@@ -6,8 +6,17 @@
     "react-scripts": "2.1.1"
   },
   "dependencies": {
+    "firebase": "^5.7.0",
+    "immutable": "^4.0.0-rc.12",
     "react": "^16.6.3",
-    "react-dom": "^16.6.3"
+    "react-dom": "^16.6.3",
+    "react-redux": "^5.0.7",
+    "react-redux-firebase": "^2.1.6",
+    "react-router-dom": "^4.3.1",
+    "redux": "^4.0.0",
+    "redux-firestore": "^0.5.7",
+    "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
