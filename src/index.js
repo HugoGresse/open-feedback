@@ -6,18 +6,15 @@ import { Provider } from 'react-redux'
 import { reduxFirestore, getFirestore } from 'redux-firestore';
 import { reactReduxFirebase, getFirebase } from 'react-redux-firebase';
 
-import rootReducer from './store/reducer/rootReducer'
+import rootReducer from './rootReducer'
 import firestoreInstance from './Firestore'
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-
 const middleware = [thunk.withExtraArgument({getFirebase, getFirestore})]
 
-
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-
 
 const store = createStore(rootReducer,
     composeEnhancers(
