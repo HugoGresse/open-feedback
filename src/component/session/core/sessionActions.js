@@ -1,4 +1,4 @@
-import { GET_SESSION_SUCCESS, GET_SESSION_ERROR } from "./sessionActionTypes"
+import { GET_SESSION_SUCCESS, GET_SESSION_ERROR, SET_SESSION_FILTER } from "./sessionActionTypes"
 import { List } from "immutable"
 
 export const getSessions = () => {
@@ -24,4 +24,14 @@ export const getSessions = () => {
                 });
             });
     }
-};
+}
+
+export const setSessionFilter = (filter) => {
+    return (dispatch) => {
+        dispatch({
+            type: SET_SESSION_FILTER,
+            payload: filter
+        });
+    }
+
+}

@@ -9,14 +9,15 @@ import Toolbar from "@material-ui/core/Toolbar"
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import InputBase from "@material-ui/core/InputBase"
 import SearchIcon from '@material-ui/icons/Search'
+import * as sessionActions from "../session/core/sessionActions"
+import connect from "react-redux/es/connect/connect"
 
 const styles = theme => ({
 
     layout: {
         width: '100%',
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(900 + theme.spacing.unit * 3 * 2)]: {
+        boxSizing: 'border-box',
+        [theme.breakpoints.up(900 + theme.spacing.unit * 2 * 2)]: {
             width: 900,
             marginLeft: 'auto',
             marginRight: 'auto',
@@ -35,14 +36,11 @@ const styles = theme => ({
             backgroundColor: fade(theme.palette.common.white, 0.8),
         },
         marginRight: theme.spacing.unit * 2,
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing.unit * 3
-        },
+        marginLeft: theme.spacing.unit * 2,
+        width: '100%'
     },
     searchIcon: {
-        width: theme.spacing.unit * 9,
+        width: theme.spacing.unit * 6,
         height: '100%',
         position: 'absolute',
         pointerEvents: 'none',
@@ -58,7 +56,7 @@ const styles = theme => ({
         paddingTop: theme.spacing.unit,
         paddingRight: theme.spacing.unit,
         paddingBottom: theme.spacing.unit,
-        paddingLeft: theme.spacing.unit * 10,
+        paddingLeft: theme.spacing.unit * 6,
         transition: theme.transitions.create('width'),
         width: '100%'
     },
@@ -68,7 +66,7 @@ const styles = theme => ({
 class Header extends Component {
 
     onFilterChanged = (event) => {
-        console.log(event.target.value)
+        this.props.setSessionFilter(event.target.value)
     }
 
     render() {
@@ -103,4 +101,6 @@ Header.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Header);
+const mapDispatchToProps = Object.assign({}, sessionActions)
+
+export default connect(null, mapDispatchToProps)(withStyles(styles)(Header))
