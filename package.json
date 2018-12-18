@@ -10,6 +10,8 @@
     "@material-ui/icons": "^3.0.1",
     "firebase": "^5.7.0",
     "immutable": "^4.0.0-rc.12",
+    "lodash": "^4.17.11",
+    "moment": "^2.23.0",
     "prop-types": "latest",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
