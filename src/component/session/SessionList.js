@@ -4,7 +4,7 @@ import { getFilteredSessions, sessionActions } from "./core"
 import { createSelector } from "reselect"
 import SessionItem from "./SessionItem"
 import Grid from "@material-ui/core/Grid"
-import { getSchedulesList, scheduleActions } from "../schedule/core"
+import { getFilteredSchedules, scheduleActions } from "../schedule/core"
 import { withStyles } from "@material-ui/core"
 
 const styles = theme => ({
@@ -29,33 +29,40 @@ class SessionList extends Component {
     }
 
     render() {
-        const {sessions, classes} = this.props;
+        const {sessions, schedule, classes} = this.props;
 
-        if(!sessions){
-            return "No Sessions loaded"
-        }
+        if(!sessions || !schedule) return "Data loading"
 
+        console.log(schedule)
 
-        return (
+        return schedule.map(scheduleItem =>
+            <Grid container spacing={24} className={classes.layout} key={scheduleItem.date}>
+                <Grid item xs >
+                    { scheduleItem.date }
+                </Grid>
 
-            <Grid container spacing={24} className={classes.layout}>
                 {
-                    sessions.map( session =>
-                        <SessionItem
-                            session={session}/>
+                    scheduleItem.timeslots.map(timeslot =>
+                        timeslot.sessions.map(timeslotSessions =>
+                            timeslotSessions.items.map(sessionId =>
+                                <SessionItem
+                                    key={sessionId}
+                                    session={sessions[sessionId]}/>
+                            )
+                        )
                     )
                 }
-            </Grid>
-        )
+
+        </Grid>)
     }
 }
 
 const mapStateToProps = createSelector(
     getFilteredSessions,
-    getSchedulesList,
-    (sessions, schedules) => ({
+    getFilteredSchedules,
+    (sessions, schedule) => ({
         sessions,
-        schedules
+        schedule
     })
 )
 

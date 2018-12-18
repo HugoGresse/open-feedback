@@ -1,5 +1,4 @@
 import { GET_SCHEDULE_SUCCESS, GET_SCHEDULE_ERROR } from "./scheduleActionTypes"
-import { List } from "immutable"
 
 export const getSchedules = () => {
     return (dispatch, getState, {getFirestore}) => {
@@ -8,9 +7,9 @@ export const getSchedules = () => {
         firestore.collection('schedule')
             .get()
             .then((querySnapshot) => {
-                let schedule = new List()
+                let schedule = []
                 querySnapshot.forEach((doc) => {
-                    schedule = schedule.push(doc.data())
+                    schedule.push(doc.data())
                 });
                 dispatch({
                     type: GET_SCHEDULE_SUCCESS,

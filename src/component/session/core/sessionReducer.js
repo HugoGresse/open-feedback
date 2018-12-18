@@ -16,9 +16,10 @@ const sessionReducer = (state = initState, { payload, type }) => {
                 list: payload
             }
         case SET_SESSION_FILTER:
-            return state.merge({
+            return {
+                ...state,
                 filter: payload
-            })
+            }
         case GET_SESSION_ERROR:
             console.log(payload)
         default:

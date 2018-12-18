@@ -11,17 +11,7 @@ export const getSessionsFilter = state => getSessions(state).filter
 
 export const getFilteredSessions = createSelector(
     getSessionsList,
-    getSessionsFilter,
-    (list, filter) => {
-        if (filter) {
-            return list.filter((session) => {
-                if (session.title.toLowerCase().includes(filter.toLowerCase())) {
-                    return true
-                }
-                // TODO : filter by speakers
-                return false
-            })
-        }
+    (list) => {
         return list
     }
 )

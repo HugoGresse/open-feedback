@@ -2,4 +2,4 @@ import * as scheduleActions from './scheduleActions'
 
 export { scheduleActions }
 
-export { getSchedulesList } from './scheduleSelectors'
+export { getSchedulesList, getFilteredSchedules } from './scheduleSelectors'
