@@ -1,20 +1,20 @@
-import {List, Record} from 'immutable'
 import {
     GET_SESSION_ERROR,
     GET_SESSION_SUCCESS, SET_SESSION_FILTER
 } from "./sessionActionTypes"
 
-const initState = new Record({
-    list: new List(),
+const initState = {
+    list: {},
     filter: null
-})
+}
 
-const sessionReducer = (state = new initState(), { payload, type }) => {
+const sessionReducer = (state = initState, { payload, type }) => {
     switch (type) {
         case GET_SESSION_SUCCESS:
-            return state.merge({
+            return {
+                ...state,
                 list: payload
-            })
+            }
         case SET_SESSION_FILTER:
             return state.merge({
                 filter: payload

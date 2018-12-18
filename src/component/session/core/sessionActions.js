@@ -1,5 +1,4 @@
 import { GET_SESSION_SUCCESS, GET_SESSION_ERROR, SET_SESSION_FILTER } from "./sessionActionTypes"
-import { List } from "immutable"
 
 export const getSessions = () => {
     return (dispatch, getState, {getFirestore}) => {
@@ -8,13 +7,13 @@ export const getSessions = () => {
         firestore.collection('sessions')
             .get()
             .then((querySnapshot) => {
-                let sessions = new List()
+                let map = {}
                 querySnapshot.forEach((doc) => {
-                    sessions = sessions.push(doc.data())
-                });
+                    map[doc.id] = doc.data()
+                })
                 dispatch({
                     type: GET_SESSION_SUCCESS,
-                    payload: sessions
+                    payload: map
                 });
             })
             .catch(err => {
