@@ -1,5 +1,8 @@
-import * as sessionActions from './sessionActions'
+import * as sessionActions from "./sessionActions";
 
-export { sessionActions }
+export { sessionActions };
 
-export { getFilteredSessions } from './sessionSelectors'
+export {
+  getFilteredSessions,
+  getSessionsGroupByDate
+} from "./sessionSelectors";
