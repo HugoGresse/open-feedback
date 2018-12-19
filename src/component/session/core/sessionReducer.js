@@ -8,7 +8,7 @@ const initState = {
     filter: null
 }
 
-const sessionReducer = (state = initState, { payload, type }) => {
+const sessionReducer = (state = initState, {payload, type}) => {
     switch (type) {
         case GET_SESSION_SUCCESS:
             return {
@@ -23,8 +23,8 @@ const sessionReducer = (state = initState, { payload, type }) => {
         case GET_SESSION_ERROR:
             console.log(payload)
         default:
-            return state;
+            return state
     }
-};
+}
 
-export default sessionReducer;
+export default sessionReducer

@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 
-import './App.css';
+import './App.css'
 import SessionList from "./component/session/SessionList"
 import Header from "./component/layout/Header"
 
@@ -18,8 +18,8 @@ class App extends Component {
 
                 </div>
             </BrowserRouter>
-        );
+        )
     }
 }
 
-export default App;
+export default App

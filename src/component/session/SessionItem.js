@@ -1,7 +1,6 @@
-import { Component } from "react"
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles'
 
 import React from "react"
 import Grid from "@material-ui/core/Grid"
@@ -19,11 +18,11 @@ const styles = theme => ({
         height: '100%',
         boxSizing: 'border-box'
     }
-});
+})
 
 
 export const SessionItem = props => {
-    const { classes, session } = props;
+    const {classes, session} = props
 
     return (
         <Grid item xs>
@@ -36,6 +35,6 @@ export const SessionItem = props => {
 SessionItem.propTypes = {
     classes: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
-};
+}
 
-export default withStyles(styles)(SessionItem);
+export default withStyles(styles)(SessionItem)

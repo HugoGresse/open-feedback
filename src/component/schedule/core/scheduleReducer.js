@@ -7,7 +7,7 @@ const initState = {
     list: []
 }
 
-const scheduleReducer = (state = initState, { payload, type }) => {
+const scheduleReducer = (state = initState, {payload, type}) => {
     switch (type) {
         case GET_SCHEDULE_SUCCESS:
             return {
@@ -17,8 +17,8 @@ const scheduleReducer = (state = initState, { payload, type }) => {
         case GET_SCHEDULE_ERROR:
             console.log(payload)
         default:
-            return state;
+            return state
     }
-};
+}
 
-export default scheduleReducer;
+export default scheduleReducer

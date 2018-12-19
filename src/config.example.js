@@ -8,6 +8,6 @@ const config = {
         storageBucket: "sunny.appspot.com",
         messagingSenderId: ""
     }
-};
+}
 
 export default config

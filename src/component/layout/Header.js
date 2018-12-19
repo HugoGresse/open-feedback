@@ -1,12 +1,12 @@
 import { Component } from "react"
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles'
 
 import React from "react"
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import { fade } from '@material-ui/core/styles/colorManipulator'
 import InputBase from "@material-ui/core/InputBase"
 import SearchIcon from '@material-ui/icons/Search'
 import * as sessionActions from "../session/core/sessionActions"
@@ -60,7 +60,7 @@ const styles = theme => ({
         transition: theme.transitions.create('width'),
         width: '100%'
     },
-});
+})
 
 
 class Header extends Component {
@@ -70,7 +70,7 @@ class Header extends Component {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes} = this.props
 
         return (
 
@@ -99,7 +99,7 @@ class Header extends Component {
 
 Header.propTypes = {
     classes: PropTypes.object.isRequired
-};
+}
 
 const mapDispatchToProps = Object.assign({}, sessionActions)
 
