@@ -1,5 +1,5 @@
 
-let config = {
+const config = {
     firebase: {
         apiKey: "AIooooooootTSURR0wh8",
         authDomain: "sunny.firebaseapp.com",
