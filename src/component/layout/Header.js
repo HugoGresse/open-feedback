@@ -11,6 +11,7 @@ import InputBase from "@material-ui/core/InputBase"
 import SearchIcon from '@material-ui/icons/Search'
 import * as sessionActions from "../session/core/sessionActions"
 import connect from "react-redux/es/connect/connect"
+import logo from "./logo.svg"
 
 const styles = theme => ({
 
@@ -27,6 +28,9 @@ const styles = theme => ({
         color: theme.palette.text.secondary,
         borderColor: theme.palette.augmentColor,
         boxShadow: 'none'
+    },
+    logo: {
+        margin: '5px 0'
     },
     search: {
         position: 'relative',
@@ -76,6 +80,8 @@ class Header extends Component {
 
             <AppBar position="sticky" color="default" className={classes.appBar}>
                 <Toolbar className={classes.layout}>
+
+                    <img src={logo} width={60} height={60} className={classes.logo}/>
 
                     <div className={classes.search}>
                         <div className={classes.searchIcon}>
