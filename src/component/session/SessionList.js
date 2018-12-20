@@ -4,12 +4,13 @@ import { getSessionsGroupByDate, sessionActions } from "./core"
 import SessionItem from "./SessionItem"
 import Grid from "@material-ui/core/Grid"
 import { withStyles } from "@material-ui/core"
+import Typography from "@material-ui/core/Typography"
 
 const styles = theme => ({
     layout: {
-        width: "auto",
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
+        marginLeft: 0,
+        marginRight: 0,
+        width:'100%',
         [theme.breakpoints.up(900 + theme.spacing.unit * 3 * 2)]: {
             width: 900,
             marginLeft: "auto",
@@ -28,15 +29,18 @@ class SessionList extends Component {
         if (!sessionsByDate) return "Data loading"
 
         return sessionsByDate.map((current, key) => (
-            <Grid container spacing={24} className={classes.layout} key={key}>
+            <div>
                 <Grid item xs>
-                    {current.date}
+                    <Typography variant="h5">{current.date}</Typography>
                 </Grid>
 
-                {current.sessions.map((session, key) => (
-                    <SessionItem key={key} session={session}/>
-                ))}
-            </Grid>
+                <Grid container className={classes.layout} key={key}>
+
+                    {current.sessions.map((session, key) => (
+                        <SessionItem key={key} session={session}/>
+                    ))}
+                </Grid>
+            </div>
         ))
     }
 }

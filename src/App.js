@@ -14,8 +14,11 @@ class App extends Component {
 
                     <Header/>
 
+                    <br/>
+
                     <Route exact path='/' component={SessionList}/>
 
+                    <br/>
                 </div>
             </BrowserRouter>
         )
