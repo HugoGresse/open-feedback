@@ -1,7 +1,7 @@
 import {
     GET_SESSION_SUCCESS,
     GET_SESSION_ERROR,
-    SET_SESSION_FILTER
+    SET_SESSION_FILTER, SET_SELECTED_SESSION
 } from "./sessionActionTypes"
 import { formatSessionsWithScheduled } from "./sessionUtils"
 
@@ -16,7 +16,10 @@ export const getSessions = () => {
                 let sessions = {}
                 let schedule = []
                 resultSessions.forEach(doc => {
-                    sessions[doc.id] = doc.data()
+                    sessions[doc.id] = {
+                        ...doc.data(),
+                        id: doc.id
+                    }
                 })
 
                 resultSchedule.forEach(doc => {
@@ -43,6 +46,15 @@ export const setSessionFilter = filter => {
         dispatch({
             type: SET_SESSION_FILTER,
             payload: filter
+        })
+    }
+}
+
+export const setSelectedSession = sessionId => {
+    return dispatch => {
+        dispatch({
+            type: SET_SELECTED_SESSION,
+            payload: sessionId
         })
     }
 }

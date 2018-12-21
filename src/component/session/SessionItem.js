@@ -8,7 +8,10 @@ import Paper from "@material-ui/core/Paper"
 
 const styles = theme => ({
     itemContainer: {
-        margin: -1
+        margin: -1,
+        '&:hover': {
+            cursor: 'pointer'
+        }
     },
     paper: {
         padding: theme.spacing.unit * 2,
@@ -28,10 +31,13 @@ const styles = theme => ({
 
 
 export const SessionItem = props => {
-    const {classes, session} = props
+    const {classes, session, onClick} = props
 
     return (
-        <Grid item xs={6} sm={4} md={2} className={classes.itemContainer}>
+        <Grid item xs={6} sm={4} md={2}
+              className={classes.itemContainer}
+              onClick={() => {onClick(session)}}
+        >
             <Paper className={classes.paper}>{session.title}</Paper>
         </Grid>
     )

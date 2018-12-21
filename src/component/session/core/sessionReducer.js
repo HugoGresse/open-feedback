@@ -1,11 +1,12 @@
 import {
     GET_SESSION_ERROR,
-    GET_SESSION_SUCCESS, SET_SESSION_FILTER
+    GET_SESSION_SUCCESS, SET_SELECTED_SESSION, SET_SESSION_FILTER
 } from "./sessionActionTypes"
 
 const initState = {
     list: {},
-    filter: null
+    filter: null,
+    selected: null
 }
 
 const sessionReducer = (state = initState, {payload, type}) => {
@@ -19,6 +20,11 @@ const sessionReducer = (state = initState, {payload, type}) => {
             return {
                 ...state,
                 filter: payload
+            }
+        case SET_SELECTED_SESSION:
+            return {
+                ...state,
+                selected: payload
             }
         case GET_SESSION_ERROR:
             console.log(payload)
