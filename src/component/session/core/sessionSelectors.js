@@ -8,6 +8,8 @@ export const getSessionsList = state => getSessions(state).list
 
 export const getSessionsFilter = state => getSessions(state).filter || ""
 
+export const getSelectedSessionId = state => getSessions(state).selected
+
 export const getSessionsAsArray = createSelector(
     getSessionsList,
     sessions => {
@@ -45,4 +47,14 @@ export const getSessionsGroupByDate = createSelector(
             return acc
         }, [])
     }
+)
+
+export const getSelectedSession = createSelector(
+    getSessionsList,
+    getSelectedSessionId,
+    (sessions, selectedSessionId) => {
+
+        return sessions[selectedSessionId]
+    }
+
 )

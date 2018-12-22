@@ -9,16 +9,6 @@ import { Route } from "react-router-dom"
 import SessionVote from "./SessionVote"
 
 const styles = theme => ({
-    layout: {
-        marginLeft: 0,
-        marginRight: 0,
-        width: '100%',
-        [theme.breakpoints.up(900 + theme.spacing.unit * 3 * 2)]: {
-            width: 900,
-            marginLeft: "auto",
-            marginRight: "auto"
-        }
-    }
 })
 
 class SessionList extends Component {
@@ -35,42 +25,29 @@ class SessionList extends Component {
         const {sessionsByDate, classes, match} = this.props
         if (!sessionsByDate) return "Data loading"
 
-        return sessionsByDate.map((current, key) => (
-            <div key={key}>
-                <Grid item xs>
-                    <Typography variant="h5">{current.date}</Typography>
-                </Grid>
+        return <div>
+            {
+                sessionsByDate.map((current, key) => (<div key={key}>
+                        <Grid item xs>
+                            <Typography variant="h5">{current.date}</Typography>
+                        </Grid>
 
-                <Grid container className={classes.layout}>
-                    {current.sessions.map((session, key) => (
-                        <SessionItem
-                            key={key}
-                            session={session}
-                            onClick={this.onSessionClicked}
-                        />
-                    ))}
-                </Grid>
+                        <Grid container>
+                            {current.sessions.map((session, key) => (
+                                <SessionItem
+                                    key={key}
+                                    session={session}
+                                    relativeUrl={match.path}
+                                    onClick={this.onSessionClicked}
+                                />
+                            ))}
+                        </Grid>
 
-
-                <Route path={`${match.path}/:id`} component={SessionVote}/>
-            </div>
-        ))
+                    </div>
+                ))
+            }
+        </div>
     }
-
-
-// <Grid container className={classes.layout}>
-// {current.sessions.map((session, key) => (
-//     <Link
-//         key={key}
-//         to={`${match.url}/${session.id}`}>
-//         <SessionItem
-//             session={session}
-//             onClick={this.onSessionClicked}
-//         />
-//     </Link>
-//
-// ))}
-// </Grid>
 }
 
 const mapStateToProps = state => ({

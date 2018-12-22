@@ -4,5 +4,6 @@ export { sessionActions }
 
 export {
     getFilteredSessions,
-    getSessionsGroupByDate
+    getSessionsGroupByDate,
+    getSelectedSession
 } from "./sessionSelectors"

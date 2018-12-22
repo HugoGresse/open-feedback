@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles'
 import React from "react"
 import Grid from "@material-ui/core/Grid"
 import Paper from "@material-ui/core/Paper"
+import { Link } from "react-router-dom"
 
 const styles = theme => ({
     itemContainer: {
@@ -31,14 +32,14 @@ const styles = theme => ({
 
 
 export const SessionItem = props => {
-    const {classes, session, onClick} = props
+    const {classes, session, relativeUrl} = props
 
     return (
         <Grid item xs={6} sm={4} md={2}
-              className={classes.itemContainer}
-              onClick={() => {onClick(session)}}
-        >
-            <Paper className={classes.paper}>{session.title}</Paper>
+              className={classes.itemContainer}>
+            <Link to={`${relativeUrl}${session.id}`}>
+                <Paper className={classes.paper}>{session.title}</Paper>
+            </Link>
         </Grid>
     )
 }

@@ -9,6 +9,7 @@ export const formatSessionsWithScheduled = (sessions, schedule) => {
             const endTime = moment(day.date + "T" + timeslot.endTime).format()
             timeslot.sessions.forEach(session => {
                 session.items.forEach(id => {
+                    if(!sessions[id]) return
                     formatedSessions[id] = {
                         ...sessions[id],
                         startTime,

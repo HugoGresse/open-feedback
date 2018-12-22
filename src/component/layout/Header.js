@@ -81,7 +81,7 @@ class Header extends Component {
             <AppBar position="sticky" color="default" className={classes.appBar}>
                 <Toolbar className={classes.layout}>
 
-                    <img src={logo} width={60} height={60} className={classes.logo}/>
+                    <img src={logo} width={60} height={60} className={classes.logo} alt="logo"/>
 
                     <div className={classes.search}>
                         <div className={classes.searchIcon}>
