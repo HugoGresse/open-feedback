@@ -10,6 +10,7 @@ import ArrowBack from '@material-ui/icons/ArrowBack'
 import Paper from "@material-ui/core/Paper"
 import SearchIcon from "@material-ui/core/SvgIcon/SvgIcon"
 import { Link } from "react-router-dom"
+import moment from "moment"
 
 const styles = theme => ({
     itemContainer: {
@@ -56,6 +57,12 @@ class SessionVote extends Component {
 
             <Typography variant="h2" id="modal-title">
                 {session.title}
+            </Typography>
+
+            <Typography variant="h5" id="modal-title">
+                {moment(session.startTime).format("dddd D, H:m ")}
+                to
+                {moment(session.endTime).format(" H:m")}
             </Typography>
             {
                 session.speakers.map(speaker =>
