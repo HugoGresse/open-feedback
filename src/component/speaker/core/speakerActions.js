@@ -2,12 +2,11 @@ import {
     GET_SPEAKERS_SUCCESS,
     GET_SPEAKERS_ERROR
 } from "./speakerActionTypes"
+import { fireStoreInstance } from "../../../Firestore"
 
 export const getSpeakers = (sessionId) => {
-    return (dispatch, getState, {getFirestore}) => {
-        const firestore = getFirestore()
-
-        return firestore.collection("speakers").get()
+    return (dispatch, getState) => {
+        return fireStoreInstance.collection("speakers").get()
             .then((speakersSnapshot) => {
                 let speakers = {}
                 speakersSnapshot.forEach((doc) => {

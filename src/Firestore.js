@@ -5,4 +5,5 @@ import config from './config'
 firebase.initializeApp(config.firebase)
 firebase.firestore().settings({ timestampsInSnapshots: true })
 
-export default firebase
+export const firebaseInstance = firebase
+export const fireStoreInstance = firebase.firestore()

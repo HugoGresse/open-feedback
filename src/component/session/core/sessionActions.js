@@ -4,12 +4,12 @@ import {
     SET_SESSION_FILTER, SET_SELECTED_SESSION, GET_SESSION_SUCCESS, GET_SESSION_ERROR
 } from "./sessionActionTypes"
 import { formatSessionsWithScheduled } from "./sessionUtils"
+import { fireStoreInstance } from "../../../Firestore"
 
 export const getSession = (sessionId) => {
-    return (dispatch, getState, {getFirestore}) => {
-        const firestore = getFirestore()
-        const schedulePromise = firestore.collection("schedule").get()
-        const sessionsPromise = firestore.collection("sessions").doc(sessionId).get()
+    return (dispatch, getState) => {
+        const schedulePromise = fireStoreInstance.collection("schedule").get()
+        const sessionsPromise = fireStoreInstance.collection("sessions").doc(sessionId).get()
 
         return Promise.all([schedulePromise, sessionsPromise])
             .then(([resultSchedule, resultSessions]) => {
@@ -40,10 +40,9 @@ export const getSession = (sessionId) => {
 }
 
 export const getSessions = () => {
-    return (dispatch, getState, {getFirestore}) => {
-        const firestore = getFirestore()
-        const schedulePromise = firestore.collection("schedule").get()
-        const sessionsPromise = firestore.collection("sessions").get()
+    return (dispatch, getState) => {
+        const schedulePromise = fireStoreInstance.collection("schedule").get()
+        const sessionsPromise = fireStoreInstance.collection("sessions").get()
 
         return Promise.all([schedulePromise, sessionsPromise])
             .then(([resultSchedule, resultSessions]) => {
