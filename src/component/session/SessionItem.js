@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
-
 import React from "react"
 import Grid from "@material-ui/core/Grid"
 import Paper from "@material-ui/core/Paper"
 import { Link } from "react-router-dom"
+import connect from "react-redux/es/connect/connect"
+import { getSpeakersList } from "../speaker/core"
 
 const styles = theme => ({
     itemContainer: {
@@ -32,13 +33,31 @@ const styles = theme => ({
 
 
 export const SessionItem = props => {
-    const {classes, session, relativeUrl} = props
+    const {classes, session, speakers, relativeUrl} = props
+
+    const speakerIds = session.speakers
+
+    let speakerRender = ""
+
+    if (speakerIds) {
+        speakerRender = session.speakers.map(speakerId => {
+            if (speakers[speakerId]) {
+                return <p key={speakerId}>{speakers[speakerId].name}</p>
+            } else {
+                console.log("No speaker for id: " + speakerId)
+                return null
+            }
+        })
+    }
 
     return (
         <Grid item xs={6} sm={4} md={2}
               className={classes.itemContainer}>
             <Link to={`${relativeUrl}${session.id}`}>
-                <Paper className={classes.paper}>{session.title}</Paper>
+                <Paper className={classes.paper}>
+                    {session.title}
+                    {speakerRender}
+                </Paper>
             </Link>
         </Grid>
     )
@@ -50,4 +69,12 @@ SessionItem.propTypes = {
     session: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(SessionItem)
+
+const mapStateToProps = state => ({
+    speakers: getSpeakersList(state)
+})
+
+export default connect(
+    mapStateToProps,
+    {}
+)(withStyles(styles)(SessionItem))

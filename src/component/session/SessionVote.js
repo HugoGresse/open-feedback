@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { getSelectedSession, sessionActions } from "./core"
+import { getSpeakersList, speakerActions } from "../speaker/core"
 import { withStyles } from "@material-ui/core"
 import Typography from "@material-ui/core/Typography"
 import config from "../../config"
@@ -8,7 +9,6 @@ import Grid from "@material-ui/core/Grid"
 
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import Paper from "@material-ui/core/Paper"
-import SearchIcon from "@material-ui/core/SvgIcon/SvgIcon"
 import { Link } from "react-router-dom"
 import moment from "moment"
 
@@ -41,19 +41,18 @@ class SessionVote extends Component {
         const id = this.props.match.params.sessionId
         this.props.getSession(id)
         this.props.setSelectedSession(id)
+        this.props.getSpeakers()
     }
 
     render() {
-        const {classes, session} = this.props
+        const {classes, speakers, session} = this.props
 
-        if (!session) {
+        if (!session || !speakers) {
             return ''
         }
 
         return <div>
-
             <Link to="/"> <ArrowBack/> </Link>
-
 
             <Typography variant="h2" id="modal-title">
                 {session.title}
@@ -65,12 +64,12 @@ class SessionVote extends Component {
                 {moment(session.endTime).format(" H:m")}
             </Typography>
             {
+
                 session.speakers.map(speaker =>
-                    <Typography variant="h6" id="modal-title">
-                        {speaker}
+                    <Typography variant="h6" key={speaker}>
+                        {speakers[speaker] ? speakers[speaker].name : speaker}
                     </Typography>)
             }
-
 
             <Grid container className={classes.layout}>
                 {config.voteItem.map((vote, key) => (
@@ -84,10 +83,11 @@ class SessionVote extends Component {
 }
 
 const mapStateToProps = state => ({
-    session: getSelectedSession(state)
+    session: getSelectedSession(state),
+    speakers: getSpeakersList(state),
 })
 
-const mapDispatchToProps = Object.assign({}, sessionActions)
+const mapDispatchToProps = Object.assign({}, sessionActions, speakerActions)
 
 export default connect(
     mapStateToProps,
