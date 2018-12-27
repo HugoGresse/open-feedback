@@ -23,5 +23,7 @@ const config = {
         12: "J'ai appris quelque chose"
     }
 }
+// TODO : 1. Create a new firebase+firstore with client configuration and generated project id
+//        2. Create multiple firebase instance
 
 export default config
