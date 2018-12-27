@@ -1,9 +1,5 @@
-import * as sessionActions from "./sessionActions"
+import * as sessionActions from './sessionActions'
 
 export { sessionActions }
 
-export {
-    getFilteredSessions,
-    getSessionsGroupByDate,
-    getSelectedSession
-} from "./sessionSelectors"
+export { getFilteredSessions, getSessionsGroupByDate, getSelectedSession } from './sessionSelectors'
