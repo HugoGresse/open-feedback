@@ -7,12 +7,12 @@ import {
   GET_SESSION_ERROR
 } from './sessionActionTypes'
 import { formatSessionsWithScheduled } from './sessionUtils'
-import { fireStoreInstance } from '../../../Firestore'
+import { fireStoreScheduleInstance } from '../../../firebase'
 
 export const getSession = sessionId => {
   return (dispatch, getState) => {
-    const schedulePromise = fireStoreInstance.collection('schedule').get()
-    const sessionsPromise = fireStoreInstance
+    const schedulePromise = fireStoreScheduleInstance.collection('schedule').get()
+    const sessionsPromise = fireStoreScheduleInstance
       .collection('sessions')
       .doc(sessionId)
       .get()
@@ -47,8 +47,8 @@ export const getSession = sessionId => {
 
 export const getSessions = () => {
   return (dispatch, getState) => {
-    const schedulePromise = fireStoreInstance.collection('schedule').get()
-    const sessionsPromise = fireStoreInstance.collection('sessions').get()
+    const schedulePromise = fireStoreScheduleInstance.collection('schedule').get()
+    const sessionsPromise = fireStoreScheduleInstance.collection('sessions').get()
 
     return Promise.all([schedulePromise, sessionsPromise])
       .then(([resultSchedule, resultSessions]) => {

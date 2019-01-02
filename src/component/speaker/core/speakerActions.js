@@ -1,9 +1,9 @@
 import { GET_SPEAKERS_SUCCESS, GET_SPEAKERS_ERROR } from './speakerActionTypes'
-import { fireStoreInstance } from '../../../Firestore'
+import { fireStoreScheduleInstance } from '../../../firebase'
 
 export const getSpeakers = sessionId => {
   return (dispatch, getState) => {
-    return fireStoreInstance
+    return fireStoreScheduleInstance
       .collection('speakers')
       .get()
       .then(speakersSnapshot => {
