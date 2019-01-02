@@ -16,7 +16,7 @@ const styles = theme => ({
     [theme.breakpoints.up(900 + theme.spacing.unit * 3 * 2)]: {
       width: 900,
       marginLeft: 'auto',
-      marginRight: 'auto'
+   marginRight: 'auto'
     },
     [theme.breakpoints.down('sm')]: {
       paddingLeft: theme.spacing.unit * 2,

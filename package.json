@@ -35,12 +35,15 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-"husky": {
+  "husky": {
     "hooks": {
-        "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged"
     }
-},
-"lint-staged": {
-    "*.{js,json,css,md}": ["prettier --write", "git add"]
-}
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
 }
