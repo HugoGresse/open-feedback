@@ -7,14 +7,6 @@ const config = {
         storageBucket: 'sunny.appspot.com',
         messagingSenderId: ''
     },
-    firebaseSchedule: {
-        apiKey: 'AIooooooootTSURR0wh8',
-        authDomain: 'sunny.firebaseapp.com',
-        databaseURL: 'https://sunny.firebaseio.com',
-        projectId: 'sunny',
-        storageBucket: 'sunny.appspot.com',
-        messagingSenderId: ''
-    },
     voteItem: {
         1: 'Pas assez technique',
         2: 'Trop technique',

@@ -6,8 +6,18 @@ import Header from './component/layout/Header'
 import SessionVote from './component/session/SessionVote'
 import { withStyles } from '@material-ui/core'
 import './App.css'
+import { connect } from 'react-redux'
+import { getCurrentProject, projectActions } from './component/project/core'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const styles = theme => ({
+    loading: {
+        textAlign: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        height: '100vh',
+        justifyContent: 'center'
+    },
     layout: {
         marginLeft: 0,
         marginRight: 0,
@@ -26,32 +36,55 @@ const styles = theme => ({
 })
 
 class App extends Component {
+    componentWillMount() {
+        const id = this.props.match.params.projectId
+        this.props.getProject(id)
+    }
+
     render() {
-        const { classes, match } = this.props
-        return (
-            <div>
-                <Header />
+        const { classes, match, project } = this.props
 
-                <div className={classes.layout}>
-                    <br />
+        if (project) {
+            return (
+                <div>
+                    <Header />
 
-                    <Switch>
-                        <Route
-                            exact
-                            path={`${match.path}`}
-                            component={SessionList}
-                        />
-                        <Route
-                            path={`${match.path}/:sessionId`}
-                            component={SessionVote}
-                        />
-                    </Switch>
+                    <div className={classes.layout}>
+                        <br />
 
-                    <br />
+                        <Switch>
+                            <Route
+                                exact
+                                path={`${match.path}`}
+                                component={SessionList}
+                            />
+                            <Route
+                                path={`${match.path}/:sessionId`}
+                                component={SessionVote}
+                            />
+                        </Switch>
+
+                        <br />
+                    </div>
                 </div>
+            )
+        }
+
+        return (
+            <div className={classes.loading}>
+                <CircularProgress />
             </div>
         )
     }
 }
 
-export default withStyles(styles)(App)
+const mapStateToProps = state => ({
+    project: getCurrentProject(state)
+})
+
+const mapDispatchToProps = Object.assign({}, projectActions)
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles)(App))

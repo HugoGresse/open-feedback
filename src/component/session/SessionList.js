@@ -11,7 +11,7 @@ import moment from 'moment'
 const styles = theme => ({})
 
 class SessionList extends Component {
-    componentDidMount() {
+    componentWillMount() {
         this.props.getSessions()
         this.props.getSpeakers()
     }
