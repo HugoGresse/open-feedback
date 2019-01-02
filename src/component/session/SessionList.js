@@ -34,7 +34,9 @@ class SessionList extends Component {
 
             <Grid container>
               {current.sessions.map((session, key) => (
-                <SessionItem key={key} session={session} relativeUrl={match.path} onClick={this.onSessionClicked} />
+                <SessionItem key={key}
+                             session={session}
+                             routerParams={match.params} onClick={this.onSessionClicked} />
               ))}
             </Grid>
           </div>

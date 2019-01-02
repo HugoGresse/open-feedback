@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 
 import SessionList from './component/session/SessionList'
 import Header from './component/layout/Header'
@@ -27,22 +27,22 @@ const styles = theme => ({
 
 class App extends Component {
   render() {
-    const { classes } = this.props
+    const { classes, match } = this.props
     return (
-      <BrowserRouter>
         <div>
           <Header />
 
           <div className={classes.layout}>
             <br />
 
-            <Route exact path="/" component={SessionList} />
-            <Route path="/:sessionId" component={SessionVote} />
+              <Switch>
+                  <Route exact path={`${match.path}`} component={SessionList} />
+                  <Route path={`${match.path}/:sessionId`} component={SessionVote} />
+              </Switch>
 
             <br />
           </div>
         </div>
-      </BrowserRouter>
     )
   }
 }

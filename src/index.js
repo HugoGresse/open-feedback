@@ -6,8 +6,11 @@ import { Provider } from 'react-redux'
 
 import rootReducer from './rootReducer'
 import './index.css'
-import App from './App'
 import * as serviceWorker from './serviceWorker'
+import { BrowserRouter, Switch, Route } from "react-router-dom"
+import Root from "./component/Root"
+import App from "./App"
+import Page404 from "./component/Page404"
 
 const middleware = [thunk]
 
@@ -17,7 +20,14 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(...middl
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+      <BrowserRouter>
+
+          <Switch>
+              <Route exact path="/" component={Root} />
+              <Route path="/:projectId" component={App} />
+              <Route component={Page404} />
+          </Switch>
+      </BrowserRouter>
   </Provider>,
   document.getElementById('root')
 )

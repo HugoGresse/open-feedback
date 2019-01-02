@@ -44,7 +44,7 @@ class SessionVote extends Component {
   }
 
   render() {
-    const { classes, speakers, session } = this.props
+    const { classes, speakers, session, match } = this.props
 
     if (!session || !speakers) {
       return ''
@@ -52,7 +52,7 @@ class SessionVote extends Component {
 
     return (
       <div>
-        <Link to="/">
+        <Link to={`/${match.params.sessionId}/`}>
           {' '}
           <ArrowBack />{' '}
         </Link>

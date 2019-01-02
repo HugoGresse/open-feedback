@@ -32,7 +32,7 @@ const styles = theme => ({
 })
 
 export const SessionItem = props => {
-  const { classes, session, speakers, relativeUrl } = props
+  const { classes, session, speakers, routerParams } = props
 
   const speakerIds = session.speakers
 
@@ -51,7 +51,7 @@ export const SessionItem = props => {
 
   return (
     <Grid item xs={6} sm={4} md={2} className={classes.itemContainer}>
-      <Link to={`${relativeUrl}${session.id}`}>
+      <Link to={`/${routerParams.projectId}/${session.id}`}>
         <Paper className={classes.paper}>
           {session.title}
           {speakerRender}
