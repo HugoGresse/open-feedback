@@ -9,10 +9,13 @@ export const getProject = projectId => {
             .get()
             .then(projectSnapshot => {
                 if (projectSnapshot.exists) {
-                    initFireStoreSchedule(projectSnapshot.data().firebaseConfig)
+                    const project = projectSnapshot.data()
+                    initFireStoreSchedule(project.firebaseConfig)
+
+                    document.title = project.name + '- Feedback'
                     dispatch({
                         type: GET_PROJECT_SUCCESS,
-                        payload: projectSnapshot.data()
+                        payload: project
                     })
                 } else {
                     // TODO : manage unknown project

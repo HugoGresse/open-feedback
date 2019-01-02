@@ -43,6 +43,18 @@ class SessionVote extends Component {
         this.props.getSpeakers()
     }
 
+    getSpeakersString(session, speakers) {
+        if (
+            !session ||
+            session.speakers.length <= 0 ||
+            Object.keys(speakers) <= 0
+        )
+            return ''
+        return session.speakers.reduce((acc, speaker) => {
+            return speakers[speaker] ? acc + ' ' + speakers[speaker].name : ''
+        }, '')
+    }
+
     render() {
         const { classes, speakers, session, match } = this.props
 
@@ -52,9 +64,8 @@ class SessionVote extends Component {
 
         return (
             <div>
-                <Link to={`/${match.params.sessionId}/`}>
-                    {' '}
-                    <ArrowBack />{' '}
+                <Link to={`/${match.params.projectId}/`}>
+                    <ArrowBack />
                 </Link>
 
                 <Typography variant="h2" id="modal-title">
@@ -66,11 +77,10 @@ class SessionVote extends Component {
                     to
                     {moment(session.endTime).format(' H:m')}
                 </Typography>
-                {session.speakers.map(speaker => (
-                    <Typography variant="h6" key={speaker}>
-                        {speakers[speaker] ? speakers[speaker].name : speaker}
-                    </Typography>
-                ))}
+
+                <Typography variant="h6">
+                    Speaker(s): {this.getSpeakersString(session, speakers)}
+                </Typography>
 
                 <Grid container className={classes.layout}>
                     {config.voteItem.map((vote, key) => (
