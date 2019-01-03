@@ -5,5 +5,6 @@ export { sessionActions }
 export {
     getFilteredSessions,
     getSessionsGroupByDate,
-    getSelectedSession
+    getSelectedSession,
+    getSpeakersForSelectedSession
 } from './sessionSelectors'

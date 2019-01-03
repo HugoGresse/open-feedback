@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getSelectedSession, sessionActions } from './core'
-import { getSpeakersList, speakerActions } from '../speaker/core'
+import {
+    getSelectedSession,
+    getSpeakersForSelectedSession,
+    sessionActions
+} from './core'
+import { speakerActions } from '../speaker/core'
 import { withStyles } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import config from '../../config'
@@ -44,14 +48,12 @@ class SessionVote extends Component {
     }
 
     getSpeakersString(session, speakers) {
-        if (
-            !session ||
-            session.speakers.length <= 0 ||
-            Object.keys(speakers) <= 0
-        )
+        if (speakers.length === 0) {
             return ''
-        return session.speakers.reduce((acc, speaker) => {
-            return speakers[speaker] ? acc + ' ' + speakers[speaker].name : ''
+        }
+
+        return speakers.reduce((acc, speaker) => {
+            return acc + ' ' + speaker.name
         }, '')
     }
 
@@ -103,7 +105,7 @@ class SessionVote extends Component {
 
 const mapStateToProps = state => ({
     session: getSelectedSession(state),
-    speakers: getSpeakersList(state)
+    speakers: getSpeakersForSelectedSession(state)
 })
 
 const mapDispatchToProps = Object.assign({}, sessionActions, speakerActions)

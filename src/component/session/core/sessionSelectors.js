@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
 import groupBy from 'lodash/groupBy'
 import moment from 'moment'
+import { getSpeakersList } from '../../speaker/core'
 
 export const getSessions = state => state.sessions
 
@@ -54,5 +55,16 @@ export const getSelectedSession = createSelector(
     getSelectedSessionId,
     (sessions, selectedSessionId) => {
         return sessions[selectedSessionId]
+    }
+)
+
+export const getSpeakersForSelectedSession = createSelector(
+    getSelectedSession,
+    getSpeakersList,
+    (session, speakers) => {
+        if (!session) return []
+        return Object.values(speakers).filter(speaker => {
+            return session.speakers.includes(speaker.id)
+        })
     }
 )

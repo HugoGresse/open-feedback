@@ -12,7 +12,7 @@ export const getProject = projectId => {
                     const project = projectSnapshot.data()
                     initFireStoreSchedule(project.firebaseConfig)
 
-                    document.title = project.name + '- Feedback'
+                    document.title = project.name + ' - Feedback'
                     dispatch({
                         type: GET_PROJECT_SUCCESS,
                         payload: project

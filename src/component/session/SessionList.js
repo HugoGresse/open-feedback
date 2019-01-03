@@ -21,7 +21,7 @@ class SessionList extends Component {
     }
 
     render() {
-        const { sessionsByDate, classes, match } = this.props
+        const { sessionsByDate, match } = this.props
         if (!sessionsByDate) return 'Data loading'
 
         return (
