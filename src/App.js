@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import { getCurrentProject, projectActions } from './component/project/core'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { setFavicon } from './component/layout/utils'
+import { authActions } from './component/auth'
 
 const styles = theme => ({
     loading: {
@@ -47,6 +48,7 @@ class App extends Component {
             const project = nextProps.project
             document.title = project.name + ' - Feedback'
             setFavicon(project.favicon)
+            this.props.signIn()
         }
     }
 
@@ -91,7 +93,7 @@ const mapStateToProps = state => ({
     project: getCurrentProject(state)
 })
 
-const mapDispatchToProps = Object.assign({}, projectActions)
+const mapDispatchToProps = Object.assign({}, projectActions, authActions)
 
 export default connect(
     mapStateToProps,
