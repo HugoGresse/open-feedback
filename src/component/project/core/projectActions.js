@@ -10,9 +10,9 @@ export const getProject = projectId => {
             .then(projectSnapshot => {
                 if (projectSnapshot.exists) {
                     const project = projectSnapshot.data()
+
                     initFireStoreSchedule(project.firebaseConfig)
 
-                    document.title = project.name + ' - Feedback'
                     dispatch({
                         type: GET_PROJECT_SUCCESS,
                         payload: project

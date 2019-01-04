@@ -11,7 +11,6 @@ import InputBase from '@material-ui/core/InputBase'
 import SearchIcon from '@material-ui/icons/Search'
 import * as sessionActions from '../session/core/sessionActions'
 import connect from 'react-redux/es/connect/connect'
-import logo from './logo.svg'
 
 const styles = theme => ({
     layout: {
@@ -71,7 +70,7 @@ class Header extends Component {
     }
 
     render() {
-        const { classes } = this.props
+        const { classes, logo } = this.props
 
         return (
             <AppBar
@@ -108,7 +107,8 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    logo: PropTypes.string.isRequired
 }
 
 const mapDispatchToProps = Object.assign({}, sessionActions)

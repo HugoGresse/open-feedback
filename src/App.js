@@ -9,6 +9,7 @@ import './App.css'
 import { connect } from 'react-redux'
 import { getCurrentProject, projectActions } from './component/project/core'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { setFavicon } from './component/layout/utils'
 
 const styles = theme => ({
     loading: {
@@ -41,13 +42,21 @@ class App extends Component {
         this.props.getProject(id)
     }
 
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (nextProps.project) {
+            const project = nextProps.project
+            document.title = project.name + ' - Feedback'
+            setFavicon(project.favicon)
+        }
+    }
+
     render() {
         const { classes, match, project } = this.props
 
         if (project) {
             return (
                 <div>
-                    <Header />
+                    <Header logo={project.logoSmall} />
 
                     <div className={classes.layout}>
                         <br />
