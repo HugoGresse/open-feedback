@@ -7,10 +7,11 @@ import SessionVote from './component/session/SessionVote'
 import { withStyles } from '@material-ui/core'
 import './App.css'
 import { connect } from 'react-redux'
-import { getCurrentProject, projectActions } from './component/project/core'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { setFavicon } from './component/layout/utils'
 import { authActions } from './component/auth'
+import { getProjectSelector } from './component/project/core/projectSelectors'
+import * as projectActions from './component/project/core/projectActions'
 
 const styles = theme => ({
     loading: {
@@ -90,7 +91,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-    project: getCurrentProject(state)
+    project: getProjectSelector(state)
 })
 
 const mapDispatchToProps = Object.assign({}, projectActions, authActions)

@@ -8,13 +8,14 @@ import {
 import { speakerActions } from '../speaker/core'
 import { withStyles } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
-import config from '../../config'
 import Grid from '@material-ui/core/Grid'
 
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import Paper from '@material-ui/core/Paper'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
+import { getProjectVoteItemsSelector } from '../project/core/projectSelectors'
+import * as projectActions from '../project/core/projectActions'
 
 const styles = theme => ({
     itemContainer: {
@@ -45,6 +46,7 @@ class SessionVote extends Component {
         this.props.getSession(id)
         this.props.setSelectedSession(id)
         this.props.getSpeakers()
+        this.props.getVoteItems()
     }
 
     getSpeakersString(session, speakers) {
@@ -58,9 +60,9 @@ class SessionVote extends Component {
     }
 
     render() {
-        const { classes, speakers, session, match } = this.props
+        const { classes, speakers, session, match, voteItems } = this.props
 
-        if (!session || !speakers) {
+        if (!session || !speakers || !voteItems) {
             return ''
         }
 
@@ -85,7 +87,7 @@ class SessionVote extends Component {
                 </Typography>
 
                 <Grid container className={classes.layout}>
-                    {config.voteItem.map((vote, key) => (
+                    {voteItems.map((vote, key) => (
                         <Grid
                             item
                             key={key}
@@ -105,10 +107,16 @@ class SessionVote extends Component {
 
 const mapStateToProps = state => ({
     session: getSelectedSession(state),
-    speakers: getSpeakersForSelectedSession(state)
+    speakers: getSpeakersForSelectedSession(state),
+    voteItems: getProjectVoteItemsSelector(state)
 })
 
-const mapDispatchToProps = Object.assign({}, sessionActions, speakerActions)
+const mapDispatchToProps = Object.assign(
+    {},
+    sessionActions,
+    speakerActions,
+    projectActions
+)
 
 export default connect(
     mapStateToProps,
