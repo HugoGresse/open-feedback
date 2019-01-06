@@ -14,8 +14,9 @@ import ArrowBack from '@material-ui/icons/ArrowBack'
 import Paper from '@material-ui/core/Paper'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
-import { getProjectVoteItemsSelector } from '../project/core/projectSelectors'
-import * as projectActions from '../project/core/projectActions'
+import { getProjectVoteItemsSelector } from '../project/projectSelectors'
+import * as projectActions from '../project/projectActions'
+import * as voteActions from '../vote/voteActions'
 
 const styles = theme => ({
     itemContainer: {
@@ -59,6 +60,10 @@ class SessionVote extends Component {
         }, '')
     }
 
+    onVoteItemClick = (event, vote) => {
+        this.props.voteFor(this.props.session.id, vote.id)
+    }
+
     render() {
         const { classes, speakers, session, match, voteItems } = this.props
 
@@ -95,6 +100,7 @@ class SessionVote extends Component {
                             sm={4}
                             md={2}
                             className={classes.itemContainer}
+                            onClick={event => this.onVoteItemClick(event, vote)}
                         >
                             <Paper className={classes.paper}>{vote.name}</Paper>
                         </Grid>
@@ -115,7 +121,8 @@ const mapDispatchToProps = Object.assign(
     {},
     sessionActions,
     speakerActions,
-    projectActions
+    projectActions,
+    voteActions
 )
 
 export default connect(

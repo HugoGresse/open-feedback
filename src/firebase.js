@@ -9,6 +9,7 @@ firebaseMain.firestore().settings({ timestampsInSnapshots: true })
 
 export const authProvider = firebaseMain.auth()
 export const fireStoreMainInstance = firebaseMain.firestore()
+export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 export let fireStoreScheduleInstance
 
 export const initFireStoreSchedule = config => {

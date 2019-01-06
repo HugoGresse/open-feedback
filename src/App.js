@@ -10,8 +10,8 @@ import { connect } from 'react-redux'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { setFavicon } from './component/layout/utils'
 import { authActions } from './component/auth'
-import { getProjectSelector } from './component/project/core/projectSelectors'
-import * as projectActions from './component/project/core/projectActions'
+import { getProjectSelector } from './component/project/projectSelectors'
+import * as projectActions from './component/project/projectActions'
 
 const styles = theme => ({
     loading: {

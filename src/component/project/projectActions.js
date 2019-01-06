@@ -4,7 +4,7 @@ import {
     GET_PROJECT_VOTE_ITEMS_ERROR,
     GET_PROJECT_VOTE_ITEMS_SUCCESS
 } from './projectActionTypes'
-import { fireStoreMainInstance, initFireStoreSchedule } from '../../../firebase'
+import { fireStoreMainInstance, initFireStoreSchedule } from '../../firebase'
 import { getProjectSelector } from './projectSelectors'
 
 export const getProject = projectId => {
@@ -61,7 +61,6 @@ export const getVoteItems = () => {
                     type: GET_PROJECT_VOTE_ITEMS_SUCCESS,
                     payload: voteItems
                 })
-                console.log(voteItems)
             })
             .catch(err => {
                 dispatch({

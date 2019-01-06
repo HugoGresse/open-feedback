@@ -1,0 +1,2 @@
+export const ADD_VOTE_SUCCESS = 'ADD_VOTE_SUCCESS'
+export const ADD_VOTE_ERROR = 'ADD_VOTE_ERROR'
