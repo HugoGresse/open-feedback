@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getSessionsGroupByDate, sessionActions } from './core'
+import { getSessionsGroupByDateAndTrack, sessionActions } from './core'
 import { speakerActions } from './../speaker/core'
 import SessionItem from './SessionItem'
 import Grid from '@material-ui/core/Grid'
@@ -21,29 +21,34 @@ class SessionList extends Component {
     }
 
     render() {
-        const { sessionsByDate, match } = this.props
-        if (!sessionsByDate) return 'Data loading'
-
+        const { sessionsByDateAndTrack, match } = this.props
+        if (!sessionsByDateAndTrack) return 'Data loading'
         return (
             <div>
-                {sessionsByDate.map((current, key) => (
+                {sessionsByDateAndTrack.map((current, key) => (
                     <div key={key}>
-                        <Grid item xs>
-                            <Typography variant="h5">
-                                {moment(current.date).format('dddd D')}
-                            </Typography>
-                        </Grid>
+                        <Typography variant="h5">
+                            {moment(current.date).format('dddd D')}
+                        </Typography>
 
-                        <Grid container>
-                            {current.sessions.map((session, key) => (
-                                <SessionItem
-                                    key={key}
-                                    session={session}
-                                    routerParams={match.params}
-                                    onClick={this.onSessionClicked}
-                                />
-                            ))}
-                        </Grid>
+                        {current.tracks.map((track, key) => (
+                            <div key={key}>
+                                <Typography variant="h6">
+                                    {track.track}
+                                </Typography>
+
+                                <Grid container>
+                                    {track.sessions.map((session, key) => (
+                                        <SessionItem
+                                            key={key}
+                                            session={session}
+                                            routerParams={match.params}
+                                            onClick={this.onSessionClicked}
+                                        />
+                                    ))}
+                                </Grid>
+                            </div>
+                        ))}
                     </div>
                 ))}
             </div>
@@ -52,7 +57,7 @@ class SessionList extends Component {
 }
 
 const mapStateToProps = state => ({
-    sessionsByDate: getSessionsGroupByDate(state)
+    sessionsByDateAndTrack: getSessionsGroupByDateAndTrack(state)
 })
 
 const mapDispatchToProps = Object.assign({}, sessionActions, speakerActions)
