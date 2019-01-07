@@ -1,4 +1,5 @@
 import {
+    ADD_VOTE_BEFORE_SUCCESS,
     ADD_VOTE_ERROR,
     ADD_VOTE_SUCCESS,
     GET_USER_VOTES_ERROR,
@@ -10,7 +11,6 @@ import { getProjectSelector } from '../project/projectSelectors'
 
 export const voteFor = (sessionId, voteItemId) => {
     return (dispatch, getState) => {
-        console.log('new vote', sessionId, voteItemId, getUser(getState()).uid)
         const voteContent = {
             projectId: getProjectSelector(getState()).id,
             sessionId: sessionId,
@@ -18,27 +18,38 @@ export const voteFor = (sessionId, voteItemId) => {
             createdAt: serverTimestamp()
         }
 
+        const tempElementTimestamp = new Date().getTime()
+
+        dispatch({
+            type: ADD_VOTE_BEFORE_SUCCESS,
+            payload: {
+                [tempElementTimestamp]: voteContent
+            }
+        })
+
         fireStoreMainInstance
             .collection('users')
             .doc(getUser(getState()).uid)
             .collection('votes')
             .add(voteContent)
             .then(docRef => {
-                console.log('Vote casted, ID: ', docRef.id)
-                // TODO : dispatch a priarly action to update the UI before the actual result
-
-                const dispatchObject = {
-                    [docRef.id]: voteContent
-                }
                 dispatch({
                     type: ADD_VOTE_SUCCESS,
-                    payload: dispatchObject
+                    payload: {
+                        vote: {
+                            [docRef.id]: voteContent
+                        },
+                        tempVoteId: tempElementTimestamp
+                    }
                 })
             })
             .catch(error => {
                 dispatch({
                     type: ADD_VOTE_ERROR,
-                    payload: error
+                    payload: {
+                        error: error,
+                        tempVoteId: tempElementTimestamp
+                    }
                 })
             })
 
