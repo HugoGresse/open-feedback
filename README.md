@@ -2,6 +2,8 @@
 
 **Open Feedback** is an opened SaaS platform destined to organisers to gather feedback from users. It connect to hoverboard-v2 Firestore to retrieve all sessions & speakers & let any user give feedback on them and store everything on Open Feedback Firestore.
 
+> Demo: https://open-feedback-42.firebaseapp.com/eaJnyMXD3oNfhrrnBYDT
+
 ## Features
 
 _Open Feedback is still in beta_

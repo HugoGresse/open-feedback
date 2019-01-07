@@ -33,3 +33,6 @@ yarn-error.log*
 
 # keys
 src/config.js
+
+# Firebase specific
+.firebase
