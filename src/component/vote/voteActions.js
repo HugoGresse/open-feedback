@@ -3,11 +3,15 @@ import {
     ADD_VOTE_ERROR,
     ADD_VOTE_SUCCESS,
     GET_USER_VOTES_ERROR,
-    GET_USER_VOTES_SUCCESS
+    GET_USER_VOTES_SUCCESS,
+    REMOVE_VOTE_BEFORE_SUCCESS,
+    REMOVE_VOTE_ERROR,
+    REMOVE_VOTE_SUCCESS
 } from './voteActionTypes'
 import { fireStoreMainInstance, serverTimestamp } from '../../firebase'
 import { getUser } from '../auth'
 import { getProjectSelector } from '../project/projectSelectors'
+import { getVotesSelector } from './voteSelectors'
 
 export const voteFor = (sessionId, voteItemId) => {
     return (dispatch, getState) => {
@@ -15,15 +19,17 @@ export const voteFor = (sessionId, voteItemId) => {
             projectId: getProjectSelector(getState()).id,
             sessionId: sessionId,
             voteItemId: voteItemId,
+            id: new Date().getTime(),
             createdAt: serverTimestamp()
         }
-
-        const tempElementTimestamp = new Date().getTime()
 
         dispatch({
             type: ADD_VOTE_BEFORE_SUCCESS,
             payload: {
-                [tempElementTimestamp]: voteContent
+                [voteContent.id]: {
+                    ...voteContent,
+                    temp: true
+                }
             }
         })
 
@@ -37,9 +43,12 @@ export const voteFor = (sessionId, voteItemId) => {
                     type: ADD_VOTE_SUCCESS,
                     payload: {
                         vote: {
-                            [docRef.id]: voteContent
+                            [docRef.id]: {
+                                ...voteContent,
+                                id: docRef.id
+                            }
                         },
-                        tempVoteId: tempElementTimestamp
+                        tempVoteId: voteContent.id
                     }
                 })
             })
@@ -48,7 +57,7 @@ export const voteFor = (sessionId, voteItemId) => {
                     type: ADD_VOTE_ERROR,
                     payload: {
                         error: error,
-                        tempVoteId: tempElementTimestamp
+                        tempVoteId: voteContent.id
                     }
                 })
             })
@@ -60,6 +69,43 @@ export const voteFor = (sessionId, voteItemId) => {
     }
 }
 
+export const removeVote = voteToDelete => {
+    return (dispatch, getState) => {
+        if (getVotesSelector(getState())[voteToDelete.id].temp) {
+            console.info(
+                'Unable to delete vote as it has not been writed on the database'
+            )
+            return
+        }
+
+        dispatch({
+            type: REMOVE_VOTE_BEFORE_SUCCESS,
+            payload: voteToDelete
+        })
+
+        fireStoreMainInstance
+            .collection('users')
+            .doc(getUser(getState()).uid)
+            .collection('votes')
+            .doc(voteToDelete.id)
+            .delete()
+            .then(() => {
+                dispatch({
+                    type: REMOVE_VOTE_SUCCESS,
+                    payload: voteToDelete
+                })
+            })
+            .catch(error => {
+                dispatch({
+                    type: REMOVE_VOTE_ERROR,
+                    payload: {
+                        error: error,
+                        voteWhichShouldHaveBeenDeleted: voteToDelete
+                    }
+                })
+            })
+    }
+}
 export const getVotes = () => {
     return (dispatch, getState) => {
         fireStoreMainInstance
@@ -72,6 +118,7 @@ export const getVotes = () => {
                 const votes = {}
                 voteSnapshot.forEach(doc => {
                     votes[doc.id] = doc.data()
+                    votes[doc.id].id = doc.id
                 })
                 dispatch({
                     type: GET_USER_VOTES_SUCCESS,

@@ -40,8 +40,12 @@ class SessionVote extends Component {
         }, '')
     }
 
-    onVoteItemClick = (event, vote) => {
-        this.props.voteFor(this.props.session.id, vote.id)
+    onVoteItemClick = (event, voteItem) => {
+        if (this.props.userVotes[voteItem.id]) {
+            this.props.removeVote(this.props.userVotes[voteItem.id])
+        } else {
+            this.props.voteFor(this.props.session.id, voteItem.id)
+        }
     }
 
     render() {
@@ -79,11 +83,11 @@ class SessionVote extends Component {
                 </Typography>
 
                 <Grid container className={classes.layout}>
-                    {voteItems.map((vote, key) => (
+                    {voteItems.map((voteItem, key) => (
                         <SessionVoteItem
                             key={key}
-                            voteItem={vote}
-                            userVote={userVotes[vote.id]}
+                            voteItem={voteItem}
+                            userVote={userVotes[voteItem.id]}
                             onClick={this.onVoteItemClick}
                         />
                     ))}

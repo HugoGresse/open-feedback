@@ -24,10 +24,7 @@ const styles = theme => ({
         borderColor: '#e2e2e2',
         border: '1px solid',
         height: '100%',
-        boxSizing: 'border-box',
-        '&:hover': {
-            backgroundColor: '#fafafa'
-        }
+        boxSizing: 'border-box'
     }
 })
 
