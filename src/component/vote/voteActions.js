@@ -61,11 +61,6 @@ export const voteFor = (sessionId, voteItemId) => {
                     }
                 })
             })
-
-        // TODO : to get the data, new cloud function that when vriting a vote agregate the result for a given session
-        /**
-         * project > sessionVote > sessionId > voteItemsIds: [uid, uid, ... ]
-         */
     }
 }
 
