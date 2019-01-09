@@ -23,7 +23,7 @@ import Chip from '../customComponent/Chip'
 
 const styles = theme => ({
     arrowLink: {
-        color: theme.palette.primary,
+        color: theme.palette.grey[800],
         marginRight: '20px'
     },
     header: {
@@ -91,7 +91,6 @@ class SessionVote extends Component {
         if (!session || !speakers || !voteItems) {
             return ''
         }
-        console.log(theme)
 
         return (
             <div>
@@ -126,7 +125,6 @@ class SessionVote extends Component {
                         </div>
 
                         <SpeakerList speakers={speakers} />
-                        {/* Speaker(s): {this.getSpeakersString(session, speakers)} */}
                     </div>
                 </div>
                 <Grid

@@ -11,12 +11,12 @@ const styles = () => ({
 
 class SpeakerList extends Component {
     render() {
-        const { speakers, classes } = this.props
+        const { speakers, classes, size = 'medium' } = this.props
 
         return (
             <div className={classes.speakers}>
                 {speakers.map((speaker, key) => (
-                    <SpeakerItem key={key} {...speaker} />
+                    <SpeakerItem key={key} {...speaker} size={size} />
                 ))}
             </div>
         )
