@@ -4,7 +4,7 @@ import { getSessionsGroupByDateAndTrack, sessionActions } from './core'
 import { speakerActions } from './../speaker/core'
 import SessionItem from './SessionItem'
 import Grid from '@material-ui/core/Grid'
-import { withStyles, withTheme } from '@material-ui/core'
+import { withStyles } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import moment from 'moment'
 
