@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper'
 import { Link } from 'react-router-dom'
 import connect from 'react-redux/es/connect/connect'
 import { getSpeakersList } from '../speaker/core'
+import SpeakerList from '../speaker/SpeakerList'
 
 const styles = theme => ({
     itemContainer: {
@@ -18,42 +19,38 @@ const styles = theme => ({
     paper: {
         padding: theme.spacing.unit * 2,
         textAlign: 'center',
-        color: theme.palette.text.secondary,
+        fontSize: '17px',
         boxShadow: 'none',
         borderRadius: '0',
-        borderColor: '#e2e2e2',
-        border: '1px solid',
-        height: '100%',
+        color: theme.palette.text.secondary,
+        border: '1px solid ' + theme.palette.grey[300],
+        height: '150px',
         boxSizing: 'border-box',
         '&:hover': {
             backgroundColor: '#fafafa'
-        }
+        },
+        display: 'flex',
+        flexDirection: 'column',
+        // alignItems: 'center',
+        justifyContent: 'space-between'
     }
 })
 
 export const SessionItem = props => {
-    const { classes, session, speakers, routerParams } = props
+    const { classes, session, speakersEntities, routerParams } = props
 
-    const speakerIds = session.speakers
-
-    let speakerRender = ''
-
-    if (speakerIds) {
-        speakerRender = session.speakers.map(speakerId => {
-            if (speakers[speakerId]) {
-                return <p key={speakerId}>{speakers[speakerId].name}</p>
-            } else {
-                return null
-            }
-        })
-    }
+    const speakers =
+        session.speakers &&
+        session.speakers.map(speakerId => speakersEntities[speakerId])
 
     return (
-        <Grid item xs={6} sm={4} md={2} className={classes.itemContainer}>
+        <Grid item xs={6} sm={4} md={4} className={classes.itemContainer}>
             <Link to={`/${routerParams.projectId}/${session.id}`}>
                 <Paper className={classes.paper}>
                     {session.title}
-                    {speakerRender}
+                    {speakers && (
+                        <SpeakerList speakers={speakers} size="small" />
+                    )}
                 </Paper>
             </Link>
         </Grid>
@@ -66,7 +63,7 @@ SessionItem.propTypes = {
 }
 
 const mapStateToProps = state => ({
-    speakers: getSpeakersList(state)
+    speakersEntities: getSpeakersList(state)
 })
 
 export default connect(
