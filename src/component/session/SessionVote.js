@@ -18,8 +18,37 @@ import * as projectActions from '../project/projectActions'
 import * as voteActions from '../vote/voteActions'
 import { getVotesBySessionAndVoteItemSelector } from '../vote/voteSelectors'
 import SessionVoteItem from './SessionVoteItem'
+import SpeakerList from '../speaker/SpeakerList'
+import Chip from '../customComponent/Chip'
 
-const styles = theme => ({})
+const styles = theme => ({
+    arrowLink: {
+        color: theme.palette.primary,
+        marginRight: '20px'
+    },
+    header: {
+        display: 'flex',
+        marginBottom: '40px'
+    },
+    subHeader: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginTop: '10px'
+    },
+    dateTime: {
+        fontSize: '18px',
+        display: 'flex',
+        flexDirection: 'column',
+        textAlign: 'right',
+        color: theme.palette.grey[500]
+    },
+    time: {
+        fontSize: '14px'
+    },
+    headerTitle: {
+        width: '100%'
+    }
+})
 
 class SessionVote extends Component {
     componentWillMount() {
@@ -51,34 +80,56 @@ class SessionVote extends Component {
             session,
             match,
             voteItems,
-            userVotes
+            userVotes,
+            theme
         } = this.props
 
         if (!session || !speakers || !voteItems) {
             return ''
         }
+        console.log(theme)
 
         return (
             <div>
-                <Link to={`/${match.params.projectId}/`}>
-                    <ArrowBack />
-                </Link>
+                <div className={classes.header}>
+                    <Link
+                        className={classes.arrowLink}
+                        to={`/${match.params.projectId}/`}
+                    >
+                        <ArrowBack />
+                    </Link>
+                    <div className={classes.headerTitle}>
+                        {session.tags.map((tag, key) => (
+                            <Chip key={key} label={tag} />
+                        ))}
 
-                <Typography variant="h2" id="modal-title">
-                    {session.title}
-                </Typography>
+                        <div className={classes.subHeader}>
+                            <Typography
+                                variant="h5"
+                                id="modal-title"
+                                className={classes.title}
+                            >
+                                {session.title}
+                            </Typography>
 
-                <Typography variant="h5" id="modal-title">
-                    {moment(session.startTime).format('dddd D, H:m ')}
-                    to
-                    {moment(session.endTime).format(' H:m')}
-                </Typography>
+                            <div className={classes.dateTime}>
+                                {moment(session.startTime).format('dddd D')}
+                                <div className={classes.time}>
+                                    {moment(session.startTime).format('H:mm ')}-
+                                    {moment(session.endTime).format(' H:mm')}
+                                </div>
+                            </div>
+                        </div>
 
-                <Typography variant="h6">
-                    Speaker(s): {this.getSpeakersString(session, speakers)}
-                </Typography>
-
-                <Grid container className={classes.layout}>
+                        <SpeakerList speakers={speakers} />
+                        {/* Speaker(s): {this.getSpeakersString(session, speakers)} */}
+                    </div>
+                </div>
+                <Grid
+                    container
+                    className={classes.layout}
+                    spacing={theme.spacing.default}
+                >
                     {voteItems.map((vote, key) => (
                         <SessionVoteItem
                             key={key}
@@ -111,4 +162,4 @@ const mapDispatchToProps = Object.assign(
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(SessionVote))
+)(withStyles(styles, { withTheme: true })(SessionVote))
