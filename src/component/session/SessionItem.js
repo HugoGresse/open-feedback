@@ -9,65 +9,67 @@ import connect from 'react-redux/es/connect/connect'
 import { getSpeakersList } from '../speaker/core'
 
 const styles = theme => ({
-  itemContainer: {
-    margin: -1,
-    '&:hover': {
-      cursor: 'pointer'
+    itemContainer: {
+        margin: -1,
+        '&:hover': {
+            cursor: 'pointer'
+        }
+    },
+    paper: {
+        padding: theme.spacing.unit * 2,
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        boxShadow: 'none',
+        borderRadius: '0',
+        borderColor: '#e2e2e2',
+        border: '1px solid',
+        height: '100%',
+        boxSizing: 'border-box',
+        '&:hover': {
+            backgroundColor: '#fafafa'
+        }
     }
-  },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    boxShadow: 'none',
-    borderRadius: '0',
-    borderColor: '#e2e2e2',
-    border: '1px solid',
-    height: '100%',
-    boxSizing: 'border-box',
-    '&:hover': {
-      backgroundColor: '#fafafa'
-    }
-  }
 })
 
 export const SessionItem = props => {
-  const { classes, session, speakers, routerParams } = props
+    const { classes, session, speakers, routerParams } = props
 
-  const speakerIds = session.speakers
+    const speakerIds = session.speakers
 
-  let speakerRender = ''
+    let speakerRender = ''
 
-  if (speakerIds) {
-    speakerRender = session.speakers.map(speakerId => {
-      if (speakers[speakerId]) {
-        return <p key={speakerId}>{speakers[speakerId].name}</p>
-      } else {
-        console.log('No speaker for id: ' + speakerId)
-        return null
-      }
-    })
-  }
+    if (speakerIds) {
+        speakerRender = session.speakers.map(speakerId => {
+            if (speakers[speakerId]) {
+                return <p key={speakerId}>{speakers[speakerId].name}</p>
+            } else {
+                return null
+            }
+        })
+    }
 
-  return (
-    <Grid item xs={6} sm={4} md={2} className={classes.itemContainer}>
-      <Link to={`/${routerParams.projectId}/${session.id}`}>
-        <Paper className={classes.paper}>
-          {session.title}
-          {speakerRender}
-        </Paper>
-      </Link>
-    </Grid>
-  )
+    return (
+        <Grid item xs={6} sm={4} md={2} className={classes.itemContainer}>
+            <Link to={`/${routerParams.projectId}/${session.id}`}>
+                <Paper className={classes.paper}>
+                    {session.title}
+                    {speakerRender}
+                </Paper>
+            </Link>
+        </Grid>
+    )
 }
 
 SessionItem.propTypes = {
-  classes: PropTypes.object.isRequired,
-  session: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
-  speakers: getSpeakersList(state)
+    speakers: getSpeakersList(state)
 })
 
-export default connect(mapStateToProps, {})(withStyles(styles)(SessionItem))
+export default connect(
+    mapStateToProps,
+    {}
+)(withStyles(styles)(SessionItem))
