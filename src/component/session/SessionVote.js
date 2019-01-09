@@ -137,8 +137,8 @@ class SessionVote extends Component {
                     {voteItems.map((vote, key) => (
                         <SessionVoteItem
                             key={key}
-                            voteItem={voteItem}
-                            userVote={userVotes[voteItem.id]}
+                            voteItem={vote}
+                            userVote={userVotes[vote.id]}
                             onClick={this.onVoteItemClick}
                         />
                     ))}
