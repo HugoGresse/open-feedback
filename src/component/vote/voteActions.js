@@ -1,22 +1,37 @@
 import {
+    ADD_VOTE_BEFORE_SUCCESS,
     ADD_VOTE_ERROR,
     ADD_VOTE_SUCCESS,
     GET_USER_VOTES_ERROR,
-    GET_USER_VOTES_SUCCESS
+    GET_USER_VOTES_SUCCESS,
+    REMOVE_VOTE_BEFORE_SUCCESS,
+    REMOVE_VOTE_ERROR,
+    REMOVE_VOTE_SUCCESS
 } from './voteActionTypes'
 import { fireStoreMainInstance, serverTimestamp } from '../../firebase'
 import { getUser } from '../auth'
 import { getProjectSelector } from '../project/projectSelectors'
+import { getVotesSelector } from './voteSelectors'
 
 export const voteFor = (sessionId, voteItemId) => {
     return (dispatch, getState) => {
-        console.log('new vote', sessionId, voteItemId, getUser(getState()).uid)
         const voteContent = {
             projectId: getProjectSelector(getState()).id,
             sessionId: sessionId,
             voteItemId: voteItemId,
+            id: new Date().getTime(),
             createdAt: serverTimestamp()
         }
+
+        dispatch({
+            type: ADD_VOTE_BEFORE_SUCCESS,
+            payload: {
+                [voteContent.id]: {
+                    ...voteContent,
+                    temp: true
+                }
+            }
+        })
 
         fireStoreMainInstance
             .collection('users')
@@ -24,31 +39,68 @@ export const voteFor = (sessionId, voteItemId) => {
             .collection('votes')
             .add(voteContent)
             .then(docRef => {
-                console.log('Vote casted, ID: ', docRef.id)
-                // TODO : dispatch a priarly action to update the UI before the actual result
-
-                const dispatchObject = {
-                    [docRef.id]: voteContent
-                }
                 dispatch({
                     type: ADD_VOTE_SUCCESS,
-                    payload: dispatchObject
+                    payload: {
+                        vote: {
+                            [docRef.id]: {
+                                ...voteContent,
+                                id: docRef.id
+                            }
+                        },
+                        tempVoteId: voteContent.id
+                    }
                 })
             })
             .catch(error => {
                 dispatch({
                     type: ADD_VOTE_ERROR,
-                    payload: error
+                    payload: {
+                        error: error,
+                        tempVoteId: voteContent.id
+                    }
                 })
             })
-
-        // TODO : to get the data, new cloud function that when vriting a vote agregate the result for a given session
-        /**
-         * project > sessionVote > sessionId > voteItemsIds: [uid, uid, ... ]
-         */
     }
 }
 
+export const removeVote = voteToDelete => {
+    return (dispatch, getState) => {
+        if (getVotesSelector(getState())[voteToDelete.id].temp) {
+            console.info(
+                'Unable to delete vote as it has not been writed on the database'
+            )
+            return
+        }
+
+        dispatch({
+            type: REMOVE_VOTE_BEFORE_SUCCESS,
+            payload: voteToDelete
+        })
+
+        fireStoreMainInstance
+            .collection('users')
+            .doc(getUser(getState()).uid)
+            .collection('votes')
+            .doc(voteToDelete.id)
+            .delete()
+            .then(() => {
+                dispatch({
+                    type: REMOVE_VOTE_SUCCESS,
+                    payload: voteToDelete
+                })
+            })
+            .catch(error => {
+                dispatch({
+                    type: REMOVE_VOTE_ERROR,
+                    payload: {
+                        error: error,
+                        voteWhichShouldHaveBeenDeleted: voteToDelete
+                    }
+                })
+            })
+    }
+}
 export const getVotes = () => {
     return (dispatch, getState) => {
         fireStoreMainInstance
@@ -61,6 +113,7 @@ export const getVotes = () => {
                 const votes = {}
                 voteSnapshot.forEach(doc => {
                     votes[doc.id] = doc.data()
+                    votes[doc.id].id = doc.id
                 })
                 dispatch({
                     type: GET_USER_VOTES_SUCCESS,

@@ -22,7 +22,8 @@ _Open Feedback is still in beta_
 -   collapsable day
 -   manage errors
 -   better design
--   release it on Firebase Hosting
+-   add GA
+-   internationalisation (date)
 
 > This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
