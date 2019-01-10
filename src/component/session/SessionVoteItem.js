@@ -30,7 +30,7 @@ const styles = theme => ({
 
 class SessionVoteItem extends Component {
     render() {
-        const { classes, voteItem, userVote } = this.props
+        const { classes, voteItem, userVote, voteResult } = this.props
 
         const selectedClass = userVote ? classes.selectedItem : ''
 
@@ -45,7 +45,11 @@ class SessionVoteItem extends Component {
                 className={classes.itemContainer}
                 onClick={event => this.props.onClick(event, voteItem)}
             >
-                <Paper className={paperClasses}>{voteItem.name}</Paper>
+                <Paper className={paperClasses}>
+                    {voteItem.name}
+                    <br />
+                    {voteResult}
+                </Paper>
             </Grid>
         )
     }
@@ -53,7 +57,8 @@ class SessionVoteItem extends Component {
 
 SessionVoteItem.propTypes = {
     classes: PropTypes.object.isRequired,
-    voteItem: PropTypes.object.isRequired
+    voteItem: PropTypes.object.isRequired,
+    voteResult: PropTypes.number
 }
 
 export default withStyles(styles)(SessionVoteItem)

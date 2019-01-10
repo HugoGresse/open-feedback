@@ -2,7 +2,10 @@ import {
     GET_PROJECT_SUCCESS,
     GET_PROJECT_ERROR,
     GET_PROJECT_VOTE_ITEMS_ERROR,
-    GET_PROJECT_VOTE_ITEMS_SUCCESS
+    GET_PROJECT_VOTE_ITEMS_SUCCESS,
+    GET_PROJECT_VOTE_RESULT_ERROR,
+    GET_PROJECT_VOTE_RESULT_SUCCESS,
+    INCREMENT_VOTE_LOCALY
 } from './projectActionTypes'
 
 const initState = {
@@ -12,7 +15,8 @@ const initState = {
     logoSmall: null,
     name: null,
     id: null,
-    voteItems: null
+    voteItems: null,
+    sessionVotes: null
 }
 
 const projectReducer = (state = initState, { payload, type }) => {
@@ -26,6 +30,51 @@ const projectReducer = (state = initState, { payload, type }) => {
                 ...state,
                 voteItems: payload
             }
+        case GET_PROJECT_VOTE_RESULT_SUCCESS:
+            return {
+                ...state,
+                sessionVotes: payload
+            }
+        case INCREMENT_VOTE_LOCALY:
+            const vote = payload.vote
+            if (!state.sessionVotes || !state.sessionVotes[vote.sessionId]) {
+                return {
+                    ...state,
+                    sessionVotes: {
+                        ...state.sessionVotes,
+                        [vote.sessionId]: {
+                            [vote.voteItemId]: payload.amount
+                        }
+                    }
+                }
+            }
+
+            if (!state.sessionVotes[vote.sessionId][vote.voteItemId]) {
+                return {
+                    ...state,
+                    sessionVotes: {
+                        ...state.sessionVotes,
+                        [vote.sessionId]: {
+                            ...state.sessionVotes[vote.sessionId],
+                            [vote.voteItemId]: payload.amount
+                        }
+                    }
+                }
+            }
+            return {
+                ...state,
+                sessionVotes: {
+                    ...state.sessionVotes,
+                    [vote.sessionId]: {
+                        ...state.sessionVotes[vote.sessionId],
+                        [vote.voteItemId]:
+                            state.sessionVotes[vote.sessionId][
+                                vote.voteItemId
+                            ] - 1
+                    }
+                }
+            }
+        case GET_PROJECT_VOTE_RESULT_ERROR:
         case GET_PROJECT_VOTE_ITEMS_ERROR:
         case GET_PROJECT_ERROR:
             console.log(payload)

@@ -12,6 +12,11 @@ import { fireStoreMainInstance, serverTimestamp } from '../../firebase'
 import { getUser } from '../auth'
 import { getProjectSelector } from '../project/projectSelectors'
 import { getVotesSelector } from './voteSelectors'
+import { getVoteResult } from '../project/projectActions'
+import {
+    GET_PROJECT_VOTE_RESULT_SUCCESS,
+    INCREMENT_VOTE_LOCALY
+} from '../project/projectActionTypes'
 
 export const voteFor = (sessionId, voteItemId) => {
     return (dispatch, getState) => {
@@ -30,6 +35,14 @@ export const voteFor = (sessionId, voteItemId) => {
                     ...voteContent,
                     temp: true
                 }
+            }
+        })
+
+        dispatch({
+            type: INCREMENT_VOTE_LOCALY,
+            payload: {
+                vote: voteContent,
+                amount: 1
             }
         })
 
@@ -76,6 +89,14 @@ export const removeVote = voteToDelete => {
         dispatch({
             type: REMOVE_VOTE_BEFORE_SUCCESS,
             payload: voteToDelete
+        })
+
+        dispatch({
+            type: INCREMENT_VOTE_LOCALY,
+            payload: {
+                vote: voteToDelete,
+                amount: -1
+            }
         })
 
         fireStoreMainInstance
