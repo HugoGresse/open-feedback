@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid'
 
 import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
+import { relative } from 'path'
 
 const styles = theme => ({
     itemContainer: {
@@ -30,7 +31,16 @@ const styles = theme => ({
         },
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        position: 'relative'
+    },
+    voteTitle: {
+        color: theme.palette.grey[800]
+    },
+    voteResult: {
+        position: 'absolute',
+        bottom: '5px',
+        fontSize: '14px'
     }
 })
 
@@ -52,9 +62,13 @@ class SessionVoteItem extends Component {
                 onClick={event => this.props.onClick(event, voteItem)}
             >
                 <Paper elevation={1} className={paperClasses}>
-                    {voteItem.name}
-                    <br />
-                    {voteResult}
+                    <span className={classes.voteTitle}>{voteItem.name}</span>
+                    {voteResult > 0 && (
+                        <span className={classes.voteResult}>
+                            {voteResult}{' '}
+                            <span>{voteResult > 1 ? 'votes' : 'vote'}</span>
+                        </span>
+                    )}
                 </Paper>
             </Grid>
         )
