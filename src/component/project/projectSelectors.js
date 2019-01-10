@@ -1,8 +1,5 @@
 import { createSelector } from 'reselect'
-import {
-    getSelectedSessionId,
-    getSessionsList
-} from '../session/core/sessionSelectors'
+import { getSelectedSessionId } from '../session/core/sessionSelectors'
 
 const getProjects = state => state.project
 
