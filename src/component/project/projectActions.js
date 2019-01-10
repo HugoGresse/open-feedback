@@ -2,7 +2,9 @@ import {
     GET_PROJECT_ERROR,
     GET_PROJECT_SUCCESS,
     GET_PROJECT_VOTE_ITEMS_ERROR,
-    GET_PROJECT_VOTE_ITEMS_SUCCESS
+    GET_PROJECT_VOTE_ITEMS_SUCCESS,
+    GET_PROJECT_VOTE_RESULT_ERROR,
+    GET_PROJECT_VOTE_RESULT_SUCCESS
 } from './projectActionTypes'
 import { fireStoreMainInstance, initFireStoreSchedule } from '../../firebase'
 import { getProjectSelector } from './projectSelectors'
@@ -65,6 +67,36 @@ export const getVoteItems = () => {
             .catch(err => {
                 dispatch({
                     type: GET_PROJECT_VOTE_ITEMS_ERROR,
+                    payload: err
+                })
+            })
+    }
+}
+
+export const getVoteResult = () => {
+    return (dispatch, getState) => {
+        return fireStoreMainInstance
+            .collection('projects')
+            .doc(getProjectSelector(getState()).id)
+            .collection('sessionVotes')
+            .get()
+            .then(projectSnapshot => {
+                const sessions = {}
+                projectSnapshot.forEach(doc => {
+                    sessions[doc.id] = {
+                        ...doc.data(),
+                        id: doc.id
+                    }
+                })
+
+                dispatch({
+                    type: GET_PROJECT_VOTE_RESULT_SUCCESS,
+                    payload: sessions
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type: GET_PROJECT_VOTE_RESULT_ERROR,
                     payload: err
                 })
             })

@@ -13,7 +13,10 @@ import Grid from '@material-ui/core/Grid'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
-import { getProjectVoteItemsSelector } from '../project/projectSelectors'
+import {
+    getProjectVoteItemsSelector,
+    getVoteResultSelector
+} from '../project/projectSelectors'
 import * as projectActions from '../project/projectActions'
 import * as voteActions from '../vote/voteActions'
 import { getVotesBySessionAndVoteItemSelector } from '../vote/voteSelectors'
@@ -28,6 +31,7 @@ class SessionVote extends Component {
         this.props.setSelectedSession(id)
         this.props.getSpeakers()
         this.props.getVoteItems()
+        this.props.getVoteResult()
     }
 
     getSpeakersString(session, speakers) {
@@ -55,7 +59,8 @@ class SessionVote extends Component {
             session,
             match,
             voteItems,
-            userVotes
+            userVotes,
+            voteResults
         } = this.props
 
         if (!session || !speakers || !voteItems) {
@@ -88,6 +93,7 @@ class SessionVote extends Component {
                             key={key}
                             voteItem={voteItem}
                             userVote={userVotes[voteItem.id]}
+                            voteResult={voteResults[voteItem.id]}
                             onClick={this.onVoteItemClick}
                         />
                     ))}
@@ -101,7 +107,8 @@ const mapStateToProps = state => ({
     session: getSelectedSession(state),
     speakers: getSpeakersForSelectedSession(state),
     voteItems: getProjectVoteItemsSelector(state),
-    userVotes: getVotesBySessionAndVoteItemSelector(state)
+    userVotes: getVotesBySessionAndVoteItemSelector(state),
+    voteResults: getVoteResultSelector(state)
 })
 
 const mapDispatchToProps = Object.assign(
