@@ -12,11 +12,7 @@ import { fireStoreMainInstance, serverTimestamp } from '../../firebase'
 import { getUser } from '../auth'
 import { getProjectSelector } from '../project/projectSelectors'
 import { getVotesSelector } from './voteSelectors'
-import { getVoteResult } from '../project/projectActions'
-import {
-    GET_PROJECT_VOTE_RESULT_SUCCESS,
-    INCREMENT_VOTE_LOCALY
-} from '../project/projectActionTypes'
+import { INCREMENT_VOTE_LOCALY } from '../project/projectActionTypes'
 
 export const voteFor = (sessionId, voteItemId) => {
     return (dispatch, getState) => {
