@@ -8,10 +8,27 @@ import { withStyles } from '@material-ui/core'
 import './App.css'
 import { connect } from 'react-redux'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { setFavicon } from './component/layout/utils'
 import { authActions } from './component/auth'
 import { getProjectSelector } from './component/project/projectSelectors'
 import * as projectActions from './component/project/projectActions'
+import red from '@material-ui/core/colors/red'
+
+const theme = createMuiTheme({
+    color: {
+        primary: red
+        // secondary: {
+        //     main: '#51B6FF'
+        // }
+    },
+    typography: {
+        useNextVariants: true
+    },
+    spacing: {
+        default: 16
+    }
+})
 
 const styles = theme => ({
     loading: {
@@ -56,36 +73,36 @@ class App extends Component {
     render() {
         const { classes, match, project } = this.props
 
-        if (project) {
-            return (
-                <div>
-                    <Header logo={project.logoSmall} />
-
-                    <div className={classes.layout}>
-                        <br />
-
-                        <Switch>
-                            <Route
-                                exact
-                                path={`${match.path}`}
-                                component={SessionList}
-                            />
-                            <Route
-                                path={`${match.path}/:sessionId`}
-                                component={SessionVote}
-                            />
-                        </Switch>
-
-                        <br />
-                    </div>
-                </div>
-            )
-        }
-
         return (
-            <div className={classes.loading}>
-                <CircularProgress />
-            </div>
+            <MuiThemeProvider theme={theme}>
+                {project ? (
+                    <div>
+                        <Header logo={project.logoSmall} />
+
+                        <div className={classes.layout}>
+                            <br />
+
+                            <Switch>
+                                <Route
+                                    exact
+                                    path={`${match.path}`}
+                                    component={SessionList}
+                                />
+                                <Route
+                                    path={`${match.path}/:sessionId`}
+                                    component={SessionVote}
+                                />
+                            </Switch>
+
+                            <br />
+                        </div>
+                    </div>
+                ) : (
+                    <div className={classes.loading}>
+                        <CircularProgress />
+                    </div>
+                )}
+            </MuiThemeProvider>
         )
     }
 }
