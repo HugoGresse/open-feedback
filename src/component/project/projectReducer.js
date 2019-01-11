@@ -70,7 +70,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                         [vote.voteItemId]:
                             state.sessionVotes[vote.sessionId][
                                 vote.voteItemId
-                            ] - 1
+                            ] + payload.amount
                     }
                 }
             }
