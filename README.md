@@ -16,10 +16,7 @@ _Open Feedback is still in beta_
 
 ## TODO list
 
--   display users feedback: aggregation should be done in a cloud function and stored in the project
 -   highlight session logged user has voted for
--   list session by tracks inside day
--   collapsable day
 -   manage errors
 -   better design
 -   add GA
