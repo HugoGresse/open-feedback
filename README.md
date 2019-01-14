@@ -18,9 +18,9 @@ _Open Feedback is still in beta_
 
 -   highlight session logged user has voted for
 -   manage errors
+-   search should include speaker name and tags
 -   better design
 -   add GA
--   internationalisation (date)
 
 > This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
