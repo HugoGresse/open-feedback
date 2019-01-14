@@ -39,7 +39,8 @@ const styles = theme => ({
         },
         marginRight: theme.spacing.unit * 2,
         marginLeft: theme.spacing.unit * 2,
-        width: '100%'
+        width: '100%',
+        transition: 'all 200ms ease-out'
     },
     searchIcon: {
         width: theme.spacing.unit * 6,

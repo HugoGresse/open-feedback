@@ -31,8 +31,8 @@ const styles = theme => ({
         },
         display: 'flex',
         flexDirection: 'column',
-        // alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        transition: 'all 200ms ease-out'
     }
 })
 
