@@ -13,10 +13,7 @@ const styles = theme => ({
             cursor: 'pointer'
         }
     },
-    selectedItem: {
-        border: '4px solid ' + theme.palette.grey[300] + ' !important'
-    },
-    paper: {
+    item: {
         padding: theme.spacing.unit * 2,
         textAlign: 'center',
         fontSize: '17px',
@@ -32,7 +29,11 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        position: 'relative'
+        position: 'relative',
+        transition: 'all 200ms ease-out'
+    },
+    selectedItem: {
+        border: '4px solid ' + theme.palette.grey[300] + ' !important'
     },
     voteTitle: {
         color: theme.palette.grey[800]
@@ -40,7 +41,12 @@ const styles = theme => ({
     voteResult: {
         position: 'absolute',
         bottom: '5px',
-        fontSize: '14px'
+        fontSize: '14px',
+        transition: 'all 200ms ease-in-out'
+    },
+
+    voteResultSelected: {
+        bottom: '2px'
     }
 })
 
@@ -48,9 +54,12 @@ class SessionVoteItem extends Component {
     render() {
         const { classes, voteItem, userVote, voteResult } = this.props
 
-        const selectedClass = userVote ? classes.selectedItem : ''
-
-        const paperClasses = `${classes.paper} ${selectedClass}`
+        const paperClasses = `${classes.item} ${
+            userVote ? classes.selectedItem : ''
+        }`
+        const voteResultClasses = `${classes.voteResult} ${
+            userVote ? classes.voteResultSelected : ''
+        }`
 
         return (
             <Grid
@@ -64,7 +73,7 @@ class SessionVoteItem extends Component {
                 <Paper elevation={1} className={paperClasses}>
                     <span className={classes.voteTitle}>{voteItem.name}</span>
                     {voteResult > 0 && (
-                        <span className={classes.voteResult}>
+                        <span className={voteResultClasses}>
                             {voteResult}{' '}
                             <span>{voteResult > 1 ? 'votes' : 'vote'}</span>
                         </span>

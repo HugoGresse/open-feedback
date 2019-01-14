@@ -7,16 +7,20 @@ import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import moment from 'moment'
+import ExpansionPanel from '@material-ui/core/ExpansionPanel'
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 const styles = theme => ({
+    expansionPanel: {
+        // boxShadow: 'none'
+    },
     DateAndTrackBlock: {
-        marginBottom: '80px'
+        marginBottom: '80px',
+        display: 'block'
     },
-    dateTitle: {
-        background: theme.palette.grey[100],
-        padding: '10px 20px',
-        margin: '0px -20px 10px -20px'
-    },
+    dateTitle: {},
     trackTitle: {
         marginTop: '20px',
         marginBottom: '10px'
@@ -39,33 +43,49 @@ class SessionList extends Component {
         return (
             <div>
                 {sessionsByDateAndTrack.map((current, key) => (
-                    <div className={classes.DateAndTrackBlock} key={key}>
-                        <Typography className={classes.dateTitle} variant="h5">
-                            {moment(current.date).format('dddd D')}
-                        </Typography>
+                    <ExpansionPanel
+                        key={key}
+                        defaultExpanded={true}
+                        className={classes.expansionPanel}
+                    >
+                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography
+                                className={classes.dateTitle}
+                                variant="h5"
+                            >
+                                {moment(current.date).format('dddd D')}
+                            </Typography>
+                        </ExpansionPanelSummary>
 
-                        {current.tracks.map((track, key) => (
-                            <div key={key}>
-                                <Typography
-                                    className={classes.trackTitle}
-                                    variant="h6"
-                                >
-                                    {track.track}
-                                </Typography>
+                        <ExpansionPanelDetails
+                            className={classes.DateAndTrackBlock}
+                        >
+                            {current.tracks.map((track, key) => (
+                                <div key={key}>
+                                    <Typography
+                                        className={classes.trackTitle}
+                                        variant="h6"
+                                    >
+                                        {track.track}
+                                    </Typography>
 
-                                <Grid container spacing={theme.spacing.default}>
-                                    {track.sessions.map((session, key) => (
-                                        <SessionItem
-                                            key={key}
-                                            session={session}
-                                            routerParams={match.params}
-                                            onClick={this.onSessionClicked}
-                                        />
-                                    ))}
-                                </Grid>
-                            </div>
-                        ))}
-                    </div>
+                                    <Grid
+                                        container
+                                        spacing={theme.spacing.default}
+                                    >
+                                        {track.sessions.map((session, key) => (
+                                            <SessionItem
+                                                key={key}
+                                                session={session}
+                                                routerParams={match.params}
+                                                onClick={this.onSessionClicked}
+                                            />
+                                        ))}
+                                    </Grid>
+                                </div>
+                            ))}
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
                 ))}
             </div>
         )
