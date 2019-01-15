@@ -20,3 +20,14 @@ export const getVotesBySessionAndVoteItemSelector = createSelector(
         return result
     }
 )
+
+export const getVotesBySession = createSelector(
+    getVotesSelector,
+    (votes, sessionId) => {
+        const result = {}
+        Object.values(votes).forEach(vote => {
+            result[vote.sessionId] = vote
+        })
+        return result
+    }
+)
