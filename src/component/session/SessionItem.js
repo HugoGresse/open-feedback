@@ -11,10 +11,7 @@ import SpeakerList from '../speaker/SpeakerList'
 
 const styles = theme => ({
     itemContainer: {
-        margin: -1,
-        '&:hover': {
-            cursor: 'pointer'
-        }
+        margin: -1
     },
     paper: {
         padding: theme.spacing.unit * 2,
@@ -27,17 +24,25 @@ const styles = theme => ({
         height: '150px',
         boxSizing: 'border-box',
         '&:hover': {
-            backgroundColor: '#fafafa'
+            backgroundColor: '#fafafa',
+            cursor: 'pointer'
         },
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
         transition: 'all 200ms ease-out'
+    },
+    paperSelected: {
+        border: '4px solid ' + theme.palette.grey[300] + ' !important'
     }
 })
 
 export const SessionItem = props => {
-    const { classes, session, speakersEntities, routerParams } = props
+    const { classes, session, speakersEntities, userVote, routerParams } = props
+
+    const itemClasses = `${classes.paper} ${
+        userVote ? classes.paperSelected : ''
+    }`
 
     const speakers =
         session.speakers &&
@@ -46,7 +51,7 @@ export const SessionItem = props => {
     return (
         <Grid item xs={6} sm={4} md={4} className={classes.itemContainer}>
             <Link to={`/${routerParams.projectId}/${session.id}`}>
-                <Paper className={classes.paper}>
+                <Paper className={itemClasses}>
                     {session.title}
                     {speakers && (
                         <SpeakerList speakers={speakers} size="small" />
@@ -59,7 +64,8 @@ export const SessionItem = props => {
 
 SessionItem.propTypes = {
     classes: PropTypes.object.isRequired,
-    session: PropTypes.object.isRequired
+    session: PropTypes.object.isRequired,
+    userVote: PropTypes.object
 }
 
 const mapStateToProps = state => ({
