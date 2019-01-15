@@ -16,7 +16,6 @@ _Open Feedback is still in beta_
 
 ## TODO list
 
--   highlight session logged user has voted for
 -   manage errors
 -   search should include speaker name and tags
 -   better design

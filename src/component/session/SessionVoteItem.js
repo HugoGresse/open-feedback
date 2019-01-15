@@ -4,7 +4,6 @@ import Grid from '@material-ui/core/Grid'
 
 import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
-import { relative } from 'path'
 
 const styles = theme => ({
     itemContainer: {

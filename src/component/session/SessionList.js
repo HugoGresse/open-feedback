@@ -11,6 +11,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { getVotesBySession } from '../vote/voteSelectors'
 
 const styles = theme => ({
     expansionPanel: {
@@ -38,7 +39,13 @@ class SessionList extends Component {
     }
 
     render() {
-        const { sessionsByDateAndTrack, match, theme, classes } = this.props
+        const {
+            sessionsByDateAndTrack,
+            match,
+            theme,
+            userSessionVote,
+            classes
+        } = this.props
         if (!sessionsByDateAndTrack) return 'Data loading'
         return (
             <div>
@@ -78,6 +85,9 @@ class SessionList extends Component {
                                                 key={key}
                                                 session={session}
                                                 routerParams={match.params}
+                                                userVote={
+                                                    userSessionVote[session.id]
+                                                }
                                                 onClick={this.onSessionClicked}
                                             />
                                         ))}
@@ -93,7 +103,8 @@ class SessionList extends Component {
 }
 
 const mapStateToProps = state => ({
-    sessionsByDateAndTrack: getSessionsGroupByDateAndTrack(state)
+    sessionsByDateAndTrack: getSessionsGroupByDateAndTrack(state),
+    userSessionVote: getVotesBySession(state)
 })
 
 const mapDispatchToProps = Object.assign({}, sessionActions, speakerActions)
