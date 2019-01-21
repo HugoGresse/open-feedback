@@ -15,18 +15,29 @@ initGA()
 
 const store = configureStore({})
 
-ReactDOM.render(
-    <Provider store={store}>
-        <BrowserRouter>
-            <Switch>
-                <Route exact path="/" component={Root} />
-                <Route path="/:projectId" component={App} />
-                <Route component={Page404} />
-            </Switch>
-        </BrowserRouter>
-    </Provider>,
-    document.getElementById('root')
-)
+const render = Component => {
+    return ReactDOM.render(
+        <Provider store={store}>
+            <BrowserRouter>
+                <Switch>
+                    <Route exact path="/" component={Root} />
+                    <Route path="/:projectId" component={Component} />
+                    <Route component={Page404} />
+                </Switch>
+            </BrowserRouter>
+        </Provider>,
+        document.getElementById('root')
+    )
+}
+
+render(App)
+
+if (module.hot) {
+    module.hot.accept('./App', () => {
+        const NextApp = require('./App').default
+        render(NextApp)
+    })
+}
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
