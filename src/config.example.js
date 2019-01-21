@@ -6,7 +6,8 @@ const config = {
         projectId: 'sunny',
         storageBucket: 'sunny.appspot.com',
         messagingSenderId: ''
-    }
+    },
+    googleAnalyticsId: 'UA-00000000-1'
 }
 
 export default config
