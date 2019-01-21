@@ -19,6 +19,7 @@ _Open Feedback is still in beta_
 -   manage errors
 -   search should include speaker name and tags
 -   better design
+-   maybe finish [HMR for redux](https://medium.com/@brianhan/hot-reloading-cra-without-eject-b54af352c642)
 
 > This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

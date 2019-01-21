@@ -87,7 +87,7 @@ export const getSpeakersForSelectedSession = createSelector(
     getSelectedSession,
     getSpeakersList,
     (session, speakers) => {
-        if (!session) return []
+        if (!session || !session.speakers) return []
         return Object.values(speakers).filter(speaker => {
             return session.speakers.includes(speaker.id)
         })

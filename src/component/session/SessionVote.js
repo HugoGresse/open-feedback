@@ -107,9 +107,10 @@ class SessionVote extends Component {
                         <ArrowBack />
                     </Link>
                     <div className={classes.headerTitle}>
-                        {session.tags.map((tag, key) => (
-                            <Chip key={key} label={tag} />
-                        ))}
+                        {session.tags &&
+                            session.tags.map((tag, key) => (
+                                <Chip key={key} label={tag} />
+                            ))}
 
                         <div className={classes.subHeader}>
                             <Typography
