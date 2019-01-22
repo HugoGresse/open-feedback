@@ -34,8 +34,34 @@ export const getSessionsGroupByDateAndTrack = createSelector(
     getSessionsAsArray,
     getSessionsFilter,
     (sessions, filter) => {
+        const cleanedFilterInput = filter.toLowerCase().trim()
+
+        // Filter session to prevent iteration on useless stuff
+        const filteredSessions = sessions.filter(session => {
+            const titleMatch = session.title
+                .toLowerCase()
+                .includes(cleanedFilterInput)
+
+            let speakerMatch = 0
+            if (!session.speakers) {
+                speakerMatch = -1
+            } else if (
+                session.speakers
+                    .filter(speaker => speaker.length > 0)
+                    .filter(speaker => {
+                        return speaker
+                            .toLowerCase()
+                            .replace('_', ' ')
+                            .includes(cleanedFilterInput)
+                    }).length > 0
+            ) {
+                speakerMatch = 1
+            }
+            return titleMatch || speakerMatch > 0
+        })
+
         // Group Session by day
-        const sessionsGroupByDate = groupBy(sessions, session =>
+        const sessionsGroupByDate = groupBy(filteredSessions, session =>
             moment(session.startTime).format('YYYY-MM-DD')
         )
 
@@ -57,13 +83,7 @@ export const getSessionsGroupByDateAndTrack = createSelector(
                     (acc, track) => {
                         acc.push({
                             track: track,
-                            sessions: sessionsByDateAndTrack[date][
-                                track
-                            ].filter(session =>
-                                session.title
-                                    .toLowerCase()
-                                    .includes(filter.toLowerCase())
-                            )
+                            sessions: sessionsByDateAndTrack[date][track]
                         })
                         return acc
                     },
