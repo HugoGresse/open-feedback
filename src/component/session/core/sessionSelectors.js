@@ -57,7 +57,14 @@ export const getSessionsGroupByDateAndTrack = createSelector(
             ) {
                 speakerMatch = 1
             }
-            return titleMatch || speakerMatch > 0
+
+            const tagMatch =
+                session.tags &&
+                session.tags.filter(tag => {
+                    return tag.toLowerCase().includes(filter)
+                }).length > 0
+
+            return titleMatch || speakerMatch > 0 || tagMatch
         })
 
         // Group Session by day

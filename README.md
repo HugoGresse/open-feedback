@@ -17,7 +17,6 @@ _Open Feedback is still in beta_
 ## TODO list
 
 -   manage errors
--   search should include tags
 -   free text input on vote
 -   better design
 -   maybe finish [HMR for redux](https://medium.com/@brianhan/hot-reloading-cra-without-eject-b54af352c642)
