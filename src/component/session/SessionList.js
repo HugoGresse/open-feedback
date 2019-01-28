@@ -12,6 +12,9 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { getVotesBySession } from '../vote/voteSelectors'
+import { getSessionsLoadError } from './core/sessionSelectors'
+import Error from '../customComponent/Error'
+import LoaderMatchParent from '../customComponent/LoaderMatchParent'
 
 const styles = theme => ({
     expansionPanel: {
@@ -44,9 +47,22 @@ class SessionList extends Component {
             match,
             theme,
             userSessionVote,
+            errorSessionsLoad,
             classes
         } = this.props
-        if (!sessionsByDateAndTrack) return 'Data loading'
+
+        if (errorSessionsLoad) {
+            return (
+                <Error
+                    error="Unable to load the sessions. This is bad."
+                    errorDetail={errorSessionsLoad}
+                />
+            )
+        }
+
+        if (!sessionsByDateAndTrack || sessionsByDateAndTrack.length < 1)
+            return <LoaderMatchParent />
+
         return (
             <div>
                 {sessionsByDateAndTrack.map((current, key) => (
@@ -104,7 +120,8 @@ class SessionList extends Component {
 
 const mapStateToProps = state => ({
     sessionsByDateAndTrack: getSessionsGroupByDateAndTrack(state),
-    userSessionVote: getVotesBySession(state)
+    userSessionVote: getVotesBySession(state),
+    errorSessionsLoad: getSessionsLoadError(state)
 })
 
 const mapDispatchToProps = Object.assign({}, sessionActions, speakerActions)

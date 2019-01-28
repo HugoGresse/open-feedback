@@ -41,7 +41,7 @@ export const getSession = sessionId => {
             .catch(err => {
                 dispatch({
                     type: GET_SESSION_ERROR,
-                    payload: err
+                    payload: err.toString()
                 })
             })
     }
@@ -79,7 +79,7 @@ export const getSessions = () => {
             .catch(err => {
                 dispatch({
                     type: GET_SESSIONS_ERROR,
-                    payload: err
+                    payload: err.toString()
                 })
             })
     }
