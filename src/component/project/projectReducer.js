@@ -16,7 +16,9 @@ const initState = {
     name: null,
     id: null,
     voteItems: null,
-    sessionVotes: null
+    sessionVotes: null,
+    projectLoadError: null,
+    projectVotesError: null
 }
 
 const projectReducer = (state = initState, { payload, type }) => {
@@ -75,10 +77,18 @@ const projectReducer = (state = initState, { payload, type }) => {
                 }
             }
         case GET_PROJECT_VOTE_RESULT_ERROR:
+            console.error(payload)
+            return {
+                ...state,
+                projectVotesError: payload
+            }
         case GET_PROJECT_VOTE_ITEMS_ERROR:
         case GET_PROJECT_ERROR:
-            console.log(payload)
-            return state
+            console.error(payload)
+            return {
+                ...state,
+                projectLoadError: payload
+            }
         default:
             return state
     }

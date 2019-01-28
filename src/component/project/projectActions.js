@@ -27,17 +27,17 @@ export const getProject = projectId => {
                         payload: project
                     })
                 } else {
-                    // TODO : manage unknown project
                     dispatch({
                         type: GET_PROJECT_ERROR,
-                        payload: 'Unknown project id'
+                        payload:
+                            'Unknown project id, probably some copy-past issue?'
                     })
                 }
             })
             .catch(err => {
                 dispatch({
                     type: GET_PROJECT_ERROR,
-                    payload: err
+                    payload: err.toString()
                 })
             })
     }
@@ -67,7 +67,7 @@ export const getVoteItems = () => {
             .catch(err => {
                 dispatch({
                     type: GET_PROJECT_VOTE_ITEMS_ERROR,
-                    payload: err
+                    payload: err.toString()
                 })
             })
     }

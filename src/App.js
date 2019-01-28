@@ -7,13 +7,19 @@ import SessionVote from './component/session/SessionVote'
 import { withStyles } from '@material-ui/core'
 import './App.css'
 import { connect } from 'react-redux'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { setFavicon } from './component/layout/utils'
 import { authActions } from './component/auth'
-import { getProjectSelector } from './component/project/projectSelectors'
+import {
+    getProjectLoadError,
+    getProjectSelector,
+    getProjectVotesError
+} from './component/project/projectSelectors'
 import * as projectActions from './component/project/projectActions'
 import red from '@material-ui/core/colors/red'
+import Error from './component/customComponent/Error'
+import LoaderMatchParent from './component/customComponent/LoaderMatchParent'
+import { getLoginErrorSelector } from './component/auth/authSelectors'
 
 const theme = createMuiTheme({
     color: {
@@ -36,7 +42,8 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center',
         height: '100vh',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        flexDirection: 'column'
     },
     layout: {
         marginLeft: 0,
@@ -71,11 +78,51 @@ class App extends Component {
     }
 
     render() {
-        const { classes, match, project } = this.props
+        const {
+            classes,
+            match,
+            project,
+            projectLoadError,
+            projectVotesError,
+            loginError
+        } = this.props
 
-        return (
-            <MuiThemeProvider theme={theme}>
-                {project ? (
+        if (loginError) {
+            return (
+                <MuiThemeProvider theme={theme}>
+                    <Error
+                        error="Fail to anonymously login you."
+                        errorDetail={loginError}
+                    />
+                </MuiThemeProvider>
+            )
+        } else if (projectLoadError) {
+            return (
+                <MuiThemeProvider theme={theme}>
+                    <Error
+                        error="Unable to load the project."
+                        errorDetail={projectLoadError}
+                    />
+                </MuiThemeProvider>
+            )
+        } else if (projectVotesError) {
+            return (
+                <MuiThemeProvider theme={theme}>
+                    <Error
+                        error="Unable to load the votes and/or the vote options."
+                        errorDetail={projectVotesError}
+                    />
+                </MuiThemeProvider>
+            )
+        } else if (!project) {
+            return (
+                <MuiThemeProvider theme={theme}>
+                    <LoaderMatchParent />
+                </MuiThemeProvider>
+            )
+        } else {
+            return (
+                <MuiThemeProvider theme={theme}>
                     <div>
                         <Header logo={project.logoSmall} />
 
@@ -97,18 +144,17 @@ class App extends Component {
                             <br />
                         </div>
                     </div>
-                ) : (
-                    <div className={classes.loading}>
-                        <CircularProgress />
-                    </div>
-                )}
-            </MuiThemeProvider>
-        )
+                </MuiThemeProvider>
+            )
+        }
     }
 }
 
 const mapStateToProps = state => ({
-    project: getProjectSelector(state)
+    project: getProjectSelector(state),
+    projectLoadError: getProjectLoadError(state),
+    projectVotesError: getProjectVotesError(state),
+    loginError: getLoginErrorSelector(state)
 })
 
 const mapDispatchToProps = Object.assign({}, projectActions, authActions)

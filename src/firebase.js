@@ -13,6 +13,10 @@ export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 export let fireStoreScheduleInstance
 
 export const initFireStoreSchedule = config => {
+    if (firebase.apps.length >= 2) {
+        return
+    }
+
     const firebaseSchedule = firebase.initializeApp(config, 'schedule')
 
     firebaseSchedule.firestore().settings({ timestampsInSnapshots: true })

@@ -11,6 +11,13 @@ export const getSessionsFilter = state => getSessions(state).filter || ''
 
 export const getSelectedSessionId = state => getSessions(state).selected
 
+export const getSessionsLoadError = state =>
+    getSessions(state).errorSessionsLoad
+
+export const getSessionLoadError = state => getSessions(state).errorSessionLoad
+
+//  MEMOIZED SELECTORS HERE
+
 export const getSessionsAsArray = createSelector(
     getSessionsList,
     sessions => {
@@ -20,8 +27,6 @@ export const getSessionsAsArray = createSelector(
         }, [])
     }
 )
-
-//  MEMOIZED SELECTORS HERE
 
 export const getFilteredSessions = createSelector(
     getSessionsList,

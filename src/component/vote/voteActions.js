@@ -2,6 +2,8 @@ import {
     ADD_VOTE_BEFORE_SUCCESS,
     ADD_VOTE_ERROR,
     ADD_VOTE_SUCCESS,
+    DELETE_VOTE_LOAD_ERROR,
+    DELETE_VOTE_POST_ERROR,
     GET_USER_VOTES_ERROR,
     GET_USER_VOTES_SUCCESS,
     REMOVE_VOTE_BEFORE_SUCCESS,
@@ -65,8 +67,16 @@ export const voteFor = (sessionId, voteItemId) => {
                 dispatch({
                     type: ADD_VOTE_ERROR,
                     payload: {
-                        error: error,
+                        error: error.toString(),
                         tempVoteId: voteContent.id
+                    }
+                })
+
+                dispatch({
+                    type: INCREMENT_VOTE_LOCALY,
+                    payload: {
+                        vote: voteContent,
+                        amount: -1
                     }
                 })
             })
@@ -111,13 +121,22 @@ export const removeVote = voteToDelete => {
                 dispatch({
                     type: REMOVE_VOTE_ERROR,
                     payload: {
-                        error: error,
+                        error: error.toString(),
                         voteWhichShouldHaveBeenDeleted: voteToDelete
+                    }
+                })
+
+                dispatch({
+                    type: INCREMENT_VOTE_LOCALY,
+                    payload: {
+                        vote: voteToDelete,
+                        amount: 1
                     }
                 })
             })
     }
 }
+
 export const getVotes = () => {
     return (dispatch, getState) => {
         fireStoreMainInstance
@@ -143,5 +162,21 @@ export const getVotes = () => {
                     payload: error
                 })
             })
+    }
+}
+
+export const removeVotePostError = () => {
+    return (dispatch, getState) => {
+        dispatch({
+            type: DELETE_VOTE_POST_ERROR
+        })
+    }
+}
+
+export const removeVoteLoadError = () => {
+    return (dispatch, getState) => {
+        dispatch({
+            type: DELETE_VOTE_LOAD_ERROR
+        })
     }
 }

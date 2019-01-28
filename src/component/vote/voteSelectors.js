@@ -5,6 +5,10 @@ const getVotes = state => state.votes
 
 export const getVotesSelector = state => getVotes(state).votes
 
+export const getErrorVotePostSelector = state => getVotes(state).errorVotePost
+
+export const getErrorVotesLoadSelector = state => getVotes(state).errorVotesLoad
+
 //  MEMOIZED SELECTORS HERE
 
 export const getVotesBySessionAndVoteItemSelector = createSelector(
