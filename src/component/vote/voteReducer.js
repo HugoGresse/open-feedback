@@ -6,11 +6,15 @@ import {
     ADD_VOTE_BEFORE_SUCCESS,
     REMOVE_VOTE_BEFORE_SUCCESS,
     REMOVE_VOTE_SUCCESS,
-    REMOVE_VOTE_ERROR
+    REMOVE_VOTE_ERROR,
+    DELETE_VOTE_POST_ERROR,
+    DELETE_VOTE_LOAD_ERROR
 } from './voteActionTypes'
 
 const initState = {
-    votes: {}
+    votes: {},
+    errorVotePost: null,
+    errorVotesLoad: null
 }
 
 const voteReducer = (state = initState, { payload, type }) => {
@@ -45,12 +49,12 @@ const voteReducer = (state = initState, { payload, type }) => {
             }
             delete newVoteState[payload.tempVoteId]
 
-            console.log('error:', payload.error)
+            console.error(payload.error)
 
-            // TODO : display something
             return {
                 ...state,
-                votes: newVoteState
+                votes: newVoteState,
+                errorVotePost: payload.error.toString()
             }
         case REMOVE_VOTE_BEFORE_SUCCESS:
             const removeVotesState = {
@@ -67,15 +71,27 @@ const voteReducer = (state = initState, { payload, type }) => {
                 ...state
             }
         case REMOVE_VOTE_ERROR:
-            // TODO : display something
-            console.log('error:', payload.error)
+            console.error(payload.error)
             return {
-                ...state
+                ...state,
+                errorVotePost: payload.error.toString()
             }
         case GET_USER_VOTES_ERROR:
-            // TODO : display something
-            console.log(payload)
-            return state
+            console.error(payload)
+            return {
+                ...state,
+                errorVotesLoad: payload.toString()
+            }
+        case DELETE_VOTE_POST_ERROR:
+            return {
+                ...state,
+                errorVotePost: null
+            }
+        case DELETE_VOTE_LOAD_ERROR:
+            return {
+                ...state,
+                errorVotesLoad: null
+            }
         default:
             return state
     }

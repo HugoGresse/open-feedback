@@ -19,10 +19,18 @@ import {
 } from '../project/projectSelectors'
 import * as projectActions from '../project/projectActions'
 import * as voteActions from '../vote/voteActions'
-import { getVotesBySessionAndVoteItemSelector } from '../vote/voteSelectors'
+import {
+    getErrorVotePostSelector,
+    getErrorVotesLoadSelector,
+    getVotesBySessionAndVoteItemSelector
+} from '../vote/voteSelectors'
 import SessionVoteItem from './SessionVoteItem'
 import SpeakerList from '../speaker/SpeakerList'
 import Chip from '../customComponent/Chip'
+import LoaderMatchParent from '../customComponent/LoaderMatchParent'
+import { getSessionLoadError } from './core/sessionSelectors'
+import Error from '../customComponent/Error'
+import Snackbar from '../customComponent/Snackbar'
 
 const styles = theme => ({
     arrowLink: {
@@ -81,6 +89,19 @@ class SessionVote extends Component {
         }
     }
 
+    onRetryLoadVotesClick = () => {
+        this.props.removeVoteLoadError()
+        this.props.getVotes()
+    }
+
+    closeErrorVotePostClick = () => {
+        this.props.removeVotePostError()
+    }
+
+    closeErrorVoteLoadClick = () => {
+        this.props.removeVoteLoadError()
+    }
+
     render() {
         const {
             classes,
@@ -90,11 +111,47 @@ class SessionVote extends Component {
             match,
             voteItems,
             userVotes,
-            voteResults
+            voteResults,
+            errorSessionLoad,
+            errorVotePost,
+            errorVotesLoad
         } = this.props
 
+        if (errorSessionLoad) {
+            return (
+                <Error
+                    error="Unable to load the session/speakers/vote options"
+                    errorDetail={errorSessionLoad}
+                />
+            )
+        }
+
         if (!session || !speakers || !voteItems) {
-            return ''
+            return <LoaderMatchParent />
+        }
+
+        let snackBarError = null
+        if (errorVotePost) {
+            snackBarError = (
+                <Snackbar
+                    text={'Unable to save the vote, reason: ' + errorVotePost}
+                    closeCallback={this.closeErrorVotePostClick}
+                />
+            )
+        }
+
+        if (errorVotesLoad) {
+            snackBarError = (
+                <Snackbar
+                    text={
+                        'Unable to load the vote results, reason: ' +
+                        errorVotePost
+                    }
+                    actionText="Retry"
+                    actionCallback={this.onRetryLoadVotesClick}
+                    closeCallback={this.closeErrorVoteLoadClick}
+                />
+            )
         }
 
         return (
@@ -148,6 +205,7 @@ class SessionVote extends Component {
                         />
                     ))}
                 </Grid>
+                {snackBarError}
             </div>
         )
     }
@@ -158,7 +216,10 @@ const mapStateToProps = state => ({
     speakers: getSpeakersForSelectedSession(state),
     voteItems: getProjectVoteItemsSelector(state),
     userVotes: getVotesBySessionAndVoteItemSelector(state),
-    voteResults: getVoteResultSelector(state)
+    voteResults: getVoteResultSelector(state),
+    errorSessionLoad: getSessionLoadError(state),
+    errorVotePost: getErrorVotePostSelector(state),
+    errorVotesLoad: getErrorVotesLoadSelector(state)
 })
 
 const mapDispatchToProps = Object.assign(

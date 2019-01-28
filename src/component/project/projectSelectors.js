@@ -12,6 +12,11 @@ export const getProjectVoteItemsSelector = state =>
 export const getProjectVoteResults = state =>
     getProjectSelector(state).sessionVotes
 
+export const getProjectLoadError = state => getProjects(state).projectLoadError
+
+export const getProjectVotesError = state =>
+    getProjects(state).projectVotesError
+
 //  MEMOIZED SELECTORS HERE
 
 export const getVoteResultSelector = createSelector(

@@ -21,8 +21,7 @@ const authReducer = (state = initState, { payload, type }) => {
                 user: null
             }
         case LOGIN_ERROR:
-            console.log(payload)
-            // TODO : implement error
+            console.error(payload)
             return {
                 ...state,
                 error: payload
