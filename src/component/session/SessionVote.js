@@ -14,6 +14,7 @@ import ArrowBack from '@material-ui/icons/ArrowBack'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import {
+    getProjectChipColors,
     getProjectVoteItemsSelector,
     getVoteResultSelector
 } from '../project/projectSelectors'
@@ -114,7 +115,8 @@ class SessionVote extends Component {
             voteResults,
             errorSessionLoad,
             errorVotePost,
-            errorVotesLoad
+            errorVotesLoad,
+            chipColors
         } = this.props
 
         if (errorSessionLoad) {
@@ -201,6 +203,7 @@ class SessionVote extends Component {
                             voteItem={voteItem}
                             userVote={userVotes[voteItem.id]}
                             voteResult={voteResults[voteItem.id]}
+                            chipColors={chipColors}
                             onClick={this.onVoteItemClick}
                         />
                     ))}
@@ -219,7 +222,8 @@ const mapStateToProps = state => ({
     voteResults: getVoteResultSelector(state),
     errorSessionLoad: getSessionLoadError(state),
     errorVotePost: getErrorVotePostSelector(state),
-    errorVotesLoad: getErrorVotesLoadSelector(state)
+    errorVotesLoad: getErrorVotesLoadSelector(state),
+    chipColors: getProjectChipColors(state)
 })
 
 const mapDispatchToProps = Object.assign(

@@ -18,7 +18,8 @@ const initState = {
     voteItems: null,
     sessionVotes: null,
     projectLoadError: null,
-    projectVotesError: null
+    projectVotesError: null,
+    chipColors: []
 }
 
 const projectReducer = (state = initState, { payload, type }) => {
