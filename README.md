@@ -16,8 +16,8 @@ _Open Feedback is still in beta_
 
 ## TODO list
 
--   free text input on vote
 -   better design
+-   free text input on vote (new aggregation, new component, new display to think of)
 -   maybe finish [HMR for redux](https://medium.com/@brianhan/hot-reloading-cra-without-eject-b54af352c642)
 
 > This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
