@@ -17,6 +17,9 @@ export const getProjectLoadError = state => getProjects(state).projectLoadError
 export const getProjectVotesError = state =>
     getProjects(state).projectVotesError
 
+export const getProjectChipColors = state =>
+    getProjectSelector(state).chipColors
+
 //  MEMOIZED SELECTORS HERE
 
 export const getVoteResultSelector = createSelector(

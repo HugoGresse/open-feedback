@@ -4,26 +4,24 @@ import Grid from '@material-ui/core/Grid'
 
 import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
+import SessionVoteItemBackground from './SessionVoteItemBackground'
 
 const styles = theme => ({
     itemContainer: {
-        margin: -1,
-        '&:hover': {
-            cursor: 'pointer'
-        }
+        margin: -1
     },
     item: {
         padding: theme.spacing.unit * 2,
         textAlign: 'center',
         fontSize: '17px',
-        boxShadow: 'none',
         borderRadius: '0',
         color: theme.palette.text.secondary,
-        border: '1px solid ' + theme.palette.grey[300],
+        boxShadow: 'inset 0 0 0 1px ' + theme.palette.grey[300],
         height: '150px',
         boxSizing: 'border-box',
         '&:hover': {
-            backgroundColor: '#fafafa'
+            backgroundColor: '#f6f6f6',
+            cursor: 'pointer'
         },
         display: 'flex',
         alignItems: 'center',
@@ -32,32 +30,36 @@ const styles = theme => ({
         transition: 'all 200ms ease-out'
     },
     selectedItem: {
-        border: '4px solid ' + theme.palette.grey[300] + ' !important'
+        boxShadow: 'inset 0 0 0 5px ' + theme.palette.grey[300]
     },
     voteTitle: {
-        color: theme.palette.grey[800]
+        color: theme.palette.grey[800],
+        zIndex: 2
     },
     voteResult: {
         position: 'absolute',
         bottom: '5px',
         fontSize: '14px',
-        transition: 'all 200ms ease-in-out'
+        transition: 'all 200ms ease-in-out',
+        zIndex: 2
     },
-
-    voteResultSelected: {
-        bottom: '2px'
+    backgroundCanvas: {
+        width: '100%'
     }
 })
 
 class SessionVoteItem extends Component {
     render() {
-        const { classes, voteItem, userVote, voteResult } = this.props
+        const {
+            classes,
+            voteItem,
+            userVote,
+            voteResult,
+            chipColors
+        } = this.props
 
         const paperClasses = `${classes.item} ${
             userVote ? classes.selectedItem : ''
-        }`
-        const voteResultClasses = `${classes.voteResult} ${
-            userVote ? classes.voteResultSelected : ''
         }`
 
         return (
@@ -72,10 +74,16 @@ class SessionVoteItem extends Component {
                 <Paper elevation={1} className={paperClasses}>
                     <span className={classes.voteTitle}>{voteItem.name}</span>
                     {voteResult > 0 && (
-                        <span className={voteResultClasses}>
-                            {voteResult}{' '}
-                            <span>{voteResult > 1 ? 'votes' : 'vote'}</span>
-                        </span>
+                        <>
+                            <span className={classes.voteResult}>
+                                {voteResult}{' '}
+                                <span>{voteResult > 1 ? 'votes' : 'vote'}</span>
+                            </span>
+                            <SessionVoteItemBackground
+                                colors={chipColors}
+                                count={voteResult}
+                            />
+                        </>
                     )}
                 </Paper>
             </Grid>
@@ -86,7 +94,8 @@ class SessionVoteItem extends Component {
 SessionVoteItem.propTypes = {
     classes: PropTypes.object.isRequired,
     voteItem: PropTypes.object.isRequired,
-    voteResult: PropTypes.number
+    voteResult: PropTypes.number,
+    chipColors: PropTypes.array
 }
 
 export default withStyles(styles)(SessionVoteItem)
