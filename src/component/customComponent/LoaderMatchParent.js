@@ -15,7 +15,8 @@ const styles = theme => ({
         opacity: 0,
         transition: 'all 1s ease-in',
         animation: '1s appearDelayed',
-        animationDelay: '500ms'
+        animationDelay: '500ms',
+        animationFillMode: 'forwards'
     },
     '@keyframes appearDelayed': {
         from: { opacity: 0 },
