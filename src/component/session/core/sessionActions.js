@@ -4,7 +4,8 @@ import {
     SET_SESSION_FILTER,
     SET_SELECTED_SESSION,
     GET_SESSION_SUCCESS,
-    GET_SESSION_ERROR
+    GET_SESSION_ERROR,
+    GET_SESSIONS_LOADING
 } from './sessionActionTypes'
 import { formatSessionsWithScheduled } from './sessionUtils'
 import { fireStoreScheduleInstance } from '../../../firebase'
@@ -49,6 +50,9 @@ export const getSession = sessionId => {
 
 export const getSessions = () => {
     return (dispatch, getState) => {
+        dispatch({
+            type: GET_SESSIONS_LOADING
+        })
         const schedulePromise = fireStoreScheduleInstance
             .collection('schedule')
             .get()
