@@ -20,16 +20,16 @@ import red from '@material-ui/core/colors/red'
 import Error from './component/customComponent/Error'
 import LoaderMatchParent from './component/customComponent/LoaderMatchParent'
 import { getLoginErrorSelector } from './component/auth/authSelectors'
+import Footer from './component/layout/Footer'
+import SearchBar from './component/layout/SearchBar'
 
 const theme = createMuiTheme({
+    typography: {
+        fontFamily: 'roboto, Helvetica, Arial, sans-serif',
+        useNextVariants: true
+    },
     color: {
         primary: red
-        // secondary: {
-        //     main: '#51B6FF'
-        // }
-    },
-    typography: {
-        useNextVariants: true
     },
     spacing: {
         default: 16
@@ -124,7 +124,8 @@ class App extends Component {
             return (
                 <MuiThemeProvider theme={theme}>
                     <div>
-                        <Header logo={project.logoSmall} />
+                        <Header displaySearch logo={project.logoSmall} />
+                        <SearchBar />
 
                         <div className={classes.layout}>
                             <br />
@@ -143,6 +144,7 @@ class App extends Component {
 
                             <br />
                         </div>
+                        <Footer />
                     </div>
                 </MuiThemeProvider>
             )

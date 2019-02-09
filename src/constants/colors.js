@@ -1,0 +1,13 @@
+const HEX_COLORS = {
+    RED_ORANGE: '#FF6A49',
+    LIGHT_RED_ORANGE: '#FFD7CB',
+    BLACK: '#000000',
+    GRAY: '#8A8A8A',
+    LIGHT_GRAY: '#B3B3B3',
+    EXTRA_LIGHT_GRAY: '#F5F5F5',
+    WHITE: '#FFFFFF'
+}
+
+export { HEX_COLORS as COLORS, HEX_COLORS }
+
+export default HEX_COLORS
