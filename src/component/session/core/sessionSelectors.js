@@ -19,6 +19,7 @@ export const getSessionsLoadError = state =>
     getSessions(state).errorSessionsLoad
 
 export const getSessionLoadError = state => getSessions(state).errorSessionLoad
+export const getSessionsLoading = state => getSessions(state).loading
 
 //  MEMOIZED SELECTORS HERE
 
