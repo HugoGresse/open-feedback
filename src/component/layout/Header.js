@@ -1,120 +1,45 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-
-import { withStyles } from '@material-ui/core/styles'
+import styled from 'styled-components'
 
 import React from 'react'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import { fade } from '@material-ui/core/styles/colorManipulator'
-import InputBase from '@material-ui/core/InputBase'
-import SearchIcon from '@material-ui/icons/Search'
-import * as sessionActions from '../session/core/sessionActions'
-import connect from 'react-redux/es/connect/connect'
+import { COLORS } from '../../constants/colors'
+import Title from '../design/Title'
+import { SPACING } from '../../constants/constants'
 
-const styles = theme => ({
-    layout: {
-        width: '100%',
-        boxSizing: 'border-box',
-        [theme.breakpoints.up(900 + theme.spacing.unit * 2 * 2)]: {
-            width: 900,
-            marginLeft: 'auto',
-            marginRight: 'auto'
-        }
-    },
-    appBar: {
-        color: theme.palette.text.secondary,
-        borderColor: theme.palette.augmentColor,
-        boxShadow: 'none'
-    },
-    logo: {
-        margin: '5px 0'
-    },
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.5),
-        '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.8)
-        },
-        marginRight: theme.spacing.unit * 2,
-        marginLeft: theme.spacing.unit * 2,
-        width: '100%',
-        transition: 'all 200ms ease-out'
-    },
-    searchIcon: {
-        width: theme.spacing.unit * 6,
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    inputRoot: {
-        color: 'inherit',
-        width: '100%'
-    },
-    inputInput: {
-        paddingTop: theme.spacing.unit,
-        paddingRight: theme.spacing.unit,
-        paddingBottom: theme.spacing.unit,
-        paddingLeft: theme.spacing.unit * 6,
-        transition: theme.transitions.create('width'),
-        width: '100%'
-    }
-})
+const Logo = styled.img`
+    margin-right: 20px;
+`
+
+const HeaderStyled = styled.div`
+    top: 0;
+    left: auto;
+    right: 0;
+    position: sticky;
+    z-index: 1;
+    background: ${COLORS.WHITE};
+    display: flex;
+    align-items: center;
+    padding: 10px ${SPACING.HEADER};
+`
 
 class Header extends Component {
-    onFilterChanged = event => {
-        this.props.setSessionFilter(event.target.value)
-    }
-
     render() {
-        const { classes, logo } = this.props
-
+        const { logo } = this.props
         return (
-            <AppBar
-                position="sticky"
-                color="default"
-                className={classes.appBar}
-            >
-                <Toolbar className={classes.layout}>
-                    <img
-                        src={logo}
-                        width={60}
-                        height={60}
-                        className={classes.logo}
-                        alt="logo"
-                    />
-
-                    <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchIcon />
-                        </div>
-                        <InputBase
-                            onChange={this.onFilterChanged}
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput
-                            }}
-                        />
-                    </div>
-                </Toolbar>
-            </AppBar>
+            <HeaderStyled>
+                <Logo src={logo} width={60} height={60} alt="logo" />
+                <Title component="h1" fontSize={24} fontWeight={400}>
+                    Sunny Tech
+                </Title>
+            </HeaderStyled>
         )
     }
 }
 
 Header.propTypes = {
-    classes: PropTypes.object.isRequired,
-    logo: PropTypes.string.isRequired
+    logo: PropTypes.string.isRequired,
+    displayHeader: PropTypes.bool
 }
 
-const mapDispatchToProps = Object.assign({}, sessionActions)
-
-export default connect(
-    null,
-    mapDispatchToProps
-)(withStyles(styles)(Header))
+export default Header
