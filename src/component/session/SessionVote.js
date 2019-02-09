@@ -15,9 +15,9 @@ import { Link } from 'react-router-dom'
 import moment from 'moment'
 import {
     getProjectChipColors,
-    getProjectVoteItemsSelector,
-    getVoteResultSelector
+    getProjectVoteItemsSelector
 } from '../project/projectSelectors'
+import { getVoteResultSelector } from '../session/core/sessionSelectors'
 import * as projectActions from '../project/projectActions'
 import * as voteActions from '../vote/voteActions'
 import {
@@ -32,6 +32,7 @@ import LoaderMatchParent from '../customComponent/LoaderMatchParent'
 import { getSessionLoadError } from './core/sessionSelectors'
 import Error from '../customComponent/Error'
 import Snackbar from '../customComponent/Snackbar'
+import { getDateFromStartTime } from './core/sessionUtils'
 
 const styles = theme => ({
     arrowLink: {
@@ -155,13 +156,13 @@ class SessionVote extends Component {
                 />
             )
         }
-
+        const date = getDateFromStartTime(session.startTime)
         return (
             <div>
                 <div className={classes.header}>
                     <Link
                         className={classes.arrowLink}
-                        to={`/${match.params.projectId}/`}
+                        to={`/${match.params.projectId}/${date}`}
                     >
                         <ArrowBack />
                     </Link>

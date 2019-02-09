@@ -1,7 +1,11 @@
 import { createSelector } from 'reselect'
 import groupBy from 'lodash/groupBy'
-import moment from 'moment'
 import { getSpeakersList } from '../../speaker/core'
+import { getDateFromStartTime } from './sessionUtils'
+import {
+    getProjectVoteResults,
+    getProjectSelectedDate
+} from '../../project/projectSelectors'
 
 export const getSessions = state => state.sessions
 
@@ -35,13 +39,26 @@ export const getFilteredSessions = createSelector(
     }
 )
 
-export const getSessionsGroupByDateAndTrack = createSelector(
+export const getSessionsDates = createSelector(
+    getSessionsAsArray,
+    sessions => {
+        return sessions.reduce((acc, session) => {
+            const date = getDateFromStartTime(session.startTime)
+            if (!acc.includes(date)) {
+                acc.push(date)
+            }
+            return acc
+        }, [])
+    }
+)
+
+export const getCurrentSessionsGroupByTrack = createSelector(
     getSessionsAsArray,
     getSessionsFilter,
-    (sessions, filter) => {
+    getProjectSelectedDate,
+    (sessions, filter, date) => {
         const cleanedFilterInput = filter.toLowerCase().trim()
 
-        // Filter session to prevent iteration on useless stuff
         const filteredSessions = sessions.filter(session => {
             const titleMatch = session.title
                 .toLowerCase()
@@ -69,38 +86,21 @@ export const getSessionsGroupByDateAndTrack = createSelector(
                     return tag.toLowerCase().includes(filter)
                 }).length > 0
 
-            return titleMatch || speakerMatch > 0 || tagMatch
-        })
-
-        // Group Session by day
-        const sessionsGroupByDate = groupBy(filteredSessions, session =>
-            moment(session.startTime).format('YYYY-MM-DD')
-        )
-
-        // Group session by day > track
-        const sessionsByDateAndTrack = {}
-        Object.keys(sessionsGroupByDate).forEach(sessionsDayId => {
-            sessionsByDateAndTrack[sessionsDayId] = groupBy(
-                sessionsGroupByDate[sessionsDayId],
-                session => session.trackTitle
+            return (
+                (titleMatch || speakerMatch > 0 || tagMatch) &&
+                date === getDateFromStartTime(session.startTime)
             )
         })
 
-        // Convert Day & Track object to array
-        // Filter the session title
-        return Object.keys(sessionsByDateAndTrack).reduce((acc, date) => {
+        const sessionsGroupByTrack = groupBy(
+            filteredSessions,
+            session => session.trackTitle
+        )
+
+        return Object.keys(sessionsGroupByTrack).reduce((acc, track) => {
             acc.push({
-                date: date,
-                tracks: Object.keys(sessionsByDateAndTrack[date]).reduce(
-                    (acc, track) => {
-                        acc.push({
-                            track: track,
-                            sessions: sessionsByDateAndTrack[date][track]
-                        })
-                        return acc
-                    },
-                    []
-                )
+                track: track,
+                sessions: sessionsGroupByTrack[track]
             })
             return acc
         }, [])
@@ -123,5 +123,16 @@ export const getSpeakersForSelectedSession = createSelector(
         return Object.values(speakers).filter(speaker => {
             return session.speakers.includes(speaker.id)
         })
+    }
+)
+
+export const getVoteResultSelector = createSelector(
+    getSelectedSessionId,
+    getProjectVoteResults,
+    (selectedSessionId, voteResults) => {
+        if (!voteResults || !voteResults[selectedSessionId]) {
+            return []
+        }
+        return voteResults[selectedSessionId]
     }
 )
