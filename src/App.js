@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import SessionList from './component/session/SessionList'
 import Header from './component/layout/Header'
 import SessionVote from './component/session/SessionVote'
 import { withStyles } from '@material-ui/core'
@@ -22,6 +21,7 @@ import LoaderMatchParent from './component/customComponent/LoaderMatchParent'
 import { getLoginErrorSelector } from './component/auth/authSelectors'
 import Footer from './component/layout/Footer'
 import SearchBar from './component/layout/SearchBar'
+import SessionListWrapper from './component/session/SessionListWrapper'
 
 const theme = createMuiTheme({
     typography: {
@@ -134,12 +134,12 @@ class App extends Component {
                                 <Route
                                     exact
                                     path={`${match.path}`}
-                                    component={SessionList}
+                                    component={SessionListWrapper}
                                 />
                                 <Route
                                     exact
                                     path={`${match.path}/:date`}
-                                    component={SessionList}
+                                    component={SessionListWrapper}
                                 />
                                 <Route
                                     path={`${match.path}/:date/:sessionId`}

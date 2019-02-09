@@ -4,7 +4,8 @@ import {
     GET_SESSIONS_ERROR,
     GET_SESSIONS_SUCCESS,
     SET_SELECTED_SESSION,
-    SET_SESSION_FILTER
+    SET_SESSION_FILTER,
+    GET_SESSIONS_LOADING
 } from './sessionActionTypes'
 
 const initState = {
@@ -12,7 +13,8 @@ const initState = {
     filter: null,
     selected: null,
     errorSessionLoad: null,
-    errorSessionsLoad: null
+    errorSessionsLoad: null,
+    loading: false
 }
 
 const sessionReducer = (state = initState, { payload, type }) => {
@@ -25,10 +27,16 @@ const sessionReducer = (state = initState, { payload, type }) => {
                     ...payload
                 }
             }
+        case GET_SESSIONS_LOADING:
+            return {
+                ...state,
+                loading: true
+            }
         case GET_SESSIONS_SUCCESS:
             return {
                 ...state,
-                list: payload
+                list: payload,
+                loading: false
             }
         case SET_SESSION_FILTER:
             return {
@@ -44,7 +52,8 @@ const sessionReducer = (state = initState, { payload, type }) => {
             console.error(payload)
             return {
                 ...state,
-                errorSessionLoad: payload
+                errorSessionLoad: payload,
+                loading: false
             }
         case GET_SESSIONS_ERROR:
             console.error(payload)
