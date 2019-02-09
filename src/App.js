@@ -137,7 +137,12 @@ class App extends Component {
                                     component={SessionList}
                                 />
                                 <Route
-                                    path={`${match.path}/:sessionId`}
+                                    exact
+                                    path={`${match.path}/:date`}
+                                    component={SessionList}
+                                />
+                                <Route
+                                    path={`${match.path}/:date/:sessionId`}
                                     component={SessionVote}
                                 />
                             </Switch>

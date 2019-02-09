@@ -5,77 +5,101 @@ import {
     GET_PROJECT_VOTE_ITEMS_SUCCESS,
     GET_PROJECT_VOTE_RESULT_ERROR,
     GET_PROJECT_VOTE_RESULT_SUCCESS,
-    INCREMENT_VOTE_LOCALY
+    INCREMENT_VOTE_LOCALY,
+    SET_SELECTED_DATE
 } from './projectActionTypes'
 
 const initState = {
-    contact: null,
-    favicon: null,
-    firebaseConfig: null,
-    logoSmall: null,
-    name: null,
-    id: null,
-    voteItems: null,
-    sessionVotes: null,
+    data: {
+        contact: null,
+        favicon: null,
+        firebaseConfig: null,
+        logoSmall: null,
+        name: null,
+        id: null,
+        voteItems: null,
+        sessionVotes: null,
+        chipColors: []
+    },
+    selectedDate: '',
     projectLoadError: null,
-    projectVotesError: null,
-    chipColors: []
+    projectVotesError: null
 }
 
 const projectReducer = (state = initState, { payload, type }) => {
     switch (type) {
         case GET_PROJECT_SUCCESS:
             return {
-                ...payload
+                ...state,
+                data: {
+                    ...payload
+                }
             }
         case GET_PROJECT_VOTE_ITEMS_SUCCESS:
             return {
                 ...state,
-                voteItems: payload.filter(
-                    voteItem => voteItem['type'] === 'boolean'
-                )
+                data: {
+                    ...state.data,
+                    voteItems: payload.filter(
+                        voteItem => voteItem['type'] === 'boolean'
+                    )
+                }
             }
+
         case GET_PROJECT_VOTE_RESULT_SUCCESS:
             return {
                 ...state,
-                sessionVotes: payload
+                data: {
+                    ...state.data,
+                    sessionVotes: payload
+                }
             }
         case INCREMENT_VOTE_LOCALY:
             const vote = payload.vote
-            if (!state.sessionVotes || !state.sessionVotes[vote.sessionId]) {
+            const data = state.data
+            if (!data.sessionVotes || !data.sessionVotes[vote.sessionId]) {
                 return {
                     ...state,
-                    sessionVotes: {
-                        ...state.sessionVotes,
-                        [vote.sessionId]: {
-                            [vote.voteItemId]: payload.amount
+                    data: {
+                        ...data,
+                        sessionVotes: {
+                            ...data.sessionVotes,
+                            [vote.sessionId]: {
+                                [vote.voteItemId]: payload.amount
+                            }
                         }
                     }
                 }
             }
 
-            if (!state.sessionVotes[vote.sessionId][vote.voteItemId]) {
+            if (!data.sessionVotes[vote.sessionId][vote.voteItemId]) {
                 return {
                     ...state,
-                    sessionVotes: {
-                        ...state.sessionVotes,
-                        [vote.sessionId]: {
-                            ...state.sessionVotes[vote.sessionId],
-                            [vote.voteItemId]: payload.amount
+                    data: {
+                        ...data,
+                        sessionVotes: {
+                            ...data.sessionVotes,
+                            [vote.sessionId]: {
+                                ...data.sessionVotes[vote.sessionId],
+                                [vote.voteItemId]: payload.amount
+                            }
                         }
                     }
                 }
             }
             return {
                 ...state,
-                sessionVotes: {
-                    ...state.sessionVotes,
-                    [vote.sessionId]: {
-                        ...state.sessionVotes[vote.sessionId],
-                        [vote.voteItemId]:
-                            state.sessionVotes[vote.sessionId][
-                                vote.voteItemId
-                            ] + payload.amount
+                data: {
+                    ...data,
+                    sessionVotes: {
+                        ...data.sessionVotes,
+                        [vote.sessionId]: {
+                            ...data.sessionVotes[vote.sessionId],
+                            [vote.voteItemId]:
+                                data.sessionVotes[vote.sessionId][
+                                    vote.voteItemId
+                                ] + payload.amount
+                        }
                     }
                 }
             }
@@ -91,6 +115,12 @@ const projectReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 projectLoadError: payload
+            }
+
+        case SET_SELECTED_DATE:
+            return {
+                ...state,
+                selectedDate: payload.date
             }
         default:
             return state

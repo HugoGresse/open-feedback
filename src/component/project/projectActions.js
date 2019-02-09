@@ -4,7 +4,8 @@ import {
     GET_PROJECT_VOTE_ITEMS_ERROR,
     GET_PROJECT_VOTE_ITEMS_SUCCESS,
     GET_PROJECT_VOTE_RESULT_ERROR,
-    GET_PROJECT_VOTE_RESULT_SUCCESS
+    GET_PROJECT_VOTE_RESULT_SUCCESS,
+    SET_SELECTED_DATE
 } from './projectActionTypes'
 import { fireStoreMainInstance, initFireStoreSchedule } from '../../firebase'
 import { getProjectSelector } from './projectSelectors'
@@ -72,6 +73,13 @@ export const getVoteItems = () => {
             })
     }
 }
+
+export const setSelectedDate = date => ({
+    type: SET_SELECTED_DATE,
+    payload: {
+        date: date
+    }
+})
 
 export const getVoteResult = () => {
     return (dispatch, getState) => {

@@ -1,20 +1,21 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getSessionsGroupByDateAndTrack, sessionActions } from './core'
+import { sessionActions } from './core'
 import { speakerActions } from './../speaker/core'
+import { setSelectedDate } from './../project/projectActions'
 import SessionItem from './SessionItem'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core'
-import Typography from '@material-ui/core/Typography'
-import moment from 'moment'
-import ExpansionPanel from '@material-ui/core/ExpansionPanel'
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { getVotesBySession } from '../vote/voteSelectors'
-import { getSessionsLoadError } from './core/sessionSelectors'
+import Title from '../design/Title'
+
+import {
+    getSessionsLoadError,
+    getCurrentSessionsGroupByTrack
+} from './core/sessionSelectors'
 import Error from '../customComponent/Error'
 import LoaderMatchParent from '../customComponent/LoaderMatchParent'
+import SessionDateMenu from './SessionDateMenu'
 
 const styles = theme => ({
     expansionPanel: {
@@ -35,6 +36,18 @@ class SessionList extends Component {
     componentWillMount() {
         this.props.getSessions()
         this.props.getSpeakers()
+
+        const currentDate = this.props.match.params.date
+        console.log(this.props.match)
+        this.props.setSelectedDate(currentDate)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const newDate = nextProps.match.params.date
+        const oldDate = this.props.match.params.date
+        if (oldDate !== newDate) {
+            this.props.setSelectedDate(newDate)
+        }
     }
 
     onSessionClicked = session => {
@@ -43,12 +56,10 @@ class SessionList extends Component {
 
     render() {
         const {
-            sessionsByDateAndTrack,
-            match,
             theme,
             userSessionVote,
             errorSessionsLoad,
-            classes
+            currentSessionsByTrack
         } = this.props
 
         if (errorSessionsLoad) {
@@ -60,58 +71,36 @@ class SessionList extends Component {
             )
         }
 
-        if (!sessionsByDateAndTrack || sessionsByDateAndTrack.length < 1)
+        if (!currentSessionsByTrack || currentSessionsByTrack.length < 1)
             return <LoaderMatchParent />
 
         return (
             <div>
-                {sessionsByDateAndTrack.map((current, key) => (
-                    <ExpansionPanel
-                        key={key}
-                        defaultExpanded={true}
-                        className={classes.expansionPanel}
-                    >
-                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                            <Typography
-                                className={classes.dateTitle}
-                                variant="h5"
-                            >
-                                {moment(current.date).format('dddd D')}
-                            </Typography>
-                        </ExpansionPanelSummary>
+                <SessionDateMenu />
 
-                        <ExpansionPanelDetails
-                            className={classes.DateAndTrackBlock}
+                {currentSessionsByTrack.map((track, key) => (
+                    <div key={key}>
+                        <Title
+                            component="h3"
+                            fontSize={20}
+                            fontWeight={400}
+                            mt={40}
+                            mb={30}
                         >
-                            {current.tracks.map((track, key) => (
-                                <div key={key}>
-                                    <Typography
-                                        className={classes.trackTitle}
-                                        variant="h6"
-                                    >
-                                        {track.track}
-                                    </Typography>
+                            {track.track}
+                        </Title>
 
-                                    <Grid
-                                        container
-                                        spacing={theme.spacing.default}
-                                    >
-                                        {track.sessions.map((session, key) => (
-                                            <SessionItem
-                                                key={key}
-                                                session={session}
-                                                routerParams={match.params}
-                                                userVote={
-                                                    userSessionVote[session.id]
-                                                }
-                                                onClick={this.onSessionClicked}
-                                            />
-                                        ))}
-                                    </Grid>
-                                </div>
+                        <Grid container spacing={theme.spacing.default}>
+                            {track.sessions.map((session, key) => (
+                                <SessionItem
+                                    key={key}
+                                    session={session}
+                                    userVote={userSessionVote[session.id]}
+                                    onClick={this.onSessionClicked}
+                                />
                             ))}
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
+                        </Grid>
+                    </div>
                 ))}
             </div>
         )
@@ -119,12 +108,20 @@ class SessionList extends Component {
 }
 
 const mapStateToProps = state => ({
-    sessionsByDateAndTrack: getSessionsGroupByDateAndTrack(state),
     userSessionVote: getVotesBySession(state),
-    errorSessionsLoad: getSessionsLoadError(state)
+    errorSessionsLoad: getSessionsLoadError(state),
+    currentSessionsByTrack: getCurrentSessionsGroupByTrack(state)
 })
 
-const mapDispatchToProps = Object.assign({}, sessionActions, speakerActions)
+const mapDispatchToProps = Object.assign(
+    {},
+    {
+        getSessions: sessionActions.getSessions,
+        setSelectedSession: sessionActions.setSelectedSession,
+        getSpeakers: speakerActions.getSpeakers,
+        setSelectedDate: setSelectedDate
+    }
+)
 
 export default connect(
     mapStateToProps,
