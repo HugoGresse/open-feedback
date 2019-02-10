@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { sessionActions } from './core'
+import { getSessions } from './core/sessionsActions'
+import { setSelectedSession } from '../session/core/sessionActions'
 import { speakerActions } from './../speaker/core'
 import { setSelectedDate } from './../project/projectActions'
 import { getVotesBySession } from '../vote/voteSelectors'
@@ -9,7 +10,7 @@ import {
     getSessionsLoadError,
     getCurrentSessionsGroupByTrack,
     getSessionsLoading
-} from './core/sessionSelectors'
+} from './core/sessionsSelectors'
 import Error from '../customComponent/Error'
 import LoaderMatchParent from '../customComponent/LoaderMatchParent'
 import SessionsDateMenu from './SessionsDateMenu'
@@ -83,8 +84,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = Object.assign(
     {},
     {
-        getSessions: sessionActions.getSessions,
-        setSelectedSession: sessionActions.setSelectedSession,
+        getSessions: getSessions,
+        setSelectedSession: setSelectedSession,
         getSpeakers: speakerActions.getSpeakers,
         setSelectedDate: setSelectedDate
     }
