@@ -41,8 +41,6 @@ class Error extends Component {
                 </p>
                 <p>Error:</p>
                 <p className={classes.errorDetail}>{errorDetail}</p>
-                <br />
-                <br />
                 <Button
                     variant="contained"
                     color="primary"

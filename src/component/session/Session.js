@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withStyles } from '@material-ui/core'
-import { Link } from 'react-router-dom'
 import moment from 'moment'
-import { getDateFromStartTime } from '../sessions/core/sessionsUtils'
+import styled from 'styled-components'
 
 import {
     getSelectedSession,
@@ -26,44 +24,33 @@ import {
 } from '../vote/voteSelectors'
 import { getSessionLoadError } from './core/sessionSelectors'
 
-import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import ArrowBack from '@material-ui/icons/ArrowBack'
 import SessionVote from './SessionVote'
 import SpeakerList from '../speaker/SpeakerList'
-import Chip from '../customComponent/Chip'
 import LoaderMatchParent from '../customComponent/LoaderMatchParent'
 import Error from '../customComponent/Error'
 import Snackbar from '../customComponent/Snackbar'
+import Title from '../design/Title'
+import { COLORS } from '../../constants/colors'
+import { SPACING } from '../../constants/constants'
 
-const styles = theme => ({
-    arrowLink: {
-        color: theme.palette.grey[800],
-        marginRight: '20px'
-    },
-    header: {
-        display: 'flex',
-        marginBottom: '40px'
-    },
-    subHeader: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginTop: '10px'
-    },
-    dateTime: {
-        fontSize: '18px',
-        display: 'flex',
-        flexDirection: 'column',
-        textAlign: 'right',
-        color: theme.palette.grey[500]
-    },
-    time: {
-        fontSize: '14px'
-    },
-    headerTitle: {
-        width: '100%'
-    }
-})
+const Header = styled.div`
+    margin-bottom: 30px;
+`
+
+const DateTime = styled.div`
+    font-size: '18px';
+    display: 'flex';
+    flex-direction: 'column';
+    color: ${COLORS.GRAY};
+    margin-bottom: 15px;
+`
+
+const ChipList = styled.span`
+    font-size: 20px;
+    color: ${COLORS.GRAY};
+    margin-left: 5px;
+`
 
 class SessionItem extends Component {
     componentWillMount() {
@@ -108,11 +95,8 @@ class SessionItem extends Component {
 
     render() {
         const {
-            classes,
-            theme,
             speakers,
             session,
-            match,
             voteItems,
             userVotes,
             voteResults,
@@ -158,48 +142,26 @@ class SessionItem extends Component {
                 />
             )
         }
-        const date = getDateFromStartTime(session.startTime)
         return (
             <div>
-                <div className={classes.header}>
-                    <Link
-                        className={classes.arrowLink}
-                        to={`/${match.params.projectId}/${date}`}
-                    >
-                        <ArrowBack />
-                    </Link>
-                    <div className={classes.headerTitle}>
-                        {session.tags &&
-                            session.tags.map((tag, key) => (
-                                <Chip key={key} label={tag} />
-                            ))}
-
-                        <div className={classes.subHeader}>
-                            <Typography
-                                variant="h5"
-                                id="modal-title"
-                                className={classes.title}
-                            >
-                                {session.title}
-                            </Typography>
-
-                            <div className={classes.dateTime}>
-                                {moment(session.startTime).format('dddd D')}
-                                <div className={classes.time}>
-                                    {moment(session.startTime).format('H:mm ')}-
-                                    {moment(session.endTime).format(' H:mm')}
-                                </div>
-                            </div>
-                        </div>
-
-                        <SpeakerList speakers={speakers} />
-                    </div>
-                </div>
-                <Grid
-                    container
-                    className={classes.layout}
-                    spacing={theme.spacing.default}
-                >
+                <Header>
+                    <Title mb="15px">
+                        {session.title}
+                        <ChipList>
+                            {session.tags &&
+                                session.tags.map((tag, key) => (
+                                    <span key={key}>#{tag}</span>
+                                ))}
+                        </ChipList>
+                    </Title>
+                    <DateTime>
+                        {moment(session.startTime).format('dddd D')} /{' '}
+                        {moment(session.startTime).format('H:mm ')}-
+                        {moment(session.endTime).format(' H:mm')}
+                    </DateTime>
+                    <SpeakerList speakers={speakers} />
+                </Header>
+                <Grid container spacing={SPACING.LAYOUT}>
                     {voteItems.map((voteItem, key) => (
                         <SessionVote
                             key={key}
@@ -245,4 +207,4 @@ const mapDispatchToProps = Object.assign(
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles, { withTheme: true })(SessionItem))
+)(SessionItem)
