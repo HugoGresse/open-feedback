@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom'
 import connect from 'react-redux/es/connect/connect'
 import { getSpeakersList } from '../speaker/core'
 import SpeakerList from '../speaker/SpeakerList'
+import { getDateFromStartTime } from './core/sessionsUtils'
+import { getProjectSelector } from '../project/projectSelectors'
 
 const styles = theme => ({
     itemContainer: {
@@ -33,12 +35,18 @@ const styles = theme => ({
         transition: 'all 200ms ease-out'
     },
     paperSelected: {
-        border: '4px solid ' + theme.palette.grey[300] + ' !important'
+        opacity: 0.5
     }
 })
 
-export const SessionItem = props => {
-    const { classes, session, speakersEntities, userVote, routerParams } = props
+export const SessionsItem = props => {
+    const {
+        classes,
+        session,
+        speakersEntities,
+        userVote,
+        currentProjectId
+    } = props
 
     const itemClasses = `${classes.paper} ${
         userVote ? classes.paperSelected : ''
@@ -47,10 +55,10 @@ export const SessionItem = props => {
     const speakers =
         session.speakers &&
         session.speakers.map(speakerId => speakersEntities[speakerId])
-
+    const date = getDateFromStartTime(session.startTime)
     return (
-        <Grid item xs={6} sm={4} md={4} className={classes.itemContainer}>
-            <Link to={`/${routerParams.projectId}/${session.id}`}>
+        <Grid item xs={12} sm={6} md={4} className={classes.itemContainer}>
+            <Link to={`/${currentProjectId}/${date}/${session.id}`}>
                 <Paper className={itemClasses}>
                     {session.title}
                     {speakers && (
@@ -62,17 +70,18 @@ export const SessionItem = props => {
     )
 }
 
-SessionItem.propTypes = {
+SessionsItem.propTypes = {
     classes: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
     userVote: PropTypes.object
 }
 
 const mapStateToProps = state => ({
-    speakersEntities: getSpeakersList(state)
+    speakersEntities: getSpeakersList(state),
+    currentProjectId: getProjectSelector(state).id
 })
 
 export default connect(
     mapStateToProps,
     {}
-)(withStyles(styles)(SessionItem))
+)(withStyles(styles)(SessionsItem))

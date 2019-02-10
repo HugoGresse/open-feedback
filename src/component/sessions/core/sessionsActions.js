@@ -1,54 +1,58 @@
 import {
-    SET_SELECTED_SESSION,
-    GET_SESSION_SUCCESS,
-    GET_SESSION_ERROR
-} from './sessionActionTypes'
-import { formatSessionsWithScheduled } from '../../sessions/core/sessionsUtils'
+    GET_SESSIONS_SUCCESS,
+    GET_SESSIONS_ERROR,
+    SET_SESSIONS_FILTER,
+    GET_SESSIONS_LOADING
+} from './sessionsActionTypes'
+import { formatSessionsWithScheduled } from './sessionsUtils'
 import { fireStoreScheduleInstance } from '../../../firebase'
 
-export const getSession = sessionId => {
+export const getSessions = () => {
     return (dispatch, getState) => {
+        dispatch({
+            type: GET_SESSIONS_LOADING
+        })
         const schedulePromise = fireStoreScheduleInstance
             .collection('schedule')
             .get()
         const sessionsPromise = fireStoreScheduleInstance
             .collection('sessions')
-            .doc(sessionId)
             .get()
 
         return Promise.all([schedulePromise, sessionsPromise])
             .then(([resultSchedule, resultSessions]) => {
                 let sessions = {}
                 let schedule = []
-
-                sessions[sessionId] = {
-                    ...resultSessions.data(),
-                    id: resultSessions.id
-                }
+                resultSessions.forEach(doc => {
+                    sessions[doc.id] = {
+                        ...doc.data(),
+                        id: doc.id
+                    }
+                })
 
                 resultSchedule.forEach(doc => {
                     schedule.push(doc.data())
                 })
 
                 dispatch({
-                    type: GET_SESSION_SUCCESS,
+                    type: GET_SESSIONS_SUCCESS,
                     payload: formatSessionsWithScheduled(sessions, schedule)
                 })
             })
             .catch(err => {
                 dispatch({
-                    type: GET_SESSION_ERROR,
+                    type: GET_SESSIONS_ERROR,
                     payload: err.toString()
                 })
             })
     }
 }
 
-export const setSelectedSession = sessionId => {
+export const setSessionsFilter = filter => {
     return dispatch => {
         dispatch({
-            type: SET_SELECTED_SESSION,
-            payload: sessionId
+            type: SET_SESSIONS_FILTER,
+            payload: filter
         })
     }
 }
