@@ -2,6 +2,7 @@ import { Component } from 'react'
 import styled from 'styled-components'
 import React from 'react'
 import { space, fontSize, fontWeight } from 'styled-system'
+import { COLORS } from '../../constants/colors'
 
 const BigInputWrapper = styled.div`
     position: relative;
@@ -24,7 +25,11 @@ const BigInputStyled = styled.input`
     ${fontSize}
     ${fontWeight}
     ${space}
+    color:${COLORS.DARK_GRAY};
 
+    &::placeholder {
+        color: ${COLORS.LIGHT_GRAY};
+    }
     &:focus {
         outline-width: 0;
     }
