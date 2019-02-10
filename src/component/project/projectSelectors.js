@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
 import { getSelectedSessionId } from '../session/core/sessionSelectors'
+import { VOTE_TYPE_TEXT } from '../vote/voteReducer'
 
 const getProjects = state => state.project
 
@@ -30,5 +31,15 @@ export const getVoteResultSelector = createSelector(
             return []
         }
         return voteResults[selectedSessionId]
+    }
+)
+
+export const getProjectVoteItemsOrderedSelector = createSelector(
+    getProjectVoteItemsSelector,
+    voteItems => {
+        if (!voteItems) {
+            return []
+        }
+        return voteItems.sort((a, b) => (a.type === VOTE_TYPE_TEXT ? -1 : 1))
     }
 )

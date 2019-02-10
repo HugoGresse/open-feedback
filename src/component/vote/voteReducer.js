@@ -17,6 +17,9 @@ const initState = {
     errorVotesLoad: null
 }
 
+export const VOTE_TYPE_BOOLEAN = 'boolean'
+export const VOTE_TYPE_TEXT = 'text'
+
 const voteReducer = (state = initState, { payload, type }) => {
     switch (type) {
         case GET_USER_VOTES_SUCCESS:
