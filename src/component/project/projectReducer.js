@@ -31,9 +31,7 @@ const projectReducer = (state = initState, { payload, type }) => {
         case GET_PROJECT_VOTE_ITEMS_SUCCESS:
             return {
                 ...state,
-                voteItems: payload.filter(
-                    voteItem => voteItem['type'] === 'boolean'
-                )
+                voteItems: payload
             }
         case GET_PROJECT_VOTE_RESULT_SUCCESS:
             return {
