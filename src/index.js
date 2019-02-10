@@ -1,13 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+
 import { Provider } from 'react-redux'
 
 import './index.css'
 import * as serviceWorker from './serviceWorker'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import Root from './component/Root'
 import App from './App'
-import Page404 from './component/Page404'
 import { initGA } from './reactGAMiddlewares'
 import configureStore from './configureStore'
 
@@ -15,21 +13,14 @@ initGA()
 
 const store = configureStore({})
 
-const render = Component => {
+const render = AppComponent => {
     return ReactDOM.render(
         <Provider store={store}>
-            <BrowserRouter>
-                <Switch>
-                    <Route exact path="/" component={Root} />
-                    <Route path="/:projectId" component={Component} />
-                    <Route component={Page404} />
-                </Switch>
-            </BrowserRouter>
+            <AppComponent />
         </Provider>,
         document.getElementById('root')
     )
 }
-
 render(App)
 
 if (module.hot) {
