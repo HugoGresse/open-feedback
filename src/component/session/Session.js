@@ -1,38 +1,40 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {
-    getSelectedSession,
-    getSpeakersForSelectedSession,
-    sessionActions
-} from './core'
-import { speakerActions } from '../speaker/core'
 import { withStyles } from '@material-ui/core'
-import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid'
-
-import ArrowBack from '@material-ui/icons/ArrowBack'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
+import { getDateFromStartTime } from '../sessions/core/sessionsUtils'
+
+import {
+    getSelectedSession,
+    getSpeakersForSelectedSession
+} from './core/sessionSelectors'
+import { getSession, setSelectedSession } from './core/sessionActions'
+import { getSpeakers } from '../speaker/core/speakerActions'
+import { getVoteResult, getVoteItems } from '../project/projectActions'
+import { removeVote, voteFor } from '../vote/voteActions'
+
 import {
     getProjectChipColors,
     getProjectVoteItemsSelector
 } from '../project/projectSelectors'
 import { getVoteResultSelector } from '../session/core/sessionSelectors'
-import * as projectActions from '../project/projectActions'
-import * as voteActions from '../vote/voteActions'
 import {
     getErrorVotePostSelector,
     getErrorVotesLoadSelector,
     getVotesBySessionAndVoteItemSelector
 } from '../vote/voteSelectors'
-import SessionItemVote from './SessionItemVote'
+import { getSessionLoadError } from './core/sessionSelectors'
+
+import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
+import ArrowBack from '@material-ui/icons/ArrowBack'
+import SessionVote from './SessionVote'
 import SpeakerList from '../speaker/SpeakerList'
 import Chip from '../customComponent/Chip'
 import LoaderMatchParent from '../customComponent/LoaderMatchParent'
-import { getSessionLoadError } from './core/sessionSelectors'
 import Error from '../customComponent/Error'
 import Snackbar from '../customComponent/Snackbar'
-import { getDateFromStartTime } from './core/sessionUtils'
 
 const styles = theme => ({
     arrowLink: {
@@ -199,7 +201,7 @@ class SessionItem extends Component {
                     spacing={theme.spacing.default}
                 >
                     {voteItems.map((voteItem, key) => (
-                        <SessionItemVote
+                        <SessionVote
                             key={key}
                             voteItem={voteItem}
                             userVote={userVotes[voteItem.id]}
@@ -229,10 +231,15 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = Object.assign(
     {},
-    sessionActions,
-    speakerActions,
-    projectActions,
-    voteActions
+    {
+        getSession: getSession,
+        setSelectedSession: setSelectedSession,
+        getSpeakers: getSpeakers,
+        getVoteItems: getVoteItems,
+        getVoteResult: getVoteResult,
+        voteFor: voteFor,
+        removeVote: removeVote
+    }
 )
 
 export default connect(

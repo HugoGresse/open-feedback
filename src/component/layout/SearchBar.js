@@ -2,7 +2,7 @@ import { Component } from 'react'
 import styled from 'styled-components'
 import React from 'react'
 import SearchIcon from '@material-ui/icons/Search'
-import * as sessionActions from '../session/core/sessionActions'
+import { setSessionsFilter } from '../sessions/core/sessionsActions'
 import connect from 'react-redux/es/connect/connect'
 import { COLORS } from '../../constants/colors'
 import { SPACING } from '../../constants/constants'
@@ -15,7 +15,7 @@ const SearchBarStyled = styled(Box)`
 
 class SearchBar extends Component {
     onFilterChanged = event => {
-        this.props.setSessionFilter(event.target.value)
+        this.props.setSessionsFilter(event.target.value)
     }
 
     render() {
@@ -34,7 +34,10 @@ class SearchBar extends Component {
     }
 }
 
-const mapDispatchToProps = Object.assign({}, sessionActions)
+const mapDispatchToProps = Object.assign(
+    {},
+    { setSessionsFilter: setSessionsFilter }
+)
 
 export default connect(
     null,

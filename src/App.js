@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import Header from './component/layout/Header'
-import SessionItem from './component/session/SessionItem'
+import Session from './component/session/Session'
 import { withStyles } from '@material-ui/core'
 import './App.css'
 import { connect } from 'react-redux'
@@ -20,7 +20,7 @@ import Error from './component/customComponent/Error'
 import LoaderMatchParent from './component/customComponent/LoaderMatchParent'
 import { getLoginErrorSelector } from './component/auth/authSelectors'
 import Footer from './component/layout/Footer'
-import SessionsListWrapper from './component/session/SessionsListWrapper'
+import SessionsListWrapper from './component/sessions/SessionsListWrapper'
 
 const theme = createMuiTheme({
     typography: {
@@ -141,7 +141,7 @@ class App extends Component {
                                 />
                                 <Route
                                     path={`${match.path}/:date/:sessionId`}
-                                    component={SessionItem}
+                                    component={Session}
                                 />
                             </Switch>
 

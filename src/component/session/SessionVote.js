@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid'
 
 import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
-import SessionItemVoteBackground from './SessionItemVoteBackground'
+import SessionVoteBackground from './SessionVoteBackground'
 
 const styles = theme => ({
     itemContainer: {
@@ -79,7 +79,7 @@ class SessionItemVote extends Component {
                                 {voteResult}{' '}
                                 <span>{voteResult > 1 ? 'votes' : 'vote'}</span>
                             </span>
-                            <SessionItemVoteBackground
+                            <SessionVoteBackground
                                 colors={chipColors}
                                 count={voteResult}
                             />
