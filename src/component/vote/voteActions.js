@@ -17,7 +17,7 @@ import { getVotesSelector } from './voteSelectors'
 import { INCREMENT_VOTE_LOCALY } from '../project/projectActionTypes'
 import { VOTE_TYPE_TEXT } from './voteReducer'
 
-export const voteFor = (sessionId, voteItem) => {
+export const voteFor = (sessionId, voteItem, data) => {
     return (dispatch, getState) => {
         const voteContent = {
             projectId: getProjectSelector(getState()).id,
@@ -28,9 +28,11 @@ export const voteFor = (sessionId, voteItem) => {
         }
 
         if (voteItem.type === VOTE_TYPE_TEXT) {
-            console.log('not managed')
-
-            return
+            voteContent.text = data.trim()
+            console.log('not managed', voteContent)
+            // TODO : manage delete & check result
+            // TODO: update comment
+            // return
         }
 
         dispatch({

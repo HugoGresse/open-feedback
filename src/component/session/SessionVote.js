@@ -32,6 +32,7 @@ import LoaderMatchParent from '../customComponent/LoaderMatchParent'
 import { getSessionLoadError } from './core/sessionSelectors'
 import Error from '../customComponent/Error'
 import Snackbar from '../customComponent/Snackbar'
+import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../vote/voteReducer'
 
 const styles = theme => ({
     arrowLink: {
@@ -82,11 +83,20 @@ class SessionVote extends Component {
         }, '')
     }
 
-    onVoteItemClick = (event, voteItem) => {
+    onVoteItemChange = (voteItem, data) => {
         if (this.props.userVotes[voteItem.id]) {
-            this.props.removeVote(this.props.userVotes[voteItem.id])
+            switch (voteItem.type) {
+                case VOTE_TYPE_TEXT:
+                    // TODO : update
+                    this.props.voteFor(this.props.session.id, voteItem, data)
+                    break
+                default:
+                case VOTE_TYPE_BOOLEAN:
+                    this.props.removeVote(this.props.userVotes[voteItem.id])
+                    break
+            }
         } else {
-            this.props.voteFor(this.props.session.id, voteItem)
+            this.props.voteFor(this.props.session.id, voteItem, data)
         }
     }
 
@@ -204,7 +214,7 @@ class SessionVote extends Component {
                             userVote={userVotes[voteItem.id]}
                             voteResult={voteResults[voteItem.id]}
                             chipColors={chipColors}
-                            onClick={this.onVoteItemClick}
+                            onClick={this.onVoteItemChange}
                         />
                     ))}
                 </Grid>
