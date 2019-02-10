@@ -29,3 +29,7 @@ export const formatSessionsWithScheduled = (sessions, schedule) => {
 
     return formatedSessions
 }
+
+export const getDateFromStartTime = startTime => {
+    return moment(startTime).format('YYYY-MM-DD')
+}
