@@ -45,7 +45,6 @@ class SessionVoteItem extends Component {
 SessionVoteItem.propTypes = {
     voteItem: PropTypes.object.isRequired,
     userVote: PropTypes.object,
-    voteResult: PropTypes.number,
     chipColors: PropTypes.array
 }
 
