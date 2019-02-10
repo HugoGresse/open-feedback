@@ -10,6 +10,7 @@ const FooterStyled = styled.div`
     display: flex;
     align-items: top;
     justify-content: center;
+    padding: 20px;
 
     .Footer__Text {
         margin-right: 4px;
