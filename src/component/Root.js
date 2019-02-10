@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core'
 import { setFavicon } from './layout/utils'
-
-const styles = theme => ({})
+import Header from './home/Header'
+import Footer from './home/Footer'
+import CallToAction from './home/CallToAction'
+import HowItWorks from './home/HowItWorks'
 
 class Root extends Component {
     componentWillMount() {
@@ -12,10 +13,13 @@ class Root extends Component {
     render() {
         return (
             <div>
-                Access to feedback site with the unique id given by someone.
+                <Header />
+                <HowItWorks />
+                <CallToAction />
+                <Footer />
             </div>
         )
     }
 }
 
-export default withStyles(styles)(Root)
+export default Root
