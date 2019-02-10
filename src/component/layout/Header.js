@@ -18,7 +18,7 @@ const HeaderStyled = styled.div`
     left: auto;
     right: 0;
     position: sticky;
-    z-index: 1;
+    z-index: 3;
     background: ${COLORS.WHITE};
 `
 
