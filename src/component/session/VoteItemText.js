@@ -108,7 +108,9 @@ class VoteItemText extends Component {
                 {this.state.comment && (
                     <Button
                         className={classes.button}
-                        onClick={event => this.props.onClick(event, voteItem)}
+                        onClick={() =>
+                            this.props.onClick(voteItem, this.state.comment)
+                        }
                     >
                         Save comment
                     </Button>
@@ -122,7 +124,7 @@ VoteItemText.propTypes = {
     classes: PropTypes.object.isRequired,
     voteItem: PropTypes.object.isRequired,
     isSelected: PropTypes.bool,
-    voteResult: PropTypes.number,
+    voteResult: PropTypes.object,
     chipColors: PropTypes.array
 }
 
