@@ -1,87 +1,241 @@
-import PropTypes from 'prop-types'
-
-import { withStyles } from '@material-ui/core/styles'
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import {
+    getSelectedSession,
+    getSpeakersForSelectedSession,
+    sessionActions
+} from './core'
+import { speakerActions } from '../speaker/core'
+import { withStyles } from '@material-ui/core'
+import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
+
+import ArrowBack from '@material-ui/icons/ArrowBack'
 import { Link } from 'react-router-dom'
-import connect from 'react-redux/es/connect/connect'
-import { getSpeakersList } from '../speaker/core'
+import moment from 'moment'
+import {
+    getProjectChipColors,
+    getProjectVoteItemsSelector
+} from '../project/projectSelectors'
+import { getVoteResultSelector } from '../session/core/sessionSelectors'
+import * as projectActions from '../project/projectActions'
+import * as voteActions from '../vote/voteActions'
+import {
+    getErrorVotePostSelector,
+    getErrorVotesLoadSelector,
+    getVotesBySessionAndVoteItemSelector
+} from '../vote/voteSelectors'
+import SessionItemVote from './SessionItemVote'
 import SpeakerList from '../speaker/SpeakerList'
+import Chip from '../customComponent/Chip'
+import LoaderMatchParent from '../customComponent/LoaderMatchParent'
+import { getSessionLoadError } from './core/sessionSelectors'
+import Error from '../customComponent/Error'
+import Snackbar from '../customComponent/Snackbar'
 import { getDateFromStartTime } from './core/sessionUtils'
-import { getProjectSelector } from '../project/projectSelectors'
 
 const styles = theme => ({
-    itemContainer: {
-        margin: -1
+    arrowLink: {
+        color: theme.palette.grey[800],
+        marginRight: '20px'
     },
-    paper: {
-        padding: theme.spacing.unit * 2,
-        textAlign: 'center',
-        fontSize: '17px',
-        boxShadow: 'none',
-        borderRadius: '0',
-        color: theme.palette.text.secondary,
-        border: '1px solid ' + theme.palette.grey[300],
-        height: '150px',
-        boxSizing: 'border-box',
-        '&:hover': {
-            backgroundColor: '#fafafa',
-            cursor: 'pointer'
-        },
+    header: {
+        display: 'flex',
+        marginBottom: '40px'
+    },
+    subHeader: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginTop: '10px'
+    },
+    dateTime: {
+        fontSize: '18px',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
-        transition: 'all 200ms ease-out'
+        textAlign: 'right',
+        color: theme.palette.grey[500]
     },
-    paperSelected: {
-        opacity: 0.5
+    time: {
+        fontSize: '14px'
+    },
+    headerTitle: {
+        width: '100%'
     }
 })
 
-export const SessionItem = props => {
-    const {
-        classes,
-        session,
-        speakersEntities,
-        userVote,
-        currentProjectId
-    } = props
+class SessionItem extends Component {
+    componentWillMount() {
+        const id = this.props.match.params.sessionId
+        this.props.getSession(id)
+        this.props.setSelectedSession(id)
+        this.props.getSpeakers()
+        this.props.getVoteItems()
+        this.props.getVoteResult()
+    }
 
-    const itemClasses = `${classes.paper} ${
-        userVote ? classes.paperSelected : ''
-    }`
+    getSpeakersString(session, speakers) {
+        if (speakers.length === 0) {
+            return ''
+        }
 
-    const speakers =
-        session.speakers &&
-        session.speakers.map(speakerId => speakersEntities[speakerId])
-    const date = getDateFromStartTime(session.startTime)
-    return (
-        <Grid item xs={6} sm={4} md={4} className={classes.itemContainer}>
-            <Link to={`/${currentProjectId}/${date}/${session.id}`}>
-                <Paper className={itemClasses}>
-                    {session.title}
-                    {speakers && (
-                        <SpeakerList speakers={speakers} size="small" />
-                    )}
-                </Paper>
-            </Link>
-        </Grid>
-    )
-}
+        return speakers.reduce((acc, speaker) => {
+            return acc + ' ' + speaker.name
+        }, '')
+    }
 
-SessionItem.propTypes = {
-    classes: PropTypes.object.isRequired,
-    session: PropTypes.object.isRequired,
-    userVote: PropTypes.object
+    onVoteItemClick = (event, voteItem) => {
+        if (this.props.userVotes[voteItem.id]) {
+            this.props.removeVote(this.props.userVotes[voteItem.id])
+        } else {
+            this.props.voteFor(this.props.session.id, voteItem.id)
+        }
+    }
+
+    onRetryLoadVotesClick = () => {
+        this.props.removeVoteLoadError()
+        this.props.getVotes()
+    }
+
+    closeErrorVotePostClick = () => {
+        this.props.removeVotePostError()
+    }
+
+    closeErrorVoteLoadClick = () => {
+        this.props.removeVoteLoadError()
+    }
+
+    render() {
+        const {
+            classes,
+            theme,
+            speakers,
+            session,
+            match,
+            voteItems,
+            userVotes,
+            voteResults,
+            errorSessionLoad,
+            errorVotePost,
+            errorVotesLoad,
+            chipColors
+        } = this.props
+
+        if (errorSessionLoad) {
+            return (
+                <Error
+                    error="Unable to load the session/speakers/vote options"
+                    errorDetail={errorSessionLoad}
+                />
+            )
+        }
+
+        if (!session || !speakers || !voteItems) {
+            return <LoaderMatchParent />
+        }
+
+        let snackBarError = null
+        if (errorVotePost) {
+            snackBarError = (
+                <Snackbar
+                    text={'Unable to save the vote, reason: ' + errorVotePost}
+                    closeCallback={this.closeErrorVotePostClick}
+                />
+            )
+        }
+
+        if (errorVotesLoad) {
+            snackBarError = (
+                <Snackbar
+                    text={
+                        'Unable to load the vote results, reason: ' +
+                        errorVotePost
+                    }
+                    actionText="Retry"
+                    actionCallback={this.onRetryLoadVotesClick}
+                    closeCallback={this.closeErrorVoteLoadClick}
+                />
+            )
+        }
+        const date = getDateFromStartTime(session.startTime)
+        return (
+            <div>
+                <div className={classes.header}>
+                    <Link
+                        className={classes.arrowLink}
+                        to={`/${match.params.projectId}/${date}`}
+                    >
+                        <ArrowBack />
+                    </Link>
+                    <div className={classes.headerTitle}>
+                        {session.tags &&
+                            session.tags.map((tag, key) => (
+                                <Chip key={key} label={tag} />
+                            ))}
+
+                        <div className={classes.subHeader}>
+                            <Typography
+                                variant="h5"
+                                id="modal-title"
+                                className={classes.title}
+                            >
+                                {session.title}
+                            </Typography>
+
+                            <div className={classes.dateTime}>
+                                {moment(session.startTime).format('dddd D')}
+                                <div className={classes.time}>
+                                    {moment(session.startTime).format('H:mm ')}-
+                                    {moment(session.endTime).format(' H:mm')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <SpeakerList speakers={speakers} />
+                    </div>
+                </div>
+                <Grid
+                    container
+                    className={classes.layout}
+                    spacing={theme.spacing.default}
+                >
+                    {voteItems.map((voteItem, key) => (
+                        <SessionItemVote
+                            key={key}
+                            voteItem={voteItem}
+                            userVote={userVotes[voteItem.id]}
+                            voteResult={voteResults[voteItem.id]}
+                            chipColors={chipColors}
+                            onClick={this.onVoteItemClick}
+                        />
+                    ))}
+                </Grid>
+                {snackBarError}
+            </div>
+        )
+    }
 }
 
 const mapStateToProps = state => ({
-    speakersEntities: getSpeakersList(state),
-    currentProjectId: getProjectSelector(state).id
+    session: getSelectedSession(state),
+    speakers: getSpeakersForSelectedSession(state),
+    voteItems: getProjectVoteItemsSelector(state),
+    userVotes: getVotesBySessionAndVoteItemSelector(state),
+    voteResults: getVoteResultSelector(state),
+    errorSessionLoad: getSessionLoadError(state),
+    errorVotePost: getErrorVotePostSelector(state),
+    errorVotesLoad: getErrorVotesLoadSelector(state),
+    chipColors: getProjectChipColors(state)
 })
+
+const mapDispatchToProps = Object.assign(
+    {},
+    sessionActions,
+    speakerActions,
+    projectActions,
+    voteActions
+)
 
 export default connect(
     mapStateToProps,
-    {}
-)(withStyles(styles)(SessionItem))
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(SessionItem))

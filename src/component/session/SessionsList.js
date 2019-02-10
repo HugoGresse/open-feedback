@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { sessionActions } from './core'
-import SessionItem from './SessionItem'
+import SessionsItem from './SessionsItem'
 import Grid from '@material-ui/core/Grid'
 import { getVotesBySession } from '../vote/voteSelectors'
 import Title from '../design/Title'
 
 import { getCurrentSessionsGroupByTrack } from './core/sessionSelectors'
 
-class SessionList extends Component {
+class SessionsList extends Component {
     onSessionClicked = session => {
         this.props.setSelectedSession(session.id)
     }
@@ -30,7 +30,7 @@ class SessionList extends Component {
 
                 <Grid container spacing={16}>
                     {track.sessions.map((session, key) => (
-                        <SessionItem
+                        <SessionsItem
                             key={key}
                             session={session}
                             userVote={userSessionVote[session.id]}
@@ -58,4 +58,4 @@ const mapDispatchToProps = Object.assign(
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SessionList)
+)(SessionsList)
