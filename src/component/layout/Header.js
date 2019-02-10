@@ -6,6 +6,8 @@ import React from 'react'
 import { COLORS } from '../../constants/colors'
 import Title from '../design/Title'
 import { SPACING } from '../../constants/constants'
+import SearchBar from './SearchBar'
+import Box from '../design/Box'
 
 const Logo = styled.img`
     margin-right: 20px;
@@ -18,9 +20,6 @@ const HeaderStyled = styled.div`
     position: sticky;
     z-index: 1;
     background: ${COLORS.WHITE};
-    display: flex;
-    align-items: center;
-    padding: 10px ${SPACING.HEADER};
 `
 
 class Header extends Component {
@@ -28,10 +27,18 @@ class Header extends Component {
         const { logo } = this.props
         return (
             <HeaderStyled>
-                <Logo src={logo} width={60} height={60} alt="logo" />
-                <Title component="h1" fontSize={24} fontWeight={400}>
-                    Sunny Tech
-                </Title>
+                <Box
+                    px={[SPACING.HEADER / 2, SPACING.HEADER]}
+                    py={10}
+                    flex
+                    alignItems="center"
+                >
+                    <Logo src={logo} width={60} height={60} alt="logo" />
+                    <Title component="h1" fontSize={24} fontWeight={400}>
+                        Sunny Tech
+                    </Title>
+                </Box>
+                <SearchBar />
             </HeaderStyled>
         )
     }

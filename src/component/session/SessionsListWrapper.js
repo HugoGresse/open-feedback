@@ -12,10 +12,10 @@ import {
 } from './core/sessionSelectors'
 import Error from '../customComponent/Error'
 import LoaderMatchParent from '../customComponent/LoaderMatchParent'
-import SessionDateMenu from './SessionDateMenu'
-import SessionList from './SessionList'
+import SessionsDateMenu from './SessionsDateMenu'
+import SessionsList from './SessionsList'
 
-class SessionListWrapper extends Component {
+class SessionsListWrapper extends Component {
     componentWillMount() {
         this.props.getSessions()
         this.props.getSpeakers()
@@ -60,13 +60,13 @@ class SessionListWrapper extends Component {
 
         return (
             <div>
-                <SessionDateMenu />
+                <SessionsDateMenu />
 
                 {!sessionIsLoading && currentSessionsByTrack.length === 0 && (
                     <span>Oops there is nothing here</span>
                 )}
                 {!sessionIsLoading && currentSessionsByTrack.length > 0 && (
-                    <SessionList sessions={currentSessionsByTrack} />
+                    <SessionsList sessions={currentSessionsByTrack} />
                 )}
             </div>
         )
@@ -93,4 +93,4 @@ const mapDispatchToProps = Object.assign(
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SessionListWrapper)
+)(SessionsListWrapper)

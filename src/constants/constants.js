@@ -1,3 +1,3 @@
 export const SPACING = {
-    HEADER: '34px'
+    HEADER: 34
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import Header from './component/layout/Header'
-import SessionVote from './component/session/SessionVote'
+import SessionItem from './component/session/SessionItem'
 import { withStyles } from '@material-ui/core'
 import './App.css'
 import { connect } from 'react-redux'
@@ -20,8 +20,7 @@ import Error from './component/customComponent/Error'
 import LoaderMatchParent from './component/customComponent/LoaderMatchParent'
 import { getLoginErrorSelector } from './component/auth/authSelectors'
 import Footer from './component/layout/Footer'
-import SearchBar from './component/layout/SearchBar'
-import SessionListWrapper from './component/session/SessionListWrapper'
+import SessionsListWrapper from './component/session/SessionsListWrapper'
 
 const theme = createMuiTheme({
     typography: {
@@ -124,8 +123,7 @@ class App extends Component {
             return (
                 <MuiThemeProvider theme={theme}>
                     <div>
-                        <Header displaySearch logo={project.logoSmall} />
-                        <SearchBar />
+                        <Header logo={project.logoSmall} />
 
                         <div className={classes.layout}>
                             <br />
@@ -134,16 +132,16 @@ class App extends Component {
                                 <Route
                                     exact
                                     path={`${match.path}`}
-                                    component={SessionListWrapper}
+                                    component={SessionsListWrapper}
                                 />
                                 <Route
                                     exact
                                     path={`${match.path}/:date`}
-                                    component={SessionListWrapper}
+                                    component={SessionsListWrapper}
                                 />
                                 <Route
                                     path={`${match.path}/:date/:sessionId`}
-                                    component={SessionVote}
+                                    component={SessionItem}
                                 />
                             </Switch>
 

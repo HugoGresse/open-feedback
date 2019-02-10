@@ -7,10 +7,10 @@ import connect from 'react-redux/es/connect/connect'
 import { COLORS } from '../../constants/colors'
 import { SPACING } from '../../constants/constants'
 import BigInput from '../design/BigInput'
+import Box from '../design/Box'
 
-const SearchBarStyled = styled.div`
+const SearchBarStyled = styled(Box)`
     background-color: ${COLORS.EXTRA_LIGHT_GRAY};
-    padding: 0 ${SPACING.HEADER};
 `
 
 class SearchBar extends Component {
@@ -20,7 +20,10 @@ class SearchBar extends Component {
 
     render() {
         return (
-            <SearchBarStyled>
+            <SearchBarStyled
+                pr={[SPACING.HEADER / 2, SPACING.HEADER]}
+                pl={[0, SPACING.HEADER]}
+            >
                 <BigInput
                     onChange={this.onFilterChanged}
                     icon={<SearchIcon />}

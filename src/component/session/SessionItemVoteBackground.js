@@ -17,7 +17,7 @@ const styles = theme => ({
 
 const circleRadius = 22
 
-class SessionVoteItemBackground extends Component {
+class SessionItemVoteBackground extends Component {
     constructor(props) {
         super(props)
         this.refElement = React.createRef()
@@ -114,10 +114,10 @@ class SessionVoteItemBackground extends Component {
     }
 }
 
-SessionVoteItemBackground.propTypes = {
+SessionItemVoteBackground.propTypes = {
     classes: PropTypes.object.isRequired,
     count: PropTypes.number,
     colors: PropTypes.array
 }
 
-export default withStyles(styles)(SessionVoteItemBackground)
+export default withStyles(styles)(SessionItemVoteBackground)

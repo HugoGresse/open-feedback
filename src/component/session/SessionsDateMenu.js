@@ -13,30 +13,36 @@ import { Link } from 'react-router-dom'
 const Menu = styled.div`
     display: flex;
     justify-content: center;
+    margin-bottom: 10px;
 `
 
-const MenuItem = styled.span`
+const MenuItem = styled.div`
     color: ${COLORS.LIGHT_GRAY};
-    padding: 10px;
+    /* padding: 10px; */
     ${props =>
         props.selected &&
         `
         color: ${COLORS.BLACK}
         border-bottom: 2px ${COLORS.RED_ORANGE} solid
     `};
+    a {
+        color: inherit;
+        margin: 10px;
+        display: block;
+    }
 `
 
-class SessionDateMenu extends Component {
+class SessionsDateMenu extends Component {
     render() {
         const { sessionsDates, selectedDate, currentProjectId } = this.props
         return (
             <Menu>
                 {sessionsDates.map(date => (
-                    <Link key={date} to={`/${currentProjectId}/${date}`}>
-                        <MenuItem selected={selectedDate === date}>
+                    <MenuItem key={date} selected={selectedDate === date}>
+                        <Link to={`/${currentProjectId}/${date}`}>
                             {moment(date).format('dddd D')}
-                        </MenuItem>
-                    </Link>
+                        </Link>
+                    </MenuItem>
                 ))}
             </Menu>
         )
@@ -52,4 +58,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     null
-)(SessionDateMenu)
+)(SessionsDateMenu)
