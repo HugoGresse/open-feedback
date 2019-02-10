@@ -1,101 +1,52 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core'
-import Grid from '@material-ui/core/Grid'
-
-import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
-import SessionVoteItemBackground from './SessionVoteItemBackground'
-
-const styles = theme => ({
-    itemContainer: {
-        margin: -1
-    },
-    item: {
-        padding: theme.spacing.unit * 2,
-        textAlign: 'center',
-        fontSize: '17px',
-        borderRadius: '0',
-        color: theme.palette.text.secondary,
-        boxShadow: 'inset 0 0 0 1px ' + theme.palette.grey[300],
-        height: '150px',
-        boxSizing: 'border-box',
-        '&:hover': {
-            backgroundColor: '#f6f6f6',
-            cursor: 'pointer'
-        },
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        transition: 'all 200ms ease-out'
-    },
-    selectedItem: {
-        boxShadow: 'inset 0 0 0 5px ' + theme.palette.grey[300]
-    },
-    voteTitle: {
-        color: theme.palette.grey[800],
-        zIndex: 2
-    },
-    voteResult: {
-        position: 'absolute',
-        bottom: '5px',
-        fontSize: '14px',
-        transition: 'all 200ms ease-in-out',
-        zIndex: 2
-    },
-    backgroundCanvas: {
-        width: '100%'
-    }
-})
+import VoteItemBoolean from './VoteItemBoolean'
+import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../vote/voteReducer'
+import VoteItemText from './VoteItemText'
 
 class SessionVoteItem extends Component {
     render() {
         const {
-            classes,
             voteItem,
             userVote,
             voteResult,
-            chipColors
+            chipColors,
+            onClick
         } = this.props
 
-        const paperClasses = `${classes.item} ${
-            userVote ? classes.selectedItem : ''
-        }`
+        const isSelected = !!userVote
 
-        return (
-            <Grid
-                item
-                xs={6}
-                sm={4}
-                md={3}
-                className={classes.itemContainer}
-                onClick={event => this.props.onClick(event, voteItem)}
-            >
-                <Paper elevation={1} className={paperClasses}>
-                    <span className={classes.voteTitle}>{voteItem.name}</span>
-                    {voteResult > 0 && (
-                        <>
-                            <span className={classes.voteResult}>
-                                {voteResult}{' '}
-                                <span>{voteResult > 1 ? 'votes' : 'vote'}</span>
-                            </span>
-                            <SessionVoteItemBackground
-                                colors={chipColors}
-                                count={voteResult}
-                            />
-                        </>
-                    )}
-                </Paper>
-            </Grid>
-        )
+        switch (voteItem.type) {
+            default:
+            case VOTE_TYPE_BOOLEAN:
+                return (
+                    <VoteItemBoolean
+                        onClick={onClick}
+                        voteItem={voteItem}
+                        isSelected={isSelected}
+                        voteResult={voteResult}
+                        chipColors={chipColors}
+                    />
+                )
+            case VOTE_TYPE_TEXT:
+                return (
+                    <VoteItemText
+                        onClick={onClick}
+                        voteItem={voteItem}
+                        isSelected={isSelected}
+                        voteResult={voteResult}
+                        chipColors={chipColors}
+                    />
+                )
+        }
     }
 }
 
 SessionVoteItem.propTypes = {
-    classes: PropTypes.object.isRequired,
     voteItem: PropTypes.object.isRequired,
+    userVote: PropTypes.object,
     voteResult: PropTypes.number,
     chipColors: PropTypes.array
 }
 
-export default withStyles(styles)(SessionVoteItem)
+export default SessionVoteItem

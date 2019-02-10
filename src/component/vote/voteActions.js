@@ -15,15 +15,22 @@ import { getUser } from '../auth'
 import { getProjectSelector } from '../project/projectSelectors'
 import { getVotesSelector } from './voteSelectors'
 import { INCREMENT_VOTE_LOCALY } from '../project/projectActionTypes'
+import { VOTE_TYPE_TEXT } from './voteReducer'
 
-export const voteFor = (sessionId, voteItemId) => {
+export const voteFor = (sessionId, voteItem) => {
     return (dispatch, getState) => {
         const voteContent = {
             projectId: getProjectSelector(getState()).id,
             sessionId: sessionId,
-            voteItemId: voteItemId,
+            voteItemId: voteItem.id,
             id: new Date().getTime(),
             createdAt: serverTimestamp()
+        }
+
+        if (voteItem.type === VOTE_TYPE_TEXT) {
+            console.log('not managed')
+
+            return
         }
 
         dispatch({

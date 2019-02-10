@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom'
 import moment from 'moment'
 import {
     getProjectChipColors,
-    getProjectVoteItemsSelector,
+    getProjectVoteItemsOrderedSelector,
     getVoteResultSelector
 } from '../project/projectSelectors'
 import * as projectActions from '../project/projectActions'
@@ -23,7 +23,7 @@ import * as voteActions from '../vote/voteActions'
 import {
     getErrorVotePostSelector,
     getErrorVotesLoadSelector,
-    getVotesBySessionAndVoteItemSelector
+    getUserVotesBySessionAndVoteItemSelector
 } from '../vote/voteSelectors'
 import SessionVoteItem from './SessionVoteItem'
 import SpeakerList from '../speaker/SpeakerList'
@@ -86,7 +86,7 @@ class SessionVote extends Component {
         if (this.props.userVotes[voteItem.id]) {
             this.props.removeVote(this.props.userVotes[voteItem.id])
         } else {
-            this.props.voteFor(this.props.session.id, voteItem.id)
+            this.props.voteFor(this.props.session.id, voteItem)
         }
     }
 
@@ -217,8 +217,8 @@ class SessionVote extends Component {
 const mapStateToProps = state => ({
     session: getSelectedSession(state),
     speakers: getSpeakersForSelectedSession(state),
-    voteItems: getProjectVoteItemsSelector(state),
-    userVotes: getVotesBySessionAndVoteItemSelector(state),
+    voteItems: getProjectVoteItemsOrderedSelector(state),
+    userVotes: getUserVotesBySessionAndVoteItemSelector(state),
     voteResults: getVoteResultSelector(state),
     errorSessionLoad: getSessionLoadError(state),
     errorVotePost: getErrorVotePostSelector(state),

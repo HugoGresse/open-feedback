@@ -11,7 +11,7 @@ export const getErrorVotesLoadSelector = state => getVotes(state).errorVotesLoad
 
 //  MEMOIZED SELECTORS HERE
 
-export const getVotesBySessionAndVoteItemSelector = createSelector(
+export const getUserVotesBySessionAndVoteItemSelector = createSelector(
     getVotesSelector,
     getSelectedSessionId,
     (votes, sessionId) => {
