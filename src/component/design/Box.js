@@ -12,6 +12,7 @@ import {
     width,
     maxWidth,
     flexDirection,
+    flexBasis,
     display,
     borderRadius
 } from 'styled-system'
@@ -28,12 +29,19 @@ const BoxStyled = styled.div`
     ${color}
     ${borderRadius}
     ${flexDirection}
+    ${flexBasis}
     ${display}
 
     ${props =>
         props.flex &&
         `
     display: flex;
+  `}
+
+    ${props =>
+        props.flexGrow &&
+        `
+    flex-grow: ${props.flexGrow};
   `}
 `
 
