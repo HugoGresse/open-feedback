@@ -1,25 +1,24 @@
 import { Component } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import React from 'react'
 import { space, fontSize, fontWeight } from 'styled-system'
 
-const TitleH1 = styled.h1`
+const TitleCss = css`
     color: ${props => props.color};
+    font-weight: 400;
     ${fontSize}
     ${fontWeight}
     ${space}
+`
+
+const TitleH1 = styled.h1`
+    ${TitleCss}
 `
 const TitleH2 = styled.h2`
-    color: ${props => props.color};
-    ${fontSize}
-    ${fontWeight}
-    ${space}
+    ${TitleCss}
 `
 const TitleH3 = styled.h3`
-    color: ${props => props.color};
-    ${fontSize}
-    ${fontWeight}
-    ${space}
+    ${TitleCss}
 `
 
 class Title extends Component {
@@ -37,10 +36,16 @@ class Title extends Component {
                     {children}
                 </TitleH2>
             )
+        if (component === 'h3')
+            return (
+                <TitleH3 color={color} {...props}>
+                    {children}
+                </TitleH3>
+            )
         return (
-            <TitleH3 color={color} {...props}>
+            <TitleH2 color={color} {...props}>
                 {children}
-            </TitleH3>
+            </TitleH2>
         )
     }
 }
