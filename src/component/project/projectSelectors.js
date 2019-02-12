@@ -30,6 +30,6 @@ export const getProjectVoteItemsOrderedSelector = createSelector(
         if (!voteItems) {
             return []
         }
-        return voteItems.sort((a, b) => (a.type === VOTE_TYPE_TEXT ? -1 : 1))
+        return voteItems.sort((a, b) => (a.type === VOTE_TYPE_TEXT ? 1 : -1))
     }
 )
