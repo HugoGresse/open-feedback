@@ -24,6 +24,17 @@ const aggregateVotesDelete = functions.firestore
         )
     })
 
+const aggregateVotesUpdate = functions.firestore
+    .document('/users/{userId}/votes/{voteId}')
+    .onUpdate((change, context) => {
+        return incrementVoteAggregate(
+            change.after.id,
+            change.after.data(),
+            context.params.userId,
+            1
+        )
+    })
+
 function incrementVoteAggregate(newVoteId, newVote, userId, increment) {
     if (
         !isIdValid(newVote.projectId) ||
@@ -50,6 +61,7 @@ function incrementVoteAggregate(newVoteId, newVote, userId, increment) {
                 const voteText = {
                     text: newVote.text,
                     createdAt: newVote.createdAt,
+                    updatedAt: newVote.updatedAt,
                     userId: userId
                 }
                 if (increment > 0) {
@@ -61,7 +73,6 @@ function incrementVoteAggregate(newVoteId, newVote, userId, increment) {
                             [newVoteId]: voteText
                         }
                     }
-                    console.log('Adding ', aggregatedValue[newVoteId])
                 } else {
                     if (!snapshot.exists || !session[newVote.voteItemId]) {
                         aggregatedValue = {}
@@ -69,7 +80,6 @@ function incrementVoteAggregate(newVoteId, newVote, userId, increment) {
                         aggregatedValue = session[newVote.voteItemId]
                         delete aggregatedValue[newVoteId]
                     }
-                    console.log('deleteing ', aggregatedValue[newVoteId])
                 }
             } else {
                 if (!snapshot.exists || !session[newVote.voteItemId]) {
@@ -98,5 +108,6 @@ function isIdValid(id) {
 
 module.exports = {
     aggregateVotesCreate,
-    aggregateVotesDelete
+    aggregateVotesDelete,
+    aggregateVotesUpdate
 }

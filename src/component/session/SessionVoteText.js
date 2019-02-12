@@ -52,11 +52,20 @@ const styles = theme => ({
     }
 })
 
-class VoteItemText extends Component {
+class SessionVoteText extends Component {
     constructor(props) {
         super(props)
         this.state = {
             comment: ''
+        }
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (nextProps.currentUserVote) {
+            this.setState({
+                ...this.state,
+                comment: nextProps.currentUserVote.text
+            })
         }
     }
 
@@ -66,18 +75,15 @@ class VoteItemText extends Component {
         })
     }
 
-    render() {
-        const {
-            classes,
-            voteItem,
-            isSelected,
-            voteResult,
-            chipColors
-        } = this.props
+    onVoteDelete = event => {
+        this.props.onVoteChange(this.props.voteItem, null)
+        this.setState({
+            comment: ''
+        })
+    }
 
-        const paperClasses = `${classes.item} ${
-            isSelected ? classes.selectedItem : ''
-        }`
+    render() {
+        const { classes, voteItem, voteResult } = this.props
 
         return (
             <Grid
@@ -87,7 +93,7 @@ class VoteItemText extends Component {
                 md={12}
                 className={classes.itemContainer}
             >
-                <Paper elevation={1} className={paperClasses}>
+                <Paper elevation={1} className={classes.item}>
                     <TextField
                         multiline
                         fullWidth
@@ -108,10 +114,21 @@ class VoteItemText extends Component {
                     <Button
                         className={classes.button}
                         onClick={() =>
-                            this.props.onClick(voteItem, this.state.comment)
+                            this.props.onVoteChange(
+                                voteItem,
+                                this.state.comment
+                            )
                         }
                     >
                         Save comment
+                    </Button>
+                )}
+                {this.state.comment && (
+                    <Button
+                        className={classes.button}
+                        onClick={() => this.onVoteDelete()}
+                    >
+                        Delete comment
                     </Button>
                 )}
             </Grid>
@@ -119,12 +136,10 @@ class VoteItemText extends Component {
     }
 }
 
-VoteItemText.propTypes = {
+SessionVoteText.propTypes = {
     classes: PropTypes.object.isRequired,
     voteItem: PropTypes.object.isRequired,
-    isSelected: PropTypes.bool,
-    voteResult: PropTypes.object,
     chipColors: PropTypes.array
 }
 
-export default withStyles(styles)(VoteItemText)
+export default withStyles(styles)(SessionVoteText)

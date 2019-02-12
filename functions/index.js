@@ -16,3 +16,4 @@ const aggregateVotes = require('./functions/aggregateVotes')
 
 exports.aggregateVotesCreate = aggregateVotes.aggregateVotesCreate
 exports.aggregateVotesDelete = aggregateVotes.aggregateVotesDelete
+exports.aggregateVotesUpdate = aggregateVotes.aggregateVotesUpdate

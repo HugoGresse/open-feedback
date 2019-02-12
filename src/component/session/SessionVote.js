@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../vote/voteReducer'
-import VoteItemText from './VoteItemText'
-import VoteItemBoolean from './VoteItemBoolean'
+import SessionVoteText from './SessionVoteText'
+import SessionVoteBoolean from './SessionVoteBoolean'
 
 class SessionItemVote extends Component {
     render() {
@@ -11,29 +11,27 @@ class SessionItemVote extends Component {
             userVote,
             voteResult,
             chipColors,
-            onClick
+            onVoteChange
         } = this.props
-
-        const isSelected = !!userVote
 
         switch (voteItem.type) {
             default:
             case VOTE_TYPE_BOOLEAN:
                 return (
-                    <VoteItemBoolean
-                        onClick={onClick}
+                    <SessionVoteBoolean
+                        onVoteChange={onVoteChange}
                         voteItem={voteItem}
-                        isSelected={isSelected}
+                        isSelected={!!userVote}
                         voteResult={voteResult}
                         chipColors={chipColors}
                     />
                 )
             case VOTE_TYPE_TEXT:
                 return (
-                    <VoteItemText
-                        onClick={onClick}
+                    <SessionVoteText
+                        onVoteChange={onVoteChange}
                         voteItem={voteItem}
-                        isSelected={isSelected}
+                        currentUserVote={userVote}
                         voteResult={voteResult}
                         chipColors={chipColors}
                     />
