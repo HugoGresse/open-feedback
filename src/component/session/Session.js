@@ -12,7 +12,14 @@ import {
 import { getSession, setSelectedSession } from './core/sessionActions'
 import { getSpeakers } from '../speaker/core/speakerActions'
 import { getVoteResult, getVoteItems } from '../project/projectActions'
-import { removeVote, voteFor } from '../vote/voteActions'
+import {
+    getVotes,
+    removeVote,
+    removeVoteLoadError,
+    removeVotePostError,
+    updateVote,
+    voteFor
+} from '../vote/voteActions'
 
 import {
     getProjectChipColors,
@@ -90,8 +97,14 @@ class SessionItem extends Component {
         if (this.props.userVotes[voteItem.id]) {
             switch (voteItem.type) {
                 case VOTE_TYPE_TEXT:
-                    // TODO : update
-
+                    if (data && data.length > 0) {
+                        this.props.updateVote(
+                            this.props.userVotes[voteItem.id],
+                            data
+                        )
+                    } else {
+                        this.props.removeVote(this.props.userVotes[voteItem.id])
+                    }
                     break
                 default:
                 case VOTE_TYPE_BOOLEAN:
@@ -217,7 +230,7 @@ class SessionItem extends Component {
                             userVote={userVotes[voteItem.id]}
                             voteResult={voteResults[voteItem.id]}
                             chipColors={chipColors}
-                            onClick={this.onVoteItemChange}
+                            onVoteChange={this.onVoteItemChange}
                         />
                     ))}
                 </Grid>
@@ -248,7 +261,11 @@ const mapDispatchToProps = Object.assign(
         getVoteItems: getVoteItems,
         getVoteResult: getVoteResult,
         voteFor: voteFor,
-        removeVote: removeVote
+        removeVote: removeVote,
+        updateVote: updateVote,
+        removeVoteLoadError: removeVoteLoadError,
+        removeVotePostError: removeVotePostError,
+        getVotes: getVotes
     }
 )
 

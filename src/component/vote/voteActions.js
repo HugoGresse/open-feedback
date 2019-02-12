@@ -8,7 +8,9 @@ import {
     GET_USER_VOTES_SUCCESS,
     REMOVE_VOTE_BEFORE_SUCCESS,
     REMOVE_VOTE_ERROR,
-    REMOVE_VOTE_SUCCESS
+    REMOVE_VOTE_SUCCESS,
+    UPDATE_VOTE_ERROR,
+    UPDATE_VOTE_SUCCESS
 } from './voteActionTypes'
 import { fireStoreMainInstance, serverTimestamp } from '../../firebase'
 import { getUser } from '../auth'
@@ -24,15 +26,12 @@ export const voteFor = (sessionId, voteItem, data) => {
             sessionId: sessionId,
             voteItemId: voteItem.id,
             id: new Date().getTime(),
-            createdAt: serverTimestamp()
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
         }
 
         if (voteItem.type === VOTE_TYPE_TEXT) {
             voteContent.text = data.trim()
-            console.log('not managed', voteContent)
-            // TODO : manage delete & check result
-            // TODO: update comment
-            // return
         }
 
         dispatch({
@@ -144,6 +143,40 @@ export const removeVote = voteToDelete => {
                 })
             })
     }
+}
+
+export const updateVote = (vote, data) => (dispatch, getState) => {
+    fireStoreMainInstance
+        .collection('users')
+        .doc(getUser(getState()).uid)
+        .collection('votes')
+        .doc(vote.id)
+        .update({
+            text: data,
+            updatedAt: serverTimestamp()
+        })
+        .then(() => {
+            dispatch({
+                type: UPDATE_VOTE_SUCCESS,
+                payload: {
+                    vote: {
+                        [vote.id]: {
+                            ...vote,
+                            text: data
+                        }
+                    }
+                }
+            })
+        })
+        .catch(error => {
+            dispatch({
+                type: UPDATE_VOTE_ERROR,
+                payload: {
+                    error: error.toString(),
+                    voteId: vote.id
+                }
+            })
+        })
 }
 
 export const getVotes = () => {
