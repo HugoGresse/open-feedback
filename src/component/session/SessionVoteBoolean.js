@@ -48,7 +48,7 @@ const styles = theme => ({
     }
 })
 
-class VoteItemBoolean extends Component {
+class SessionVoteBoolean extends Component {
     render() {
         const {
             classes,
@@ -91,7 +91,7 @@ class VoteItemBoolean extends Component {
     }
 }
 
-VoteItemBoolean.propTypes = {
+SessionVoteBoolean.propTypes = {
     classes: PropTypes.object.isRequired,
     voteItem: PropTypes.object.isRequired,
     isSelected: PropTypes.bool,
@@ -99,4 +99,4 @@ VoteItemBoolean.propTypes = {
     chipColors: PropTypes.array
 }
 
-export default withStyles(styles)(VoteItemBoolean)
+export default withStyles(styles)(SessionVoteBoolean)

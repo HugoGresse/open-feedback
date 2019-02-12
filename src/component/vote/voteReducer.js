@@ -8,7 +8,9 @@ import {
     REMOVE_VOTE_SUCCESS,
     REMOVE_VOTE_ERROR,
     DELETE_VOTE_POST_ERROR,
-    DELETE_VOTE_LOAD_ERROR
+    DELETE_VOTE_LOAD_ERROR,
+    UPDATE_VOTE_SUCCESS,
+    UPDATE_VOTE_ERROR
 } from './voteActionTypes'
 
 const initState = {
@@ -94,6 +96,19 @@ const voteReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 errorVotesLoad: null
+            }
+        case UPDATE_VOTE_SUCCESS:
+            return {
+                ...state,
+                votes: {
+                    ...state.votes,
+                    ...payload.vote
+                }
+            }
+        case UPDATE_VOTE_ERROR:
+            return {
+                ...state,
+                errorVotePost: payload.error.toString()
             }
         default:
             return state
