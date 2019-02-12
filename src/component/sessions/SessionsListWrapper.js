@@ -66,7 +66,7 @@ class SessionsListWrapper extends Component {
                 {!sessionIsLoading && currentSessionsByTrack.length === 0 && (
                     <span>Oops there is nothing here</span>
                 )}
-                {!sessionIsLoading && currentSessionsByTrack.length > 0 && (
+                {currentSessionsByTrack.length > 0 && (
                     <SessionsList sessions={currentSessionsByTrack} />
                 )}
             </div>
