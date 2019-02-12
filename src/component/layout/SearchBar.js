@@ -11,6 +11,7 @@ import Box from '../design/Box'
 
 const SearchBarStyled = styled(Box)`
     background-color: ${COLORS.EXTRA_LIGHT_GRAY};
+    color: ${COLORS.LIGHT_GRAY};
 `
 
 class SearchBar extends Component {
