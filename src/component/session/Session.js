@@ -117,6 +117,8 @@ class SessionItem extends Component {
     }
 
     render() {
+        const unused = ''
+
         const {
             speakers,
             session,
