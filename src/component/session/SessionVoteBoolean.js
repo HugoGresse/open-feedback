@@ -69,7 +69,7 @@ class SessionVoteBoolean extends Component {
                 sm={4}
                 md={3}
                 className={classes.itemContainer}
-                onClick={event => this.props.onClick(voteItem)}
+                onClick={event => this.props.onVoteChange(voteItem)}
             >
                 <Paper elevation={1} className={paperClasses}>
                     <span className={classes.voteTitle}>{voteItem.name}</span>

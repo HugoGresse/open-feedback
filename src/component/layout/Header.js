@@ -1,8 +1,7 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { withRouter } from 'react-router'
-import React from 'react'
 import { COLORS } from '../../constants/colors'
 import Title from '../design/Title'
 import { SPACING } from '../../constants/constants'
@@ -38,7 +37,6 @@ const IconWrapper = styled.div`
 class Header extends Component {
     render() {
         const { logo, match } = this.props
-        console.log(match.params.sessionId)
         return (
             <HeaderStyled>
                 <Box

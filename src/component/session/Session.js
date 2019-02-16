@@ -5,11 +5,12 @@ import styled from 'styled-components'
 
 import {
     getSelectedSession,
+    getSessionLoadError,
     getSpeakersForSelectedSession
 } from './core/sessionSelectors'
 import { getSession, setSelectedSession } from './core/sessionActions'
 import { getSpeakers } from '../speaker/core/speakerActions'
-import { getVoteResult, getVoteItems } from '../project/projectActions'
+import { getVoteItems, getVoteResult } from '../project/projectActions'
 import {
     getVotes,
     removeVote,
@@ -29,7 +30,6 @@ import {
     getErrorVotesLoadSelector,
     getUserVotesBySessionAndVoteItemSelector
 } from '../vote/voteSelectors'
-import { getSessionLoadError } from './core/sessionSelectors'
 
 import Grid from '@material-ui/core/Grid'
 import SessionVote from './SessionVote'
@@ -117,8 +117,6 @@ class SessionItem extends Component {
     }
 
     render() {
-        const unused = ''
-
         const {
             speakers,
             session,
