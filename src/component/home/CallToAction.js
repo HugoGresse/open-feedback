@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/colors'
-import logoWhite from '../../assets/logo-openfeedback-white.png'
 import Title from '../design/Title'
 import Box from '../design/Box'
 

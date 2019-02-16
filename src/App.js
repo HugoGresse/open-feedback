@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 
 import './index.css'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Root from './component/Root'
 import Page404 from './component/Page404'
 import Session from './component/session/Session'
@@ -21,7 +21,6 @@ const theme = createMuiTheme({
 
 class App extends Component {
     render() {
-        console.log('Router')
         return (
             <MuiThemeProvider theme={theme}>
                 <BrowserRouter>
