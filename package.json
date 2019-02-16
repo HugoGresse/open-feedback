@@ -12,7 +12,6 @@
     "dependencies": {
         "@material-ui/core": "^3.6.2",
         "@material-ui/icons": "^3.0.1",
-        "eslint": "^5.13.0",
         "firebase": "^5.7.0",
         "lodash": "^4.17.11",
         "moment": "^2.23.0",
@@ -50,8 +49,9 @@
         }
     },
     "lint-staged": {
-        "*.{js}": [
-            "eslint"
+        "*.{js,json,css,md}": [
+            "prettier --write",
+            "git add"
         ]
     }
 }
