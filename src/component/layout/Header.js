@@ -4,9 +4,8 @@ import styled from 'styled-components'
 import { withRouter } from 'react-router'
 import { COLORS } from '../../constants/colors'
 import Title from '../design/Title'
-import { SPACING } from '../../constants/constants'
+import { SCREEN_SIZES } from '../../constants/constants'
 import SearchBar from './SearchBar'
-import Box from '../design/Box'
 import { Link } from 'react-router-dom'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import CalendarToday from '@material-ui/icons/CalendarToday'
@@ -25,28 +24,52 @@ const HeaderStyled = styled.div`
     background: ${COLORS.WHITE};
     box-shadow: 0px 1px 15px ${COLORS.LIGHT_GRAY};
     margin-bottom: 20px;
+
+    .header {
+        height: 65px;
+        display: flex;
+        align-items: center;
+    }
 `
 
 const IconWrapper = styled.div`
     min-width: 28px;
+    position: absolute;
+    ${props =>
+        props.left &&
+        `
+        left: 20px;
+    `}
+    ${props =>
+        props.right &&
+        `
+        right: 20px;
+    `}
     svg {
         color: ${COLORS.GRAY};
     }
 `
 
+const BoxCenter = styled.div`
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    display: flex;
+
+    @media screen and (min-width: ${SCREEN_SIZES.MD}) {
+        justify-content: flex-start;
+        width: 900px;
+    }
+`
+
 class Header extends Component {
     render() {
-        const { logo, match } = this.props
+        const { project, match } = this.props
         return (
             <HeaderStyled>
-                <Box
-                    px={[SPACING.HEADER / 2, SPACING.HEADER]}
-                    py={10}
-                    flex
-                    alignItems="center"
-                    justifyContent="space-between"
-                >
-                    <IconWrapper>
+                <div className="header">
+                    <IconWrapper left>
                         {match.params.sessionId && (
                             <Link
                                 to={`/${match.params.projectId}/${
@@ -57,25 +80,33 @@ class Header extends Component {
                             </Link>
                         )}
                     </IconWrapper>
-
-                    <Box flex>
-                        <Logo src={logo} width={60} height={60} alt="logo" />
+                    <IconWrapper right>
+                        <a
+                            href={project.scheduleLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <CalendarToday />
+                        </a>
+                    </IconWrapper>
+                    <BoxCenter>
+                        <Logo
+                            src={project.logoSmall}
+                            width={60}
+                            height={60}
+                            alt="logo"
+                        />
                         <Hidden smDown>
                             <Title
                                 component="h1"
                                 fontSize={24}
                                 fontWeight={400}
                             >
-                                Sunny Tech
+                                {project.name}
                             </Title>
                         </Hidden>
-                    </Box>
-                    <IconWrapper>
-                        <a href="" target="_blank" rel="noopener noreferrer">
-                            <CalendarToday />
-                        </a>
-                    </IconWrapper>
-                </Box>
+                    </BoxCenter>
+                </div>
                 {!match.params.sessionId && <SearchBar />}
             </HeaderStyled>
         )

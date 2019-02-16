@@ -94,7 +94,7 @@ class AppLayout extends Component {
         } else {
             return (
                 <div>
-                    <Header logo={project.logoSmall} />
+                    <Header project={project} />
 
                     <div className={classes.layout}> {children}</div>
                     <Footer />
