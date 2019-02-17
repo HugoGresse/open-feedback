@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/colors'
 import Title from '../design/Title'
 import Box from '../design/Box'
+import Button from '../design/Button'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.EXTRA_LIGHT_GRAY};
@@ -20,12 +21,16 @@ class Header extends Component {
                     flex
                     flexDirection="column"
                     justifyContent="center"
+                    alignItems="center"
                     flexGrow="1"
                     textAlign="center"
                 >
                     <Title component="h3" m={0}>
                         Prêt à recevoir des feedback ?
                     </Title>
+                    <Button mt={40} color={COLORS.RED_ORANGE}>
+                        Créer votre événement
+                    </Button>
                 </Box>
             </Wrapper>
         )
