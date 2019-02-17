@@ -54,7 +54,7 @@ class AppLayout extends Component {
         const { date, projectId } = this.props.match.params
 
         if (!date && nextProps.dates.length > 0) {
-            this.props.history.push(`/${projectId}/${nextProps.dates[0]}`)
+            this.props.history.replace(`/${projectId}/${nextProps.dates[0]}`)
         }
         if (nextProps.project) {
             const project = nextProps.project
