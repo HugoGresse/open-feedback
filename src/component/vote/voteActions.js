@@ -146,6 +146,16 @@ export const removeVote = voteToDelete => {
 }
 
 export const updateVote = (vote, data) => (dispatch, getState) => {
+    dispatch({
+        type: INCREMENT_VOTE_LOCALY,
+        payload: {
+            vote: {
+                ...vote,
+                text: data
+            }
+        }
+    })
+
     fireStoreMainInstance
         .collection('users')
         .doc(getUser(getState()).uid)
