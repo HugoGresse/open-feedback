@@ -8,6 +8,7 @@ const firebaseMain = firebase.initializeApp(config.firebaseMain)
 export const authProvider = firebaseMain.auth()
 export const fireStoreMainInstance = firebaseMain.firestore()
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
+export const nowTimestamp = firebase.firestore.Timestamp.now
 export let fireStoreScheduleInstance
 
 export const initFireStoreSchedule = config => {
