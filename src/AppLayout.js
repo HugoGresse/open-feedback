@@ -16,6 +16,7 @@ import Error from './component/customComponent/Error'
 import LoaderMatchParent from './component/customComponent/LoaderMatchParent'
 import { getLoginErrorSelector } from './component/auth/authSelectors'
 import Footer from './component/layout/Footer'
+import { getSessionsDates } from './component/sessions/core/sessionsSelectors'
 
 const styles = theme => ({
     loading: {
@@ -50,6 +51,11 @@ class AppLayout extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
+        const { date, projectId } = this.props.match.params
+
+        if (!date && nextProps.dates.length > 0) {
+            this.props.history.push(`/${projectId}/${nextProps.dates[0]}`)
+        }
         if (nextProps.project) {
             const project = nextProps.project
             document.title = project.name + ' - Feedback'
@@ -106,6 +112,7 @@ class AppLayout extends Component {
 
 const mapStateToProps = state => ({
     project: getProjectSelector(state),
+    dates: getSessionsDates(state),
     projectLoadError: getProjectLoadError(state),
     projectVotesError: getProjectVotesError(state),
     loginError: getLoginErrorSelector(state)
