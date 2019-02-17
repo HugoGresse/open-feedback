@@ -88,8 +88,15 @@ class SessionItemVoteBackground extends Component {
         ctx.clearRect(0, 0, width, height)
 
         circles.forEach((circle, index) => {
-            ctx.fillStyle =
-                '#' + this.props.colors[index % this.props.colors.length] + '80'
+            const randomOpacity = parseInt(Math.random() * 80) + 20
+            let fillStyle = '#' + this.props.colors[0] + randomOpacity
+            if (this.props.colors.length > 1) {
+                fillStyle =
+                    '#' +
+                    this.props.colors[index % this.props.colors.length] +
+                    '80'
+            }
+            ctx.fillStyle = fillStyle
             ctx.beginPath()
             ctx.arc(circle.x, circle.y, circleRadius, 0, 2 * Math.PI)
             ctx.fill()
