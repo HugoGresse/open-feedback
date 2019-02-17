@@ -34,6 +34,28 @@ export const getVoteResultSelector = createSelector(
         if (!voteResults || !voteResults[selectedSessionId]) {
             return []
         }
-        return voteResults[selectedSessionId]
+        let results = voteResults[selectedSessionId]
+
+        // Transform results.id.{ id: voteText1, id: voteText2, id: voteText3} into an array
+        let transformResult = {}
+        Object.entries(results).forEach(([key, value]) => {
+            if (typeof value === 'object') {
+                transformResult[key] = []
+                Object.entries(value).forEach(([key2, value2]) => {
+                    transformResult[key].push({
+                        ...value2,
+                        updatedAt: value2.updatedAt.toDate(),
+                        createdAt: value2.createdAt.toDate()
+                    })
+                })
+                transformResult[key] = transformResult[key].sort(
+                    (a, b) => b.updatedAt - a.updatedAt
+                )
+            } else {
+                transformResult[key] = value
+            }
+        })
+
+        return transformResult
     }
 )
