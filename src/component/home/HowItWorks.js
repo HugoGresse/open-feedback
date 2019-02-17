@@ -38,7 +38,7 @@ const CompatibilityText = styled(Box)`
 class Header extends Component {
     render() {
         return (
-            <Wrapper container>
+            <Wrapper container id="howitworks">
                 <Grid className="right" item xs={0} sm={6}>
                     <img height="300" src={phone} alt="Phone" />
                 </Grid>
