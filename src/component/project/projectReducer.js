@@ -8,6 +8,7 @@ import {
     INCREMENT_VOTE_LOCALY,
     SET_SELECTED_DATE
 } from './projectActionTypes'
+import { nowTimestamp } from '../../firebase'
 
 const initState = {
     data: {
@@ -55,6 +56,29 @@ const projectReducer = (state = initState, { payload, type }) => {
         case INCREMENT_VOTE_LOCALY:
             const vote = payload.vote
             const data = state.data
+
+            let precedentData = null
+            try {
+                precedentData =
+                    data.sessionVotes[vote.sessionId][vote.voteItemId]
+            } catch (e) {
+                precedentData = null
+            }
+            let newVoteValue
+            if (vote.text) {
+                newVoteValue = {
+                    ...precedentData,
+                    [vote.id]: {
+                        ...vote,
+                        text: vote.text,
+                        updatedAt: nowTimestamp(),
+                        createdAt: vote.createdAt || nowTimestamp()
+                    }
+                }
+            } else {
+                newVoteValue = precedentData + payload.amount
+            }
+
             if (!data.sessionVotes || !data.sessionVotes[vote.sessionId]) {
                 return {
                     ...state,
@@ -63,28 +87,13 @@ const projectReducer = (state = initState, { payload, type }) => {
                         sessionVotes: {
                             ...data.sessionVotes,
                             [vote.sessionId]: {
-                                [vote.voteItemId]: payload.amount
+                                [vote.voteItemId]: newVoteValue
                             }
                         }
                     }
                 }
             }
 
-            if (!data.sessionVotes[vote.sessionId][vote.voteItemId]) {
-                return {
-                    ...state,
-                    data: {
-                        ...data,
-                        sessionVotes: {
-                            ...data.sessionVotes,
-                            [vote.sessionId]: {
-                                ...data.sessionVotes[vote.sessionId],
-                                [vote.voteItemId]: payload.amount
-                            }
-                        }
-                    }
-                }
-            }
             return {
                 ...state,
                 data: {
@@ -93,10 +102,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                         ...data.sessionVotes,
                         [vote.sessionId]: {
                             ...data.sessionVotes[vote.sessionId],
-                            [vote.voteItemId]:
-                                data.sessionVotes[vote.sessionId][
-                                    vote.voteItemId
-                                ] + payload.amount
+                            [vote.voteItemId]: newVoteValue
                         }
                     }
                 }

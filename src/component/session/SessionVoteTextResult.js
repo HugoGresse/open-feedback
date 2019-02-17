@@ -5,16 +5,9 @@ import moment from 'moment'
 
 const styles = theme => ({})
 
-/**
- * TODO :
- * - update redux aggregation when save/add
- * - toast when vote saved
- */
 class SessionVoteTextResult extends Component {
     render() {
         const { result } = this.props
-
-        console.log(result)
 
         return (
             <div>

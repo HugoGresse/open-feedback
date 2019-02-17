@@ -16,8 +16,9 @@ _Open Feedback is still in beta_
 
 ## TODO list
 
--   better design
--   free text input on vote (new aggregation, new component, new display to think of), WIP
+-   admin
+-   schedule & speaker list from json rather than hoverboard db
+-   display user vote when submitting a comment
 
 > This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
