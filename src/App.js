@@ -28,6 +28,15 @@ class App extends Component {
                         <Route exact path="/" component={Root} />
                         <Route
                             exact
+                            path="/:projectId"
+                            render={props => (
+                                <AppLayout {...props}>
+                                    <SessionsListWrapper {...props} />
+                                </AppLayout>
+                            )}
+                        />
+                        <Route
+                            exact
                             path="/:projectId/:date"
                             render={props => (
                                 <AppLayout {...props}>
