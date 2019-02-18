@@ -2,21 +2,7 @@ import { Component } from 'react'
 import styled from 'styled-components'
 import React from 'react'
 import { rgba } from 'polished'
-import {
-    justifyContent,
-    fontWeight,
-    fontSize,
-    textAlign,
-    color,
-    space,
-    alignItems,
-    width,
-    maxWidth,
-    flexDirection,
-    flexBasis,
-    display,
-    borderRadius
-} from 'styled-system'
+import { space } from 'styled-system'
 import { COLORS } from '../../constants/colors'
 
 const ButtonStyled = styled.button`
