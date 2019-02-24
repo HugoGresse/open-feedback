@@ -1,6 +1,6 @@
 import {
-    GET_PROJECT_SUCCESS,
     GET_PROJECT_ERROR,
+    GET_PROJECT_SUCCESS,
     GET_PROJECT_VOTE_ITEMS_ERROR,
     GET_PROJECT_VOTE_ITEMS_SUCCESS,
     GET_PROJECT_VOTE_RESULT_ERROR,
@@ -66,13 +66,21 @@ const projectReducer = (state = initState, { payload, type }) => {
             }
             let newVoteValue
             if (vote.text) {
-                newVoteValue = {
-                    ...precedentData,
-                    [vote.id]: {
-                        ...vote,
-                        text: vote.text,
-                        updatedAt: nowTimestamp(),
-                        createdAt: vote.createdAt || nowTimestamp()
+                if (payload.amount === -1) {
+                    // Remove a vote from the aggregate localy before database update
+                    newVoteValue = {
+                        ...precedentData
+                    }
+                    delete newVoteValue[vote.id]
+                } else {
+                    newVoteValue = {
+                        ...precedentData,
+                        [vote.id]: {
+                            ...vote,
+                            text: vote.text,
+                            updatedAt: nowTimestamp(),
+                            createdAt: vote.createdAt || nowTimestamp()
+                        }
                     }
                 }
             } else {
