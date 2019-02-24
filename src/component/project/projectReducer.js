@@ -79,7 +79,12 @@ const projectReducer = (state = initState, { payload, type }) => {
                             ...vote,
                             text: vote.text,
                             updatedAt: nowTimestamp(),
-                            createdAt: vote.createdAt || nowTimestamp()
+                            createdAt:
+                                vote.createdAt &&
+                                vote.createdAt._methodName ===
+                                    'FieldValue.serverTimestamp'
+                                    ? nowTimestamp()
+                                    : nowTimestamp()
                         }
                     }
                 }
