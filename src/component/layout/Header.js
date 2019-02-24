@@ -114,7 +114,8 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-    logo: PropTypes.string.isRequired,
+    logo: PropTypes.string,
+    logoSmall: PropTypes.string,
     displayHeader: PropTypes.bool
 }
 
