@@ -3,7 +3,7 @@ import { getSelectedSessionId } from '../session/core/sessionSelectors'
 
 const getVotes = state => state.votes
 
-export const getVotesSelector = state => getVotes(state).votes
+export const getVotesSelector = state => getVotes(state).currentUserVotes
 
 export const getErrorVotePostSelector = state => getVotes(state).errorVotePost
 

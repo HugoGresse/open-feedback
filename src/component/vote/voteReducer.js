@@ -1,20 +1,20 @@
 import {
-    ADD_VOTE_SUCCESS,
-    ADD_VOTE_ERROR,
-    GET_USER_VOTES_SUCCESS,
-    GET_USER_VOTES_ERROR,
     ADD_VOTE_BEFORE_SUCCESS,
-    REMOVE_VOTE_BEFORE_SUCCESS,
-    REMOVE_VOTE_SUCCESS,
-    REMOVE_VOTE_ERROR,
-    DELETE_VOTE_POST_ERROR,
+    ADD_VOTE_ERROR,
+    ADD_VOTE_SUCCESS,
     DELETE_VOTE_LOAD_ERROR,
-    UPDATE_VOTE_SUCCESS,
-    UPDATE_VOTE_ERROR
+    DELETE_VOTE_POST_ERROR,
+    GET_USER_VOTES_ERROR,
+    GET_USER_VOTES_SUCCESS,
+    REMOVE_VOTE_BEFORE_SUCCESS,
+    REMOVE_VOTE_ERROR,
+    REMOVE_VOTE_SUCCESS,
+    UPDATE_VOTE_ERROR,
+    UPDATE_VOTE_SUCCESS
 } from './voteActionTypes'
 
 const initState = {
-    votes: {},
+    currentUserVotes: {},
     errorVotePost: null,
     errorVotesLoad: null
 }
@@ -27,30 +27,30 @@ const voteReducer = (state = initState, { payload, type }) => {
         case GET_USER_VOTES_SUCCESS:
             return {
                 ...state,
-                votes: payload
+                currentUserVotes: payload
             }
         case ADD_VOTE_BEFORE_SUCCESS:
             return {
                 ...state,
-                votes: {
-                    ...state.votes,
+                currentUserVotes: {
+                    ...state.currentUserVotes,
                     ...payload
                 }
             }
         case ADD_VOTE_SUCCESS:
             const newVotes = {
-                ...state.votes,
+                ...state.currentUserVotes,
                 ...payload.vote
             }
             delete newVotes[payload.tempVoteId]
 
             return {
                 ...state,
-                votes: newVotes
+                currentUserVotes: newVotes
             }
         case ADD_VOTE_ERROR:
             const newVoteState = {
-                ...state.votes
+                ...state.currentUserVotes
             }
             delete newVoteState[payload.tempVoteId]
 
@@ -58,17 +58,17 @@ const voteReducer = (state = initState, { payload, type }) => {
 
             return {
                 ...state,
-                votes: newVoteState,
+                currentUserVotes: newVoteState,
                 errorVotePost: payload.error.toString()
             }
         case REMOVE_VOTE_BEFORE_SUCCESS:
             const removeVotesState = {
-                ...state.votes
+                ...state.currentUserVotes
             }
             delete removeVotesState[payload.id]
             return {
                 ...state,
-                votes: removeVotesState
+                currentUserVotes: removeVotesState
             }
         case REMOVE_VOTE_SUCCESS:
             // Do nothing, state already change in REMOVE_VOTE_BEFORE_SUCCESS
@@ -100,8 +100,8 @@ const voteReducer = (state = initState, { payload, type }) => {
         case UPDATE_VOTE_SUCCESS:
             return {
                 ...state,
-                votes: {
-                    ...state.votes,
+                currentUserVotes: {
+                    ...state.currentUserVotes,
                     ...payload.vote
                 }
             }
