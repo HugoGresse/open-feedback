@@ -9,6 +9,7 @@ import {
     SET_SELECTED_DATE
 } from './projectActionTypes'
 import { nowTimestamp } from '../../firebase'
+import { ADD_VOTE_SUCCESS } from '../vote/voteActionTypes'
 
 const initState = {
     data: {
@@ -51,6 +52,29 @@ const projectReducer = (state = initState, { payload, type }) => {
                 data: {
                     ...state.data,
                     sessionVotes: payload
+                }
+            }
+        case ADD_VOTE_SUCCESS:
+            const sessionVotesVoteItemContent = {
+                ...state.data.sessionVotes[payload.sessionId][
+                    payload.voteItemId
+                ],
+                ...payload.vote
+            }
+            delete sessionVotesVoteItemContent[payload.tempVoteId]
+
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    sessionVotes: {
+                        ...state.data.sessionVotes,
+                        [payload.sessionId]: {
+                            [payload.voteItemId]: {
+                                ...sessionVotesVoteItemContent
+                            }
+                        }
+                    }
                 }
             }
         case INCREMENT_VOTE_LOCALY:

@@ -12,7 +12,11 @@ import {
     UPDATE_VOTE_ERROR,
     UPDATE_VOTE_SUCCESS
 } from './voteActionTypes'
-import { fireStoreMainInstance, serverTimestamp } from '../../firebase'
+import {
+    fireStoreMainInstance,
+    nowTimestamp,
+    serverTimestamp
+} from '../../firebase'
 import { getUser } from '../auth'
 import { getProjectSelector } from '../project/projectSelectors'
 import { getVotesSelector } from './voteSelectors'
@@ -64,9 +68,13 @@ export const voteFor = (sessionId, voteItem, data) => {
                         vote: {
                             [docRef.id]: {
                                 ...voteContent,
-                                id: docRef.id
+                                id: docRef.id,
+                                createdAt: nowTimestamp(),
+                                updatedAt: nowTimestamp()
                             }
                         },
+                        sessionId: voteContent.sessionId,
+                        voteItemId: voteContent.voteItemId,
                         tempVoteId: voteContent.id
                     }
                 })
