@@ -55,6 +55,18 @@ const projectReducer = (state = initState, { payload, type }) => {
                 }
             }
         case ADD_VOTE_SUCCESS:
+            // Only useful for Text votes
+            if (
+                !state.data.sessionVotes[payload.sessionId][
+                    payload.tempVoteId
+                ] ||
+                !state.data.sessionVotes[payload.sessionId][payload.tempVoteId]
+                    .text
+            ) {
+                return {
+                    ...state
+                }
+            }
             const sessionVotesVoteItemContent = {
                 ...state.data.sessionVotes[payload.sessionId][
                     payload.voteItemId
