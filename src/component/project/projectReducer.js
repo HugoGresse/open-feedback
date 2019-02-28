@@ -125,6 +125,9 @@ const projectReducer = (state = initState, { payload, type }) => {
                     }
                 }
             } else {
+                if (precedentData == null) {
+                    precedentData = 0
+                }
                 newVoteValue = precedentData + payload.amount
             }
 
