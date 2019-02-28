@@ -56,7 +56,7 @@ class AppLayout extends Component {
         if (!date && nextProps.dates.length > 0) {
             this.props.history.replace(`/${projectId}/${nextProps.dates[0]}`)
         }
-        if (nextProps.project) {
+        if (nextProps.project && !this.props.project) {
             const project = nextProps.project
             document.title = project.name + ' - Feedback'
             setFavicon(project.favicon)
