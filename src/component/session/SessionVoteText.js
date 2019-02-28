@@ -13,6 +13,7 @@ const styles = theme => ({
         margin: -1
     },
     item: {
+        overflow: 'hidden',
         padding: theme.spacing.unit * 2,
         textAlign: 'center',
         fontSize: '17px',
