@@ -42,6 +42,10 @@ export const getVoteResultSelector = createSelector(
             if (typeof value === 'object') {
                 transformResult[key] = []
                 Object.entries(value).forEach(([key2, value2]) => {
+                    if (Object.keys(value2).length === 0) {
+                        // Empty object due to deletion
+                        return
+                    }
                     transformResult[key].push({
                         ...value2,
                         updatedAt: value2.updatedAt.toDate(),

@@ -52,7 +52,7 @@ function incrementVoteAggregate(newVoteId, newVote, userId, increment) {
         .collection('sessionVotes')
         .doc(newVote.sessionId)
 
-    return sessionVoteDb
+    sessionVoteDb
         .get()
         .then(snapshot => {
             let aggregatedValue
@@ -78,7 +78,7 @@ function incrementVoteAggregate(newVoteId, newVote, userId, increment) {
                         aggregatedValue = {}
                     } else {
                         aggregatedValue = session[newVote.voteItemId]
-                        delete aggregatedValue[newVoteId]
+                        aggregatedValue[newVoteId] = {}
                     }
                 }
             } else {
