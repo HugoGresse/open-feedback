@@ -8,6 +8,7 @@ import Page404 from './Page404'
 import Session from './feedback/session/Session'
 import SessionsListWrapper from './feedback/sessions/SessionsListWrapper'
 import AppLayout from './feedback/AppLayout'
+import Admin from './admin/Admin'
 
 const theme = createMuiTheme({
     typography: {
@@ -26,7 +27,7 @@ class App extends Component {
                 <BrowserRouter>
                     <Switch>
                         <Route exact path="/" component={Root} />
-                        <Route exact path="/admin" component={Root} />
+                        <Route exact path="/admin" component={Admin} />
                         <Route
                             exact
                             path="/:projectId"

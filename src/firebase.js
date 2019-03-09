@@ -11,6 +11,8 @@ export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 export const nowTimestamp = firebase.firestore.Timestamp.now
 export let fireStoreScheduleInstance
 
+authProvider.useDeviceLanguage()
+
 export const initFireStoreSchedule = config => {
     if (firebase.apps.length >= 2) {
         return

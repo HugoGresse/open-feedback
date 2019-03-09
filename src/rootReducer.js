@@ -5,6 +5,7 @@ import speakerReducer from './feedback/speaker/core/speakerReducer'
 import projectReducer from './feedback/project/projectReducer'
 import authReducer from './feedback/auth/authReducer'
 import voteReducer from './feedback/vote/voteReducer'
+import adminAuthReducer from './admin/auth/authReducer'
 
 const rootReducer = combineReducers({
     sessions: sessionsReducer,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     speakers: speakerReducer,
     project: projectReducer,
     auth: authReducer,
-    votes: voteReducer
+    votes: voteReducer,
+    adminAuth: adminAuthReducer
 })
 
 export default rootReducer
