@@ -7,9 +7,10 @@ import { connect } from 'react-redux'
 import { getUserSelector } from './authSelectors'
 import { didSignIn, signOut } from './authActions'
 import { authProvider } from '../../firebase'
+import { Link } from 'react-router-dom'
 
 const Wrapper = styled(Box)`
-    background: ${COLORS.LIGHT_GRAY};
+    background: ${COLORS.EXTRA_LIGHT_GRAY};
     height: 100vh;
     width: 200px;
     padding: 15px;
@@ -18,7 +19,7 @@ const Wrapper = styled(Box)`
 
 class SideBar extends Component {
     render() {
-        const { user } = this.props
+        const { user, match } = this.props
         return (
             <Wrapper>
                 <Box
@@ -48,6 +49,9 @@ class SideBar extends Component {
                             </button>
                         </Box>
                     </Box>
+
+                    <Link to={`${match.url}`}>Home</Link>
+                    <Link to={`${match.url}/event`}>Event</Link>
                 </Box>
             </Wrapper>
         )

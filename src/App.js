@@ -27,7 +27,7 @@ class App extends Component {
                 <BrowserRouter>
                     <Switch>
                         <Route exact path="/" component={Root} />
-                        <Route exact path="/admin" component={Admin} />
+                        <Route path="/admin" component={Admin} />
                         <Route
                             exact
                             path="/:projectId"

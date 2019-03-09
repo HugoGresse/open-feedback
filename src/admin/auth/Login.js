@@ -8,7 +8,6 @@ import { auth, authProvider } from '../../firebase'
 import { connect } from 'react-redux'
 import { getLoginErrorSelector, isLogged } from './authSelectors'
 import { didSignIn, signOut } from './authActions'
-import SideBar from './SideBar'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.RED_ORANGE};
@@ -57,7 +56,7 @@ class Login extends Component {
 
     render() {
         if (this.props.isLoggedIn) {
-            return <SideBar />
+            return this.props.children
         }
 
         return (
