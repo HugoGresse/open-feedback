@@ -3,10 +3,10 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/colors'
 import logo from '../../assets/logo-openfeedback-color.png'
 import Box from '../../baseComponents/design/Box'
-import firebase from 'firebase'
 import { connect } from 'react-redux'
 import { getUserSelector } from './authSelectors'
 import { didSignIn, signOut } from './authActions'
+import { authProvider } from '../../firebase'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.LIGHT_GRAY};
@@ -35,7 +35,7 @@ class SideBar extends Component {
                         <img
                             height="40"
                             src={user.providerData[0].photoURL}
-                            alt="user picture"
+                            alt="user"
                         />
                         <Box
                             flex
@@ -43,9 +43,9 @@ class SideBar extends Component {
                             alignItems="flex-start"
                         >
                             {user.providerData[0].displayName}
-                            <a onClick={() => firebase.auth().signOut()}>
+                            <button onClick={() => authProvider.signOut()}>
                                 Sign-out
-                            </a>
+                            </button>
                         </Box>
                     </Box>
                 </Box>

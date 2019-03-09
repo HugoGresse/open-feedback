@@ -7,6 +7,7 @@ import firebase from '../assets/firebase.png'
 import Title from '../baseComponents/design/Title'
 import Box from '../baseComponents/design/Box'
 import { Grid } from '@material-ui/core/es'
+import Hidden from '@material-ui/core/Hidden'
 
 const Wrapper = styled(Grid)`
     padding: 0px 15px 0 15px;
@@ -39,9 +40,11 @@ class Header extends Component {
     render() {
         return (
             <Wrapper container id="howitworks">
-                <Grid className="right" item xs={0} sm={6}>
-                    <img height="300" src={phone} alt="Phone" />
-                </Grid>
+                <Hidden xsDown>
+                    <Grid className="right" item sm={6}>
+                        <img height="300" src={phone} alt="Phone" />
+                    </Grid>
+                </Hidden>
                 <Grid className="left" item xs={12} sm={6}>
                     <Title>Comment ça marche ?</Title>
 
