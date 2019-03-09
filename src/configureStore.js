@@ -13,12 +13,5 @@ export default function(initialState) {
         composeEnhancers(applyMiddleware(...middleware))
     )
 
-    // if (module.hot) {
-    //     // Enable Webpack hot module replacement for reducers
-    //     module.hot.accept('../reducers', () => {
-    //         store.replaceReducer(createRootReducer(require('../reducers')))
-    //     })
-    // }
-
     return store
 }
