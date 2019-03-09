@@ -5,6 +5,7 @@ import config from './config'
 
 const firebaseMain = firebase.initializeApp(config.firebaseMain)
 
+export const auth = firebase.auth
 export const authProvider = firebaseMain.auth()
 export const fireStoreMainInstance = firebaseMain.firestore()
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
