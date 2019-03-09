@@ -5,8 +5,8 @@ import { setSessionsFilter } from '../sessions/core/sessionsActions'
 import connect from 'react-redux/es/connect/connect'
 import { COLORS } from '../../constants/colors'
 import { SCREEN_SIZES } from '../../constants/constants'
-import BigInput from '../design/BigInput'
-import Box from '../design/Box'
+import BigInput from '../../baseComponents/design/BigInput'
+import Box from '../../baseComponents/design/Box'
 
 const SearchBarStyled = styled(Box)`
     margin-top: 10px;

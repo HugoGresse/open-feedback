@@ -11,8 +11,8 @@ import {
     getSessionsLoadError,
     getSessionsLoading
 } from './core/sessionsSelectors'
-import Error from '../customComponent/Error'
-import LoaderMatchParent from '../customComponent/LoaderMatchParent'
+import Error from '../../baseComponents/customComponent/Error'
+import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 import SessionsDateMenu from './SessionsDateMenu'
 import SessionsList from './SessionsList'
 
