@@ -41,7 +41,7 @@ class Header extends Component {
                             <a href="/eaJnyMXD3oNfhrrnBYDT">Démo</a>
                         </li>
                         <li>
-                            <a href="/">Connexion</a>
+                            <a href="/admin">Connexion</a>
                         </li>
                     </Menu>
                 </Box>
