@@ -12,8 +12,8 @@ import {
     getProjectVotesError
 } from './project/projectSelectors'
 import * as projectActions from './project/projectActions'
-import Error from './customComponent/Error'
-import LoaderMatchParent from './customComponent/LoaderMatchParent'
+import Error from '../baseComponents/customComponent/Error'
+import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent'
 import { getLoginErrorSelector } from './auth/authSelectors'
 import Footer from './layout/Footer'
 import { getSessionsDates } from './sessions/core/sessionsSelectors'
