@@ -56,23 +56,19 @@ const projectReducer = (state = initState, { payload, type }) => {
             }
         case ADD_VOTE_SUCCESS:
             // Only useful for Text votes
-            if (
-                !state.data.sessionVotes[payload.sessionId][
-                    payload.tempVoteId
-                ] ||
-                !state.data.sessionVotes[payload.sessionId][payload.tempVoteId]
-                    .text
-            ) {
+            if (!payload.vote[payload.newVoteId].text) {
                 return {
                     ...state
                 }
             }
+            // Replace tempVoteId by the new id
             const sessionVotesVoteItemContent = {
                 ...state.data.sessionVotes[payload.sessionId][
                     payload.voteItemId
                 ],
                 ...payload.vote
             }
+
             delete sessionVotesVoteItemContent[payload.tempVoteId]
 
             return {
@@ -82,6 +78,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                     sessionVotes: {
                         ...state.data.sessionVotes,
                         [payload.sessionId]: {
+                            ...state.data.sessionVotes[payload.sessionId],
                             [payload.voteItemId]: {
                                 ...sessionVotesVoteItemContent
                             }
