@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import sessionsReducer from './component/sessions/core/sessionsReducer'
-import sessionReducer from './component/session/core/sessionReducer'
-import speakerReducer from './component/speaker/core/speakerReducer'
-import projectReducer from './component/project/projectReducer'
-import authReducer from './component/auth/authReducer'
-import voteReducer from './component/vote/voteReducer'
+import sessionsReducer from './feedback/sessions/core/sessionsReducer'
+import sessionReducer from './feedback/session/core/sessionReducer'
+import speakerReducer from './feedback/speaker/core/speakerReducer'
+import projectReducer from './feedback/project/projectReducer'
+import authReducer from './feedback/auth/authReducer'
+import voteReducer from './feedback/vote/voteReducer'
 
 const rootReducer = combineReducers({
     sessions: sessionsReducer,
