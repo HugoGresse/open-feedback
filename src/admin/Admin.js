@@ -8,11 +8,7 @@ class Admin extends Component {
     }
 
     render() {
-        return (
-            <div>
-                <Login />
-            </div>
-        )
+        return <Login />
     }
 }
 

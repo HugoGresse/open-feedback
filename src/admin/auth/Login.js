@@ -4,8 +4,7 @@ import { COLORS } from '../../constants/colors'
 import logoWhite from '../../assets/logo-openfeedback-white.png'
 import Box from '../../baseComponents/design/Box'
 import { StyledFirebaseAuth } from 'react-firebaseui'
-import firebase from 'firebase'
-import { authProvider } from '../../firebase'
+import { auth, authProvider } from '../../firebase'
 import { connect } from 'react-redux'
 import { getLoginErrorSelector, isLogged } from './authSelectors'
 import { didSignIn, signOut } from './authActions'
@@ -23,10 +22,10 @@ const uiConfig = {
     signInFlow: 'popup',
     signInSuccessUrl: '/',
     signInOptions: [
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.GithubAuthProvider.PROVIDER_ID,
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        firebase.auth.PhoneAuthProvider.PROVIDER_ID
+        auth.GoogleAuthProvider.PROVIDER_ID,
+        auth.GithubAuthProvider.PROVIDER_ID,
+        auth.EmailAuthProvider.PROVIDER_ID,
+        auth.PhoneAuthProvider.PROVIDER_ID
     ],
     callbacks: {
         // Avoid redirects after sign-in.
@@ -43,15 +42,13 @@ const uiConfig = {
 
 class Login extends Component {
     componentDidMount() {
-        this.unregisterAuthObserver = firebase
-            .auth()
-            .onAuthStateChanged(user => {
-                if (user) {
-                    this.props.didSignIn(user)
-                } else {
-                    this.props.signOut()
-                }
-            })
+        this.unregisterAuthObserver = authProvider.onAuthStateChanged(user => {
+            if (user) {
+                this.props.didSignIn(user)
+            } else {
+                this.props.signOut()
+            }
+        })
     }
 
     componentWillUnmount() {
