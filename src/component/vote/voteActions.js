@@ -75,7 +75,8 @@ export const voteFor = (sessionId, voteItem, data) => {
                         },
                         sessionId: voteContent.sessionId,
                         voteItemId: voteContent.voteItemId,
-                        tempVoteId: voteContent.id
+                        tempVoteId: voteContent.id,
+                        newVoteId: docRef.id
                     }
                 })
             })
