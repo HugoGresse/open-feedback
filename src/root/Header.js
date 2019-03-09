@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../constants/colors'
 import logoWhite from '../assets/logo-openfeedback-white.png'
-import Title from '../feedback/design/Title'
-import Box from '../feedback/design/Box'
-import Button from '../feedback/design/Button'
+import Title from '../baseComponents/design/Title'
+import Box from '../baseComponents/design/Box'
+import Button from '../baseComponents/design/Button'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.RED_ORANGE};

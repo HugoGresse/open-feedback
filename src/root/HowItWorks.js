@@ -4,8 +4,8 @@ import { COLORS } from '../constants/colors'
 import phone from '../assets/phone.png'
 import hoverboard from '../assets/hoverboard.png'
 import firebase from '../assets/firebase.png'
-import Title from '../feedback/design/Title'
-import Box from '../feedback/design/Box'
+import Title from '../baseComponents/design/Title'
+import Box from '../baseComponents/design/Box'
 import { Grid } from '@material-ui/core/es'
 
 const Wrapper = styled(Grid)`
