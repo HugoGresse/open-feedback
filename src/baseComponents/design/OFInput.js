@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { fontSize, fontWeight, space } from 'styled-system'
 import { COLORS } from '../../constants/colors'
 
-const BigInputWrapper = styled.div`
+const OFInputWrapper = styled.div`
     position: relative;
 `
 
@@ -13,14 +13,14 @@ const IconWrapper = styled.div`
     left: 10px;
 `
 
-const BigInputStyled = styled.input`
-    height: 55px;
-    font-size: 23px;
-    border: 0px;
+const OFInputStyled = styled.input`
+    height: 40px;
+    font-size: 16px;
+    border: 1px solid #EEE;
     width: 100%;
     background: none;
     box-sizing: border-box;
-    ${props => props.icon && ` padding-left: 40px;`}
+    ${props => (props.icon ? ` padding-left: 40px;` : ` padding-left: 12px;`)}
     ${fontSize}
     ${fontWeight}
     ${space}
@@ -34,17 +34,17 @@ const BigInputStyled = styled.input`
     }
 `
 
-class BigInput extends Component {
+class OFInput extends Component {
     render() {
         const { icon, ...props } = this.props
 
         return (
-            <BigInputWrapper>
+            <OFInputWrapper>
                 {icon && <IconWrapper>{icon}</IconWrapper>}
-                <BigInputStyled icon {...props} />
-            </BigInputWrapper>
+                <OFInputStyled icon={icon} {...props} />
+            </OFInputWrapper>
         )
     }
 }
 
-export default BigInput
+export default OFInput
