@@ -1,10 +1,13 @@
 import {
+    EDIT_PROJECT_ERROR,
+    EDIT_PROJECT_SUCCESS,
     GET_PROJECTS_ERROR,
     GET_PROJECTS_SUCCESS,
     SELECT_PROJECT
 } from './projectActionTypes'
 import { fireStoreMainInstance } from '../../firebase'
 import { getUserSelector } from '../auth/authSelectors'
+import { getSelectedProjectIdSelector } from './projectSelectors'
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -40,6 +43,24 @@ export const selectProject = projectId => (dispatch, getState) => {
         type: SELECT_PROJECT,
         payload: projectId
     })
+}
+
+export const editProject = projectData => (dispatch, getState) => {
+    fireStoreMainInstance
+        .collection('projects')
+        .doc(getSelectedProjectIdSelector(getState()))
+        .set(projectData, { merge: true })
+        .then(() => {
+            dispatch({
+                type: EDIT_PROJECT_SUCCESS
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type: EDIT_PROJECT_ERROR,
+                payload: err.toString()
+            })
+        })
 }
 
 /*
