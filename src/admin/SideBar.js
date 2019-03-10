@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../constants/colors'
-import logo from '../../assets/logo-openfeedback-color.png'
-import Box from '../../baseComponents/design/Box'
+import { COLORS } from '../constants/colors'
+import logo from '../assets/logo-openfeedback-color.png'
+import Box from '../baseComponents/design/Box'
 import { connect } from 'react-redux'
-import { getUserSelector } from './authSelectors'
-import { didSignIn, signOut } from './authActions'
-import { authProvider } from '../../firebase'
+import { getUserSelector } from './auth/authSelectors'
+import { didSignIn, signOut } from './auth/authActions'
+import { authProvider } from '../firebase'
 import { Link } from 'react-router-dom'
+import { getProjectsSelector } from './project/projectSelectors'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.EXTRA_LIGHT_GRAY};
@@ -19,7 +20,7 @@ const Wrapper = styled(Box)`
 
 class SideBar extends Component {
     render() {
-        const { user, match } = this.props
+        const { user, match, projects } = this.props
         return (
             <Wrapper>
                 <Box
@@ -33,17 +34,20 @@ class SideBar extends Component {
                     <img height="40" src={logo} alt="open feedback logo" />
 
                     <Box flex alignItems="flex-start">
-                        <img
-                            height="40"
-                            src={user.providerData[0].photoURL}
-                            alt="user"
-                        />
+                        {user.providerData[0] && (
+                            <img
+                                height="40"
+                                src={user.providerData[0].photoURL}
+                                alt="user"
+                            />
+                        )}
                         <Box
                             flex
                             flexDirection="column"
                             alignItems="flex-start"
                         >
-                            {user.providerData[0].displayName}
+                            {user.providerData[0] &&
+                                user.providerData[0].displayName}
                             <button onClick={() => authProvider.signOut()}>
                                 Sign-out
                             </button>
@@ -51,7 +55,16 @@ class SideBar extends Component {
                     </Box>
 
                     <Link to={`${match.url}`}>Home</Link>
-                    <Link to={`${match.url}/event`}>Event</Link>
+
+                    {projects &&
+                        projects.map(project => (
+                            <Link
+                                key={project.id}
+                                to={`${match.url}/${project.id}`}
+                            >
+                                {project.name}
+                            </Link>
+                        ))}
                 </Box>
             </Wrapper>
         )
@@ -59,7 +72,8 @@ class SideBar extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: getUserSelector(state)
+    user: getUserSelector(state),
+    projects: getProjectsSelector(state)
 })
 
 const mapDispatchToProps = Object.assign(

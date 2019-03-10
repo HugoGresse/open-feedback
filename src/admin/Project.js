@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Box from '../baseComponents/design/Box'
 import { connect } from 'react-redux'
+import { getSelectedProjectSelector } from './project/projectSelectors'
+import { selectProject } from './project/projectActions'
 
 const Wrapper = styled(Box)`
     height: 100vh;
@@ -10,15 +12,31 @@ const Wrapper = styled(Box)`
 `
 
 class Project extends Component {
+    componentWillMount() {
+        this.props.selectProject(this.props.match.params.projectId)
+    }
+
     render() {
-        const {} = this.props
-        return <Wrapper>Project</Wrapper>
+        const { project } = this.props
+
+        if (!project) {
+            return ''
+        }
+
+        return <Wrapper>{project.name}</Wrapper>
     }
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+    project: getSelectedProjectSelector(state)
+})
 
-const mapDispatchToProps = Object.assign({}, {})
+const mapDispatchToProps = Object.assign(
+    {},
+    {
+        selectProject: selectProject
+    }
+)
 
 export default connect(
     mapStateToProps,
