@@ -17,8 +17,15 @@ _Open Feedback is still in beta_
 ## TODO list
 
 -   admin
--   schedule & speaker list from json rather than hoverboard db
--   display user vote when submitting a comment
+    -   create firestore.rules
+    -   per project permission list
+    -   create project by hand
+    -   add voteItems to manual project
+    -   display project stats
+    -   add admin to project
+    -   edit project
+    -   webhook to notify Hugo when new project is created
+-   import/sync talks from Conference-Hall
 
 > This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
