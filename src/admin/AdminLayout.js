@@ -1,8 +1,14 @@
 import React, { Component } from 'react'
-import SideBar from './auth/SideBar'
+import SideBar from './SideBar'
 import Box from '../baseComponents/design/Box'
+import { connect } from 'react-redux'
+import { getProjects } from './project/projectActions'
 
 class AdminLayout extends Component {
+    componentWillMount() {
+        this.props.getProjects()
+    }
+
     render() {
         return (
             <Box
@@ -20,4 +26,16 @@ class AdminLayout extends Component {
     }
 }
 
-export default AdminLayout
+const mapStateToProps = state => ({})
+
+const mapDispatchToProps = Object.assign(
+    {},
+    {
+        getProjects: getProjects
+    }
+)
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AdminLayout)

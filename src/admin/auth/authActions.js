@@ -1,5 +1,6 @@
 import { LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT } from './authActionTypes'
 import { isLogged } from './authSelectors'
+import { authProvider } from '../../firebase'
 
 export const didSignIn = (user, error) => {
     return (dispatch, getState) => {
@@ -8,10 +9,17 @@ export const didSignIn = (user, error) => {
         }
 
         if (user) {
-            dispatch({
-                type: LOGIN_SUCCESS,
-                payload: user
-            })
+            if (user.isAnonymous) {
+                dispatch({
+                    type: LOGIN_ERROR,
+                    payload: 'You cannot use the admin in anonymous mode'
+                })
+            } else {
+                dispatch({
+                    type: LOGIN_SUCCESS,
+                    payload: user
+                })
+            }
         } else {
             dispatch({
                 type: LOGIN_ERROR,
@@ -23,8 +31,10 @@ export const didSignIn = (user, error) => {
 
 export const signOut = () => {
     return (dispatch, getState) => {
-        dispatch({
-            type: LOGOUT
+        authProvider.signOut().then(() => {
+            dispatch({
+                type: LOGOUT
+            })
         })
     }
 }
