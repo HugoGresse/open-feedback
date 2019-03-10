@@ -1,0 +1,44 @@
+service cloud.firestore {
+    match /databases/{database}/documents {
+
+        function authenticated() { return request.auth.uid != null }
+        function limitOne() { return request.query.limit <= 1 }
+        function userNotExists() { return !exists(/databases/$(database)/documents/users/$(request.auth.uid)) }
+        function itsRequestedByMe() { return request.resource.data.uid == request.auth.uid }
+        function itsMyDocument(userId) { return request.auth.uid == userId }
+        function itsMyProjects() { return resource.data.owner == request.auth.uid || request.auth.uid in resource.data.members}
+
+        // USERS
+        match /users/{userId} {
+            allow get: if authenticated() && itsMyDocument(userId);
+            allow list: if authenticated() && itsMyDocument(userId) && limitOne();
+            allow create: if authenticated() && itsMyDocument(userId) && userNotExists();
+            allow update: if authenticated() && itsMyDocument(userId);
+
+            // USER VOTES
+            match /votes/{document=**} {
+                allow get: if authenticated() && itsMyDocument(userId);
+                allow list: if authenticated() && itsMyDocument(userId);
+                allow create: if authenticated() && itsMyDocument(userId);
+                allow update: if authenticated() && itsMyDocument(userId);
+                allow delete: if authenticated() && itsMyDocument(userId);
+            }
+        }
+
+        // PROJECTS
+        match /projects/{project} {
+            allow get: if true;
+            allow list: if authenticated() && itsMyProjects();
+            allow write: if authenticated() && itsMyProjects();
+
+            // VOTE ITEMS
+            match /voteItems/{voteItemsId} {
+                allow list: if true;
+            }
+
+            match /sessionVotes/{session} {
+                allow list: if true;
+            }
+        }
+    }
+}
