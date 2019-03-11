@@ -6,7 +6,7 @@ import projectReducer from './feedback/project/projectReducer'
 import authReducer from './feedback/auth/authReducer'
 import voteReducer from './feedback/vote/voteReducer'
 import adminAuthReducer from './admin/auth/authReducer'
-import adminProjectReducer from './admin/project/projectReducer'
+import adminProjectReducer from './admin/projectCore/projectReducer'
 
 const rootReducer = combineReducers({
     sessions: sessionsReducer,

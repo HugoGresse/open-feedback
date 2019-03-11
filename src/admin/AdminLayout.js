@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import SideBar from './SideBar'
 import Box from '../baseComponents/design/Box'
 import { connect } from 'react-redux'
-import { getProjects } from './project/projectActions'
+import { getProjects } from './projectCore/projectActions'
 
 class AdminLayout extends Component {
     componentWillMount() {
