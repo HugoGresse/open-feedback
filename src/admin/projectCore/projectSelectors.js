@@ -5,6 +5,9 @@ const getProjectsData = state => getProjects(state).data
 
 export const getProjectsSelector = state => getProjectsData(state).projects
 
+export const isProjectsLoadedSelector = state =>
+    getProjects(state).projectsLoaded
+
 export const getSelectedProjectIdSelector = state =>
     getProjects(state).selectedProjectId
 

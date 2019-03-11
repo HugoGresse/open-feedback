@@ -11,6 +11,7 @@ const initState = {
     data: {
         projects: []
     },
+    projectsLoaded: false,
     projectLoadError: null,
     projectVotesError: null,
     selectedProjectId: null
@@ -21,14 +22,16 @@ const projectReducer = (state = initState, { payload, type }) => {
         case LOGOUT:
             return {
                 ...state,
-                data: initState.data
+                data: initState.data,
+                projectsLoaded: initState.projectsLoaded
             }
         case GET_PROJECTS_SUCCESS:
             return {
                 ...state,
                 data: {
                     projects: payload
-                }
+                },
+                projectsLoaded: true
             }
         case GET_PROJECT_VOTE_ITEMS_SUCCESS:
             return {

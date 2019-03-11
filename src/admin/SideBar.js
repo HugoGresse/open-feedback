@@ -8,7 +8,7 @@ import { getUserSelector } from './auth/authSelectors'
 import { didSignIn, signOut } from './auth/authActions'
 import { authProvider } from '../firebase'
 import { Link } from 'react-router-dom'
-import { getProjectsSelector } from './project/projectSelectors'
+import { getProjectsSelector } from './projectCore/projectSelectors'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.EXTRA_LIGHT_GRAY};

@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Box from '../baseComponents/design/Box'
 import { connect } from 'react-redux'
-import { getProjectsSelector } from './project/projectSelectors'
+import { getProjectsSelector } from './projectCore/projectSelectors'
+import { Link } from 'react-router-dom'
 
 const Wrapper = styled(Box)`
     height: 100vh;
@@ -10,14 +11,15 @@ const Wrapper = styled(Box)`
     display: flex;
 `
 
-class Dashboard extends Component {
+class ProjectDashboard extends Component {
     render() {
-        const { projects } = this.props
+        const { match } = this.props
         return (
             <Wrapper>
                 Dashboard
                 <br />
-                You have {projects.length} project(s).
+                Stats will be displayed here
+                <Link to={`${match.url}/edit`}>Edit</Link>
             </Wrapper>
         )
     }
@@ -32,4 +34,4 @@ const mapDispatchToProps = Object.assign({}, {})
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Dashboard)
+)(ProjectDashboard)
