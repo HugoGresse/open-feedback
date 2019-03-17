@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Box from '../baseComponents/design/Box'
-import { connect } from 'react-redux'
-import { getSelectedProjectSelector } from './projectCore/projectSelectors'
-import { editProject } from './projectCore/projectActions'
 import OFInput from '../baseComponents/design/OFInput'
 import OFTextArea from '../baseComponents/design/OFTextArea'
 import Button from '../baseComponents/design/Button'
@@ -13,56 +10,83 @@ const Wrapper = styled(Box)`
     display: flex;
 `
 
-class ProjectAddEdit extends Component {
+const defaultState = {
+    name: '',
+    websiteLink: '',
+    scheduleLink: '',
+    logoSmall: '',
+    favicon: '',
+    contact: '',
+    owner: '',
+    members: JSON.stringify([]),
+    chipColors: JSON.stringify(['999999']),
+    firebaseConfig: JSON.stringify(
+        {
+            apiKey: 'AIzaSyB_n7dxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+            databaseURL: 'https://xxxxx.firebaseio.com',
+            projectId: 'sunny-tech-test'
+        },
+        undefined,
+        2
+    ),
+    errors: []
+}
+
+class ProjectAddEditContent extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            name: '',
-            websiteLink: '',
-            scheduleLink: '',
-            logoSmall: '',
-            favicon: '',
-            contact: '',
-            owner: '',
-            members: JSON.stringify([]),
-            chipColors: JSON.stringify(['999999']),
-            firebaseConfig: JSON.stringify(
-                {
-                    apiKey: 'AIzaSyB_n7dxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-                    databaseURL: 'https://xxxxx.firebaseio.com',
-                    projectId: 'sunny-tech-test'
-                },
-                undefined,
-                2
-            )
-        }
+        this.state = defaultState
     }
 
     componentDidMount() {
         if (this.props && this.props.project) {
             this.updateLocalStateFromProps(this.props.project)
+        } else {
+            this.updateLocalStateFromProps(null)
         }
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if (nextProps.project) {
-            this.updateLocalStateFromProps(nextProps.project)
-        }
+        this.updateLocalStateFromProps(nextProps.project)
     }
 
     updateLocalStateFromProps(project) {
+        if (project) {
+            this.setState({
+                name: project.name,
+                websiteLink: project.websiteLink,
+                scheduleLink: project.scheduleLink,
+                logoSmall: project.logoSmall,
+                favicon: project.favicon,
+                contact: project.contact,
+                owner: project.owner,
+                members: JSON.stringify(project.members),
+                chipColors: JSON.stringify(project.chipColors),
+                firebaseConfig: JSON.stringify(
+                    project.firebaseConfig,
+                    undefined,
+                    2
+                )
+            })
+        } else {
+            this.setState(defaultState)
+        }
+    }
+
+    addErrorToState(errorMessage) {
+        const error = this.state.errors
+        error.push(errorMessage)
         this.setState({
-            name: project.name,
-            websiteLink: project.websiteLink,
-            scheduleLink: project.scheduleLink,
-            logoSmall: project.logoSmall,
-            favicon: project.favicon,
-            contact: project.contact,
-            owner: project.owner,
-            members: JSON.stringify(project.members),
-            chipColors: JSON.stringify(project.chipColors),
-            firebaseConfig: JSON.stringify(project.firebaseConfig, undefined, 2)
+            errors: error
         })
+    }
+
+    checkMissingData(field, errorMessage) {
+        if (!field) {
+            this.addErrorToState(errorMessage)
+            return true
+        }
+        return false
     }
 
     onValidateClick(data) {
@@ -74,33 +98,47 @@ class ProjectAddEdit extends Component {
             favicon: data.favicon,
             contact: data.contact
         }
+
+        this.setState({
+            errors: []
+        })
+        this.checkMissingData(project.name, 'Missing project name')
+        this.checkMissingData(project.websiteLink, 'Missing websiteLink')
+        this.checkMissingData(project.scheduleLink, 'Missing scheduleLink')
+        this.checkMissingData(project.logoSmall, 'Missing logoSmall')
+        this.checkMissingData(project.favicon, 'Missing favicon')
+
+        if (this.state.errors.length > 0) {
+            return
+        }
+
         try {
             project.chipColors = JSON.parse(data.chipColors)
         } catch (error) {
-            this.setState({ error: 'chipColors are not formatted correctly' })
+            this.addErrorToState('chipColors are not formatted correctly')
             return
         }
         try {
             project.firebaseConfig = JSON.parse(data.firebaseConfig)
         } catch (error) {
-            this.setState({
-                error: 'firebaseConfig is not formatted correctly'
-            })
+            this.addErrorToState('firebaseConfig is not formatted correctly')
             return
         }
         try {
             project.members = JSON.parse(data.members)
         } catch (error) {
-            this.setState({ error: 'Editors are not formatted correctly' })
+            this.addErrorToState('Editors are not formatted correctly')
             return
         }
 
-        this.setState({ error: null })
+        this.setState({ errors: [] })
 
-        this.props.editProject(project)
+        this.props.onSubmitClicked(project)
     }
 
     render() {
+        const { create } = this.props
+
         return (
             <>
                 <Wrapper>
@@ -217,13 +255,13 @@ class ProjectAddEdit extends Component {
                     </Box>
                 </Wrapper>
 
-                <Wrapper>
-                    {this.state.error && `Error: ${this.state.error}`}
-                </Wrapper>
+                {this.state.errors.map((error, index) => {
+                    return <Wrapper key={index}>{error}</Wrapper>
+                })}
 
                 <Wrapper>
                     <Button onClick={() => this.onValidateClick(this.state)}>
-                        Save
+                        {create ? 'Create' : 'Save'}
                     </Button>
                 </Wrapper>
             </>
@@ -231,18 +269,4 @@ class ProjectAddEdit extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    project: getSelectedProjectSelector(state)
-})
-
-const mapDispatchToProps = Object.assign(
-    {},
-    {
-        editProject: editProject
-    }
-)
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ProjectAddEdit)
+export default ProjectAddEditContent
