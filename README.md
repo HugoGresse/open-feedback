@@ -17,13 +17,11 @@ _Open Feedback is still in beta_
 ## TODO list
 
 -   admin
-    -   create firestore.rules
-    -   per project permission list
     -   create project by hand
+        -   notification component plugged to the store
     -   add voteItems to manual project
     -   display project stats
     -   add admin to project
-    -   edit project
     -   webhook to notify Hugo when new project is created
 -   import/sync talks from Conference-Hall
 
