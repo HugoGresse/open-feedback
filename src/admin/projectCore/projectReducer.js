@@ -3,7 +3,8 @@ import {
     GET_PROJECT_VOTE_ITEMS_SUCCESS,
     GET_PROJECTS_ERROR,
     GET_PROJECTS_SUCCESS,
-    SELECT_PROJECT
+    SELECT_PROJECT,
+    UNSELECT_PROJECT
 } from './projectActionTypes'
 import { LOGOUT } from '../auth/authActionTypes'
 
@@ -14,7 +15,8 @@ const initState = {
     projectsLoaded: false,
     projectLoadError: null,
     projectVotesError: null,
-    selectedProjectId: null
+    selectedProjectId: null,
+    notifications: []
 }
 
 const projectReducer = (state = initState, { payload, type }) => {
@@ -45,6 +47,11 @@ const projectReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 selectedProjectId: payload
+            }
+        case UNSELECT_PROJECT:
+            return {
+                ...state,
+                selectedProjectId: null
             }
         case GET_PROJECT_VOTE_ITEMS_ERROR:
         case GET_PROJECTS_ERROR:

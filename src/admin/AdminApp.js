@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import { setFavicon } from '../feedback/layout/utils'
 import Login from './auth/Login'
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import AdminLayout from './AdminLayout'
 import ProjectDashboard from './ProjectDashboard'
-import ProjectAddEdit from './ProjectAddEdit'
+import ProjectEdit from './ProjectEdit'
 import AdminRoot from './AdminRoot'
 import Project from './Project'
+import ProjectAdd from './ProjectAdd'
 
 class AdminApp extends Component {
     componentWillMount() {
@@ -18,25 +19,46 @@ class AdminApp extends Component {
         return (
             <Login>
                 <AdminLayout match={match}>
-                    <Route exact path={`${match.url}/`} component={AdminRoot} />
-                    <Route
-                        exact
-                        path={`${match.url}/:projectId`}
-                        render={props => (
-                            <Project {...props}>
-                                <ProjectDashboard {...props} />
-                            </Project>
-                        )}
-                    />
-                    <Route
-                        exact
-                        path={`${match.url}/:projectId/edit`}
-                        render={props => (
-                            <Project {...props}>
-                                <ProjectAddEdit {...props} />
-                            </Project>
-                        )}
-                    />
+                    <Switch>
+                        <Route
+                            exact
+                            path={`${match.url}/`}
+                            component={AdminRoot}
+                        />
+
+                        <Route
+                            exact
+                            path={`${match.url}/newProject`}
+                            render={props => (
+                                <ProjectAdd {...props} create={true} />
+                            )}
+                        />
+
+                        <Route
+                            exact
+                            path={`${match.url}/:projectId`}
+                            render={props => (
+                                <Project
+                                    {...props}
+                                    key={props.match.params.projectId}
+                                >
+                                    <ProjectDashboard {...props} />
+                                </Project>
+                            )}
+                        />
+                        <Route
+                            exact
+                            path={`${match.url}/:projectId/edit`}
+                            render={props => (
+                                <Project
+                                    {...props}
+                                    key={props.match.params.projectId}
+                                >
+                                    <ProjectEdit {...props} />
+                                </Project>
+                            )}
+                        />
+                    </Switch>
                 </AdminLayout>
             </Login>
         )
