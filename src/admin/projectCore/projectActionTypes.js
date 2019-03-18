@@ -1,5 +1,7 @@
 export const GET_PROJECTS_SUCCESS = 'admin/getProjects/success'
 export const GET_PROJECTS_ERROR = 'admin/getProjects/error'
+export const GET_PROJECT_SUCCESS = 'admin/getProject/success'
+export const GET_PROJECT_ERROR = 'admin/getProject/error'
 export const SELECT_PROJECT = 'admin/selectProject'
 export const UNSELECT_PROJECT = 'admin/unselectProject'
 export const GET_PROJECT_VOTE_ITEMS_SUCCESS = 'admin/getProjectVoteItem/success'

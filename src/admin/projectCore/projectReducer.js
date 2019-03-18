@@ -1,4 +1,5 @@
 import {
+    GET_PROJECT_SUCCESS,
     GET_PROJECT_VOTE_ITEMS_ERROR,
     GET_PROJECT_VOTE_ITEMS_SUCCESS,
     GET_PROJECTS_ERROR,
@@ -15,8 +16,7 @@ const initState = {
     projectsLoaded: false,
     projectLoadError: null,
     projectVotesError: null,
-    selectedProjectId: null,
-    notifications: []
+    selectedProjectId: null
 }
 
 const projectReducer = (state = initState, { payload, type }) => {
@@ -34,6 +34,20 @@ const projectReducer = (state = initState, { payload, type }) => {
                     projects: payload
                 },
                 projectsLoaded: true
+            }
+        case GET_PROJECT_SUCCESS:
+            const newProjectsArray = Array.from(state.data.projects).filter(
+                project => project.id !== payload.id
+            )
+
+            newProjectsArray.push(payload)
+
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    projects: newProjectsArray
+                }
             }
         case GET_PROJECT_VOTE_ITEMS_SUCCESS:
             return {
