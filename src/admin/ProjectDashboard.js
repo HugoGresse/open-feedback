@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { getSelectedProjectSelector } from './projectCore/projectSelectors'
 import { Link } from 'react-router-dom'
 import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent'
-import { getProjects } from './projectCore/projectActions'
+import { getProject } from './projectCore/projectActions'
 
 const Wrapper = styled(Box)`
     height: 100vh;
@@ -15,7 +15,7 @@ const Wrapper = styled(Box)`
 
 class ProjectDashboard extends Component {
     componentWillMount() {
-        this.props.getProjects()
+        this.props.getProject()
     }
 
     render() {
@@ -43,7 +43,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = Object.assign(
     {},
     {
-        getProjects: getProjects
+        getProject: getProject
     }
 )
 export default connect(
