@@ -8,6 +8,7 @@ import ProjectEdit from './ProjectEdit'
 import AdminRoot from './AdminRoot'
 import Project from './Project'
 import ProjectAdd from './ProjectAdd'
+import Notifications from './notification/Notifications'
 
 class AdminApp extends Component {
     componentWillMount() {
@@ -60,6 +61,7 @@ class AdminApp extends Component {
                         />
                     </Switch>
                 </AdminLayout>
+                <Notifications />
             </Login>
         )
     }

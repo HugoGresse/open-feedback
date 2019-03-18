@@ -53,8 +53,6 @@ const mapStateToProps = state => ({
     currentUser: getUserSelector(state)
 })
 
-// TODO : getLastNotifications
-
 const mapDispatchToProps = Object.assign(
     {},
     {
