@@ -18,17 +18,13 @@ const defaultState = {
     favicon: '',
     contact: '',
     owner: '',
-    members: JSON.stringify([]),
-    chipColors: JSON.stringify(['999999']),
-    firebaseConfig: JSON.stringify(
-        {
-            apiKey: 'AIzaSyB_n7dxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-            databaseURL: 'https://xxxxx.firebaseio.com',
-            projectId: 'sunny-tech-test'
-        },
-        undefined,
-        2
-    ),
+    members: [],
+    chipColors: ['999999'],
+    firebaseConfig: {
+        apiKey: 'AIzaSyB_n7dxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        databaseURL: 'https://xxxxx.firebaseio.com',
+        projectId: 'some-project-id'
+    },
     errors: []
 }
 
@@ -40,7 +36,9 @@ class ProjectAddEditContent extends Component {
 
     componentDidMount() {
         if (this.props && this.props.project) {
-            this.updateLocalStateFromProps(this.props.project)
+            this.updateLocalStateFromProps(
+                Object.assign({}, defaultState, this.props.project)
+            )
         } else {
             this.updateLocalStateFromProps(null)
         }
@@ -51,26 +49,21 @@ class ProjectAddEditContent extends Component {
     }
 
     updateLocalStateFromProps(project) {
-        if (project) {
-            this.setState({
-                name: project.name,
-                websiteLink: project.websiteLink,
-                scheduleLink: project.scheduleLink,
-                logoSmall: project.logoSmall,
-                favicon: project.favicon,
-                contact: project.contact,
-                owner: project.owner,
-                members: JSON.stringify(project.members),
-                chipColors: JSON.stringify(project.chipColors),
-                firebaseConfig: JSON.stringify(
-                    project.firebaseConfig,
-                    undefined,
-                    2
-                )
-            })
-        } else {
-            this.setState(defaultState)
+        if (!project) {
+            project = defaultState
         }
+        this.setState({
+            name: project.name,
+            websiteLink: project.websiteLink,
+            scheduleLink: project.scheduleLink,
+            logoSmall: project.logoSmall,
+            favicon: project.favicon,
+            contact: project.contact,
+            owner: project.owner,
+            members: JSON.stringify(project.members),
+            chipColors: JSON.stringify(project.chipColors),
+            firebaseConfig: JSON.stringify(project.firebaseConfig, undefined, 2)
+        })
     }
 
     addErrorToState(errorMessage) {
