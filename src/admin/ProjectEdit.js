@@ -5,14 +5,8 @@ import { editProject } from './projectCore/projectActions'
 import ProjectAddEditContent from './ProjectAddEditContent'
 
 class ProjectEdit extends Component {
-    constructor(props) {
-        super(props)
-    }
-
     onValidateClick(data) {
-        this.props.editProject(data).then(id => {
-            console.log('editedddd', id)
-        })
+        this.props.editProject(data)
     }
 
     render() {
