@@ -1,3 +1,3 @@
 const getNotifications = state => state.adminNotifications
-const getLastNotifications = state =>
-    getNotifications(state).notifications.pop()
+export const getLastNotifications = state =>
+    getNotifications(state).notifications[0]
