@@ -1,21 +1,9 @@
-import {
-    ADD_NOTIFICATION,
-    REMOVE_NOTIFICATION
-} from './notificationActionTypes'
+import { REMOVE_NOTIFICATION } from './notificationActionTypes'
 
 export const clearNotification = notificationObject => {
-    return (dispatch, getState) => {
+    return dispatch => {
         dispatch({
             type: REMOVE_NOTIFICATION,
-            payload: notificationObject
-        })
-    }
-}
-
-export const addNotification = notificationObject => (dispatch, getState) => {
-    return (dispatch, getState) => {
-        dispatch({
-            type: ADD_NOTIFICATION,
             payload: notificationObject
         })
     }

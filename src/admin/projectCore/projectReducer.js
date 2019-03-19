@@ -4,8 +4,7 @@ import {
     GET_PROJECT_VOTE_ITEMS_SUCCESS,
     GET_PROJECTS_ERROR,
     GET_PROJECTS_SUCCESS,
-    SELECT_PROJECT,
-    UNSELECT_PROJECT
+    SELECT_PROJECT
 } from './projectActionTypes'
 import { LOGOUT } from '../auth/authActionTypes'
 
@@ -35,7 +34,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                 },
                 projectsLoaded: true
             }
-        case GET_PROJECT_SUCCESS:
+        case GET_PROJECT_SUCCESS: {
             const newProjectsArray = Array.from(state.data.projects).filter(
                 project => project.id !== payload.id
             )
@@ -49,6 +48,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                     projects: newProjectsArray
                 }
             }
+        }
         case GET_PROJECT_VOTE_ITEMS_SUCCESS:
             return {
                 ...state,
@@ -61,11 +61,6 @@ const projectReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 selectedProjectId: payload
-            }
-        case UNSELECT_PROJECT:
-            return {
-                ...state,
-                selectedProjectId: null
             }
         case GET_PROJECT_VOTE_ITEMS_ERROR:
         case GET_PROJECTS_ERROR:
