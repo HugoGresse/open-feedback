@@ -1,6 +1,10 @@
 import {
+    ADD_PROJECT_ERROR,
+    ADD_PROJECT_SUCCESS,
     EDIT_PROJECT_ERROR,
     EDIT_PROJECT_SUCCESS,
+    GET_PROJECT_ERROR,
+    GET_PROJECT_SUCCESS,
     GET_PROJECTS_ERROR,
     GET_PROJECTS_SUCCESS,
     SELECT_PROJECT
@@ -8,6 +12,7 @@ import {
 import { fireStoreMainInstance } from '../../firebase'
 import { getUserSelector } from '../auth/authSelectors'
 import { getSelectedProjectIdSelector } from './projectSelectors'
+import { ADD_NOTIFICATION } from '../notification/notificationActionTypes'
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -38,7 +43,31 @@ export const getProjects = () => {
     }
 }
 
-export const selectProject = projectId => (dispatch, getState) => {
+export const getProject = () => {
+    return (dispatch, getState) => {
+        return fireStoreMainInstance
+            .collection('projects')
+            .doc(getSelectedProjectIdSelector(getState()))
+            .get()
+            .then(doc => {
+                dispatch({
+                    type: GET_PROJECT_SUCCESS,
+                    payload: {
+                        id: doc.id,
+                        ...doc.data()
+                    }
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type: GET_PROJECT_ERROR,
+                    payload: err.toString()
+                })
+            })
+    }
+}
+
+export const selectProject = projectId => dispatch => {
     dispatch({
         type: SELECT_PROJECT,
         payload: projectId
@@ -46,11 +75,19 @@ export const selectProject = projectId => (dispatch, getState) => {
 }
 
 export const editProject = projectData => (dispatch, getState) => {
-    fireStoreMainInstance
+    return fireStoreMainInstance
         .collection('projects')
         .doc(getSelectedProjectIdSelector(getState()))
         .set(projectData, { merge: true })
         .then(() => {
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: {
+                    type: 'success',
+                    message: 'Project saved'
+                }
+            })
+
             dispatch({
                 type: EDIT_PROJECT_SUCCESS
             })
@@ -63,33 +100,30 @@ export const editProject = projectData => (dispatch, getState) => {
         })
 }
 
-/*
-export const getVoteItems = () => {
-    return (dispatch, getState) => {
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(getProjectSelector(getState()).id)
-            .collection('voteItems')
-            .get()
-            .then(projectSnapshot => {
-                const voteItems = []
-                projectSnapshot.forEach(doc => {
-                    voteItems.push({
-                        ...doc.data(),
-                        id: doc.id
-                    })
-                })
+export const newProject = projectData => (dispatch, getState) => {
+    projectData.owner = getUserSelector(getState()).uid
 
-                dispatch({
-                    type: GET_PROJECT_VOTE_ITEMS_SUCCESS,
-                    payload: voteItems
-                })
+    return fireStoreMainInstance
+        .collection('projects')
+        .add(projectData)
+        .then(docRef => {
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: {
+                    type: 'success',
+                    message: 'New project created!'
+                }
             })
-            .catch(err => {
-                dispatch({
-                    type: GET_PROJECT_VOTE_ITEMS_ERROR,
-                    payload: err.toString()
-                })
+            dispatch({
+                type: ADD_PROJECT_SUCCESS,
+                payload: docRef.id
             })
-    }
-}*/
+            return docRef.id
+        })
+        .catch(err => {
+            dispatch({
+                type: ADD_PROJECT_ERROR,
+                payload: err.toString()
+            })
+        })
+}

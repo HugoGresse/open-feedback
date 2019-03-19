@@ -29,7 +29,8 @@ service cloud.firestore {
         match /projects/{project} {
             allow get: if true;
             allow list: if authenticated() && itsMyProjects();
-            allow write: if authenticated() && itsMyProjects();
+            allow create: if authenticated();
+            allow update: if authenticated() && itsMyProjects();
 
             // VOTE ITEMS
             match /voteItems/{voteItemsId} {

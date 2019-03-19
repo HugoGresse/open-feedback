@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Box from '../baseComponents/design/Box'
 import { connect } from 'react-redux'
-import { getProjectsSelector } from './projectCore/projectSelectors'
+import { getSelectedProjectSelector } from './projectCore/projectSelectors'
 import { Link } from 'react-router-dom'
+import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent'
+import { getProject } from './projectCore/projectActions'
 
 const Wrapper = styled(Box)`
     height: 100vh;
@@ -12,11 +14,20 @@ const Wrapper = styled(Box)`
 `
 
 class ProjectDashboard extends Component {
+    componentDidMount() {
+        this.props.getProject()
+    }
+
     render() {
-        const { match } = this.props
+        const { project, match } = this.props
+
+        if (!project) {
+            return <LoaderMatchParent />
+        }
+
         return (
             <Wrapper>
-                Dashboard
+                {project.name} Dashboard
                 <br />
                 Stats will be displayed here
                 <Link to={`${match.url}/edit`}>Edit</Link>
@@ -26,11 +37,15 @@ class ProjectDashboard extends Component {
 }
 
 const mapStateToProps = state => ({
-    projects: getProjectsSelector(state)
+    project: getSelectedProjectSelector(state)
 })
 
-const mapDispatchToProps = Object.assign({}, {})
-
+const mapDispatchToProps = Object.assign(
+    {},
+    {
+        getProject: getProject
+    }
+)
 export default connect(
     mapStateToProps,
     mapDispatchToProps
