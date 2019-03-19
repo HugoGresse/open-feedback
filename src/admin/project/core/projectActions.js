@@ -9,10 +9,10 @@ import {
     GET_PROJECTS_SUCCESS,
     SELECT_PROJECT
 } from './projectActionTypes'
-import { fireStoreMainInstance } from '../../firebase'
-import { getUserSelector } from '../auth/authSelectors'
+import { fireStoreMainInstance } from '../../../firebase'
+import { getUserSelector } from '../../auth/authSelectors'
 import { getSelectedProjectIdSelector } from './projectSelectors'
-import { ADD_NOTIFICATION } from '../notification/notificationActionTypes'
+import { ADD_NOTIFICATION } from '../../notification/notificationActionTypes'
 
 export const getProjects = () => {
     return (dispatch, getState) => {

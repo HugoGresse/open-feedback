@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {
     getProjectsSelector,
     isProjectsLoadedSelector
-} from './projectCore/projectSelectors'
+} from './project/core/projectSelectors'
 import { connect } from 'react-redux'
 import Redirect from 'react-router-dom/Redirect'
 import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent'
