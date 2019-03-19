@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import Box from '../baseComponents/design/Box'
-import OFInput from '../baseComponents/design/OFInput'
-import OFTextArea from '../baseComponents/design/OFTextArea'
-import Button from '../baseComponents/design/Button'
+import Box from '../../../baseComponents/design/Box'
+import OFInput from '../../../baseComponents/design/OFInput'
+import OFTextArea from '../../../baseComponents/design/OFTextArea'
+import Button from '../../../baseComponents/design/Button'
 
 const Wrapper = styled(Box)`
     padding: 15px;
@@ -28,7 +28,7 @@ const defaultState = {
     errors: []
 }
 
-class ProjectAddEditContent extends Component {
+class ProjectAddEditInfos extends Component {
     constructor(props) {
         super(props)
         this.state = defaultState
@@ -262,4 +262,4 @@ class ProjectAddEditContent extends Component {
     }
 }
 
-export default ProjectAddEditContent
+export default ProjectAddEditInfos

@@ -8,13 +8,12 @@ import { getUserSelector } from './auth/authSelectors'
 import { didSignIn, signOut } from './auth/authActions'
 import { authProvider } from '../firebase'
 import { Link } from 'react-router-dom'
-import { getProjectsSelector } from './projectCore/projectSelectors'
+import { getProjectsSelector } from './project/core/projectSelectors'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.EXTRA_LIGHT_GRAY};
     height: 100vh;
     width: 200px;
-    padding: 15px;
     display: flex;
 `
 
@@ -30,6 +29,7 @@ class SideBar extends Component {
                     alignItems="flex-start"
                     flexGrow="1"
                     textAlign="center"
+                    p="15px"
                 >
                     <img height="40" src={logo} alt="open feedback logo" />
 
