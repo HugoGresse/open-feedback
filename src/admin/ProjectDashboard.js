@@ -14,7 +14,7 @@ const Wrapper = styled(Box)`
 `
 
 class ProjectDashboard extends Component {
-    componentWillMount() {
+    componentDidMount() {
         this.props.getProject()
     }
 

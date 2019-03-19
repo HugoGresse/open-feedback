@@ -7,8 +7,7 @@ import {
     GET_PROJECT_SUCCESS,
     GET_PROJECTS_ERROR,
     GET_PROJECTS_SUCCESS,
-    SELECT_PROJECT,
-    UNSELECT_PROJECT
+    SELECT_PROJECT
 } from './projectActionTypes'
 import { fireStoreMainInstance } from '../../firebase'
 import { getUserSelector } from '../auth/authSelectors'
@@ -68,16 +67,10 @@ export const getProject = () => {
     }
 }
 
-export const selectProject = projectId => (dispatch, getState) => {
+export const selectProject = projectId => dispatch => {
     dispatch({
         type: SELECT_PROJECT,
         payload: projectId
-    })
-}
-
-export const unselectProject = () => (dispatch, getState) => {
-    dispatch({
-        type: UNSELECT_PROJECT
     })
 }
 
