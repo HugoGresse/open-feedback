@@ -44,7 +44,7 @@ class Login extends Component {
         this.unregisterAuthObserver = authProvider.onAuthStateChanged(user => {
             if (user) {
                 if (user.isAnonymous) {
-                    console.log('Is anonymous :(')
+                    this.props.signOut()
                 } else {
                     this.props.didSignIn(user)
                 }

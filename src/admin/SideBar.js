@@ -65,6 +65,8 @@ class SideBar extends Component {
                                 {project.name}
                             </Link>
                         ))}
+
+                    <Link to={`${match.url}/newProject`}>New project</Link>
                 </Box>
             </Wrapper>
         )
