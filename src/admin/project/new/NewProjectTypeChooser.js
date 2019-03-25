@@ -7,33 +7,54 @@ import {
     PROJECT_TYPE_HOVERBOARDV2,
     PROJECT_TYPE_MANUAL
 } from '../core/projectTypes'
+import Button from '../../../baseComponents/design/Button'
 
 class NewProjectTypeChooser extends Component {
     constructor(props) {
         super(props)
         this.state = {
             isHoverboardSelected: false,
-            isManualSelected: false
+            isManualSelected: false,
+            selected: null
+        }
+        if (props.selectedSetup) {
+            this.state = {
+                selected: props.selectedSetup,
+                isHoverboardSelected:
+                    props.selectedSetup === PROJECT_TYPE_HOVERBOARDV2,
+                isManualSelected: props.selectedSetup === PROJECT_TYPE_MANUAL
+            }
         }
     }
 
     onHoverboardSelected() {
         this.setState({
             isHoverboardSelected: !this.state.isHoverboardSelected,
-            isManualSelected: false
+            isManualSelected: false,
+            selected: PROJECT_TYPE_HOVERBOARDV2
         })
-        this.props.onTypeSelected(PROJECT_TYPE_HOVERBOARDV2)
     }
 
     onManualSelected() {
         this.setState({
             isHoverboardSelected: false,
-            isManualSelected: !this.state.isManualSelected
+            isManualSelected: !this.state.isManualSelected,
+            selected: PROJECT_TYPE_MANUAL
         })
-        this.props.onTypeSelected(PROJECT_TYPE_MANUAL)
+    }
+
+    onSubmitClicked() {
+        if (this.state.selected) {
+            this.props.onSubmit(this.state.selected)
+        }
+    }
+
+    onCancelClicked() {
+        this.props.onCancel(this.state.selected)
     }
 
     render() {
+        const { cancelText, submitText } = this.props
         return (
             <div>
                 <Typography variant="h4">
@@ -77,6 +98,17 @@ class NewProjectTypeChooser extends Component {
                             speakers, tracks & dates. You'll need to update
                             those information yourself
                         </Typography>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        {cancelText && (
+                            <Button onClick={() => this.onCancelClicked()}>
+                                {cancelText}
+                            </Button>
+                        )}
+                        <Button onClick={() => this.onSubmitClicked()}>
+                            {submitText}
+                        </Button>
                     </Grid>
                 </Grid>
             </div>
