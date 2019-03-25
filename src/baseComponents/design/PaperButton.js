@@ -53,7 +53,7 @@ class PaperButton extends Component {
                 sm={4}
                 md={3}
                 className={classes.itemContainer}
-                onClick={event => this.props.onClick()}
+                onClick={() => this.props.onClick()}
             >
                 <Paper elevation={1} className={paperClasses}>
                     <span className={classes.title}>{content.title}</span>
