@@ -54,8 +54,6 @@ class SideBar extends Component {
                         </Box>
                     </Box>
 
-                    <Link to={`${match.url}`}>Home</Link>
-
                     {projects &&
                         projects.map(project => (
                             <Link

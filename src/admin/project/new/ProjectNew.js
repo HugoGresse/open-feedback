@@ -13,6 +13,8 @@ import {
     PROJECT_TYPE_MANUAL
 } from '../core/projectTypes'
 import ProjectAddEditInfos from '../ProjectAddEditInfos'
+import Hoverboardv2Config from '../types/Hoverboardv2Config'
+import ManualConfig from '../types/ManualConfig'
 
 const Container = styled.div`
     min-height: 100vh
@@ -29,34 +31,52 @@ class ProjectNew extends Component {
         super(props)
         this.state = {
             activeStep: 0,
-            newProjectLoading: false
+            newProjectLoading: false,
+            stepData: {
+                0: {},
+                1: {},
+                2: {}
+            }
         }
     }
 
-    onValidateClick(data) {
+    onValidateClick() {
         this.setState({
             newProjectLoading: true
         })
-        this.props.newProject(data).then(newProjectId => {
+
+        const projectData = {
+            ...this.state.stepData[0],
+            setupType: this.state.stepData[1],
+            ...this.state.stepData[2]
+        }
+
+        this.props.newProject(projectData).then(newProjectId => {
             this.setState({
                 newProjectLoading: false
             })
-            if (newProjectId) {
-                this.props.history.replace(`/admin/${newProjectId}`)
-            }
+            this.props.history.replace(`/admin/${newProjectId}`)
         })
     }
 
     getSteps() {
-        return ['Event setup', 'Event information', 'Fine tuning']
+        return ['Information', 'Setup', 'Configuration']
     }
 
     moveToStep(stepNumber, stepData) {
-        console.log('Move to step ', stepNumber)
-        this.setState({
-            activeStep: stepNumber,
-            [this.state.activeStep]: stepData
-        })
+        const state = {
+            ...this.state,
+            activeStep: stepNumber
+        }
+        if (stepData) {
+            state.stepData[this.state.activeStep] = stepData
+        }
+
+        this.setState(state)
+
+        if (stepNumber >= this.getSteps().length) {
+            this.onValidateClick()
+        }
     }
 
     getStepContent(activeStep) {
@@ -65,39 +85,47 @@ class ProjectNew extends Component {
                 return (
                     <ProjectAddEditInfos
                         create={true}
+                        submitText="Next"
                         onSubmitClicked={project => this.moveToStep(1, project)}
-                        project={{
-                            owner: this.props.currentUser.uid,
-                            members: [this.props.currentUser.uid]
-                        }}
+                        project={this.state.stepData[0]}
                     />
                 )
             case 1:
                 return (
                     <NewProjectTypeChooser
-                        onTypeSelected={data => this.moveToStep(2, data)}
+                        cancelText="Back"
+                        submitText="Next"
+                        selectedSetup={this.state.stepData[1]}
+                        onCancel={() => this.moveToStep(0)}
+                        onSubmit={data => this.moveToStep(2, data)}
                     />
                 )
             case 2:
-                switch (this.state[1]) {
+                switch (this.state.stepData[1]) {
                     case PROJECT_TYPE_HOVERBOARDV2:
                         return (
-                            <ProjectAddEditInfos
+                            <Hoverboardv2Config
                                 create={true}
-                                onSubmitClicked={project =>
-                                    this.moveToStep(3, project)
+                                onCancelClicked={() => this.moveToStep(1)}
+                                onSubmitClicked={config =>
+                                    this.moveToStep(3, config)
                                 }
-                                project={{
-                                    owner: this.props.currentUser.uid,
-                                    members: [this.props.currentUser.uid]
-                                }}
                             />
                         )
                     case PROJECT_TYPE_MANUAL:
-                        return 'TODO'
+                        return (
+                            <ManualConfig
+                                onCancelClicked={() => this.moveToStep(1)}
+                                onSubmitClicked={config =>
+                                    this.moveToStep(3, config)
+                                }
+                            />
+                        )
                     default:
                         return 'Not managed'
                 }
+            case 3:
+                return ''
             default:
                 return 'todo'
         }

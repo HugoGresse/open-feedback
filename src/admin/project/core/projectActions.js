@@ -1,5 +1,6 @@
 import {
     ADD_PROJECT_ERROR,
+    ADD_PROJECT_SETUP,
     ADD_PROJECT_SUCCESS,
     EDIT_PROJECT_ERROR,
     EDIT_PROJECT_SUCCESS,
@@ -102,6 +103,7 @@ export const editProject = projectData => (dispatch, getState) => {
 
 export const newProject = projectData => (dispatch, getState) => {
     projectData.owner = getUserSelector(getState()).uid
+    projectData.members = [projectData.owner]
 
     return fireStoreMainInstance
         .collection('projects')
@@ -111,7 +113,7 @@ export const newProject = projectData => (dispatch, getState) => {
                 type: ADD_NOTIFICATION,
                 payload: {
                     type: 'success',
-                    message: 'New project created!'
+                    message: 'New event created! Redirecting you now...'
                 }
             })
             dispatch({
@@ -121,6 +123,13 @@ export const newProject = projectData => (dispatch, getState) => {
             return docRef.id
         })
         .catch(err => {
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: {
+                    type: 'error',
+                    message: 'Fail to create a new event, ' + err.toString()
+                }
+            })
             dispatch({
                 type: ADD_PROJECT_ERROR,
                 payload: err.toString()
