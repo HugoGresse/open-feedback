@@ -6,7 +6,7 @@ import {
     GET_PROJECTS_SUCCESS,
     SELECT_PROJECT
 } from './projectActionTypes'
-import { LOGOUT } from '../auth/authActionTypes'
+import { LOGOUT } from '../../auth/authActionTypes'
 
 const initState = {
     data: {

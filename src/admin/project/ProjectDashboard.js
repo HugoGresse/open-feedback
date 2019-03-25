@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import Box from '../baseComponents/design/Box'
+import Box from '../../baseComponents/design/Box'
 import { connect } from 'react-redux'
-import { getSelectedProjectSelector } from './projectCore/projectSelectors'
+import { getSelectedProjectSelector } from './core/projectSelectors'
 import { Link } from 'react-router-dom'
-import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent'
-import { getProject } from './projectCore/projectActions'
+import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
+import { getProject } from './core/projectActions'
 
 const Wrapper = styled(Box)`
     height: 100vh;

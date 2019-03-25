@@ -9,10 +9,10 @@ import {
     GET_PROJECTS_SUCCESS,
     SELECT_PROJECT
 } from './projectActionTypes'
-import { fireStoreMainInstance } from '../../firebase'
-import { getUserSelector } from '../auth/authSelectors'
+import { fireStoreMainInstance } from '../../../firebase'
+import { getUserSelector } from '../../auth/authSelectors'
 import { getSelectedProjectIdSelector } from './projectSelectors'
-import { ADD_NOTIFICATION } from '../notification/notificationActionTypes'
+import { ADD_NOTIFICATION } from '../../notification/notificationActionTypes'
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -102,6 +102,7 @@ export const editProject = projectData => (dispatch, getState) => {
 
 export const newProject = projectData => (dispatch, getState) => {
     projectData.owner = getUserSelector(getState()).uid
+    projectData.members = [projectData.owner]
 
     return fireStoreMainInstance
         .collection('projects')
@@ -111,7 +112,7 @@ export const newProject = projectData => (dispatch, getState) => {
                 type: ADD_NOTIFICATION,
                 payload: {
                     type: 'success',
-                    message: 'New project created!'
+                    message: 'New event created! Redirecting you now...'
                 }
             })
             dispatch({
@@ -121,6 +122,13 @@ export const newProject = projectData => (dispatch, getState) => {
             return docRef.id
         })
         .catch(err => {
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: {
+                    type: 'error',
+                    message: 'Fail to create a new event, ' + err.toString()
+                }
+            })
             dispatch({
                 type: ADD_PROJECT_ERROR,
                 payload: err.toString()
