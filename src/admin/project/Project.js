@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import { getProjectsSelector } from './projectCore/projectSelectors'
-import { selectProject } from './projectCore/projectActions'
+import { getProjectsSelector } from './core/projectSelectors'
+import { selectProject } from './core/projectActions'
 
 class Project extends Component {
     componentWillMount() {

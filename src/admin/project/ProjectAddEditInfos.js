@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import Box from '../baseComponents/design/Box'
-import OFInput from '../baseComponents/design/OFInput'
-import OFTextArea from '../baseComponents/design/OFTextArea'
-import Button from '../baseComponents/design/Button'
+import Box from '../../baseComponents/design/Box'
+import OFInput from '../../baseComponents/design/OFInput'
+import Button from '../../baseComponents/design/Button'
 
 const Wrapper = styled(Box)`
     padding: 15px;
@@ -20,15 +19,10 @@ const defaultState = {
     owner: '',
     members: [],
     chipColors: ['999999'],
-    firebaseConfig: {
-        apiKey: 'AIzaSyB_n7dxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-        databaseURL: 'https://xxxxx.firebaseio.com',
-        projectId: 'some-project-id'
-    },
     errors: []
 }
 
-class ProjectAddEditContent extends Component {
+class ProjectAddEditInfos extends Component {
     constructor(props) {
         super(props)
         this.state = defaultState
@@ -59,24 +53,13 @@ class ProjectAddEditContent extends Component {
             logoSmall: project.logoSmall,
             favicon: project.favicon,
             contact: project.contact,
-            owner: project.owner,
-            members: JSON.stringify(project.members),
-            chipColors: JSON.stringify(project.chipColors),
-            firebaseConfig: JSON.stringify(project.firebaseConfig, undefined, 2)
+            chipColors: JSON.stringify(project.chipColors)
         })
     }
 
-    addErrorToState(errorMessage) {
-        const error = this.state.errors
-        error.push(errorMessage)
-        this.setState({
-            errors: error
-        })
-    }
-
-    checkMissingData(field, errorMessage) {
+    checkMissingData(field, errorArray, errorMessage) {
         if (!field) {
-            this.addErrorToState(errorMessage)
+            errorArray.push(errorMessage)
             return true
         }
         return false
@@ -92,45 +75,36 @@ class ProjectAddEditContent extends Component {
             contact: data.contact
         }
 
-        this.setState({
-            errors: []
-        })
-        this.checkMissingData(project.name, 'Missing project name')
-        this.checkMissingData(project.websiteLink, 'Missing websiteLink')
-        this.checkMissingData(project.scheduleLink, 'Missing scheduleLink')
-        this.checkMissingData(project.logoSmall, 'Missing logoSmall')
-        this.checkMissingData(project.favicon, 'Missing favicon')
-
-        if (this.state.errors.length > 0) {
-            return
-        }
+        const errors = []
+        this.checkMissingData(project.name, errors, 'Missing project name')
+        this.checkMissingData(
+            project.websiteLink,
+            errors,
+            'Missing websiteLink'
+        )
+        this.checkMissingData(
+            project.scheduleLink,
+            errors,
+            'Missing scheduleLink'
+        )
+        this.checkMissingData(project.logoSmall, errors, 'Missing logoSmall')
+        this.checkMissingData(project.favicon, errors, 'Missing favicon')
 
         try {
             project.chipColors = JSON.parse(data.chipColors)
         } catch (error) {
-            this.addErrorToState('chipColors are not formatted correctly')
-            return
-        }
-        try {
-            project.firebaseConfig = JSON.parse(data.firebaseConfig)
-        } catch (error) {
-            this.addErrorToState('firebaseConfig is not formatted correctly')
-            return
-        }
-        try {
-            project.members = JSON.parse(data.members)
-        } catch (error) {
-            this.addErrorToState('Editors are not formatted correctly')
-            return
+            errors.push('chipColors are not formatted correctly')
         }
 
-        this.setState({ errors: [] })
+        this.setState({ errors: errors })
 
-        this.props.onSubmitClicked(project)
+        if (errors.length === 0) {
+            this.props.onSubmitClicked(project)
+        }
     }
 
     render() {
-        const { create } = this.props
+        const { submitText } = this.props
 
         return (
             <>
@@ -222,31 +196,6 @@ class ProjectAddEditContent extends Component {
                         />
                     </Box>
                 </Wrapper>
-                <Wrapper>
-                    <Box>
-                        <label>Owner (read only)</label>
-                        <OFInput value={this.state.owner} readOnly />
-                    </Box>
-                    <Box>
-                        <label>Editors (read only)</label>
-                        <OFInput value={this.state.members} readOnly />
-                    </Box>
-                </Wrapper>
-                <Wrapper>
-                    <Box width="100%">
-                        <label>Hoverboard v2 config</label>
-                        <OFTextArea
-                            width="100%"
-                            height="100px"
-                            value={this.state.firebaseConfig}
-                            onChange={event =>
-                                this.setState({
-                                    firebaseConfig: event.target.value
-                                })
-                            }
-                        />
-                    </Box>
-                </Wrapper>
 
                 {this.state.errors.map((error, index) => {
                     return <Wrapper key={index}>{error}</Wrapper>
@@ -254,7 +203,7 @@ class ProjectAddEditContent extends Component {
 
                 <Wrapper>
                     <Button onClick={() => this.onValidateClick(this.state)}>
-                        {create ? 'Create' : 'Save'}
+                        {submitText}
                     </Button>
                 </Wrapper>
             </>
@@ -262,4 +211,4 @@ class ProjectAddEditContent extends Component {
     }
 }
 
-export default ProjectAddEditContent
+export default ProjectAddEditInfos

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getSelectedProjectSelector } from './projectCore/projectSelectors'
-import { editProject } from './projectCore/projectActions'
-import ProjectAddEditContent from './ProjectAddEditContent'
+import { getSelectedProjectSelector } from './core/projectSelectors'
+import { editProject } from './core/projectActions'
+import ProjectAddEditInfos from './ProjectAddEditInfos'
 
 class ProjectEdit extends Component {
     onValidateClick(data) {
@@ -11,7 +11,8 @@ class ProjectEdit extends Component {
 
     render() {
         return (
-            <ProjectAddEditContent
+            <ProjectAddEditInfos
+                submitText="Save"
                 onSubmitClicked={project => this.onValidateClick(project)}
                 project={this.props.project}
             />
