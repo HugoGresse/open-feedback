@@ -116,7 +116,7 @@ class NewProjectTypeChooser extends Component {
     }
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = () => ({})
 
 const mapDispatchToProps = Object.assign({}, {})
 
