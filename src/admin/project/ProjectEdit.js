@@ -12,6 +12,7 @@ class ProjectEdit extends Component {
     render() {
         return (
             <ProjectAddEditInfos
+                submitText="Save"
                 onSubmitClicked={project => this.onValidateClick(project)}
                 project={this.props.project}
             />
