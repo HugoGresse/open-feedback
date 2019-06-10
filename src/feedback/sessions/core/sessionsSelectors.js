@@ -2,6 +2,7 @@ import { createSelector } from 'reselect'
 import groupBy from 'lodash/groupBy'
 import { getDateFromStartTime } from './sessionsUtils'
 import { getProjectSelectedDate } from '../../project/projectSelectors'
+import { getSpeakersList } from '../../speaker/core'
 
 export const getSessions = state => state.sessions
 
@@ -50,7 +51,8 @@ export const getCurrentSessionsGroupByTrack = createSelector(
     getSessionsAsArray,
     getSessionsFilter,
     getProjectSelectedDate,
-    (sessions, filter, date) => {
+    getSpeakersList,
+    (sessions, filter, date, speakers) => {
         const cleanedFilterInput = filter.toLowerCase().trim()
 
         const filteredSessions = sessions.filter(session => {
@@ -63,9 +65,12 @@ export const getCurrentSessionsGroupByTrack = createSelector(
                 speakerMatch = -1
             } else if (
                 session.speakers
-                    .filter(speaker => speaker.length > 0)
-                    .filter(speaker => {
-                        return speaker
+                    .filter(speakerId => speakerId.length > 0)
+                    .map(speakerId => speakers[speakerId])
+                    .filter(speaker => speaker && speaker.name)
+                    .map(speaker => speaker.name)
+                    .filter(speakerName => {
+                        return speakerName
                             .toLowerCase()
                             .replace('_', ' ')
                             .includes(cleanedFilterInput)
