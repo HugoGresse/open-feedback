@@ -83,11 +83,9 @@ class ProjectNew extends Component {
         switch (activeStep) {
             case 0:
                 return (
-                    <ProjectAddEditInfos
-                        create={true}
-                        submitText="Next"
-                        onSubmitClicked={project => this.moveToStep(1, project)}
-                        project={this.state.stepData[0]}
+                    <ManualConfig
+                        onCancelClicked={() => this.moveToStep(1)}
+                        onSubmitClicked={config => this.moveToStep(3, config)}
                     />
                 )
             case 1:

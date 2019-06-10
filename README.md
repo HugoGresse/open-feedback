@@ -18,6 +18,7 @@ _Open Feedback is still in beta_
 
 -   admin
     -   create project by hand
+
     -   add/edit voteItems (= vote option)
     -   display project stats
     -   add admin to project
