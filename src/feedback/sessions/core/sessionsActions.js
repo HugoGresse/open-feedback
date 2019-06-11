@@ -23,9 +23,15 @@ export const getSessions = () => {
             .then(([resultSchedule, resultSessions]) => {
                 let sessions = {}
                 let schedule = []
+                let temp
                 resultSessions.forEach(doc => {
+                    temp = doc.data()
+                    if (temp.hideInFeedback) {
+                        // Some sessions are not display (break time, etc)
+                        return
+                    }
                     sessions[doc.id] = {
-                        ...doc.data(),
+                        ...temp,
                         id: doc.id
                     }
                 })
