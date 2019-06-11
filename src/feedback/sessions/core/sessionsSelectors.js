@@ -37,13 +37,15 @@ export const getFilteredSessions = createSelector(
 export const getSessionsDates = createSelector(
     getSessionsAsArray,
     sessions => {
-        return sessions.reduce((acc, session) => {
-            const date = getDateFromStartTime(session.startTime)
-            if (!acc.includes(date)) {
-                acc.push(date)
-            }
-            return acc
-        }, [])
+        return sessions
+            .reduce((acc, session) => {
+                const date = getDateFromStartTime(session.startTime)
+                if (!acc.includes(date)) {
+                    acc.push(date)
+                }
+                return acc
+            }, [])
+            .sort()
     }
 )
 
@@ -96,12 +98,14 @@ export const getCurrentSessionsGroupByTrack = createSelector(
             session => session.trackTitle
         )
 
-        return Object.keys(sessionsGroupByTrack).reduce((acc, track) => {
-            acc.push({
-                track: track,
-                sessions: sessionsGroupByTrack[track]
-            })
-            return acc
-        }, [])
+        return Object.keys(sessionsGroupByTrack)
+            .sort()
+            .reduce((acc, track) => {
+                acc.push({
+                    track: track,
+                    sessions: sessionsGroupByTrack[track]
+                })
+                return acc
+            }, [])
     }
 )
