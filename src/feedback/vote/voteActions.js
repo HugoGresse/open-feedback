@@ -25,6 +25,26 @@ import { VOTE_TYPE_TEXT } from './voteReducer'
 
 export const voteFor = (sessionId, voteItem, data) => {
     return (dispatch, getState) => {
+        const project = getProjectSelector(getState())
+
+        const currentDate = new Date().toISOString()
+        if (
+            project.voteStartTime &&
+            (currentDate < project.voteStartTime ||
+                project.voteEndTime < currentDate)
+        ) {
+            dispatch({
+                type: ADD_VOTE_ERROR,
+                payload: {
+                    error:
+                        'you cannot vote yet, wait until ' +
+                        new Date(project.voteStartTime).toLocaleString() +
+                        '.'
+                }
+            })
+            return
+        }
+
         const voteContent = {
             projectId: getProjectSelector(getState()).id,
             sessionId: sessionId,
