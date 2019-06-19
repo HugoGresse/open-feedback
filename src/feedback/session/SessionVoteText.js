@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
-
+import SaveIcon from '@material-ui/icons/Save'
+import DeleteIcon from '@material-ui/icons/Delete'
 import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
@@ -20,7 +21,7 @@ const styles = theme => ({
         borderRadius: '0',
         color: theme.palette.text.secondary,
         boxShadow: 'inset 0 0 0 1px ' + theme.palette.grey[300],
-        height: '150px',
+        height: '95px',
         boxSizing: 'border-box',
         '&:hover': {
             backgroundColor: '#f6f6f6'
@@ -51,6 +52,19 @@ const styles = theme => ({
     textArea: {
         width: '100%',
         height: '100%'
+    },
+    leftIcon: {
+        marginRight: theme.spacing.unit,
+        fontSize: 20
+    },
+    buttonContainer: {
+        marginTop: 10,
+        marginBottom: 30,
+        display: 'flex',
+        justifyContent: 'flex-end'
+    },
+    saveButton: {
+        backgroundColor: '#6a96ff'
     }
 })
 
@@ -100,7 +114,7 @@ class SessionVoteText extends Component {
                         multiline
                         fullWidth
                         margin="none"
-                        rows="6"
+                        rows="3"
                         rowsMax="6"
                         InputProps={{
                             disableUnderline: true
@@ -113,25 +127,27 @@ class SessionVoteText extends Component {
                 </Paper>
 
                 {this.state.comment && (
-                    <Button
-                        className={classes.button}
-                        onClick={() =>
-                            this.props.onVoteChange(
-                                voteItem,
-                                this.state.comment
-                            )
-                        }
-                    >
-                        Save comment
-                    </Button>
-                )}
-                {this.state.comment && (
-                    <Button
-                        className={classes.button}
-                        onClick={() => this.onVoteDelete()}
-                    >
-                        Delete comment
-                    </Button>
+                    <div className={classes.buttonContainer}>
+                        <Button onClick={() => this.onVoteDelete()}>
+                            <DeleteIcon className={classes.leftIcon} />
+                            Delete comment
+                        </Button>
+
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.saveButton}
+                            onClick={() =>
+                                this.props.onVoteChange(
+                                    voteItem,
+                                    this.state.comment
+                                )
+                            }
+                        >
+                            <SaveIcon className={classes.leftIcon} />
+                            Save comment
+                        </Button>
+                    </div>
                 )}
 
                 {voteResult && <SessionVoteTextResult result={voteResult} />}
