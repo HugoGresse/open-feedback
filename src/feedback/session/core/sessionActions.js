@@ -5,6 +5,7 @@ import {
 } from './sessionActionTypes'
 import { formatSessionsWithScheduled } from '../../sessions/core/sessionsUtils'
 import { fireStoreScheduleInstance } from '../../../firebase'
+import { SET_SESSIONS_FILTER } from '../../sessions/core/sessionsActionTypes'
 
 export const getSession = sessionId => {
     return (dispatch, getState) => {
@@ -49,6 +50,11 @@ export const setSelectedSession = sessionId => {
         dispatch({
             type: SET_SELECTED_SESSION,
             payload: sessionId
+        })
+
+        dispatch({
+            type: SET_SESSIONS_FILTER,
+            payload: ''
         })
     }
 }
