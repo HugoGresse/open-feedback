@@ -92,7 +92,9 @@ class SessionVoteText extends Component {
     }
 
     onVoteDelete = event => {
-        this.props.onVoteChange(this.props.voteItem, null)
+        if (this.props.currentUserVote) {
+            this.props.onVoteChange(this.props.voteItem, null)
+        }
         this.setState({
             comment: ''
         })
@@ -100,6 +102,10 @@ class SessionVoteText extends Component {
 
     render() {
         const { classes, voteItem, voteResult } = this.props
+
+        const saveUpdateText = this.props.currentUserVote
+            ? 'Update comment'
+            : 'Save comment'
 
         return (
             <Grid
@@ -145,7 +151,7 @@ class SessionVoteText extends Component {
                             }
                         >
                             <SaveIcon className={classes.leftIcon} />
-                            Save comment
+                            {saveUpdateText}
                         </Button>
                     </div>
                 )}
