@@ -17,7 +17,7 @@ const styles = theme => ({
         borderRadius: '0',
         color: theme.palette.text.secondary,
         boxShadow: 'inset 0 0 0 1px ' + theme.palette.grey[300],
-        height: '150px',
+        height: '100px',
         boxSizing: 'border-box',
         '&:hover': {
             backgroundColor: '#f6f6f6',
@@ -33,15 +33,17 @@ const styles = theme => ({
         boxShadow: 'inset 0 0 0 5px ' + theme.palette.grey[300]
     },
     voteTitle: {
-        color: theme.palette.grey[800],
-        zIndex: 2
+        color: '#222',
+        zIndex: 2,
+        textShadow: '0px 0px 6px #fff'
     },
     voteResult: {
         position: 'absolute',
         bottom: '5px',
         fontSize: '14px',
         transition: 'all 200ms ease-in-out',
-        zIndex: 2
+        zIndex: 2,
+        textShadow: '0px 0px 6px #fff'
     },
     backgroundCanvas: {
         width: '100%'

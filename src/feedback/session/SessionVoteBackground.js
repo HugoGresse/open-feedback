@@ -15,7 +15,7 @@ const styles = theme => ({
     }
 })
 
-const circleRadius = 22
+const circleRadius = 15
 
 class SessionItemVoteBackground extends Component {
     constructor(props) {
@@ -94,7 +94,7 @@ class SessionItemVoteBackground extends Component {
                 fillStyle =
                     '#' +
                     this.props.colors[index % this.props.colors.length] +
-                    '80'
+                    '60'
             }
             ctx.fillStyle = fillStyle
             ctx.beginPath()
