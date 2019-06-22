@@ -22,26 +22,11 @@ import { getProjectSelector } from '../project/projectSelectors'
 import { getVotesSelector } from './voteSelectors'
 import { INCREMENT_VOTE_LOCALY } from '../project/projectActionTypes'
 import { VOTE_TYPE_TEXT } from './voteReducer'
+import { checkDateBeforeVote } from './checkDataBeforeVote'
 
 export const voteFor = (sessionId, voteItem, data) => {
     return (dispatch, getState) => {
-        const project = getProjectSelector(getState())
-
-        const currentDate = new Date().toISOString()
-        if (
-            project.voteStartTime &&
-            (currentDate < project.voteStartTime ||
-                project.voteEndTime < currentDate)
-        ) {
-            dispatch({
-                type: ADD_VOTE_ERROR,
-                payload: {
-                    error:
-                        'you cannot vote yet, wait until ' +
-                        new Date(project.voteStartTime).toLocaleString() +
-                        '.'
-                }
-            })
+        if (checkDateBeforeVote(dispatch, getState())) {
             return
         }
 
@@ -129,6 +114,10 @@ export const removeVote = voteToDelete => {
             return
         }
 
+        if (checkDateBeforeVote(dispatch, getState())) {
+            return
+        }
+
         dispatch({
             type: REMOVE_VOTE_BEFORE_SUCCESS,
             payload: voteToDelete
@@ -175,6 +164,10 @@ export const removeVote = voteToDelete => {
 }
 
 export const updateVote = (vote, data) => (dispatch, getState) => {
+    if (checkDateBeforeVote(dispatch, getState())) {
+        return
+    }
+
     dispatch({
         type: INCREMENT_VOTE_LOCALY,
         payload: {
