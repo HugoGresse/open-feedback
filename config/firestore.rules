@@ -8,7 +8,7 @@ service cloud.firestore {
         function itsMyDocument(userId) { return request.auth.uid == userId }
         function itsMyProjects() { return resource.data.owner == request.auth.uid || request.auth.uid in resource.data.members}
 
-        // USERS
+        // USERS - deprecated
         match /users/{userId} {
             allow get: if authenticated() && itsMyDocument(userId);
             allow list: if authenticated() && itsMyDocument(userId) && limitOne();
@@ -37,8 +37,20 @@ service cloud.firestore {
                 allow list: if true;
             }
 
+            // Deprecated soon
             match /sessionVotes/{session} {
                 allow list: if true;
+            }
+
+            match /aggregatedVotes/{session} {
+                allow list: if true;
+            }
+
+            match /userVotes/{ref} {
+                allow read: if authenticated() && resource.data.userId == request.auth.uid
+                allow create: if authenticated() && request.resource.data.userId == request.auth.uid;
+                allow update: if authenticated() && resource.data.userId == request.auth.uid;
+                allow delete: if authenticated() && resource.data.userId == request.auth.uid;
             }
         }
     }
