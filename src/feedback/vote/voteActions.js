@@ -30,13 +30,16 @@ export const voteFor = (sessionId, voteItem, data) => {
             return
         }
 
+        const projectId = getProjectSelector(getState()).id
+
         const voteContent = {
-            projectId: getProjectSelector(getState()).id,
+            projectId: projectId,
             sessionId: sessionId,
             voteItemId: voteItem.id,
             id: new Date().getTime(),
             createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp()
+            updatedAt: serverTimestamp(),
+            userId: getUser(getState()).uid
         }
 
         if (voteItem.type === VOTE_TYPE_TEXT) {
@@ -62,9 +65,9 @@ export const voteFor = (sessionId, voteItem, data) => {
         })
 
         fireStoreMainInstance
-            .collection('users')
-            .doc(getUser(getState()).uid)
-            .collection('votes')
+            .collection('projects')
+            .doc(projectId)
+            .collection('userVotes')
             .add(voteContent)
             .then(docRef => {
                 dispatch({
@@ -132,9 +135,9 @@ export const removeVote = voteToDelete => {
         })
 
         fireStoreMainInstance
-            .collection('users')
-            .doc(getUser(getState()).uid)
-            .collection('votes')
+            .collection('projects')
+            .doc(getProjectSelector(getState()).id)
+            .collection('userVotes')
             .doc(voteToDelete.id)
             .delete()
             .then(() => {
@@ -179,9 +182,9 @@ export const updateVote = (vote, data) => (dispatch, getState) => {
     })
 
     fireStoreMainInstance
-        .collection('users')
-        .doc(getUser(getState()).uid)
-        .collection('votes')
+        .collection('projects')
+        .doc(getProjectSelector(getState()).id)
+        .collection('userVotes')
         .doc(vote.id)
         .update({
             text: data,
@@ -214,10 +217,10 @@ export const updateVote = (vote, data) => (dispatch, getState) => {
 export const getVotes = () => {
     return (dispatch, getState) => {
         fireStoreMainInstance
-            .collection('users')
-            .doc(getUser(getState()).uid)
-            .collection('votes')
-            .where('projectId', '==', getProjectSelector(getState()).id)
+            .collection('projects')
+            .doc(getProjectSelector(getState()).id)
+            .collection('userVotes')
+            .where('userId', '==', getUser(getState()).uid)
             .get()
             .then(voteSnapshot => {
                 const votes = {}
