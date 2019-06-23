@@ -3,43 +3,29 @@ const admin = require('firebase-admin')
 const db = admin.firestore()
 
 const aggregateVotesCreate = functions.firestore
-    .document('/users/{userId}/votes/{voteId}')
+    .document('/projects/{projectId}/userVotes/{voteId}')
     .onCreate((snapshot, context) => {
-        return incrementVoteAggregate(
-            snapshot.id,
-            snapshot.data(),
-            context.params.userId,
-            +1
-        )
+        return incrementVoteAggregate(snapshot.id, snapshot.data(), +1)
     })
 
 const aggregateVotesDelete = functions.firestore
-    .document('/users/{userId}/votes/{voteId}')
+    .document('/projects/{projectId}/userVotes/{voteId}')
     .onDelete((snapshot, context) => {
-        return incrementVoteAggregate(
-            snapshot.id,
-            snapshot.data(),
-            context.params.userId,
-            -1
-        )
+        return incrementVoteAggregate(snapshot.id, snapshot.data(), -1)
     })
 
 const aggregateVotesUpdate = functions.firestore
-    .document('/users/{userId}/votes/{voteId}')
+    .document('/projects/{projectId}/userVotes/{voteId}')
     .onUpdate((change, context) => {
-        return incrementVoteAggregate(
-            change.after.id,
-            change.after.data(),
-            context.params.userId,
-            1
-        )
+        return incrementVoteAggregate(change.after.id, change.after.data(), 1)
     })
 
-function incrementVoteAggregate(newVoteId, newVote, userId, increment) {
+function incrementVoteAggregate(newVoteId, newVote, increment) {
     if (
         !isIdValid(newVote.projectId) ||
         !isIdValid(newVote.sessionId) ||
         !isIdValid(newVote.voteItemId) ||
+        !isIdValid(newVote.userId) ||
         !newVote.id
     ) {
         console.error('newVotes ids are not valid', newVote)
@@ -62,7 +48,7 @@ function incrementVoteAggregate(newVoteId, newVote, userId, increment) {
                     text: newVote.text,
                     createdAt: newVote.createdAt,
                     updatedAt: newVote.updatedAt,
-                    userId: userId
+                    userId: newVote.userId
                 }
                 if (increment > 0) {
                     if (!snapshot.exists || !session[newVote.voteItemId]) {
