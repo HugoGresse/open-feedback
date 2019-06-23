@@ -1,7 +1,7 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 
-const serviceAccount = require('./serviceAccountKey.json')
+const serviceAccount = require('../serviceAccountKey.json')
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -13,7 +13,10 @@ settings = { timestampsInSnapshots: true }
 db.settings(settings)
 
 const aggregateVotes = require('./functions/aggregateVotes')
+const voteConsolidification = require('../script/votesConsolidification')
 
 exports.aggregateVotesCreate = aggregateVotes.aggregateVotesCreate
 exports.aggregateVotesDelete = aggregateVotes.aggregateVotesDelete
 exports.aggregateVotesUpdate = aggregateVotes.aggregateVotesUpdate
+exports.consolidateVoteForSession =
+    voteConsolidification.consolidateVoteForSession

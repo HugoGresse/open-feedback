@@ -36,3 +36,4 @@ src/config.js
 
 # Firebase specific
 .firebase
+serviceAccountKey.json

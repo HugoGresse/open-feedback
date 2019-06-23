@@ -61,6 +61,18 @@ export const voteFor = (sessionId, voteItem, data) => {
             }
         })
 
+        console.log('adding vote for ' + getUser(getState()).uid)
+
+        fireStoreMainInstance
+            .collection('users')
+            .doc(getUser(getState()).uid)
+            .set(
+                {
+                    testHug: true
+                },
+                { merge: true }
+            )
+
         fireStoreMainInstance
             .collection('users')
             .doc(getUser(getState()).uid)
