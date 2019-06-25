@@ -44,6 +44,9 @@ export const voteFor = (sessionId, voteItem, data) => {
 
         if (voteItem.type === VOTE_TYPE_TEXT) {
             voteContent.text = data.trim()
+            if (voteContent.text.length === 0) {
+                return
+            }
         }
 
         dispatch({
@@ -167,7 +170,7 @@ export const removeVote = voteToDelete => {
 }
 
 export const updateVote = (vote, data) => (dispatch, getState) => {
-    if (checkDateBeforeVote(dispatch, getState())) {
+    if (checkDateBeforeVote(dispatch, getState()) || data.trim().length === 0) {
         return
     }
 
@@ -176,7 +179,7 @@ export const updateVote = (vote, data) => (dispatch, getState) => {
         payload: {
             vote: {
                 ...vote,
-                text: data
+                text: data.trim()
             }
         }
     })
