@@ -4,7 +4,6 @@ import { COLORS } from '../constants/colors'
 import logoWhite from '../assets/logo-openfeedback-white.png'
 import Title from '../baseComponents/design/Title'
 import Box from '../baseComponents/design/Box'
-import Button from '../baseComponents/design/Button'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.RED_ORANGE};
@@ -12,8 +11,24 @@ const Wrapper = styled(Box)`
     padding: 15px;
     display: flex;
     flex-direction: column;
+
+    @media (max-width: 640px) {
+        .wrapperLogoMenu {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    }
 `
 const Menu = styled.ul`
+    @media (max-width: 640px) {
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
     li {
         display: inline;
         margin-left: 30px;
@@ -27,11 +42,16 @@ const Menu = styled.ul`
         }
     }
 `
+
 class Header extends Component {
     render() {
         return (
             <Wrapper>
-                <Box flex justifyContent="space-between">
+                <Box
+                    className="wrapperLogoMenu"
+                    flex
+                    justifyContent="space-between"
+                >
                     <img height="40" src={logoWhite} alt="open feedback" />
                     <Menu>
                         <li>
@@ -39,9 +59,6 @@ class Header extends Component {
                         </li>
                         <li>
                             <a href="/eaJnyMXD3oNfhrrnBYDT">Démo</a>
-                        </li>
-                        <li>
-                            <a href="/admin">Connexion</a>
                         </li>
                     </Menu>
                 </Box>
@@ -59,9 +76,9 @@ class Header extends Component {
                     <Title component="h3" m={0} color={COLORS.WHITE}>
                         Conférences, meetups, évènements,...
                     </Title>
-                    <Button mt={40} outline color={COLORS.WHITE}>
+                    {/*<Button mt={40} outline color={COLORS.WHITE} disable>
                         Créer votre événement
-                    </Button>
+                    </Button>*/}
                 </Box>
             </Wrapper>
         )
