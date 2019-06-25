@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { setFavicon } from '../feedback/layout/utils'
 import Header from './Header'
 import Footer from './Footer'
-import CallToAction from './CallToAction'
 import HowItWorks from './HowItWorks'
 
 class Root extends Component {
@@ -15,7 +14,7 @@ class Root extends Component {
             <div>
                 <Header />
                 <HowItWorks />
-                <CallToAction />
+                {/*<CallToAction />*/}
                 <Footer />
             </div>
         )
