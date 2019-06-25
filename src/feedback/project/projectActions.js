@@ -9,7 +9,6 @@ import {
 } from './projectActionTypes'
 import { fireStoreMainInstance, initFireStoreSchedule } from '../../firebase'
 import { getProjectSelector } from './projectSelectors'
-import { orderBy, sortBy } from 'lodash/collection'
 
 export const getProject = projectId => {
     return (dispatch, getState) => {
@@ -63,7 +62,7 @@ export const getVoteItems = () => {
 
                 dispatch({
                     type: GET_PROJECT_VOTE_ITEMS_SUCCESS,
-                    payload: orderBy(voteItems, ['position'], ['desc'])
+                    payload: voteItems
                 })
             })
             .catch(err => {
