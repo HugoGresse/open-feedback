@@ -1,23 +1,25 @@
 import {
+    CLEAR_SESSIONS,
     GET_SESSIONS_ERROR,
     GET_SESSIONS_LOADING,
     GET_SESSIONS_SUCCESS,
     SET_SESSIONS_FILTER
 } from './sessionsActionTypes'
 import { formatSessionsWithScheduled } from './sessionsUtils'
-import { fireStoreScheduleInstance } from '../../../firebase'
+import { getFirestoreSchedule } from '../../firebase'
+import { getProjectFirebaseConfigSelector } from '../../feedback/project/projectSelectors'
 
 export const getSessions = () => {
     return (dispatch, getState) => {
         dispatch({
             type: GET_SESSIONS_LOADING
         })
-        const schedulePromise = fireStoreScheduleInstance
-            .collection('schedule')
-            .get()
-        const sessionsPromise = fireStoreScheduleInstance
-            .collection('sessions')
-            .get()
+        const firestore = getFirestoreSchedule(
+            getProjectFirebaseConfigSelector(getState()).projectId
+        )
+
+        const schedulePromise = firestore.collection('schedule').get()
+        const sessionsPromise = firestore.collection('sessions').get()
 
         return Promise.all([schedulePromise, sessionsPromise])
             .then(([resultSchedule, resultSessions]) => {
@@ -59,6 +61,14 @@ export const setSessionsFilter = filter => {
         dispatch({
             type: SET_SESSIONS_FILTER,
             payload: filter
+        })
+    }
+}
+
+export const clearSessions = () => {
+    return dispatch => {
+        dispatch({
+            type: CLEAR_SESSIONS
         })
     }
 }

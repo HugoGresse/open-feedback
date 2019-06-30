@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
 
 import { getSpeakersList } from '../../speaker/core'
-import { getSessionsList } from '../../sessions/core/sessionsSelectors'
+import { getSessionsList } from '../../../core/sessions/sessionsSelectors'
 import { getProjectVoteResults } from '../../project/projectSelectors'
 
 export const getSession = state => state.session

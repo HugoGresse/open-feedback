@@ -13,6 +13,8 @@ import { fireStoreMainInstance } from '../../../firebase'
 import { getUserSelector } from '../../auth/authSelectors'
 import { getSelectedProjectIdSelector } from './projectSelectors'
 import { ADD_NOTIFICATION } from '../../notification/notificationActionTypes'
+import { CLEAR_SESSIONS } from '../../../core/sessions/sessionsActionTypes'
+import { CLEAR_SESSION_VOTES } from '../dashboard/dashboardActionTypes'
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -68,6 +70,14 @@ export const getProject = () => {
 }
 
 export const selectProject = projectId => dispatch => {
+    dispatch({
+        type: CLEAR_SESSION_VOTES,
+        payload: projectId
+    })
+    dispatch({
+        type: CLEAR_SESSIONS,
+        payload: projectId
+    })
     dispatch({
         type: SELECT_PROJECT,
         payload: projectId

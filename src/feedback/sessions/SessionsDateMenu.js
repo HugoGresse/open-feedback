@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import styled from 'styled-components'
-import { getSessionsDates } from './core/sessionsSelectors'
+import { getSessionsDates } from '../../core/sessions/sessionsSelectors'
 import {
     getProjectSelectedDate,
     getProjectSelector
