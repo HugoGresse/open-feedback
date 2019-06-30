@@ -138,7 +138,6 @@ class SessionItem extends Component {
             )
         }
 
-        console.log(session, speakers, voteItems)
         if (!session || !speakers || !voteItems) {
             return <LoaderMatchParent />
         }
