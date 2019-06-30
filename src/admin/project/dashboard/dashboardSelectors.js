@@ -7,6 +7,7 @@ import {
 const getDashboard = state => state.adminDashboard
 const getDashboardData = state => getDashboard(state).data
 const getSessionVotes = state => getDashboardData(state).sessionVotes
+const getUserVotes = state => getDashboardData(state).userVotes
 
 // MEMOIZED
 
@@ -54,5 +55,40 @@ export const getMostVotedSessionSelector = createSelector(
                 return 0
             })
             .slice(0, 5)
+    }
+)
+
+export const getVotesByHour = createSelector(
+    getUserVotes,
+    userVotes => {
+        let tempDate
+        let tempDateString
+        const collection = userVotes.reduce((acc, userVote) => {
+            tempDate = userVote.createdAt.toDate()
+            tempDateString =
+                tempDate.getUTCFullYear() +
+                '-' +
+                (tempDate.getUTCMonth() + 1) +
+                '-' +
+                tempDate.getUTCDate() +
+                ' ' +
+                tempDate.getHours()
+
+            if (acc[tempDateString]) {
+                acc[tempDateString] = {
+                    ...acc[tempDateString],
+                    voteCount: acc[tempDateString].voteCount + 1
+                }
+            } else {
+                acc[tempDateString] = {
+                    date: tempDateString,
+                    day:
+                        tempDate.getUTCDate() + ' ' + tempDate.getHours() + 'h',
+                    voteCount: 1
+                }
+            }
+            return acc
+        }, [])
+        return Object.values(collection)
     }
 )

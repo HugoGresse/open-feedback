@@ -69,7 +69,12 @@ export const getProject = () => {
     }
 }
 
-export const selectProject = projectId => dispatch => {
+export const selectProject = projectId => (dispatch, getState) => {
+    if (getSelectedProjectIdSelector(getState()) === projectId) {
+        // Project already selected (HMR potentially)
+        return
+    }
+
     dispatch({
         type: CLEAR_SESSION_VOTES,
         payload: projectId
