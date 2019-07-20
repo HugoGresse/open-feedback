@@ -18,7 +18,7 @@
         "polished": "^3.4.1",
         "prop-types": "latest",
         "react": "^16.6.3",
-        "react-dom": "^16.6.3",
+        "react-dom": "^16.8.6",
         "react-firebaseui": "^3.1.2",
         "react-ga": "^2.5.6",
         "react-redux": "^5.0.7",
