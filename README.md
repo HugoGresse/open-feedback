@@ -1,5 +1,7 @@
 # Open Feedback
 
+[![Join the chat at https://gitter.im/open-feedback/community](https://badges.gitter.im/open-feedback/community.svg)](https://gitter.im/open-feedback/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 **Open Feedback** is an opened SaaS platform destined to organisers to gather feedback from users. It connect to hoverboard-v2 Firestore to retrieve all sessions & speakers & let any user give feedback on them and store everything on Open Feedback Firestore.
 
 > Demo: https://openfeedback.io/eaJnyMXD3oNfhrrnBYDT
