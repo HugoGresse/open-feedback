@@ -32,10 +32,6 @@ export const getMostVotedSessionSelector = createSelector(
                     return acc + 1
                 }, 0)
 
-                if (!sessionlist[session.id]) {
-                    console.log('Sessions not found: ' + session.id)
-                }
-
                 acc.push({
                     sessionId: session.id,
                     voteCount: voteCount,
