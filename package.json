@@ -12,6 +12,8 @@
     "dependencies": {
         "@material-ui/core": "^3.9.3",
         "@material-ui/icons": "^3.0.1",
+        "docz": "^1.2.0",
+        "docz-theme-default": "^1.2.0",
         "firebase": "^5.7.0",
         "lodash": "^4.17.15",
         "moment": "^2.23.0",
@@ -34,7 +36,9 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "deploy": "npm run build && firebase deploy"
+        "deploy": "npm run build && firebase deploy",
+        "docz:dev": "docz dev",
+        "docz:build": "docz build"
     },
     "eslintConfig": {
         "extends": "react-app"
