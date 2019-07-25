@@ -1,8 +1,6 @@
 # Open Feedback
 
-[![Join the chat at https://gitter.im/open-feedback/community](https://badges.gitter.im/open-feedback/community.svg)](https://gitter.im/open-feedback/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-**Open Feedback** is an opened SaaS platform destined to organisers to gather feedback from users. It connect to hoverboard-v2 Firestore to retrieve all sessions & speakers & let any user give feedback on them and store everything on Open Feedback Firestore.
+**Open Feedback** is an opened SaaS platform destined to organisers to gather feedback from users. It connect to many (hoverboard-v2 Firestore, imported data WIP, remote JSON WIP) to retrieve all sessions & speakers & let any user give feedback on them and store everything on Open Feedback Firestore.
 
 > Demo: https://openfeedback.io/eaJnyMXD3oNfhrrnBYDT
 
@@ -15,50 +13,10 @@ _Open Feedback is still in beta_
 -   User give feedback (not a rate) on any session anonymously (it use Firebase anonymous login)
 -   Feedback list is customizable by event
 -   Display users feedback
+-   Dashboard & admin tools (coming soon)
 
-## TODO list
+## You want to contribute ?
 
--   admin
-    -   create project by hand
-    -   add/edit voteItems (= vote option)
-    -   display project stats
-    -   add admin to project
-    -   webhook to notify Hugo when new project is created
--   import/sync talks from Conference-Hall
+You want to contribute and and keep Open Feedback in a good shape, go there:
 
-> This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
-
-### `npm test`
-
-> No test has been written for this project.
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+[contribute-open-feedback.netlify.com](https://contribute-open-feedback.netlify.com)

@@ -36,3 +36,5 @@ src/config.js
 
 # Firebase specific
 .firebase
+
+.docz/
