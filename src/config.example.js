@@ -4,8 +4,7 @@ const config = {
         authDomain: 'sunny.firebaseapp.com',
         databaseURL: 'https://sunny.firebaseio.com',
         projectId: 'sunny',
-        storageBucket: 'sunny.appspot.com',
-        messagingSenderId: ''
+        storageBucket: 'sunny.appspot.com'
     },
     googleAnalyticsId: 'UA-00000000-1'
 }
