@@ -1,0 +1,89 @@
+# Installation
+
+## Pre-requisites
+
+- node@10.16.0 
+- npm
+
+## Setup
+
+### Configure Firebase
+Create a firebase project with the [firebase console](https://console.firebase.google.com).
+
+1. Create a "Cloud Firestore" Database. It's okay to start in 'locked' mode. The rules will be overriden when you deploy.
+2. Activate "Anonymous" as a sign-in provider for Authentication of voters
+3. Activate "Google" as a sign-in provider for Admin Authentication. (You may want to add Email/Pwd", "Phone", "Google", "GitHub" later on)
+4. Create a `src/config.js` file by copying .config.example.js file at `src/` folder and set firebase environment variables. You can get all these variables from the Firebase Console homepage by clicking "Add an application" and selecting the web icon.
+
+```
+{
+    firebaseMain: {
+        apiKey: '',
+        authDomain: '',
+        databaseURL: '',
+        projectId: '',
+        storageBucket: ''
+    },
+    googleAnalyticsId: 'UA-00000000-1'
+}
+```
+
+### Configure Google Analytics (optional)
+You can add a Google Analytics by adding your Analytics ID to the `src/config.js` in `googleAnalyticsId`.
+
+## Run
+
+### Run the app in dev mode
+
+
+1. Clone the Open Feedback app and install dependencies  
+    ```
+    git clone git@github.com:HugoGresse/open-feedback.git
+    npm i
+    ```
+2. Configure the app with [Firebase](#configure-firebase)  
+3. Start the app
+    ```
+    npm start
+    ```
+    
+    >Before using the app, you'll need to deploy the firestore security rules at least once (see below for how to deploy with firebase)
+    
+4. Open [http://localhost:3000](http://localhost:3000) to view the app in the browser.
+
+## Cloud functions
+
+The project uses cloud functions for vote aggregations. Before deploying the application, you need to resolve cloud functions dependencies.
+
+All commands must be done in `/functions` folder with **node@8**.
+
+Cloud functions uses its own `package.json`, first install dependencies:
+```
+npm i
+```
+
+The next deploy will also deploy Firebase Cloud Functions
+
+## Deploy
+
+### Pre-requisites
+1. Install firebase-cli :
+    ```
+    npm install firebase-tools -g
+    ```
+    
+2. You must be logged with firebase and select project ([Firebase documentation](https://firebase.google.com/docs/web)) :
+    ```
+    firebase login
+    firebase use --add
+    ```
+3. Install dependencies for the app and cloud functions.
+
+### Build and deploy the app
+    
+```
+npm run deploy
+```
+
+Install dependencies for the app and cloud functions.
+
