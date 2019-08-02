@@ -19,10 +19,10 @@ class ProjectDashboard extends Component {
         this.props.getUserVotes()
     }
 
-    componentWillReceiveProps(nextProps, nextContext) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         if (
-            (!this.props.project && nextProps.project) ||
-            this.props.project.id !== nextProps.project.id
+            (!prevProps.project && this.props.project) ||
+            prevProps.project.id !== this.props.project.id
         ) {
             this.props.getSessions()
         }

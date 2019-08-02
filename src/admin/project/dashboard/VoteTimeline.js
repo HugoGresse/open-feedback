@@ -20,7 +20,6 @@ class VoteTimeline extends Component {
 
         return (
             <Paper>
-                Timeline here
                 <ResponsiveContainer height={250} width="80%">
                     <AreaChart data={votesByHour} strokeWidth={2}>
                         <defs>
