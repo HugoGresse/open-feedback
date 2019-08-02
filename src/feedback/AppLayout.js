@@ -16,7 +16,7 @@ import Error from '../baseComponents/customComponent/Error'
 import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent'
 import { getLoginErrorSelector } from './auth/authSelectors'
 import Footer from './layout/Footer'
-import { getSessionsDates } from './sessions/core/sessionsSelectors'
+import { getSessionsDates } from '../core/sessions/sessionsSelectors'
 
 const styles = theme => ({
     loading: {

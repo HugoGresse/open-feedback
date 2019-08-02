@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect'
 import groupBy from 'lodash/groupBy'
 import { getDateFromStartTime } from './sessionsUtils'
-import { getProjectSelectedDate } from '../../project/projectSelectors'
-import { getSpeakersList } from '../../speaker/core'
+import { getProjectSelectedDate } from '../../feedback/project/projectSelectors'
+import { getSpeakersList } from '../../feedback/speaker/core'
 
 export const getSessions = state => state.sessions
 
@@ -13,7 +13,9 @@ export const getSessionsFilter = state => getSessions(state).filter || ''
 export const getSessionsLoadError = state =>
     getSessions(state).errorSessionsLoad
 
-export const getSessionsLoading = state => getSessions(state).loading
+export const isSessionsLoadingSelector = state => getSessions(state).loading
+
+export const isSessionLoadedSelector = state => getSessions(state).loaded
 
 //  MEMOIZED SELECTORS HERE
 
@@ -24,13 +26,6 @@ export const getSessionsAsArray = createSelector(
             acc.push(sessions[id])
             return acc
         }, [])
-    }
-)
-
-export const getFilteredSessions = createSelector(
-    getSessionsList,
-    list => {
-        return list
     }
 )
 

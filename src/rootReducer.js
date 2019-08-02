@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import sessionsReducer from './feedback/sessions/core/sessionsReducer'
+import sessionsReducer from './core/sessions/sessionsReducer'
 import sessionReducer from './feedback/session/core/sessionReducer'
 import speakerReducer from './feedback/speaker/core/speakerReducer'
 import projectReducer from './feedback/project/projectReducer'
@@ -8,6 +8,7 @@ import voteReducer from './feedback/vote/voteReducer'
 import adminAuthReducer from './admin/auth/authReducer'
 import adminProjectReducer from './admin/project/core/projectReducer'
 import adminNotificationReducer from './admin/notification/notificationReducer'
+import adminDashboardReducer from './admin/project/dashboard/dashboardReducer'
 
 const rootReducer = combineReducers({
     sessions: sessionsReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
     votes: voteReducer,
     adminAuth: adminAuthReducer,
     adminProject: adminProjectReducer,
-    adminNotifications: adminNotificationReducer
+    adminNotifications: adminNotificationReducer,
+    adminDashboard: adminDashboardReducer
 })
 
 export default rootReducer
