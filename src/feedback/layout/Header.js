@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import { COLORS } from '../../constants/colors'
 import Title from '../../baseComponents/design/Title'
 import { SCREEN_SIZES } from '../../constants/constants'
 import SearchBar from './SearchBar'
-import { Link } from 'react-router-dom'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import CalendarToday from '@material-ui/icons/CalendarToday'
 import { Hidden } from '@material-ui/core/es'
@@ -72,9 +71,7 @@ class Header extends Component {
                     <IconWrapper left>
                         {match.params.sessionId && (
                             <Link
-                                to={`/${match.params.projectId}/${
-                                    match.params.date
-                                }`}
+                                to={`/${match.params.projectId}/${match.params.date}`}
                             >
                                 <ArrowBack />
                             </Link>
