@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import connect from 'react-redux/es/connect/connect'
 import { getSpeakersList } from '../speaker/core'
 import SpeakerList from '../speaker/SpeakerList'
-import { getDateFromStartTime } from './core/sessionsUtils'
+import { getDateFromStartTime } from '../../core/sessions/sessionsUtils'
 import { getProjectSelector } from '../project/projectSelectors'
 
 const styles = theme => ({

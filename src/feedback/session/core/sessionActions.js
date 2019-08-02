@@ -3,16 +3,18 @@ import {
     GET_SESSION_SUCCESS,
     SET_SELECTED_SESSION
 } from './sessionActionTypes'
-import { formatSessionsWithScheduled } from '../../sessions/core/sessionsUtils'
-import { fireStoreScheduleInstance } from '../../../firebase'
-import { SET_SESSIONS_FILTER } from '../../sessions/core/sessionsActionTypes'
+import { formatSessionsWithScheduled } from '../../../core/sessions/sessionsUtils'
+import { SET_SESSIONS_FILTER } from '../../../core/sessions/sessionsActionTypes'
+import { getFirestoreSchedule } from '../../../firebase'
+import { getProjectFirebaseConfigSelector } from '../../project/projectSelectors'
 
 export const getSession = sessionId => {
     return (dispatch, getState) => {
-        const schedulePromise = fireStoreScheduleInstance
-            .collection('schedule')
-            .get()
-        const sessionsPromise = fireStoreScheduleInstance
+        const firestore = getFirestoreSchedule(
+            getProjectFirebaseConfigSelector(getState()).projectId
+        )
+        const schedulePromise = firestore.collection('schedule').get()
+        const sessionsPromise = firestore
             .collection('sessions')
             .doc(sessionId)
             .get()
