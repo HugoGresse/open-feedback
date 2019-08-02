@@ -1,16 +1,18 @@
 import {
-    GET_SESSION_SUCCESS,
+    CLEAR_SESSIONS,
     GET_SESSIONS_ERROR,
     GET_SESSIONS_LOADING,
     GET_SESSIONS_SUCCESS,
     SET_SESSIONS_FILTER
 } from './sessionsActionTypes'
+import { GET_SESSION_SUCCESS } from '../../feedback/session/core/sessionActionTypes'
 
 const initState = {
     list: {},
     filter: null,
     errorSessionsLoad: null,
-    loading: false
+    loading: false,
+    loaded: false
 }
 
 const sessionsReducer = (state = initState, { payload, type }) => {
@@ -32,7 +34,8 @@ const sessionsReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 list: payload,
-                loading: false
+                loading: false,
+                loaded: true
             }
         case SET_SESSIONS_FILTER:
             return {
@@ -45,6 +48,8 @@ const sessionsReducer = (state = initState, { payload, type }) => {
                 ...state,
                 errorSessionsLoad: payload
             }
+        case CLEAR_SESSIONS:
+            return initState
         default:
             return state
     }
