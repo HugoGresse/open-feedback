@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import { getVotesBySession } from '../vote/voteSelectors'
 import Title from '../../baseComponents/design/Title'
 
-import { getCurrentSessionsGroupByTrack } from './core/sessionsSelectors'
+import { getCurrentSessionsGroupByTrack } from '../../core/sessions/sessionsSelectors'
 
 class SessionsList extends Component {
     onSessionClicked = session => {

@@ -1,10 +1,17 @@
 import { GET_SPEAKERS_ERROR, GET_SPEAKERS_SUCCESS } from './speakerActionTypes'
-import { fireStoreScheduleInstance } from '../../../firebase'
-import { getProjectSelector } from '../../project/projectSelectors'
+import {
+    getProjectFirebaseConfigSelector,
+    getProjectSelector
+} from '../../project/projectSelectors'
+import { getFirestoreSchedule } from '../../../firebase'
 
 export const getSpeakers = sessionId => {
     return (dispatch, getState) => {
-        return fireStoreScheduleInstance
+        const firestore = getFirestoreSchedule(
+            getProjectFirebaseConfigSelector(getState()).projectId
+        )
+
+        return firestore
             .collection('speakers')
             .get()
             .then(speakersSnapshot => {

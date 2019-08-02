@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import SearchIcon from '@material-ui/icons/Search'
-import { setSessionsFilter } from '../sessions/core/sessionsActions'
+import { setSessionsFilter } from '../../core/sessions/sessionsActions'
 import connect from 'react-redux/es/connect/connect'
 import { COLORS } from '../../constants/colors'
 import { SCREEN_SIZES } from '../../constants/constants'

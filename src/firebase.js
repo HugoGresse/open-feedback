@@ -10,15 +10,17 @@ export const authProvider = firebaseMain.auth()
 export const fireStoreMainInstance = firebaseMain.firestore()
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 export const nowTimestamp = firebase.firestore.Timestamp.now
-export let fireStoreScheduleInstance
 
 authProvider.useDeviceLanguage()
 
 export const initFireStoreSchedule = config => {
-    if (firebase.apps.length >= 2) {
+    if (firebase.apps.filter(app => app.name === config.projectId).length > 0) {
         return
     }
 
-    const firebaseSchedule = firebase.initializeApp(config, 'schedule')
-    fireStoreScheduleInstance = firebaseSchedule.firestore()
+    firebase.initializeApp(config, config.projectId)
+}
+
+export const getFirestoreSchedule = projectId => {
+    return firebase.app(projectId).firestore()
 }
