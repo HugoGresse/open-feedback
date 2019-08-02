@@ -4,7 +4,7 @@ import {
     isProjectsLoadedSelector
 } from './project/core/projectSelectors'
 import { connect } from 'react-redux'
-import Redirect from 'react-router-dom/Redirect'
+import { Redirect } from 'react-router-dom'
 import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent'
 
 class AdminRoot extends Component {
