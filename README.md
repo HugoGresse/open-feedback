@@ -17,6 +17,6 @@ _Open Feedback is still in beta_
 
 ## You want to contribute ?
 
-You want to contribute and and keep Open Feedback in a good shape, go there:
+You want to contribute and keep Open Feedback in a good shape, go there:
 
 [contribute-open-feedback.netlify.com](https://contribute-open-feedback.netlify.com)
