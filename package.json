@@ -30,7 +30,7 @@
         "redux-thunk": "^2.3.0",
         "reselect": "^4.0.0",
         "styled-components": "^4.3.2",
-        "styled-system": "^3.2.1"
+        "styled-system": "^5.0.18"
     },
     "scripts": {
         "start": "react-scripts start",
