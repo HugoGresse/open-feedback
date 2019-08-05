@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import styled from 'styled-components'
-import { getSessionsDates } from '../../core/sessions/sessionsSelectors'
+import { getSessionsDatesSelector } from '../../core/sessions/sessionsSelectors'
 import {
-    getProjectSelectedDate,
+    getProjectSelectedDateSelector,
     getProjectSelector
 } from '../project/projectSelectors'
 import { COLORS } from '../../constants/colors'
@@ -50,8 +50,8 @@ class SessionsDateMenu extends Component {
 }
 
 const mapStateToProps = state => ({
-    sessionsDates: getSessionsDates(state),
-    selectedDate: getProjectSelectedDate(state),
+    sessionsDates: getSessionsDatesSelector(state),
+    selectedDate: getProjectSelectedDateSelector(state),
     currentProjectId: getProjectSelector(state).id
 })
 

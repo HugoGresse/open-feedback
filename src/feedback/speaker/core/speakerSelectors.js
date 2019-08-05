@@ -1,5 +1,5 @@
-export const getSpeakers = state => state.speakers
+export const getSpeakersSelector = state => state.speakers
 
-export const getSpeakersList = state => getSpeakers(state).list
+export const getSpeakersListSelector = state => getSpeakersSelector(state).list
 
 //  MEMOIZED SELECTORS HERE

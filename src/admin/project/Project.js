@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import { getProjectsSelector } from './core/projectSelectors'
+import { getSortedProjectsSelector } from './core/projectSelectors'
 import { selectProject } from './core/projectActions'
 
 class Project extends Component {
@@ -14,7 +14,7 @@ class Project extends Component {
 }
 
 const mapStateToProps = state => ({
-    projects: getProjectsSelector(state)
+    projects: getSortedProjectsSelector(state)
 })
 
 const mapDispatchToProps = Object.assign(

@@ -11,7 +11,7 @@ export const getSelectedProjectIdSelector = state =>
 
 // MEMOIZED
 
-export const getProjectsSelector = createSelector(
+export const getSortedProjectsSelector = createSelector(
     getProjectsData,
     projectsData => {
         return projectsData.projects.sort((a, b) => {
@@ -27,7 +27,7 @@ export const getProjectsSelector = createSelector(
 )
 
 export const getSelectedProjectSelector = createSelector(
-    getProjectsSelector,
+    getSortedProjectsSelector,
     getSelectedProjectIdSelector,
     (projects, selectedProjectId) => {
         if (!projects || projects.length < 1) {
