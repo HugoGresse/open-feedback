@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core'
 import '../App.css'
 import { connect } from 'react-redux'
 import { setFavicon } from './layout/utils'
-import { authActions } from './auth'
+import * as authActions from './auth/authActions'
 import {
     getProjectLoadError,
     getProjectSelector,

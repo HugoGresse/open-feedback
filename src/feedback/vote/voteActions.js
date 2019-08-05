@@ -17,10 +17,10 @@ import {
     nowTimestamp,
     serverTimestamp
 } from '../../firebase'
-import { getUser } from '../auth'
+import { getUser } from '../auth/authSelectors'
 import { getProjectSelector } from '../project/projectSelectors'
 import { getVotesSelector } from './voteSelectors'
-import { INCREMENT_VOTE_LOCALY } from '../project/projectActionTypes'
+import { INCREMENT_VOTE_LOCALLY } from '../project/projectActionTypes'
 import { VOTE_TYPE_TEXT } from './voteReducer'
 import { checkDateBeforeVote } from './checkDataBeforeVote'
 
@@ -60,7 +60,7 @@ export const voteFor = (sessionId, voteItem, data) => {
         })
 
         dispatch({
-            type: INCREMENT_VOTE_LOCALY,
+            type: INCREMENT_VOTE_LOCALLY,
             payload: {
                 vote: voteContent,
                 amount: 1
@@ -101,7 +101,7 @@ export const voteFor = (sessionId, voteItem, data) => {
                 })
 
                 dispatch({
-                    type: INCREMENT_VOTE_LOCALY,
+                    type: INCREMENT_VOTE_LOCALLY,
                     payload: {
                         vote: voteContent,
                         amount: -1
@@ -130,7 +130,7 @@ export const removeVote = voteToDelete => {
         })
 
         dispatch({
-            type: INCREMENT_VOTE_LOCALY,
+            type: INCREMENT_VOTE_LOCALLY,
             payload: {
                 vote: voteToDelete,
                 amount: -1
@@ -159,7 +159,7 @@ export const removeVote = voteToDelete => {
                 })
 
                 dispatch({
-                    type: INCREMENT_VOTE_LOCALY,
+                    type: INCREMENT_VOTE_LOCALLY,
                     payload: {
                         vote: voteToDelete,
                         amount: 1
@@ -175,7 +175,7 @@ export const updateVote = (vote, data) => (dispatch, getState) => {
     }
 
     dispatch({
-        type: INCREMENT_VOTE_LOCALY,
+        type: INCREMENT_VOTE_LOCALLY,
         payload: {
             vote: {
                 ...vote,

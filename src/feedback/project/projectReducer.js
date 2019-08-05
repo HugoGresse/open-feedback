@@ -5,7 +5,7 @@ import {
     GET_PROJECT_VOTE_ITEMS_SUCCESS,
     GET_PROJECT_VOTE_RESULT_ERROR,
     GET_PROJECT_VOTE_RESULT_SUCCESS,
-    INCREMENT_VOTE_LOCALY,
+    INCREMENT_VOTE_LOCALLY,
     SET_SELECTED_DATE
 } from './projectActionTypes'
 import { nowTimestamp } from '../../firebase'
@@ -86,7 +86,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                     }
                 }
             }
-        case INCREMENT_VOTE_LOCALY:
+        case INCREMENT_VOTE_LOCALLY:
             const vote = payload.vote
             const data = state.data
 
