@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import {
-    getSessionsList,
+    getSessionsListSelector,
     isSessionLoadedSelector
 } from '../../../core/sessions/sessionsSelectors'
 
@@ -13,7 +13,7 @@ const getUserVotes = state => getDashboardData(state).userVotes
 
 export const getMostVotedSessionSelector = createSelector(
     getSessionVotes,
-    getSessionsList,
+    getSessionsListSelector,
     isSessionLoadedSelector,
     (sessionVotes, sessionlist, isSessionLoaded) => {
         if (Object.keys(sessionlist).length <= 0 || !isSessionLoaded) {
@@ -54,7 +54,7 @@ export const getMostVotedSessionSelector = createSelector(
     }
 )
 
-export const getVotesByHour = createSelector(
+export const getVotesByHourSelector = createSelector(
     getUserVotes,
     userVotes => {
         let tempDate

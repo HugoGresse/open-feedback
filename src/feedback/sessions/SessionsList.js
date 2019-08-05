@@ -3,10 +3,10 @@ import { connect } from 'react-redux'
 import { setSelectedSession } from '../session/core/sessionActions'
 import SessionsItem from './SessionsItem'
 import Grid from '@material-ui/core/Grid'
-import { getVotesBySession } from '../vote/voteSelectors'
+import { getVotesBySessionSelector } from '../vote/voteSelectors'
 import Title from '../../baseComponents/design/Title'
 
-import { getCurrentSessionsGroupByTrack } from '../../core/sessions/sessionsSelectors'
+import { getCurrentSessionsGroupByTrackSelector } from '../../core/sessions/sessionsSelectors'
 
 class SessionsList extends Component {
     onSessionClicked = session => {
@@ -44,8 +44,8 @@ class SessionsList extends Component {
 }
 
 const mapStateToProps = state => ({
-    userSessionVote: getVotesBySession(state),
-    currentSessionsByTrack: getCurrentSessionsGroupByTrack(state)
+    userSessionVote: getVotesBySessionSelector(state),
+    currentSessionsByTrack: getCurrentSessionsGroupByTrackSelector(state)
 })
 
 const mapDispatchToProps = Object.assign(

@@ -8,7 +8,7 @@ import ErrorIcon from '@material-ui/icons/Error'
 import withStyles from '@material-ui/core/styles/withStyles'
 import green from '@material-ui/core/colors/green'
 import amber from '@material-ui/core/colors/amber'
-import { getLastNotifications } from './notificationSelectors'
+import { getLastNotificationsSelector } from './notificationSelectors'
 import Snackbar from '@material-ui/core/Snackbar'
 import { clearNotification } from './notifcationActions'
 
@@ -97,7 +97,7 @@ class Notifications extends Component {
 }
 
 const mapStateToProps = state => ({
-    notification: getLastNotifications(state)
+    notification: getLastNotificationsSelector(state)
 })
 
 const mapDispatchToProps = Object.assign(

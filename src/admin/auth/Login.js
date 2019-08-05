@@ -6,7 +6,7 @@ import Box from '../../baseComponents/design/Box'
 import { StyledFirebaseAuth } from 'react-firebaseui'
 import { auth, authProvider } from '../../firebase'
 import { connect } from 'react-redux'
-import { getLoginErrorSelector, isLogged } from './authSelectors'
+import { getLoginErrorSelector, isLoggedSelector } from './authSelectors'
 import { didSignIn, signOut } from './authActions'
 
 const Wrapper = styled(Box)`
@@ -90,7 +90,7 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-    isLoggedIn: isLogged(state),
+    isLoggedIn: isLoggedSelector(state),
     loginError: getLoginErrorSelector(state)
 })
 

@@ -1,9 +1,10 @@
 import { createSelector } from 'reselect'
-import { getSelectedSessionId } from '../session/core/sessionSelectors'
+import { getSelectedSessionIdSelector } from '../session/core/sessionSelectors'
 
 const getVotes = state => state.votes
 
-export const getVotesSelector = state => getVotes(state).currentUserVotes
+export const getCurrentUserVotesSelector = state =>
+    getVotes(state).currentUserVotes
 
 export const getErrorVotePostSelector = state => getVotes(state).errorVotePost
 
@@ -12,8 +13,8 @@ export const getErrorVotesLoadSelector = state => getVotes(state).errorVotesLoad
 //  MEMOIZED SELECTORS HERE
 
 export const getUserVotesBySessionAndVoteItemSelector = createSelector(
-    getVotesSelector,
-    getSelectedSessionId,
+    getCurrentUserVotesSelector,
+    getSelectedSessionIdSelector,
     (votes, sessionId) => {
         const result = {}
         Object.values(votes)
@@ -25,8 +26,8 @@ export const getUserVotesBySessionAndVoteItemSelector = createSelector(
     }
 )
 
-export const getVotesBySession = createSelector(
-    getVotesSelector,
+export const getVotesBySessionSelector = createSelector(
+    getCurrentUserVotesSelector,
     (votes, sessionId) => {
         const result = {}
         Object.values(votes).forEach(vote => {

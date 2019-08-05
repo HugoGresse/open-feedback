@@ -4,9 +4,9 @@ import moment from 'moment'
 import styled from 'styled-components'
 
 import {
-    getSelectedSession,
-    getSessionLoadError,
-    getSpeakersForSelectedSession
+    getSelectedSessionSelector,
+    getSessionLoadErrorSelector,
+    getSpeakersForSelectedSessionSelector
 } from './core/sessionSelectors'
 import { getSession, setSelectedSession } from './core/sessionActions'
 import { getSpeakers } from '../speaker/core/speakerActions'
@@ -21,10 +21,10 @@ import {
 } from '../vote/voteActions'
 
 import {
-    getProjectChipColors,
+    getProjectChipColorsSelector,
     getProjectVoteItemsOrderedSelector
 } from '../project/projectSelectors'
-import { getVoteResultSelector } from '../session/core/sessionSelectors'
+import { getVoteResultSelectorSelector } from '../session/core/sessionSelectors'
 import {
     getErrorVotePostSelector,
     getErrorVotesLoadSelector,
@@ -203,15 +203,15 @@ class SessionItem extends Component {
 }
 
 const mapStateToProps = state => ({
-    session: getSelectedSession(state),
-    speakers: getSpeakersForSelectedSession(state),
+    session: getSelectedSessionSelector(state),
+    speakers: getSpeakersForSelectedSessionSelector(state),
     voteItems: getProjectVoteItemsOrderedSelector(state),
     userVotes: getUserVotesBySessionAndVoteItemSelector(state),
-    voteResults: getVoteResultSelector(state),
-    errorSessionLoad: getSessionLoadError(state),
+    voteResults: getVoteResultSelectorSelector(state),
+    errorSessionLoad: getSessionLoadErrorSelector(state),
     errorVotePost: getErrorVotePostSelector(state),
     errorVotesLoad: getErrorVotesLoadSelector(state),
-    chipColors: getProjectChipColors(state)
+    chipColors: getProjectChipColorsSelector(state)
 })
 
 const mapDispatchToProps = Object.assign(

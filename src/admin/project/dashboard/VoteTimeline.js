@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getVotesByHour } from './dashboardSelectors'
+import { getVotesByHourSelector } from './dashboardSelectors'
 import Paper from '@material-ui/core/Paper'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import XAxis from 'recharts/es6/cartesian/XAxis'
@@ -82,7 +82,7 @@ class VoteTimeline extends Component {
 }
 
 const mapStateToProps = state => ({
-    votesByHour: getVotesByHour(state)
+    votesByHour: getVotesByHourSelector(state)
 })
 
 export default connect(
