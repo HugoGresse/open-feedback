@@ -1,79 +1,258 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
 import { COLORS } from '../constants/colors'
-import logo from '../assets/logo-openfeedback-color.png'
-import Box from '../baseComponents/design/Box'
+import logo from '../assets/logo-openfeedback-color&white.png'
 import { connect } from 'react-redux'
 import { getUserSelector } from './auth/authSelectors'
 import { didSignIn, signOut } from './auth/authActions'
+import { createMuiTheme, withStyles } from '@material-ui/core'
+import { MuiThemeProvider } from '@material-ui/core/styles'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import Divider from '@material-ui/core/Divider'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
+import Avatar from '@material-ui/core/Avatar'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import ListSubheader from '@material-ui/core/ListSubheader'
+import EventNoteIcon from '@material-ui/icons/EventNote'
+import ExploreIcon from '@material-ui/icons/Explore'
+import HowToVoteIcon from '@material-ui/icons/HowToVote'
+import PeopleIcon from '@material-ui/icons/People'
+import PowerSettingsIcon from '@material-ui/icons/PowerSettingsNew'
+import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver'
+import SettingsIcon from '@material-ui/icons/Settings'
+import SlideshowIcon from '@material-ui/icons/Slideshow'
+import IconButton from '@material-ui/core/IconButton'
 import { authProvider } from '../firebase'
-import { Link } from 'react-router-dom'
-import { getSortedProjectsSelector } from './project/core/projectSelectors'
+import { NavLink } from 'react-router-dom'
 
-const Wrapper = styled(Box)`
-    background: ${COLORS.EXTRA_LIGHT_GRAY};
-    height: 100vh;
-    width: 200px;
-    display: flex;
-`
+const innerTheme = createMuiTheme({
+    typography: {
+        useNextVariants: true
+    },
+    palette: {
+        type: 'dark',
+        useNextVariants: true
+    }
+})
+
+const styles = theme => ({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        background: COLORS.ADMIN_BACKGROUND,
+        height: '100vh',
+        minWidth: '220px',
+        [theme.breakpoints.up(900 + theme.spacing.unit * 3 * 2)]: {
+            width: 300
+        },
+        '& .active': {
+            background: COLORS.RED_ORANGE
+        }
+    },
+    list: {
+        padding: 15,
+        '& > a': {
+            borderRadius: 2
+        }
+    },
+    listItemText: {
+        paddingLeft: 0
+    },
+    logoContainer: {
+        justifyContent: 'center'
+    },
+    logo: {
+        width: '80%',
+        maxWidth: '150px'
+    },
+    header: {
+        textAlign: 'left'
+    },
+    userBox: {
+        marginTop: 'auto'
+    }
+})
 
 class SideBar extends Component {
     render() {
-        const { user, match, projects } = this.props
+        const { classes, user, match } = this.props
+
+        const userName =
+            user.providerData[0] && user.providerData[0].displayName
+
         return (
-            <Wrapper>
-                <Box
-                    flex
-                    flexDirection="column"
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
-                    flexGrow="1"
-                    textAlign="center"
-                    p="15px"
-                >
-                    <img height="40" src={logo} alt="open feedback logo" />
-
-                    <Box flex alignItems="flex-start">
-                        {user.providerData[0] && (
+            <MuiThemeProvider theme={innerTheme}>
+                <div className={classes.container}>
+                    <List component="nav">
+                        <ListItem className={classes.logoContainer}>
                             <img
-                                height="40"
-                                src={user.providerData[0].photoURL}
-                                alt="user"
+                                className={classes.logo}
+                                src={logo}
+                                alt="open feedback logo"
                             />
-                        )}
-                        <Box
-                            flex
-                            flexDirection="column"
-                            alignItems="flex-start"
-                        >
-                            {user.providerData[0] &&
-                                user.providerData[0].displayName}
-                            <button onClick={() => authProvider.signOut()}>
-                                Sign-out
-                            </button>
-                        </Box>
-                    </Box>
+                        </ListItem>
+                        <Divider />
+                    </List>
 
-                    {projects &&
-                        projects.map(project => (
-                            <Link
-                                key={project.id}
-                                to={`${match.url}/${project.id}`}
+                    <List
+                        component="nav"
+                        aria-label="main toto tutu"
+                        className={classes.list}
+                        subheader={
+                            <ListSubheader
+                                component="div"
+                                className={classes.header}
                             >
-                                {project.name}
-                            </Link>
-                        ))}
+                                DATA
+                            </ListSubheader>
+                        }
+                    >
+                        <ListItem
+                            button
+                            component={NavLink}
+                            to={`${match.url}/dashboard`}
+                        >
+                            <ListItemIcon>
+                                <ExploreIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                className={classes.listItemText}
+                                primary="Dashboard"
+                            />
+                        </ListItem>
+                        <ListItem
+                            button
+                            component={NavLink}
+                            to={`${match.url}/talks`}
+                        >
+                            <ListItemIcon>
+                                <SlideshowIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                className={classes.listItemText}
+                                primary="Talks"
+                            />
+                        </ListItem>
+                        <ListItem
+                            button
+                            component={NavLink}
+                            to={`${match.url}/speakers`}
+                        >
+                            <ListItemIcon>
+                                <RecordVoiceOverIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                className={classes.listItemText}
+                                primary="Speakers"
+                            />
+                        </ListItem>
+                    </List>
+                    <Divider />
 
-                    <Link to={`${match.url}/newProject`}>New project</Link>
-                </Box>
-            </Wrapper>
+                    <List
+                        component="nav"
+                        aria-label="main toto tutu"
+                        className={classes.list}
+                        subheader={
+                            <ListSubheader
+                                component="div"
+                                className={classes.header}
+                            >
+                                SETTINGS
+                            </ListSubheader>
+                        }
+                    >
+                        <ListItem
+                            button
+                            component={NavLink}
+                            to={`${match.url}/settings/event`}
+                        >
+                            <ListItemIcon>
+                                <EventNoteIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                className={classes.listItemText}
+                                primary="Event & theme"
+                            />
+                        </ListItem>
+                        <ListItem
+                            button
+                            component={NavLink}
+                            to={`${match.url}/settings/votingform`}
+                        >
+                            <ListItemIcon>
+                                <HowToVoteIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                className={classes.listItemText}
+                                primary="Voting form"
+                            />
+                        </ListItem>
+                        <ListItem
+                            button
+                            component={NavLink}
+                            to={`${match.url}/settings/setup`}
+                        >
+                            <ListItemIcon>
+                                <SettingsIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                className={classes.listItemText}
+                                primary="Setup"
+                            />
+                        </ListItem>
+                        <ListItem
+                            button
+                            component={NavLink}
+                            to={`${match.url}/settings/users`}
+                        >
+                            <ListItemIcon>
+                                <PeopleIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                className={classes.listItemText}
+                                primary="Users"
+                            />
+                        </ListItem>
+                    </List>
+                    <Divider />
+
+                    <List
+                        component="nav"
+                        aria-label="something"
+                        className={classes.userBox}
+                    >
+                        <ListItem>
+                            <ListItemAvatar>
+                                {user.providerData[0] && (
+                                    <Avatar
+                                        alt="user"
+                                        src={user.providerData[0].photoURL}
+                                    />
+                                )}
+                            </ListItemAvatar>
+                            <ListItemText primary={userName} />
+                            <ListItemSecondaryAction>
+                                <IconButton
+                                    edge="end"
+                                    aria-label="signout"
+                                    onClick={() => authProvider.signOut()}
+                                >
+                                    <PowerSettingsIcon />
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    </List>
+                </div>
+            </MuiThemeProvider>
         )
     }
 }
 
 const mapStateToProps = state => ({
-    user: getUserSelector(state),
-    projects: getSortedProjectsSelector(state)
+    user: getUserSelector(state)
 })
 
 const mapDispatchToProps = Object.assign(
@@ -87,4 +266,4 @@ const mapDispatchToProps = Object.assign(
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SideBar)
+)(withStyles(styles)(SideBar))

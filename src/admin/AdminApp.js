@@ -7,8 +7,12 @@ import ProjectDashboard from './project/dashboard/ProjectDashboard'
 import ProjectEdit from './project/ProjectEdit'
 import AdminRoot from './AdminRoot'
 import Project from './project/Project'
-import ProjectAdd from './project/new/ProjectNew'
 import Notifications from './notification/Notifications'
+import Talks from './project/talks/Talks'
+import Speakers from './project/speakers/Speakers'
+import VotingForm from './project/settings/votingForm/VotingForm'
+import Users from './project/settings/users/Users'
+import Setup from './project/settings/setup/Setup'
 
 class AdminApp extends Component {
     componentWillMount() {
@@ -29,15 +33,7 @@ class AdminApp extends Component {
 
                         <Route
                             exact
-                            path={`${match.url}/newProject`}
-                            render={props => (
-                                <ProjectAdd {...props} create={true} />
-                            )}
-                        />
-
-                        <Route
-                            exact
-                            path={`${match.url}/:projectId`}
+                            path={`${match.url}/dashboard`}
                             render={props => (
                                 <Project
                                     {...props}
@@ -49,13 +45,78 @@ class AdminApp extends Component {
                         />
                         <Route
                             exact
-                            path={`${match.url}/:projectId/edit`}
+                            path={`${match.url}/talks`}
+                            render={props => (
+                                <Project
+                                    {...props}
+                                    key={props.match.params.projectId}
+                                >
+                                    <Talks {...props} />
+                                </Project>
+                            )}
+                        />
+
+                        <Route
+                            exact
+                            path={`${match.url}/speakers`}
+                            render={props => (
+                                <Project
+                                    {...props}
+                                    key={props.match.params.projectId}
+                                >
+                                    <Speakers {...props} />
+                                </Project>
+                            )}
+                        />
+
+                        <Route
+                            exact
+                            path={`${match.url}/settings/event`}
                             render={props => (
                                 <Project
                                     {...props}
                                     key={props.match.params.projectId}
                                 >
                                     <ProjectEdit {...props} />
+                                </Project>
+                            )}
+                        />
+
+                        <Route
+                            exact
+                            path={`${match.url}/settings/votingform`}
+                            render={props => (
+                                <Project
+                                    {...props}
+                                    key={props.match.params.projectId}
+                                >
+                                    <VotingForm {...props} />
+                                </Project>
+                            )}
+                        />
+
+                        <Route
+                            exact
+                            path={`${match.url}/settings/setup`}
+                            render={props => (
+                                <Project
+                                    {...props}
+                                    key={props.match.params.projectId}
+                                >
+                                    <Setup {...props} />
+                                </Project>
+                            )}
+                        />
+
+                        <Route
+                            exact
+                            path={`${match.url}/settings/users`}
+                            render={props => (
+                                <Project
+                                    {...props}
+                                    key={props.match.params.projectId}
+                                >
+                                    <Users {...props} />
                                 </Project>
                             )}
                         />
