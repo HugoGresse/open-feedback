@@ -1,25 +1,27 @@
 import { createSelector } from 'reselect'
 
-import { getSpeakersList } from '../../speaker/core'
-import { getSessionsList } from '../../../core/sessions/sessionsSelectors'
-import { getProjectVoteResults } from '../../project/projectSelectors'
+import { getSpeakersListSelector } from '../../speaker/core/speakerSelectors'
+import { getSessionsListSelector } from '../../../core/sessions/sessionsSelectors'
+import { getProjectVoteResultsSelector } from '../../project/projectSelectors'
 
-export const getSession = state => state.session
+export const getSessionSelector = state => state.session
 
-export const getSelectedSessionId = state => getSession(state).selected
-export const getSessionLoadError = state => getSession(state).errorSessionLoad
+export const getSelectedSessionIdSelector = state =>
+    getSessionSelector(state).selected
+export const getSessionLoadErrorSelector = state =>
+    getSessionSelector(state).errorSessionLoad
 
-export const getSelectedSession = createSelector(
-    getSessionsList,
-    getSelectedSessionId,
+export const getSelectedSessionSelector = createSelector(
+    getSessionsListSelector,
+    getSelectedSessionIdSelector,
     (sessions, selectedSessionId) => {
         return sessions[selectedSessionId]
     }
 )
 
-export const getSpeakersForSelectedSession = createSelector(
-    getSelectedSession,
-    getSpeakersList,
+export const getSpeakersForSelectedSessionSelector = createSelector(
+    getSelectedSessionSelector,
+    getSpeakersListSelector,
     (session, speakers) => {
         if (!session || !session.speakers) return []
         return Object.values(speakers).filter(speaker => {
@@ -27,9 +29,9 @@ export const getSpeakersForSelectedSession = createSelector(
         })
     }
 )
-export const getVoteResultSelector = createSelector(
-    getSelectedSessionId,
-    getProjectVoteResults,
+export const getVoteResultSelectorSelector = createSelector(
+    getSelectedSessionIdSelector,
+    getProjectVoteResultsSelector,
     (selectedSessionId, voteResults) => {
         if (!voteResults || !voteResults[selectedSessionId]) {
             return []

@@ -1,11 +1,11 @@
 import { authProvider } from '../../firebase'
 import { LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT } from './authActionTypes'
-import { isLogged } from './authSelectors'
+import { isLoggedSelector } from './authSelectors'
 import { getVotes } from '../vote/voteActions'
 
 export const signIn = () => {
     return (dispatch, getState) => {
-        if (isLogged(getState())) {
+        if (isLoggedSelector(getState())) {
             return
         }
         authProvider.onAuthStateChanged(user => {

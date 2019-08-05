@@ -8,7 +8,7 @@ import { getUserSelector } from './auth/authSelectors'
 import { didSignIn, signOut } from './auth/authActions'
 import { authProvider } from '../firebase'
 import { Link } from 'react-router-dom'
-import { getProjectsSelector } from './project/core/projectSelectors'
+import { getSortedProjectsSelector } from './project/core/projectSelectors'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.EXTRA_LIGHT_GRAY};
@@ -73,7 +73,7 @@ class SideBar extends Component {
 
 const mapStateToProps = state => ({
     user: getUserSelector(state),
-    projects: getProjectsSelector(state)
+    projects: getSortedProjectsSelector(state)
 })
 
 const mapDispatchToProps = Object.assign(

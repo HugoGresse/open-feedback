@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {
-    getProjectsSelector,
+    getSortedProjectsSelector,
     isProjectsLoadedSelector
 } from './project/core/projectSelectors'
 import { connect } from 'react-redux'
@@ -22,7 +22,7 @@ class AdminRoot extends Component {
 }
 
 const mapStateToProps = state => ({
-    projects: getProjectsSelector(state),
+    projects: getSortedProjectsSelector(state),
     isProjectsLoaded: isProjectsLoadedSelector(state)
 })
 

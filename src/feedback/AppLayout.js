@@ -5,18 +5,18 @@ import { withStyles } from '@material-ui/core'
 import '../App.css'
 import { connect } from 'react-redux'
 import { setFavicon } from './layout/utils'
-import { authActions } from './auth'
+import * as authActions from './auth/authActions'
 import {
-    getProjectLoadError,
+    getProjectLoadErrorSelector,
     getProjectSelector,
-    getProjectVotesError
+    getProjectVotesErrorSelector
 } from './project/projectSelectors'
 import * as projectActions from './project/projectActions'
 import Error from '../baseComponents/customComponent/Error'
 import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent'
 import { getLoginErrorSelector } from './auth/authSelectors'
 import Footer from './layout/Footer'
-import { getSessionsDates } from '../core/sessions/sessionsSelectors'
+import { getSessionsDatesSelector } from '../core/sessions/sessionsSelectors'
 
 const styles = theme => ({
     loading: {
@@ -112,9 +112,9 @@ class AppLayout extends Component {
 
 const mapStateToProps = state => ({
     project: getProjectSelector(state),
-    dates: getSessionsDates(state),
-    projectLoadError: getProjectLoadError(state),
-    projectVotesError: getProjectVotesError(state),
+    dates: getSessionsDatesSelector(state),
+    projectLoadError: getProjectLoadErrorSelector(state),
+    projectVotesError: getProjectVotesErrorSelector(state),
     loginError: getLoginErrorSelector(state)
 })
 

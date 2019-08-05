@@ -17,10 +17,10 @@ import {
     nowTimestamp,
     serverTimestamp
 } from '../../firebase'
-import { getUser } from '../auth'
+import { getUserSelector } from '../auth/authSelectors'
 import { getProjectSelector } from '../project/projectSelectors'
-import { getVotesSelector } from './voteSelectors'
-import { INCREMENT_VOTE_LOCALY } from '../project/projectActionTypes'
+import { getCurrentUserVotesSelector } from './voteSelectors'
+import { INCREMENT_VOTE_LOCALLY } from '../project/projectActionTypes'
 import { VOTE_TYPE_TEXT } from './voteReducer'
 import { checkDateBeforeVote } from './checkDataBeforeVote'
 
@@ -39,7 +39,7 @@ export const voteFor = (sessionId, voteItem, data) => {
             id: new Date().getTime(),
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
-            userId: getUser(getState()).uid
+            userId: getUserSelector(getState()).uid
         }
 
         if (voteItem.type === VOTE_TYPE_TEXT) {
@@ -60,7 +60,7 @@ export const voteFor = (sessionId, voteItem, data) => {
         })
 
         dispatch({
-            type: INCREMENT_VOTE_LOCALY,
+            type: INCREMENT_VOTE_LOCALLY,
             payload: {
                 vote: voteContent,
                 amount: 1
@@ -101,7 +101,7 @@ export const voteFor = (sessionId, voteItem, data) => {
                 })
 
                 dispatch({
-                    type: INCREMENT_VOTE_LOCALY,
+                    type: INCREMENT_VOTE_LOCALLY,
                     payload: {
                         vote: voteContent,
                         amount: -1
@@ -113,7 +113,7 @@ export const voteFor = (sessionId, voteItem, data) => {
 
 export const removeVote = voteToDelete => {
     return (dispatch, getState) => {
-        if (getVotesSelector(getState())[voteToDelete.id].temp) {
+        if (getCurrentUserVotesSelector(getState())[voteToDelete.id].temp) {
             console.info(
                 'Unable to delete vote as it has not been writed on the database'
             )
@@ -130,7 +130,7 @@ export const removeVote = voteToDelete => {
         })
 
         dispatch({
-            type: INCREMENT_VOTE_LOCALY,
+            type: INCREMENT_VOTE_LOCALLY,
             payload: {
                 vote: voteToDelete,
                 amount: -1
@@ -159,7 +159,7 @@ export const removeVote = voteToDelete => {
                 })
 
                 dispatch({
-                    type: INCREMENT_VOTE_LOCALY,
+                    type: INCREMENT_VOTE_LOCALLY,
                     payload: {
                         vote: voteToDelete,
                         amount: 1
@@ -175,7 +175,7 @@ export const updateVote = (vote, data) => (dispatch, getState) => {
     }
 
     dispatch({
-        type: INCREMENT_VOTE_LOCALY,
+        type: INCREMENT_VOTE_LOCALLY,
         payload: {
             vote: {
                 ...vote,
@@ -223,7 +223,7 @@ export const getVotes = () => {
             .collection('projects')
             .doc(getProjectSelector(getState()).id)
             .collection('userVotes')
-            .where('userId', '==', getUser(getState()).uid)
+            .where('userId', '==', getUserSelector(getState()).uid)
             .get()
             .then(voteSnapshot => {
                 const votes = {}

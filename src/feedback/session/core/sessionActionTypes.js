@@ -1,3 +1,3 @@
-export const GET_SESSION_SUCCESS = 'GET_SESSION_SUCCESS'
-export const GET_SESSION_ERROR = 'GET_SESSION_ERROR'
-export const SET_SELECTED_SESSION = 'SET_SELECTED_SESSION'
+export const GET_SESSION_SUCCESS = 'session/get/success'
+export const GET_SESSION_ERROR = 'session/get/error'
+export const SET_SELECTED_SESSION = 'session/setSelected'
