@@ -4,10 +4,10 @@ import { getSessions } from '../../core/sessions/sessionsActions'
 import { setSelectedSession } from '../session/core/sessionActions'
 import * as speakerActions from './../speaker/core/speakerActions'
 import { setSelectedDate } from './../project/projectActions'
-import { getVotesBySession } from '../vote/voteSelectors'
+import { getVotesBySessionSelector } from '../vote/voteSelectors'
 
 import {
-    getCurrentSessionsGroupByTrack,
+    getCurrentSessionsGroupByTrackSelector,
     getSessionsLoadError,
     isSessionsLoadingSelector
 } from '../../core/sessions/sessionsSelectors'
@@ -71,9 +71,9 @@ class SessionsListWrapper extends Component {
 }
 
 const mapStateToProps = state => ({
-    userSessionVote: getVotesBySession(state),
+    userSessionVote: getVotesBySessionSelector(state),
     errorSessionsLoad: getSessionsLoadError(state),
-    currentSessionsByTrack: getCurrentSessionsGroupByTrack(state),
+    currentSessionsByTrack: getCurrentSessionsGroupByTrackSelector(state),
     sessionIsLoading: isSessionsLoadingSelector(state)
 })
 

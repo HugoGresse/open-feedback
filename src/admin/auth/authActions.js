@@ -1,10 +1,10 @@
 import { LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT } from './authActionTypes'
-import { isLogged } from './authSelectors'
+import { isLoggedSelector } from './authSelectors'
 import { authProvider } from '../../firebase'
 
 export const didSignIn = (user, error) => {
     return (dispatch, getState) => {
-        if (isLogged(getState())) {
+        if (isLoggedSelector(getState())) {
             return
         }
 

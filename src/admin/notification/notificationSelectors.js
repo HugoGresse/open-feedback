@@ -1,3 +1,3 @@
 const getNotifications = state => state.adminNotifications
-export const getLastNotifications = state =>
+export const getLastNotificationsSelector = state =>
     getNotifications(state).notifications[0]

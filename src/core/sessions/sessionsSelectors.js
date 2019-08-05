@@ -1,26 +1,29 @@
 import { createSelector } from 'reselect'
 import groupBy from 'lodash/groupBy'
 import { getDateFromStartTime } from './sessionsUtils'
-import { getProjectSelectedDate } from '../../feedback/project/projectSelectors'
-import { getSpeakersList } from '../../feedback/speaker/core/speakerSelectors'
+import { getProjectSelectedDateSelector } from '../../feedback/project/projectSelectors'
+import { getSpeakersListSelector } from '../../feedback/speaker/core/speakerSelectors'
 
-export const getSessions = state => state.sessions
+export const getSessionsSelector = state => state.sessions
 
-export const getSessionsList = state => getSessions(state).list
+export const getSessionsListSelector = state => getSessionsSelector(state).list
 
-export const getSessionsFilter = state => getSessions(state).filter || ''
+export const getSessionsFilterSelector = state =>
+    getSessionsSelector(state).filter || ''
 
 export const getSessionsLoadError = state =>
-    getSessions(state).errorSessionsLoad
+    getSessionsSelector(state).errorSessionsLoad
 
-export const isSessionsLoadingSelector = state => getSessions(state).loading
+export const isSessionsLoadingSelector = state =>
+    getSessionsSelector(state).loading
 
-export const isSessionLoadedSelector = state => getSessions(state).loaded
+export const isSessionLoadedSelector = state =>
+    getSessionsSelector(state).loaded
 
 //  MEMOIZED SELECTORS HERE
 
-export const getSessionsAsArray = createSelector(
-    getSessionsList,
+export const getSessionsAsArraySelector = createSelector(
+    getSessionsListSelector,
     sessions => {
         return Object.keys(sessions).reduce((acc, id) => {
             acc.push(sessions[id])
@@ -29,8 +32,8 @@ export const getSessionsAsArray = createSelector(
     }
 )
 
-export const getSessionsDates = createSelector(
-    getSessionsAsArray,
+export const getSessionsDatesSelector = createSelector(
+    getSessionsAsArraySelector,
     sessions => {
         return sessions
             .reduce((acc, session) => {
@@ -44,11 +47,11 @@ export const getSessionsDates = createSelector(
     }
 )
 
-export const getCurrentSessionsGroupByTrack = createSelector(
-    getSessionsAsArray,
-    getSessionsFilter,
-    getProjectSelectedDate,
-    getSpeakersList,
+export const getCurrentSessionsGroupByTrackSelector = createSelector(
+    getSessionsAsArraySelector,
+    getSessionsFilterSelector,
+    getProjectSelectedDateSelector,
+    getSpeakersListSelector,
     (sessions, filter, date, speakers) => {
         const cleanedFilterInput = filter.toLowerCase().trim()
 

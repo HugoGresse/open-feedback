@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { Link } from 'react-router-dom'
 import connect from 'react-redux/es/connect/connect'
-import { getSpeakersList } from '../speaker/core/speakerSelectors'
+import { getSpeakersListSelector } from '../speaker/core/speakerSelectors'
 import SpeakerList from '../speaker/SpeakerList'
 import { getDateFromStartTime } from '../../core/sessions/sessionsUtils'
 import { getProjectSelector } from '../project/projectSelectors'
@@ -77,7 +77,7 @@ SessionsItem.propTypes = {
 }
 
 const mapStateToProps = state => ({
-    speakersEntities: getSpeakersList(state),
+    speakersEntities: getSpeakersListSelector(state),
     currentProjectId: getProjectSelector(state).id
 })
 

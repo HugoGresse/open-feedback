@@ -14,16 +14,18 @@ export const getProjectFirebaseConfigSelector = state =>
 export const getProjectVoteItemsSelector = state =>
     getProjectSelector(state).voteItems
 
-export const getProjectVoteResults = state =>
+export const getProjectVoteResultsSelector = state =>
     getProjectSelector(state).sessionVotes
 
-export const getProjectLoadError = state => getProjects(state).projectLoadError
-export const getProjectSelectedDate = state => getProjects(state).selectedDate
+export const getProjectLoadErrorSelector = state =>
+    getProjects(state).projectLoadError
+export const getProjectSelectedDateSelector = state =>
+    getProjects(state).selectedDate
 
-export const getProjectVotesError = state =>
+export const getProjectVotesErrorSelector = state =>
     getProjects(state).projectVotesError
 
-export const getProjectChipColors = state =>
+export const getProjectChipColorsSelector = state =>
     getProjectSelector(state).chipColors
 
 //  MEMOIZED SELECTORS HERE
