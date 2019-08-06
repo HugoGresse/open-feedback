@@ -1,6 +1,6 @@
 export const SPACING = {
-    HEADER: 34,
-    LAYOUT: 16
+    HEADER: 4,
+    LAYOUT: 2
 }
 
 export const SCREEN_SIZES = {

@@ -32,14 +32,14 @@ const styles = theme => ({
         marginRight: 0,
         width: '100%',
         boxSizing: 'border-box',
-        [theme.breakpoints.up(900 + theme.spacing.unit * 3 * 2)]: {
+        [theme.breakpoints.up(900 + theme.spacing(6))]: {
             width: 900,
             marginLeft: 'auto',
             marginRight: 'auto'
         },
         [theme.breakpoints.down('sm')]: {
-            paddingLeft: theme.spacing.unit * 2,
-            paddingRight: theme.spacing.unit * 2
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2)
         }
     }
 })

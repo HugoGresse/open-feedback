@@ -28,7 +28,7 @@ class SessionsList extends Component {
                     {track.track}
                 </Title>
 
-                <Grid container spacing={16}>
+                <Grid container spacing={2}>
                     {track.sessions.map((session, key) => (
                         <SessionsItem
                             key={key}
