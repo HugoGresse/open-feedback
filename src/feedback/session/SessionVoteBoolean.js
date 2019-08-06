@@ -11,7 +11,7 @@ const styles = theme => ({
         margin: -1
     },
     item: {
-        padding: theme.spacing.unit * 2,
+        padding: theme.spacing(2),
         textAlign: 'center',
         fontSize: '17px',
         borderRadius: '0',
