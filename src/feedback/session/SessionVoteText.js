@@ -15,7 +15,7 @@ const styles = theme => ({
     },
     item: {
         overflow: 'hidden',
-        padding: theme.spacing.unit * 2,
+        padding: theme.spacing(2),
         textAlign: 'center',
         fontSize: '17px',
         borderRadius: '0',
@@ -54,7 +54,7 @@ const styles = theme => ({
         height: '100%'
     },
     leftIcon: {
-        marginRight: theme.spacing.unit,
+        marginRight: theme.spacing(1),
         fontSize: 20
     },
     buttonContainer: {

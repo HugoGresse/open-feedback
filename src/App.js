@@ -12,11 +12,7 @@ import AdminApp from './admin/AdminApp'
 
 const theme = createMuiTheme({
     typography: {
-        fontFamily: 'roboto, Helvetica, Arial, sans-serif',
-        useNextVariants: true
-    },
-    spacing: {
-        default: 16
+        fontFamily: 'roboto, Helvetica, Arial, sans-serif'
     }
 })
 
