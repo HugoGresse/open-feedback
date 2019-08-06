@@ -33,7 +33,7 @@ class AdminApp extends Component {
 
                         <Route
                             exact
-                            path={`${match.url}/dashboard`}
+                            path={`${match.url}/:projectId/dashboard`}
                             render={props => (
                                 <Project
                                     {...props}
@@ -45,7 +45,7 @@ class AdminApp extends Component {
                         />
                         <Route
                             exact
-                            path={`${match.url}/talks`}
+                            path={`${match.url}/:projectId/talks`}
                             render={props => (
                                 <Project
                                     {...props}
@@ -58,7 +58,7 @@ class AdminApp extends Component {
 
                         <Route
                             exact
-                            path={`${match.url}/speakers`}
+                            path={`${match.url}/:projectId/speakers`}
                             render={props => (
                                 <Project
                                     {...props}
@@ -71,7 +71,7 @@ class AdminApp extends Component {
 
                         <Route
                             exact
-                            path={`${match.url}/settings/event`}
+                            path={`${match.url}/:projectId/settings/event`}
                             render={props => (
                                 <Project
                                     {...props}
@@ -84,7 +84,7 @@ class AdminApp extends Component {
 
                         <Route
                             exact
-                            path={`${match.url}/settings/votingform`}
+                            path={`${match.url}/:projectId/settings/votingform`}
                             render={props => (
                                 <Project
                                     {...props}
@@ -97,7 +97,7 @@ class AdminApp extends Component {
 
                         <Route
                             exact
-                            path={`${match.url}/settings/setup`}
+                            path={`${match.url}/:projectId/settings/setup`}
                             render={props => (
                                 <Project
                                     {...props}
@@ -110,7 +110,7 @@ class AdminApp extends Component {
 
                         <Route
                             exact
-                            path={`${match.url}/settings/users`}
+                            path={`${match.url}/:projectId/settings/users`}
                             render={props => (
                                 <Project
                                     {...props}

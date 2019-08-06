@@ -13,7 +13,10 @@ class AdminRoot extends Component {
 
         if (isProjectsLoaded) {
             if (projects.length > 0) {
-                return <Redirect to={`${match.url}/${projects[0].id}`} />
+                const rootUrl = match.url.endsWith('/')
+                    ? match.url
+                    : match.url + '/'
+                return <Redirect to={`${rootUrl}${projects[0].id}/dashboard`} />
             }
             return <div>TODO : create new project button</div>
         }

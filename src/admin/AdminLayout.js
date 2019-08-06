@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import SideBar from './SideBar'
+import SideBar from './project/layout/SideBar'
 import Box from '../baseComponents/design/Box'
 import { connect } from 'react-redux'
 import { getProjects } from './project/core/projectActions'
+import { Grid } from '@material-ui/core'
+import Header from './project/layout/Header'
 
 class AdminLayout extends Component {
     componentWillMount() {
@@ -20,7 +22,16 @@ class AdminLayout extends Component {
                 textAlign="center"
             >
                 <SideBar match={this.props.match} />
-                <Box flexGrow="1">{this.props.children}</Box>
+                <Box flexGrow="1">
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <Header />
+                        </Grid>
+                        <Grid item xs={12}>
+                            {this.props.children}
+                        </Grid>
+                    </Grid>
+                </Box>
             </Box>
         )
     }

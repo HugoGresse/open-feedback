@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { COLORS } from '../constants/colors'
-import logo from '../assets/logo-openfeedback-color&white.png'
+import { COLORS } from '../../../constants/colors'
+import logo from '../../../assets/logo-openfeedback-color&white.png'
 import { connect } from 'react-redux'
-import { getUserSelector } from './auth/authSelectors'
-import { didSignIn, signOut } from './auth/authActions'
+import { getUserSelector } from '../../auth/authSelectors'
+import { didSignIn, signOut } from '../../auth/authActions'
 import { createMuiTheme, withStyles } from '@material-ui/core'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
@@ -24,7 +24,7 @@ import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver'
 import SettingsIcon from '@material-ui/icons/Settings'
 import SlideshowIcon from '@material-ui/icons/Slideshow'
 import IconButton from '@material-ui/core/IconButton'
-import { authProvider } from '../firebase'
+import { authProvider } from '../../../firebase'
 import { NavLink } from 'react-router-dom'
 
 const innerTheme = createMuiTheme({
@@ -33,7 +33,6 @@ const innerTheme = createMuiTheme({
     },
     palette: {
         type: 'dark',
-        useNextVariants: true
     }
 })
 
