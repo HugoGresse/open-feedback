@@ -8,7 +8,6 @@ import { createMuiTheme, withStyles } from '@material-ui/core'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Divider from '@material-ui/core/Divider'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -25,14 +24,11 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import SlideshowIcon from '@material-ui/icons/Slideshow'
 import IconButton from '@material-ui/core/IconButton'
 import { authProvider } from '../../../firebase'
-import { NavLink } from 'react-router-dom'
+import OFMenuItem from './OFMenuItem'
 
 const innerTheme = createMuiTheme({
-    typography: {
-        useNextVariants: true
-    },
     palette: {
-        type: 'dark',
+        type: 'dark'
     }
 })
 
@@ -43,7 +39,7 @@ const styles = theme => ({
         background: COLORS.ADMIN_BACKGROUND,
         height: '100vh',
         minWidth: '220px',
-        [theme.breakpoints.up(900 + theme.spacing.unit * 3 * 2)]: {
+        [theme.breakpoints.up(900 + theme.spacing(6))]: {
             width: 300
         },
         '& .active': {
@@ -108,45 +104,26 @@ class SideBar extends Component {
                             </ListSubheader>
                         }
                     >
-                        <ListItem
-                            button
-                            component={NavLink}
+                        <OFMenuItem
                             to={`${match.url}/dashboard`}
-                        >
-                            <ListItemIcon>
-                                <ExploreIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                className={classes.listItemText}
-                                primary="Dashboard"
-                            />
-                        </ListItem>
-                        <ListItem
-                            button
-                            component={NavLink}
+                            icon={<ExploreIcon />}
+                            text="Dashboard"
+                            textClassName={classes.listItemText}
+                        />
+
+                        <OFMenuItem
                             to={`${match.url}/talks`}
-                        >
-                            <ListItemIcon>
-                                <SlideshowIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                className={classes.listItemText}
-                                primary="Talks"
-                            />
-                        </ListItem>
-                        <ListItem
-                            button
-                            component={NavLink}
+                            text="Talks"
+                            icon={<SlideshowIcon />}
+                            textClassName={classes.listItemText}
+                        />
+
+                        <OFMenuItem
                             to={`${match.url}/speakers`}
-                        >
-                            <ListItemIcon>
-                                <RecordVoiceOverIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                className={classes.listItemText}
-                                primary="Speakers"
-                            />
-                        </ListItem>
+                            icon={<RecordVoiceOverIcon />}
+                            text="Speakers"
+                            textClassName={classes.listItemText}
+                        />
                     </List>
                     <Divider />
 
@@ -163,58 +140,30 @@ class SideBar extends Component {
                             </ListSubheader>
                         }
                     >
-                        <ListItem
-                            button
-                            component={NavLink}
+                        <OFMenuItem
+                            text="Event & Theme"
+                            textClassName={classes.listItemText}
+                            icon={<EventNoteIcon />}
                             to={`${match.url}/settings/event`}
-                        >
-                            <ListItemIcon>
-                                <EventNoteIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                className={classes.listItemText}
-                                primary="Event & theme"
-                            />
-                        </ListItem>
-                        <ListItem
-                            button
-                            component={NavLink}
+                        />
+                        <OFMenuItem
+                            text="Voting Form"
+                            textClassName={classes.listItemText}
+                            icon={<HowToVoteIcon />}
                             to={`${match.url}/settings/votingform`}
-                        >
-                            <ListItemIcon>
-                                <HowToVoteIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                className={classes.listItemText}
-                                primary="Voting form"
-                            />
-                        </ListItem>
-                        <ListItem
-                            button
-                            component={NavLink}
+                        />
+                        <OFMenuItem
+                            text="Setup"
+                            textClassName={classes.listItemText}
+                            icon={<SettingsIcon />}
                             to={`${match.url}/settings/setup`}
-                        >
-                            <ListItemIcon>
-                                <SettingsIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                className={classes.listItemText}
-                                primary="Setup"
-                            />
-                        </ListItem>
-                        <ListItem
-                            button
-                            component={NavLink}
+                        />
+                        <OFMenuItem
+                            text="Users"
+                            textClassName={classes.listItemText}
+                            icon={<PeopleIcon />}
                             to={`${match.url}/settings/users`}
-                        >
-                            <ListItemIcon>
-                                <PeopleIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                className={classes.listItemText}
-                                primary="Users"
-                            />
-                        </ListItem>
+                        />
                     </List>
                     <Divider />
 
@@ -232,7 +181,12 @@ class SideBar extends Component {
                                     />
                                 )}
                             </ListItemAvatar>
-                            <ListItemText primary={userName} />
+                            <ListItemText
+                                primaryTypographyProps={{
+                                    color: 'textPrimary'
+                                }}
+                                primary={userName}
+                            />
                             <ListItemSecondaryAction>
                                 <IconButton
                                     edge="end"

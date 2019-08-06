@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { COLORS } from '../../../constants/colors'
 import { connect } from 'react-redux'
-import { createMuiTheme, withStyles, useScrollTrigger } from '@material-ui/core'
-import useScrollTrigger from '@material-ui/core/useScrollTrigger'
+import { createMuiTheme, useScrollTrigger, withStyles } from '@material-ui/core'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import Slide from '@material-ui/core/Slide'
 import AppBar from '@material-ui/core/AppBar'
@@ -10,11 +9,8 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 
 const innerTheme = createMuiTheme({
-    typography: {
-        useNextVariants: true
-    },
     palette: {
-        //type: 'dark',
+        type: 'dark'
     }
 })
 
