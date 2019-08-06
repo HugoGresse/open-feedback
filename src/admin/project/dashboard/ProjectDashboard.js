@@ -36,7 +36,7 @@ class ProjectDashboard extends Component {
         }
 
         return (
-            <Grid container spacing={16}>
+            <Grid container>
                 <Grid item xs={12}>
                     {project.name} Dashboard
                     <br />
