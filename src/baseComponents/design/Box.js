@@ -9,6 +9,7 @@ import {
     flexDirection,
     fontSize,
     fontWeight,
+    height,
     justifyContent,
     maxWidth,
     space,
@@ -18,6 +19,7 @@ import {
 
 const BoxStyled = styled.div`
     ${width}
+    ${height}
     ${maxWidth}
     ${alignItems}
     ${space}

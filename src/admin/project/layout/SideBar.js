@@ -25,6 +25,8 @@ import SlideshowIcon from '@material-ui/icons/Slideshow'
 import IconButton from '@material-ui/core/IconButton'
 import { authProvider } from '../../../firebase'
 import OFMenuItem from './OFMenuItem'
+import { getSelectedProjectIdSelector } from '../core/projectSelectors'
+import RoutingMap from '../../RoutingMap'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -52,8 +54,8 @@ const styles = theme => ({
             borderRadius: 2
         }
     },
-    listItemText: {
-        paddingLeft: 0
+    listItemIcon: {
+        minWidth: 40
     },
     logoContainer: {
         justifyContent: 'center'
@@ -93,7 +95,7 @@ class SideBar extends Component {
 
                     <List
                         component="nav"
-                        aria-label="main toto tutu"
+                        aria-label="Main menu"
                         className={classes.list}
                         subheader={
                             <ListSubheader
@@ -105,31 +107,31 @@ class SideBar extends Component {
                         }
                     >
                         <OFMenuItem
-                            to={`${match.url}/dashboard`}
+                            to={`${match.url}${RoutingMap.dashboard.url}`}
                             icon={<ExploreIcon />}
-                            text="Dashboard"
-                            textClassName={classes.listItemText}
+                            text={RoutingMap.dashboard.name}
+                            iconClassName={classes.listItemIcon}
                         />
 
                         <OFMenuItem
-                            to={`${match.url}/talks`}
-                            text="Talks"
+                            to={`${match.url}${RoutingMap.talks.url}`}
+                            text={RoutingMap.talks.name}
                             icon={<SlideshowIcon />}
-                            textClassName={classes.listItemText}
+                            iconClassName={classes.listItemIcon}
                         />
 
                         <OFMenuItem
-                            to={`${match.url}/speakers`}
+                            to={`${match.url}${RoutingMap.speakers.url}`}
                             icon={<RecordVoiceOverIcon />}
-                            text="Speakers"
-                            textClassName={classes.listItemText}
+                            text={RoutingMap.speakers.name}
+                            iconClassName={classes.listItemIcon}
                         />
                     </List>
                     <Divider />
 
                     <List
                         component="nav"
-                        aria-label="main toto tutu"
+                        aria-label="Settings menu"
                         className={classes.list}
                         subheader={
                             <ListSubheader
@@ -141,28 +143,28 @@ class SideBar extends Component {
                         }
                     >
                         <OFMenuItem
-                            text="Event & Theme"
-                            textClassName={classes.listItemText}
+                            text={RoutingMap.settingEvent.name}
+                            iconClassName={classes.listItemIcon}
                             icon={<EventNoteIcon />}
-                            to={`${match.url}/settings/event`}
+                            to={`${match.url}${RoutingMap.settingEvent.url}`}
                         />
                         <OFMenuItem
-                            text="Voting Form"
-                            textClassName={classes.listItemText}
+                            text={RoutingMap.settingVotingform.name}
+                            iconClassName={classes.listItemIcon}
                             icon={<HowToVoteIcon />}
-                            to={`${match.url}/settings/votingform`}
+                            to={`${match.url}${RoutingMap.settingVotingform.url}`}
                         />
                         <OFMenuItem
-                            text="Setup"
-                            textClassName={classes.listItemText}
+                            text={RoutingMap.settingSetup.name}
+                            iconClassName={classes.listItemIcon}
                             icon={<SettingsIcon />}
-                            to={`${match.url}/settings/setup`}
+                            to={`${match.url}${RoutingMap.settingSetup.url}`}
                         />
                         <OFMenuItem
-                            text="Users"
-                            textClassName={classes.listItemText}
+                            text={RoutingMap.settingUsers.name}
+                            iconClassName={classes.listItemIcon}
                             icon={<PeopleIcon />}
-                            to={`${match.url}/settings/users`}
+                            to={`${match.url}${RoutingMap.settingUsers.url}`}
                         />
                     </List>
                     <Divider />
@@ -205,7 +207,8 @@ class SideBar extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: getUserSelector(state)
+    user: getUserSelector(state),
+    selectedProjectId: getSelectedProjectIdSelector(state)
 })
 
 const mapDispatchToProps = Object.assign(

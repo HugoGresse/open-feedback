@@ -1,40 +1,115 @@
-import React, { Component } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import SideBar from './project/layout/SideBar'
 import Box from '../baseComponents/design/Box'
 import { connect } from 'react-redux'
 import { getProjects } from './project/core/projectActions'
 import { Grid } from '@material-ui/core'
+import withStyles from '@material-ui/core/styles/withStyles'
 import Header from './project/layout/Header'
 
-class AdminLayout extends Component {
-    componentWillMount() {
-        this.props.getProjects()
+const styles = theme => ({
+    sidebar: {
+        overflow: 'auto',
+        flexGrow: 1
     }
+})
 
-    render() {
-        return (
-            <Box
-                flex
-                flexDirection="row"
-                justifyContent="flex-start"
-                alignItems="flex-start"
-                flexGrow="1"
-                textAlign="center"
-            >
-                <SideBar match={this.props.match} />
-                <Box flexGrow="1">
+function AdminLayout(props) {
+    const { classes, match, children, getProjects } = props
+
+    useEffect(() => {
+        getProjects()
+    }, [])
+
+    const [scrollTargetRef, setRef] = useState(undefined)
+
+    const scrollRef = useCallback(node => {
+        if (node !== null) {
+            setRef(node)
+        }
+    }, [])
+
+    return (
+        <Box
+            flex
+            flexDirection="row"
+            justifyContent="flex-start"
+            flexGrow="1"
+            textAlign="center"
+            height="100vh"
+        >
+            <SideBar match={match} className={classes.sidebar} />
+            <div className={classes.sidebar} ref={scrollRef}>
+                <Header refTarget={scrollTargetRef} />
+                <div>
                     <Grid container>
                         <Grid item xs={12}>
-                            <Header />
+                            {children}
                         </Grid>
                         <Grid item xs={12}>
-                            {this.props.children}
+                            <div className={classes.container}>
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                                Haa <br />
+                            </div>
                         </Grid>
                     </Grid>
-                </Box>
-            </Box>
-        )
-    }
+                </div>
+            </div>
+        </Box>
+    )
 }
 
 const mapStateToProps = state => ({})
@@ -49,4 +124,4 @@ const mapDispatchToProps = Object.assign(
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(AdminLayout)
+)(withStyles(styles)(AdminLayout))

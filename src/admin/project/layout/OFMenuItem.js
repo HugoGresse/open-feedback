@@ -6,15 +6,14 @@ import NavLinkMui from './NavLinkMui'
 
 class OFMenuItem extends Component {
     render() {
-        const { to, icon, text, textClassName } = this.props
+        const { to, icon, text, iconClassName } = this.props
         return (
             <ListItem button component={NavLinkMui} to={to}>
-                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemIcon className={iconClassName}>{icon}</ListItemIcon>
                 <ListItemText
                     primaryTypographyProps={{
                         color: 'textPrimary'
                     }}
-                    className={textClassName}
                     primary={text}
                 />
             </ListItem>
