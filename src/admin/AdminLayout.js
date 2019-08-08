@@ -46,65 +46,6 @@ function AdminLayout(props) {
                         <Grid item xs={12}>
                             {children}
                         </Grid>
-                        <Grid item xs={12}>
-                            <div className={classes.container}>
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                                Haa <br />
-                            </div>
-                        </Grid>
                     </Grid>
                 </div>
             </div>

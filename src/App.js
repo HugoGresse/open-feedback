@@ -2,13 +2,16 @@ import React, { Component } from 'react'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 
 import './App.css'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { Route, Router, Switch } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
 import Root from './root/Root'
 import Page404 from './Page404'
 import Session from './feedback/session/Session'
 import SessionsListWrapper from './feedback/sessions/SessionsListWrapper'
 import AppLayout from './feedback/AppLayout'
 import AdminApp from './admin/AdminApp'
+
+export const history = createBrowserHistory()
 
 const theme = createMuiTheme({
     typography: {
@@ -20,7 +23,7 @@ class App extends Component {
     render() {
         return (
             <MuiThemeProvider theme={theme}>
-                <BrowserRouter>
+                <Router history={history}>
                     <Switch>
                         <Route exact path="/" component={Root} />
                         <Route path="/admin" component={AdminApp} />
@@ -53,7 +56,7 @@ class App extends Component {
 
                         <Route component={Page404} />
                     </Switch>
-                </BrowserRouter>
+                </Router>
             </MuiThemeProvider>
         )
     }

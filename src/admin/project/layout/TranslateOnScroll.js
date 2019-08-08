@@ -4,12 +4,8 @@ import Translate from './Translate'
 
 function TranslateOnScroll(props) {
     const { children, window, refTarget } = props
-
     const newTarget = refTarget || window
-
     const trigger = useScrollTrigger({ target: newTarget })
-
-    console.log('IsCollapsed: ', trigger)
 
     return <Translate in={!trigger}>{children}</Translate>
 }

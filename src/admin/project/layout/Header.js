@@ -106,7 +106,7 @@ class Header extends Component {
             location
         } = this.props
 
-        const menuId = 'primary-search-account-menu'
+        const menuId = 'primary-project-selection-menu'
 
         // TODO : selectedProject should always be true after router refacto, remove those
         return (
