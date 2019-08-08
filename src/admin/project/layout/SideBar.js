@@ -64,9 +64,6 @@ const styles = theme => ({
         width: '80%',
         maxWidth: '150px'
     },
-    header: {
-        textAlign: 'left'
-    },
     userBox: {
         marginTop: 'auto'
     }
@@ -98,12 +95,7 @@ class SideBar extends Component {
                         aria-label="Main menu"
                         className={classes.list}
                         subheader={
-                            <ListSubheader
-                                component="div"
-                                className={classes.header}
-                            >
-                                DATA
-                            </ListSubheader>
+                            <ListSubheader component="div">DATA</ListSubheader>
                         }
                     >
                         <OFMenuItem
@@ -134,10 +126,7 @@ class SideBar extends Component {
                         aria-label="Settings menu"
                         className={classes.list}
                         subheader={
-                            <ListSubheader
-                                component="div"
-                                className={classes.header}
-                            >
+                            <ListSubheader component="div">
                                 SETTINGS
                             </ListSubheader>
                         }

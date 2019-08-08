@@ -29,8 +29,7 @@ const innerTheme = createMuiTheme({
 
 const styles = () => ({
     appbar: {
-        background: COLORS.RED_ORANGE,
-        textAlign: 'left'
+        background: COLORS.RED_ORANGE
     },
     topHeader: {
         marginTop: 20,

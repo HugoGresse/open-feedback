@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import {
     alignItems,
+    background,
     borderRadius,
     color,
     display,
@@ -32,6 +33,7 @@ const BoxStyled = styled.div`
     ${flexDirection}
     ${flexBasis}
     ${display}
+    ${background}
 
     ${props =>
         props.flex &&

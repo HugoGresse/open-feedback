@@ -6,7 +6,11 @@ import {
 } from './core/projectSelectors'
 import { selectProject } from './core/projectActions'
 
+/**
+ * @return {string}
+ */
 function Project({ selectProject, selectedProjectId, children, match }) {
+    console.log('First render, selected: ' + selectedProjectId)
     useEffect(() => selectProject(match.params.projectId), [])
 
     if (selectedProjectId) return children
