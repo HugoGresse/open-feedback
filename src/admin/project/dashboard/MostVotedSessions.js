@@ -34,7 +34,7 @@ class MostVotedSessions extends Component {
                     {mostVotedSessions.map(row => (
                         <React.Fragment key={row.sessionId}>
                             <Grid item xs={10} className={classes.title}>
-                                <Typography component="body1">
+                                <Typography variant="body1">
                                     {row.title}
                                 </Typography>
                             </Grid>
