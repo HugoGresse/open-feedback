@@ -71,7 +71,7 @@ const styles = theme => ({
 
 class SideBar extends Component {
     render() {
-        const { classes, user, match } = this.props
+        const { classes, user, match, selectedProjectId } = this.props
 
         const userName =
             user.providerData[0] && user.providerData[0].displayName
@@ -99,21 +99,21 @@ class SideBar extends Component {
                         }
                     >
                         <OFMenuItem
-                            to={`${match.url}${RoutingMap.dashboard.url}`}
+                            to={`${match.url}/${selectedProjectId}${RoutingMap.dashboard.url}`}
                             icon={<ExploreIcon />}
                             text={RoutingMap.dashboard.name}
                             iconClassName={classes.listItemIcon}
                         />
 
                         <OFMenuItem
-                            to={`${match.url}${RoutingMap.talks.url}`}
+                            to={`${match.url}/${selectedProjectId}${RoutingMap.talks.url}`}
                             text={RoutingMap.talks.name}
                             icon={<SlideshowIcon />}
                             iconClassName={classes.listItemIcon}
                         />
 
                         <OFMenuItem
-                            to={`${match.url}${RoutingMap.speakers.url}`}
+                            to={`${match.url}/${selectedProjectId}${RoutingMap.speakers.url}`}
                             icon={<RecordVoiceOverIcon />}
                             text={RoutingMap.speakers.name}
                             iconClassName={classes.listItemIcon}
@@ -135,25 +135,25 @@ class SideBar extends Component {
                             text={RoutingMap.settingEvent.name}
                             iconClassName={classes.listItemIcon}
                             icon={<EventNoteIcon />}
-                            to={`${match.url}${RoutingMap.settingEvent.url}`}
+                            to={`${match.url}/${selectedProjectId}${RoutingMap.settingEvent.url}`}
                         />
                         <OFMenuItem
                             text={RoutingMap.settingVotingform.name}
                             iconClassName={classes.listItemIcon}
                             icon={<HowToVoteIcon />}
-                            to={`${match.url}${RoutingMap.settingVotingform.url}`}
+                            to={`${match.url}/${selectedProjectId}${RoutingMap.settingVotingform.url}`}
                         />
                         <OFMenuItem
                             text={RoutingMap.settingSetup.name}
                             iconClassName={classes.listItemIcon}
                             icon={<SettingsIcon />}
-                            to={`${match.url}${RoutingMap.settingSetup.url}`}
+                            to={`${match.url}/${selectedProjectId}${RoutingMap.settingSetup.url}`}
                         />
                         <OFMenuItem
                             text={RoutingMap.settingUsers.name}
                             iconClassName={classes.listItemIcon}
                             icon={<PeopleIcon />}
-                            to={`${match.url}${RoutingMap.settingUsers.url}`}
+                            to={`${match.url}/${selectedProjectId}${RoutingMap.settingUsers.url}`}
                         />
                     </List>
                     <Divider />
