@@ -43,11 +43,6 @@ const LoaderMatchParentStyled = styled.div`
 const styles = () => ({})
 
 class LoaderMatchParent extends Component {
-    static defaultProps = {
-        height: '100vh',
-        maxWidth: '100%'
-    }
-
     render() {
         return (
             <LoaderMatchParentStyled {...this.props}>
@@ -55,6 +50,11 @@ class LoaderMatchParent extends Component {
             </LoaderMatchParentStyled>
         )
     }
+}
+
+LoaderMatchParent.defaultProps = {
+    height: '100vh',
+    maxWidth: '100%'
 }
 
 export default withStyles(styles)(LoaderMatchParent)

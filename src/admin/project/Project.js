@@ -10,11 +10,9 @@ import { selectProject } from './core/projectActions'
  * @return {string}
  */
 function Project({ selectProject, selectedProjectId, children, match }) {
-    console.log('First render, selected: ' + selectedProjectId)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         selectProject(match.params.projectId)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     if (selectedProjectId) return children
