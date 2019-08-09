@@ -107,7 +107,6 @@ class Header extends Component {
 
         const menuId = 'primary-project-selection-menu'
 
-        // TODO : selectedProject should always be true after router refacto, remove those
         return (
             <MuiThemeProvider theme={innerTheme}>
                 <TranslateOnScroll refTarget={refTarget}>
