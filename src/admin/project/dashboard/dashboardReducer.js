@@ -3,6 +3,7 @@ import {
     GET_SESSION_VOTES_SUCCESS,
     GET_USER_VOTES_SUCCESS
 } from './dashboardActionTypes'
+import { LOGOUT } from '../../auth/authActionTypes'
 
 const initState = {
     data: {
@@ -34,6 +35,7 @@ const adminDashboardReducer = (state = initState, { payload, type }) => {
                 },
                 userVotesLoaded: true
             }
+        case LOGOUT:
         case CLEAR_SESSION_VOTES:
             return initState
         default:

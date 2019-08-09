@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { setFavicon } from '../feedback/layout/utils'
 import Login from './auth/Login'
-import { Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import AdminLayout from './AdminLayout'
 import ProjectDashboard from './project/dashboard/ProjectDashboard'
 import ProjectEdit from './project/ProjectEdit'
@@ -15,7 +15,6 @@ import Users from './project/settings/users/Users'
 import Setup from './project/settings/setup/Setup'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
 import RoutingMap from './RoutingMap'
-import Redirect from 'react-router-dom/es/Redirect'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -55,10 +54,17 @@ class AdminApp extends Component {
                         <AdminLayout match={match}>
                             <Switch>
                                 <Redirect
+                                    strict
                                     exact
                                     from={`${match.url}/:projectId`}
+                                    to={`${match.url}/:projectId/`}
+                                />
+                                <Redirect
+                                    exact
+                                    from={`${match.url}/:projectId/`}
                                     to={`${match.url}/:projectId${RoutingMap.dashboard.url}`}
                                 />
+
                                 <Route
                                     exact
                                     path={`${match.url}/:projectId${RoutingMap.dashboard.url}`}

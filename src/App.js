@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 
 import './App.css'
-import { Route, Router, Switch } from 'react-router-dom'
+import { Redirect, Route, Router, Switch } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import Root from './root/Root'
 import Page404 from './Page404'
@@ -26,7 +26,10 @@ class App extends Component {
                 <Router history={history}>
                     <Switch>
                         <Route exact path="/" component={Root} />
-                        <Route path="/admin" component={AdminApp} />
+
+                        <Redirect strict exact from="/admin" to="/admin/" />
+                        <Route path="/admin/" component={AdminApp} />
+
                         <Route
                             exact
                             path="/:projectId"
