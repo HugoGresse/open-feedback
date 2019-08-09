@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import {
     alignItems,
+    background,
     borderRadius,
     color,
     display,
@@ -9,6 +10,7 @@ import {
     flexDirection,
     fontSize,
     fontWeight,
+    height,
     justifyContent,
     maxWidth,
     space,
@@ -18,6 +20,7 @@ import {
 
 const BoxStyled = styled.div`
     ${width}
+    ${height}
     ${maxWidth}
     ${alignItems}
     ${space}
@@ -30,6 +33,7 @@ const BoxStyled = styled.div`
     ${flexDirection}
     ${flexBasis}
     ${display}
+    ${background}
 
     ${props =>
         props.flex &&

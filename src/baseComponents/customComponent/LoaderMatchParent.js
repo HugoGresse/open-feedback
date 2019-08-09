@@ -1,37 +1,60 @@
 import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import styled from 'styled-components'
 
-const styles = theme => ({
-    root: {
-        maxWidth: '100%',
-        textAlign: 'center',
-        display: 'flex',
-        alignItems: 'center',
-        height: '100vh',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        opacity: 0,
-        transition: 'all 1s ease-in',
-        animation: '1s appearDelayed',
-        animationDelay: '500ms',
-        animationFillMode: 'forwards'
-    },
-    '@keyframes appearDelayed': {
-        from: { opacity: 0 },
-        to: { opacity: 1 }
+const LoaderMatchParentStyled = styled.div`
+    
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    opacity: 1;
+    transition: all 1s ease-in;
+    animation: 1s appearDelayed;
+    animation-delay: 500ms;
+    animation-fill-mode: forwards;
+        
+    @keyframes appearDelayed {
+        from: {opacity: 0;}
+        to: {opacity: 1;}
     }
-})
+    
+    ${props =>
+        props.width &&
+        `
+    width: ${props.width};
+    `}
+    
+    ${props =>
+        props.height &&
+        `
+    height: ${props.height};
+    `}
+    
+    ${props =>
+        props.maxWidth &&
+        `
+    maxWidth: ${props.maxWidth};
+    `}
+`
+
+const styles = () => ({})
 
 class LoaderMatchParent extends Component {
     render() {
-        const { classes } = this.props
         return (
-            <div className={classes.root}>
+            <LoaderMatchParentStyled {...this.props}>
                 <CircularProgress />
-            </div>
+            </LoaderMatchParentStyled>
         )
     }
+}
+
+LoaderMatchParent.defaultProps = {
+    height: '100vh',
+    maxWidth: '100%'
 }
 
 export default withStyles(styles)(LoaderMatchParent)

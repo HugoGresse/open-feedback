@@ -15,6 +15,7 @@ import { getSelectedProjectIdSelector } from './projectSelectors'
 import { ADD_NOTIFICATION } from '../../notification/notificationActionTypes'
 import { CLEAR_SESSIONS } from '../../../core/sessions/sessionsActionTypes'
 import { CLEAR_SESSION_VOTES } from '../dashboard/dashboardActionTypes'
+import { history } from '../../../App'
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -70,7 +71,8 @@ export const getProject = () => {
 }
 
 export const selectProject = projectId => (dispatch, getState) => {
-    if (getSelectedProjectIdSelector(getState()) === projectId) {
+    const currentSelectedProjectId = getSelectedProjectIdSelector(getState())
+    if (currentSelectedProjectId === projectId) {
         // Project already selected (HMR potentially)
         return
     }
@@ -87,6 +89,26 @@ export const selectProject = projectId => (dispatch, getState) => {
         type: SELECT_PROJECT,
         payload: projectId
     })
+
+    // If we have switch the project at runtime
+    if (
+        currentSelectedProjectId &&
+        history.location.pathname.includes(currentSelectedProjectId)
+    ) {
+        const redirectUrl = history.location.pathname.replace(
+            currentSelectedProjectId,
+            projectId
+        )
+
+        history.push(redirectUrl)
+    } else if (
+        !currentSelectedProjectId &&
+        history.location.pathname.includes(projectId)
+    ) {
+        // No nothing, hard refresh, id in url but not in states
+    } else {
+        history.push(`${history.location.pathname}${projectId}`)
+    }
 }
 
 export const editProject = projectData => (dispatch, getState) => {

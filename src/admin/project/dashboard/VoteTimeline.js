@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getVotesByHourSelector } from './dashboardSelectors'
-import Paper from '@material-ui/core/Paper'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import XAxis from 'recharts/es6/cartesian/XAxis'
 import YAxis from 'recharts/es6/cartesian/YAxis'
@@ -9,6 +8,8 @@ import Tooltip from 'recharts/es6/component/Tooltip'
 import AreaChart from 'recharts/es6/chart/AreaChart'
 import Area from 'recharts/es6/cartesian/Area'
 import ResponsiveContainer from 'recharts/es6/component/ResponsiveContainer'
+import DashboardCard from '../../baseComponents/DashboardCard'
+import InsertChartOutlined from '@material-ui/icons/InsertChartOutlined'
 
 class VoteTimeline extends Component {
     render() {
@@ -19,7 +20,10 @@ class VoteTimeline extends Component {
         }
 
         return (
-            <Paper>
+            <DashboardCard
+                title="Votes per hour"
+                titleIcon={<InsertChartOutlined />}
+            >
                 <ResponsiveContainer height={250} width="80%">
                     <AreaChart data={votesByHour} strokeWidth={2}>
                         <defs>
@@ -76,7 +80,7 @@ class VoteTimeline extends Component {
                         />
                     </AreaChart>
                 </ResponsiveContainer>
-            </Paper>
+            </DashboardCard>
         )
     }
 }
