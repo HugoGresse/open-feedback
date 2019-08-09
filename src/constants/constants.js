@@ -10,5 +10,3 @@ export const SCREEN_SIZES = {
     LG: '1280px',
     XL: '1920px'
 }
-
-export const MAIN_ADMINISTRATOR = 'hugo.gresse@gmail.com'
