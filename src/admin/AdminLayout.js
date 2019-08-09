@@ -36,7 +36,7 @@ function AdminLayout(props) {
 
     useEffect(() => {
         getProjects()
-    }, [])
+    }, [getProjects])
 
     const [scrollTargetRef, setRef] = useState(undefined)
 

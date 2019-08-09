@@ -90,12 +90,19 @@ export const selectProject = projectId => (dispatch, getState) => {
         payload: projectId
     })
 
-    const redirectUrl = history.location.pathname.replace(
-        currentSelectedProjectId,
-        projectId
-    )
+    if (
+        currentSelectedProjectId &&
+        history.location.pathname.includes(currentSelectedProjectId)
+    ) {
+        const redirectUrl = history.location.pathname.replace(
+            currentSelectedProjectId,
+            projectId
+        )
 
-    history.push(redirectUrl)
+        history.push(redirectUrl)
+    } else {
+        history.push(`${history.location.pathname}${projectId}`)
+    }
 }
 
 export const editProject = projectData => (dispatch, getState) => {
