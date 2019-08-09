@@ -20,7 +20,7 @@
         "moment": "^2.23.0",
         "polished": "^3.4.1",
         "prop-types": "latest",
-        "react": "^16.8.6",
+        "react": "^16.9.0",
         "react-dom": "^16.8.6",
         "react-firebaseui": "^3.1.2",
         "react-ga": "^2.6.0",
