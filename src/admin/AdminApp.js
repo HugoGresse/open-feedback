@@ -15,6 +15,7 @@ import Users from './project/settings/users/Users'
 import Setup from './project/settings/setup/Setup'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
 import RoutingMap from './RoutingMap'
+import Redirect from 'react-router-dom/es/Redirect'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -53,6 +54,11 @@ class AdminApp extends Component {
 
                         <AdminLayout match={match}>
                             <Switch>
+                                <Redirect
+                                    exact
+                                    from={`${match.url}/:projectId`}
+                                    to={`${match.url}/:projectId${RoutingMap.dashboard.url}`}
+                                />
                                 <Route
                                     exact
                                     path={`${match.url}/:projectId${RoutingMap.dashboard.url}`}

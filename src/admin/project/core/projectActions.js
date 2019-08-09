@@ -90,6 +90,7 @@ export const selectProject = projectId => (dispatch, getState) => {
         payload: projectId
     })
 
+    // If we have switch the project at runtime
     if (
         currentSelectedProjectId &&
         history.location.pathname.includes(currentSelectedProjectId)
@@ -100,6 +101,11 @@ export const selectProject = projectId => (dispatch, getState) => {
         )
 
         history.push(redirectUrl)
+    } else if (
+        !currentSelectedProjectId &&
+        history.location.pathname.includes(projectId)
+    ) {
+        // No nothing, had refresh, id in url but not in states
     } else {
         history.push(`${history.location.pathname}${projectId}`)
     }
