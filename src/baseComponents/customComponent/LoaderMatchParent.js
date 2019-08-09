@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-const styles = theme => ({
+const styles = () => ({
     root: {
         maxWidth: '100%',
         textAlign: 'center',
@@ -13,7 +13,7 @@ const styles = theme => ({
         flexDirection: 'column',
         opacity: 0,
         transition: 'all 1s ease-in',
-        animation: '1s appearDelayed',
+        animation: '1s $appearDelayed',
         animationDelay: '500ms',
         animationFillMode: 'forwards'
     },
