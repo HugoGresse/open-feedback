@@ -105,7 +105,7 @@ export const selectProject = projectId => (dispatch, getState) => {
         !currentSelectedProjectId &&
         history.location.pathname.includes(projectId)
     ) {
-        // No nothing, had refresh, id in url but not in states
+        // No nothing, hard refresh, id in url but not in states
     } else {
         history.push(`${history.location.pathname}${projectId}`)
     }
