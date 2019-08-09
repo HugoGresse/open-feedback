@@ -1,6 +1,7 @@
 import { LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT } from './authActionTypes'
 import { isLoggedSelector } from './authSelectors'
 import { authProvider } from '../../firebase'
+import { history } from '../../App'
 
 export const didSignIn = (user, error) => {
     return (dispatch, getState) => {
@@ -35,6 +36,7 @@ export const signOut = () => {
             dispatch({
                 type: LOGOUT
             })
+            history.push('/admin/')
         })
     }
 }

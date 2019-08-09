@@ -21,11 +21,7 @@ const initState = {
 const projectReducer = (state = initState, { payload, type }) => {
     switch (type) {
         case LOGOUT:
-            return {
-                ...state,
-                data: initState.data,
-                projectsLoaded: initState.projectsLoaded
-            }
+            return initState
         case GET_PROJECTS_SUCCESS:
             return {
                 ...state,

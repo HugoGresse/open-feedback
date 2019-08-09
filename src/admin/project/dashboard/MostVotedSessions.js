@@ -2,48 +2,54 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent'
 import { getMostVotedSessionSelector } from './dashboardSelectors'
-import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableCell from '@material-ui/core/TableCell'
-import TableBody from '@material-ui/core/TableBody'
-import Paper from '@material-ui/core/Paper'
-import Title from '../../../baseComponents/design/Title'
+import withStyles from '@material-ui/core/styles/withStyles'
+import WhatshotIcon from '@material-ui/icons/WhatshotOutlined'
+import DashboardCard from '../../baseComponents/DashboardCard'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
+import COLORS from '../../../constants/colors'
+
+const styles = () => ({
+    title: {
+        padding: 0
+    },
+    count: {
+        color: COLORS.RED_ORANGE,
+        fontSize: 16,
+        fontWeight: 'bold'
+    }
+})
 
 class MostVotedSessions extends Component {
     render() {
-        const { mostVotedSessions } = this.props
+        const { mostVotedSessions, classes } = this.props
 
         if (!mostVotedSessions) {
             return <LoaderMatchParent />
         }
 
         return (
-            <Paper>
-                <Title>Most Voted sessions</Title>
-                {mostVotedSessions.length > 0 && (
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Session</TableCell>
-                                <TableCell align="right">Votes</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {mostVotedSessions.map(row => (
-                                <TableRow key={row.sessionId}>
-                                    <TableCell component="th" scope="row">
-                                        {row.title}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {row.voteCount}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                )}
-            </Paper>
+            <DashboardCard title="Most voted" titleIcon={<WhatshotIcon />}>
+                <Grid container spacing={2}>
+                    {mostVotedSessions.map(row => (
+                        <React.Fragment key={row.sessionId}>
+                            <Grid item xs={10} className={classes.title}>
+                                <Typography variant="body1">
+                                    {row.title}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Typography
+                                    align="right"
+                                    className={classes.count}
+                                >
+                                    {row.voteCount}
+                                </Typography>
+                            </Grid>
+                        </React.Fragment>
+                    ))}
+                </Grid>
+            </DashboardCard>
         )
     }
 }
@@ -55,4 +61,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     {}
-)(MostVotedSessions)
+)(withStyles(styles)(MostVotedSessions))

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
-import { Link } from 'react-router-dom'
 import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent'
 import { getSessionVotes, getUserVotes } from './dashboardActions'
 import { getSessions } from '../../../core/sessions/sessionsActions'
@@ -29,19 +28,14 @@ class ProjectDashboard extends Component {
     }
 
     render() {
-        const { project, match } = this.props
+        const { project } = this.props
 
         if (!project) {
             return <LoaderMatchParent />
         }
 
         return (
-            <Grid container>
-                <Grid item xs={12}>
-                    {project.name} Dashboard
-                    <br />
-                    <Link to={`${match.url}/edit`}>Edit</Link>
-                </Grid>
+            <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
                     <MostVotedSessions />
                 </Grid>
