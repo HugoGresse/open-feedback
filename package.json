@@ -7,7 +7,7 @@
         "husky": "^3.0.3",
         "lint-staged": "^9.2.1",
         "prettier": "^1.18.2",
-        "react-scripts": "3.0.1"
+        "react-scripts": "3.1.0"
     },
     "dependencies": {
         "@material-ui/core": "^4.3.1",
