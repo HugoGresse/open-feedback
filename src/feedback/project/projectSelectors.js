@@ -8,8 +8,10 @@ const getProjectsData = state => state.project.data
 export const getProjectSelector = state =>
     getProjectsData(state).id ? getProjectsData(state) : null
 
-export const getProjectFirebaseConfigSelector = state =>
-    getProjectSelector(state).firebaseConfig
+export const getProjectConfigSelector = state =>
+    getProjectSelector(state).config
+        ? getProjectSelector(state).config
+        : getProjectSelector(state).firebaseConfig
 
 export const getProjectVoteItemsSelector = state =>
     getProjectSelector(state).voteItems
