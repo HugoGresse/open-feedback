@@ -1,9 +1,6 @@
 import firebase from 'firebase/app'
 import { formatSessionsWithScheduled } from '../../sessions/sessionsUtils'
-import {
-    getProjectConfigSelector,
-    getProjectSelector
-} from '../../../feedback/project/projectSelectors'
+import { getProjectConfigSelector } from '../../../feedback/project/projectSelectors'
 
 class Hoverboardv2Api {
     constructor(project) {
@@ -35,16 +32,9 @@ class Hoverboardv2Api {
             ([resultSchedule, resultSessions]) => {
                 let sessions = {}
                 let schedule = []
-                let temp
                 resultSessions.forEach(doc => {
-                    temp = doc.data()
-                    if (temp.hideInFeedback) {
-                        // TODO: move this to the selector?
-                        // Some sessions are not display (break time, etc)
-                        return
-                    }
                     sessions[doc.id] = {
-                        ...temp,
+                        ...doc.data(),
                         id: doc.id
                     }
                 })
@@ -92,16 +82,9 @@ class Hoverboardv2Api {
             .then(speakersSnapshot => {
                 let speakers = {}
 
-                // TODO : move this to the selector
-                const websiteLink = getProjectSelector(state).websiteLink
-                let temp
                 speakersSnapshot.forEach(doc => {
                     speakers[doc.id] = doc.data()
                     speakers[doc.id].id = doc.id
-                    temp = speakers[doc.id].photoUrl
-                    if (temp && !temp.startsWith('http')) {
-                        speakers[doc.id].photoUrl = websiteLink + temp
-                    }
                 })
 
                 return speakers
