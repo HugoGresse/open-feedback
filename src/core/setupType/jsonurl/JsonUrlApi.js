@@ -9,7 +9,7 @@ class JsonUrlApi {
         }
     }
 
-    getJsonData(state) {
+    getJsonData() {
         if (data) {
             return Promise.resolve(data)
         }

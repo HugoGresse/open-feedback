@@ -16,7 +16,7 @@ class Hoverboardv2Api {
         firebase.initializeApp(config, config.projectId)
     }
 
-    getFirestore = state => {
+    getFirestore(state) {
         return firebase
             .app(getProjectConfigSelector(state).projectId)
             .firestore()
