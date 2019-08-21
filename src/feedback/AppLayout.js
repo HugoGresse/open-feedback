@@ -45,19 +45,20 @@ const styles = theme => ({
 })
 
 class AppLayout extends Component {
-    componentWillMount() {
-        const id = this.props.match.params.projectId
-        this.props.getProject(id)
+    componentDidMount() {
+        if (!this.props.project) {
+            this.props.getProject(this.props.match.params.projectId)
+        }
     }
 
-    componentWillReceiveProps(nextProps, nextContext) {
-        const { date, projectId } = this.props.match.params
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const { date, projectId } = prevProps.match.params
 
-        if (!date && nextProps.dates.length > 0) {
-            this.props.history.replace(`/${projectId}/${nextProps.dates[0]}`)
+        if (!date && this.props.dates.length > 0) {
+            this.props.history.replace(`/${projectId}/${this.props.dates[0]}`)
         }
-        if (nextProps.project && !this.props.project) {
-            const project = nextProps.project
+        if (!prevProps.project && this.props.project) {
+            const project = this.props.project
             document.title = project.name + ' - Feedback'
             setFavicon(project.favicon)
             this.props.signIn()
