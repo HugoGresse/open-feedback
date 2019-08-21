@@ -7,8 +7,9 @@ import {
     GET_PROJECT_VOTE_RESULT_SUCCESS,
     SET_SELECTED_DATE
 } from './projectActionTypes'
-import { fireStoreMainInstance, initFireStoreSchedule } from '../../firebase'
+import { fireStoreMainInstance } from '../../firebase'
 import { getProjectSelector } from './projectSelectors'
+import { initProjectApi } from '../../core/setupType/projectApi'
 
 export const getProject = projectId => {
     return (dispatch, getState) => {
@@ -21,7 +22,7 @@ export const getProject = projectId => {
                     const project = projectSnapshot.data()
                     project.id = projectId
 
-                    initFireStoreSchedule(project.firebaseConfig)
+                    initProjectApi(project.setupType, project)
 
                     dispatch({
                         type: GET_PROJECT_SUCCESS,
