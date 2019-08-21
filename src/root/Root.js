@@ -5,7 +5,7 @@ import Footer from './Footer'
 import HowItWorks from './HowItWorks'
 
 class Root extends Component {
-    componentWillMount() {
+    componentDidMount() {
         setFavicon('/favicon-root.ico')
     }
 

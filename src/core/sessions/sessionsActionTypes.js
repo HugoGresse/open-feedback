@@ -1,5 +1,5 @@
 export const GET_SESSIONS_SUCCESS = 'core/sessions/get/success'
-export const GET_SESSIONS_LOADING = 'core/session/get/loading'
+export const GET_SESSIONS_LOADING = 'core/sessions/get/loading'
 export const GET_SESSIONS_ERROR = 'core/sessions/get/error'
 export const CLEAR_SESSIONS = 'core/sessions/clear'
 export const SET_SESSIONS_FILTER = 'core/sessions/filter'

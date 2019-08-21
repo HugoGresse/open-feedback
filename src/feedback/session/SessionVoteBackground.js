@@ -37,9 +37,9 @@ class SessionItemVoteBackground extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps, nextContext) {
-        if (nextProps.count && this.canvasRef.current) {
-            if (nextProps.count !== this.props.count) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.count && this.canvasRef.current) {
+            if (this.props.count !== prevProps.count) {
                 this.canvasState = {
                     ...this.canvasState,
                     isDrawn: false
@@ -47,7 +47,7 @@ class SessionItemVoteBackground extends Component {
             }
             this.createRandomCircle(
                 this.canvasRef.current.getContext('2d'),
-                nextProps.count
+                this.props.count
             )
         }
     }
