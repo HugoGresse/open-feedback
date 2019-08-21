@@ -60,8 +60,8 @@ const ChipList = styled.span`
     margin-left: 5px;
 `
 
-class SessionItem extends Component {
-    componentWillMount() {
+class Session extends Component {
+    componentDidMount() {
         const id = this.props.match.params.sessionId
         this.props.getSession(id)
         this.props.setSelectedSession(id)
@@ -234,4 +234,4 @@ const mapDispatchToProps = Object.assign(
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SessionItem)
+)(Session)
