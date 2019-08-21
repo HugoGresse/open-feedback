@@ -1,31 +1,19 @@
 import { GET_SPEAKERS_ERROR, GET_SPEAKERS_SUCCESS } from './speakerActionTypes'
-import {
-    getProjectFirebaseConfigSelector,
-    getProjectSelector
-} from '../../project/projectSelectors'
-import { getFirestoreSchedule } from '../../../firebase'
+import { projectApi } from '../../../core/setupType/projectApi'
+import { getProjectSelector } from '../../project/projectSelectors'
 
-export const getSpeakers = sessionId => {
+export const getSpeakers = () => {
     return (dispatch, getState) => {
-        const firestore = getFirestoreSchedule(
-            getProjectFirebaseConfigSelector(getState()).projectId
-        )
-
-        return firestore
-            .collection('speakers')
-            .get()
-            .then(speakersSnapshot => {
-                let speakers = {}
-
+        return projectApi
+            .getSpeakers(getState())
+            .then(speakers => {
                 const websiteLink = getProjectSelector(getState()).websiteLink
-                let temp
+                let photoUrl
 
-                speakersSnapshot.forEach(doc => {
-                    speakers[doc.id] = doc.data()
-                    speakers[doc.id].id = doc.id
-                    temp = speakers[doc.id].photoUrl
-                    if (temp && !temp.startsWith('http')) {
-                        speakers[doc.id].photoUrl = websiteLink + temp
+                Object.keys(speakers).forEach(speakerId => {
+                    photoUrl = speakers[speakerId].photoUrl
+                    if (photoUrl && !photoUrl.startsWith('http')) {
+                        speakers[speakerId].photoUrl = websiteLink + photoUrl
                     }
                 })
 

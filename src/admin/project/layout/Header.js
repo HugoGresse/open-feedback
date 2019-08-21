@@ -155,7 +155,7 @@ class Header extends Component {
                                                         classes.topRightButton
                                                     }
                                                     target="_blank"
-                                                    href={`https://openfeedback.io/${selectedProjectId}`}
+                                                    href={`/${selectedProjectId}`}
                                                 >
                                                     <EyeIcon
                                                         className={
