@@ -17,7 +17,7 @@ import SessionsDateMenu from './SessionsDateMenu'
 import SessionsList from './SessionsList'
 
 class SessionsListWrapper extends Component {
-    componentWillMount() {
+    componentDidMount() {
         this.props.getSessions()
         this.props.getSpeakers()
 
@@ -25,9 +25,9 @@ class SessionsListWrapper extends Component {
         this.props.setSelectedDate(currentDate)
     }
 
-    componentWillReceiveProps(nextProps) {
-        const newDate = nextProps.match.params.date
-        const oldDate = this.props.match.params.date
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const newDate = this.props.match.params.date
+        const oldDate = prevProps.match.params.date
         if (oldDate !== newDate) {
             this.props.setSelectedDate(newDate)
         }

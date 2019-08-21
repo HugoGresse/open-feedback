@@ -35,7 +35,7 @@ const innerTheme = createMuiTheme({
 })
 
 class AdminApp extends Component {
-    componentWillMount() {
+    componentDidMount() {
         setFavicon('/favicon-root.ico')
     }
 

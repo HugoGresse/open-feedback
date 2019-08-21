@@ -76,11 +76,15 @@ class SessionVoteText extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps, nextContext) {
-        if (nextProps.currentUserVote) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (
+            (this.props.currentUserVote && !prevProps.currentUserVote) ||
+            (this.props.currentUserVote &&
+                this.state.comment !== this.props.currentUserVote.text)
+        ) {
             this.setState({
                 ...this.state,
-                comment: nextProps.currentUserVote.text
+                comment: this.props.currentUserVote.text
             })
         }
     }
