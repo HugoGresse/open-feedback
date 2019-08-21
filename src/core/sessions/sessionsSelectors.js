@@ -26,6 +26,10 @@ export const getSessionsAsArraySelector = createSelector(
     getSessionsListSelector,
     sessions => {
         return Object.keys(sessions).reduce((acc, id) => {
+            if (sessions[id].hideInFeedback) {
+                // Some sessions are not displayed (break time, etc)
+                return acc
+            }
             acc.push(sessions[id])
             return acc
         }, [])
