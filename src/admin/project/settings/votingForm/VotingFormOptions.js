@@ -4,6 +4,9 @@ import Switch from '@material-ui/core/Switch'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Typography } from '@material-ui/core'
 import Divider from '@material-ui/core/Divider'
+import { useDispatch, useSelector } from 'react-redux'
+import { isCommentEnableSelector } from './votingFormSelectors'
+import { toggleVoteComment } from './votingFormActions'
 
 const styles = () => ({
     label: {
@@ -12,6 +15,9 @@ const styles = () => ({
 })
 
 function VotingFormOptions({ classes }) {
+    const dispatch = useDispatch()
+    const isCommentEnable = useSelector(isCommentEnableSelector)
+
     return (
         <>
             <Typography variant="subtitle2" gutterBottom>
@@ -23,9 +29,12 @@ function VotingFormOptions({ classes }) {
             <FormControlLabel
                 control={
                     <Switch
-                        checked={true}
-                        value="checkedB"
+                        checked={isCommentEnable}
+                        value="toto"
                         color="primary"
+                        onChange={event =>
+                            dispatch(toggleVoteComment(event.target.checked))
+                        }
                         inputProps={{ 'aria-label': 'primary checkbox' }}
                     />
                 }

@@ -15,9 +15,17 @@ export const getBooleanVoteItemsSelector = createSelector(
             .sort((a, b) => a.position - b.position)
     }
 )
-export const isCommentEnableSelector = createSelector(
+
+export const getCommentVoteItemSelector = createSelector(
     getVoteItemsSelector,
     voteItems => {
-        return !!voteItems.filter(item => item.type === 'text')
+        return voteItems.filter(item => item.type === 'text')[0]
+    }
+)
+
+export const isCommentEnableSelector = createSelector(
+    getCommentVoteItemSelector,
+    item => {
+        return !!item
     }
 )

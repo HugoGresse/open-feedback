@@ -10,7 +10,10 @@ import {
 import { fireStoreMainInstance } from '../../../../firebase'
 import { getSelectedProjectIdSelector } from '../../core/projectSelectors'
 import { ADD_NOTIFICATION } from '../../../notification/notificationActionTypes'
-import { getBooleanVoteItemsSelector } from './votingFormSelectors'
+import {
+    getBooleanVoteItemsSelector,
+    getCommentVoteItemSelector
+} from './votingFormSelectors'
 
 export const getVoteItems = () => {
     return (dispatch, getState) => {
@@ -86,5 +89,25 @@ export const onVoteItemAddBoolean = () => {
                 type: 'boolean'
             }
         })
+    }
+}
+
+export const toggleVoteComment = enableComment => {
+    return (dispatch, getState) => {
+        if (enableComment) {
+            return dispatch({
+                type: ADD_VOTEITEM,
+                payload: {
+                    id: Date.now(),
+                    name: 'Comment',
+                    type: 'text'
+                }
+            })
+        } else {
+            return dispatch({
+                type: DELETE_VOTEITEM,
+                payload: getCommentVoteItemSelector(getState())
+            })
+        }
     }
 }
