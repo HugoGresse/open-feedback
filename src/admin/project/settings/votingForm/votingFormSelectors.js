@@ -1,0 +1,23 @@
+import { getAdminStateSelector } from '../../../adminSelector'
+import { createSelector } from 'reselect'
+
+const getVotingForm = state => getAdminStateSelector(state).adminVotingForm
+
+export const getVoteItemsSelector = state => getVotingForm(state).voteItems
+
+// MEMOIZED
+
+export const getBooleanVoteItemsSelector = createSelector(
+    getVoteItemsSelector,
+    voteItems => {
+        return voteItems
+            .filter(item => item.type === 'boolean')
+            .sort((a, b) => a.position - b.position)
+    }
+)
+export const isCommentEnableSelector = createSelector(
+    getVoteItemsSelector,
+    voteItems => {
+        return !!voteItems.filter(item => item.type === 'text')
+    }
+)
