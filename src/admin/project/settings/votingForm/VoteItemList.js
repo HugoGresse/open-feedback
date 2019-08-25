@@ -4,7 +4,6 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
 import TableBody from '@material-ui/core/TableBody'
-import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/AddCircleOutline'
 import { withStyles } from '@material-ui/core'
 import VoteItem from './VoteItem'
@@ -17,8 +16,13 @@ import {
     onVoteItemMoveDown,
     onVoteItemMoveUp
 } from './votingFormActions'
+import Button from '@material-ui/core/Button'
 
-const styles = () => ({})
+const styles = () => ({
+    icon: {
+        marginRight: 6
+    }
+})
 
 /**
  * TODO :
@@ -57,12 +61,13 @@ const VoteItemList = ({ classes }) => {
                 ))}
                 <TableRow>
                     <TableCell component="th" scope="row">
-                        <IconButton
+                        <Button
                             aria-label="new vote item"
                             onClick={() => dispatch(onVoteItemAddBoolean())}
                         >
-                            <AddIcon />
-                        </IconButton>
+                            <AddIcon className={classes.icon} />
+                            New item
+                        </Button>
                     </TableCell>
                 </TableRow>
             </TableBody>
