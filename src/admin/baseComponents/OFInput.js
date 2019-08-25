@@ -18,7 +18,7 @@ const OFInputStyled = styled.input`
     font-size: 16px;
     border: 1px solid #EEE;
     width: 100%;
-    background: none;
+    background: ${COLORS.WHITE};
     box-sizing: border-box;
     ${props => (props.icon ? ` padding-left: 40px;` : ` padding-left: 12px;`)}
     ${fontSize}
