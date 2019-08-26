@@ -27,8 +27,7 @@ const styles = () => ({
 })
 
 /**
- * TODO :
- * change Header to be inside the pages like firebase & save button
+ * TODO : implement save
  */
 const VoteItemList = ({ classes }) => {
     const dispatch = useDispatch()
