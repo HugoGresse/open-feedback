@@ -14,9 +14,11 @@ import {
     onVoteItemChange,
     onVoteItemDelete,
     onVoteItemMoveDown,
-    onVoteItemMoveUp
+    onVoteItemMoveUp,
+    saveVoteItems
 } from './votingFormActions'
 import Button from '@material-ui/core/Button'
+import OFButton from '../../../baseComponents/OFButton'
 
 const styles = () => ({
     icon: {
@@ -37,7 +39,11 @@ const VoteItemList = ({ classes }) => {
             <TableHead>
                 <TableRow>
                     <TableCell>Vote items</TableCell>
-                    <TableCell align="right">Actions</TableCell>
+                    <TableCell align="right">
+                        <OFButton onClick={() => dispatch(saveVoteItems())}>
+                            Save
+                        </OFButton>
+                    </TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>

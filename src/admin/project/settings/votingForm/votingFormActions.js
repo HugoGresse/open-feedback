@@ -111,3 +111,15 @@ export const toggleVoteComment = enableComment => {
         }
     }
 }
+
+export const saveVoteItems = () => {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_NOTIFICATION,
+            payload: {
+                type: 'success',
+                message: 'TODO'
+            }
+        })
+    }
+}
