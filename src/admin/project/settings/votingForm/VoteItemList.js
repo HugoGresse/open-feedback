@@ -8,7 +8,10 @@ import AddIcon from '@material-ui/icons/AddCircleOutline'
 import { withStyles } from '@material-ui/core'
 import VoteItem from './VoteItem'
 import { useDispatch, useSelector } from 'react-redux'
-import { getBooleanVoteItemsSelector } from './votingFormSelectors'
+import {
+    getBooleanVoteItemsSelector,
+    isSavingSelector
+} from './votingFormSelectors'
 import {
     onVoteItemAddBoolean,
     onVoteItemChange,
@@ -19,19 +22,26 @@ import {
 } from './votingFormActions'
 import Button from '@material-ui/core/Button'
 import OFButton from '../../../baseComponents/OFButton'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Fade from '@material-ui/core/Fade'
 
 const styles = () => ({
     icon: {
         marginRight: 6
+    },
+    progress: {
+        width: 30,
+        height: 30,
+        marginRight: 10,
+        top: 10,
+        position: 'relative'
     }
 })
 
-/**
- * TODO : implement save
- */
 const VoteItemList = ({ classes }) => {
     const dispatch = useDispatch()
     const voteItems = useSelector(getBooleanVoteItemsSelector)
+    const isSaving = useSelector(isSavingSelector)
 
     return (
         <Table className={classes.table}>
@@ -39,6 +49,13 @@ const VoteItemList = ({ classes }) => {
                 <TableRow>
                     <TableCell>Vote items</TableCell>
                     <TableCell align="right">
+                        <Fade in={isSaving}>
+                            <CircularProgress
+                                size={30}
+                                className={classes.progress}
+                            />
+                        </Fade>
+
                         <OFButton onClick={() => dispatch(saveVoteItems())}>
                             Save
                         </OFButton>

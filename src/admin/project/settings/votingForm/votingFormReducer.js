@@ -5,11 +5,15 @@ import {
     GET_VOTEITEMS_ERROR,
     GET_VOTEITEMS_SUCCESS,
     MOVE_DOWN_VOTEITEM,
-    MOVE_UP_VOTEITEM
+    MOVE_UP_VOTEITEM,
+    SAVE_VOTEITEMS_ERROR,
+    SAVE_VOTEITEMS_ONGOING,
+    SAVE_VOTEITEMS_SUCCESS
 } from './votingFormActionTypes'
 
 const initState = {
-    voteItems: []
+    voteItems: [],
+    ongoingSave: false
 }
 
 const votingFormReducer = (state = initState, { payload, type }) => {
@@ -94,12 +98,24 @@ const votingFormReducer = (state = initState, { payload, type }) => {
                 voteItems: voteItems
             }
         }
+
         case ADD_VOTEITEM: {
             return {
                 ...state,
                 voteItems: [...state.voteItems, payload]
             }
         }
+        case SAVE_VOTEITEMS_SUCCESS:
+        case SAVE_VOTEITEMS_ERROR:
+            return {
+                ...state,
+                ongoingSave: false
+            }
+        case SAVE_VOTEITEMS_ONGOING:
+            return {
+                ...state,
+                ongoingSave: true
+            }
         case GET_VOTEITEMS_ERROR:
         default:
             return state
