@@ -1,5 +1,6 @@
 const HEX_COLORS = {
     RED_ORANGE: '#FF6A49',
+    DARK_RED_ORANGE: '#a95543',
     LIGHT_RED_ORANGE: '#FFD7CB',
     BLACK: '#000000',
     DARK_GRAY: '#292929',

@@ -5,10 +5,7 @@ import speakerReducer from './feedback/speaker/core/speakerReducer'
 import projectReducer from './feedback/project/projectReducer'
 import authReducer from './feedback/auth/authReducer'
 import voteReducer from './feedback/vote/voteReducer'
-import adminAuthReducer from './admin/auth/authReducer'
-import adminProjectReducer from './admin/project/core/projectReducer'
-import adminNotificationReducer from './admin/notification/notificationReducer'
-import adminDashboardReducer from './admin/project/dashboard/dashboardReducer'
+import adminReducer from './admin/adminReducer'
 
 const rootReducer = combineReducers({
     sessions: sessionsReducer,
@@ -17,10 +14,7 @@ const rootReducer = combineReducers({
     project: projectReducer,
     auth: authReducer,
     votes: voteReducer,
-    adminAuth: adminAuthReducer,
-    adminProject: adminProjectReducer,
-    adminNotifications: adminNotificationReducer,
-    adminDashboard: adminDashboardReducer
+    admin: adminReducer
 })
 
 export default rootReducer

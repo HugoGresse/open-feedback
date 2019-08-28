@@ -36,6 +36,7 @@ service cloud.firestore {
 
             match /voteItems/{voteItemsId} {
                 allow list: if true;
+                allow write: if authenticated() && isAdmin(projectData());
             }
 
             // Deprecated soon

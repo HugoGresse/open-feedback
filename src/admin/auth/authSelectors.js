@@ -1,4 +1,6 @@
-export const getAuthSelector = state => state.adminAuth
+import { getAdminStateSelector } from '../adminSelector'
+
+export const getAuthSelector = state => getAdminStateSelector(state).adminAuth
 
 export const isLoggedSelector = state => getAuthSelector(state).isLogin
 
