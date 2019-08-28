@@ -1,20 +1,12 @@
 import React, { Component } from 'react'
 import { setFavicon } from '../feedback/layout/utils'
 import Login from './auth/Login'
-import { Redirect, Route, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import AdminLayout from './AdminLayout'
-import ProjectDashboard from './project/dashboard/ProjectDashboard'
-import ProjectEdit from './project/ProjectEdit'
 import AdminRoot from './root/AdminRoot'
-import Project from './project/Project'
 import Notifications from './notification/Notifications'
-import Talks from './project/talks/Talks'
-import Speakers from './project/speakers/Speakers'
-import VotingForm from './project/settings/votingForm/VotingForm'
-import Users from './project/settings/users/Users'
-import Setup from './project/settings/setup/Setup'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
-import RoutingMap from './RoutingMap'
+import ProjectApp from './project/ProjectApp'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -52,109 +44,15 @@ class AdminApp extends Component {
                         />
 
                         <AdminLayout match={match}>
-                            <Switch>
-                                <Redirect
-                                    strict
-                                    exact
-                                    from={`${match.url}/:projectId`}
-                                    to={`${match.url}/:projectId/`}
-                                />
-                                <Redirect
-                                    exact
-                                    from={`${match.url}/:projectId/`}
-                                    to={`${match.url}/:projectId${RoutingMap.dashboard.url}`}
-                                />
-
-                                <Route
-                                    exact
-                                    path={`${match.url}/:projectId${RoutingMap.dashboard.url}`}
-                                    render={props => (
-                                        <Project
-                                            {...props}
-                                            key={props.match.params.projectId}
-                                        >
-                                            <ProjectDashboard {...props} />
-                                        </Project>
-                                    )}
-                                />
-                                <Route
-                                    exact
-                                    path={`${match.url}/:projectId${RoutingMap.talks.url}`}
-                                    render={props => (
-                                        <Project
-                                            {...props}
-                                            key={props.match.params.projectId}
-                                        >
-                                            <Talks {...props} />
-                                        </Project>
-                                    )}
-                                />
-
-                                <Route
-                                    exact
-                                    path={`${match.url}/:projectId${RoutingMap.speakers.url}`}
-                                    render={props => (
-                                        <Project
-                                            {...props}
-                                            key={props.match.params.projectId}
-                                        >
-                                            <Speakers {...props} />
-                                        </Project>
-                                    )}
-                                />
-
-                                <Route
-                                    exact
-                                    path={`${match.url}/:projectId${RoutingMap.settingEvent.url}`}
-                                    render={props => (
-                                        <Project
-                                            {...props}
-                                            key={props.match.params.projectId}
-                                        >
-                                            <ProjectEdit {...props} />
-                                        </Project>
-                                    )}
-                                />
-
-                                <Route
-                                    exact
-                                    path={`${match.url}/:projectId${RoutingMap.settingVotingform.url}`}
-                                    render={props => (
-                                        <Project
-                                            {...props}
-                                            key={props.match.params.projectId}
-                                        >
-                                            <VotingForm {...props} />
-                                        </Project>
-                                    )}
-                                />
-
-                                <Route
-                                    exact
-                                    path={`${match.url}/:projectId${RoutingMap.settingSetup.url}`}
-                                    render={props => (
-                                        <Project
-                                            {...props}
-                                            key={props.match.params.projectId}
-                                        >
-                                            <Setup {...props} />
-                                        </Project>
-                                    )}
-                                />
-
-                                <Route
-                                    exact
-                                    path={`${match.url}/:projectId${RoutingMap.settingUsers.url}`}
-                                    render={props => (
-                                        <Project
-                                            {...props}
-                                            key={props.match.params.projectId}
-                                        >
-                                            <Users {...props} />
-                                        </Project>
-                                    )}
-                                />
-                            </Switch>
+                            <Route
+                                path={`${match.url}/:projectId`}
+                                render={props => (
+                                    <ProjectApp
+                                        match={props.match}
+                                        key={match.params.projectId}
+                                    />
+                                )}
+                            />
                         </AdminLayout>
                     </Switch>
 

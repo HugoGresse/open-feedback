@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
+import { getAdminStateSelector } from '../../adminSelector'
 
-const getProjects = state => state.adminProject
+const getProjects = state => getAdminStateSelector(state).adminProject
 const getProjectsData = state => getProjects(state).data
 
 export const isProjectsLoadedSelector = state =>

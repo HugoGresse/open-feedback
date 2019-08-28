@@ -1,36 +1,36 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import Card from '@material-ui/core/Card'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import CardContent from '@material-ui/core/CardContent'
-import Typography from '@material-ui/core/Typography'
-import Link from '@material-ui/core/Link'
-import Config from '../../../../config'
+import VoteItemList from './VoteItemList'
+import VotingFormOptions from './VotingFormOptions'
+import Grid from '@material-ui/core/Grid'
+import { getVoteItems } from './votingFormActions'
+import OFPaper from '../../../baseComponents/OFPaper'
+import OFCard from '../../../baseComponents/OFCard'
 
-class VotingForm extends Component {
-    render() {
-        return (
-            <Card>
-                <CardContent>
-                    <Typography>
-                        You cannot add/edit Voting Form for the moment, but you
-                        can ask {Config.adminAddress}. The feature is planned,
-                        check this{' '}
-                        <Link href="https://github.com/HugoGresse/open-feedback/issues/58">
-                            issue
-                        </Link>{' '}
-                        for more info.
-                    </Typography>
-                </CardContent>
-            </Card>
-        )
-    }
+const VotingForm = () => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getVoteItems())
+    }, [dispatch])
+
+    return (
+        <Grid container spacing={2}>
+            <Grid item xs={12} sm={4}>
+                <OFCard>
+                    <CardContent>
+                        <VotingFormOptions />
+                    </CardContent>
+                </OFCard>
+            </Grid>
+            <Grid item xs={12}>
+                <OFPaper>
+                    <VoteItemList />
+                </OFPaper>
+            </Grid>
+        </Grid>
+    )
 }
 
-const mapStateToProps = state => ({})
-
-const mapDispatchToProps = Object.assign({}, {})
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(VotingForm)
+export default VotingForm
