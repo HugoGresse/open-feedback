@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Box from '../../baseComponents/design/Box'
-import OFInput from '../../baseComponents/design/OFInput'
+import OFInput from '../baseComponents/OFInput'
 import Button from '../../baseComponents/design/Button'
 
 const Wrapper = styled(Box)`

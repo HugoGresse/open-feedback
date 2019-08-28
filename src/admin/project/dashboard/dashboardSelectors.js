@@ -3,8 +3,9 @@ import {
     getSessionsListSelector,
     isSessionLoadedSelector
 } from '../../../core/sessions/sessionsSelectors'
+import { getAdminStateSelector } from '../../adminSelector'
 
-const getDashboard = state => state.adminDashboard
+const getDashboard = state => getAdminStateSelector(state).adminDashboard
 const getDashboardData = state => getDashboard(state).data
 const getSessionVotes = state => getDashboardData(state).sessionVotes
 const getUserVotes = state => getDashboardData(state).userVotes
