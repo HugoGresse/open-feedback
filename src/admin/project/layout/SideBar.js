@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { COLORS } from '../../../constants/colors'
 import logo from '../../../assets/logo-openfeedback-color&white.png'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getUserSelector } from '../../auth/authSelectors'
-import { didSignIn, signOut } from '../../auth/authActions'
-import { createMuiTheme, withStyles } from '@material-ui/core'
+import { signOut } from '../../auth/authActions'
+import { createMuiTheme } from '@material-ui/core'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -23,10 +23,11 @@ import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver'
 import SettingsIcon from '@material-ui/icons/Settings'
 import SlideshowIcon from '@material-ui/icons/Slideshow'
 import IconButton from '@material-ui/core/IconButton'
-import { authProvider } from '../../../firebase'
 import OFMenuItem from './OFMenuItem'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import RoutingMap from '../../RoutingMap'
+import Drawer from '@material-ui/core/Drawer'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -34,19 +35,20 @@ const innerTheme = createMuiTheme({
     }
 })
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
         background: COLORS.ADMIN_BACKGROUND,
         height: '100vh',
         minWidth: '220px',
-        [theme.breakpoints.up(900 + theme.spacing(6))]: {
-            width: 300
-        },
         '& .active': {
             background: COLORS.RED_ORANGE
         }
+    },
+    drawer: {
+        position: 'relative',
+        width: 270
     },
     list: {
         padding: 15,
@@ -67,18 +69,30 @@ const styles = theme => ({
     userBox: {
         marginTop: 'auto'
     }
-})
+}))
 
-class SideBar extends Component {
-    render() {
-        const { classes, user, match, selectedProjectId } = this.props
+const SideBar = ({ match, drawerOpen, toggleDrawer, isMobile }) => {
+    const dispatch = useDispatch()
+    const classes = useStyles()
 
-        const userName =
-            user.providerData[0] && user.providerData[0].displayName
+    const user = useSelector(getUserSelector)
+    const selectedProjectId = useSelector(getSelectedProjectIdSelector)
 
-        return (
-            <MuiThemeProvider theme={innerTheme}>
+    const userName = user.providerData[0] && user.providerData[0].displayName
+
+    return (
+        <MuiThemeProvider theme={innerTheme}>
+            <Drawer
+                variant={isMobile ? undefined : 'persistent'}
+                open={drawerOpen}
+                onClose={event => toggleDrawer(event)}
+                anchor="left"
+                classes={{
+                    paper: classes.drawer
+                }}
+            >
                 <div className={classes.container}>
+                    {isMobile}
                     <List component="nav">
                         <ListItem className={classes.logoContainer}>
                             <img
@@ -94,6 +108,7 @@ class SideBar extends Component {
                         component="nav"
                         aria-label="Main menu"
                         className={classes.list}
+                        onClick={event => toggleDrawer(event)}
                         subheader={
                             <ListSubheader component="div">DATA</ListSubheader>
                         }
@@ -125,6 +140,7 @@ class SideBar extends Component {
                         component="nav"
                         aria-label="Settings menu"
                         className={classes.list}
+                        onClick={event => toggleDrawer(event)}
                         subheader={
                             <ListSubheader component="div">
                                 SETTINGS
@@ -182,7 +198,7 @@ class SideBar extends Component {
                                 <IconButton
                                     edge="end"
                                     aria-label="signout"
-                                    onClick={() => authProvider.signOut()}
+                                    onClick={() => dispatch(signOut())}
                                 >
                                     <PowerSettingsIcon />
                                 </IconButton>
@@ -190,25 +206,9 @@ class SideBar extends Component {
                         </ListItem>
                     </List>
                 </div>
-            </MuiThemeProvider>
-        )
-    }
+            </Drawer>
+        </MuiThemeProvider>
+    )
 }
 
-const mapStateToProps = state => ({
-    user: getUserSelector(state),
-    selectedProjectId: getSelectedProjectIdSelector(state)
-})
-
-const mapDispatchToProps = Object.assign(
-    {},
-    {
-        didSignIn: didSignIn,
-        signOut: signOut
-    }
-)
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles)(SideBar))
+export default SideBar
