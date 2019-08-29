@@ -35,7 +35,7 @@ const innerTheme = createMuiTheme({
     }
 })
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -69,7 +69,7 @@ const useStyles = makeStyles(theme => ({
     userBox: {
         marginTop: 'auto'
     }
-}))
+})
 
 const SideBar = ({ match, drawerOpen, toggleDrawer, isMobile }) => {
     const dispatch = useDispatch()
