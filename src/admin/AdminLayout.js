@@ -8,6 +8,8 @@ import Header from './project/layout/Header'
 import COLORS from '../constants/colors'
 import Container from '@material-ui/core/Container'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
+import useTheme from '@material-ui/core/styles/useTheme'
+import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -46,6 +48,28 @@ function AdminLayout(props) {
         }
     }, [])
 
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+    const [state, setState] = React.useState({
+        drawerOpen: !isMobile
+    })
+
+    const toggleDrawer = open => event => {
+        if (
+            event.type === 'keydown' &&
+            (event.key === 'Tab' || event.key === 'Shift')
+        ) {
+            return
+        }
+
+        if (!isMobile) {
+            // Menu always open is mobile
+            return
+        }
+
+        setState({ ...state, drawerOpen: open })
+    }
+
     return (
         <Box
             flex
@@ -55,9 +79,19 @@ function AdminLayout(props) {
             height="100vh"
             background={COLORS.ADMIN_BACKGROUND_LIGHT}
         >
-            <SideBar match={match} className={classes.sidebar} />
+            <SideBar
+                match={match}
+                className={classes.sidebar}
+                drawerOpen={state.drawerOpen}
+                isMobile={isMobile}
+                toggleDrawer={toggleDrawer(false)}
+            />
+
             <div className={classes.sidebar} ref={scrollRef}>
-                <Header refTarget={scrollTargetRef} />
+                <Header
+                    refTarget={scrollTargetRef}
+                    toggleDrawer={toggleDrawer(true)}
+                />
 
                 <Container maxWidth="lg" className={classes.container}>
                     <MuiThemeProvider theme={innerTheme}>

@@ -20,6 +20,9 @@ import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
 import RoutingMap from '../../RoutingMap'
 import { withRouter } from 'react-router-dom'
+import Hidden from '@material-ui/core/Hidden'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -102,7 +105,8 @@ class Header extends Component {
             projects,
             selectedProject,
             selectedProjectId,
-            location
+            location,
+            toggleDrawer
         } = this.props
 
         const menuId = 'primary-project-selection-menu'
@@ -120,6 +124,16 @@ class Header extends Component {
                                 >
                                     <Grid container justify="space-between">
                                         <Grid item xs={12} sm={8}>
+                                            <Hidden mdUp>
+                                                <IconButton
+                                                    onClick={event =>
+                                                        toggleDrawer(event)
+                                                    }
+                                                >
+                                                    <MenuIcon />
+                                                </IconButton>
+                                            </Hidden>
+
                                             {selectedProject && (
                                                 <Button
                                                     aria-label="change event"
