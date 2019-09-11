@@ -6,6 +6,8 @@ import OFFormControlFormiked from '../../../baseComponents/OFFormControlFormiked
 import Grid from '@material-ui/core/Grid'
 import OFButton from '../../../baseComponents/OFButton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import { useDispatch } from 'react-redux'
+import { editProject } from '../../core/projectActions'
 
 const schema = object().shape({
     name: string().required(
@@ -61,6 +63,7 @@ const useStyles = makeStyles(theme => ({
 
 const ProjectSettingsForm = ({ project }) => {
     const classes = useStyles()
+    const dispatch = useDispatch()
 
     const initialValues = {
         name: project.name,
@@ -75,8 +78,19 @@ const ProjectSettingsForm = ({ project }) => {
         <Formik
             validationSchema={schema}
             initialValues={initialValues}
-            onSubmit={() => {
-                console.log('TODO')
+            onSubmit={(values, actions) => {
+                dispatch(
+                    editProject({
+                        chipColors: values.chipColors,
+                        favicon: values.faviconUrl,
+                        logoSmall: values.logoUrl,
+                        name: values.name,
+                        scheduleLink: values.scheduleLink,
+                        websiteLink: values.websiteLink
+                    })
+                ).then(() => {
+                    actions.setSubmitting(false)
+                })
             }}
         >
             {({ isSubmitting }) => (
@@ -110,7 +124,7 @@ const ProjectSettingsForm = ({ project }) => {
                         <Grid item xs={12} sm={6}>
                             <Typography variant="h5">Theme</Typography>
                             <OFFormControlFormiked
-                                name="Logo url(around 100*100px)"
+                                name="Logo url (around 100*100px)"
                                 fieldName="logoUrl"
                                 type="text"
                                 value={project.logoSmall}

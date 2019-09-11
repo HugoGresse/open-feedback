@@ -1,4 +1,5 @@
 import {
+    EDIT_PROJECT_SUCCESS,
     GET_PROJECT_SUCCESS,
     GET_PROJECTS_ERROR,
     GET_PROJECTS_SUCCESS,
@@ -48,6 +49,25 @@ const projectReducer = (state = initState, { payload, type }) => {
                 ...state,
                 selectedProjectId: payload
             }
+        case EDIT_PROJECT_SUCCESS: {
+            const projects = state.data.projects.map(project => {
+                if (project.id === state.selectedProjectId) {
+                    return {
+                        ...project,
+                        ...payload
+                    }
+                }
+                return project
+            })
+
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    projects: projects
+                }
+            }
+        }
         case GET_PROJECTS_ERROR:
             console.error(payload)
             return {

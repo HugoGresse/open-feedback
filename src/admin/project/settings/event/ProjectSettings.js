@@ -7,8 +7,6 @@ import LoaderMatchParent from '../../../../baseComponents/customComponent/Loader
 import ProjectSettingsForm from './ProjectSettingsForm'
 
 const ProjectSettings = () => {
-    // const dispatch = useDispatch()
-
     const project = useSelector(getSelectedProjectSelector)
 
     if (!project) {
