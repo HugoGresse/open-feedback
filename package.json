@@ -11,7 +11,7 @@
         "babel-loader": "8.0.6"
     },
     "dependencies": {
-        "@material-ui/core": "^4.4.1",
+        "@material-ui/core": "^4.4.2",
         "@material-ui/icons": "^4.4.1",
         "docz": "^1.2.0",
         "docz-theme-default": "^1.2.0",
