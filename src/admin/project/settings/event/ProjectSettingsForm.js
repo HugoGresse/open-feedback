@@ -1,13 +1,14 @@
 import React from 'react'
 import { object, string } from 'yup'
 import { Typography } from '@material-ui/core'
-import { Form, Formik } from 'formik'
+import { Field, Form, Formik } from 'formik'
 import OFFormControlFormiked from '../../../baseComponents/OFFormControlFormiked'
 import Grid from '@material-ui/core/Grid'
 import OFButton from '../../../baseComponents/OFButton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { useDispatch } from 'react-redux'
 import { editProject } from '../../core/projectActions'
+import ChipColorsEditor from './ChipColorsEditor'
 
 const schema = object().shape({
     name: string().required(
@@ -109,7 +110,6 @@ const ProjectSettingsForm = ({ project }) => {
                                 name="Website Link"
                                 fieldName="websiteLink"
                                 type="text"
-                                value={project.websiteLink}
                                 isSubmitting={isSubmitting}
                             />
 
@@ -117,7 +117,6 @@ const ProjectSettingsForm = ({ project }) => {
                                 name="Schedule Link"
                                 fieldName="scheduleLink"
                                 type="text"
-                                value={project.scheduleLink}
                                 isSubmitting={isSubmitting}
                             />
                         </Grid>
@@ -127,7 +126,6 @@ const ProjectSettingsForm = ({ project }) => {
                                 name="Logo url (around 100*100px)"
                                 fieldName="logoUrl"
                                 type="text"
-                                value={project.logoSmall}
                                 isSubmitting={isSubmitting}
                             />
 
@@ -135,7 +133,6 @@ const ProjectSettingsForm = ({ project }) => {
                                 name="Favicon url (.png or .ico)"
                                 fieldName="faviconUrl"
                                 type="text"
-                                value={project.favicon}
                                 isSubmitting={isSubmitting}
                             />
 
@@ -143,8 +140,12 @@ const ProjectSettingsForm = ({ project }) => {
                                 name="Chip Colors"
                                 fieldName="chipColors"
                                 type="text"
-                                value={project.chipColors}
                                 isSubmitting={isSubmitting}
+                            />
+
+                            <Field
+                                name="chipColors"
+                                component={ChipColorsEditor}
                             />
                         </Grid>
 
