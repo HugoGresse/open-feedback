@@ -2,13 +2,13 @@ import RoutingMap from '../RoutingMap'
 import ProjectDashboard from './dashboard/ProjectDashboard'
 import Talks from './talks/Talks'
 import Speakers from './speakers/Speakers'
-import ProjectEdit from './ProjectEdit'
 import VotingForm from './settings/votingForm/VotingForm'
 import Setup from './settings/setup/Setup'
 import Users from './settings/users/Users'
 import Project from './Project'
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import ProjectSettings from './settings/event/ProjectSettings'
 
 const ProjectApp = ({ match }) => {
     return (
@@ -39,7 +39,7 @@ const ProjectApp = ({ match }) => {
                 <Route
                     exact
                     path={`${match.url}${RoutingMap.settingEvent.url}`}
-                    render={props => <ProjectEdit {...props} />}
+                    render={props => <ProjectSettings {...props} />}
                 />
 
                 <Route
