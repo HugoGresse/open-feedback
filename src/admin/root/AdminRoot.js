@@ -13,7 +13,6 @@ import RootHeader from './RootHeader'
 import { Box } from '@material-ui/core'
 import Container from '@material-ui/core/Container'
 import COLORS from '../../constants/colors'
-import Config from '../../config'
 import Paper from '@material-ui/core/Paper'
 import RootContent from './RootContent'
 
@@ -63,7 +62,7 @@ function AdminRoot({
                             projects={projects}
                             onNewEventClick={() =>
                                 alert(
-                                    `Creating new event can only be done by the admin for the moment. Contact ${Config.adminAddress} to create it (should be pretty fast).`
+                                    `Creating new event can only be done by the admin for the moment. Contact ${process.env.REACT_APP_ADMIN_EMAIL} to create it (should be pretty fast).`
                                 )
                             }
                             onProjectSelected={projectId =>

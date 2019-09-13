@@ -4,7 +4,6 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import Link from '@material-ui/core/Link'
-import Config from '../../../../config'
 
 class Users extends Component {
     render() {
@@ -13,8 +12,8 @@ class Users extends Component {
                 <CardContent>
                     <Typography>
                         You cannot add/edit Users for the moment, but you can
-                        ask {Config.adminAddress}. The feature is planned, check
-                        this{' '}
+                        ask {process.env.REACT_APP_ADMIN_EMAIL}. The feature is
+                        planned, check this{' '}
                         <Link href="https://github.com/HugoGresse/open-feedback/issues/55">
                             issue
                         </Link>{' '}
