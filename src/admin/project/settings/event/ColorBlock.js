@@ -14,9 +14,10 @@ const Color = styled.div`
             : ` background-color: RED;`}
     border: 1px solid #eee;
     transition: all 200ms;
+    ${props => (props.disabled ? `opacity: 0.6;` : ``)}
 
     &:hover {
-        cursor: pointer;
+        ${props => (props.disabled ? `` : `cursor: pointer;`)}
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
@@ -25,7 +26,13 @@ const Color = styled.div`
     }
 `
 
-const ColorBlock = ({ color, onColorChanged, onColorDeleted, className }) => {
+const ColorBlock = ({
+    color,
+    onColorChanged,
+    onColorDeleted,
+    className,
+    disabled
+}) => {
     const [isPickerOpen, setPickerOpen] = useState(false)
     const [stateColor, setColor] = useState(color)
 
@@ -40,12 +47,19 @@ const ColorBlock = ({ color, onColorChanged, onColorDeleted, className }) => {
         onColorDeleted(color)
     }
 
+    const onColorClicked = () => {
+        if (!disabled) {
+            setPickerOpen(true)
+        }
+    }
+
     return (
         <>
             <Color
                 color={stateColor}
                 className={className}
-                onClick={() => setPickerOpen(true)}
+                disabled={disabled}
+                onClick={() => onColorClicked()}
             />
 
             <ColorBlockDialog

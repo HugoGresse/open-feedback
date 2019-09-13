@@ -47,12 +47,13 @@ const ChipColorsEditor = ({ field, form }) => {
 
     return (
         <div className={classes.container}>
-            {field.value.map(color => {
+            {field.value.map((color, index) => {
                 return (
                     <ColorBlock
-                        key={color}
+                        key={index + color}
                         color={color}
                         className={classes.colorBlock}
+                        disabled={form.isSubmitting}
                         onColorChanged={newColor =>
                             onColorChanges(color, newColor)
                         }
@@ -64,6 +65,7 @@ const ChipColorsEditor = ({ field, form }) => {
                 className={classes.addButton}
                 component="div"
                 aria-label="new chip color"
+                disabled={form.isSubmitting}
                 onClick={() => addColor()}
             >
                 <AddIcon />
