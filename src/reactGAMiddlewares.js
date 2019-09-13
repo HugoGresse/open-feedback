@@ -1,5 +1,4 @@
 import ReactGA from 'react-ga'
-import config from './config'
 
 const options = {}
 
@@ -15,9 +14,7 @@ let currentPage = ''
 
 export const googleAnalytics = store => next => action => {
     if (action.type === '@@router/LOCATION_CHANGE') {
-        const nextPage = `${action.payload.location.pathname}${
-            action.payload.location.search
-        }`
+        const nextPage = `${action.payload.location.pathname}${action.payload.location.search}`
 
         if (currentPage !== nextPage) {
             currentPage = nextPage
@@ -33,5 +30,5 @@ export const initGA = () => {
         return
     }
 
-    ReactGA.initialize(config.googleAnalyticsId)
+    ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS)
 }
