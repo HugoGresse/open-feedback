@@ -126,10 +126,19 @@ export const editProject = projectData => (dispatch, getState) => {
             })
 
             dispatch({
-                type: EDIT_PROJECT_SUCCESS
+                type: EDIT_PROJECT_SUCCESS,
+                payload: projectData
             })
         })
         .catch(err => {
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: {
+                    type: 'error',
+                    message: 'Failed to save the project'
+                }
+            })
+
             dispatch({
                 type: EDIT_PROJECT_ERROR,
                 payload: err.toString()
