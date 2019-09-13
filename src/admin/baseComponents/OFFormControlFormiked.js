@@ -1,9 +1,8 @@
 import InputLabel from '@material-ui/core/InputLabel'
-import OFInput from './OFInput'
 import FormControl from '@material-ui/core/FormControl'
 import React from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { ErrorMessage, Field } from 'formik'
+import { ErrorMessage } from 'formik'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -20,13 +19,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const OFFormControlFormiked = ({
-    name,
-    fieldName,
-    type,
-    value,
-    isSubmitting
-}) => {
+const OFFormControlFormiked = ({ name, fieldName, children }) => {
     const classes = useStyles()
 
     return (
@@ -34,20 +27,7 @@ const OFFormControlFormiked = ({
             <InputLabel shrink htmlFor={fieldName} className={classes.label}>
                 {name}
             </InputLabel>
-            <Field
-                type={type}
-                name={fieldName}
-                render={({ field }) => (
-                    <OFInput
-                        className={classes.root}
-                        name={fieldName}
-                        value={value}
-                        disabled={isSubmitting}
-                        {...field}
-                    />
-                )}
-                disabled={isSubmitting}
-            />
+            {children}
             <ErrorMessage name={fieldName} />
         </FormControl>
     )

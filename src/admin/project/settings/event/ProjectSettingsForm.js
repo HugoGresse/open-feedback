@@ -9,6 +9,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { useDispatch } from 'react-redux'
 import { editProject } from '../../core/projectActions'
 import ChipColorsEditor from './ChipColorsEditor'
+import OFFormControlInputFormiked from '../../../baseComponents/OFFormControlInputFormiked'
 
 const schema = object().shape({
     name: string().required(
@@ -59,6 +60,9 @@ const schema = object().shape({
 const useStyles = makeStyles(theme => ({
     buttonContainer: {
         textAlign: 'right'
+    },
+    chipLabel: {
+        marginTop: theme.spacing(3)
     }
 }))
 
@@ -99,21 +103,21 @@ const ProjectSettingsForm = ({ project }) => {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <Typography variant="h5">Event</Typography>
-                            <OFFormControlFormiked
+                            <OFFormControlInputFormiked
                                 name="Name"
                                 fieldName="name"
                                 type="text"
                                 isSubmitting={isSubmitting}
                             />
 
-                            <OFFormControlFormiked
+                            <OFFormControlInputFormiked
                                 name="Website Link"
                                 fieldName="websiteLink"
                                 type="text"
                                 isSubmitting={isSubmitting}
                             />
 
-                            <OFFormControlFormiked
+                            <OFFormControlInputFormiked
                                 name="Schedule Link"
                                 fieldName="scheduleLink"
                                 type="text"
@@ -122,14 +126,14 @@ const ProjectSettingsForm = ({ project }) => {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography variant="h5">Theme</Typography>
-                            <OFFormControlFormiked
+                            <OFFormControlInputFormiked
                                 name="Logo url (around 100*100px)"
                                 fieldName="logoUrl"
                                 type="text"
                                 isSubmitting={isSubmitting}
                             />
 
-                            <OFFormControlFormiked
+                            <OFFormControlInputFormiked
                                 name="Favicon url (.png or .ico)"
                                 fieldName="faviconUrl"
                                 type="text"
@@ -139,14 +143,12 @@ const ProjectSettingsForm = ({ project }) => {
                             <OFFormControlFormiked
                                 name="Chip Colors"
                                 fieldName="chipColors"
-                                type="text"
-                                isSubmitting={isSubmitting}
-                            />
-
-                            <Field
-                                name="chipColors"
-                                component={ChipColorsEditor}
-                            />
+                            >
+                                <Field
+                                    name="chipColors"
+                                    component={ChipColorsEditor}
+                                />
+                            </OFFormControlFormiked>
                         </Grid>
 
                         <Grid item xs={12} className={classes.buttonContainer}>

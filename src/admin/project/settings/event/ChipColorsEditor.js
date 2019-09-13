@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 
 const useStyles = makeStyles(theme => ({
     container: {
-        marginTop: '16px'
+        marginTop: '20px'
     },
     colorBlock: {
         float: 'left'
