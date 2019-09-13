@@ -83,7 +83,7 @@ const SideBar = ({ match, drawerOpen, toggleDrawer, isMobile }) => {
     return (
         <MuiThemeProvider theme={innerTheme}>
             <Drawer
-                variant={isMobile ? undefined : 'persistent'}
+                variant={isMobile ? 'temporary' : 'persistent'}
                 open={drawerOpen}
                 onClose={event => toggleDrawer(event)}
                 anchor="left"

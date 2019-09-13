@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { fontSize, fontWeight, space } from 'styled-system'
 import { COLORS } from '../../constants/colors'
-
-const OFInputWrapper = styled.div`
-    position: relative;
-`
+import InputBase from '@material-ui/core/InputBase'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
 const IconWrapper = styled.div`
     position: absolute;
@@ -13,7 +11,7 @@ const IconWrapper = styled.div`
     left: 10px;
 `
 
-const OFInputStyled = styled.input`
+const OFInputStyled = styled(InputBase)`
     height: 40px;
     font-size: 16px;
     border: 1px solid #EEE;
@@ -29,22 +27,38 @@ const OFInputStyled = styled.input`
     &::placeholder {
         color: ${COLORS.LIGHT_GRAY};
     }
-    &:focus {
-        outline-width: 0;
+    &::selected {
+        background-color: 'transparent'
     }
 `
 
-class OFInput extends Component {
-    render() {
-        const { icon, ...props } = this.props
-
-        return (
-            <OFInputWrapper>
-                {icon && <IconWrapper>{icon}</IconWrapper>}
-                <OFInputStyled icon={icon} {...props} />
-            </OFInputWrapper>
-        )
+const useStyles = makeStyles({
+    focusedInput: {
+        borderColor: COLORS.RED_ORANGE
+    },
+    selectedInput: {
+        '&:-internal-autofill-selected': {
+            backgroundColor: 'transparent'
+        }
     }
+})
+
+const OFInput = props => {
+    const classes = useStyles()
+
+    return (
+        <>
+            {props.icon && <IconWrapper>{props.icon}</IconWrapper>}
+            <OFInputStyled
+                icon={props.icon}
+                {...props}
+                classes={{
+                    focused: classes.focusedInput,
+                    input: classes.selectedInput
+                }}
+            />
+        </>
+    )
 }
 
 export default OFInput
