@@ -13,23 +13,19 @@ Create a firebase project with the [firebase console](https://console.firebase.g
 1. Create a "Cloud Firestore" Database. It's okay to start in 'locked' mode. The rules will be overriden when you deploy.
 2. Activate "Anonymous" as a sign-in provider for Authentication of voters
 3. Activate "Google" as a sign-in provider for Admin Authentication. (You may want to add Email/Pwd", "Phone", "Google", "GitHub" later on)
-4. Create a `src/config.js` file by copying .config.example.js file at `src/` folder and set firebase environment variables. You can get all these variables from the Firebase Console homepage by clicking "Add an application" and selecting the web icon.
+4. Create a `.env.local` file by copying `.env` file at root folder and set firebase environment variables. You can get all these variables from the Firebase Console homepage by clicking "Add an application" and selecting the web icon.
 
-```
-{
-    firebaseMain: {
-        apiKey: '',
-        authDomain: '',
-        databaseURL: '',
-        projectId: '',
-        storageBucket: ''
-    },
-    googleAnalyticsId: 'UA-00000000-1'
-}
-```
+  * `REACT_APP_ADMIN_EMAIL=<ADMIN_EMAIL>`
+  * `REACT_APP_API_KEY=<API_KEY>`
+  * `REACT_APP_AUTH_DOMAIN=<AUTH_DOMAIN>`
+  * `REACT_APP_DATABASE_URL=<DATABASE_URL>`
+  * `REACT_APP_PROJECT_ID=<PROJECT_ID>`
+  * `REACT_APP_STORAGE_BUCKET=<STORAGE_BUCKET>`
+  * `REACT_APP_GOOGLE_ANALYTICS=<GOOGLE_ANALYTICS>`
+
 
 ### Configure Google Analytics (optional)
-You can add a Google Analytics by adding your Analytics ID to the `src/config.js` in `googleAnalyticsId`.
+You can add a Google Analytics by adding your Analytics ID to the environment variable in `REACT_APP_GOOGLE_ANALYTICS` in `.env.loval`.
 
 ## Run
 
