@@ -9,6 +9,9 @@ const useStyles = makeStyles({
         color: COLORS.WHITE,
         '&:hover': {
             background: COLORS.DARK_RED_ORANGE
+        },
+        '&:disabled': {
+            color: COLORS.DARK_RED_ORANGE
         }
     }
 })
