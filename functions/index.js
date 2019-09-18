@@ -1,12 +1,7 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 
-const serviceAccount = require('./serviceAccountKey.json')
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://open-feedback-42.firebaseio.com'
-})
+admin.initializeApp()
 
 const db = admin.firestore()
 settings = { timestampsInSnapshots: true }
