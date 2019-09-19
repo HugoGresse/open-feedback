@@ -9,6 +9,7 @@ Cypress.Commands.add('visitFeedbackProject', (talkId, option) => {
 
     if (options.clearUserSession) {
         indexedDB.deleteDatabase('firebaseLocalStorageDb')
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(2000)
     }
 })
@@ -33,9 +34,4 @@ Cypress.Commands.add('getVoteCountData', baseEl => {
                     })
             }
         })
-})
-
-Cypress.Commands.add('resetAnonymousUserSession', () => {
-    indexedDB.deleteDatabase('firebaseLocalStorageDb')
-    cy.wait(2000)
 })
