@@ -20,7 +20,8 @@ jobs:
     - name: npm install, build
       run: |
         npm install
-        npm run start:dist
+        npm run build
+        ./node_modules/.bin/firebase serve --only hosting -p 3000
         npx wait-on http://localhost:3000
     - name: Run Cypress
       run: |
