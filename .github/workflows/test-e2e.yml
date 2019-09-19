@@ -21,7 +21,7 @@ jobs:
       run: |
         npm install
         npm run build
-        ./node_modules/.bin/firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} --non-interactive
+        ./node_modules/.bin/firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} &
         npx wait-on http://localhost:3000
     - name: Run Cypress
       run: |
