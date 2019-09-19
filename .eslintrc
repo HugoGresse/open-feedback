@@ -28,5 +28,19 @@
             "pragma": "React",
             "version": "16.6.3"
         }
-    }
+    },
+    "overrides": [
+        {
+            "files": [ "cypress/**/*.js" ],
+            "plugins": [
+                "cypress"
+            ],
+            "extends": [
+                "plugin:cypress/recommended"
+            ],
+            "env": {
+                "cypress/globals": true
+            }
+        }
+    ]
 }
