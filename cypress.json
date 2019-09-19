@@ -1,6 +1,7 @@
 {
-    "baseUrl": "http://localhost:3000",
-    "env": {
-        "firestoreTestProjectId": "xo5qvbJCpYPpU74yGW7W"
-    }
+  "baseUrl": "http://localhost:3000",
+  "env": {
+    "firestoreTestProjectId": "xo5qvbJCpYPpU74yGW7W"
+  },
+  "projectId": "3nv53o"
 }

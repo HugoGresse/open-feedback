@@ -1,0 +1,29 @@
+name: Run End to End test using Cypress
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install, build
+      run: |
+        npm install
+        npm run start:dist
+        npx wait-on http://localhost:3000
+    - name: Run Cypress
+      run: |
+        npm cypress run --record --key ${{ secrets.SuperSecret }}
+      env:
+        CI: true
