@@ -19,6 +19,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build
       run: |
+        rm .env
         npm install
         npm run build
         ./node_modules/.bin/firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} &
