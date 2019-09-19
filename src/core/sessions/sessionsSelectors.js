@@ -85,9 +85,7 @@ export const getCurrentSessionsGroupByTrackSelector = createSelector(
 
             const tagMatch =
                 session.tags &&
-                session.tags.filter(tag => {
-                    return tag.toLowerCase().includes(filter)
-                }).length > 0
+                session.tags.filter(tag => tag.toLowerCase().includes(cleanedFilterInput)).length > 0
 
             return (
                 (titleMatch || speakerMatch > 0 || tagMatch) &&
