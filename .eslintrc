@@ -23,25 +23,14 @@
         "react/prop-types": 0,
         "no-unused-vars": "warn",
         "no-console": 1,
-        "no-unexpected-multiline": "warn"
+        "no-unexpected-multiline": "warn",
+        "cypress/no-assigning-return-values": "error",
+        "cypress/no-unnecessary-waiting": "error"
     },
     "settings": {
         "react": {
             "pragma": "React",
             "version": "16.6.3"
         }
-    },
-    "overrides": [
-        {
-            "files": [ "cypress/**/*.js" ],
-            "rules": {
-                "cypress/no-assigning-return-values": "error",
-                "cypress/no-unnecessary-waiting": "error",
-                "cypress/assertion-before-screenshot": "warn"
-            },
-            "env": {
-                "cypress/globals": true
-            }
-        }
-    ]
+    }
 }
