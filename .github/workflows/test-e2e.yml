@@ -21,10 +21,10 @@ jobs:
       run: |
         npm install
         npm run build
-        ./node_modules/.bin/firebase serve --only hosting -p 3000  --token= ${{ secrets. CYPRESS_FIREBASE_TOKEN }}
+        ./node_modules/.bin/firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}
         npx wait-on http://localhost:3000
     - name: Run Cypress
       run: |
-        npm cypress run --record --key ${{ secrets. CYPRESS_DASHBOARD_KEY }}
+        npm cypress run --record --key ${{ secrets.CYPRESS_DASHBOARD_KEY }}
       env:
         CI: true
