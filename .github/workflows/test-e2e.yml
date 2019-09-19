@@ -24,12 +24,14 @@ jobs:
         npm run build
         ./node_modules/.bin/firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} &
         npx wait-on http://localhost:3000
-    - name: Run Cypress
-      run: |
-          ./node_modules/.bin/cypress run --record --key ${{ secrets.CYPRESS_DASHBOARD_KEY }}
       env:
         CI: true
         REACT_APP_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
         REACT_APP_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
         REACT_APP_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
         REACT_APP_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
+    - name: Run Cypress
+      run: |
+          ./node_modules/.bin/cypress run --record --key ${{ secrets.CYPRESS_DASHBOARD_KEY }}
+      env:
+        CI: true
