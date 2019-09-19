@@ -25,6 +25,6 @@ jobs:
         npx wait-on http://localhost:3000
     - name: Run Cypress
       run: |
-        npm cypress run --record --key ${{ secrets.CYPRESS_DASHBOARD_KEY }}
+          ./node_modules/.bin/cypress run --record --key ${{ secrets.CYPRESS_DASHBOARD_KEY }}
       env:
         CI: true
