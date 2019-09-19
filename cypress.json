@@ -1,0 +1,6 @@
+{
+    "baseUrl": "http://localhost:3000",
+    "env": {
+        "firestoreTestProjectId": "xo5qvbJCpYPpU74yGW7W"
+    }
+}
