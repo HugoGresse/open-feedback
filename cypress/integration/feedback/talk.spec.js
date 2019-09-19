@@ -1,8 +1,8 @@
 import { stringGenerator } from '../../utils/generateString'
 
-describe('Single talk', function() {
-    it('Check that detail & vote item are displayed correctly', function() {
-        cy.visitTestProject('2019-06-28/0')
+describe('Single talk', function () {
+    it('Check that detail & vote item are displayed correctly', function () {
+        cy.visitFeedbackProject('2019-06-28/0')
 
         cy.get('h2')
             .parent()
@@ -31,8 +31,8 @@ describe('Single talk', function() {
             .should('contain', 'Une petite pépite')
     })
 
-    it('Check that boolean vote does work (increment/decrement count)', function() {
-        cy.visitTestProject('2019-06-28/0', {
+    it('Check that boolean vote does work (increment/decrement count)', function () {
+        cy.visitFeedbackProject('2019-06-28/0', {
             clearUserSession: true
         })
 
@@ -58,23 +58,20 @@ describe('Single talk', function() {
         })
     })
 
-    it('Check that text vote does work (post and delete)', function() {
-        cy.visitTestProject('2019-06-28/0', {
+    it('Check that text vote does work (post and delete)', function () {
+        cy.visitFeedbackProject('2019-06-28/0', {
             clearUserSession: true
         })
 
         const inputText = stringGenerator()
-
         const voteTextAreaSelector = 'textarea[placeholder="Comment"]'
 
         cy.get(voteTextAreaSelector).type(inputText)
-
         cy.contains('Save comment').click()
-
         cy.get('.comments').should('contain', inputText)
 
+        cy.wait(200)
         cy.contains('Delete comment').click()
         cy.get('.comments').should('not.contain', inputText)
-        // TODO : fix last assert
     })
 })

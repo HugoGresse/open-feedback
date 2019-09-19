@@ -1,4 +1,4 @@
-Cypress.Commands.add('visitTestProject', (talkId, option) => {
+Cypress.Commands.add('visitFeedbackProject', (talkId, option) => {
     const options = option || {}
     const rootUrl = `/${Cypress.env('firestoreTestProjectId')}`
     if (talkId) {

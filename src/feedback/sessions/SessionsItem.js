@@ -60,7 +60,7 @@ export const SessionsItem = props => {
         session.speakers.map(speakerId => speakersEntities[speakerId])
     const date = getDateFromStartTime(session.startTime)
     return (
-        <Grid item xs={12} sm={6} md={4} className={classes.itemContainer}>
+        <Grid item xs={12} sm={6} md={4} className={`${classes.itemContainer} session`}>
             <Link
                 to={`/${currentProjectId}/${date}/${session.id}`}
                 className={classes.a}
