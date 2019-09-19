@@ -4,11 +4,12 @@
     "private": true,
     "homepage": "https://openfeedback.io/",
     "devDependencies": {
+        "babel-loader": "8.0.6",
+        "cypress": "^3.4.1",
         "husky": "^3.0.5",
         "lint-staged": "^9.2.5",
         "prettier": "^1.18.2",
-        "react-scripts": "3.1.1",
-        "babel-loader": "8.0.6"
+        "react-scripts": "3.1.1"
     },
     "dependencies": {
         "@material-ui/core": "^4.4.2",
@@ -35,16 +36,22 @@
         "reselect": "^4.0.0",
         "styled-components": "^4.3.2",
         "styled-system": "^5.1.2",
+        "wait-on": "^3.3.0",
         "yup": "^0.27.0"
     },
     "scripts": {
         "start": "react-scripts start",
+        "start:dist": "npm run build && firebase serve --only hosting -p 3000",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "deploy": "npm run build && firebase deploy",
         "docz:dev": "docz dev",
-        "docz:build": "docz build"
+        "docz:build": "docz build",
+        "cy:open": "cypress open",
+        "cy:run": "cypress run",
+        "test:cy": "npm run start:dist & wait-on http://localhost:3000 && npm run cy:run",
+        "test:cy:stop": "kill -9 $(lsof -i :3000 | grep 'node' | awk '{print $2}')"
     },
     "eslintConfig": {
         "extends": "react-app"

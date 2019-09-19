@@ -38,3 +38,8 @@ src/config.js
 .firebase
 
 .docz/
+
+# cypress
+cypress/screenshots
+cypress/videos
+cypress.env.json
