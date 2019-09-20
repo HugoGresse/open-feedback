@@ -23,7 +23,7 @@ class SessionVoteTextResult extends Component {
         const { result, classes } = this.props
 
         return (
-            <div>
+            <div className="comments">
                 {result.map((item, key) => (
                     <div key={key}>
                         <p className={classes.date}>

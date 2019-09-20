@@ -36,6 +36,9 @@ const styles = theme => ({
     },
     paperSelected: {
         opacity: 0.5
+    },
+    a: {
+        display: 'block'
     }
 })
 
@@ -57,8 +60,11 @@ export const SessionsItem = props => {
         session.speakers.map(speakerId => speakersEntities[speakerId])
     const date = getDateFromStartTime(session.startTime)
     return (
-        <Grid item xs={12} sm={6} md={4} className={classes.itemContainer}>
-            <Link to={`/${currentProjectId}/${date}/${session.id}`}>
+        <Grid item xs={12} sm={6} md={4} className={`${classes.itemContainer} session`}>
+            <Link
+                to={`/${currentProjectId}/${date}/${session.id}`}
+                className={classes.a}
+            >
                 <Paper className={itemClasses}>
                     {session.title}
                     {speakers && (

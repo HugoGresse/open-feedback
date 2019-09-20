@@ -36,6 +36,7 @@ class SearchBar extends Component {
                     <BigInput
                         onChange={this.onFilterChanged}
                         icon={<SearchIcon />}
+                        className="search"
                         placeholder="Search speakers, talks, tags,..."
                     />
                 </div>
