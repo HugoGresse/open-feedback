@@ -39,9 +39,7 @@ class Error extends Component {
                     <b>{error}</b>
                 </p>
                 <p>Error:</p>
-                <p className={classes.errorDetail}>
-                    {process.env.REACT_APP_AUTH_DOMAIN}
-                    {errorDetail}</p>
+                <p className={classes.errorDetail}>{errorDetail}</p>
                 <Button
                     variant="contained"
                     color="primary"
