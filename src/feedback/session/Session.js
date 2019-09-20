@@ -20,10 +20,7 @@ import {
     voteFor
 } from '../vote/voteActions'
 
-import {
-    getProjectChipColorsSelector,
-    getProjectVoteItemsOrderedSelector
-} from '../project/projectSelectors'
+import { getProjectChipColorsSelector, getProjectVoteItemsOrderedSelector } from '../project/projectSelectors'
 import { getVoteResultSelectorSelector } from '../session/core/sessionSelectors'
 import {
     getErrorVotePostSelector,
@@ -178,9 +175,9 @@ class Session extends Component {
                         </ChipList>
                     </Title>
                     <DateTime>
-                        {moment(session.startTime).format('dddd D')} /{' '}
-                        {moment(session.startTime).format('H:mm ')}-
-                        {moment(session.endTime).format(' H:mm')}
+                        {moment.parseZone(session.startTime).format('dddd D')} /{' '}
+                        {moment.parseZone(session.startTime).format('H:mm ')}-
+                        {moment.parseZone(session.endTime).format(' H:mm')}
                     </DateTime>
                     <SpeakerList speakers={speakers} />
                 </Header>
