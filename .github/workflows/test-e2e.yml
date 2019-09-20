@@ -31,6 +31,7 @@ jobs:
         REACT_APP_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
     - name: Run Cypress
       run: |
+          COMMIT_INFO_BRANCH=${GITHUB_REF}
           ./node_modules/.bin/cypress run --record --key ${{ secrets.CYPRESS_DASHBOARD_KEY }}
       env:
         CI: true
