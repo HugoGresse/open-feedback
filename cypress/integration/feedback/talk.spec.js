@@ -72,7 +72,7 @@ describe('Single talk', function() {
         cy.get('.comments').should('contain', inputText)
 
         // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(200)
+        cy.wait(500)
         cy.contains('Delete comment').click()
         cy.get('.comments').should('not.contain', inputText)
     })
