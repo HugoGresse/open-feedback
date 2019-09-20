@@ -18,7 +18,7 @@
         "@material-ui/icons": "^4.4.1",
         "docz": "^1.2.0",
         "docz-theme-default": "^1.2.0",
-        "firebase": "^6.6.1",
+        "firebase": "^6.6.2",
         "formik": "^1.5.8",
         "history": "^4.10.1",
         "lodash": "^4.17.15",
