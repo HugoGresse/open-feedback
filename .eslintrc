@@ -7,11 +7,13 @@
         }
     },
     "plugins": [
-        "react"
+        "react",
+        "cypress"
     ],
     "env": {
         "browser": true,
-        "es6": true
+        "es6": true,
+        "cypress/globals": true
     },
     "extends": ["eslint:recommended", "plugin:react/recommended"],
     "rules": {
@@ -21,7 +23,9 @@
         "react/prop-types": 0,
         "no-unused-vars": "warn",
         "no-console": 1,
-        "no-unexpected-multiline": "warn"
+        "no-unexpected-multiline": "warn",
+        "cypress/no-assigning-return-values": "error",
+        "cypress/no-unnecessary-waiting": "error"
     },
     "settings": {
         "react": {
