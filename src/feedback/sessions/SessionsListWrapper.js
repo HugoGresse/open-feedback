@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getSessions } from '../../core/sessions/sessionsActions'
 import { setSelectedSession } from '../session/core/sessionActions'
-import * as speakerActions from './../speaker/core/speakerActions'
+import * as speakerActions from '../../core/speakers/speakerActions'
 import { setSelectedDate } from './../project/projectActions'
 import { getVotesBySessionSelector } from '../vote/voteSelectors'
 
