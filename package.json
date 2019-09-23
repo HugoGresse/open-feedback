@@ -15,7 +15,7 @@
     },
     "dependencies": {
         "@material-ui/core": "^4.4.3",
-        "@material-ui/icons": "^4.4.1",
+        "@material-ui/icons": "^4.4.3",
         "docz": "^1.2.0",
         "docz-theme-default": "^1.2.0",
         "firebase": "^6.6.2",
