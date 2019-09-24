@@ -9,3 +9,5 @@ export const EDIT_PROJECT_ERROR = 'admin/project/edit/error'
 
 export const ADD_PROJECT_SUCCESS = 'admin/project/add/success'
 export const ADD_PROJECT_ERROR = 'admin/project/add/error'
+
+export const INIT_PROJECTAPI = 'admin/project/projectApi/init'
