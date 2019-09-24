@@ -1,4 +1,4 @@
-import { GET_SPEAKERS_ERROR, GET_SPEAKERS_SUCCESS } from './speakerActionTypes'
+import { FILTER_SPEAKER, GET_SPEAKERS_ERROR, GET_SPEAKERS_SUCCESS } from './speakerActionTypes'
 import { projectApi } from '../setupType/projectApi'
 
 export const getSpeakers = () => {
@@ -18,4 +18,11 @@ export const getSpeakers = () => {
                 })
             })
     }
+}
+
+export const filterSpeakers = (filter) => (dispatch, getState) => {
+    return dispatch({
+        type: FILTER_SPEAKER,
+        payload: filter
+    })
 }
