@@ -7,8 +7,11 @@ import Root from './root/Root'
 import Page404 from './Page404'
 import AdminApp from './admin/AdminApp'
 import FeedbackApp from "./feedback/FeedbackApp"
+import initAndTrackWithGoogleAnalytics from "./utils/google-analytics/GoogleAnalytics"
 
 export const history = createBrowserHistory()
+
+initAndTrackWithGoogleAnalytics(history, process.env.REACT_APP_GOOGLE_ANALYTICS)
 
 const theme = createMuiTheme({
     typography: {
