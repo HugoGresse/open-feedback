@@ -72,7 +72,8 @@ class SessionVoteText extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            comment: ''
+            comment: '',
+            dataLoaded: false
         }
     }
 
@@ -80,10 +81,12 @@ class SessionVoteText extends Component {
         if (
             (this.props.currentUserVote && !prevProps.currentUserVote) ||
             (this.props.currentUserVote &&
-                this.state.comment !== this.props.currentUserVote.text)
+                this.state.comment !== this.props.currentUserVote.text &&
+                !this.state.dataLoaded)
         ) {
             this.setState({
                 ...this.state,
+                dataLoaded: true,
                 comment: this.props.currentUserVote.text
             })
         }

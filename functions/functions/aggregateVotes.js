@@ -21,6 +21,7 @@ const aggregateVotesUpdate = functions.firestore
     })
 
 function incrementVoteAggregate(newVoteId, newVote, increment) {
+    newVote.sessionId = "" + newVote.sessionId
     if (
         !isIdValid(newVote.projectId) ||
         !isIdValid(newVote.sessionId) ||
@@ -38,7 +39,7 @@ function incrementVoteAggregate(newVoteId, newVote, increment) {
         .collection('sessionVotes')
         .doc(newVote.sessionId)
 
-    sessionVoteDb
+    return sessionVoteDb
         .get()
         .then(snapshot => {
             let aggregatedValue
