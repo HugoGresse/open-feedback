@@ -4,7 +4,7 @@ import JsonUrlApi from './jsonurl/JsonUrlApi'
 const PROJECT_TYPE_HOVERBOARDV2 = 'hoverboardv2'
 const PROJECT_TYPE_JSONURL = 'jsonurl'
 
-export let projectApi = {
+const notImplementApi = {
     getSessions(state) {
         logProjectNotInitialized()
     },
@@ -15,6 +15,8 @@ export let projectApi = {
         logProjectNotInitialized()
     }
 }
+
+export let projectApi = notImplementApi
 
 export const initProjectApi = (projectType, project) => {
     switch (projectType) {

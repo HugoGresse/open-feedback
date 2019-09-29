@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import sessionsReducer from './core/sessions/sessionsReducer'
 import sessionReducer from './feedback/session/core/sessionReducer'
-import speakerReducer from './feedback/speaker/core/speakerReducer'
+import speakerReducer from './core/speakers/speakerReducer'
 import projectReducer from './feedback/project/projectReducer'
 import authReducer from './feedback/auth/authReducer'
 import voteReducer from './feedback/vote/voteReducer'

@@ -10,6 +10,9 @@ export const isProjectsLoadedSelector = state =>
 export const getSelectedProjectIdSelector = state =>
     getProjects(state).selectedProjectId
 
+export const isProjectApiInitSelector = state =>
+    getProjects(state).projectApiInit
+
 // MEMOIZED
 
 export const getSortedProjectsSelector = createSelector(

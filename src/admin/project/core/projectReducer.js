@@ -3,6 +3,7 @@ import {
     GET_PROJECT_SUCCESS,
     GET_PROJECTS_ERROR,
     GET_PROJECTS_SUCCESS,
+    INIT_PROJECTAPI,
     SELECT_PROJECT
 } from './projectActionTypes'
 import { LOGOUT } from '../../auth/authActionTypes'
@@ -11,6 +12,7 @@ const initState = {
     data: {
         projects: []
     },
+    projectApiInit: false,
     projectsLoaded: false,
     projectLoadError: null,
     projectVotesError: null,
@@ -66,6 +68,12 @@ const projectReducer = (state = initState, { payload, type }) => {
                     ...state.data,
                     projects: projects
                 }
+            }
+        }
+        case INIT_PROJECTAPI: {
+            return {
+                ...state,
+                projectApiInit: true
             }
         }
         case GET_PROJECTS_ERROR:

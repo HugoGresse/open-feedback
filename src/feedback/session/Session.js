@@ -9,7 +9,7 @@ import {
     getSpeakersForSelectedSessionSelector
 } from './core/sessionSelectors'
 import { getSession, setSelectedSession } from './core/sessionActions'
-import { getSpeakers } from '../speaker/core/speakerActions'
+import { getSpeakers } from '../../core/speakers/speakerActions'
 import { getVoteItems, getVoteResult } from '../project/projectActions'
 import {
     getVotes,

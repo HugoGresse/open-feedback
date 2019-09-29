@@ -8,10 +8,7 @@ import AddIcon from '@material-ui/icons/AddCircleOutline'
 import { withStyles } from '@material-ui/core'
 import VoteItem from './VoteItem'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-    getBooleanVoteItemsSelector,
-    isSavingSelector
-} from './votingFormSelectors'
+import { getBooleanVoteItemsSelector, isSavingSelector } from './votingFormSelectors'
 import {
     onVoteItemAddBoolean,
     onVoteItemChange,
@@ -44,7 +41,7 @@ const VoteItemList = ({ classes }) => {
     const isSaving = useSelector(isSavingSelector)
 
     return (
-        <Table className={classes.table}>
+        <Table>
             <TableHead>
                 <TableRow>
                     <TableCell>Vote items</TableCell>
