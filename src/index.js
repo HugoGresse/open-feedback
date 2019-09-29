@@ -1,13 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-
 import { Provider } from 'react-redux'
-
 import App from './App'
-import { initGA } from './reactGAMiddlewares'
 import configureStore from './configureStore'
 
-initGA()
 
 const store = configureStore({})
 
