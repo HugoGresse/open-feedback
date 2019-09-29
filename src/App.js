@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-
 import './App.css'
 import { Redirect, Route, Router, Switch } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import Root from './root/Root'
 import Page404 from './Page404'
-import Session from './feedback/session/Session'
-import SessionsListWrapper from './feedback/sessions/SessionsListWrapper'
-import AppLayout from './feedback/AppLayout'
 import AdminApp from './admin/AdminApp'
+import FeedbackApp from "./feedback/FeedbackApp"
+import initAndTrackWithGoogleAnalytics from "./utils/google-analytics/GoogleAnalytics"
 
 export const history = createBrowserHistory()
+
+initAndTrackWithGoogleAnalytics(history, process.env.REACT_APP_GOOGLE_ANALYTICS)
 
 const theme = createMuiTheme({
     typography: {
@@ -25,39 +25,14 @@ class App extends Component {
             <MuiThemeProvider theme={theme}>
                 <Router history={history}>
                     <Switch>
-                        <Route exact path="/" component={Root} />
+                        <Route exact path="/" component={Root}/>
 
-                        <Redirect strict exact from="/admin" to="/admin/" />
-                        <Route path="/admin/" component={AdminApp} />
+                        <Redirect strict exact from="/admin" to="/admin/"/>
+                        <Route path="/admin/" component={AdminApp}/>
 
-                        <Route
-                            exact
-                            path="/:projectId"
-                            render={props => (
-                                <AppLayout {...props}>
-                                    <SessionsListWrapper {...props} />
-                                </AppLayout>
-                            )}
-                        />
-                        <Route
-                            exact
-                            path="/:projectId/:date"
-                            render={props => (
-                                <AppLayout {...props}>
-                                    <SessionsListWrapper {...props} />
-                                </AppLayout>
-                            )}
-                        />
-                        <Route
-                            path="/:projectId/:date/:sessionId"
-                            render={props => (
-                                <AppLayout {...props}>
-                                    <Session {...props} />
-                                </AppLayout>
-                            )}
-                        />
+                        <Route path="/:projectId" component={FeedbackApp}/>
 
-                        <Route component={Page404} />
+                        <Route component={Page404}/>
                     </Switch>
                 </Router>
             </MuiThemeProvider>
