@@ -59,21 +59,26 @@ describe('Single talk', function() {
         })
     })
 
-    it('Check that text vote does work (post and delete)', function() {
+    it('Check that text vote does work (post, edit and delete)', function() {
         cy.visitFeedbackProject('2019-06-28/0', {
             clearUserSession: true
         })
 
         const inputText = stringGenerator()
+        const textEdited = stringGenerator()
         const voteTextAreaSelector = 'textarea[placeholder="Comment"]'
 
         cy.get(voteTextAreaSelector).type(inputText)
         cy.contains('Save comment').click()
         cy.get('.comments').should('contain', inputText)
 
+        cy.get(voteTextAreaSelector).type(textEdited)
+        cy.contains('Update comment').click()
+        cy.get('.comments').should('contain', inputText + textEdited)
+
         // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(500)
         cy.contains('Delete comment').click()
-        cy.get('.comments').should('not.contain', inputText)
+        cy.get('.comments').should('not.contain', inputText + textEdited)
     })
 })
