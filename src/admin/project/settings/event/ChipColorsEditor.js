@@ -32,7 +32,7 @@ const ChipColorsEditor = ({ field, form }) => {
     }
 
     const addColor = () => {
-        const values = field.value
+        const values = field.value || []
         // Generate new random color
         values.push(Math.floor(Math.random() * 16777215).toString(16))
         form.setFieldValue(field.name, values)
@@ -47,7 +47,7 @@ const ChipColorsEditor = ({ field, form }) => {
 
     return (
         <div className={classes.container}>
-            {field.value.map((color, index) => {
+            {field.value && field.value.map((color, index) => {
                 return (
                     <ColorBlock
                         key={index + color}
