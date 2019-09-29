@@ -1,10 +1,9 @@
 import { applyMiddleware, compose, createStore } from 'redux'
 import rootReducer from './rootReducer'
 import thunk from 'redux-thunk'
-import { googleAnalytics } from './reactGAMiddlewares'
 
 export default function(initialState) {
-    const middleware = [thunk, googleAnalytics]
+    const middleware = [thunk]
     const composeEnhancers =
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
