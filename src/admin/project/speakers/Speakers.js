@@ -1,34 +1,28 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import Typography from '@material-ui/core/Typography'
-import Link from '@material-ui/core/Link'
+import React, { useEffect } from 'react'
+import Grid from "@material-ui/core/Grid"
+import OFPaper from "../../baseComponents/OFPaper"
+import SpeakerList from "./SpeakerList"
+import { useDispatch, useSelector } from "react-redux"
+import { getSpeakers } from "../../../core/speakers/speakerActions"
+import { isProjectApiInitSelector } from "../core/projectSelectors"
 
-class Speakers extends Component {
-    render() {
-        return (
-            <Card>
-                <CardContent>
-                    <Typography>
-                        You cannot edit speakers for the moment. The feature is
-                        planned, check this{' '}
-                        <Link href="https://github.com/HugoGresse/open-feedback/issues/77">
-                            issue
-                        </Link>{' '}
-                        for more info.
-                    </Typography>
-                </CardContent>
-            </Card>
-        )
-    }
+const Speakers = () => {
+    const dispatch = useDispatch()
+    const isProjectApiInit = useSelector(isProjectApiInitSelector)
+
+    useEffect(() => {
+        if (isProjectApiInit) {
+            dispatch(getSpeakers())
+        }
+    }, [isProjectApiInit, dispatch])
+
+    return <Grid container spacing={2}>
+        <Grid item xs={12}>
+            <OFPaper>
+                <SpeakerList/>
+            </OFPaper>
+        </Grid>
+    </Grid>
 }
 
-const mapStateToProps = state => ({})
-
-const mapDispatchToProps = Object.assign({}, {})
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Speakers)
+export default Speakers

@@ -2,7 +2,7 @@ import { createSelector } from 'reselect'
 import groupBy from 'lodash/groupBy'
 import { getDateFromStartTime } from './sessionsUtils'
 import { getProjectSelectedDateSelector } from '../../feedback/project/projectSelectors'
-import { getSpeakersListSelector } from '../../feedback/speaker/core/speakerSelectors'
+import { getSpeakersListSelector } from '../speakers/speakerSelectors'
 
 export const getSessionsSelector = state => state.sessions
 

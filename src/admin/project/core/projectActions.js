@@ -7,15 +7,17 @@ import {
     GET_PROJECT_SUCCESS,
     GET_PROJECTS_ERROR,
     GET_PROJECTS_SUCCESS,
+    INIT_PROJECTAPI,
     SELECT_PROJECT
 } from './projectActionTypes'
 import { fireStoreMainInstance } from '../../../firebase'
 import { getUserSelector } from '../../auth/authSelectors'
-import { getSelectedProjectIdSelector } from './projectSelectors'
+import { getSelectedProjectIdSelector, getSelectedProjectSelector } from './projectSelectors'
 import { ADD_NOTIFICATION } from '../../notification/notificationActionTypes'
 import { CLEAR_SESSIONS } from '../../../core/sessions/sessionsActionTypes'
 import { CLEAR_SESSION_VOTES } from '../dashboard/dashboardActionTypes'
 import { history } from '../../../App'
+import { initProjectApi } from "../../../core/setupType/projectApi"
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -36,6 +38,12 @@ export const getProjects = () => {
                     type: GET_PROJECTS_SUCCESS,
                     payload: projects
                 })
+            })
+            .then(() => {
+                dispatch(initProjectApiIfReady(
+                    getSelectedProjectIdSelector(getState()),
+                    getSelectedProjectSelector(getState()))
+                )
             })
             .catch(err => {
                 dispatch({
@@ -90,6 +98,8 @@ export const selectProject = projectId => (dispatch, getState) => {
         payload: projectId
     })
 
+    dispatch(initProjectApiIfReady(projectId, getSelectedProjectSelector(getState())))
+
     // If we have switch the project at runtime
     if (
         currentSelectedProjectId &&
@@ -115,7 +125,7 @@ export const editProject = projectData => (dispatch, getState) => {
     return fireStoreMainInstance
         .collection('projects')
         .doc(getSelectedProjectIdSelector(getState()))
-        .set(projectData, { merge: true })
+        .set(projectData, {merge: true})
         .then(() => {
             dispatch({
                 type: ADD_NOTIFICATION,
@@ -180,4 +190,14 @@ export const newProject = projectData => (dispatch, getState) => {
                 payload: err.toString()
             })
         })
+}
+
+
+export const initProjectApiIfReady = (projectId, project) => (dispatch, getState) => {
+    if (projectId && project) {
+        initProjectApi(project.setupType, project)
+        dispatch({
+            type: INIT_PROJECTAPI
+        })
+    }
 }
