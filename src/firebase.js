@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
+import 'firebase/performance'
 
 const config = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -18,5 +19,6 @@ export const authProvider = firebaseMain.auth()
 export const fireStoreMainInstance = firebaseMain.firestore()
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 export const nowTimestamp = firebase.firestore.Timestamp.now
+export const perf = firebase.performance()
 
 authProvider.useDeviceLanguage()
