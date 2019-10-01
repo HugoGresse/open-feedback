@@ -1,13 +1,7 @@
 import React from 'react'
-import Table from "@material-ui/core/Table"
-import TableHead from "@material-ui/core/TableHead"
-import TableRow from "@material-ui/core/TableRow"
-import TableCell from "@material-ui/core/TableCell"
 import Fade from "@material-ui/core/Fade"
 import CircularProgress from "@material-ui/core/CircularProgress"
 import OFButton from "../../baseComponents/OFButton"
-
-import TableBody from "@material-ui/core/TableBody"
 import makeStyles from "@material-ui/core/styles/makeStyles"
 import OFInput from "../../baseComponents/OFInput"
 import { useDispatch, useSelector } from "react-redux"
@@ -15,6 +9,7 @@ import TalkListItem from "./TalkListItem"
 import { getFilteredSessionsSelector, getSessionsFilterSelector } from "../../../core/sessions/sessionsSelectors"
 import { setSessionsFilter } from "../../../core/sessions/sessionsActions"
 import { getSpeakersListSelector } from "../../../core/speakers/speakerSelectors"
+import Grid from "@material-ui/core/Grid"
 
 const useStyles = makeStyles(theme => ({
     icon: {
@@ -27,8 +22,11 @@ const useStyles = makeStyles(theme => ({
         top: 10,
         position: 'relative'
     },
-    table: {
-        minWidth: 600
+    header: {
+        padding: 20
+    },
+    headerRight: {
+        textAlign: "right"
     }
 }))
 
@@ -41,18 +39,15 @@ const TalkList = () => {
     const filter = useSelector(getSessionsFilterSelector)
 
     return (
-        <Table className={classes.table}>
-            <TableHead>
-                <TableRow>
-                    <TableCell>
+        <Grid container>
+                <Grid container className={classes.header}>
+                    <Grid item xs={12} sm={6} >
                         <OFInput placeholder="Search"
                                  value={filter}
                                  onChange={(event) => dispatch(setSessionsFilter(event.target.value))}/>
-                    </TableCell>
-                    <TableCell/>
-                    <TableCell/>
-                    <TableCell style={{ minWidth: "80px"}}/>
-                    <TableCell align="right"  style={{ width: "120px"}}>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} className={classes.headerRight}>
                         <Fade in={false}>
                             <CircularProgress
                                 size={30}
@@ -60,16 +55,16 @@ const TalkList = () => {
                             />
                         </Fade>
 
-                        <OFButton onClick={() => alert('Talks are read only here. You can probably update them through your Hoverboard Firestore or json url depending on your setup.')}>
+                        <OFButton
+                            onClick={() => alert('Talks are read only here. You can probably update them through your Hoverboard Firestore or json url depending on your setup.')}>
                             Save
                         </OFButton>
-                    </TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {talks.map(talk =>  <TalkListItem item={talk} key={talk.id} speakers={talk.speakers.map(id => speakers[id])}/>)}
-            </TableBody>
-        </Table>
+                    </Grid>
+                </Grid>
+
+            {talks.map(talk => <TalkListItem item={talk} key={talk.id}
+                                             speakers={talk.speakers.map(id => speakers[id])}/>)}
+        </Grid>
     )
 }
 

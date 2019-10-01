@@ -20,7 +20,7 @@ const Talks = () => {
 
     return <Grid container spacing={2}>
         <Grid item xs={12}>
-            <OFPaper>
+            <OFPaper style={{padding: 0}}>
                 <TalkList/>
             </OFPaper>
         </Grid>
