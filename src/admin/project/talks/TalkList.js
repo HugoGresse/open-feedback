@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux"
 import TalkListItem from "./TalkListItem"
 import { getFilteredSessionsSelector, getSessionsFilterSelector } from "../../../core/sessions/sessionsSelectors"
 import { setSessionsFilter } from "../../../core/sessions/sessionsActions"
+import { getSpeakersListSelector } from "../../../core/speakers/speakerSelectors"
 
 const useStyles = makeStyles(theme => ({
     icon: {
@@ -25,6 +26,9 @@ const useStyles = makeStyles(theme => ({
         marginRight: 10,
         top: 10,
         position: 'relative'
+    },
+    table: {
+        minWidth: 600
     }
 }))
 
@@ -33,10 +37,11 @@ const TalkList = () => {
     const dispatch = useDispatch()
     const classes = useStyles()
     const talks = useSelector(getFilteredSessionsSelector)
+    const speakers = useSelector(getSpeakersListSelector)
     const filter = useSelector(getSessionsFilterSelector)
 
     return (
-        <Table>
+        <Table className={classes.table}>
             <TableHead>
                 <TableRow>
                     <TableCell>
@@ -44,7 +49,10 @@ const TalkList = () => {
                                  value={filter}
                                  onChange={(event) => dispatch(setSessionsFilter(event.target.value))}/>
                     </TableCell>
-                    <TableCell align="right"  style={{ width: "200px"}}>
+                    <TableCell/>
+                    <TableCell/>
+                    <TableCell style={{ minWidth: "80px"}}/>
+                    <TableCell align="right"  style={{ width: "120px"}}>
                         <Fade in={false}>
                             <CircularProgress
                                 size={30}
@@ -59,7 +67,7 @@ const TalkList = () => {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {talks.map(talk =>  <TalkListItem item={talk} key={talk.id}/>)}
+                {talks.map(talk =>  <TalkListItem item={talk} key={talk.id} speakers={talk.speakers.map(id => speakers[id])}/>)}
             </TableBody>
         </Table>
     )
