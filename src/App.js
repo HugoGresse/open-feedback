@@ -8,6 +8,7 @@ import Page404 from './Page404'
 import AdminApp from './admin/AdminApp'
 import FeedbackApp from "./feedback/FeedbackApp"
 import initAndTrackWithGoogleAnalytics from "./utils/google-analytics/GoogleAnalytics"
+import { ThemeProvider } from "styled-components"
 
 export const history = createBrowserHistory()
 
@@ -23,18 +24,20 @@ class App extends Component {
     render() {
         return (
             <MuiThemeProvider theme={theme}>
-                <Router history={history}>
-                    <Switch>
-                        <Route exact path="/" component={Root}/>
+                <ThemeProvider theme={{}}>
+                    <Router history={history}>
+                        <Switch>
+                            <Route exact path="/" component={Root}/>
 
-                        <Redirect strict exact from="/admin" to="/admin/"/>
-                        <Route path="/admin/" component={AdminApp}/>
+                            <Redirect strict exact from="/admin" to="/admin/"/>
+                            <Route path="/admin/" component={AdminApp}/>
 
-                        <Route path="/:projectId" component={FeedbackApp}/>
+                            <Route path="/:projectId" component={FeedbackApp}/>
 
-                        <Route component={Page404}/>
-                    </Switch>
-                </Router>
+                            <Route component={Page404}/>
+                        </Switch>
+                    </Router>
+                </ThemeProvider>
             </MuiThemeProvider>
         )
     }
