@@ -2,7 +2,7 @@ import { createSelector } from 'reselect'
 import groupBy from 'lodash/groupBy'
 import { getDateFromStartTime } from './sessionsUtils'
 import { getProjectSelectedDateSelector } from '../../feedback/project/projectSelectors'
-import { getSpeakersListSelector } from '../../feedback/speaker/core/speakerSelectors'
+import { getSpeakersListSelector } from '../speakers/speakerSelectors'
 
 export const getSessionsSelector = state => state.sessions
 
@@ -51,15 +51,14 @@ export const getSessionsDatesSelector = createSelector(
     }
 )
 
-export const getCurrentSessionsGroupByTrackSelector = createSelector(
+export const getFilteredSessionsSelector = createSelector(
     getSessionsAsArraySelector,
     getSessionsFilterSelector,
-    getProjectSelectedDateSelector,
     getSpeakersListSelector,
-    (sessions, filter, date, speakers) => {
+    (sessions, filter, speakers) => {
         const cleanedFilterInput = filter.toLowerCase().trim()
 
-        const filteredSessions = sessions.filter(session => {
+        return sessions.filter(session => {
             const titleMatch = session.title
                 .toLowerCase()
                 .includes(cleanedFilterInput)
@@ -87,10 +86,17 @@ export const getCurrentSessionsGroupByTrackSelector = createSelector(
                 session.tags &&
                 session.tags.filter(tag => tag.toLowerCase().includes(cleanedFilterInput)).length > 0
 
-            return (
-                (titleMatch || speakerMatch > 0 || tagMatch) &&
-                date === getDateFromStartTime(session.startTime)
-            )
+            return titleMatch || speakerMatch > 0 || tagMatch
+        })
+    }
+)
+
+export const getCurrentSessionsGroupByTrackSelector = createSelector(
+    getFilteredSessionsSelector,
+    getProjectSelectedDateSelector,
+    (sessions, date) => {
+        const filteredSessions = sessions.filter(session => {
+            return date === getDateFromStartTime(session.startTime)
         })
 
         const sessionsGroupByTrack = groupBy(

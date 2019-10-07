@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 
-import { getSpeakersListSelector } from '../../speaker/core/speakerSelectors'
+import { getSpeakersListSelector } from '../../../core/speakers/speakerSelectors'
 import { getSessionsListSelector } from '../../../core/sessions/sessionsSelectors'
 import { getProjectVoteResultsSelector } from '../../project/projectSelectors'
 

@@ -1,29 +1,28 @@
 import firebase from 'firebase/app'
 import { formatSessionsWithScheduled } from '../../sessions/sessionsUtils'
-import { getProjectConfigSelector } from '../../../feedback/project/projectSelectors'
 
 class Hoverboardv2Api {
     constructor(project) {
-        const config = project.config ? project.config : project.firebaseConfig
+        this.config = project.config ? project.config : project.firebaseConfig
 
         if (
-            firebase.apps.filter(app => app.name === config.projectId).length >
+            firebase.apps.filter(app => app.name === this.config.projectId).length >
             0
         ) {
             return
         }
 
-        firebase.initializeApp(config, config.projectId)
+        firebase.initializeApp(this.config, this.config.projectId)
     }
 
-    getFirestore(state) {
+    getFirestore() {
         return firebase
-            .app(getProjectConfigSelector(state).projectId)
+            .app(this.config.projectId)
             .firestore()
     }
 
-    getSessions(state) {
-        const firestore = this.getFirestore(state)
+    getSessions() {
+        const firestore = this.getFirestore()
 
         const schedulePromise = firestore.collection('schedule').get()
         const sessionsPromise = firestore.collection('sessions').get()
@@ -49,7 +48,7 @@ class Hoverboardv2Api {
     }
 
     getSession(state, sessionId) {
-        const firestore = this.getFirestore(state)
+        const firestore = this.getFirestore()
         const schedulePromise = firestore.collection('schedule').get()
         const sessionsPromise = firestore
             .collection('sessions')
@@ -75,8 +74,8 @@ class Hoverboardv2Api {
         )
     }
 
-    getSpeakers(state) {
-        return this.getFirestore(state)
+    getSpeakers() {
+        return this.getFirestore()
             .collection('speakers')
             .get()
             .then(speakersSnapshot => {
