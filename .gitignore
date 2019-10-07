@@ -16,9 +16,9 @@
 *.DS_Store
 *.log
 *.iml
-.env.local
+.env.prod.local
 .env.development.local
-.env.test.local
+.env.local
 .env.production.local
 
 # IDE specific

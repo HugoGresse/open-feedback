@@ -35,3 +35,16 @@ Cypress.Commands.add('getVoteCountData', baseEl => {
             }
         })
 })
+
+let spyConsoleError
+Cypress.on('window:before:load', win => {
+    spyConsoleError = cy.spy(win.console, 'error').as('consoleError')
+})
+
+Cypress.Commands.add('getConsoleError', () => {
+    return spyConsoleError
+})
+
+afterEach(function() {
+    expect(spyConsoleError).to.be.callCount(0)
+})
