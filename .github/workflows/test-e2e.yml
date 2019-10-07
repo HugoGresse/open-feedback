@@ -35,3 +35,4 @@ jobs:
           ./node_modules/.bin/cypress run --record --key ${{ secrets.CYPRESS_DASHBOARD_KEY }}
       env:
         CI: true
+        COMMIT_INFO_BRANCH: ${GITHUB_REF}
