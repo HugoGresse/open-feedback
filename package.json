@@ -31,7 +31,7 @@
         "react-firebaseui": "^4.0.0",
         "react-ga": "^2.6.0",
         "react-redux": "^7.1.1",
-        "react-router-dom": "^5.1.1",
+        "react-router-dom": "^5.1.2",
         "recharts": "^1.7.1",
         "redux": "^4.0.4",
         "redux-thunk": "^2.3.0",
