@@ -30,8 +30,6 @@ export const voteFor = (sessionId, voteItem, data) => {
             return
         }
 
-        console.error('nnoo')
-
         const projectId = getProjectSelector(getState()).id
 
         const voteContent = {
