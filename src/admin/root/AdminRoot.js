@@ -1,20 +1,21 @@
-import React, { useEffect } from 'react'
+import React, {useEffect, useState} from 'react'
 import {
     getSortedProjectsSelector,
     isProjectsLoadedSelector
 } from '../project/core/projectSelectors'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
-import { getProjects, selectProject } from '../project/core/projectActions'
+import {getProjects, selectProject} from '../project/core/projectActions'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import withStyles from '@material-ui/core/styles/withStyles'
 import RootHeader from './RootHeader'
-import { Box } from '@material-ui/core'
+import {Box} from '@material-ui/core'
 import Container from '@material-ui/core/Container'
 import COLORS from '../../constants/colors'
 import Paper from '@material-ui/core/Paper'
 import RootContent from './RootContent'
+import NewProject from "../project/new/NewProject"
 
 const styles = theme => ({
     container: {
@@ -32,19 +33,26 @@ const styles = theme => ({
 })
 
 function AdminRoot({
-    getProjects,
-    projects,
-    isProjectsLoaded,
-    selectProject,
-    classes
-}) {
+                       getProjects,
+                       projects,
+                       isProjectsLoaded,
+                       selectProject,
+                       classes
+                   }) {
     useEffect(() => {
         getProjects()
     }, [getProjects])
 
+    const [isNewProjectOpen, setNewProjectOpen] = useState(true)
+
+    if (isNewProjectOpen) {
+        return <NewProject
+            onCancel={() => setNewProjectOpen(false)}/>
+    }
+
     return (
         <Box className={classes.container}>
-            <RootHeader />
+            <RootHeader/>
             <Container maxWidth="md" fixed>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -61,9 +69,7 @@ function AdminRoot({
                         <RootContent
                             projects={projects}
                             onNewEventClick={() =>
-                                alert(
-                                    `Creating new event can only be done by the admin for the moment. Contact ${process.env.REACT_APP_ADMIN_EMAIL} to create it (should be pretty fast).`
-                                )
+                                setNewProjectOpen(true)
                             }
                             onProjectSelected={projectId =>
                                 selectProject(projectId)
@@ -73,7 +79,7 @@ function AdminRoot({
 
                     {!isProjectsLoaded && (
                         <Paper className={classes.loaderContainer}>
-                            <LoaderMatchParent height="50" />
+                            <LoaderMatchParent height="50"/>
                         </Paper>
                     )}
                 </Grid>

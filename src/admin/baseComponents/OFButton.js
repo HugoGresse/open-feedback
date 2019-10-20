@@ -7,6 +7,7 @@ const useStyles = makeStyles({
     root: {
         background: COLORS.RED_ORANGE,
         color: COLORS.WHITE,
+        padding: props => props.type === "big" ? '12px 32px' : '6px 8px',
         '&:hover': {
             background: COLORS.DARK_RED_ORANGE
         },
@@ -17,7 +18,7 @@ const useStyles = makeStyles({
 })
 
 const OFButton = props => {
-    const classes = useStyles()
+    const classes = useStyles(props.style)
 
     return (
         <Button
