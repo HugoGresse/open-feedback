@@ -27,7 +27,7 @@
         "prop-types": "latest",
         "react": "^16.9.0",
         "react-color": "^2.17.3",
-        "react-dom": "^16.9.0",
+        "react-dom": "^16.10.2",
         "react-firebaseui": "^4.0.0",
         "react-ga": "^2.6.0",
         "react-redux": "^7.1.1",
