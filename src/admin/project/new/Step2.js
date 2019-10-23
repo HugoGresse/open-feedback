@@ -4,8 +4,8 @@ import {object, string} from 'yup'
 import {Typography} from '@material-ui/core'
 import {Field, Form, Formik} from 'formik'
 import OFButton from '../../baseComponents/OFButton'
-import RadioButtonGroup from './RadioButtonGroup'
-import OFRadioButtonFormiked from './OFRadioButtonFormiked'
+import RadioButtonGroup from '../../baseComponents/RadioButtonGroup'
+import OFRadioButtonFormiked from '../../baseComponents/OFRadioButtonFormiked'
 
 const schema = object().shape({
     projectType: string().required(
@@ -22,7 +22,7 @@ const Step2 = ({onCancel, onSubmit}) => {
         <Formik
             validationSchema={schema}
             initialValues={{projectType: ''}}
-            onSubmit={(values, actions) => onSubmit(values.projectType)}
+            onSubmit={(values) => onSubmit(values.projectType)}
         >
 
             {({isSubmitting}) => (
@@ -44,7 +44,7 @@ const Step2 = ({onCancel, onSubmit}) => {
                         <Field
                             component={OFRadioButtonFormiked}
                             name="projectType"
-                            id="json"
+                            id="jsonUrl"
                             label={<div>
                                 <Typography variant="h6">Link to JSON file</Typography>
                                 <Typography variant="subtitle1">By providing a url to a .json file that you’ll either

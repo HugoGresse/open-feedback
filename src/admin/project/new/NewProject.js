@@ -5,6 +5,7 @@ import {COLORS} from '../../../constants/colors'
 import Hidden from '@material-ui/core/Hidden'
 import Step1 from './Step1'
 import Step2 from './Step2'
+import Step3 from './Step3'
 
 const useStyles = makeStyles({
     container: {
@@ -17,29 +18,35 @@ const useStyles = makeStyles({
         background: COLORS.RED_ORANGE
     }
 })
-
+// TODO : store PROJECTYPE const and replace occurence
 const NewProject = ({onCancel}) => {
     const classes = useStyles()
 
-    const [currentStep, setCurrentStep] = useState(1)
-    const [projectData, setProjectData] = useState({
-        projectName: '',
-        projectType: ''
-    })
+    const [currentStep, setCurrentStep] = useState(3)
 
-    console.log("Peroject: ", projectData)
+    const [projectName, setProjectName] = useState('')
+    const [projectType, setProjectType] = useState('')
+    const [projectConfig, setProjectConfig] = useState({})
+
+    console.log("Peroject: ", projectName, projectType, projectConfig)
 
     return <Grid container className={classes.container}>
         <Grid item xs={12} sm={9} className={classes.leftContainer}>
             {currentStep === 1 && <Step1 onCancel={onCancel}
                                          onSubmit={(projectName) => {
                                              setCurrentStep(2)
-                                             setProjectData({projectName: projectName})
+                                             setProjectName(projectName)
                                          }}/>}
             {currentStep === 2 && <Step2 onCancel={onCancel}
                                          onSubmit={(projectType) => {
-                                             setCurrentStep(2)
-                                             setProjectData({projectType: projectType})
+                                             setCurrentStep(3)
+                                             setProjectType( projectType)
+                                         }}/>}
+
+            {currentStep === 3 && <Step3 onCancel={onCancel}
+                                         projectType={projectType}
+                                         onSubmit={(data) => {
+                                             setProjectConfig(data)
                                          }}/>}
         </Grid>
 
