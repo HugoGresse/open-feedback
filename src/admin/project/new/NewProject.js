@@ -23,18 +23,24 @@ const NewProject = ({onCancel}) => {
 
     const [currentStep, setCurrentStep] = useState(1)
     const [projectData, setProjectData] = useState({
-        projectName: ''
+        projectName: '',
+        projectType: ''
     })
 
-    console.log("Peroject name: " + projectData.projectName)
+    console.log("Peroject: ", projectData)
 
     return <Grid container className={classes.container}>
         <Grid item xs={12} sm={9} className={classes.leftContainer}>
-            {currentStep === 1 && <Step1 onCancel={onCancel} onSubmit={(projectName) => {
-                setCurrentStep(2)
-                setProjectData({projectName: projectName})
-            }}/>}
-            {currentStep === 2 && <Step2 onCancel={onCancel}/>}
+            {currentStep === 1 && <Step1 onCancel={onCancel}
+                                         onSubmit={(projectName) => {
+                                             setCurrentStep(2)
+                                             setProjectData({projectName: projectName})
+                                         }}/>}
+            {currentStep === 2 && <Step2 onCancel={onCancel}
+                                         onSubmit={(projectType) => {
+                                             setCurrentStep(2)
+                                             setProjectData({projectType: projectType})
+                                         }}/>}
         </Grid>
 
         <Hidden xsDown>

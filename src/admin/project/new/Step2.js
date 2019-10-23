@@ -2,53 +2,72 @@ import React from 'react'
 import NewProjectLayout from './NewProjectLayout'
 import {object, string} from 'yup'
 import {Typography} from '@material-ui/core'
-import {Form, Formik} from 'formik'
-import OFFormControlInputFormiked from '../../baseComponents/OFFormControlInputFormiked'
+import {Field, Form, Formik} from 'formik'
 import OFButton from '../../baseComponents/OFButton'
-import RadioGroup from '@material-ui/core/RadioGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio'
+import RadioButtonGroup from './RadioButtonGroup'
+import OFRadioButtonFormiked from './OFRadioButtonFormiked'
 
 const schema = object().shape({
-    name: string().required(
-        <Typography>The event name is required</Typography>
+    projectType: string().required(
+        <Typography>You need to choose how you want to setup the project.</Typography>
     )
 })
 
 const Step2 = ({onCancel, onSubmit}) => {
-    const initialValues = {
-        name: '',
-    }
-
     return <NewProjectLayout
         stepTitle="Create a new event (step 2/3)"
         title="How do you want to load your data?"
         onCancel={onCancel}>
 
-        <RadioGroup aria-label="gender" name="gender1">
-            <FormControlLabel value="hoverboardv2" control={<Radio />} label="Hoverboard v2 Firestore" />
-            <FormControlLabel value="json" control={<Radio />} label="Link to JSON file" />
-            <FormControlLabel value="openfeedback"
-                              control={<Radio />}
-                              label="OpenFeedback Database (not available yet)"
-                              disabled />
-        </RadioGroup>
-
         <Formik
             validationSchema={schema}
-            initialValues={initialValues}
-            onSubmit={(values, actions) => onSubmit(values.name)}
+            initialValues={{projectType: ''}}
+            onSubmit={(values, actions) => onSubmit(values.projectType)}
         >
 
             {({isSubmitting}) => (
                 <Form method="POST">
+                    <RadioButtonGroup fieldName="projectType">
 
-                    <OFFormControlInputFormiked
-                        name="Event Name"
-                        fieldName="name"
-                        type="text"
-                        isSubmitting={isSubmitting}
-                    />
+                        <Field
+                            component={OFRadioButtonFormiked}
+                            name="projectType"
+                            id="hoverboardv2"
+                            label={<div>
+                                <Typography variant="h6">Hoverboard v2 Firestore</Typography>
+                                <Typography variant="subtitle1">The talks/speakers/schedule will be retrieved directly
+                                    on page load from your own
+                                    Firestore database that follow Hoverboard v2 model.</Typography>
+                            </div>}
+                        />
+
+                        <Field
+                            component={OFRadioButtonFormiked}
+                            name="projectType"
+                            id="json"
+                            label={<div>
+                                <Typography variant="h6">Link to JSON file</Typography>
+                                <Typography variant="subtitle1">By providing a url to a .json file that you’ll either
+                                    host (on gist.github.com or another static server) or a dynamic answer from your
+                                    own database/api. The json model will need to match OpenFeedback one, you’ll be able
+                                    to check it on the next screen.</Typography>
+                            </div>}
+                        />
+                        <Field
+                            component={OFRadioButtonFormiked}
+                            name="projectType"
+                            id="openfeedback"
+                            disabled
+                            label={
+                                <div>
+                                    <Typography variant="h6">OpenFeedback Database (not available yet)</Typography>
+                                    <Typography variant="subtitle1">You can manually enter the talks/speakers/schedule
+                                        on OpenFeedback. It will not be in sync with another service if you are using
+                                        one. No additional configuration is required.</Typography>
+                                </div>
+                            }
+                        />
+                    </RadioButtonGroup>
 
                     <OFButton disabled={isSubmitting}
                               type="submit"
