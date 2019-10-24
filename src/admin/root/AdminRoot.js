@@ -1,21 +1,21 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     getSortedProjectsSelector,
     isProjectsLoadedSelector
 } from '../project/core/projectSelectors'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
-import {getProjects, selectProject} from '../project/core/projectActions'
+import { getProjects, selectProject } from '../project/core/projectActions'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import withStyles from '@material-ui/core/styles/withStyles'
 import RootHeader from './RootHeader'
-import {Box} from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import Container from '@material-ui/core/Container'
 import COLORS from '../../constants/colors'
 import Paper from '@material-ui/core/Paper'
 import RootContent from './RootContent'
-import NewProject from "../project/new/NewProject"
+import NewProject from '../project/new/NewProject'
 
 const styles = theme => ({
     container: {
@@ -33,58 +33,57 @@ const styles = theme => ({
 })
 
 function AdminRoot({
-                       getProjects,
-                       projects,
-                       isProjectsLoaded,
-                       selectProject,
-                       classes
-                   }) {
+    getProjects,
+    projects,
+    isProjectsLoaded,
+    selectProject,
+    classes
+}) {
     useEffect(() => {
         getProjects()
     }, [getProjects])
 
-    const [isNewProjectOpen, setNewProjectOpen] = useState(true)
+    const [isNewProjectOpen, setNewProjectOpen] = useState(false)
 
     if (isNewProjectOpen) {
-        return <NewProject
-            onCancel={() => setNewProjectOpen(false)}/>
+        return <NewProject onCancel={() => setNewProjectOpen(false)} />
     }
 
     return (
-        <Box className={classes.container}>
-            <RootHeader/>
-            <Container maxWidth="md" fixed>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <Typography
-                            className={classes.title}
-                            variant="h4"
-                            gutterBottom
-                        >
-                            Your OpenFeedback events
-                        </Typography>
+        <>
+            <Box className={classes.container}>
+                <RootHeader />
+                <Container maxWidth="md" fixed>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Typography
+                                className={classes.title}
+                                variant="h4"
+                                gutterBottom
+                            >
+                                Your OpenFeedback events
+                            </Typography>
+                        </Grid>
+
+                        {isProjectsLoaded && (
+                            <RootContent
+                                projects={projects}
+                                onNewEventClick={() => setNewProjectOpen(true)}
+                                onProjectSelected={projectId =>
+                                    selectProject(projectId)
+                                }
+                            />
+                        )}
+
+                        {!isProjectsLoaded && (
+                            <Paper className={classes.loaderContainer}>
+                                <LoaderMatchParent height="50" />
+                            </Paper>
+                        )}
                     </Grid>
-
-                    {isProjectsLoaded && (
-                        <RootContent
-                            projects={projects}
-                            onNewEventClick={() =>
-                                setNewProjectOpen(true)
-                            }
-                            onProjectSelected={projectId =>
-                                selectProject(projectId)
-                            }
-                        />
-                    )}
-
-                    {!isProjectsLoaded && (
-                        <Paper className={classes.loaderContainer}>
-                            <LoaderMatchParent height="50"/>
-                        </Paper>
-                    )}
-                </Grid>
-            </Container>
-        </Box>
+                </Container>
+            </Box>
+        </>
     )
 }
 

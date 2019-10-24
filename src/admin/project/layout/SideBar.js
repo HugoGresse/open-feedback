@@ -4,7 +4,7 @@ import logo from '../../../assets/logo-openfeedback-color&white.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserSelector } from '../../auth/authSelectors'
 import { signOut } from '../../auth/authActions'
-import { createMuiTheme } from '@material-ui/core'
+import { createMuiTheme, Link } from '@material-ui/core'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -92,14 +92,15 @@ const SideBar = ({ match, drawerOpen, toggleDrawer, isMobile }) => {
                 }}
             >
                 <div className={classes.container}>
-                    {isMobile}
                     <List component="nav">
                         <ListItem className={classes.logoContainer}>
-                            <img
-                                className={classes.logo}
-                                src={logo}
-                                alt="open feedback logo"
-                            />
+                            <Link href="/admin/">
+                                <img
+                                    className={classes.logo}
+                                    src={logo}
+                                    alt="open feedback logo"
+                                />
+                            </Link>
                         </ListItem>
                         <Divider />
                     </List>

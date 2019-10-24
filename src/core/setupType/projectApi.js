@@ -1,8 +1,8 @@
 import HoverboardV2Api from './hoverboardv2/Hoverboardv2Api'
 import JsonUrlApi from './jsonurl/JsonUrlApi'
 
-const PROJECT_TYPE_HOVERBOARDV2 = 'hoverboardv2'
-const PROJECT_TYPE_JSONURL = 'jsonurl'
+export const PROJECT_TYPE_HOVERBOARDV2 = 'hoverboardv2'
+export const PROJECT_TYPE_JSONURL = 'jsonurl'
 
 const notImplementApi = {
     getSessions(state) {
@@ -29,7 +29,9 @@ export const initProjectApi = (projectType, project) => {
             break
         }
         default: {
-            console.error('This project type has not been implemented')
+            console.error(
+                `This project type has not been implemented: ${projectType}`
+            )
             break
         }
     }
