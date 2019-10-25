@@ -10,6 +10,7 @@ import {
     PROJECT_TYPE_HOVERBOARDV2,
     PROJECT_TYPE_JSONURL
 } from '../../../core/setupType/projectApi'
+import Box from '@material-ui/core/Box'
 
 const schema = object().shape({
     projectType: string().required(
@@ -19,7 +20,7 @@ const schema = object().shape({
     )
 })
 
-const Step2 = ({ onCancel, onSubmit }) => {
+const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
     return (
         <NewProjectLayout
             stepTitle="Create a new event (step 2/3)"
@@ -28,7 +29,7 @@ const Step2 = ({ onCancel, onSubmit }) => {
         >
             <Formik
                 validationSchema={schema}
-                initialValues={{ projectType: '' }}
+                initialValues={initialValues}
                 onSubmit={values => onSubmit(values.projectType)}
             >
                 {({ isSubmitting }) => (
@@ -99,13 +100,27 @@ const Step2 = ({ onCancel, onSubmit }) => {
                             />
                         </RadioButtonGroup>
 
-                        <OFButton
-                            disabled={isSubmitting}
-                            type="submit"
-                            style={{ type: 'big', marginTop: 64 }}
-                        >
-                            Continue
-                        </OFButton>
+                        <Box justifyContent="space-between" display="flex">
+                            <OFButton
+                                disabled={isSubmitting}
+                                onClick={() => onBack()}
+                                style={{
+                                    type: 'big',
+                                    design: 'text',
+                                    marginTop: 64
+                                }}
+                            >
+                                Back
+                            </OFButton>
+
+                            <OFButton
+                                disabled={isSubmitting}
+                                type="submit"
+                                style={{ type: 'big', marginTop: 64 }}
+                            >
+                                Continue
+                            </OFButton>
+                        </Box>
                     </Form>
                 )}
             </Formik>

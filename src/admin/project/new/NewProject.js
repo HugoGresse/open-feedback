@@ -25,9 +25,10 @@ const NewProject = ({ onCancel }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
 
-    const [currentStep, setCurrentStep] = useState(1)
+    const [currentStep, setCurrentStep] = useState(2)
     const [projectName, setProjectName] = useState('')
     const [projectType, setProjectType] = useState('')
+    const [step3Data, setStep3Data] = useState()
 
     return (
         <Grid container className={classes.container}>
@@ -39,21 +40,33 @@ const NewProject = ({ onCancel }) => {
                             setCurrentStep(2)
                             setProjectName(projectName)
                         }}
+                        initialValues={{ name: projectName }}
                     />
                 )}
                 {currentStep === 2 && (
                     <Step2
                         onCancel={onCancel}
-                        onSubmit={projectType => {
+                        onBack={() => setCurrentStep(1)}
+                        onSubmit={newProjectType => {
                             setCurrentStep(3)
-                            setProjectType(projectType)
+                            if (projectType !== newProjectType) {
+                                setStep3Data()
+                            }
+                            setProjectType(newProjectType)
                         }}
+                        initialValues={{ projectType: projectType }}
                     />
                 )}
 
                 {currentStep === 3 && (
                     <Step3
                         onCancel={onCancel}
+                        onBack={data => {
+                            console.log('back,', data)
+                            setStep3Data(data)
+                            setCurrentStep(2)
+                        }}
+                        initialValues={step3Data}
                         projectType={projectType}
                         onSubmit={data => {
                             dispatch(

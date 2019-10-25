@@ -43,7 +43,7 @@ function AdminRoot({
         getProjects()
     }, [getProjects])
 
-    const [isNewProjectOpen, setNewProjectOpen] = useState(false)
+    const [isNewProjectOpen, setNewProjectOpen] = useState(true)
 
     if (isNewProjectOpen) {
         return <NewProject onCancel={() => setNewProjectOpen(false)} />

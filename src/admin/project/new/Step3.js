@@ -8,16 +8,26 @@ import {
 
 const stepTitle = 'Create a new event (step 3/3)'
 const submitText = 'Create the event'
+const backText = 'Back'
 
-const Step3 = ({ onCancel, onSubmit, projectType }) => {
+const Step3 = ({ onCancel, onBack, onSubmit, projectType, initialValues }) => {
     switch (projectType) {
         case PROJECT_TYPE_HOVERBOARDV2:
             return (
                 <Step3Hoverboardv2
                     stepTitle={stepTitle}
                     submitText={submitText}
+                    backText={backText}
                     onCancel={onCancel}
+                    onBack={onBack}
                     onSubmit={onSubmit}
+                    initialValues={
+                        initialValues || {
+                            projectId: '',
+                            apiKey: '',
+                            databaseURL: ''
+                        }
+                    }
                 />
             )
         case PROJECT_TYPE_JSONURL:
@@ -25,8 +35,15 @@ const Step3 = ({ onCancel, onSubmit, projectType }) => {
                 <Step3JSON
                     stepTitle={stepTitle}
                     submitText={submitText}
+                    backText={backText}
                     onCancel={onCancel}
+                    onBack={onBack}
                     onSubmit={onSubmit}
+                    initialValues={
+                        initialValues || {
+                            jsonUrl: ''
+                        }
+                    }
                 />
             )
         default:
