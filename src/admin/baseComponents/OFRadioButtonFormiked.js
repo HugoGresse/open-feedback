@@ -24,7 +24,7 @@ const OFRadioButtonFormiked = ({
         <FormControlLabel
             name={name}
             id={id}
-            value={id} // could be something else for output?
+            value={id}
             checked={id === value}
             onChange={onChange}
             onBlur={onBlur}

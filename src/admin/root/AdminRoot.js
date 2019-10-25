@@ -57,49 +57,45 @@ function AdminRoot({
 
     return (
         <div style={{ position: 'relative' }}>
-            {
-                <Box
-                    className={classes.container}
-                    style={{ height: isNewProjectOpen ? '100vh' : 'auto' }}
+            <Box
+                className={classes.container}
+                style={{ height: isNewProjectOpen ? '100vh' : 'auto' }}
+            >
+                <RootHeader />
+                <Container
+                    maxWidth="md"
+                    fixed
+                    className={classes.projectContainer}
                 >
-                    <RootHeader />
-                    <Container
-                        maxWidth="md"
-                        fixed
-                        className={classes.projectContainer}
-                    >
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <Typography
-                                    className={classes.title}
-                                    variant="h4"
-                                    gutterBottom
-                                >
-                                    Your OpenFeedback events
-                                </Typography>
-                            </Grid>
-
-                            {isProjectsLoaded && (
-                                <RootContent
-                                    projects={projects}
-                                    onNewEventClick={() =>
-                                        setNewProjectOpen(true)
-                                    }
-                                    onProjectSelected={projectId =>
-                                        selectProject(projectId)
-                                    }
-                                />
-                            )}
-
-                            {!isProjectsLoaded && (
-                                <Paper className={classes.loaderContainer}>
-                                    <LoaderMatchParent height="50" />
-                                </Paper>
-                            )}
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Typography
+                                className={classes.title}
+                                variant="h4"
+                                gutterBottom
+                            >
+                                Your OpenFeedback events
+                            </Typography>
                         </Grid>
-                    </Container>
-                </Box>
-            }
+
+                        {isProjectsLoaded && (
+                            <RootContent
+                                projects={projects}
+                                onNewEventClick={() => setNewProjectOpen(true)}
+                                onProjectSelected={projectId =>
+                                    selectProject(projectId)
+                                }
+                            />
+                        )}
+
+                        {!isProjectsLoaded && (
+                            <Paper className={classes.loaderContainer}>
+                                <LoaderMatchParent height="50" />
+                            </Paper>
+                        )}
+                    </Grid>
+                </Container>
+            </Box>
 
             <div className={classes.newProjectContainer}>
                 <Slide
