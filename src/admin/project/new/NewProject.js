@@ -12,7 +12,8 @@ import { history } from '../../../App'
 
 const useStyles = makeStyles({
     container: {
-        minHeight: '100vh'
+        minHeight: '100vh',
+        minWidth: '100vw'
     },
     leftContainer: {
         background: COLORS.ADMIN_BACKGROUND_LIGHT
@@ -25,7 +26,7 @@ const NewProject = ({ onCancel }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
 
-    const [currentStep, setCurrentStep] = useState(2)
+    const [currentStep, setCurrentStep] = useState(1)
     const [projectName, setProjectName] = useState('')
     const [projectType, setProjectType] = useState('')
     const [step3Data, setStep3Data] = useState()
@@ -62,7 +63,6 @@ const NewProject = ({ onCancel }) => {
                     <Step3
                         onCancel={onCancel}
                         onBack={data => {
-                            console.log('back,', data)
                             setStep3Data(data)
                             setCurrentStep(2)
                         }}
@@ -76,7 +76,9 @@ const NewProject = ({ onCancel }) => {
                                     config: data
                                 })
                             ).then(projectId => {
-                                history.push(`/admin/${projectId}`)
+                                history.push(
+                                    `/admin/${projectId}/setting/event`
+                                )
                             })
                         }}
                     />
@@ -84,7 +86,7 @@ const NewProject = ({ onCancel }) => {
             </Grid>
 
             <Hidden xsDown>
-                <Grid item sm={3} className={classes.rightContainer}></Grid>
+                <Grid item sm={3} className={classes.rightContainer} />
             </Hidden>
         </Grid>
     )
