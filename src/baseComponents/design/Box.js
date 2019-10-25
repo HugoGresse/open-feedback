@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import {
     alignItems,
@@ -36,23 +36,20 @@ const BoxStyled = styled.div`
     ${background}
 
     ${props =>
-        props.flex &&
-        `
+    props.flex &&
+    `
     display: flex;
   `}
 
     ${props =>
-        props.flexGrow &&
-        `
+    props.flexGrow &&
+    `
     flex-grow: ${props.flexGrow};
   `}
 `
 
-class Box extends Component {
-    render() {
-        const { children, ...props } = this.props
-        return <BoxStyled {...props}>{children}</BoxStyled>
-    }
+const Box = ({children, ...props}) => {
+    return <BoxStyled {...props}>{children}</BoxStyled>
 }
 
 export default Box
