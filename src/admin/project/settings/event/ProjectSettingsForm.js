@@ -15,17 +15,6 @@ const schema = object().shape({
     name: string().required(
         <Typography>The project name is required</Typography>
     ),
-    websiteLink: string()
-        .url(
-            <Typography variant="subtitle2">
-                The website link is not a valid url
-            </Typography>
-        )
-        .required(
-            <Typography variant="subtitle2">
-                The website link is required
-            </Typography>
-        ),
     scheduleLink: string()
         .url(
             <Typography variant="subtitle2">
@@ -72,7 +61,6 @@ const ProjectSettingsForm = ({ project }) => {
 
     const initialValues = {
         name: project.name,
-        websiteLink: project.websiteLink,
         scheduleLink: project.scheduleLink,
         logoUrl: project.logoSmall,
         faviconUrl: project.favicon,
@@ -90,8 +78,7 @@ const ProjectSettingsForm = ({ project }) => {
                         favicon: values.faviconUrl,
                         logoSmall: values.logoUrl,
                         name: values.name,
-                        scheduleLink: values.scheduleLink,
-                        websiteLink: values.websiteLink
+                        scheduleLink: values.scheduleLink
                     })
                 ).then(() => {
                     actions.setSubmitting(false)
@@ -106,13 +93,6 @@ const ProjectSettingsForm = ({ project }) => {
                             <OFFormControlInputFormiked
                                 name="Name"
                                 fieldName="name"
-                                type="text"
-                                isSubmitting={isSubmitting}
-                            />
-
-                            <OFFormControlInputFormiked
-                                name="Website Link"
-                                fieldName="websiteLink"
                                 type="text"
                                 isSubmitting={isSubmitting}
                             />
