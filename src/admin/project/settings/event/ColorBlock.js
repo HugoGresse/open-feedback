@@ -7,7 +7,7 @@ const Color = styled.div`
     width: 40px;
     display: inline-block;
     border-radius: 2px;
-    margin: 3px 5px 5px 0;
+    margin: -1px 5px 5px 0;
     ${props =>
         props.color
             ? `background-color: #${props.color};`

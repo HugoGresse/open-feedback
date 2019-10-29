@@ -5,17 +5,14 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { ErrorMessage } from 'formik'
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        'label + &': {
-            marginTop: theme.spacing(3)
-        }
-    },
     formControl: {
         width: '100%',
         marginTop: theme.spacing(3)
     },
     label: {
-        fontSize: theme.typography.fontSize * 1.2
+        fontSize: theme.typography.fontSize * 1.2,
+        position: 'relative',
+        marginBottom: theme.spacing(1)
     }
 }))
 

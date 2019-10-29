@@ -4,15 +4,13 @@ import AddIcon from '@material-ui/icons/AddCircleOutline'
 import ColorBlock from './ColorBlock'
 import IconButton from '@material-ui/core/IconButton'
 
-const useStyles = makeStyles(theme => ({
-    container: {
-        marginTop: '20px'
-    },
+const useStyles = makeStyles(() => ({
     colorBlock: {
         float: 'left'
     },
     addButton: {
-        float: 'left'
+        float: 'left',
+        padding: 8
     }
 }))
 
@@ -46,7 +44,7 @@ const ChipColorsEditor = ({ field, form }) => {
     }
 
     return (
-        <div className={classes.container}>
+        <div>
             {field.value && field.value.map((color, index) => {
                 return (
                     <ColorBlock
