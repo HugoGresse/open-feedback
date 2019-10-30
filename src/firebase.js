@@ -19,6 +19,7 @@ export const authProvider = firebaseMain.auth()
 export const fireStoreMainInstance = firebaseMain.firestore()
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 export const nowTimestamp = firebase.firestore.Timestamp.now
+export const deleteField = firebase.firestore.FieldValue.delete
 
 if (process.env.NODE_ENV === 'production') {
     firebase.performance()
