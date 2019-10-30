@@ -122,6 +122,12 @@ export const selectProject = projectId => (dispatch, getState) => {
 }
 
 export const editProject = projectData => (dispatch, getState) => {
+    if(!projectData.restrictVoteRange){
+        delete projectData.voteStartTime
+        delete projectData.voteEndTime
+    }
+    delete projectData.restrictVoteRange
+
     return fireStoreMainInstance
         .collection('projects')
         .doc(getSelectedProjectIdSelector(getState()))
