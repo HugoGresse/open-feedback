@@ -1,31 +1,25 @@
 import React from 'react'
-import { object, string } from 'yup'
-import { Typography } from '@material-ui/core'
-import { Field, Form, Formik } from 'formik'
+import {object, string, boolean} from 'yup'
+import {Typography} from '@material-ui/core'
+import {Field, Form, Formik} from 'formik'
 import OFFormControlFormiked from '../../../baseComponents/OFFormControlFormiked'
 import Grid from '@material-ui/core/Grid'
 import OFButton from '../../../baseComponents/OFButton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { useDispatch } from 'react-redux'
-import { editProject } from '../../core/projectActions'
+import {useDispatch} from 'react-redux'
+import {editProject} from '../../core/projectActions'
 import ChipColorsEditor from './ChipColorsEditor'
 import OFFormControlInputFormiked from '../../../baseComponents/OFFormControlInputFormiked'
+import OFDateTimePickerFormiked from '../../../baseComponents/OFDateTimePickerFormiked'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import {SwitchFormiked} from '../../../baseComponents/SwitchFormiked'
+import Fade from '@material-ui/core/Fade'
+import moment from 'moment'
 
 const schema = object().shape({
     name: string().required(
         <Typography>The project name is required</Typography>
     ),
-    websiteLink: string()
-        .url(
-            <Typography variant="subtitle2">
-                The website link is not a valid url
-            </Typography>
-        )
-        .required(
-            <Typography variant="subtitle2">
-                The website link is required
-            </Typography>
-        ),
     scheduleLink: string()
         .url(
             <Typography variant="subtitle2">
@@ -54,7 +48,10 @@ const schema = object().shape({
         )
         .required(
             <Typography variant="subtitle2">The favicon is required</Typography>
-        )
+        ),
+    restrictVoteRange: boolean(),
+    voteStartTime: string(),
+    voteEndTime: string()
 })
 
 const useStyles = makeStyles(theme => ({
@@ -66,17 +63,19 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const ProjectSettingsForm = ({ project }) => {
+const ProjectSettingsForm = ({project}) => {
     const classes = useStyles()
     const dispatch = useDispatch()
 
     const initialValues = {
         name: project.name,
-        websiteLink: project.websiteLink,
-        scheduleLink: project.scheduleLink,
-        logoUrl: project.logoSmall,
-        faviconUrl: project.favicon,
-        chipColors: project.chipColors
+        scheduleLink: project.scheduleLink || '',
+        logoUrl: project.logoSmall || '',
+        faviconUrl: project.favicon || '',
+        chipColors: project.chipColors,
+        restrictVoteRange: !!project.voteStartTime,
+        voteStartTime: project.voteStartTime || Date.now(),
+        voteEndTime: project.voteEndTime || Date.now()
     }
 
     return (
@@ -84,6 +83,7 @@ const ProjectSettingsForm = ({ project }) => {
             validationSchema={schema}
             initialValues={initialValues}
             onSubmit={(values, actions) => {
+
                 dispatch(
                     editProject({
                         chipColors: values.chipColors,
@@ -91,14 +91,16 @@ const ProjectSettingsForm = ({ project }) => {
                         logoSmall: values.logoUrl,
                         name: values.name,
                         scheduleLink: values.scheduleLink,
-                        websiteLink: values.websiteLink
+                        restrictVoteRange: values.restrictVoteRange,
+                        voteStartTime: moment(values.voteStartTime).toISOString(),
+                        voteEndTime: moment(values.voteEndTime).toISOString()
                     })
                 ).then(() => {
                     actions.setSubmitting(false)
                 })
             }}
         >
-            {({ isSubmitting }) => (
+            {({isSubmitting, values}) => (
                 <Form method="POST">
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
@@ -111,18 +113,46 @@ const ProjectSettingsForm = ({ project }) => {
                             />
 
                             <OFFormControlInputFormiked
-                                name="Website Link"
-                                fieldName="websiteLink"
-                                type="text"
-                                isSubmitting={isSubmitting}
-                            />
-
-                            <OFFormControlInputFormiked
                                 name="Schedule Link"
                                 fieldName="scheduleLink"
                                 type="text"
                                 isSubmitting={isSubmitting}
                             />
+
+                            <OFFormControlFormiked fieldName="restrictVoteRange">
+                                <FormControlLabel
+                                    label="Restrict vote open/close time"
+                                    control={
+                                        <Field name="restrictVoteRange"
+                                               component={SwitchFormiked}/>
+                                    }
+                                />
+                            </OFFormControlFormiked>
+
+                            <Fade in={values.restrictVoteRange}>
+                                <div>
+                                    <OFFormControlFormiked
+                                        name="Vote open time (in your local timezone)"
+                                        fieldName="voteStartTime"
+                                    >
+                                        <Field name="voteStartTime"
+                                               format="dddd, MMMM Do, Y [at] HH[h]mm [(]Z[)]"
+                                               component={OFDateTimePickerFormiked}/>
+
+                                    </OFFormControlFormiked>
+
+                                    <OFFormControlFormiked
+                                        name="Vote end time (in your local timezone)"
+                                        fieldName="voteEndTime"
+                                    >
+                                        <Field name="voteEndTime"
+                                               format="dddd, MMMM Do, Y [at] HH[h]mm [(]Z[)]"
+                                               component={OFDateTimePickerFormiked}/>
+
+                                    </OFFormControlFormiked>
+                                </div>
+                            </Fade>
+
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography variant="h5">Theme</Typography>

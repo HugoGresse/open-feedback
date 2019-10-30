@@ -10,7 +10,7 @@ import {
     INIT_PROJECTAPI,
     SELECT_PROJECT
 } from './projectActionTypes'
-import { fireStoreMainInstance } from '../../../firebase'
+import {deleteField, fireStoreMainInstance} from '../../../firebase'
 import { getUserSelector } from '../../auth/authSelectors'
 import { getSelectedProjectIdSelector, getSelectedProjectSelector } from './projectSelectors'
 import { ADD_NOTIFICATION } from '../../notification/notificationActionTypes'
@@ -122,6 +122,12 @@ export const selectProject = projectId => (dispatch, getState) => {
 }
 
 export const editProject = projectData => (dispatch, getState) => {
+    if(!projectData.restrictVoteRange){
+        projectData.voteStartTime = deleteField()
+        projectData.voteEndTime = deleteField()
+    }
+    delete projectData.restrictVoteRange
+
     return fireStoreMainInstance
         .collection('projects')
         .doc(getSelectedProjectIdSelector(getState()))
