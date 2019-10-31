@@ -1,28 +1,32 @@
-const functions = require('firebase-functions')
-const admin = require('firebase-admin')
+import * as  functions from 'firebase-functions'
+import * as admin from 'firebase-admin'
+import * as firebase from "firebase";
+import DocumentData = firebase.firestore.DocumentData;
 const db = admin.firestore()
 
-const aggregateVotesCreate = functions.firestore
+export const aggregateVotesCreate = functions.firestore
     .document('/projects/{projectId}/userVotes/{voteId}')
-    .onCreate((snapshot, context) => {
+    .onCreate((snapshot) => {
         return incrementVoteAggregate(snapshot.id, snapshot.data(), +1)
     })
 
-const aggregateVotesDelete = functions.firestore
+export const aggregateVotesDelete = functions.firestore
     .document('/projects/{projectId}/userVotes/{voteId}')
-    .onDelete((snapshot, context) => {
+    .onDelete((snapshot) => {
         return incrementVoteAggregate(snapshot.id, snapshot.data(), -1)
     })
 
-const aggregateVotesUpdate = functions.firestore
+export const aggregateVotesUpdate = functions.firestore
     .document('/projects/{projectId}/userVotes/{voteId}')
-    .onUpdate((change, context) => {
+    .onUpdate((change) => {
         return incrementVoteAggregate(change.after.id, change.after.data(), 1)
     })
 
-function incrementVoteAggregate(newVoteId, newVote, increment) {
-    newVote.sessionId = "" + newVote.sessionId
+
+
+const incrementVoteAggregate = (newVoteId: string, newVote: DocumentData | undefined, increment: number) => {
     if (
+        !newVote ||
         !isIdValid(newVote.projectId) ||
         !isIdValid(newVote.sessionId) ||
         !isIdValid(newVote.voteItemId) ||
@@ -37,13 +41,18 @@ function incrementVoteAggregate(newVoteId, newVote, increment) {
         .collection('projects')
         .doc(newVote.projectId)
         .collection('sessionVotes')
-        .doc(newVote.sessionId)
+        .doc(String(newVote.sessionId))
 
     return sessionVoteDb
         .get()
         .then(snapshot => {
             let aggregatedValue
             const session = snapshot.data()
+
+            if(!session){
+                return Promise.reject('undefined session')
+            }
+
             if (newVote.text) {
                 const voteText = {
                     text: newVote.text,
@@ -87,14 +96,8 @@ function incrementVoteAggregate(newVoteId, newVote, increment) {
             console.log('Error getting documents session', err)
             return err
         })
-}
 
-function isIdValid(id) {
+}
+const isIdValid = (id: any): boolean => {
     return id && id.length > 0
-}
-
-module.exports = {
-    aggregateVotesCreate,
-    aggregateVotesDelete,
-    aggregateVotesUpdate
 }
