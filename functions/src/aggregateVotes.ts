@@ -1,30 +1,29 @@
 import * as  functions from 'firebase-functions'
-import * as admin from 'firebase-admin'
-import * as firebase from "firebase";
-import DocumentData = firebase.firestore.DocumentData;
-const db = admin.firestore()
+import * as firebase from "firebase"
+import DocumentData = firebase.firestore.DocumentData
+import {firestore} from "./firebaseInit"
 
 export const aggregateVotesCreate = functions.firestore
     .document('/projects/{projectId}/userVotes/{voteId}')
     .onCreate((snapshot) => {
-        return incrementVoteAggregate(snapshot.id, snapshot.data(), +1)
+        return incrementVoteAggregate(firestore, snapshot.id, snapshot.data(), +1)
     })
 
 export const aggregateVotesDelete = functions.firestore
     .document('/projects/{projectId}/userVotes/{voteId}')
     .onDelete((snapshot) => {
-        return incrementVoteAggregate(snapshot.id, snapshot.data(), -1)
+        return incrementVoteAggregate(firestore, snapshot.id, snapshot.data(), -1)
     })
 
 export const aggregateVotesUpdate = functions.firestore
     .document('/projects/{projectId}/userVotes/{voteId}')
     .onUpdate((change) => {
-        return incrementVoteAggregate(change.after.id, change.after.data(), 1)
+        return incrementVoteAggregate(firestore, change.after.id, change.after.data(), 1)
     })
 
 
 
-const incrementVoteAggregate = (newVoteId: string, newVote: DocumentData | undefined, increment: number) => {
+export const incrementVoteAggregate = (firestoreDb: FirebaseFirestore.Firestore, newVoteId: string, newVote: DocumentData | undefined, increment: number) => {
     if (
         !newVote ||
         !isIdValid(newVote.projectId) ||
@@ -37,7 +36,7 @@ const incrementVoteAggregate = (newVoteId: string, newVote: DocumentData | undef
         return
     }
 
-    const sessionVoteDb = db
+    const sessionVoteDb = firestoreDb
         .collection('projects')
         .doc(newVote.projectId)
         .collection('sessionVotes')
@@ -47,7 +46,7 @@ const incrementVoteAggregate = (newVoteId: string, newVote: DocumentData | undef
         .get()
         .then(snapshot => {
             let aggregatedValue
-            const session = snapshot.data()
+                const session = snapshot.data()
 
             if(!session){
                 return Promise.reject('undefined session')

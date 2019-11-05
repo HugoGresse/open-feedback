@@ -33,5 +33,11 @@
             "pragma": "React",
             "version": "16.6.3"
         }
-    }
+    },
+    "overrides": [
+        {
+            "files": ["src/*.*"],
+            "excludedFiles": "*.spec.ts"
+        }
+    ]
 }
