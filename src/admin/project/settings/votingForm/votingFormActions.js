@@ -2,7 +2,6 @@ import {
     ADD_VOTEITEM,
     DELETE_VOTEITEM,
     EDIT_VOTEITEM,
-    GET_VOTEITEMS_ERROR,
     GET_VOTEITEMS_SUCCESS,
     MOVE_DOWN_VOTEITEM,
     MOVE_UP_VOTEITEM,
@@ -10,53 +9,20 @@ import {
     SAVE_VOTEITEMS_ONGOING,
     SAVE_VOTEITEMS_SUCCESS
 } from './votingFormActionTypes'
-import { fireStoreMainInstance } from '../../../../firebase'
-import { getSelectedProjectIdSelector } from '../../core/projectSelectors'
-import { ADD_NOTIFICATION } from '../../../notification/notificationActionTypes'
+import {fireStoreMainInstance} from '../../../../firebase'
+import {getSelectedProjectIdSelector, getSelectedProjectSelector} from '../../core/projectSelectors'
+import {ADD_NOTIFICATION} from '../../../notification/notificationActionTypes'
 import {
     getBooleanVoteItemsSelector,
     getCommentVoteItemSelector,
     getVoteItemsSelector
 } from './votingFormSelectors'
+import {newId} from '../../../../utils/stringUtils'
 
-export const getVoteItems = () => {
-    return (dispatch, getState) => {
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(getSelectedProjectIdSelector(getState()))
-            .collection('voteItems')
-            .get()
-            .then(snapshot => {
-                const voteItems = []
-                snapshot.forEach(doc => {
-                    voteItems.push({
-                        id: doc.id,
-                        ...doc.data()
-                    })
-                })
-
-                dispatch({
-                    type: GET_VOTEITEMS_SUCCESS,
-                    payload: voteItems
-                })
-            })
-            .catch(err => {
-                dispatch({
-                    type: ADD_NOTIFICATION,
-                    payload: {
-                        type: 'error',
-                        message:
-                            'Failed to load Vote Items, err: ' + err.toString()
-                    }
-                })
-
-                dispatch({
-                    type: GET_VOTEITEMS_ERROR,
-                    payload: err.toString()
-                })
-            })
-    }
-}
+export const getVoteItems = () => (dispatch, getState) => dispatch({
+    type: GET_VOTEITEMS_SUCCESS,
+    payload: getSelectedProjectSelector(getState()).voteItems || []
+})
 
 export const onVoteItemChange = voteItem => ({
     type: EDIT_VOTEITEM,
@@ -87,7 +53,7 @@ export const onVoteItemAddBoolean = () => {
         return dispatch({
             type: ADD_VOTEITEM,
             payload: {
-                id: Date.now(),
+                id: newId(),
                 name: '',
                 position: position,
                 type: 'boolean'
@@ -99,20 +65,22 @@ export const onVoteItemAddBoolean = () => {
 export const toggleVoteComment = enableComment => {
     return (dispatch, getState) => {
         if (enableComment) {
-            return dispatch({
+            dispatch({
                 type: ADD_VOTEITEM,
                 payload: {
-                    id: Date.now(),
+                    id: newId(),
                     name: 'Comment',
                     type: 'text'
                 }
             })
         } else {
-            return dispatch({
+            dispatch({
                 type: DELETE_VOTEITEM,
                 payload: getCommentVoteItemSelector(getState())
             })
         }
+
+        return dispatch(saveVoteItems())
     }
 }
 
@@ -123,90 +91,17 @@ export const saveVoteItems = () => {
         const voteItems = getVoteItemsSelector(getState())
         const selectedProjectId = getSelectedProjectIdSelector(getState())
 
-        const localIds = voteItems.map(voteItem => voteItem.id)
-
         dispatch({
             type: SAVE_VOTEITEMS_ONGOING
         })
 
+
         return fireStoreMainInstance
             .collection('projects')
             .doc(selectedProjectId)
-            .collection('voteItems')
-            .get()
-            .then(snapshot => {
-                const voteItems = []
-                snapshot.forEach(doc => {
-                    voteItems.push(doc.id)
-                })
-
-                return voteItems
-            })
-            .then(remoteDocIds => {
-                // 1. Filter remote ids by local ids and delete remote id not exsiting in local
-                const idsToDelete = remoteDocIds.filter(
-                    id => !localIds.includes(id)
-                )
-
-                // 2. For existing ids in local & remote, set them (erase the inside by the new value)
-                const idsToSet = remoteDocIds.filter(id =>
-                    localIds.includes(id)
-                )
-
-                // 3. Add new ids
-                const idsToAdd = localIds.filter(
-                    id => !remoteDocIds.includes(id)
-                )
-
-                return { idsToDelete, idsToSet, idsToAdd }
-            })
-            .then(({ idsToDelete, idsToSet, idsToAdd }) => {
-                // Get a new write batch
-                const batch = fireStoreMainInstance.batch()
-
-                idsToDelete.forEach(id =>
-                    batch.delete(
-                        fireStoreMainInstance
-                            .collection('projects')
-                            .doc(selectedProjectId)
-                            .collection('voteItems')
-                            .doc(id)
-                    )
-                )
-
+            .set({
                 voteItems
-                    .filter(item => idsToSet.includes(item.id))
-                    .forEach(item =>
-                        batch.set(
-                            fireStoreMainInstance
-                                .collection('projects')
-                                .doc(selectedProjectId)
-                                .collection('voteItems')
-                                .doc(item.id),
-                            item
-                        )
-                    )
-
-                voteItems
-                    .filter(item => idsToAdd.includes(item.id))
-                    .map(item => {
-                        const copy = Object.assign({}, item)
-                        delete copy.id
-                        return copy
-                    })
-                    .forEach(item => {
-                        batch.set(
-                            fireStoreMainInstance
-                                .collection('projects')
-                                .doc(selectedProjectId)
-                                .collection('voteItems')
-                                .doc(),
-                            item
-                        )
-                    })
-
-                return batch.commit()
-            })
+            }, {merge: true})
             .then(() => {
                 dispatch({
                     type: ADD_NOTIFICATION,
@@ -219,8 +114,6 @@ export const saveVoteItems = () => {
                 dispatch({
                     type: SAVE_VOTEITEMS_SUCCESS
                 })
-
-                dispatch(getVoteItems())
             })
             .catch(error => {
                 console.error(error)

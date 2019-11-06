@@ -2,7 +2,6 @@ import {
     ADD_VOTEITEM,
     DELETE_VOTEITEM,
     EDIT_VOTEITEM,
-    GET_VOTEITEMS_ERROR,
     GET_VOTEITEMS_SUCCESS,
     MOVE_DOWN_VOTEITEM,
     MOVE_UP_VOTEITEM,
@@ -116,7 +115,6 @@ const votingFormReducer = (state = initState, { payload, type }) => {
                 ...state,
                 ongoingSave: true
             }
-        case GET_VOTEITEMS_ERROR:
         default:
             return state
     }
