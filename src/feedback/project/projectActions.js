@@ -1,8 +1,6 @@
 import {
     GET_PROJECT_ERROR,
     GET_PROJECT_SUCCESS,
-    GET_PROJECT_VOTE_ITEMS_ERROR,
-    GET_PROJECT_VOTE_ITEMS_SUCCESS,
     GET_PROJECT_VOTE_RESULT_ERROR,
     GET_PROJECT_VOTE_RESULT_SUCCESS,
     SET_SELECTED_DATE
@@ -39,36 +37,6 @@ export const getProject = projectId => {
             .catch(err => {
                 dispatch({
                     type: GET_PROJECT_ERROR,
-                    payload: err.toString()
-                })
-            })
-    }
-}
-
-export const getVoteItems = () => {
-    return (dispatch, getState) => {
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(getProjectSelector(getState()).id)
-            .collection('voteItems')
-            .get()
-            .then(projectSnapshot => {
-                const voteItems = []
-                projectSnapshot.forEach(doc => {
-                    voteItems.push({
-                        ...doc.data(),
-                        id: doc.id
-                    })
-                })
-
-                dispatch({
-                    type: GET_PROJECT_VOTE_ITEMS_SUCCESS,
-                    payload: voteItems
-                })
-            })
-            .catch(err => {
-                dispatch({
-                    type: GET_PROJECT_VOTE_ITEMS_ERROR,
                     payload: err.toString()
                 })
             })

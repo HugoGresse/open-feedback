@@ -10,7 +10,7 @@ import {
 } from './core/sessionSelectors'
 import { getSession, setSelectedSession } from './core/sessionActions'
 import { getSpeakers } from '../../core/speakers/speakerActions'
-import { getVoteItems, getVoteResult } from '../project/projectActions'
+import { getVoteResult } from '../project/projectActions'
 import {
     getVotes,
     removeVote,
@@ -63,7 +63,6 @@ class Session extends Component {
         this.props.getSession(id)
         this.props.setSelectedSession(id)
         this.props.getSpeakers()
-        this.props.getVoteItems()
         this.props.getVoteResult()
     }
 
@@ -217,7 +216,6 @@ const mapDispatchToProps = Object.assign(
         getSession: getSession,
         setSelectedSession: setSelectedSession,
         getSpeakers: getSpeakers,
-        getVoteItems: getVoteItems,
         getVoteResult: getVoteResult,
         voteFor: voteFor,
         removeVote: removeVote,
