@@ -1,6 +1,6 @@
 {
     "name": "open-feedback",
-    "version": "0.0.1",
+    "version": "0.5.0",
     "private": true,
     "homepage": "https://openfeedback.io/",
     "devDependencies": {
@@ -49,6 +49,7 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "deploy": "npm run build && firebase deploy",
+        "release": "npm version minor && npm run deploy",
         "docz:dev": "docz dev",
         "docz:build": "docz build",
         "cy:open": "cypress open",
