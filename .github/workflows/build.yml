@@ -1,4 +1,4 @@
-name: Build project
+name: Build project + unit test
 
 on: [push]
 
@@ -21,5 +21,10 @@ jobs:
       run: |
         npm install
         npm run build --if-present
-      env:
-        CI: true
+    - name: move to function, init & run test
+      run: |
+        cd functions
+        cp serviceAccountKey.json.example serviceAccountKey.json
+        npm install
+        npm run build --if-present
+        npm run test
