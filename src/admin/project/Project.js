@@ -1,37 +1,17 @@
-import { useEffect } from 'react'
-import { connect } from 'react-redux'
-import {
-    getSelectedProjectIdSelector,
-    getSortedProjectsSelector
-} from './core/projectSelectors'
-import { selectProject } from './core/projectActions'
+import {useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {getSelectedProjectSelector} from './core/projectSelectors'
+import {selectProject} from './core/projectActions'
 
-/**
- * @return {string}
- */
-function Project({ selectProject, selectedProjectId, children, match }) {
+export default ({children, match}) => {
+    const dispatch = useDispatch()
+
     useEffect(() => {
-        selectProject(match.params.projectId)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        dispatch(selectProject(match.params.projectId))
+    }, [dispatch, match.params.projectId])
 
-    if (selectedProjectId) return children
+    const selectedProject = useSelector(getSelectedProjectSelector)
+
+    if (selectedProject) return children
     return 'Loading...'
 }
-
-const mapStateToProps = state => ({
-    projects: getSortedProjectsSelector(state),
-    selectedProjectId: getSelectedProjectIdSelector(state)
-})
-
-const mapDispatchToProps = Object.assign(
-    {},
-    {
-        selectProject: selectProject
-    }
-)
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Project)
