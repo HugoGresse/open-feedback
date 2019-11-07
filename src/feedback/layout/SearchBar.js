@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import SearchIcon from '@material-ui/icons/Search'
-import { setSessionsFilter } from '../../core/sessions/sessionsActions'
-import connect from 'react-redux/es/connect/connect'
-import { COLORS } from '../../constants/colors'
-import { SCREEN_SIZES } from '../../constants/constants'
+import {setSessionsFilter} from '../../core/sessions/sessionsActions'
+import {COLORS} from '../../constants/colors'
+import {SCREEN_SIZES} from '../../constants/constants'
 import BigInput from '../../baseComponents/design/BigInput'
 import Box from '../../baseComponents/design/Box'
+import {useDispatch} from 'react-redux'
 
 const SearchBarStyled = styled(Box)`
     margin-top: 10px;
@@ -24,33 +24,20 @@ const SearchBarStyled = styled(Box)`
     }
 `
 
-class SearchBar extends Component {
-    onFilterChanged = event => {
-        this.props.setSessionsFilter(event.target.value)
-    }
+const SearchBar = () => {
+    const dispatch = useDispatch()
 
-    render() {
-        return (
-            <SearchBarStyled>
-                <div className="wrapper">
-                    <BigInput
-                        onChange={this.onFilterChanged}
-                        icon={<SearchIcon />}
-                        className="search"
-                        placeholder="Search speakers, talks, tags,..."
-                    />
-                </div>
-            </SearchBarStyled>
-        )
-    }
+    return (
+        <SearchBarStyled>
+            <div className="wrapper">
+                <BigInput
+                    onChange={event => dispatch(setSessionsFilter(event.target.value))}
+                    icon={<SearchIcon/>}
+                    className="search"
+                    placeholder="Search speakers, talks, tags,..."
+                />
+            </div>
+        </SearchBarStyled>
+    )
 }
-
-const mapDispatchToProps = Object.assign(
-    {},
-    { setSessionsFilter: setSessionsFilter }
-)
-
-export default connect(
-    null,
-    mapDispatchToProps
-)(SearchBar)
+export default SearchBar
