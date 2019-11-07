@@ -1,8 +1,6 @@
 import {
     GET_PROJECT_ERROR,
     GET_PROJECT_SUCCESS,
-    GET_PROJECT_VOTE_ITEMS_ERROR,
-    GET_PROJECT_VOTE_ITEMS_SUCCESS,
     GET_PROJECT_VOTE_RESULT_ERROR,
     GET_PROJECT_VOTE_RESULT_SUCCESS,
     INCREMENT_VOTE_LOCALLY,
@@ -37,14 +35,6 @@ const projectReducer = (state = initState, { payload, type }) => {
                     ...payload
                 }
             }
-        case GET_PROJECT_VOTE_ITEMS_SUCCESS:
-            return {
-                ...state,
-                data: {
-                    ...state.data,
-                    voteItems: payload
-                }
-            }
 
         case GET_PROJECT_VOTE_RESULT_SUCCESS:
             return {
@@ -54,7 +44,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                     sessionVotes: payload
                 }
             }
-        case ADD_VOTE_SUCCESS:
+        case ADD_VOTE_SUCCESS: {
             // Only useful for Text votes
             if (!payload.vote[payload.newVoteId].text) {
                 return {
@@ -65,7 +55,7 @@ const projectReducer = (state = initState, { payload, type }) => {
             const sessionVotesVoteItemContent = {
                 ...state.data.sessionVotes[payload.sessionId][
                     payload.voteItemId
-                ],
+                    ],
                 ...payload.vote
             }
 
@@ -86,6 +76,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                     }
                 }
             }
+        }
         case INCREMENT_VOTE_LOCALLY: {
             const vote = payload.vote
             const data = state.data
@@ -163,7 +154,6 @@ const projectReducer = (state = initState, { payload, type }) => {
                 ...state,
                 projectVotesError: payload
             }
-        case GET_PROJECT_VOTE_ITEMS_ERROR:
         case GET_PROJECT_ERROR:
             console.error(payload)
             return {

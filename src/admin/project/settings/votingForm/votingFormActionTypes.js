@@ -1,5 +1,4 @@
 export const GET_VOTEITEMS_SUCCESS = 'admin/voteItems/get/success'
-export const GET_VOTEITEMS_ERROR = 'admin/voteItems/get/error'
 export const EDIT_VOTEITEM = 'admin/voteItems/edit'
 export const MOVE_UP_VOTEITEM = 'admin/voteItems/moveUp'
 export const MOVE_DOWN_VOTEITEM = 'admin/voteItems/moveDown'
