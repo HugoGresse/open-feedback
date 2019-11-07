@@ -13,8 +13,8 @@ import OFFormControlInputFormiked from '../../../baseComponents/OFFormControlInp
 import OFDateTimePickerFormiked from '../../../baseComponents/OFDateTimePickerFormiked'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import {SwitchFormiked} from '../../../baseComponents/SwitchFormiked'
-import Fade from '@material-ui/core/Fade'
 import moment from 'moment'
+import Collapse from '@material-ui/core/Collapse'
 
 const schema = object().shape({
     name: string().required(
@@ -129,7 +129,7 @@ const ProjectSettingsForm = ({project}) => {
                                 />
                             </OFFormControlFormiked>
 
-                            <Fade in={values.restrictVoteRange}>
+                            <Collapse in={values.restrictVoteRange}>
                                 <div>
                                     <OFFormControlFormiked
                                         name="Vote open time (in your local timezone)"
@@ -151,7 +151,7 @@ const ProjectSettingsForm = ({project}) => {
 
                                     </OFFormControlFormiked>
                                 </div>
-                            </Fade>
+                            </Collapse>
 
                         </Grid>
                         <Grid item xs={12} sm={6}>
