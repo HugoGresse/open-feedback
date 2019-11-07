@@ -98,9 +98,7 @@ export const selectProject = projectId => (dispatch, getState) => {
         payload: projectId
     })
 
-    const newSelectedProject = getSelectedProjectSelector(getState())
-
-    dispatch(initProjectApiIfReady(projectId, newSelectedProject))
+    dispatch(initProjectApiIfReady(projectId, getSelectedProjectSelector(getState())))
 
     // If we have switch the project at runtime
     if (
