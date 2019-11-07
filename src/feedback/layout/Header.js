@@ -1,14 +1,13 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import styled from 'styled-components'
-import { Link, withRouter } from 'react-router-dom'
-import { COLORS } from '../../constants/colors'
+import {Link, useParams} from 'react-router-dom'
+import {COLORS} from '../../constants/colors'
 import Title from '../../baseComponents/design/Title'
-import { SCREEN_SIZES } from '../../constants/constants'
+import {SCREEN_SIZES} from '../../constants/constants'
 import SearchBar from './SearchBar'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import CalendarToday from '@material-ui/icons/CalendarToday'
-import { Hidden } from '@material-ui/core/es'
+import {Hidden} from '@material-ui/core/es'
 
 const Logo = styled.img`
     margin-right: 20px;
@@ -35,13 +34,13 @@ const IconWrapper = styled.div`
     min-width: 28px;
     position: absolute;
     ${props =>
-        props.left &&
-        `
+    props.left &&
+    `
         left: 20px;
     `}
     ${props =>
-        props.right &&
-        `
+    props.right &&
+    `
         right: 20px;
     `}
     svg {
@@ -62,58 +61,51 @@ const BoxCenter = styled.div`
     }
 `
 
-class Header extends Component {
-    render() {
-        const { project, match } = this.props
-        return (
-            <HeaderStyled>
-                <div className="header">
-                    <IconWrapper left>
-                        {match.params.sessionId && (
-                            <Link
-                                to={`/${match.params.projectId}/${match.params.date}`}
-                            >
-                                <ArrowBack />
-                            </Link>
-                        )}
-                    </IconWrapper>
-                    <IconWrapper right>
-                        <a
-                            href={project.scheduleLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
+const Header = ({project}) => {
+    const matchParams = useParams()
+
+    return (
+        <HeaderStyled>
+            <div className="header">
+                <IconWrapper left>
+                    {matchParams.sessionId && (
+                        <Link
+                            to={`/${matchParams.projectId}/${matchParams.date}`}
                         >
-                            <CalendarToday />
-                        </a>
-                    </IconWrapper>
-                    <BoxCenter>
-                        <Logo
-                            src={project.logoSmall}
-                            width={60}
-                            height={60}
-                            alt="logo"
-                        />
-                        <Hidden smDown>
-                            <Title
-                                component="h1"
-                                fontSize={24}
-                                fontWeight={400}
-                            >
-                                {project.name}
-                            </Title>
-                        </Hidden>
-                    </BoxCenter>
-                </div>
-                {!match.params.sessionId && <SearchBar />}
-            </HeaderStyled>
-        )
-    }
+                            <ArrowBack/>
+                        </Link>
+                    )}
+                </IconWrapper>
+                <IconWrapper right>
+                    <a
+                        href={project.scheduleLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <CalendarToday/>
+                    </a>
+                </IconWrapper>
+                <BoxCenter>
+                    <Logo
+                        src={project.logoSmall}
+                        width={60}
+                        height={60}
+                        alt="logo"
+                    />
+                    <Hidden smDown>
+                        <Title
+                            component="h1"
+                            fontSize={24}
+                            fontWeight={400}
+                        >
+                            {project.name}
+                        </Title>
+                    </Hidden>
+                </BoxCenter>
+            </div>
+            {!matchParams.sessionId && <SearchBar/>}
+        </HeaderStyled>
+    )
 }
 
-Header.propTypes = {
-    logo: PropTypes.string,
-    logoSmall: PropTypes.string,
-    displayHeader: PropTypes.bool
-}
-
-export default withRouter(Header)
+export default Header
