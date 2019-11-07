@@ -3,6 +3,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import AddIcon from '@material-ui/icons/AddCircleOutline'
 import ColorBlock from './ColorBlock'
 import IconButton from '@material-ui/core/IconButton'
+import {newRandomHexColor} from '../../../../utils/colorsUtils'
 
 const useStyles = makeStyles(() => ({
     colorBlock: {
@@ -32,7 +33,7 @@ const ChipColorsEditor = ({ field, form }) => {
     const addColor = () => {
         const values = field.value || []
         // Generate new random color
-        values.push(Math.floor(Math.random() * 16777215).toString(16))
+        values.push(newRandomHexColor())
         form.setFieldValue(field.name, values)
     }
 
