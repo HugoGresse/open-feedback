@@ -12,13 +12,15 @@ const authReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 isLogin: true,
-                user: payload
+                user: payload,
+                error: null
             }
         case LOGOUT:
             return {
                 ...state,
                 isLogin: false,
-                user: null
+                user: null,
+                error: null
             }
         case LOGIN_ERROR:
             console.error(payload)

@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../constants/colors'
+import {COLORS} from '../../constants/colors'
 import logoWhite from '../../assets/logo-openfeedback-white.png'
 import Box from '../../baseComponents/design/Box'
-import { StyledFirebaseAuth } from 'react-firebaseui'
-import { auth, authProvider } from '../../firebase'
-import { connect } from 'react-redux'
-import { getLoginErrorSelector, isLoggedSelector } from './authSelectors'
-import { didSignIn, signOut } from './authActions'
+import {StyledFirebaseAuth} from 'react-firebaseui'
+import {auth, authProvider} from '../../firebase'
+import {connect} from 'react-redux'
+import {getLoginErrorSelector, isLoggedSelector} from './authSelectors'
+import {didSignIn, signOut} from './authActions'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.RED_ORANGE};
@@ -16,28 +16,6 @@ const Wrapper = styled(Box)`
     display: flex;
     flex-direction: column;
 `
-
-const uiConfig = {
-    signInFlow: 'popup',
-    signInSuccessUrl: '/',
-    signInOptions: [
-        auth.GoogleAuthProvider.PROVIDER_ID,
-        auth.GithubAuthProvider.PROVIDER_ID,
-        auth.EmailAuthProvider.PROVIDER_ID,
-        auth.PhoneAuthProvider.PROVIDER_ID
-    ],
-    callbacks: {
-        // Avoid redirects after sign-in.
-        signInSuccessWithAuthResult: () => false,
-        signInFailure: error => {
-            this.props.didSignIn(
-                null,
-                'Unable to upgrade you from anonymous user'
-            )
-        }
-    },
-    autoUpgradeAnonymousUsers: true
-}
 
 class Login extends Component {
     componentDidMount() {
@@ -77,12 +55,46 @@ class Login extends Component {
                         height="40"
                         src={logoWhite}
                         alt="open feedback"
-                        style={{ marginBottom: '40px' }}
+                        style={{marginBottom: '40px'}}
                     />
                     <StyledFirebaseAuth
-                        uiConfig={uiConfig}
+                        uiConfig={{
+                            signInFlow: 'popup',
+                            signInSuccessUrl: '/',
+                            signInOptions: [
+                                auth.GoogleAuthProvider.PROVIDER_ID,
+                                auth.GithubAuthProvider.PROVIDER_ID,
+                                auth.EmailAuthProvider.PROVIDER_ID,
+                                auth.PhoneAuthProvider.PROVIDER_ID
+                            ],
+                            callbacks: {
+                                // Avoid redirects after sign-in.
+                                signInSuccessWithAuthResult: () => false,
+                                signInFailure: error => {
+                                    if (error.code !== 'firebaseui/anonymous-upgrade-merge-conflict') {
+                                        return Promise.resolve()
+                                    }
+
+                                    const currentUser = authProvider.currentUser
+
+                                    authProvider
+                                        .signInWithCredential(error.credential)
+                                        .then(() => {
+                                            if (currentUser.isAnonymous) {
+                                                return currentUser.delete()
+                                            }
+                                        })
+                                }
+                            },
+                            autoUpgradeAnonymousUsers: true
+                        }
+                        }
                         firebaseAuth={authProvider}
                     />
+
+                    {this.props.loginError && <div>
+                        {this.props.loginError}
+                    </div>}
                 </Box>
             </Wrapper>
         )

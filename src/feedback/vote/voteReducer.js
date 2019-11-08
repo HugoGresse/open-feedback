@@ -7,7 +7,6 @@ import {
     GET_USER_VOTES_ERROR,
     GET_USER_VOTES_SUCCESS,
     REMOVE_VOTE_BEFORE_SUCCESS,
-    REMOVE_VOTE_ERROR,
     REMOVE_VOTE_SUCCESS,
     UPDATE_VOTE_ERROR,
     UPDATE_VOTE_SUCCESS
@@ -37,7 +36,7 @@ const voteReducer = (state = initState, { payload, type }) => {
                     ...payload
                 }
             }
-        case ADD_VOTE_SUCCESS:
+        case ADD_VOTE_SUCCESS: {
             const newVotes = {
                 ...state.currentUserVotes,
                 ...payload.vote
@@ -48,12 +47,14 @@ const voteReducer = (state = initState, { payload, type }) => {
                 ...state,
                 currentUserVotes: newVotes
             }
-        case ADD_VOTE_ERROR:
+        }
+        case ADD_VOTE_ERROR: {
             const newVoteState = {
                 ...state.currentUserVotes
             }
             delete newVoteState[payload.tempVoteId]
 
+            // eslint-disable-next-line no-console
             console.error(payload.error)
 
             return {
@@ -61,7 +62,8 @@ const voteReducer = (state = initState, { payload, type }) => {
                 currentUserVotes: newVoteState,
                 errorVotePost: payload.error.toString()
             }
-        case REMOVE_VOTE_BEFORE_SUCCESS:
+        }
+        case REMOVE_VOTE_BEFORE_SUCCESS:{
             const removeVotesState = {
                 ...state.currentUserVotes
             }
@@ -70,18 +72,14 @@ const voteReducer = (state = initState, { payload, type }) => {
                 ...state,
                 currentUserVotes: removeVotesState
             }
+        }
         case REMOVE_VOTE_SUCCESS:
             // Do nothing, state already change in REMOVE_VOTE_BEFORE_SUCCESS
             return {
                 ...state
             }
-        case REMOVE_VOTE_ERROR:
-            console.error(payload.error)
-            return {
-                ...state,
-                errorVotePost: payload.error.toString()
-            }
         case GET_USER_VOTES_ERROR:
+            // eslint-disable-next-line no-console
             console.error(payload)
             return {
                 ...state,
