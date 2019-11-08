@@ -10,7 +10,7 @@ import {
     INIT_PROJECTAPI,
     SELECT_PROJECT
 } from './projectActionTypes'
-import {deleteField, fireStoreMainInstance} from '../../../firebase'
+import {deleteField, fireStoreMainInstance, serverTimestamp} from '../../../firebase'
 import { getUserSelector } from '../../auth/authSelectors'
 import { getSelectedProjectIdSelector, getSelectedProjectSelector } from './projectSelectors'
 import { ADD_NOTIFICATION } from '../../notification/notificationActionTypes'
@@ -18,6 +18,7 @@ import { CLEAR_SESSIONS } from '../../../core/sessions/sessionsActionTypes'
 import { CLEAR_SESSION_VOTES } from '../dashboard/dashboardActionTypes'
 import { history } from '../../../App'
 import { initProjectApi } from "../../../core/setupType/projectApi"
+import {newRandomHexColor} from '../../../utils/colorsUtils'
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -165,6 +166,8 @@ export const editProject = projectData => (dispatch, getState) => {
 export const newProject = projectData => (dispatch, getState) => {
     projectData.owner = getUserSelector(getState()).uid
     projectData.members = [projectData.owner]
+    projectData.createdAt = serverTimestamp()
+    projectData.chipColors = [newRandomHexColor()]
 
     return fireStoreMainInstance
         .collection('projects')

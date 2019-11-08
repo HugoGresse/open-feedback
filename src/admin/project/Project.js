@@ -1,9 +1,10 @@
-import {useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {getSelectedProjectSelector} from './core/projectSelectors'
 import {selectProject} from './core/projectActions'
+import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 
-export default ({children, match}) => {
+const Project = ({children, match}) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -13,5 +14,6 @@ export default ({children, match}) => {
     const selectedProject = useSelector(getSelectedProjectSelector)
 
     if (selectedProject) return children
-    return 'Loading...'
+    return <LoaderMatchParent/>
 }
+export default Project
