@@ -10,7 +10,7 @@ export const checkDateBeforeVote = (dispatch, state) => {
         dispatch({
             type: ADD_VOTE_ERROR,
             payload: {
-                error: 'the vote period is passed.'
+                error: `Unable to save the vote, the vote period has passed.`
             }
         })
         return true
@@ -18,10 +18,7 @@ export const checkDateBeforeVote = (dispatch, state) => {
         dispatch({
             type: ADD_VOTE_ERROR,
             payload: {
-                error:
-                    'you cannot vote yet, wait until ' +
-                    new Date(project.voteStartTime).toLocaleString() +
-                    '.'
+                error: `You cannot vote before the ${new Date(project.voteStartTime).toLocaleString()}.`
             }
         })
         return true
