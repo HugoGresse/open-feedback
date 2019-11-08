@@ -142,7 +142,7 @@ class Session extends Component {
         if (errorVotePost) {
             snackBarError = (
                 <Snackbar
-                    text={'Unable to save the vote, reason: ' + errorVotePost}
+                    text={errorVotePost}
                     closeCallback={this.closeErrorVotePostClick}
                 />
             )

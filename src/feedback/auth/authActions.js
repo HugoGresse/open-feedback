@@ -25,11 +25,18 @@ export const signIn = () => {
             }
         })
 
-        authProvider.signInAnonymously().catch(error => {
+        if(authProvider.currentUser) {
             dispatch({
-                type: LOGIN_ERROR,
-                payload: error
+                type: LOGIN_SUCCESS,
+                payload: authProvider.currentUser
             })
-        })
+        } else {
+            authProvider.signInAnonymously().catch(error => {
+                dispatch({
+                    type: LOGIN_ERROR,
+                    payload: error
+                })
+            })
+        }
     }
 }

@@ -7,7 +7,6 @@ import {
     GET_USER_VOTES_ERROR,
     GET_USER_VOTES_SUCCESS,
     REMOVE_VOTE_BEFORE_SUCCESS,
-    REMOVE_VOTE_ERROR,
     REMOVE_VOTE_SUCCESS,
     UPDATE_VOTE_ERROR,
     UPDATE_VOTE_SUCCESS
@@ -17,17 +16,27 @@ import {
     nowTimestamp,
     serverTimestamp
 } from '../../firebase'
-import { getUserSelector } from '../auth/authSelectors'
-import { getProjectSelector } from '../project/projectSelectors'
-import { getCurrentUserVotesSelector } from './voteSelectors'
-import { INCREMENT_VOTE_LOCALLY } from '../project/projectActionTypes'
-import { VOTE_TYPE_TEXT } from './voteReducer'
-import { checkDateBeforeVote } from './checkDataBeforeVote'
+import {getUserSelector} from '../auth/authSelectors'
+import {getProjectSelector} from '../project/projectSelectors'
+import {getCurrentUserVotesSelector} from './voteSelectors'
+import {INCREMENT_VOTE_LOCALLY} from '../project/projectActionTypes'
+import {VOTE_TYPE_TEXT} from './voteReducer'
+import {checkDateBeforeVote} from './checkDataBeforeVote'
 
 export const voteFor = (sessionId, voteItem, data) => {
     return (dispatch, getState) => {
         if (checkDateBeforeVote(dispatch, getState())) {
             return
+        }
+
+        if (!getUserSelector(getState()).isAnonymous) {
+            dispatch({
+                type: ADD_VOTE_ERROR,
+                payload: {
+                    error:
+                        'You are logged in to the admin, your vote will not be anonymous.'
+                }
+            })
         }
 
         const projectId = getProjectSelector(getState()).id
@@ -95,7 +104,7 @@ export const voteFor = (sessionId, voteItem, data) => {
                 dispatch({
                     type: ADD_VOTE_ERROR,
                     payload: {
-                        error: error.toString(),
+                        error: `Unable to save the vote, ${error}`,
                         tempVoteId: voteContent.id
                     }
                 })
@@ -114,6 +123,7 @@ export const voteFor = (sessionId, voteItem, data) => {
 export const removeVote = voteToDelete => {
     return (dispatch, getState) => {
         if (getCurrentUserVotesSelector(getState())[voteToDelete.id].temp) {
+            // eslint-disable-next-line no-console
             console.info(
                 'Unable to delete vote as it has not been writed on the database'
             )
@@ -151,9 +161,9 @@ export const removeVote = voteToDelete => {
             })
             .catch(error => {
                 dispatch({
-                    type: REMOVE_VOTE_ERROR,
+                    type: ADD_VOTE_ERROR,
                     payload: {
-                        error: error.toString(),
+                        error: `Unable to save the vote, ${error}`,
                         voteWhichShouldHaveBeenDeleted: voteToDelete
                     }
                 })
@@ -245,18 +255,10 @@ export const getVotes = () => {
     }
 }
 
-export const removeVotePostError = () => {
-    return (dispatch, getState) => {
-        dispatch({
-            type: DELETE_VOTE_POST_ERROR
-        })
-    }
-}
+export const removeVotePostError = () => ({
+    type: DELETE_VOTE_POST_ERROR
+})
 
-export const removeVoteLoadError = () => {
-    return (dispatch, getState) => {
-        dispatch({
-            type: DELETE_VOTE_LOAD_ERROR
-        })
-    }
-}
+export const removeVoteLoadError = () => ({
+    type: DELETE_VOTE_LOAD_ERROR
+})
