@@ -3,14 +3,18 @@ import JsonUrlApi from './jsonurl/JsonUrlApi'
 
 export const PROJECT_TYPE_HOVERBOARDV2 = 'hoverboardv2'
 export const PROJECT_TYPE_JSONURL = 'jsonurl'
+export const PROJECT_TYPE_OPENFEEDBACK = 'openfeedbackv1'
 
 const notImplementApi = {
+    // eslint-disable-next-line no-unused-vars
     getSessions(state) {
         logProjectNotInitialized()
     },
+    // eslint-disable-next-line no-unused-vars
     getSession(state, sessionId) {
         logProjectNotInitialized()
     },
+    // eslint-disable-next-line no-unused-vars
     getSpeakers(state) {
         logProjectNotInitialized()
     }
@@ -29,6 +33,7 @@ export const initProjectApi = (projectType, project) => {
             break
         }
         default: {
+            // eslint-disable-next-line no-console
             console.error(
                 `This project type has not been implemented: ${projectType}`
             )
@@ -38,5 +43,6 @@ export const initProjectApi = (projectType, project) => {
 }
 
 const logProjectNotInitialized = () => {
+    // eslint-disable-next-line no-console
     console.warn('The project is not initialized yet.')
 }

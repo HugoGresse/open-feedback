@@ -11,13 +11,13 @@ import {
     SELECT_PROJECT
 } from './projectActionTypes'
 import {deleteField, fireStoreMainInstance, serverTimestamp} from '../../../firebase'
-import { getUserSelector } from '../../auth/authSelectors'
-import { getSelectedProjectIdSelector, getSelectedProjectSelector } from './projectSelectors'
-import { ADD_NOTIFICATION } from '../../notification/notificationActionTypes'
-import { CLEAR_SESSIONS } from '../../../core/sessions/sessionsActionTypes'
-import { CLEAR_SESSION_VOTES } from '../dashboard/dashboardActionTypes'
-import { history } from '../../../App'
-import { initProjectApi } from "../../../core/setupType/projectApi"
+import {getUserSelector} from '../../auth/authSelectors'
+import {getSelectedProjectIdSelector, getSelectedProjectSelector} from './projectSelectors'
+import {ADD_NOTIFICATION} from '../../notification/notificationActionTypes'
+import {CLEAR_SESSIONS} from '../../../core/sessions/sessionsActionTypes'
+import {CLEAR_SESSION_VOTES} from '../dashboard/dashboardActionTypes'
+import {history} from '../../../App'
+import {initProjectApi} from "../../../core/setupType/projectApi"
 import {newRandomHexColor} from '../../../utils/colorsUtils'
 
 export const getProjects = () => {
@@ -123,7 +123,7 @@ export const selectProject = projectId => (dispatch, getState) => {
 }
 
 export const editProject = projectData => (dispatch, getState) => {
-    if(!projectData.restrictVoteRange){
+    if (!projectData.restrictVoteRange && projectData.restrictVoteRange !== undefined) {
         projectData.voteStartTime = deleteField()
         projectData.voteEndTime = deleteField()
     }
