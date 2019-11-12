@@ -40,8 +40,6 @@ const VoteItemList = ({ classes }) => {
     const voteItems = useSelector(getBooleanVoteItemsSelector)
     const isSaving = useSelector(isSavingSelector)
 
-    console.log('test hound')
-
     return (
         <Table>
             <TableHead>
