@@ -2,8 +2,8 @@ import firebase from 'firebase/app'
 import { formatSessionsWithScheduled } from '../../sessions/sessionsUtils'
 
 class Hoverboardv2Api {
-    constructor(project) {
-        this.config = project.config ? project.config : project.firebaseConfig
+    constructor(config) {
+        this.config = config
 
         if (
             firebase.apps.filter(app => app.name === this.config.projectId).length >

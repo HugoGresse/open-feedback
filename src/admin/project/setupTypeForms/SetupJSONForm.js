@@ -8,6 +8,7 @@ import Collapse from '@material-ui/core/Collapse'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import ArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import Box from '@material-ui/core/Box'
+import {FormikObserver} from '../../baseComponents/FormikObserver'
 
 const useStyles = makeStyles(() => ({
     jsonShowButton: {
@@ -51,7 +52,8 @@ const SetupJSONForm = ({
             }
         >
             {({isSubmitting, values}) => (
-                <Form method="POST" onChange={() => onFormChange && onFormChange(values)}>
+                <Form method="POST">
+                    {onFormChange && <FormikObserver value={values} onChange={(values) => onFormChange(values)}/>}
                     <OFFormControlInputFormiked
                         name="JSON URL"
                         fieldName="jsonUrl"

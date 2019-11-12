@@ -82,7 +82,6 @@ const SetupForm = () => {
                     isSelected={project.setupType === PROJECT_TYPE_JSONURL}/>
                 <SetupTypeBox
                     title="OpenFeedback Database"
-                    disable
                     isSelected={project.setupType === PROJECT_TYPE_OPENFEEDBACK}/>
             </Box>
             {setupTypeComponent}

@@ -25,11 +25,11 @@ export let projectApi = notImplementApi
 export const initProjectApi = (projectType, project) => {
     switch (projectType) {
         case PROJECT_TYPE_HOVERBOARDV2: {
-            projectApi = new HoverboardV2Api(project)
+            projectApi = new HoverboardV2Api(project.config)
             break
         }
         case PROJECT_TYPE_JSONURL: {
-            projectApi = new JsonUrlApi(project)
+            projectApi = new JsonUrlApi(project.config)
             break
         }
         default: {

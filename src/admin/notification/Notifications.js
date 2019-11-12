@@ -52,7 +52,7 @@ class Notifications extends Component {
     }
 
     render() {
-        const { classes, onClose, notification } = this.props
+        const { classes, notification } = this.props
         if (!notification) {
             return ''
         }

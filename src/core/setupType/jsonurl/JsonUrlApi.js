@@ -1,30 +1,30 @@
-let data = null
-let jsonUrl = ''
-
 class JsonUrlApi {
-    constructor(project) {
-        if (project.config.jsonUrl !== jsonUrl) {
-            jsonUrl = project.config.jsonUrl
-            data = null
+    constructor(config) {
+        if (config.jsonUrl !== this.jsonUrl) {
+            this.jsonUrl = config.jsonUrl
+            this.data = null
         }
     }
 
     getJsonData() {
-        if (data) {
-            return Promise.resolve(data)
+        if (this.data) {
+            return Promise.resolve(this.data)
         }
-        return fetch(jsonUrl).then(async (response) => {
+        return fetch(this.jsonUrl).then(async (response) => {
             if (response.ok) {
-                data = await response.json()
-                let tempId = ""
-                Object.values(data.sessions).forEach(session => {
-                    tempId = "" + session.id
-                    data.sessions[tempId] = {
-                        ...session,
-                        id: tempId
-                    }
-                })
-                return data
+                this.data = await response.json()
+                if (this.data.sessions) {
+                    let tempId = ""
+                    // Convert numeric id to string
+                    Object.values(this.data.sessions).forEach(session => {
+                        tempId = "" + session.id
+                        this.data.sessions[tempId] = {
+                            ...session,
+                            id: tempId
+                        }
+                    })
+                }
+                return this.data
             } else {
                 throw new Error(
                     'Something went wrong when loading the data. ' +

@@ -2,6 +2,9 @@ import React, {useState} from 'react'
 import Grid from '@material-ui/core/Grid'
 import SetupJSONForm from './SetupJSONForm'
 import {Typography} from '@material-ui/core'
+import SetupValidationContainer from './validation/SetupValidationContainer'
+import {PROJECT_TYPE_JSONURL} from '../../../core/setupType/projectApi'
+import JsonUrlApi from '../../../core/setupType/jsonurl/JsonUrlApi'
 
 const SetupJSON = ({
                        submitText,
@@ -12,7 +15,10 @@ const SetupJSON = ({
                        backText,
                        onBack
                    }) => {
-    const [currentFormValues, onFormChange] = useState(null)
+    const [formChangeValues, onFormChange] = useState(null)
+
+    const formValues = formChangeValues || initialValues
+    const isFieldNotEmpty = formChangeValues || Object.values(initialValues).filter(value => value.length > 0).length > 0
 
     return (
         <Grid container spacing={2}>
@@ -31,10 +37,12 @@ const SetupJSON = ({
                     }}
                 />
             </Grid>
-            {currentFormValues && <Grid item xs={12} sm={6}>
-                <Typography variant="h5">
+            {isFieldNotEmpty && <Grid item xs={12} sm={6}>
+                <Typography variant="h5" gutterBottom>
                     {rightColumnTitle}
                 </Typography>
+                <SetupValidationContainer setupType={PROJECT_TYPE_JSONURL}
+                                          api={new JsonUrlApi(formValues)}/>
             </Grid>}
         </Grid>
     )
