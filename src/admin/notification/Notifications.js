@@ -52,7 +52,7 @@ class Notifications extends Component {
     }
 
     render() {
-        const { classes, onClose, notification } = this.props
+        const { classes, notification } = this.props
         if (!notification) {
             return ''
         }
@@ -85,7 +85,7 @@ class Notifications extends Component {
                             aria-label="Close"
                             color="inherit"
                             className={classes.close}
-                            onClick={onClose}
+                            onClick={() => this.onNotificationClose(notification)}
                         >
                             <CloseIcon className={classes.icon} />
                         </IconButton>

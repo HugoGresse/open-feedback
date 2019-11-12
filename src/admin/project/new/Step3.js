@@ -9,6 +9,7 @@ import {
 const stepTitle = 'Create a new event (step 3/3)'
 const submitText = 'Create the event'
 const backText = 'Back'
+const rightColumnTitle = 'Validation'
 
 const Step3 = ({ onCancel, onBack, onSubmit, projectType, initialValues }) => {
     switch (projectType) {
@@ -39,6 +40,7 @@ const Step3 = ({ onCancel, onBack, onSubmit, projectType, initialValues }) => {
                     onCancel={onCancel}
                     onBack={onBack}
                     onSubmit={onSubmit}
+                    rightColumnTitle={rightColumnTitle}
                     initialValues={
                         initialValues || {
                             jsonUrl: ''
