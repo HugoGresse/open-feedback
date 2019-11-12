@@ -77,41 +77,58 @@ const validateSessions = (sessions, speakers) => {
         }
     }
 
-    let tempSession
-    Object.keys(sessions).forEach(key => {
-        tempSession = sessions[key]
-        if (tempSession || typeof sessions === 'object') {
-            result.session.sessionCount++
-
-            if (key !== tempSession.id) {
-                result.session.idValid = false
-            }
-            if (!tempSession.title) {
-                result.session.titleValid = false
-            }
-            if (!tempSession.startTime || !tempSession.endTime) {
-                result.session.startEndTimeValid = false
-            } else if (!moment(tempSession.startTime).isValid() || !moment(tempSession.endTime).isValid()) {
-                result.session.startEndTimeValid = false
-            }
-
-            if (!tempSession.trackTitle) {
-                result.session.trackTitleValid = false
-            }
-            if (!tempSession.speakers || tempSession.speakers.constructor !== Array) {
-                result.session.speakersValid = false
-            } else {
-                tempSession.speakers.forEach(speakerId => {
-                    if (!speakers || !speakers[speakerId]) {
-                        result.session.speakersMissing++
-                    }
-                })
-                if (tempSession.speakers.length <= 0) {
-                    result.session.noSpeakers++
-                }
+    const sessionKeys = Object.keys(sessions)
+    if (sessionKeys.length <= 0) {
+        return {
+            sessionsObjectFound: false,
+            session: {
+                idValid: false,
+                titleValid: false,
+                startEndTimeValid: false,
+                trackTitleValid: false,
+                speakersValid: false,
+                noSpeakers: 0,
+                speakersMissing: 0,
+                sessionCount: 0
             }
         }
-    })
+    } else {
+        let tempSession
+        sessionKeys.forEach(key => {
+            tempSession = sessions[key]
+            if (tempSession || typeof sessions === 'object') {
+                result.session.sessionCount++
+
+                if (key !== tempSession.id) {
+                    result.session.idValid = false
+                }
+                if (!tempSession.title) {
+                    result.session.titleValid = false
+                }
+                if (!tempSession.startTime || !tempSession.endTime) {
+                    result.session.startEndTimeValid = false
+                } else if (!moment(tempSession.startTime).isValid() || !moment(tempSession.endTime).isValid()) {
+                    result.session.startEndTimeValid = false
+                }
+
+                if (!tempSession.trackTitle) {
+                    result.session.trackTitleValid = false
+                }
+                if (!tempSession.speakers || tempSession.speakers.constructor !== Array) {
+                    result.session.speakersValid = false
+                } else {
+                    tempSession.speakers.forEach(speakerId => {
+                        if (!speakers || !speakers[speakerId]) {
+                            result.session.speakersMissing++
+                        }
+                    })
+                    if (tempSession.speakers.length <= 0) {
+                        result.session.noSpeakers++
+                    }
+                }
+            }
+        })
+    }
 
     return result
 }
@@ -138,21 +155,34 @@ const validateSpeakers = (speakers) => {
         }
     }
 
-    let speaker
-    Object.keys(speakers).forEach(key => {
-        speaker = speakers[key]
-        result.speaker.speakerCount++
-        if (key !== speaker.id) {
-            result.speaker.idValid = false
+    const speakerKeys = Object.keys(speakers)
+    if (speakerKeys.length <= 0) {
+        return {
+            speakersObjectFound: false,
+            speaker: {
+                idValid: false,
+                nameValid: false,
+                photoUrlValid: false,
+                speakerCount: 0
+            }
         }
+    } else {
+        let speaker
+        speakerKeys.forEach(key => {
+            speaker = speakers[key]
+            result.speaker.speakerCount++
+            if (key !== speaker.id) {
+                result.speaker.idValid = false
+            }
 
-        if (!speaker.name) {
-            result.speaker.nameValid = false
-        }
-        if (!speaker.photoUrl || (!speaker.photoUrl.startsWith("https://") && !speaker.photoUrl.startsWith("http://"))) {
-            result.speaker.photoUrlValid = false
-        }
-    })
+            if (!speaker.name) {
+                result.speaker.nameValid = false
+            }
+            if (!speaker.photoUrl || (!speaker.photoUrl.startsWith("https://") && !speaker.photoUrl.startsWith("http://"))) {
+                result.speaker.photoUrlValid = false
+            }
+        })
+    }
 
     return result
 }

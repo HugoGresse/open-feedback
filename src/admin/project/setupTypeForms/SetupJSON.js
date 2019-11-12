@@ -18,7 +18,7 @@ const SetupJSON = ({
     const [formChangeValues, onFormChange] = useState(null)
 
     const formValues = formChangeValues || initialValues
-    const isFieldNotEmpty = formChangeValues || Object.values(initialValues).filter(value => value.length > 0).length > 0
+    const isFieldNotEmpty = formValues && formValues.jsonUrl
 
     return (
         <Grid container spacing={2}>

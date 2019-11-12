@@ -5,6 +5,7 @@ import {Form, Formik} from 'formik'
 import OFFormControlInputFormiked from '../../baseComponents/OFFormControlInputFormiked'
 import OFButton from '../../baseComponents/OFButton'
 import Box from '@material-ui/core/Box'
+import {FormikObserver} from '../../baseComponents/FormikObserver'
 
 const schema = object().shape({
     projectId: string().required(
@@ -21,7 +22,8 @@ const SetupHoverboardv2Form = ({
                                    onSubmit,
                                    submitText,
                                    backText,
-                                   initialValues
+                                   initialValues,
+                                   onFormChange
                                }) => {
     return (
         <Formik
@@ -37,6 +39,7 @@ const SetupHoverboardv2Form = ({
         >
             {({isSubmitting, values}) => (
                 <Form method="POST">
+                    {onFormChange && <FormikObserver value={values} onChange={(values) => onFormChange(values)}/>}
                     <OFFormControlInputFormiked
                         name="Project ID"
                         fieldName="projectId"

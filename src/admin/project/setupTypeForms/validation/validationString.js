@@ -30,7 +30,7 @@ const validationText = {
     notValidModel: 'Model not valid.',
     model: {
         [PROJECT_TYPE_JSONURL]: {
-            speakersOrSessionsObjectFound: 'We did not found the %s object(s) in your json. It may be missing or may not be an object with key:value inside. Check the json model for more information.',
+            speakersOrSessionsObjectFound: 'We did not found the %s object(s) in your json. It may be missing, may not be an object with key:value inside or be empty. Check the json model for more information.',
             session: {
                 idValid: sessionIdValid,
                 titleValid: sessionTitleValid,
@@ -48,7 +48,7 @@ const validationText = {
             }
         },
         [PROJECT_TYPE_HOVERBOARDV2]: {
-            speakersOrSessionsObjectFound: 'We did not found the %s object(s) in your data. It may be missing or not named correctly. Is your database model matching Hoverboard v2 Firestore model?',
+            speakersOrSessionsObjectFound: 'We did not found the %s object(s) in your data. It may be missing, empty or not named correctly. Is your database model matching Hoverboard v2 Firestore model?',
             session: {
                 idValid: sessionIdValid,
                 titleValid: sessionTitleValid,
