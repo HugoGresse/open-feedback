@@ -1,0 +1,38 @@
+{
+    "sessions": {
+        "2": {
+            "description": "Une conférence pou...",
+            "speakers": [
+                "lhwORZ2dSGbF1OG6VkfbjkOCzR12"
+            ],
+            "tags": [
+                "Architecture & Paradigme"
+            ],
+            "title": "Entre industrialisation et artisanat, le métier de développeur",
+            "id": "2",
+            "startTime": "2019-06-27T16:20:00+02:00",
+            "endTime": "2019-06-27T17:10:00+02:00",
+            "trackTitle": "Amphi D"
+        },
+        "30": {
+            "...": ""
+        }
+    },
+    "speakers": {
+        "lhwORZ2dSGbF1OG6VkfbjkOCzR12": {
+            "company": "Suricats Consulting",
+            "name": "Olivier PONCET",
+            "photoUrl": "https://avatars2.githubusercontent.com/u/29702924?v=4",
+            "socials": [
+                {
+                    "name": "twitter",
+                    "link": "https://twitter.com/ponceto91"
+                }
+            ],
+            "id": "lhwORZ2dSGbF1OG6VkfbjkOCzR12"
+        },
+        "anotherId": {
+            "...": ""
+        }
+    }
+}

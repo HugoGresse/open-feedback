@@ -9,6 +9,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import ArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import Box from '@material-ui/core/Box'
 import {FormikObserver} from '../../baseComponents/FormikObserver'
+import jsonModel from './jsonmodel'
+import clipboardCopy from 'clipboard-copy'
 
 const useStyles = makeStyles(() => ({
     jsonShowButton: {
@@ -21,6 +23,14 @@ const useStyles = makeStyles(() => ({
     },
     jsonExamplePre: {
         overflow: 'auto'
+    },
+    jsonExampleInnerContainer: {
+        position: 'relative'
+    },
+    jsonCopyButton: {
+        position: 'absolute',
+        right: 0,
+        top: 10
     }
 }))
 
@@ -68,57 +78,14 @@ const SetupJSONForm = ({
                         >
                             Show JSON model <ArrowDownIcon/>
                         </Button>
-                        <Collapse in={isExampleOpen}>
-                                <pre className={classes.jsonExamplePre}>
-                                    {JSON.stringify(
-                                        {
-                                            sessions: {
-                                                '2': {
-                                                    description:
-                                                        'Une conférence pou...',
-                                                    speakers: [
-                                                        'lhwORZ2dSGbF1OG6VkfbjkOCzR12'
-                                                    ],
-                                                    tags: [
-                                                        'Architecture & Paradigme'
-                                                    ],
-                                                    title:
-                                                        'Entre industrialisation et artisanat, le métier de développeur',
-                                                    id: '2',
-                                                    startTime:
-                                                        '2019-06-27T16:20:00+02:00',
-                                                    endTime:
-                                                        '2019-06-27T17:10:00+02:00',
-                                                    trackTitle: 'Amphi D'
-                                                },
-                                                '30': {
-                                                    '...': ''
-                                                }
-                                            },
-                                            speakers: {
-                                                lhwORZ2dSGbF1OG6VkfbjkOCzR12: {
-                                                    company:
-                                                        'Suricats Consulting',
-                                                    name: 'Olivier PONCET',
-                                                    photoUrl:
-                                                        'https://avatars2.githubusercontent.com/u/29702924?v=4',
-                                                    socials: [
-                                                        {
-                                                            name: 'twitter',
-                                                            link: 'https://twitter.com/ponceto91'
-                                                        }
-                                                    ],
-                                                    id:
-                                                        'lhwORZ2dSGbF1OG6VkfbjkOCzR12'
-                                                },
-                                                anotherId_dfnejz: {
-                                                    '...': ''
-                                                }
-                                            }
-                                        },
-                                        undefined,
-                                        4
-                                    )}
+                        <Collapse in={isExampleOpen} className={classes.jsonExampleInnerContainer}>
+                            <OFButton
+                                style={{design: "text"}}
+                                variant="outlined"
+                                className={classes.jsonCopyButton}
+                                onClick={() => clipboardCopy(JSON.stringify(jsonModel, undefined, 4))}>Copy</OFButton>
+                            <pre className={classes.jsonExamplePre}>
+                                    {JSON.stringify(jsonModel, undefined, 4)}
                                 </pre>
                         </Collapse>
                     </div>
