@@ -31,9 +31,10 @@ export const getSortedProjectsSelector = createSelector(
 )
 
 export const getSelectedProjectSelector = createSelector(
-    getSortedProjectsSelector,
+    getProjectsData,
     getSelectedProjectIdSelector,
-    (projects, selectedProjectId) => {
+    (projectsData, selectedProjectId) => {
+        const projects = projectsData.projects
         if (!projects || projects.length < 1) {
             return null
         }

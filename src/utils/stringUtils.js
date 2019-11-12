@@ -13,3 +13,24 @@ export const newId = () => {
     }
     return autoId
 }
+
+/**
+ * Example usage:
+
+ sprintf('The quick %s %s jumps over the lazy %s', [
+ 'brown',
+ 'fox',
+ 'dog'
+ ]);
+
+ Would output:
+
+ "The quick brown fox jumps over the lazy dog"
+
+ From https://stackoverflow.com/a/20218801/1377145
+
+ * @param  {String} template
+ * @param  values
+ * @return {String}
+ */
+export const sprintf = (template, ...values) => template.replace(/%s/g, () => values.shift())
