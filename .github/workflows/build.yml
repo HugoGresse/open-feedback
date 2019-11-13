@@ -30,8 +30,7 @@ jobs:
         npm run test
     - name: run lighthouse ci
       run: |
-          cd ../
           npm install -g @lhci/cli@0.3.x
           pwd
-          ls -la 
+          ls -la
           lhci autorun --config=./lighthouserc.json
