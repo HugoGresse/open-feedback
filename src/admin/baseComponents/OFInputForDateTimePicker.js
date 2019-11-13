@@ -1,7 +1,7 @@
 import React from 'react'
 import OFInput from './OFInput'
 
-const OFInputForDateTimePicker = ({icon, name, value, onClick, onError, onKeyDown, inputRef}) => {
+const OFInputForDateTimePicker = ({icon, name, value, onClick, onError, onKeyDown, inputRef, disabled}) => {
     return <OFInput icon={icon}
                     name={name}
                     value={value}
@@ -9,6 +9,7 @@ const OFInputForDateTimePicker = ({icon, name, value, onClick, onError, onKeyDow
                     onError={onError}
                     onKeyDown={onKeyDown}
                     inputRef={inputRef}
+                    disabled={disabled}
     />
 }
 
