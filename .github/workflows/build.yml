@@ -33,4 +33,5 @@ jobs:
           cd ../
           npm install -g @lhci/cli@0.3.x
           pwd
+          ls -la 
           lhci autorun --config=./lighthouserc.json
