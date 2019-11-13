@@ -44,3 +44,6 @@ src/config.js
 cypress/screenshots
 cypress/videos
 cypress.env.json
+
+# lighthouse ci
+.lighthouseci/
