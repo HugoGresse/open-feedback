@@ -1,14 +1,13 @@
 import React from 'react'
 import NewProjectLayout from './NewProjectLayout'
 import { object, string } from 'yup'
-import { Typography } from '@material-ui/core'
 import { Form, Formik } from 'formik'
 import OFFormControlInputFormiked from '../../baseComponents/OFFormControlInputFormiked'
 import OFButton from '../../baseComponents/OFButton'
 import Box from '@material-ui/core/Box'
 
 const schema = object().shape({
-    name: string().required(<Typography>The event name is required</Typography>)
+    name: string().required('The event name is required')
 })
 
 const Step1 = ({ onCancel, onSubmit, initialValues }) => {

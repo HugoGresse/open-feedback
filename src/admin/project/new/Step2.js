@@ -13,10 +13,7 @@ import {
 import Box from '@material-ui/core/Box'
 
 const schema = object().shape({
-    projectType: string().required(
-        <Typography>
-            You need to choose how you want to setup the project.
-        </Typography>
+    projectType: string().required('You need to choose how you want to setup the project.'
     )
 })
 
