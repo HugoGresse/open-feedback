@@ -7,13 +7,20 @@ import ArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import DeleteIcon from '@material-ui/icons/Delete'
 import IconButton from '@material-ui/core/IconButton'
 
-const VoteItem = ({ item, onChange, onMoveUp, onMoveDown, onDelete }) => {
+const VoteItem = ({ item, onChange, onMoveUp, onMoveDown, onDelete, onEnterPressed }) => {
     return (
         <TableRow>
             <TableCell component="th" scope="row">
                 <OFInput
                     value={item.name}
                     onChange={event => onChange(event.target.value)}
+                    autoFocus={!item.name}
+                    onKeyPress={(ev) => {
+                        if (ev.key === 'Enter') {
+                            onEnterPressed && onEnterPressed()
+                            ev.preventDefault()
+                        }
+                    }}
                 />
             </TableCell>
             <TableCell align="right">
