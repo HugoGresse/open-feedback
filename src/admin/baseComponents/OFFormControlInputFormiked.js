@@ -18,9 +18,10 @@ const OFFormControlInputFormiked = ({
                 disabled={isSubmitting}
             >
                 {
-                    ({field}) => (
+                    ({field, form}) => (
                         <OFInput
-                            name={fieldName}
+                            error={!!form.errors[field.name]}
+                            name={field.name}
                             value={value}
                             disabled={isSubmitting}
                             {...field}

@@ -3,6 +3,7 @@ import FormControl from '@material-ui/core/FormControl'
 import React from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { ErrorMessage } from 'formik'
+import {Typography} from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -13,6 +14,9 @@ const useStyles = makeStyles(theme => ({
         fontSize: theme.typography.fontSize * 1.2,
         position: 'relative',
         marginBottom: theme.spacing(1)
+    },
+    errorMessage: {
+        color: 'red'
     }
 }))
 
@@ -25,7 +29,8 @@ const OFFormControlFormiked = ({ name, fieldName, children }) => {
                 {name}
             </InputLabel>
             {children}
-            <ErrorMessage name={fieldName} />
+            <ErrorMessage name={fieldName}
+                          render={msg => <Typography className={classes.errorMessage}>{msg}</Typography>}/>
         </FormControl>
     )
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {object, string, boolean} from 'yup'
 import {Typography} from '@material-ui/core'
 import {Field, Form, Formik} from 'formik'
@@ -17,38 +17,16 @@ import moment from 'moment'
 import Collapse from '@material-ui/core/Collapse'
 
 const schema = object().shape({
-    name: string().required(
-        <Typography>The project name is required</Typography>
-    ),
+    name: string().required("The project name is required"),
     scheduleLink: string()
-        .url(
-            <Typography variant="subtitle2">
-                The schedule link is not a valid url
-            </Typography>
-        )
-        .required(
-            <Typography variant="subtitle2">
-                The schedule link is required
-            </Typography>
-        ),
+        .url("The schedule link is not a valid url")
+        .required("The schedule link is required"),
     logoUrl: string()
-        .url(
-            <Typography variant="subtitle2">
-                The logo is not a valid url
-            </Typography>
-        )
-        .required(
-            <Typography variant="subtitle2">The logo is required</Typography>
-        ),
+        .url("The logo is not a valid url")
+        .required("The logo is required"),
     faviconUrl: string()
-        .url(
-            <Typography variant="subtitle2">
-                The favicon is not a valid url
-            </Typography>
-        )
-        .required(
-            <Typography variant="subtitle2">The favicon is required</Typography>
-        ),
+        .url("The favicon is not a valid url")
+        .required("The favicon is required"),
     restrictVoteRange: boolean(),
     voteStartTime: string(),
     voteEndTime: string()
@@ -66,6 +44,7 @@ const useStyles = makeStyles(theme => ({
 const ProjectSettingsForm = ({project}) => {
     const classes = useStyles()
     const dispatch = useDispatch()
+    const [errorOnSubmit, setErrorSubmit] = useState(false)
 
     const initialValues = {
         name: project.name,
@@ -82,25 +61,20 @@ const ProjectSettingsForm = ({project}) => {
         <Formik
             validationSchema={schema}
             initialValues={initialValues}
-            onSubmit={(values, actions) => {
-
-                dispatch(
-                    editProject({
-                        chipColors: values.chipColors,
-                        favicon: values.faviconUrl,
-                        logoSmall: values.logoUrl,
-                        name: values.name,
-                        scheduleLink: values.scheduleLink,
-                        restrictVoteRange: values.restrictVoteRange,
-                        voteStartTime: moment(values.voteStartTime).toISOString(),
-                        voteEndTime: moment(values.voteEndTime).toISOString()
-                    })
-                ).then(() => {
-                    actions.setSubmitting(false)
+            onSubmit={values => dispatch(
+                editProject({
+                    chipColors: values.chipColors,
+                    favicon: values.faviconUrl,
+                    logoSmall: values.logoUrl,
+                    name: values.name,
+                    scheduleLink: values.scheduleLink,
+                    restrictVoteRange: values.restrictVoteRange,
+                    voteStartTime: moment(values.voteStartTime).toISOString(),
+                    voteEndTime: moment(values.voteEndTime).toISOString()
                 })
-            }}
+            )}
         >
-            {({isSubmitting, values}) => (
+            {({isSubmitting, values, errors}) => (
                 <Form method="POST">
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
@@ -182,9 +156,19 @@ const ProjectSettingsForm = ({project}) => {
                         </Grid>
 
                         <Grid item xs={12} className={classes.buttonContainer}>
-                            <OFButton disabled={isSubmitting} type="submit">
+                            <OFButton disabled={isSubmitting} type="submit" onClick={() => {
+                                if(errorArrayContainError(errors)) {
+                                    setErrorSubmit(true)
+                                } else {
+                                    setErrorSubmit(false)
+                                }
+                            }}>
                                 Save
                             </OFButton>
+
+                            {errorOnSubmit && errorArrayContainError(errors) && <Typography style={{}}>
+                                You have some error in here, would you mind fixing it before saving? Much appreciated.
+                            </Typography>}
                         </Grid>
                     </Grid>
                 </Form>
@@ -192,5 +176,7 @@ const ProjectSettingsForm = ({project}) => {
         </Formik>
     )
 }
+
+const errorArrayContainError = (errorArray) => Object.values(errorArray).filter(el => !!el).length > 0
 
 export default ProjectSettingsForm

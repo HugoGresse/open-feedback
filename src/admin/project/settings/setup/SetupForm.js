@@ -32,11 +32,9 @@ const SetupForm = () => {
                         databaseURL: project.config.databaseURL
                     }
                 }
-                onSubmit={(values) => {
-                    dispatch(editProject({
-                        config: values
-                    }))
-                }}
+                onSubmit={(values) => dispatch(editProject({
+                    config: values
+                }))}
             />
             break
         case PROJECT_TYPE_JSONURL:
@@ -49,11 +47,9 @@ const SetupForm = () => {
                         jsonUrl: project.config.jsonUrl
                     }
                 }
-                onSubmit={(values) => {
-                    dispatch(editProject({
-                        config: values
-                    }))
-                }}
+                onSubmit={(values) => dispatch(editProject({
+                    config: values
+                }))}
             />
             break
         default:

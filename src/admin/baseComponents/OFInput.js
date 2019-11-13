@@ -14,7 +14,8 @@ const IconWrapper = styled.div`
 const OFInputStyled = styled(InputBase)`
     height: 40px;
     font-size: 16px;
-    border: 1px solid #EEE;
+    ${props => (props.error ? `border: 1px solid #F00;`: `border: 1px solid #EEE;`)}
+    ${props => (props.error ? `box-shadow: 0px 1px 3px rgba(255,0,0, 0.3);`: ``)}
     width: 100%;
     background: ${COLORS.WHITE};
     box-sizing: border-box;

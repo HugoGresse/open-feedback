@@ -1,6 +1,7 @@
 import React from 'react'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import {ErrorMessage} from 'formik'
+import {Typography} from '@material-ui/core'
 
 const RadioButtonGroup = ({
                               fieldName,
@@ -9,7 +10,8 @@ const RadioButtonGroup = ({
     return (
         <RadioGroup>
             {children}
-            <ErrorMessage name={fieldName}/>
+            <ErrorMessage name={fieldName}
+                          render={msg => <Typography style={{color: 'red'}}>{msg}</Typography>}/>
         </RadioGroup>
     )
 }

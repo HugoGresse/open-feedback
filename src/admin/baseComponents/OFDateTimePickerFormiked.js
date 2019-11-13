@@ -7,6 +7,7 @@ const OFDateTimePickerFormiked = ({ field, form, ...other }) => {
 
     return (
         <DateTimePicker
+            disabled={!!form.isSubmitting}
             name={field.name}
             value={field.value}
             variant="inline"

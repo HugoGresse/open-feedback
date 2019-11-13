@@ -1,6 +1,5 @@
 import React from 'react'
 import {object, string} from 'yup'
-import {Typography} from '@material-ui/core'
 import {Form, Formik} from 'formik'
 import OFFormControlInputFormiked from '../../baseComponents/OFFormControlInputFormiked'
 import OFButton from '../../baseComponents/OFButton'
@@ -8,13 +7,11 @@ import Box from '@material-ui/core/Box'
 import {FormikObserver} from '../../baseComponents/FormikObserver'
 
 const schema = object().shape({
-    projectId: string().required(
-        <Typography>The Firebase project ID is required</Typography>
-    ),
-    apiKey: string().required(<Typography>The API Key is required</Typography>),
+    projectId: string().required('The Firebase project ID is required'),
+    apiKey: string().required('The API Key is required'),
     databaseURL: string()
-        .url(<Typography>The database URL must be a valid url</Typography>)
-        .required(<Typography>The database URL is required</Typography>)
+        .url('The database URL must be a valid url')
+        .required('The database URL is required')
 })
 
 const SetupHoverboardv2Form = ({
