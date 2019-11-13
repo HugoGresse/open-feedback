@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 import {object, string} from 'yup'
-import {Button, Typography} from '@material-ui/core'
 import {Form, Formik} from 'formik'
 import OFFormControlInputFormiked from '../../baseComponents/OFFormControlInputFormiked'
 import OFButton from '../../baseComponents/OFButton'
@@ -11,6 +10,7 @@ import Box from '@material-ui/core/Box'
 import {FormikObserver} from '../../baseComponents/FormikObserver'
 import jsonModel from './jsonmodel'
 import clipboardCopy from 'clipboard-copy'
+import Button from '@material-ui/core/Button'
 
 const useStyles = makeStyles(() => ({
     jsonShowButton: {
@@ -36,8 +36,8 @@ const useStyles = makeStyles(() => ({
 
 const schema = object().shape({
     jsonUrl: string()
-        .url(<Typography>The JSON URL must be a valid url</Typography>)
-        .required(<Typography>The JSON URL is required</Typography>)
+        .url('The JSON URL must be a valid url')
+        .required('The JSON URL is required')
 })
 
 const SetupJSONForm = ({
