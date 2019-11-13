@@ -75,6 +75,7 @@ const VoteItemList = ({ classes }) => {
                         onMoveUp={() => dispatch(onVoteItemMoveUp(item))}
                         onMoveDown={() => dispatch(onVoteItemMoveDown(item))}
                         onDelete={() => dispatch(onVoteItemDelete(item))}
+                        onEnterPressed={() => dispatch(onVoteItemAddBoolean())}
                     />
                 ))}
                 <TableRow>
