@@ -1,5 +1,6 @@
 {
     "ci": {
+        "budgetsFile": "./lighthouse/budget.json",
         "collect": {
             "staticDistDir": "./build"
         },
