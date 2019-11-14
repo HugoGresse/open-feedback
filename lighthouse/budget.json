@@ -4,26 +4,17 @@
         "resourceSizes":[
             {
                 "resourceType":"total",
-                "budget":300
+                "budget":740000
             },
             {
                 "resourceType":"script",
-                "budget":150
+                "budget":690000
             }
         ],
         "resourceCounts":[
             {
                 "resourceType":"third-party",
-                "budget":10
-            }
-        ]
-    },
-    {
-        "path":"/blog",
-        "resourceSizes":[
-            {
-                "resourceType":"total",
-                "budget":200
+                "budget":13
             }
         ]
     }
