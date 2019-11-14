@@ -1,6 +1,8 @@
 {
     "ci": {
-        "budgetsFile": "./lighthouse/budget.json",
+        "assert": {
+            "budgetsFile": "./lighthouse/budget.json"
+        },
         "collect": {
             "staticDistDir": "./build"
         },
