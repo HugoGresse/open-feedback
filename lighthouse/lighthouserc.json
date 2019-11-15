@@ -1,0 +1,13 @@
+{
+    "ci": {
+        "assert": {
+            "budgetsFile": "./lighthouse/budget.json"
+        },
+        "collect": {
+            "staticDistDir": "./build"
+        },
+        "upload": {
+            "target": "temporary-public-storage"
+        }
+    }
+}
