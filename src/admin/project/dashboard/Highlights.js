@@ -16,9 +16,6 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { getVoteItems } from '../settings/votingForm/votingFormActions'
 
 const useStyles = makeStyles({
-    title: {
-        padding: 0
-    },
     count: {
         color: COLORS.RED_ORANGE,
         fontSize: 40,
@@ -63,7 +60,7 @@ const Highlights = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                    <Typography variant="body1">Vote per user</Typography>
+                    <Typography variant="body1">Votes per user</Typography>
                     <Typography variant="body1" className={classes.count}>
                         {voteCountByUser}
                     </Typography>
