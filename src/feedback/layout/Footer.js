@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {COLORS} from '../../constants/colors'
+import { COLORS } from '../../constants/colors'
 
 import logoColor from '../../assets/logo-openfeedback-color.png'
 
@@ -18,10 +18,17 @@ const FooterStyled = styled.div`
 `
 
 const Footer = () => {
-    return <FooterStyled>
-        <span className="Footer__Text">Fabricoté par</span>
-        <img height="25" src={logoColor} alt="open feedback"/>
-    </FooterStyled>
+    return (
+        <FooterStyled>
+            <span className="Footer__Text">Fabricoté par</span>
+            <a
+                href="https://github.com/HugoGresse/open-feedback"
+                target="_blank"
+            >
+                <img height="25" src={logoColor} alt="open feedback" />
+            </a>
+        </FooterStyled>
+    )
 }
 
 export default Footer
