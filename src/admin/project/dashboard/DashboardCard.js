@@ -1,12 +1,15 @@
 import React from 'react'
-import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
+import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import withStyles from '@material-ui/core/styles/withStyles'
-import COLORS from '../../constants/colors'
+import COLORS from '../../../constants/colors'
 
-const styles = () => ({
+const styles = theme => ({
+    container: {
+        marginBottom: theme.spacing(3)
+    },
     content: {
         '&:last-child': {
             paddingBottom: 16
@@ -32,7 +35,7 @@ function DashboardCard({ title, titleIcon, children, classes }) {
     }
 
     return (
-        <Card>
+        <Card className={classes.container}>
             <CardContent className={classes.content}>
                 <Typography
                     component="h1"

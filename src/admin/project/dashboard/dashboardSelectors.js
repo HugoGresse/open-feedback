@@ -4,6 +4,12 @@ import {
     isSessionLoadedSelector
 } from '../../../core/sessions/sessionsSelectors'
 import { getAdminStateSelector } from '../../adminSelector'
+import { groupBy } from 'lodash'
+import {
+    getBooleanVoteItemsSelector,
+    getCommentVoteItemSelector
+} from '../settings/votingForm/votingFormSelectors'
+import { round1Decimals } from '../../../utils/numberUtils'
 
 const getDashboard = state => getAdminStateSelector(state).adminDashboard
 const getDashboardData = state => getDashboard(state).data
@@ -51,7 +57,7 @@ export const getMostVotedSessionSelector = createSelector(
                 }
                 return 0
             })
-            .slice(0, 5)
+            .slice(0, 20)
     }
 )
 
@@ -87,5 +93,71 @@ export const getVotesByHourSelector = createSelector(
             return acc
         }, [])
         return Object.values(collection)
+    }
+)
+
+const getVoteByUserSelector = createSelector(getUserVotes, userVotes =>
+    groupBy(userVotes, 'userId')
+)
+
+const getBooleanVotesSelector = createSelector(
+    getUserVotes,
+    getBooleanVoteItemsSelector,
+    (userVotes, booleanVoteItems) => {
+        const booleansVoteItemIds = booleanVoteItems.map(item => item.id)
+        return userVotes.filter(vote =>
+            booleansVoteItemIds.includes(vote.voteItemId)
+        )
+    }
+)
+
+const getCommentVotesSelector = createSelector(
+    getUserVotes,
+    getCommentVoteItemSelector,
+    (userVotes, textVoteItems) => {
+        if (!textVoteItems) {
+            return []
+        }
+        const textVoteItemIds = [textVoteItems.id]
+        return userVotes.filter(vote =>
+            textVoteItemIds.includes(vote.voteItemId)
+        )
+    }
+)
+
+export const getTotalVotersSelector = createSelector(
+    getVoteByUserSelector,
+    voteByUser => Object.keys(voteByUser).length
+)
+
+export const getTotalVotesSelector = createSelector(
+    getBooleanVotesSelector,
+    booleanVotes => booleanVotes.length
+)
+
+export const getTotalCommentsSelector = createSelector(
+    getCommentVotesSelector,
+    commentVotes => commentVotes.length
+)
+
+export const getBooleanCountByUser = createSelector(
+    getTotalVotesSelector,
+    getTotalVotersSelector,
+    (voteCount, voters) => {
+        if (!voters) {
+            return 0
+        }
+        return round1Decimals(voteCount / voters)
+    }
+)
+
+export const getCommentCountByUser = createSelector(
+    getTotalCommentsSelector,
+    getTotalVotersSelector,
+    (commentCount, voters) => {
+        if (!voters) {
+            return 0
+        }
+        return round1Decimals(commentCount / voters)
     }
 )

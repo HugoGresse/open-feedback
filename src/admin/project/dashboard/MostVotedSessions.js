@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent'
 import { getMostVotedSessionSelector } from './dashboardSelectors'
 import withStyles from '@material-ui/core/styles/withStyles'
-import WhatshotIcon from '@material-ui/icons/WhatshotOutlined'
-import DashboardCard from '../../baseComponents/DashboardCard'
+import ThumbsUpIcon from '@material-ui/icons/ThumbUpSharp'
+import DashboardCard from './DashboardCard'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import COLORS from '../../../constants/colors'
@@ -29,7 +29,7 @@ class MostVotedSessions extends Component {
         }
 
         return (
-            <DashboardCard title="Most voted" titleIcon={<WhatshotIcon />}>
+            <DashboardCard title="Most voted" titleIcon={<ThumbsUpIcon />}>
                 <Grid container spacing={2}>
                     {mostVotedSessions.map(row => (
                         <React.Fragment key={row.sessionId}>
