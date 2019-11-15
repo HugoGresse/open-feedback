@@ -24,6 +24,7 @@ const Footer = () => {
             <a
                 href="https://github.com/HugoGresse/open-feedback"
                 target="_blank"
+                rel="noopener noreferrer" 
             >
                 <img height="25" src={logoColor} alt="open feedback" />
             </a>
