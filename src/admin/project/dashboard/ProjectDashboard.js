@@ -10,6 +10,7 @@ import { Grid } from '@material-ui/core'
 import { isSessionLoadedSelector } from '../../../core/sessions/sessionsSelectors'
 import MostVotedSessions from './MostVotedSessions'
 import VoteTimeline from './VoteTimeline'
+import Highlights from './Highlights'
 
 class ProjectDashboard extends Component {
     componentDidMount() {
@@ -37,6 +38,7 @@ class ProjectDashboard extends Component {
         return (
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
+                    <Highlights />
                     <MostVotedSessions />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -62,7 +64,4 @@ const mapDispatchToProps = Object.assign(
         getSessions: getSessions
     }
 )
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ProjectDashboard)
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectDashboard)
