@@ -43,7 +43,10 @@ export const getMostVotedSessionSelector = createSelector(
                     sessionId: session.id,
                     voteCount: voteCount,
                     title: sessionlist[session.id].title,
-                    trackTitle: sessionlist[session.id].trackTitle
+                    trackTitle: sessionlist[session.id].trackTitle,
+                    date:
+                        sessionlist[session.id].startTime &&
+                        sessionlist[session.id].startTime.split('T')[0]
                 })
 
                 return acc
