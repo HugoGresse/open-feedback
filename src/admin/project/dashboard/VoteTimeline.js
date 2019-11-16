@@ -8,7 +8,7 @@ import Tooltip from 'recharts/es6/component/Tooltip'
 import AreaChart from 'recharts/es6/chart/AreaChart'
 import Area from 'recharts/es6/cartesian/Area'
 import ResponsiveContainer from 'recharts/es6/component/ResponsiveContainer'
-import DashboardCard from '../../baseComponents/DashboardCard'
+import DashboardCard from './DashboardCard'
 import InsertChartOutlined from '@material-ui/icons/InsertChartOutlined'
 
 class VoteTimeline extends Component {
@@ -89,7 +89,4 @@ const mapStateToProps = state => ({
     votesByHour: getVotesByHourSelector(state)
 })
 
-export default connect(
-    mapStateToProps,
-    {}
-)(VoteTimeline)
+export default connect(mapStateToProps, {})(VoteTimeline)
