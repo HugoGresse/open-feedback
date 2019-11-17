@@ -13,7 +13,7 @@ const styles = theme => ({
         borderBottom: '1px solid #e8e8e8',
         paddingBottom: 15,
         marginTop: 10,
-        wordBreak: 'break-all',
+        wordBreak: 'break-word',
         whiteSpace: 'pre-wrap'
     }
 })

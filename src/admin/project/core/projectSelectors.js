@@ -13,6 +13,10 @@ export const getSelectedProjectIdSelector = state =>
 export const isProjectApiInitSelector = state =>
     getProjects(state).projectApiInit
 
+export const getMemberIds = state => getSelectedProjectSelector(state).members
+
+export const getOwnerId = state => getSelectedProjectSelector(state).owner
+
 // MEMOIZED
 
 export const getSortedProjectsSelector = createSelector(

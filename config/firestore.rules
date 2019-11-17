@@ -7,9 +7,10 @@ service cloud.firestore {
         function itsRequestedByMe() { return request.resource.data.uid == request.auth.uid }
         function itsMyDocument(userId) { return request.auth.uid == userId }
         function isAdmin(data) { return data.owner == request.auth.uid || request.auth.uid in data.members}
+        function isAnonymous() { return request.auth.token.firebase.sign_in_provider == 'anonymous'}
 
         match /users/{userId} {
-            allow get: if authenticated() && itsMyDocument(userId);
+            allow get: if authenticated() && !isAnonymous();
             allow list: if authenticated() && itsMyDocument(userId) && limitOne();
             allow create: if authenticated() && itsMyDocument(userId) && userNotExists();
             allow update: if authenticated() && itsMyDocument(userId);
