@@ -33,7 +33,7 @@ const UserItem = ({userId, ownerId, currentUserId}) => {
 
     useEffect(() => {
         dispatch(getUserDetails(userId))
-    }, [dispatch])
+    }, [dispatch, userId])
 
     if (!user) {
         return ""
