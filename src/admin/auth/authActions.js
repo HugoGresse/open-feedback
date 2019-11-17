@@ -67,6 +67,7 @@ const createUser = async (user, displayName, photoURL) => {
         updatedAt: serverTimestamp(),
         displayName: displayName,
         photoURL: photoURL,
+        email: user.email,
         uid: user.uid,
     }
     return fireStoreMainInstance

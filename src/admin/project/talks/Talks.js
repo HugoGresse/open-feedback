@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { isProjectApiInitSelector } from "../core/projectSelectors"
-import { getSessions } from "../../../core/sessions/sessionsActions"
-import { getSpeakers } from "../../../core/speakers/speakerActions"
-import Grid from "@material-ui/core/Grid"
+import React, {useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {isProjectApiInitSelector} from "../core/projectSelectors"
+import {getSessions} from "../../../core/sessions/sessionsActions"
+import {getSpeakers} from "../../../core/speakers/speakerActions"
 import OFPaper from "../../baseComponents/OFPaper"
 import TalkList from "./TalkList"
 
@@ -18,13 +17,9 @@ const Talks = () => {
         }
     }, [isProjectApiInit, dispatch])
 
-    return <Grid container spacing={2}>
-        <Grid item xs={12}>
-            <OFPaper style={{padding: 0}}>
-                <TalkList/>
-            </OFPaper>
-        </Grid>
-    </Grid>
+    return <OFPaper style={{padding: 0}}>
+        <TalkList/>
+    </OFPaper>
 }
 
 export default Talks
