@@ -138,7 +138,7 @@ export const editProject = projectData => (dispatch, getState) => {
                 type: ADD_NOTIFICATION,
                 payload: {
                     type: 'success',
-                    message: 'Project saved'
+                    message: 'Event saved'
                 }
             })
 
@@ -152,7 +152,7 @@ export const editProject = projectData => (dispatch, getState) => {
                 type: ADD_NOTIFICATION,
                 payload: {
                     type: 'error',
-                    message: 'Failed to save the project'
+                    message: 'Failed to save the event'
                 }
             })
 
@@ -202,7 +202,7 @@ export const newProject = projectData => (dispatch, getState) => {
 }
 
 
-export const initProjectApiIfReady = (projectId, project) => (dispatch, getState) => {
+export const initProjectApiIfReady = (projectId, project) => dispatch => {
     if (projectId && project) {
         initProjectApi(project.setupType, project)
         dispatch({
