@@ -1,5 +1,11 @@
 import * as admin from 'firebase-admin'
-const serviceAccount = require('../serviceAccountKey.json')
+import * as functions from 'firebase-functions';
+
+// eslint-disable-next-line no-undef
+const serviceAccount = require(
+    functions.config().app.env === 'development' ?
+        '../serviceAccountKey.development.json' :
+        '../serviceAccountKey.production.json')
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
