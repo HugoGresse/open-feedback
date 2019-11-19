@@ -2,4 +2,8 @@ export {
     aggregateVotesCreate,
     aggregateVotesDelete,
     aggregateVotesUpdate
-} from './aggregateVotes'
+} from './triggers/aggregateVotes'
+
+export {
+    userInviteCreated
+} from './triggers/userInvite'

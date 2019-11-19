@@ -3,8 +3,9 @@ import {ADD_NOTIFICATION} from '../../../notification/notificationActionTypes'
 import {GET_USER_DETAILS_SUCCESS, USERS_SET_FILTER} from './usersActionTypes'
 import {getUsersSelector} from './usersSelectors'
 import {editProject} from '../../core/projectActions'
-import {getMemberIds, getSelectedProjectIdSelector} from '../../core/projectSelectors'
+import {getMemberIds, getSelectedProjectSelector} from '../../core/projectSelectors'
 import {getUserSelector} from '../../../auth/authSelectors'
+import {getDataFromProviderDataOrUser} from '../../../auth/authActions'
 
 export const getUserDetails = (uid) => (dispatch, getState) => {
     const usersDetails = getUsersSelector(getState())
@@ -56,8 +57,8 @@ export const removeUserFromProject = (userId) => (dispatch, getState) => {
 }
 
 export const inviteUser = userEmail => (dispatch, getState) => {
-    const currentUserId = getUserSelector(getState()).uid
-    const projectId = getSelectedProjectIdSelector(getState())
+    const currentUser = getUserSelector(getState())
+    const project = getSelectedProjectSelector(getState())
 
     return fireStoreMainInstance
         .collection('projects-invites')
@@ -65,8 +66,11 @@ export const inviteUser = userEmail => (dispatch, getState) => {
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
             destinationUserInfo: userEmail,
-            originUserId: currentUserId,
-            projectId: projectId,
+            originUserId: currentUser.uid,
+            originUserName: currentUser.displayName,
+            originUserPhotoURL: getDataFromProviderDataOrUser(currentUser, 'photoURL'),
+            projectId: project.id,
+            projectName: project.name,
             status: 'new'
         })
         .then(() => {

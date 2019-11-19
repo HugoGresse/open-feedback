@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions'
 import * as firebase from 'firebase'
 import DocumentData = firebase.firestore.DocumentData
-import { firestore } from './firebaseInit'
+import { firestore } from '../helpers/firebaseInit'
 
 export const aggregateVotesCreate = functions.firestore
     .document('/projects/{projectId}/userVotes/{voteId}')

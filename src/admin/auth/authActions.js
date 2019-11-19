@@ -89,7 +89,7 @@ const updateUser = async (user, displayName, photoURL) => {
         .update(userField)
 }
 
-const getDataFromProviderDataOrUser = (user, keyToGet) => {
+export const getDataFromProviderDataOrUser = (user, keyToGet) => {
     if (!user) {
         return ""
     }

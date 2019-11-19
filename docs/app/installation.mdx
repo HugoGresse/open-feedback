@@ -2,7 +2,7 @@
 
 ## Pre-requisites
 
-- node@10.16.0 
+- node@10.16.0
 - npm
 
 ## Setup
@@ -28,24 +28,45 @@ Create a firebase project with the [firebase console](https://console.firebase.g
 ### Configure Google Analytics (optional)
 You can add a Google Analytics by adding your Analytics ID to the environment variable in `REACT_APP_GOOGLE_ANALYTICS` in `.env.loval`.
 
+### Configure Mailgun (optional)
+The application sends emails through the Mailgun API
+
+You have to create a Mailgun account if you want to send those emails, if not the app will still works perfectly but without sending any email.
+
+Mailgun API is used to send email through Cloud Functions, so you will have to add environment variables with Firebase CLI:
+
+- The application URL: app.url (ex: `http://localhost:3000`)
+- The API key: mailgun.key
+- The domain name: mailgun.domain
+
+Here the command to register those variables:
+
+    firebase functions:config:set app.url="https://myserver.com" mailgun.key="MAILGUN API KEY" mailgun.domain="MAILGUN DOMAIN"  mailgun.api="https://api.eu.mailgun.net/v3/SOMETHINGLIKE_THIS/messages"
+
+To test cloud functions with Mailgun on local machine (with cloud function shell), you will need to generate ``.runtimeconfig.json` file with environment variables :
+
+    firebase functions:config:get > .runtimeconfig.json
+
+> Important Note: Mailgun is an external service from Firebase and Google, so to be able use it with you will need to activate Firebase pricing.
+
 ## Run
 
 ### Run the app in dev mode
 
 
-1. Clone the Open Feedback app and install dependencies  
+1. Clone the Open Feedback app and install dependencies
     ```
     git clone git@github.com:HugoGresse/open-feedback.git
     npm i
     ```
-2. Configure the app with [Firebase](#configure-firebase)  
+2. Configure the app with [Firebase](#configure-firebase)
 3. Start the app
     ```
     npm start
     ```
-    
+
     >Before using the app, you'll need to deploy the firestore security rules at least once (see below for how to deploy with firebase)
-    
+
 4. Open [http://localhost:3000](http://localhost:3000) to view the app in the browser.
 
 ## Cloud functions
@@ -68,7 +89,7 @@ The next deploy will also deploy Firebase Cloud Functions
     ```
     npm install firebase-tools -g
     ```
-    
+
 2. You must be logged with firebase and select project ([Firebase documentation](https://firebase.google.com/docs/web)) :
     ```
     firebase login
@@ -77,7 +98,7 @@ The next deploy will also deploy Firebase Cloud Functions
 3. Install dependencies for the app and cloud functions.
 
 ### Build and deploy the app
-    
+
 ```
 npm run deploy
 ```
