@@ -10,3 +10,5 @@ node_modules/
 
 serviceAccountKey.production.json
 serviceAccountKey.development.json
+
+.runtimeconfig1.json
