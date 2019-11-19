@@ -1,14 +1,15 @@
-import {fireStoreMainInstance} from '../../../../firebase'
+import {fireStoreMainInstance, serverTimestamp} from '../../../../firebase'
 import {ADD_NOTIFICATION} from '../../../notification/notificationActionTypes'
 import {GET_USER_DETAILS_SUCCESS, USERS_SET_FILTER} from './usersActionTypes'
 import {getUsersSelector} from './usersSelectors'
 import {editProject} from '../../core/projectActions'
-import {getMemberIds} from '../../core/projectSelectors'
+import {getMemberIds, getSelectedProjectIdSelector} from '../../core/projectSelectors'
+import {getUserSelector} from '../../../auth/authSelectors'
 
 export const getUserDetails = (uid) => (dispatch, getState) => {
     const usersDetails = getUsersSelector(getState())
 
-    if(usersDetails && usersDetails[uid]) {
+    if (usersDetails && usersDetails[uid]) {
         // prevent load if data are already there
         return
     }
@@ -18,7 +19,7 @@ export const getUserDetails = (uid) => (dispatch, getState) => {
         .doc(uid)
         .get()
         .then(snapshot => {
-            if(snapshot.exists) {
+            if (snapshot.exists) {
                 dispatch({
                     type: GET_USER_DETAILS_SUCCESS,
                     payload: snapshot.data()
@@ -55,13 +56,41 @@ export const removeUserFromProject = (userId) => (dispatch, getState) => {
 }
 
 export const inviteUser = userEmail => (dispatch, getState) => {
-    dispatch({
-        type: ADD_NOTIFICATION,
-        payload: {
-            type: 'error',
-            message: `This feature is not ready yet. See https://github.com/HugoGresse/open-feedback/issues/55`
-        }
-    })
+    const currentUserId = getUserSelector(getState()).uid
+    const projectId = getSelectedProjectIdSelector(getState())
+
+    return fireStoreMainInstance
+        .collection('projects-invites')
+        .add({
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            destinationUserInfo: userEmail,
+            originUserId: currentUserId,
+            projectId: projectId,
+            status: 'new'
+        })
+        .then(() => {
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: {
+                    type: 'success',
+                    message: `The user has been invited to the project and should receive an email very soon.`
+                }
+            })
+            return true
+        })
+        .catch(error => {
+            // eslint-disable-next-line no-console
+            console.error(error)
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: {
+                    type: 'error',
+                    message: `Failed to invite user ${userEmail}, ${JSON.stringify(error)}`
+                }
+            })
+            return false
+        })
 }
 
 export const setUsersFilter = filterValue => ({
