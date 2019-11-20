@@ -1,17 +1,3 @@
-import testFunction from 'firebase-functions-test'
-const test = testFunction()
-
-test.mockConfig({
-    app: {
-        url: 'http://localhost'
-    },
-    mailgun: {
-        key:"MAILGUN_KEY",
-        domain:"MAILGUN_DOMAIN",
-        api:"MAILGUN_API"
-    }
-})
-
 import {incrementVoteAggregate} from "./aggregateVotes"
 
 const getMockedFirestore = (docData: {}) => ({
@@ -35,20 +21,6 @@ const getMockedFirestore = (docData: {}) => ({
 }) as unknown as FirebaseFirestore.Firestore
 
 describe('incrementVoteAggregate', () => {
-
-    beforeEach(() => {
-        test.mockConfig({
-            app: {
-                url: 'http://localhost'
-            },
-            mailgun: {
-                key:"MAILGUN_KEY",
-                domain:"MAILGUN_DOMAIN",
-                api:"MAILGUN_API"
-            }
-        })
-    })
-
     // Boolean vote
     it('successfully increment by one a never voted voteItemId & session', async () => {
         const input = {
