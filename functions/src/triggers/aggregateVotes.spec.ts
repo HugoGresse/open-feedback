@@ -1,6 +1,18 @@
-import {incrementVoteAggregate} from "./aggregateVotes"
 import testFunction from 'firebase-functions-test'
 const test = testFunction()
+
+test.mockConfig({
+    app: {
+        url: 'http://localhost'
+    },
+    mailgun: {
+        key:"MAILGUN_KEY",
+        domain:"MAILGUN_DOMAIN",
+        api:"MAILGUN_API"
+    }
+})
+
+import {incrementVoteAggregate} from "./aggregateVotes"
 
 const getMockedFirestore = (docData: {}) => ({
     collection: jest.fn(path => ({
