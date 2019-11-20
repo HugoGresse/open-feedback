@@ -48,6 +48,7 @@ describe('userInviteCreated', () => {
         const snapshot = {
             id: "ee",
             data: () => {
+                // Empty
             }
         }
         await expect(userInviteCreatedWrapped(snapshot)).rejects.toEqual(new Error('Empty data'))
@@ -55,12 +56,22 @@ describe('userInviteCreated', () => {
 
 
     it('should resolve when a user is invited to a project, thus an email is sent', async () => {
+        test.mockConfig({
+            app: {
+                url: 'http://localhost'
+            },
+            mailgun: {
+                key: "MAILGUN_KEY",
+                domain: "MAILGUN_DOMAIN",
+                api: "MAILGUN_API"
+            }
+        })
         const mockSet = jest.fn()
         mockSet.mockReturnValue("firestoreCompleted")
 
         const firestoreStub = jest.fn(() => ({
             collection: jest.fn(path => ({
-                doc: jest.fn(path => ({
+                doc: jest.fn(secondPath => ({
                     set: mockSet
                 }))
             }))
