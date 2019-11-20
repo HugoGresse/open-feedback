@@ -21,6 +21,10 @@ export const userInviteCreated = functions.firestore
             return Promise.reject(new Error('Empty data'))
         }
 
+        if(isEmpty(app) || isEmpty(mailgun)) {
+            return Promise.reject(new Error('No config set on "app" or "mailgun"'))
+        }
+
         return await send(mailgun, {
             to: [data.destinationUserInfo],
             subject: `[OpenFeedback] ${data.originUserName} invited you to become member of the event "${data.projectName}"`,
