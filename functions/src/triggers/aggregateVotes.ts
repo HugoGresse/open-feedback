@@ -1,13 +1,13 @@
 import * as functions from 'firebase-functions'
+import * as admin from "firebase-admin"
 import * as firebase from 'firebase'
 import DocumentData = firebase.firestore.DocumentData
-import { firestore } from '../helpers/firebaseInit'
 
 export const aggregateVotesCreate = functions.firestore
     .document('/projects/{projectId}/userVotes/{voteId}')
     .onCreate(snapshot => {
         return incrementVoteAggregate(
-            firestore,
+            admin.firestore(),
             snapshot.id,
             snapshot.data(),
             +1
@@ -18,7 +18,7 @@ export const aggregateVotesDelete = functions.firestore
     .document('/projects/{projectId}/userVotes/{voteId}')
     .onDelete(snapshot => {
         return incrementVoteAggregate(
-            firestore,
+            admin.firestore(),
             snapshot.id,
             snapshot.data(),
             -1
@@ -29,7 +29,7 @@ export const aggregateVotesUpdate = functions.firestore
     .document('/projects/{projectId}/userVotes/{voteId}')
     .onUpdate(change => {
         return incrementVoteAggregate(
-            firestore,
+            admin.firestore(),
             change.after.id,
             change.after.data(),
             1
