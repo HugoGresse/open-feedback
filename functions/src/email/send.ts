@@ -17,8 +17,8 @@ interface EmailData {
 }
 
 const send = (config: MailgunConfig, data: EmailData): Promise<Error | Response> => {
-    if (!config || !config.key || !config.api) {
-        return Promise.reject(new Error('Mailgun configuration mailgun.key or mailgun.domain not found.'))
+    if (!config || !config.key || !config.api || !config.domain) {
+        return Promise.reject(new Error('Mailgun configuration mailgun.key or mailgun.domain or mailgun.api not found.'))
     }
     const {to, cc, bcc, subject, html} = data
 

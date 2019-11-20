@@ -56,16 +56,6 @@ describe('userInviteCreated', () => {
 
 
     it('should resolve when a user is invited to a project, thus an email is sent', async () => {
-        test.mockConfig({
-            app: {
-                url: 'http://localhost'
-            },
-            mailgun: {
-                key: "MAILGUN_KEY",
-                domain: "MAILGUN_DOMAIN",
-                api: "MAILGUN_API"
-            }
-        })
         const mockSet = jest.fn()
         mockSet.mockReturnValue("firestoreCompleted")
 
@@ -80,6 +70,17 @@ describe('userInviteCreated', () => {
         Object.defineProperty(admin, 'firestore', { get: () => firestoreStub, configurable: true })
 
         ;(send as any).mockImplementation(() => new Response())
+
+        test.mockConfig({
+            app: {
+                url: 'http://localhost'
+            },
+            mailgun: {
+                key: "MAILGUN_KEY",
+                domain: "MAILGUN_DOMAIN",
+                api: "MAILGUN_API"
+            }
+        })
 
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
