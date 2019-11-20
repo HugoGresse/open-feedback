@@ -18,8 +18,6 @@ export const userInviteCreated = functions.firestore
         const inviteId = snapshot.id
         const data = snapshot.data()
 
-        console.log(app, mailgun)
-
         if (!data || isEmpty(data)) {
             return Promise.reject(new Error('Empty data'))
         }

@@ -1,7 +1,13 @@
-import testFunction from 'firebase-functions-test'
+import admin from 'firebase-admin'
+import firebaseFunctionsTest from 'firebase-functions-test'
 import {userInviteCreated} from './userInvite'
 
-const test = testFunction()
+import {Response} from "node-fetch"
+
+jest.mock('../email/send')
+import send from '../email/send'
+
+const test = firebaseFunctionsTest()
 
 describe('userInviteCreated', () => {
     const invite = {
@@ -18,9 +24,9 @@ describe('userInviteCreated', () => {
                 url: 'http://localhost'
             },
             mailgun: {
-                key:"MAILGUN_KEY",
-                domain:"MAILGUN_DOMAIN",
-                api:"MAILGUN_API"
+                key: "MAILGUN_KEY",
+                domain: "MAILGUN_DOMAIN",
+                api: "MAILGUN_API"
             }
         })
     })
@@ -41,18 +47,37 @@ describe('userInviteCreated', () => {
 
         const snapshot = {
             id: "ee",
-            data: () => {}
+            data: () => {
+            }
         }
         await expect(userInviteCreatedWrapped(snapshot)).rejects.toEqual(new Error('Empty data'))
     })
 
+
     it('should resolve when a user is invited to a project, thus an email is sent', async () => {
+        const mockSet = jest.fn()
+        mockSet.mockReturnValue("firestoreCompleted")
+
+        const firestoreStub = jest.fn(() => ({
+            collection: jest.fn(path => ({
+                doc: jest.fn(path => ({
+                    set: mockSet
+                }))
+            }))
+        }))
+
+        Object.defineProperty(admin, 'firestore', { get: () => firestoreStub, configurable: true })
+
+        ;(send as any).mockImplementation(() => new Response())
+
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
         const snapshot = {
             id: invite.id,
             data: () => invite
         }
-        await expect(userInviteCreatedWrapped(snapshot)).resolves
+        await expect(userInviteCreatedWrapped(snapshot)).resolves.toEqual('firestoreCompleted')
+
+        expect(firestoreStub().collection('projects-invites').doc(invite.id).set).toBeCalledWith({status: 'emailSent'},  {"merge": true})
     })
 })
