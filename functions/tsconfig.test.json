@@ -11,5 +11,5 @@
         "resolveJsonModule": true
     },
     "compileOnSave": true,
-    "include": ["test"]
+    "include": ["src"]
 }

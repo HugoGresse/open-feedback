@@ -1,4 +1,4 @@
-import {incrementVoteAggregate} from "../src/triggers/aggregateVotes"
+import {incrementVoteAggregate} from "./aggregateVotes"
 
 const getMockedFirestore = (docData: {}) => ({
     collection: jest.fn(path => ({
