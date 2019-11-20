@@ -1,4 +1,6 @@
 import {incrementVoteAggregate} from "./aggregateVotes"
+import testFunction from 'firebase-functions-test'
+const test = testFunction()
 
 const getMockedFirestore = (docData: {}) => ({
     collection: jest.fn(path => ({
@@ -21,6 +23,20 @@ const getMockedFirestore = (docData: {}) => ({
 }) as unknown as FirebaseFirestore.Firestore
 
 describe('incrementVoteAggregate', () => {
+
+    beforeEach(() => {
+        test.mockConfig({
+            app: {
+                url: 'http://localhost'
+            },
+            mailgun: {
+                key:"MAILGUN_KEY",
+                domain:"MAILGUN_DOMAIN",
+                api:"MAILGUN_API"
+            }
+        })
+    })
+
     // Boolean vote
     it('successfully increment by one a never voted voteItemId & session', async () => {
         const input = {
