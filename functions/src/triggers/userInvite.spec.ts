@@ -31,17 +31,6 @@ describe('userInviteCreated', () => {
         })
     })
 
-    it('should reject when a user is invited to a project while no config is specified to send the invite email', async () => {
-        test.mockConfig({})
-        const userInviteCreatedWrapped = test.wrap(userInviteCreated)
-
-        const snapshot = {
-            id: invite.id,
-            data: () => invite
-        }
-        await expect(userInviteCreatedWrapped(snapshot)).rejects.toEqual(new Error('No config set on "app" or "mailgun"'))
-    })
-
     it('should reject when a user is invited to a project while no data is received from firestore', async () => {
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
@@ -70,17 +59,6 @@ describe('userInviteCreated', () => {
         Object.defineProperty(admin, 'firestore', { get: () => firestoreStub, configurable: true })
 
         ;(send as any).mockImplementation(() => new Response())
-
-        test.mockConfig({
-            app: {
-                url: 'http://localhost'
-            },
-            mailgun: {
-                key: "MAILGUN_KEY",
-                domain: "MAILGUN_DOMAIN",
-                api: "MAILGUN_API"
-            }
-        })
 
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 

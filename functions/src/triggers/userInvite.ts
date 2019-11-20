@@ -23,7 +23,7 @@ export const userInviteCreated = functions.firestore
         }
 
         if (isEmpty(app) || isEmpty(mailgun)) {
-            return Promise.reject(new Error('No config set on "app" or "mailgun"' + JSON.stringify(app) + JSON.stringify(mailgun)))
+            return Promise.reject(new Error('No config set on "app" or "mailgun"'))
         }
 
         const sendResult = await send(mailgun, {
