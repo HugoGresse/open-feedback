@@ -42,20 +42,14 @@ describe('Single talk', function() {
             cy.contains(voteButtonText)
                 .parent()
                 .click()
-            cy.getVoteCountData(voteButtonText).should(
-                'equal',
-                originalVoteCount + 1
-            )
+            expect(cy.getVoteCountData(voteButtonText), "Vote count incremented").to.equal(originalVoteCount + 1)
 
             // eslint-disable-next-line cypress/no-unnecessary-waiting
             cy.wait(3000)
             cy.contains(voteButtonText)
                 .parent()
                 .click()
-            cy.getVoteCountData(voteButtonText).should(
-                'equal',
-                originalVoteCount
-            )
+            expect(cy.getVoteCountData(voteButtonText), "Vote count decremented").to.equal(originalVoteCount)
         })
     })
 
