@@ -36,6 +36,9 @@ describe('Single talk', function() {
             clearUserSession: true
         })
 
+        // to test if this help fixing this random test
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(3000)
         const voteButtonText = 'Trop de code'
 
         cy.getVoteCountData(voteButtonText).then(originalVoteCount => {
