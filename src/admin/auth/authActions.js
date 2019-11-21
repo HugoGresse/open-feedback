@@ -2,7 +2,7 @@ import {LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT} from './authActionTypes'
 import {isLoggedSelector} from './authSelectors'
 import {authProvider, fireStoreMainInstance, serverTimestamp} from '../../firebase'
 import {history} from '../../App'
-import { isEmpty} from 'lodash'
+import {isEmpty} from 'lodash'
 
 export const didSignIn = (user, error) => {
     return async (dispatch, getState) => {
@@ -57,7 +57,11 @@ export const signOut = () => dispatch => {
         dispatch({
             type: LOGOUT
         })
-        history.push('/admin/')
+        if (history.location.pathname === '/admin/') {
+            window.location.reload()
+        } else {
+            history.replace('/admin/')
+        }
     })
 }
 
@@ -104,7 +108,7 @@ export const getDataFromProviderDataOrUser = (user, keyToGet) => {
     if (user[keyToGet]) {
         return user[keyToGet]
     }
-    if(isEmpty(user.providerData)) {
+    if (isEmpty(user.providerData)) {
         return ""
     }
     const providerDataWithPhoto = user.providerData.filter(data => data[keyToGet])

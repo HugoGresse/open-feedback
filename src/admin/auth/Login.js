@@ -19,14 +19,20 @@ const Wrapper = styled(Box)`
 
 class Login extends Component {
     componentDidMount() {
+        let tempUser = authProvider.currentUser
         this.unregisterAuthObserver = authProvider.onAuthStateChanged(user => {
             if (user) {
                 if (user.isAnonymous) {
+                    tempUser = null
                     this.props.signOut()
                 } else {
+                    tempUser = user
                     this.props.didSignIn(user)
                 }
-            } else {
+            } else if (tempUser) {
+                // Checking tempUser prevent signOut if the is no user to signOut currently.
+                // It may happen with the listener is first attached, no user if logged in, and this method if called.
+                // It also prevent the inviteId to be remove from the url.
                 this.props.signOut()
             }
         })
