@@ -30,7 +30,7 @@ const ProjectInviteDialog = ({inviteId}) => {
     }
 
     let text = ""
-    if(invite && (invite.status === 'emailSent' || invite.status === 'userAccepted')) {
+    if(invite && (invite.status === 'emailSent')) {
         text = "You'll be redirected to the event soon"
     } else {
         text = "You've already used this invitation"

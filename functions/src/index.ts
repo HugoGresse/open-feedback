@@ -12,3 +12,7 @@ export {
 export {
     userInviteCreated
 } from './triggers/userInvite'
+
+export {
+    userCreate
+} from './triggers/userCreate'
