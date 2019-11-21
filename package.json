@@ -64,7 +64,8 @@
         "extends": "react-app"
     },
     "eslintIgnore": [
-        "*.spec.ts"
+        "*.spec.ts",
+        "functions/src/testUtils/*.ts"
     ],
     "browserslist": [
         ">0.2%",

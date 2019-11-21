@@ -5,7 +5,7 @@ import {Response} from "node-fetch"
 
 jest.mock('../email/send')
 import send from '../email/send'
-import {firestoreStub, replaceFirestoreByStub, update} from "../helpers/firestoreStub.spec";
+import {getFirestoreMocksAndInit} from "../testUtils/firestoreStub";
 
 const test = firebaseFunctionsTest()
 
@@ -43,11 +43,10 @@ describe('userInviteCreated', () => {
         await expect(userInviteCreatedWrapped(snapshot)).rejects.toEqual(new Error('Empty data'))
     })
 
-
     it('should resolve when a user is invited to a project, thus an email is sent', async () => {
-        update.mockImplementation(() => Promise.resolve("firestoreCompleted"))
+        const {update, firestoreStub} = getFirestoreMocksAndInit()
 
-        replaceFirestoreByStub()
+        update.mockImplementation(() => Promise.resolve("firestoreCompleted"))
 
         ;(send as any).mockImplementation(() => new Response())
 
