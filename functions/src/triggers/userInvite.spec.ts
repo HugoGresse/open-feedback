@@ -51,7 +51,7 @@ describe('userInviteCreated', () => {
         const firestoreStub = jest.fn(() => ({
             collection: jest.fn(path => ({
                 doc: jest.fn(secondPath => ({
-                    set: mockSet
+                    update: mockSet
                 }))
             }))
         }))
@@ -68,6 +68,6 @@ describe('userInviteCreated', () => {
         }
         await expect(userInviteCreatedWrapped(snapshot)).resolves.toEqual('firestoreCompleted')
 
-        expect(firestoreStub().collection('projects-invites').doc(invite.id).set).toBeCalledWith({status: 'emailSent'},  {"merge": true})
+        expect(firestoreStub().collection('projects-invites').doc(invite.id).update).toBeCalledWith({status: 'emailSent'})
     })
 })

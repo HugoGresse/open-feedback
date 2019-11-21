@@ -53,7 +53,6 @@ export const didSignIn = (user, error) => {
 }
 
 export const signOut = () => dispatch => {
-    console.log('logout')
     authProvider.signOut().then(() => {
         dispatch({
             type: LOGOUT

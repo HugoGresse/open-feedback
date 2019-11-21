@@ -12,3 +12,6 @@ export const initFirebase = (env: string) => {
         databaseURL: `https://${serviceAccount.project_id}.firebaseio.com`
     })
 }
+
+export const arrayUnion = admin.firestore.FieldValue.arrayUnion
+export const serverTimestamp = admin.firestore.FieldValue.serverTimestamp

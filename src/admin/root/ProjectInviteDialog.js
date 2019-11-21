@@ -5,8 +5,6 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import {useDispatch, useSelector} from 'react-redux'
 import {
-    acceptInvite,
-    discardedInvite,
     listenForInvite,
     unsubscribeRealtimeInviteListener
 } from '../project/settings/users/usersActions'
@@ -27,14 +25,8 @@ const ProjectInviteDialog = ({inviteId}) => {
         }
     }, [dispatch, inviteId])
 
-    useEffect(() => {
-        dispatch(acceptInvite(inviteId))
-    }, [dispatch, inviteId])
-
     const closeDialog = () => {
-        const redirectUrl = history.location.pathname
-        dispatch(discardedInvite(inviteId))
-        history.push(redirectUrl)
+        history.push(history.location.pathname)
     }
 
     let text = ""

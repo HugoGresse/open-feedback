@@ -116,7 +116,7 @@ export const listenForInvite = inviteId => dispatch => {
                     payload: snapshot.data()
                 })
                 if(data.status === 'completed') {
-                    history.push(history.location.pathname + inviteId)
+                    history.push(history.location.pathname + data.projectId)
                 }
             } else {
                 dispatch({
@@ -143,39 +143,4 @@ export const listenForInvite = inviteId => dispatch => {
 
 export const unsubscribeRealtimeInviteListener = () => () => {
     stopListenForInvite && stopListenForInvite()
-}
-
-export const discardedInvite = inviteId => () => {
-    return fireStoreMainInstance
-        .collection('projects-invites')
-        .doc(inviteId)
-        .set({
-            status: 'userDiscarded'
-        }, {merge: true})
-        .catch(error => {
-            // eslint-disable-next-line no-console
-            console.error(error)
-            return false
-        })
-}
-
-export const acceptInvite = inviteId => dispatch => {
-    return fireStoreMainInstance
-        .collection('projects-invites')
-        .doc(inviteId)
-        .set({
-            status: 'userAccepted'
-        }, {merge: true})
-        .catch(error => {
-            // eslint-disable-next-line no-console
-            console.error(error)
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
-                    type: 'error',
-                    message: `Unable to accept the invitation, ask for another one please.`
-                }
-            })
-            return false
-        })
 }
