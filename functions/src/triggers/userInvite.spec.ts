@@ -1,4 +1,3 @@
-import admin from 'firebase-admin'
 import firebaseFunctionsTest from 'firebase-functions-test'
 import {userInviteCreated} from './userInvite'
 
@@ -6,6 +5,7 @@ import {Response} from "node-fetch"
 
 jest.mock('../email/send')
 import send from '../email/send'
+import {firestoreStub, replaceFirestoreByStub, update} from "../helpers/firestoreStub.spec";
 
 const test = firebaseFunctionsTest()
 
@@ -45,18 +45,9 @@ describe('userInviteCreated', () => {
 
 
     it('should resolve when a user is invited to a project, thus an email is sent', async () => {
-        const mockSet = jest.fn()
-        mockSet.mockReturnValue("firestoreCompleted")
+        update.mockImplementation(() => Promise.resolve("firestoreCompleted"))
 
-        const firestoreStub = jest.fn(() => ({
-            collection: jest.fn(path => ({
-                doc: jest.fn(secondPath => ({
-                    update: mockSet
-                }))
-            }))
-        }))
-
-        Object.defineProperty(admin, 'firestore', { get: () => firestoreStub, configurable: true })
+        replaceFirestoreByStub()
 
         ;(send as any).mockImplementation(() => new Response())
 
