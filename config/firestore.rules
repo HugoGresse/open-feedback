@@ -55,6 +55,7 @@ service cloud.firestore {
         match /projects-invites/{inviteId} {
             allow get: if authenticated();
             allow list: if authenticated() && isDestinedToMe(resource.data);
+            allow update: if authenticated() && isDestinedToMe(resource.data);
             allow create: if authenticated() && isAdmin(projectData(request.resource.data.projectId));
             allow delete: if authenticated() && isAdmin(projectData(request.resource.data.projectId));
 

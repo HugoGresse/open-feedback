@@ -1,11 +1,12 @@
 import {fireStoreMainInstance, serverTimestamp} from '../../../../firebase'
 import {ADD_NOTIFICATION} from '../../../notification/notificationActionTypes'
-import {GET_USER_DETAILS_SUCCESS, USERS_SET_FILTER} from './usersActionTypes'
+import {GET_USER_DETAILS_SUCCESS, USER_INVITE_GET_SUCCESS, USERS_SET_FILTER} from './usersActionTypes'
 import {getUsersSelector} from './usersSelectors'
 import {editProject} from '../../core/projectActions'
 import {getMemberIds, getSelectedProjectSelector} from '../../core/projectSelectors'
 import {getUserSelector} from '../../../auth/authSelectors'
 import {getDataFromProviderDataOrUser} from '../../../auth/authActions'
+import {history} from '../../../../App'
 
 export const getUserDetails = (uid) => (dispatch, getState) => {
     const usersDetails = getUsersSelector(getState())
@@ -101,3 +102,80 @@ export const setUsersFilter = filterValue => ({
     type: USERS_SET_FILTER,
     payload: filterValue.trim()
 })
+
+let stopListenForInvite
+export const listenForInvite = inviteId => dispatch => {
+    stopListenForInvite = fireStoreMainInstance
+        .collection('projects-invites')
+        .doc(inviteId)
+        .onSnapshot(snapshot => {
+            if(snapshot.exists) {
+                const data = snapshot.data()
+                dispatch({
+                    type: USER_INVITE_GET_SUCCESS,
+                    payload: snapshot.data()
+                })
+                if(data.status === 'completed') {
+                    history.push(history.location.pathname + inviteId)
+                }
+            } else {
+                dispatch({
+                    type: ADD_NOTIFICATION,
+                    payload: {
+                        type: 'error',
+                        message: `Unable to get your invitation, ask for another one please.`
+                    }
+                })
+            }
+        }, (error => {
+            // eslint-disable-next-line no-console
+            console.error(error)
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: {
+                    type: 'error',
+                    message: `Unable to get your invitation, ask for another one please.`
+                }
+            })
+            return false
+        }))
+}
+
+export const unsubscribeRealtimeInviteListener = () => () => {
+    stopListenForInvite && stopListenForInvite()
+}
+
+export const discardedInvite = inviteId => () => {
+    return fireStoreMainInstance
+        .collection('projects-invites')
+        .doc(inviteId)
+        .set({
+            status: 'userDiscarded'
+        }, {merge: true})
+        .catch(error => {
+            // eslint-disable-next-line no-console
+            console.error(error)
+            return false
+        })
+}
+
+export const acceptInvite = inviteId => dispatch => {
+    return fireStoreMainInstance
+        .collection('projects-invites')
+        .doc(inviteId)
+        .set({
+            status: 'userAccepted'
+        }, {merge: true})
+        .catch(error => {
+            // eslint-disable-next-line no-console
+            console.error(error)
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: {
+                    type: 'error',
+                    message: `Unable to accept the invitation, ask for another one please.`
+                }
+            })
+            return false
+        })
+}

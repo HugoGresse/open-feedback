@@ -1,9 +1,10 @@
 import {
-    GET_USER_DETAILS_SUCCESS, USERS_SET_FILTER,
+    GET_USER_DETAILS_SUCCESS, USER_INVITE_GET_SUCCESS, USERS_SET_FILTER,
 } from './usersActionTypes'
 
 const initState = {
     usersData: {},
+    invite: {},
     filter: ""
 }
 
@@ -21,6 +22,11 @@ const usersReducer = (state = initState, {payload, type}) => {
             return {
                 ...state,
                 filter: payload
+            }
+        case USER_INVITE_GET_SUCCESS:
+            return {
+                ...state,
+                invite: payload
             }
         default:
             return state
