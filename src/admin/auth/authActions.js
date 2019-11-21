@@ -2,6 +2,7 @@ import {LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT} from './authActionTypes'
 import {isLoggedSelector} from './authSelectors'
 import {authProvider, fireStoreMainInstance, serverTimestamp} from '../../firebase'
 import {history} from '../../App'
+import { isEmpty} from 'lodash'
 
 export const didSignIn = (user, error) => {
     return async (dispatch, getState) => {
@@ -25,17 +26,21 @@ export const didSignIn = (user, error) => {
 
                 const displayName = getDataFromProviderDataOrUser(user, 'displayName')
                 const photoURL = getDataFromProviderDataOrUser(user, 'photoURL')
+                const email = getDataFromProviderDataOrUser(user, 'email')
+                const phone = getDataFromProviderDataOrUser(user, 'phoneNumber')
 
                 if (userInDb.exists) {
                     // update photoURL
                     const userDbData = userInDb.data()
                     const displayNameDb = getDataFromProviderDataOrUser(userDbData, 'displayName')
                     const photoURLDb = getDataFromProviderDataOrUser(userDbData, 'photoURL')
-                    if (displayNameDb !== displayName || photoURLDb !== photoURL) {
-                        await updateUser(user, displayName, photoURL)
+                    const emailDb = getDataFromProviderDataOrUser(userDbData, 'email')
+                    const phoneDb = getDataFromProviderDataOrUser(userDbData, 'phoneNumber')
+                    if (displayNameDb !== displayName || photoURLDb !== photoURL || emailDb !== email || phoneDb !== phone) {
+                        await updateUser(user, displayName, photoURL, emailDb, phone)
                     }
                 } else {
-                    await createUser(user, displayName, photoURL)
+                    await createUser(user, displayName, photoURL, phone)
                 }
             }
         } else {
@@ -48,6 +53,7 @@ export const didSignIn = (user, error) => {
 }
 
 export const signOut = () => dispatch => {
+    console.log('logout')
     authProvider.signOut().then(() => {
         dispatch({
             type: LOGOUT
@@ -61,13 +67,14 @@ const getUserFromDB = async (uid) => await fireStoreMainInstance
     .doc(uid)
     .get()
 
-const createUser = async (user, displayName, photoURL) => {
+const createUser = async (user, displayName, photoURL, phone) => {
     const userField = {
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
         displayName: displayName,
         photoURL: photoURL,
         email: user.email,
+        phoneNumber: phone,
         uid: user.uid,
     }
     return fireStoreMainInstance
@@ -76,11 +83,13 @@ const createUser = async (user, displayName, photoURL) => {
         .set(userField)
 }
 
-const updateUser = async (user, displayName, photoURL) => {
+const updateUser = async (user, displayName, photoURL, email, phone) => {
     const userField = {
         updatedAt: serverTimestamp(),
         displayName: displayName,
-        photoURL: photoURL
+        photoURL: photoURL,
+        email: email,
+        phoneNumber: phone
     }
 
     return fireStoreMainInstance
@@ -95,6 +104,9 @@ export const getDataFromProviderDataOrUser = (user, keyToGet) => {
     }
     if (user[keyToGet]) {
         return user[keyToGet]
+    }
+    if(isEmpty(user.providerData)) {
+        return ""
     }
     const providerDataWithPhoto = user.providerData.filter(data => data[keyToGet])
     if (providerDataWithPhoto.length > 0) {
