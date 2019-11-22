@@ -64,7 +64,7 @@ export const removeUserFromProject = (userId) => (dispatch, getState) => {
 
 export const inviteUser = userEmail => (dispatch, getState) => {
     const pendingInvites = getPendingInvitesSelector(getState())
-    if(pendingInvites.filter(invite => invite.destinationUserInfo === userEmail)) {
+    if(pendingInvites.filter(invite => invite.destinationUserInfo === userEmail).length > 0) {
         dispatch({
             type: ADD_NOTIFICATION,
             payload: {

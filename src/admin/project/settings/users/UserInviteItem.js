@@ -30,13 +30,29 @@ const useStyles = makeStyles(theme => ({
 const UserInviteItem = ({invite, cancelInvite}) => {
     const classes = useStyles()
 
+    let inviteStatus = 'unknown'
+    switch(invite.status) {
+        case 'emailSent':
+            inviteStatus = 'sent'
+            break
+        case 'error':
+            inviteStatus = 'errored'
+            break
+        case 'new':
+            inviteStatus = 'created'
+            break
+        default:
+            inviteStatus = 'has disappeared'
+            break
+    }
+
     return <OFListItem>
         <Grid item xs={12} sm={6} className={classes.cell}>
             <Box display="flex">
                 <ScheduleIcon className={classes.icon}/>
                 <Box>
                     <Typography>{invite.destinationUserInfo}</Typography>
-                    <Typography style={{color: "#999"}}>Invitation sent on {moment.parseZone(invite.updatedAt.toDate()).format('MMMM Do Y')}</Typography>
+                    <Typography style={{color: "#999"}}>Invitation {inviteStatus} on {moment.parseZone(invite.updatedAt.toDate()).format('MMMM Do Y')}</Typography>
                 </Box>
             </Box>
         </Grid>
