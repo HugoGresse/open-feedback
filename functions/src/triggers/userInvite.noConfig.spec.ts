@@ -8,10 +8,10 @@ const test = firebaseFunctionsTest()
 describe('userInviteCreated', () => {
     const invite = {
         id: "001",
-        projectId: "ozeBdajelkVB6yF9tqB3",
+        projectId: "projectId1",
         projectName: "Project Name",
         originUserName: "Hugo G",
-        destinationUserInfo: "xonim81605@tmailpro.net"
+        destinationUserInfo: "email@example.com"
     }
 
     it('should reject when a user is invited to a project while no config is specified', async () => {

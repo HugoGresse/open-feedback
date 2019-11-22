@@ -34,40 +34,38 @@ export const userInviteCreated = functions.firestore
             subject: `[OpenFeedback] ${data.originUserName} invited you to become member of the event "${data.projectName}"`,
             html: userInvited(
                 `${data.originUserName} invited you to become a member of the event "${data.projectName}"`,
-                `Hey ${data.destinationUserInfo},<br/><br/> I invited you to become a member of the OpenFeedback event <b>${data.projectName}</b>. Click on the button below to accept my invitation.`,
+                `Hey ${data.destinationUserInfo},<br/><br/> I invited you to become a member of the OpenFeedback event <b>${data.projectName}</b>. Click on the button below to view the event.`,
                 'View the event',
                 `${app.url}/admin/?inviteId=${inviteId}`
             )
         })
         if (sendResult instanceof Response && sendResult.ok) {
-            const promises: Promise<any>[] = []
-            promises.push(admin
+            return admin
                 .firestore()
                 .collection('projects-invites')
                 .doc(inviteId)
                 .update({
                     status: 'emailSent'
-                }))
-            promises.push(
-                admin
-                    .firestore()
-                    .collection('users')
-                    .where('email', '==', data.destinationUserInfo)
-                    .limit(1)
-                    .get()
-                    .then(querySnapshot => {
-                        if(querySnapshot.empty) {
-                            return Promise.resolve('no user matched')
-                        }
-                        let promise: Promise<any> = Promise.resolve('forEach not implemented or firebase issue')
-                        querySnapshot.forEach(userSnapshot => {
-                            promise = checkPendingInviteAndProcessThem(userSnapshot.data() as admin.auth.UserRecord)
+                })
+                .then(() => {
+                    return admin
+                        .firestore()
+                        .collection('users')
+                        .where('email', '==', data.destinationUserInfo)
+                        .limit(1)
+                        .get()
+                        .then(querySnapshot => {
+                            if(querySnapshot.empty) {
+                                return Promise.resolve('no user matched')
+                            }
+                            let promise: Promise<any> = Promise.resolve('forEach not implemented or firebase issue')
+                            querySnapshot.forEach(userSnapshot => {
+                                promise = checkPendingInviteAndProcessThem(userSnapshot.data() as admin.auth.UserRecord)
+                            })
+                            return promise
                         })
-                        return promise
-                    })
+                }
             )
-
-            return Promise.all(promises)
         }
 
         return Promise.reject('Function failed due to not successful email send')

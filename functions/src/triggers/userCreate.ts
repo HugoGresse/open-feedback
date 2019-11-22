@@ -8,9 +8,5 @@ export const userCreate = functions.auth.user()
             return Promise.resolve('new anonymous user')
         }
 
-        if(user.email && !user.emailVerified) {
-            return Promise.resolve('new anonymous user')
-        }
-
         return checkPendingInviteAndProcessThem(user)
     })
