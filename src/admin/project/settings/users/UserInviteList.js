@@ -14,6 +14,10 @@ const UserInviteList = () => {
         dispatch(getPendingInvites())
     }, [dispatch])
 
+    if(pendingInvites.length === 0) {
+        return ""
+    }
+
     return <Box>
         <Typography variant="h6" style={{marginTop: 20, marginLeft: 32, marginBottom: 10}}>PENDING INVITES</Typography>
         {pendingInvites.map(invite => <UserInviteItem key={invite.id}
