@@ -8,7 +8,7 @@
         "start": "npm run shell",
         "deploy": "firebase deploy --only functions",
         "logs": "firebase functions:log",
-        "test": "jest test/"
+        "test": "jest"
     },
     "engines": {
         "node": "8"
@@ -16,15 +16,22 @@
     "main": "lib/index.js",
     "dependencies": {
         "@types/jest": "^24.0.23",
+        "@types/jest-expect-message": "^1.0.1",
         "firebase": "^7.4.0",
         "firebase-admin": "^8.7.0",
         "firebase-functions": "^3.3.0",
+        "firebase-functions-test": "^0.1.7",
         "firebase-mock": "^2.2.10",
+        "form-data": "^3.0.0",
+        "lodash": "^4.17.15",
+        "node-fetch": "^2.6.0",
         "ts-jest": "^24.1.0"
     },
     "devDependencies": {
+        "@types/node-fetch": "^2.5.3",
         "firebase-functions-test": "^0.1.7",
         "jest": "^24.9.0",
+        "jest-expect-message": "^1.0.2",
         "tslint": "^5.20.1",
         "typescript": "^3.7.2"
     },

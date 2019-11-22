@@ -36,26 +36,29 @@ describe('Single talk', function() {
             clearUserSession: true
         })
 
+        // to test if this help fixing this random test
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(3000)
         const voteButtonText = 'Trop de code'
 
         cy.getVoteCountData(voteButtonText).then(originalVoteCount => {
             cy.contains(voteButtonText)
                 .parent()
                 .click()
-            cy.getVoteCountData(voteButtonText).should(
-                'equal',
-                originalVoteCount + 1
-            )
+
+            cy.getVoteCountData(voteButtonText).should(voteCount => {
+                expect(voteCount, "Vote count incremented").to.equal(originalVoteCount + 1)
+            })
 
             // eslint-disable-next-line cypress/no-unnecessary-waiting
             cy.wait(3000)
             cy.contains(voteButtonText)
                 .parent()
                 .click()
-            cy.getVoteCountData(voteButtonText).should(
-                'equal',
-                originalVoteCount
-            )
+
+            cy.getVoteCountData(voteButtonText).should(voteCount => {
+                expect(voteCount, "Vote count decremented").to.equal(originalVoteCount)
+            })
         })
     })
 

@@ -21,6 +21,7 @@
         "clipboard-copy": "^3.1.0",
         "docz": "^1.2.0",
         "docz-theme-default": "^1.2.0",
+        "env-cmd": "^10.0.1",
         "firebase": "^7.4.0",
         "formik": "^2.0.4",
         "history": "^4.10.1",
@@ -55,12 +56,16 @@
         "docz:build": "docz build",
         "cy:open": "cypress open",
         "cy:run": "cypress run",
+        "cy:start": "env-cmd -f .env.test.local react-scripts start",
         "test:cy": "npm run start:dist & wait-on http://localhost:3000 && npm run cy:run",
         "test:cy:stop": "kill -9 $(lsof -i :3000 | grep 'node' | awk '{print $2}')"
     },
     "eslintConfig": {
         "extends": "react-app"
     },
+    "eslintIgnore": [
+        "*.ts"
+    ],
     "browserslist": [
         ">0.2%",
         "not dead",

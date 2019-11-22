@@ -16,7 +16,8 @@ import COLORS from '../../constants/colors'
 import Paper from '@material-ui/core/Paper'
 import RootContent from './RootContent'
 import NewProject from '../project/new/NewProject'
-
+import useQuery from '../../utils/useQuery'
+import ProjectInviteDialog from './ProjectInviteDialog'
 const styles = theme => ({
     container: {
         background: COLORS.ADMIN_BACKGROUND_LIGHT,
@@ -49,6 +50,8 @@ function AdminRoot({
     selectProject,
     classes
 }) {
+    const inviteId = useQuery().get('inviteId')
+
     useEffect(() => {
         getProjects()
     }, [getProjects])
@@ -110,6 +113,8 @@ function AdminRoot({
                     </div>
                 </Slide>
             </div>
+
+            {inviteId && <ProjectInviteDialog inviteId={inviteId}/>}
         </div>
     )
 }
