@@ -1,9 +1,14 @@
 import {fireStoreMainInstance, serverTimestamp} from '../../../../firebase'
 import {ADD_NOTIFICATION} from '../../../notification/notificationActionTypes'
-import {GET_USER_DETAILS_SUCCESS, USER_INVITE_GET_SUCCESS, USERS_SET_FILTER} from './usersActionTypes'
+import {
+    GET_USER_DETAILS_SUCCESS,
+    USER_INVITE_GET_SUCCESS, USER_INVITE_REMOVE_SUCCESS,
+    USER_INVITES_GET_SUCCESS,
+    USERS_SET_FILTER
+} from './usersActionTypes'
 import {getUsersSelector} from './usersSelectors'
 import {editProject} from '../../core/projectActions'
-import {getMemberIds, getSelectedProjectSelector} from '../../core/projectSelectors'
+import {getMemberIds, getSelectedProjectIdSelector, getSelectedProjectSelector} from '../../core/projectSelectors'
 import {getUserSelector} from '../../../auth/authSelectors'
 import {getDataFromProviderDataOrUser} from '../../../auth/authActions'
 import {history} from '../../../../App'
@@ -109,13 +114,13 @@ export const listenForInvite = inviteId => dispatch => {
         .collection('projects-invites')
         .doc(inviteId)
         .onSnapshot(snapshot => {
-            if(snapshot.exists) {
+            if (snapshot.exists) {
                 const data = snapshot.data()
                 dispatch({
                     type: USER_INVITE_GET_SUCCESS,
                     payload: snapshot.data()
                 })
-                if(data.status === 'completed') {
+                if (data.status === 'completed') {
                     history.push(history.location.pathname + data.projectId)
                 }
             } else {
@@ -143,4 +148,62 @@ export const listenForInvite = inviteId => dispatch => {
 
 export const unsubscribeRealtimeInviteListener = () => () => {
     stopListenForInvite && stopListenForInvite()
+}
+
+export const getPendingInvites = () => (dispatch, getState) => {
+    const projectId = getSelectedProjectIdSelector(getState())
+    fireStoreMainInstance
+        .collection('projects-invites')
+        .where('projectId', '==', projectId)
+        .where('status', 'in', ['new', 'emailSent'])
+        .get()
+        .then(querySnapshot => {
+            const pendingInvite = []
+            querySnapshot.forEach(snapshot => {
+                pendingInvite.push({
+                    id: snapshot.id,
+                    ...snapshot.data()
+                })
+            })
+            return dispatch({
+                type: USER_INVITES_GET_SUCCESS,
+                payload: pendingInvite
+            })
+        })
+        .catch(error => {
+            // eslint-disable-next-line no-console
+            console.error(error)
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: {
+                    type: 'error',
+                    message: `Failed to load pending invites, ${JSON.stringify(error)}`
+                }
+            })
+            return false
+        })
+}
+
+export const cancelInvite = (inviteId) => dispatch => {
+    fireStoreMainInstance
+        .collection('projects-invites')
+        .doc(inviteId)
+        .delete()
+        .then(() => dispatch({
+                type: USER_INVITE_REMOVE_SUCCESS,
+                payload: inviteId
+            })
+        )
+        .catch(error => {
+            // eslint-disable-next-line no-console
+            console.error(error)
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: {
+                    type: 'error',
+                    message: `Failed to cancel invite, ${JSON.stringify(error)}`
+                }
+            })
+            return false
+        })
 }

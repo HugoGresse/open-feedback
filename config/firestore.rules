@@ -35,7 +35,7 @@ service cloud.firestore {
                 allow write: if authenticated() && isAdmin(projectData(projectId));
             }
 
-            // Deprecated soon
+            // Should be replaced by aggregated votes...
             match /sessionVotes/{session} {
                 allow list: if true;
             }
@@ -56,9 +56,9 @@ service cloud.firestore {
         // PROJECTS INVITE
         match /projects-invites/{inviteId} {
             allow get: if authenticated();
-            allow list: if authenticated() && isDestinedToMe(resource.data);
+            allow list: if authenticated() && (isDestinedToMe(resource.data) || isAdmin(projectData(resource.data.projectId)));
             allow create: if authenticated() && isAdmin(projectData(request.resource.data.projectId));
-            allow delete: if authenticated() && isAdmin(projectData(request.resource.data.projectId));
+            allow delete: if authenticated() && isAdmin(projectData(resource.data.projectId));
 
             function isDestinedToMe(data) { return request.auth.token.email == data.destinationUserInfo }
         }

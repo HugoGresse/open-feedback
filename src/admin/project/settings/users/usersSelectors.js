@@ -29,3 +29,5 @@ export const getFilteredUsersSelector = createSelector(
 )
 
 export const getInviteSelector = state => getUsersState(state).invite
+
+export const getPendingInvitesSelector = state => getUsersState(state).pendingInvites
