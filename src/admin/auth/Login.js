@@ -36,7 +36,7 @@ class Login extends Component {
                 }
             } else if (tempUser) {
                 // Checking tempUser prevent signOut if the is no user to signOut currently.
-                // It may happen with the listener is first attached, no user if logged in, and this method if called.
+                // It may happen with the listener is first attached, no user is logged in, and this method is called.
                 // It also prevent the inviteId to be remove from the url.
                 this.props.signOut()
             }
@@ -48,7 +48,7 @@ class Login extends Component {
     }
 
     render() {
-        if(this.props.user && !this.props.user.emailVerified && !this.props.user.phoneNumber) {
+        if(this.props.user && !this.props.user.emailVerified && !this.props.user.phoneNumber && !this.props.user.isAnonymous) {
             return "You need to verify your email using the link you've received in your inbox and refresh this page after. Thanks."
         }
 
