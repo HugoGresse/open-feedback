@@ -1,11 +1,15 @@
 import firebaseFunctionsTest from 'firebase-functions-test'
-import {userInviteCreated} from './userInvite'
+import {
+    checkPendingInviteAndProcessThem,
+    userInviteCreated
+} from './userInvite'
 
 import {Response} from "node-fetch"
 
 jest.mock('../email/send')
 import send from '../email/send'
-import {getFirestoreMocksAndInit} from "../testUtils/firestoreStub";
+import {getFirestoreMocksAndInit} from "../testUtils/firestoreStub"
+import * as admin from 'firebase-admin'
 
 const test = firebaseFunctionsTest()
 
@@ -44,9 +48,13 @@ describe('userInviteCreated', () => {
     })
 
     it('should resolve when a user is invited to a project, thus an email is sent', async () => {
-        const {update, firestoreStub} = getFirestoreMocksAndInit()
+        const {update, get, firestoreStub} = getFirestoreMocksAndInit()
 
         update.mockImplementation(() => Promise.resolve("firestoreCompleted"))
+        get.mockImplementationOnce(() => Promise.resolve({
+            forEach: () => {},
+            empty: false
+        }))
 
         ;(send as any).mockImplementation(() => new Response())
 
@@ -56,8 +64,52 @@ describe('userInviteCreated', () => {
             id: invite.id,
             data: () => invite
         }
-        await expect(userInviteCreatedWrapped(snapshot)).resolves.toEqual('firestoreCompleted')
+        await expect(userInviteCreatedWrapped(snapshot)).resolves.toEqual(['firestoreCompleted', 'forEach not implemented or firebase issue'])
 
         expect(firestoreStub().collection('projects-invites').doc(invite.id).update).toBeCalledWith({status: 'emailSent'})
+    })
+})
+
+describe('checkPendingInviteAndProcessThem', () => {
+
+    const user: admin.auth.UserRecord = {
+        uid: '00001',
+        emailVerified: true,
+        disabled: false,
+        metadata: {} as any,
+        providerData: [],
+        email: "toto@example.com",
+        toJSON: () => true
+    }
+
+    it('check pending invites, no nothing is none was found', async () => {
+        const {get, firestoreStub} = getFirestoreMocksAndInit()
+
+        get.mockImplementation(() => Promise.resolve([]))
+
+        await expect(checkPendingInviteAndProcessThem(user)).resolves.toEqual([])
+
+        expect(firestoreStub().collection('').where('', '', '').get, 'projects-invites has been queried').toHaveBeenCalledTimes(1)
+    })
+
+    it('check pending invites and assert process', async () => {
+        const {get, update, firestoreStub} = getFirestoreMocksAndInit()
+
+        const snapshot = {
+            data: () => ({projectId: "12"})
+        }
+        const snapshot2 = {
+            data: () => ({projectId: "33"})
+        }
+        get.mockImplementation(() => Promise.resolve([snapshot, snapshot2]))
+        update.mockImplementationOnce(() => Promise.resolve("1"))
+        update.mockImplementationOnce(() => Promise.resolve("2"))
+        update.mockImplementationOnce(() => Promise.resolve("a1"))
+        update.mockImplementationOnce(() => Promise.resolve("a2"))
+
+        await expect(checkPendingInviteAndProcessThem(user)).resolves.toEqual(["a1", "a2"])
+
+        expect(firestoreStub().collection('').where('', '', '').get, 'projects-invites has been queried').toHaveBeenCalledTimes(1)
+        expect(firestoreStub().collection('').doc('').update, 'projects and projects-invites has been updated once each for each invite').toHaveBeenCalledTimes(4)
     })
 })

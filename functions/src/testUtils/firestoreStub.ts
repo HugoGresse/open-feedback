@@ -8,6 +8,7 @@ export const getFirestoreMocksAndInit = () => {
     const collection = jest.fn((path) => {
         return {
             where,
+            limit,
             doc
         }
     })
@@ -29,11 +30,21 @@ export const getFirestoreMocksAndInit = () => {
     } = jest.fn((firstTerm: string, operator: string, secondTerm: string) => {
         return {
             where,
+            limit,
             get,
             set,
             update,
             onSnapshot
         }
+    })
+
+    const limit = jest.fn((limitCount: number) => {
+      return {
+          get,
+          set,
+          update,
+          onSnapshot
+      }
     })
 
     const get = jest.fn((): Promise<any> => Promise.resolve(true))
