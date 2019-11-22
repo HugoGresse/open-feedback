@@ -1,5 +1,6 @@
+// eslint-disable-next-line no-undef
 module.exports = {
-    roots: ['<rootDir>/test'],
+    roots: ['<rootDir>/src'],
     transform: {
         '^.+\\.tsx?$': 'ts-jest',
     },
@@ -9,5 +10,6 @@ module.exports = {
         'ts-jest': {
             tsConfig: 'tsconfig.test.json'
         }
-    }
+    },
+    setupFilesAfterEnv: ["jest-expect-message"]
 }

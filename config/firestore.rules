@@ -1,6 +1,7 @@
 service cloud.firestore {
     match /databases/{database}/documents {
 
+        // Verification functions
         function authenticated() { return request.auth.uid != null }
         function limitOne() { return request.query.limit <= 1 }
         function userNotExists() { return !exists(/databases/$(database)/documents/users/$(request.auth.uid)) }
@@ -8,6 +9,11 @@ service cloud.firestore {
         function itsMyDocument(userId) { return request.auth.uid == userId }
         function isAdmin(data) { return data.owner == request.auth.uid || request.auth.uid in data.members}
         function isAnonymous() { return request.auth.token.firebase.sign_in_provider == 'anonymous'}
+        function isEmailVerified() { return request.auth.token.email_verified == true }
+        function isPhoneNumberAccount() { return request.auth.token.firebase.sign_in_provider == 'phone' }
+
+        // Get functions
+        function projectData(projectId) { return get(/databases/$(database)/documents/projects/$(projectId)).data }
 
         match /users/{userId} {
             allow get: if authenticated() && !isAnonymous();
@@ -19,15 +25,14 @@ service cloud.firestore {
         // PROJECTS
         match /projects/{projectId} {
             allow get: if true;
-            allow list: if authenticated() && isAdmin(resource.data);
+            allow list: if authenticated() && isAdmin(resource.data) && (isEmailVerified() || isPhoneNumberAccount());
             allow create: if authenticated();
-            allow update: if authenticated() && isAdmin(resource.data);
+            allow update: if authenticated() && isAdmin(resource.data) && (isEmailVerified() || isPhoneNumberAccount());
 
-            function projectData() { return get(/databases/$(database)/documents/projects/$(projectId)).data }
-
+            // Deprecated
             match /voteItems/{voteItemsId} {
                 allow list: if true;
-                allow write: if authenticated() && isAdmin(projectData());
+                allow write: if authenticated() && isAdmin(projectData(projectId));
             }
 
             // Deprecated soon
@@ -40,12 +45,22 @@ service cloud.firestore {
             }
 
             match /userVotes/{ref} {
-                allow read: if authenticated() && resource.data.userId == request.auth.uid || isAdmin(projectData());
+                allow read: if authenticated() && resource.data.userId == request.auth.uid || isAdmin(projectData(projectId));
                 allow create: if authenticated() && request.resource.data.userId == request.auth.uid;
                 allow update: if authenticated() && resource.data.userId == request.auth.uid;
                 allow delete: if authenticated() && resource.data.userId == request.auth.uid;
             }
 
+        }
+
+        // PROJECTS INVITE
+        match /projects-invites/{inviteId} {
+            allow get: if authenticated();
+            allow list: if authenticated() && isDestinedToMe(resource.data);
+            allow create: if authenticated() && isAdmin(projectData(request.resource.data.projectId));
+            allow delete: if authenticated() && isAdmin(projectData(request.resource.data.projectId));
+
+            function isDestinedToMe(data) { return request.auth.token.email == data.destinationUserInfo }
         }
     }
 }

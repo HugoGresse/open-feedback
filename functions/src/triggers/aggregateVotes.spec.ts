@@ -1,9 +1,9 @@
-import {incrementVoteAggregate} from "../src/aggregateVotes"
+import {incrementVoteAggregate} from "./aggregateVotes"
 
 const getMockedFirestore = (docData: {}) => ({
     collection: jest.fn(path => ({
         doc: jest.fn(doc => ({
-            collection: jest.fn(path => ({
+            collection: jest.fn(secondPath => ({
                 doc: jest.fn(newVote => ({
                         get: () => Promise.resolve(({
                                 data: () => docData,

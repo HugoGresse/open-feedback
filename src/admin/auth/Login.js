@@ -6,7 +6,7 @@ import Box from '../../baseComponents/design/Box'
 import {StyledFirebaseAuth} from 'react-firebaseui'
 import {auth, authProvider} from '../../firebase'
 import {connect} from 'react-redux'
-import {getLoginErrorSelector, isLoggedSelector} from './authSelectors'
+import {getLoginErrorSelector, getUserSelector, isLoggedSelector} from './authSelectors'
 import {didSignIn, signOut} from './authActions'
 
 const Wrapper = styled(Box)`
@@ -19,14 +19,25 @@ const Wrapper = styled(Box)`
 
 class Login extends Component {
     componentDidMount() {
+        let tempUser = authProvider.currentUser
         this.unregisterAuthObserver = authProvider.onAuthStateChanged(user => {
             if (user) {
                 if (user.isAnonymous) {
+                    tempUser = null
                     this.props.signOut()
                 } else {
+                    tempUser = user
                     this.props.didSignIn(user)
                 }
-            } else {
+                if(!user.emailVerified && !user.phoneNumber){
+                    user.sendEmailVerification().then(() => {
+                        // Email sent.
+                    })
+                }
+            } else if (tempUser) {
+                // Checking tempUser prevent signOut if the is no user to signOut currently.
+                // It may happen with the listener is first attached, no user is logged in, and this method is called.
+                // It also prevent the inviteId to be remove from the url.
                 this.props.signOut()
             }
         })
@@ -37,6 +48,10 @@ class Login extends Component {
     }
 
     render() {
+        if(this.props.user && !this.props.user.emailVerified && !this.props.user.phoneNumber && !this.props.user.isAnonymous) {
+            return "You need to verify your email using the link you've received in your inbox and refresh this page after. Thanks."
+        }
+
         if (this.props.isLoggedIn) {
             return this.props.children
         }
@@ -103,7 +118,8 @@ class Login extends Component {
 
 const mapStateToProps = state => ({
     isLoggedIn: isLoggedSelector(state),
-    loginError: getLoginErrorSelector(state)
+    loginError: getLoginErrorSelector(state),
+    user: getUserSelector(state)
 })
 
 const mapDispatchToProps = Object.assign(

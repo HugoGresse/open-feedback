@@ -27,3 +27,5 @@ export const getFilteredUsersSelector = createSelector(
         return result
     }
 )
+
+export const getInviteSelector = state => getUsersState(state).invite
