@@ -1,12 +1,12 @@
-import {fireStoreMainInstance, serverTimestamp} from '../../../../firebase'
+import {fireStoreMainInstance, nowTimestamp, serverTimestamp} from '../../../../firebase'
 import {ADD_NOTIFICATION} from '../../../notification/notificationActionTypes'
 import {
-    GET_USER_DETAILS_SUCCESS,
+    GET_USER_DETAILS_SUCCESS, USER_INVITE_ADD,
     USER_INVITE_GET_SUCCESS, USER_INVITE_REMOVE_SUCCESS,
     USER_INVITES_GET_SUCCESS,
     USERS_SET_FILTER
 } from './usersActionTypes'
-import {getUsersSelector} from './usersSelectors'
+import {getPendingInvitesSelector, getUsersSelector} from './usersSelectors'
 import {editProject} from '../../core/projectActions'
 import {getMemberIds, getSelectedProjectIdSelector, getSelectedProjectSelector} from '../../core/projectSelectors'
 import {getUserSelector} from '../../../auth/authSelectors'
@@ -63,23 +63,36 @@ export const removeUserFromProject = (userId) => (dispatch, getState) => {
 }
 
 export const inviteUser = userEmail => (dispatch, getState) => {
+    const pendingInvites = getPendingInvitesSelector(getState())
+    if(pendingInvites.filter(invite => invite.destinationUserInfo === userEmail)) {
+        dispatch({
+            type: ADD_NOTIFICATION,
+            payload: {
+                type: 'error',
+                message: 'The user is already invited to the event.'
+            }
+        })
+        return Promise.resolve(false)
+    }
+
     const currentUser = getUserSelector(getState())
     const project = getSelectedProjectSelector(getState())
+    const invite = {
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        destinationUserInfo: userEmail,
+        originUserId: currentUser.uid,
+        originUserName: currentUser.displayName,
+        originUserPhotoURL: getDataFromProviderDataOrUser(currentUser, 'photoURL'),
+        projectId: project.id,
+        projectName: project.name,
+        status: 'new'
+    }
 
     return fireStoreMainInstance
         .collection('projects-invites')
-        .add({
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp(),
-            destinationUserInfo: userEmail,
-            originUserId: currentUser.uid,
-            originUserName: currentUser.displayName,
-            originUserPhotoURL: getDataFromProviderDataOrUser(currentUser, 'photoURL'),
-            projectId: project.id,
-            projectName: project.name,
-            status: 'new'
-        })
-        .then(() => {
+        .add(invite)
+        .then(docRef => {
             dispatch({
                 type: ADD_NOTIFICATION,
                 payload: {
@@ -87,7 +100,16 @@ export const inviteUser = userEmail => (dispatch, getState) => {
                     message: `The user has been invited to the project and should receive an email very soon.`
                 }
             })
-            return true
+
+            return dispatch({
+                type: USER_INVITE_ADD,
+                payload: {
+                    ...invite,
+                    id: docRef.id,
+                    createdAt: nowTimestamp(),
+                    updatedAt: nowTimestamp()
+                }
+            })
         })
         .catch(error => {
             // eslint-disable-next-line no-console
@@ -155,7 +177,7 @@ export const getPendingInvites = () => (dispatch, getState) => {
     fireStoreMainInstance
         .collection('projects-invites')
         .where('projectId', '==', projectId)
-        .where('status', 'in', ['new', 'emailSent'])
+        .where('status', 'in', ['new', 'emailSent', 'error'])
         .get()
         .then(querySnapshot => {
             const pendingInvite = []

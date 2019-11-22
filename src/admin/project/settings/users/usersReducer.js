@@ -1,5 +1,5 @@
 import {
-    GET_USER_DETAILS_SUCCESS,
+    GET_USER_DETAILS_SUCCESS, USER_INVITE_ADD,
     USER_INVITE_GET_SUCCESS,
     USER_INVITE_REMOVE_SUCCESS,
     USER_INVITES_GET_SUCCESS,
@@ -37,6 +37,11 @@ const usersReducer = (state = initState, {payload, type}) => {
             return {
                 ...state,
                 pendingInvites: payload
+            }
+        case USER_INVITE_ADD:
+            return {
+                ...state,
+                pendingInvites: [...state.pendingInvites, payload]
             }
         case USER_INVITE_REMOVE_SUCCESS:
             return {
