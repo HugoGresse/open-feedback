@@ -32,7 +32,7 @@ class Login extends Component {
                 if(!user.emailVerified && !user.phoneNumber){
                     user.sendEmailVerification().then(() => {
                         // Email sent.
-                    }) // O7luKAu0iWSiP0Ic9r3NSQ4uwCm2 // fevopor141@tmailcloud.com // p iJPPcqtAcMzYhH75yWLt
+                    })
                 }
             } else if (tempUser) {
                 // Checking tempUser prevent signOut if the is no user to signOut currently.
