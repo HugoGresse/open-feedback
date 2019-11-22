@@ -27,6 +27,7 @@ export const didSignIn = (user, error) => {
                 const displayName = getDataFromProviderDataOrUser(user, 'displayName')
                 const photoURL = getDataFromProviderDataOrUser(user, 'photoURL')
                 const email = getDataFromProviderDataOrUser(user, 'email')
+                const emailVerified = getDataFromProviderDataOrUser(user, 'emailVerified')
                 const phone = getDataFromProviderDataOrUser(user, 'phoneNumber')
 
                 if (userInDb.exists) {
@@ -35,8 +36,13 @@ export const didSignIn = (user, error) => {
                     const displayNameDb = getDataFromProviderDataOrUser(userDbData, 'displayName')
                     const photoURLDb = getDataFromProviderDataOrUser(userDbData, 'photoURL')
                     const emailDb = getDataFromProviderDataOrUser(userDbData, 'email')
+                    const emailVerifiedDb = userDbData.emailVerified
                     const phoneDb = getDataFromProviderDataOrUser(userDbData, 'phoneNumber')
-                    if (displayNameDb !== displayName || photoURLDb !== photoURL || emailDb !== email || phoneDb !== phone) {
+                    if (displayNameDb !== displayName ||
+                        photoURLDb !== photoURL ||
+                        emailDb !== email ||
+                        phoneDb !== phone ||
+                        emailVerifiedDb !== emailVerified) {
                         await updateUser(user, displayName, photoURL, emailDb, phone)
                     }
                 } else {
@@ -92,6 +98,7 @@ const updateUser = async (user, displayName, photoURL, email, phone) => {
         displayName: displayName,
         photoURL: photoURL,
         email: email,
+        emailVerified: user.emailVerified,
         phoneNumber: phone
     }
 

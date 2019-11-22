@@ -6,7 +6,7 @@ import Box from '../../baseComponents/design/Box'
 import {StyledFirebaseAuth} from 'react-firebaseui'
 import {auth, authProvider} from '../../firebase'
 import {connect} from 'react-redux'
-import {getLoginErrorSelector, isLoggedSelector} from './authSelectors'
+import {getLoginErrorSelector, getUserSelector, isLoggedSelector} from './authSelectors'
 import {didSignIn, signOut} from './authActions'
 
 const Wrapper = styled(Box)`
@@ -29,6 +29,11 @@ class Login extends Component {
                     tempUser = user
                     this.props.didSignIn(user)
                 }
+                if(!user.emailVerified && !user.phoneNumber){
+                    user.sendEmailVerification().then(() => {
+                        // Email sent.
+                    }) // O7luKAu0iWSiP0Ic9r3NSQ4uwCm2 // fevopor141@tmailcloud.com // p iJPPcqtAcMzYhH75yWLt
+                }
             } else if (tempUser) {
                 // Checking tempUser prevent signOut if the is no user to signOut currently.
                 // It may happen with the listener is first attached, no user if logged in, and this method if called.
@@ -43,6 +48,10 @@ class Login extends Component {
     }
 
     render() {
+        if(this.props.user && !this.props.user.emailVerified && !this.props.user.phoneNumber) {
+            return "You need to verify your email using the link you've received in your inbox and refresh this page after. Thanks."
+        }
+
         if (this.props.isLoggedIn) {
             return this.props.children
         }
@@ -109,7 +118,8 @@ class Login extends Component {
 
 const mapStateToProps = state => ({
     isLoggedIn: isLoggedSelector(state),
-    loginError: getLoginErrorSelector(state)
+    loginError: getLoginErrorSelector(state),
+    user: getUserSelector(state)
 })
 
 const mapDispatchToProps = Object.assign(

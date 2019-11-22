@@ -9,6 +9,8 @@ service cloud.firestore {
         function itsMyDocument(userId) { return request.auth.uid == userId }
         function isAdmin(data) { return data.owner == request.auth.uid || request.auth.uid in data.members}
         function isAnonymous() { return request.auth.token.firebase.sign_in_provider == 'anonymous'}
+        function isEmailVerified() { return request.auth.token.email_verified == true }
+        function isPhoneNumberAccount() { return request.auth.token.firebase.sign_in_provider == 'phone' }
 
         // Get functions
         function projectData(projectId) { return get(/databases/$(database)/documents/projects/$(projectId)).data }
@@ -23,11 +25,11 @@ service cloud.firestore {
         // PROJECTS
         match /projects/{projectId} {
             allow get: if true;
-            allow list: if authenticated() && isAdmin(resource.data);
+            allow list: if authenticated() && isAdmin(resource.data) && (isEmailVerified() || isPhoneNumberAccount());
             allow create: if authenticated();
-            allow update: if authenticated() && isAdmin(resource.data);
+            allow update: if authenticated() && isAdmin(resource.data) && (isEmailVerified() || isPhoneNumberAccount());
 
-
+            // Deprecated
             match /voteItems/{voteItemsId} {
                 allow list: if true;
                 allow write: if authenticated() && isAdmin(projectData(projectId));
