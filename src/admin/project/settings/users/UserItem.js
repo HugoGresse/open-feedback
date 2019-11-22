@@ -31,6 +31,9 @@ const UserItem = ({userId, ownerId, currentUserId}) => {
 
     const user = usersDetails[userId]
 
+    const isOwner = userId === ownerId
+    const isMe = currentUserId === userId
+
     useEffect(() => {
         dispatch(getUserDetails(userId))
     }, [dispatch, userId])
@@ -50,10 +53,10 @@ const UserItem = ({userId, ownerId, currentUserId}) => {
             </Box>
         </Grid>
         <Grid item xs={12} sm={3} className={classes.cell}>
-            {ownerId === userId ? "Owner" : "Member"}
+            {isOwner ? "Owner" : "Member"}
         </Grid>
         <Grid item xs={12} sm={3} className={classes.buttonCell}>
-            {!currentUserId && <IconButton aria-label="Remove the user from the event" onClick={() => dispatch(removeUserFromProject(userId))}>
+            {!isOwner && !isMe && <IconButton aria-label="Remove the user from the event" onClick={() => dispatch(removeUserFromProject(userId))}>
                 <RemoveButton/>
             </IconButton>}
         </Grid>
