@@ -11,12 +11,13 @@ import {
 import CircularProgress from '@material-ui/core/CircularProgress'
 import {Box} from '@material-ui/core'
 import {isEmpty} from 'lodash'
-import {getInviteSelector} from '../project/settings/users/usersSelectors'
+import {getInviteSelector, getUsersSelector} from '../project/settings/users/usersSelectors'
 import {history} from '../../App'
 
 const ProjectInviteDialog = ({inviteId}) => {
     const dispatch = useDispatch()
     const invite = useSelector(getInviteSelector)
+    const currentUser = useSelector(getUsersSelector)
 
     useEffect(() => {
         dispatch(listenForInvite(inviteId))
@@ -30,20 +31,25 @@ const ProjectInviteDialog = ({inviteId}) => {
     }
 
     let text = ""
-    if(invite && (invite.status === 'emailSent')) {
-        text = "You'll be redirected to the event soon"
+    if (invite) {
+        if(invite.destinationUserInfo !== currentUser.email && invite.destinationUserInfo !== currentUser.phoneNumber) {
+            history.push(history.location.pathname)
+        }
+        if (invite.status === 'emailSent') {
+            text = "You'll be redirected to the event soon"
+        }
     } else {
         text = "You've already used this invitation"
     }
 
-    return  <Dialog onClose={() => closeDialog()} aria-labelledby="event invitation" open={!isEmpty(inviteId)}>
+    return <Dialog onClose={() => closeDialog()} aria-labelledby="event invitation" open={!isEmpty(inviteId)}>
         <DialogTitle>Event invitation</DialogTitle>
         <DialogContent>
             <DialogContentText id="alert-dialog-description">
                 {text}
             </DialogContentText>
             <Box margin={2}>
-                <CircularProgress />
+                <CircularProgress/>
             </Box>
         </DialogContent>
     </Dialog>
