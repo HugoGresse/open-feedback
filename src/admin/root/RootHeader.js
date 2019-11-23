@@ -39,19 +39,17 @@ const RootHeader = () => {
 
     const user = useSelector(getUserSelector)
 
-    const userName = user.providerData[0] && user.providerData[0].displayName
-
     return (
         <div className={classes.container}>
             <Box display="flex" justifyContent="space-between">
 
                 <img className={classes.logo} src={logo} alt="open feedback logo" />
                 <Box display="flex">
-                    {user.providerData[0] && <Avatar
+                    {user.photoURL && <Avatar
                         alt="user"
-                        src={user.providerData[0].photoURL}
+                        src={user.photoURL}
                     />}
-                    <Typography className={classes.user}>{userName}</Typography>
+                    <Typography className={classes.user}>{user.displayName}</Typography>
                     <IconButton
                         edge="end"
                         className={classes.logout}
