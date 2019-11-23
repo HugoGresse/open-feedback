@@ -64,7 +64,9 @@ const useStyles = makeStyles({
     },
     logo: {
         width: '80%',
-        maxWidth: '150px'
+        maxWidth: 170,
+        marginTop: 10,
+        marginBottom: 10
     },
     userBox: {
         marginTop: 'auto'
