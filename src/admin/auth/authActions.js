@@ -17,18 +17,22 @@ export const didSignIn = (user, error) => {
                     payload: 'You cannot use the admin in anonymous mode'
                 })
             } else {
-                dispatch({
-                    type: LOGIN_SUCCESS,
-                    payload: user
-                })
-
-                const userInDb = await getUserFromDB(user.uid)
-
                 const displayName = getDataFromProviderDataOrUser(user, 'displayName')
                 const photoURL = getDataFromProviderDataOrUser(user, 'photoURL')
                 const email = getDataFromProviderDataOrUser(user, 'email')
                 const emailVerified = getDataFromProviderDataOrUser(user, 'emailVerified')
                 const phone = getDataFromProviderDataOrUser(user, 'phoneNumber')
+
+                dispatch({
+                    type: LOGIN_SUCCESS,
+                    payload: {
+                        ...user,
+                        displayName,
+                        photoURL
+                    }
+                })
+
+                const userInDb = await getUserFromDB(user.uid)
 
                 if (userInDb.exists) {
                     // update photoURL
@@ -118,9 +122,9 @@ export const getDataFromProviderDataOrUser = (user, keyToGet) => {
     if (isEmpty(user.providerData)) {
         return ""
     }
-    const providerDataWithPhoto = user.providerData.filter(data => data[keyToGet])
-    if (providerDataWithPhoto.length > 0) {
-        return providerDataWithPhoto[0][keyToGet]
+    const providerData = user.providerData.filter(data => data[keyToGet])
+    if (providerData.length > 0) {
+        return providerData[0][keyToGet]
     }
     return ""
 }

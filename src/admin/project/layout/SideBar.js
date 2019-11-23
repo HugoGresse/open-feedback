@@ -80,8 +80,6 @@ const SideBar = ({ match, drawerOpen, toggleDrawer, isMobile }) => {
     const user = useSelector(getUserSelector)
     const selectedProjectId = useSelector(getSelectedProjectIdSelector)
 
-    const userName = user.providerData[0] && user.providerData[0].displayName
-
     return (
         <MuiThemeProvider theme={innerTheme}>
             <Drawer
@@ -184,10 +182,10 @@ const SideBar = ({ match, drawerOpen, toggleDrawer, isMobile }) => {
                     >
                         <ListItem>
                             <ListItemAvatar>
-                                {user.providerData[0] && (
+                                {user.photoURL && (
                                     <Avatar
                                         alt="user"
-                                        src={user.providerData[0].photoURL}
+                                        src={user.photoURL}
                                     />
                                 )}
                             </ListItemAvatar>
@@ -195,7 +193,7 @@ const SideBar = ({ match, drawerOpen, toggleDrawer, isMobile }) => {
                                 primaryTypographyProps={{
                                     color: 'textPrimary'
                                 }}
-                                primary={userName}
+                                primary={user.displayName}
                             />
                             <ListItemSecondaryAction>
                                 <IconButton
