@@ -10,15 +10,15 @@ const LoaderMatchParentStyled = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    opacity: 1;
+    opacity: 0;
     transition: all 1s ease-in;
     animation: 1s appearDelayed;
     animation-delay: 500ms;
     animation-fill-mode: forwards;
         
     @keyframes appearDelayed {
-        from: {opacity: 0;}
-        to: {opacity: 1;}
+        from {opacity: 0;}
+        to {opacity: 1;}
     }
     
     ${props =>
@@ -54,7 +54,7 @@ class LoaderMatchParent extends Component {
 
 LoaderMatchParent.defaultProps = {
     height: '100vh',
-    maxWidth: '100%'
+    maxWidth: '100%',
 }
 
 export default withStyles(styles)(LoaderMatchParent)

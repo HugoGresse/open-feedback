@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import SideBar from './project/layout/SideBar'
 import Box from '../baseComponents/design/Box'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { getProjects } from './project/core/projectActions'
-import withStyles from '@material-ui/core/styles/withStyles'
 import Header from './project/layout/Header'
 import COLORS from '../constants/colors'
 import Container from '@material-ui/core/Container'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
 import useTheme from '@material-ui/core/styles/useTheme'
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -18,27 +18,28 @@ const innerTheme = createMuiTheme({
             light: '#ff9c76',
             main: '#ff6a49',
             dark: '#c6381e',
-            contrastText: '#fff'
-        }
-    }
+            contrastText: '#fff',
+        },
+    },
 })
 
-const styles = () => ({
+const useStyles = makeStyles(() => ({
     container: {
-        padding: 24
+        padding: 24,
     },
     sidebar: {
         overflow: 'auto',
-        flexGrow: 1
-    }
-})
+        flexGrow: 1,
+    },
+}))
 
-function AdminLayout(props) {
-    const { classes, match, children, getProjects } = props
+const AdminLayout = ({ baseUrl, children }) => {
+    const dispatch = useDispatch()
+    const classes = useStyles()
 
     useEffect(() => {
-        getProjects()
-    }, [getProjects])
+        dispatch(getProjects())
+    }, [dispatch])
 
     const [scrollTargetRef, setRef] = useState(undefined)
 
@@ -51,7 +52,7 @@ function AdminLayout(props) {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
     const [state, setState] = React.useState({
-        drawerOpen: !isMobile
+        drawerOpen: !isMobile,
     })
 
     const toggleDrawer = open => event => {
@@ -77,10 +78,9 @@ function AdminLayout(props) {
             justifyContent="flex-start"
             flexGrow="1"
             height="100vh"
-            background={COLORS.ADMIN_BACKGROUND_LIGHT}
-        >
+            background={COLORS.ADMIN_BACKGROUND_LIGHT}>
             <SideBar
-                match={match}
+                baseUrl={baseUrl}
                 className={classes.sidebar}
                 drawerOpen={state.drawerOpen}
                 isMobile={isMobile}
@@ -103,16 +103,4 @@ function AdminLayout(props) {
     )
 }
 
-const mapStateToProps = () => ({})
-
-const mapDispatchToProps = Object.assign(
-    {},
-    {
-        getProjects: getProjects
-    }
-)
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles)(AdminLayout))
+export default AdminLayout
