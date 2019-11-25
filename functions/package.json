@@ -27,7 +27,7 @@
         "ts-jest": "^24.1.0"
     },
     "devDependencies": {
-        "@types/node-fetch": "^2.5.3",
+        "@types/node-fetch": "^2.5.4",
         "jest": "^24.9.0",
         "jest-expect-message": "^1.0.2",
         "tslint": "^5.20.1",
