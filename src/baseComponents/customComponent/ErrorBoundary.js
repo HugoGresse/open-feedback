@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import OFButton from '../../admin/baseComponents/OFButton'
 import Box from '@material-ui/core/Box'
+import createAlert from '../../utils/alerting/createAlert'
+import { ALERT_REACT_CATCHED_ERROR_ADMIN } from '../../utils/alerting/alerts'
 
-class ErrorBoundaryWithGame extends Component {
+class ErrorBoundary extends Component {
     constructor(props) {
         super(props)
         this.state = { hasError: false }
@@ -13,7 +15,9 @@ class ErrorBoundaryWithGame extends Component {
     }
 
     componentDidCatch(error, errorInfo) {
-        // TODO : will be done later on
+        createAlert(
+            ALERT_REACT_CATCHED_ERROR_ADMIN(error, errorInfo.componentStack)
+        )
     }
 
     render() {
@@ -25,7 +29,7 @@ class ErrorBoundaryWithGame extends Component {
                         Open Feedback itself or your internet connection.{' '}
                     </h3>
                     <br />
-                    <pre>{JSON.stringify(this.state.error)}</pre>
+                    <pre>{String(this.state.error)}</pre>
                     <br />
                     <OFButton href={window.location.href}>
                         Reload the page
@@ -46,4 +50,4 @@ class ErrorBoundaryWithGame extends Component {
     }
 }
 
-export default ErrorBoundaryWithGame
+export default ErrorBoundary
