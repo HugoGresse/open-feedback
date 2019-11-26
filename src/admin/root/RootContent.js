@@ -4,30 +4,26 @@ import Typography from '@material-ui/core/Typography'
 import CardContent from '@material-ui/core/CardContent'
 import Card from '@material-ui/core/Card'
 import AddIcon from '@material-ui/icons/Add'
-import withStyles from '@material-ui/core/styles/withStyles'
 import COLORS from '../../constants/colors'
 import CardActionArea from '@material-ui/core/CardActionArea'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
-const styles = () => ({
+const useStyles = makeStyles({
     newEventCard: {
         textAlign: 'center',
         color: COLORS.RED_ORANGE,
         '& svg': {
             marginTop: 40,
-            marginBottom: 16
-        }
+            marginBottom: 16,
+        },
     },
     cardContent: {
-        minHeight: 140
-    }
+        minHeight: 140,
+    },
 })
 
-function RootContent({
-    projects,
-    onNewEventClick,
-    onProjectSelected,
-    classes
-}) {
+const RootContent = ({ projects, onNewEventClick, onProjectSelected }) => {
+    const classes = useStyles()
     return (
         <>
             <Grid item xs={6} sm={6} md={4} key="new-event">
@@ -45,16 +41,14 @@ function RootContent({
                 <Grid item xs={6} sm={6} md={4} key={project.id}>
                     <Card>
                         <CardActionArea
-                            onClick={() => onProjectSelected(project.id)}
-                        >
+                            onClick={() => onProjectSelected(project.id)}>
                             <CardContent className={classes.cardContent}>
                                 <Typography variant="h6">
                                     {project.name}
                                 </Typography>
                                 <Typography
                                     variant="caption"
-                                    color="textSecondary"
-                                >
+                                    color="textSecondary">
                                     {project.id}
                                 </Typography>
                             </CardContent>
@@ -66,4 +60,4 @@ function RootContent({
     )
 }
 
-export default withStyles(styles)(RootContent)
+export default RootContent
