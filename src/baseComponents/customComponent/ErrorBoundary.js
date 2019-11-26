@@ -15,9 +15,11 @@ class ErrorBoundary extends Component {
     }
 
     componentDidCatch(error, errorInfo) {
-        createAlert(
-            ALERT_REACT_CATCHED_ERROR_ADMIN(error, errorInfo.componentStack)
-        )
+        if (process.env.NODE_ENV === 'production') {
+            createAlert(
+                ALERT_REACT_CATCHED_ERROR_ADMIN(error, errorInfo.componentStack)
+            )
+        }
     }
 
     render() {
