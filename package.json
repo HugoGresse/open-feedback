@@ -19,7 +19,7 @@
         "@material-ui/icons": "^4.5.1",
         "@material-ui/pickers": "^3.2.8",
         "clipboard-copy": "^3.1.0",
-        "docz": "^1.2.0",
+        "docz": "^2.0.0",
         "docz-theme-default": "^1.2.0",
         "env-cmd": "^10.0.1",
         "firebase": "^7.5.0",
