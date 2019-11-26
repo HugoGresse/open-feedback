@@ -51,6 +51,17 @@ service cloud.firestore {
                 allow delete: if authenticated() && resource.data.userId == request.auth.uid;
             }
 
+            match /speakers/{speakerId} {
+                allow get: if true;
+                allow list: if true;
+                allow write: if authenticated() && isAdmin(projectData(projectId));
+            }
+
+            match /talks/{speakerId} {
+                allow get: if true;
+                allow list: if true;
+                allow write: if authenticated() && isAdmin(projectData(projectId));
+            }
         }
 
         // PROJECTS INVITE
