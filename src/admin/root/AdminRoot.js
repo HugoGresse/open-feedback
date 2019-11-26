@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import {
     getSortedProjectsSelector,
-    isProjectsLoadedSelector
+    isProjectsLoadedSelector,
 } from '../project/core/projectSelectors'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 import { getProjects, selectProject } from '../project/core/projectActions'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import withStyles from '@material-ui/core/styles/withStyles'
 import RootHeader from './RootHeader'
 import { Box, Slide } from '@material-ui/core'
 import Container from '@material-ui/core/Container'
@@ -18,65 +17,61 @@ import RootContent from './RootContent'
 import NewProject from '../project/new/NewProject'
 import useQuery from '../../utils/useQuery'
 import ProjectInviteDialog from './ProjectInviteDialog'
-const styles = theme => ({
+import makeStyles from '@material-ui/core/styles/makeStyles'
+
+const useStyles = makeStyles(theme => ({
     container: {
         background: COLORS.ADMIN_BACKGROUND_LIGHT,
         minHeight: '100vh',
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
     projectContainer: {
-        paddingBottom: theme.spacing(2)
+        paddingBottom: theme.spacing(2),
     },
     title: {
         marginTop: 100,
         marginBottom: 20,
-        color: COLORS.WHITE
+        color: COLORS.WHITE,
     },
     loaderContainer: {
-        padding: theme.spacing(2, 2)
+        padding: theme.spacing(2, 2),
     },
     newProjectContainer: {
         position: 'absolute',
         top: 0,
         width: '100%',
-        overflow: 'hidden'
-    }
-})
+        overflow: 'hidden',
+    },
+}))
 
-function AdminRoot({
-    getProjects,
-    projects,
-    isProjectsLoaded,
-    selectProject,
-    classes
-}) {
+const AdminRoot = () => {
+    const classes = useStyles()
     const inviteId = useQuery().get('inviteId')
+    const dispatch = useDispatch()
+    const projects = useSelector(getSortedProjectsSelector)
+    const isProjectsLoaded = useSelector(isProjectsLoadedSelector)
+    const [isNewProjectOpen, setNewProjectOpen] = useState(false)
 
     useEffect(() => {
-        getProjects()
-    }, [getProjects])
-
-    const [isNewProjectOpen, setNewProjectOpen] = useState(false)
+        dispatch(getProjects())
+    }, [dispatch])
 
     return (
         <div style={{ position: 'relative' }}>
             <Box
                 className={classes.container}
-                style={{ height: isNewProjectOpen ? '100vh' : 'auto' }}
-            >
+                style={{ height: isNewProjectOpen ? '100vh' : 'auto' }}>
                 <RootHeader />
                 <Container
                     maxWidth="md"
                     fixed
-                    className={classes.projectContainer}
-                >
+                    className={classes.projectContainer}>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <Typography
                                 className={classes.title}
                                 variant="h4"
-                                gutterBottom
-                            >
+                                gutterBottom>
                                 Your OpenFeedback events
                             </Typography>
                         </Grid>
@@ -86,7 +81,7 @@ function AdminRoot({
                                 projects={projects}
                                 onNewEventClick={() => setNewProjectOpen(true)}
                                 onProjectSelected={projectId =>
-                                    selectProject(projectId)
+                                    dispatch(selectProject(projectId))
                                 }
                             />
                         )}
@@ -106,33 +101,16 @@ function AdminRoot({
                     mountOnEnter={true}
                     unmountOnExit={true}
                     in={isNewProjectOpen}
-                    timeout={500}
-                >
+                    timeout={500}>
                     <div>
                         <NewProject onCancel={() => setNewProjectOpen(false)} />
                     </div>
                 </Slide>
             </div>
 
-            {inviteId && <ProjectInviteDialog inviteId={inviteId}/>}
+            {inviteId && <ProjectInviteDialog inviteId={inviteId} />}
         </div>
     )
 }
 
-const mapStateToProps = state => ({
-    projects: getSortedProjectsSelector(state),
-    isProjectsLoaded: isProjectsLoadedSelector(state)
-})
-
-const mapDispatchToProps = Object.assign(
-    {},
-    {
-        getProjects: getProjects,
-        selectProject: selectProject
-    }
-)
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles)(AdminRoot))
+export default AdminRoot
