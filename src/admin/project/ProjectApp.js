@@ -12,6 +12,7 @@ import ProjectSettings from './settings/event/ProjectSettings'
 import ProjectLayout from './layout/ProjectLayout'
 import { useDispatch } from 'react-redux'
 import { getProjects } from './core/projectActions'
+import Layout404 from './layout/Layout404'
 
 const ProjectApp = ({ match }) => {
     const dispatch = useDispatch()
@@ -69,6 +70,8 @@ const ProjectApp = ({ match }) => {
                         path={`${match.url}${RoutingMap.settingUsers.url}`}
                         render={props => <Users {...props} />}
                     />
+
+                    <Route component={Layout404} />
                 </Switch>
             </ProjectLayout>
         </Project>

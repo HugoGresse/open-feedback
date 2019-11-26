@@ -6,6 +6,7 @@ import {
 } from './core/projectSelectors'
 import { selectProject } from './core/projectActions'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
+import Layout404 from './layout/Layout404'
 
 const Project = ({ children, match }) => {
     const dispatch = useDispatch()
@@ -18,7 +19,7 @@ const Project = ({ children, match }) => {
     const isProjectsLoaded = useSelector(isProjectsLoadedSelector)
 
     if (selectedProject) return children
-    if (isProjectsLoaded && !selectedProject) return 'TOTO'
+    if (isProjectsLoaded && !selectedProject) return <Layout404 />
     return <LoaderMatchParent />
 }
 export default Project
