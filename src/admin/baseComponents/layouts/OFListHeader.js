@@ -6,45 +6,52 @@ import OFButton from '../OFButton'
 import React from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     progress: {
         width: 30,
         height: 30,
         marginRight: 10,
-        top: 10,
-        position: 'relative'
+        position: 'relative',
+        verticalAlign: 'middle',
     },
     header: {
-        padding: 20
+        padding: 20,
     },
     headerRight: {
-        textAlign: "right"
-    }
-})
+        textAlign: 'right',
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 12,
+        },
+    },
+}))
 
-const OFListHeader = ({filterValue, filterChange, buttonProcessing, buttonClick, buttonText}) => {
+const OFListHeader = ({
+    filterValue,
+    filterChange,
+    buttonProcessing,
+    buttonClick,
+    buttonText,
+}) => {
     const classes = useStyles()
 
-    return  <Grid container className={classes.header}>
-        <Grid item xs={12} sm={6} >
-            <OFInput placeholder="Search"
-                     value={filterValue}
-                     onChange={event => filterChange(event.target.value)}/>
-        </Grid>
-
-        <Grid item xs={12} sm={6} className={classes.headerRight}>
-            <Fade in={buttonProcessing}>
-                <CircularProgress
-                    size={30}
-                    className={classes.progress}
+    return (
+        <Grid container className={classes.header}>
+            <Grid item xs={12} sm={6}>
+                <OFInput
+                    placeholder="Search"
+                    value={filterValue}
+                    onChange={event => filterChange(event.target.value)}
                 />
-            </Fade>
+            </Grid>
 
-            <OFButton
-                onClick={() => buttonClick()}>
-                {buttonText}
-            </OFButton>
+            <Grid item xs={12} sm={6} className={classes.headerRight}>
+                <Fade in={buttonProcessing}>
+                    <CircularProgress size={30} className={classes.progress} />
+                </Fade>
+
+                <OFButton onClick={() => buttonClick()}>{buttonText}</OFButton>
+            </Grid>
         </Grid>
-    </Grid>
+    )
 }
 export default OFListHeader
