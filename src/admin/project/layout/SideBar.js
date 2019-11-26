@@ -31,8 +31,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 
 const innerTheme = createMuiTheme({
     palette: {
-        type: 'dark'
-    }
+        type: 'dark',
+    },
 })
 
 const useStyles = makeStyles({
@@ -43,37 +43,37 @@ const useStyles = makeStyles({
         height: '100vh',
         minWidth: '220px',
         '& .active': {
-            background: COLORS.RED_ORANGE
-        }
+            background: COLORS.RED_ORANGE,
+        },
     },
     drawer: {
         position: 'relative',
-        width: 270
+        width: 270,
     },
     list: {
         padding: 15,
         '& > a': {
-            borderRadius: 2
-        }
+            borderRadius: 2,
+        },
     },
     listItemIcon: {
-        minWidth: 40
+        minWidth: 40,
     },
     logoContainer: {
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     logo: {
         width: '80%',
         maxWidth: 170,
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 10,
     },
     userBox: {
-        marginTop: 'auto'
-    }
+        marginTop: 'auto',
+    },
 })
 
-const SideBar = ({ match, drawerOpen, toggleDrawer, isMobile }) => {
+const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
     const dispatch = useDispatch()
     const classes = useStyles()
 
@@ -88,9 +88,8 @@ const SideBar = ({ match, drawerOpen, toggleDrawer, isMobile }) => {
                 onClose={event => toggleDrawer(event)}
                 anchor="left"
                 classes={{
-                    paper: classes.drawer
-                }}
-            >
+                    paper: classes.drawer,
+                }}>
                 <div className={classes.container}>
                     <List component="nav">
                         <ListItem className={classes.logoContainer}>
@@ -112,24 +111,23 @@ const SideBar = ({ match, drawerOpen, toggleDrawer, isMobile }) => {
                         onClick={event => toggleDrawer(event)}
                         subheader={
                             <ListSubheader component="div">DATA</ListSubheader>
-                        }
-                    >
+                        }>
                         <OFMenuItem
-                            to={`${match.url}/${selectedProjectId}${RoutingMap.dashboard.url}`}
+                            to={`${baseUrl}/${selectedProjectId}${RoutingMap.dashboard.url}`}
                             icon={<ExploreIcon />}
                             text={RoutingMap.dashboard.name}
                             iconClassName={classes.listItemIcon}
                         />
 
                         <OFMenuItem
-                            to={`${match.url}/${selectedProjectId}${RoutingMap.talks.url}`}
+                            to={`${baseUrl}/${selectedProjectId}${RoutingMap.talks.url}`}
                             text={RoutingMap.talks.name}
                             icon={<SlideshowIcon />}
                             iconClassName={classes.listItemIcon}
                         />
 
                         <OFMenuItem
-                            to={`${match.url}/${selectedProjectId}${RoutingMap.speakers.url}`}
+                            to={`${baseUrl}/${selectedProjectId}${RoutingMap.speakers.url}`}
                             icon={<RecordVoiceOverIcon />}
                             text={RoutingMap.speakers.name}
                             iconClassName={classes.listItemIcon}
@@ -146,31 +144,30 @@ const SideBar = ({ match, drawerOpen, toggleDrawer, isMobile }) => {
                             <ListSubheader component="div">
                                 SETTINGS
                             </ListSubheader>
-                        }
-                    >
+                        }>
                         <OFMenuItem
                             text={RoutingMap.settingEvent.name}
                             iconClassName={classes.listItemIcon}
                             icon={<EventNoteIcon />}
-                            to={`${match.url}/${selectedProjectId}${RoutingMap.settingEvent.url}`}
+                            to={`${baseUrl}/${selectedProjectId}${RoutingMap.settingEvent.url}`}
                         />
                         <OFMenuItem
                             text={RoutingMap.settingVotingform.name}
                             iconClassName={classes.listItemIcon}
                             icon={<HowToVoteIcon />}
-                            to={`${match.url}/${selectedProjectId}${RoutingMap.settingVotingform.url}`}
+                            to={`${baseUrl}/${selectedProjectId}${RoutingMap.settingVotingform.url}`}
                         />
                         <OFMenuItem
                             text={RoutingMap.settingSetup.name}
                             iconClassName={classes.listItemIcon}
                             icon={<SettingsIcon />}
-                            to={`${match.url}/${selectedProjectId}${RoutingMap.settingSetup.url}`}
+                            to={`${baseUrl}/${selectedProjectId}${RoutingMap.settingSetup.url}`}
                         />
                         <OFMenuItem
                             text={RoutingMap.settingUsers.name}
                             iconClassName={classes.listItemIcon}
                             icon={<PeopleIcon />}
-                            to={`${match.url}/${selectedProjectId}${RoutingMap.settingUsers.url}`}
+                            to={`${baseUrl}/${selectedProjectId}${RoutingMap.settingUsers.url}`}
                         />
                     </List>
                     <Divider />
@@ -178,20 +175,16 @@ const SideBar = ({ match, drawerOpen, toggleDrawer, isMobile }) => {
                     <List
                         component="nav"
                         aria-label="something"
-                        className={classes.userBox}
-                    >
+                        className={classes.userBox}>
                         <ListItem>
                             <ListItemAvatar>
                                 {user.photoURL && (
-                                    <Avatar
-                                        alt="user"
-                                        src={user.photoURL}
-                                    />
+                                    <Avatar alt="user" src={user.photoURL} />
                                 )}
                             </ListItemAvatar>
                             <ListItemText
                                 primaryTypographyProps={{
-                                    color: 'textPrimary'
+                                    color: 'textPrimary',
                                 }}
                                 primary={user.displayName}
                             />
@@ -199,8 +192,7 @@ const SideBar = ({ match, drawerOpen, toggleDrawer, isMobile }) => {
                                 <IconButton
                                     edge="end"
                                     aria-label="signout"
-                                    onClick={() => dispatch(signOut())}
-                                >
+                                    onClick={() => dispatch(signOut())}>
                                     <PowerSettingsIcon />
                                 </IconButton>
                             </ListItemSecondaryAction>

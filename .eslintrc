@@ -14,7 +14,8 @@
     "env": {
         "browser": true,
         "es6": true,
-        "cypress/globals": true
+        "cypress/globals": true,
+        "node": true
     },
     "extends": ["eslint:recommended", "plugin:react/recommended"],
     "rules": {
