@@ -1,7 +1,7 @@
 import Grid from '@material-ui/core/Grid'
 import React from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import {darken, fade, lighten} from '@material-ui/core/styles'
+import { darken, fade, lighten } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -11,17 +11,18 @@ const useStyles = makeStyles(theme => ({
                 ? lighten(fade(theme.palette.divider, 1), 0.88)
                 : darken(fade(theme.palette.divider, 1), 0.68)
         }`,
-        alignItems: 'center'
-    }
+        alignItems: 'center',
+    },
 }))
 
-
-const OFListItem = ({children}) => {
+const OFListItem = ({ children, style }) => {
     const classes = useStyles()
 
-    return <Grid container className={classes.container}>
+    return (
+        <Grid container className={classes.container} style={style}>
             {children}
         </Grid>
+    )
 }
 
 export default OFListItem
