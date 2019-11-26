@@ -1,18 +1,16 @@
-import * as functions from 'firebase-functions';
-import {initFirebase} from "./helpers/firebaseInit";
+import * as functions from 'firebase-functions'
+import { initFirebase } from './helpers/firebaseInit'
 
 initFirebase(functions.config().app.env)
 
 export {
     aggregateVotesCreate,
     aggregateVotesDelete,
-    aggregateVotesUpdate
+    aggregateVotesUpdate,
 } from './triggers/aggregateVotes'
 
-export {
-    userInviteCreated
-} from './triggers/userInvite'
+export { userInviteCreated } from './triggers/userInvite'
 
-export {
-    userCreate
-} from './triggers/userCreate'
+export { userCreate } from './triggers/userCreate'
+
+export { alert } from './http/alert'
