@@ -44,11 +44,30 @@ Here the command to register those variables:
 
     firebase functions:config:set app.url="https://myserver.com" mailgun.key="MAILGUN API KEY" mailgun.domain="MAILGUN DOMAIN"  mailgun.api="https://api.eu.mailgun.net/v3/SOMETHINGLIKE_THIS/messages"
 
-To test cloud functions with Mailgun on local machine (with cloud function shell), you will need to generate ``.runtimeconfig.json` file with environment variables :
+To test cloud functions with Mailgun on your local machine (with cloud function shell), you will need to generate ``.runtimeconfig.json` file with environment variables :
 
     firebase functions:config:get > .runtimeconfig.json
 
 > Important Note: Mailgun is an external service from Firebase and Google, so to be able use it with you will need to activate Firebase pricing.
+
+### Configure OpsGenie (optional)
+The application report alerting using OpsGenie, it is optional and the app will still works perfectly but without any alerting.
+
+You will have to add environment variables with Firebase CLI:
+
+- The application URL: app.url (ex: `http://localhost:3000`)
+- The OpsGenie API key: opsgenie.key
+- The OpsGenie api domain: opsgenie.api
+
+Here the command to register those variables:
+
+    firebase functions:config:set app.url="https://myserver.com" opsgenie.api="https://api.eu.opsgenie.com" opsgenie.key="xxxxx-xxxxxx-xxxxxx-xxxxx"
+
+To test alerting on your local machine (with cloud function shell), you will need to generate ``.runtimeconfig.json` file with environment variables :
+
+    firebase functions:config:get > .runtimeconfig.json
+
+> Important Note: OpsGenie is an external service from Firebase and Google, so to be able use it with you will need to activate Firebase pricing.
 
 ## Run
 
