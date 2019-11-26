@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import SideBar from './project/layout/SideBar'
-import Box from '../baseComponents/design/Box'
-import { useDispatch } from 'react-redux'
-import { getProjects } from './project/core/projectActions'
-import Header from './project/layout/Header'
-import COLORS from '../constants/colors'
+import React, { useCallback, useState } from 'react'
+import SideBar from './SideBar'
+import Box from '../../../baseComponents/design/Box'
+import Header from './Header'
+import COLORS from '../../../constants/colors'
 import Container from '@material-ui/core/Container'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
 import useTheme from '@material-ui/core/styles/useTheme'
@@ -33,13 +31,8 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-const AdminLayout = ({ baseUrl, children }) => {
-    const dispatch = useDispatch()
+const ProjectLayout = ({ baseUrl, children }) => {
     const classes = useStyles()
-
-    useEffect(() => {
-        dispatch(getProjects())
-    }, [dispatch])
 
     const [scrollTargetRef, setRef] = useState(undefined)
 
@@ -103,4 +96,4 @@ const AdminLayout = ({ baseUrl, children }) => {
     )
 }
 
-export default AdminLayout
+export default ProjectLayout
