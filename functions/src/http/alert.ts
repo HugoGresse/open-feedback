@@ -5,6 +5,13 @@ import { isEmpty } from 'lodash'
 export const alert = functions.https.onCall(data => {
     const { opsgenie } = functions.config()
 
+    if (isEmpty(data)) {
+        throw new functions.https.HttpsError(
+            'failed-precondition',
+            'Input parameters are empty'
+        )
+    }
+
     if (isEmpty(opsgenie)) {
         throw new functions.https.HttpsError(
             'failed-precondition',
