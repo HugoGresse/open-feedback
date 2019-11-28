@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import SpeakerListItem from './SpeakerListItem'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -8,23 +8,27 @@ import {
 import { filterSpeakers } from '../../../core/speakers/speakerActions'
 import Grid from '@material-ui/core/Grid'
 import OFListHeader from '../../baseComponents/layouts/OFListHeader'
+import SpeakerAddEditPanel from './SpeakerAddEditPanel'
 
 const SpeakerList = () => {
     const dispatch = useDispatch()
     const speakers = useSelector(getFilteredSpeakers)
     const filter = useSelector(getSpeakersFilter)
+    const [sidePanelOpen, setSidePanelOpen] = useState(true)
 
     return (
         <Grid container>
             <OFListHeader
                 filterValue={filter}
                 filterChange={value => dispatch(filterSpeakers(value))}
-                buttonClick={() =>
-                    alert(
-                        'Speakers are read only here. You can probably update them through your Hoverboard Firestore or json url depending on your setup.'
-                    )
-                }
-                buttonText="Save"
+                buttonClick={() => setSidePanelOpen(true)}
+                buttonText="Add speaker"
+            />
+
+            <SpeakerAddEditPanel
+                isOpen={sidePanelOpen}
+                onClose={() => setSidePanelOpen(false)}
+                onSubmit={data => console.log(data)}
             />
 
             {speakers.map(speaker => (
