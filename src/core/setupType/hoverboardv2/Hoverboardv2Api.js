@@ -6,8 +6,8 @@ class Hoverboardv2Api {
         this.config = config
 
         if (
-            firebase.apps.filter(app => app.name === this.config.projectId).length >
-            0
+            firebase.apps.filter(app => app.name === this.config.projectId)
+                .length > 0
         ) {
             return
         }
@@ -16,9 +16,7 @@ class Hoverboardv2Api {
     }
 
     getFirestore() {
-        return firebase
-            .app(this.config.projectId)
-            .firestore()
+        return firebase.app(this.config.projectId).firestore()
     }
 
     getSessions() {
@@ -34,7 +32,7 @@ class Hoverboardv2Api {
                 resultSessions.forEach(doc => {
                     sessions[doc.id] = {
                         ...doc.data(),
-                        id: doc.id
+                        id: doc.id,
                     }
                 })
 
@@ -47,7 +45,7 @@ class Hoverboardv2Api {
         )
     }
 
-    getSession(state, sessionId) {
+    getSession(sessionId) {
         const firestore = this.getFirestore()
         const schedulePromise = firestore.collection('schedule').get()
         const sessionsPromise = firestore
@@ -62,7 +60,7 @@ class Hoverboardv2Api {
 
                 sessions[sessionId] = {
                     ...resultSessions.data(),
-                    id: resultSessions.id
+                    id: resultSessions.id,
                 }
 
                 resultSchedule.forEach(doc => {

@@ -5,7 +5,10 @@ import {
     getFilteredSpeakers,
     getSpeakersFilter,
 } from '../../../core/speakers/speakerSelectors'
-import { filterSpeakers } from '../../../core/speakers/speakerActions'
+import {
+    addSpeaker,
+    filterSpeakers,
+} from '../../../core/speakers/speakerActions'
 import Grid from '@material-ui/core/Grid'
 import OFListHeader from '../../baseComponents/layouts/OFListHeader'
 import SpeakerAddEditPanel from './SpeakerAddEditPanel'
@@ -28,7 +31,12 @@ const SpeakerList = () => {
             <SpeakerAddEditPanel
                 isOpen={sidePanelOpen}
                 onClose={() => setSidePanelOpen(false)}
-                onSubmit={data => console.log(data)}
+                onSubmit={(data, shouldContinueAfterSubmit) => {
+                    if (!shouldContinueAfterSubmit) {
+                        setSidePanelOpen(false)
+                    }
+                    dispatch(addSpeaker(data))
+                }}
             />
 
             {speakers.map(speaker => (

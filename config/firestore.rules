@@ -57,7 +57,7 @@ service cloud.firestore {
                 allow write: if authenticated() && isAdmin(projectData(projectId));
             }
 
-            match /talks/{speakerId} {
+            match /talks/{talkId} {
                 allow get: if true;
                 allow list: if true;
                 allow write: if authenticated() && isAdmin(projectData(projectId));

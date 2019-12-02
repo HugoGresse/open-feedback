@@ -3,28 +3,28 @@ import {
     GET_SESSIONS_ERROR,
     GET_SESSIONS_LOADING,
     GET_SESSIONS_SUCCESS,
-    SET_SESSIONS_FILTER
+    SET_SESSIONS_FILTER,
 } from './sessionsActionTypes'
 import { projectApi } from '../setupType/projectApi'
 
 export const getSessions = () => {
-    return (dispatch, getState) => {
+    return dispatch => {
         dispatch({
-            type: GET_SESSIONS_LOADING
+            type: GET_SESSIONS_LOADING,
         })
 
         projectApi
-            .getSessions(getState())
+            .getSessions()
             .then(sessionsWithSchedule => {
                 dispatch({
                     type: GET_SESSIONS_SUCCESS,
-                    payload: sessionsWithSchedule
+                    payload: sessionsWithSchedule,
                 })
             })
             .catch(err => {
                 dispatch({
                     type: GET_SESSIONS_ERROR,
-                    payload: err.toString()
+                    payload: err.toString(),
                 })
             })
     }
@@ -34,7 +34,7 @@ export const setSessionsFilter = filter => {
     return dispatch => {
         dispatch({
             type: SET_SESSIONS_FILTER,
-            payload: filter
+            payload: filter,
         })
     }
 }
@@ -42,7 +42,7 @@ export const setSessionsFilter = filter => {
 export const clearSessions = () => {
     return dispatch => {
         dispatch({
-            type: CLEAR_SESSIONS
+            type: CLEAR_SESSIONS,
         })
     }
 }

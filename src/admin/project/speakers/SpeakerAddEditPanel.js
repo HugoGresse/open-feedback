@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Form, Formik } from 'formik'
 import { object, string } from 'yup'
 import SidePanelLayout from '../../baseComponents/layouts/SidePanelLayout'
@@ -20,6 +20,8 @@ const schema = object().shape({
 })
 
 const SpeakerAddEditPanel = ({ isOpen, onClose, onSubmit }) => {
+    const [shouldContinueAfterSubmit, setContinueAfterSubmit] = useState(false)
+
     return (
         <SidePanelLayout
             isOpen={isOpen}
@@ -32,9 +34,11 @@ const SpeakerAddEditPanel = ({ isOpen, onClose, onSubmit }) => {
                     photoUrl: '',
                     socialProfil: '',
                 }}
-                onSubmit={(values, actions) => {
-                    onSubmit(values.email)
-                    console.log(actions)
+                onSubmit={(values, { resetForm }) => {
+                    if (shouldContinueAfterSubmit) {
+                        resetForm()
+                    }
+                    return onSubmit(values, shouldContinueAfterSubmit)
                 }}>
                 {({ isSubmitting }) => (
                     <Form method="POST">
@@ -64,7 +68,8 @@ const SpeakerAddEditPanel = ({ isOpen, onClose, onSubmit }) => {
                                 type: 'big',
                                 marginTop: 64,
                                 width: '100%',
-                            }}>
+                            }}
+                            onClick={() => setContinueAfterSubmit(false)}>
                             Add speaker
                         </OFButton>
                         <OFButton
@@ -75,7 +80,8 @@ const SpeakerAddEditPanel = ({ isOpen, onClose, onSubmit }) => {
                                 design: 'text',
                                 marginTop: 12,
                                 width: '100%',
-                            }}>
+                            }}
+                            onClick={() => setContinueAfterSubmit(true)}>
                             Add speaker & continue
                         </OFButton>
                     </Form>
