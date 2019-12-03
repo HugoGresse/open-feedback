@@ -41,7 +41,6 @@ const speakerReducer = (state = initState, { payload, type }) => {
             }
         case SELECT_PROJECT:
             return initState
-
         case ADD_SPEAKER_SUCCESS:
         case EDIT_SPEAKER_SUCCESS:
             return {
