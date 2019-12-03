@@ -49,6 +49,10 @@ class JsonUrlApi {
     getSpeakers() {
         return this.getJsonData().then(data => data.speakers)
     }
+
+    isReadOnly() {
+        return true
+    }
 }
 
 export default JsonUrlApi

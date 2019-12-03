@@ -87,6 +87,10 @@ class Hoverboardv2Api {
                 return speakers
             })
     }
+
+    isReadOnly() {
+        return true
+    }
 }
 
 export default Hoverboardv2Api

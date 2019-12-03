@@ -19,7 +19,7 @@ const schema = object().shape({
         .trim(),
 })
 
-const SpeakerAddEditPanel = ({ isOpen, onClose, onSubmit }) => {
+const SpeakerAddEditPanel = ({ isOpen, speaker, onClose, onSubmit }) => {
     const [shouldContinueAfterSubmit, setContinueAfterSubmit] = useState(false)
 
     return (
@@ -29,11 +29,13 @@ const SpeakerAddEditPanel = ({ isOpen, onClose, onSubmit }) => {
             title="Add a new speaker to the event">
             <Formik
                 validationSchema={schema}
-                initialValues={{
-                    name: '',
-                    photoUrl: '',
-                    socialProfil: '',
-                }}
+                initialValues={
+                    speaker || {
+                        name: '',
+                        photoUrl: '',
+                        socialProfil: '',
+                    }
+                }
                 onSubmit={(values, { resetForm }) => {
                     if (shouldContinueAfterSubmit) {
                         resetForm()
@@ -70,20 +72,22 @@ const SpeakerAddEditPanel = ({ isOpen, onClose, onSubmit }) => {
                                 width: '100%',
                             }}
                             onClick={() => setContinueAfterSubmit(false)}>
-                            Add speaker
+                            {speaker ? 'Save' : 'Add speaker'}
                         </OFButton>
-                        <OFButton
-                            disabled={isSubmitting}
-                            type="submit"
-                            variant="outlined"
-                            style={{
-                                design: 'text',
-                                marginTop: 12,
-                                width: '100%',
-                            }}
-                            onClick={() => setContinueAfterSubmit(true)}>
-                            Add speaker & continue
-                        </OFButton>
+                        {!speaker && (
+                            <OFButton
+                                disabled={isSubmitting}
+                                type="submit"
+                                variant="outlined"
+                                style={{
+                                    design: 'text',
+                                    marginTop: 12,
+                                    width: '100%',
+                                }}
+                                onClick={() => setContinueAfterSubmit(true)}>
+                                Add speaker & continue
+                            </OFButton>
+                        )}
                     </Form>
                 )}
             </Formik>

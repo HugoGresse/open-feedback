@@ -51,14 +51,20 @@ const speakerReducer = (state = initState, { payload, type }) => {
                     [payload.id]: payload,
                 },
             }
-        case REMOVE_SPEAKER_SUCCESS:
+        case REMOVE_SPEAKER_SUCCESS: {
+            const {
+                // eslint-disable-next-line no-unused-vars
+                [payload.id]: value,
+                ...list
+            } = state.list
+
             return {
                 ...state,
                 list: {
-                    [payload.id]: 'removed',
-                    ...state.list,
+                    ...list,
                 },
             }
+        }
         case ADD_SPEAKER_ERROR:
         case EDIT_SPEAKER_ERROR:
         case REMOVE_SPEAKER_ERROR:

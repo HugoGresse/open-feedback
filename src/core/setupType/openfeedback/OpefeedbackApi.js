@@ -96,6 +96,10 @@ class OpenfeedbackApi {
                 { merge: true }
             )
     }
+
+    isReadOnly() {
+        return false
+    }
 }
 
 export default OpenfeedbackApi

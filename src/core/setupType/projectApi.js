@@ -43,6 +43,9 @@ const notImplementApi = {
     editSpeaker(speaker) {
         logProjectNotInitialized()
     },
+    isReadOnly() {
+        logProjectNotInitialized()
+    },
 }
 
 export let projectApi = notImplementApi
