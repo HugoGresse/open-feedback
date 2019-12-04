@@ -28,7 +28,9 @@ const TalkListItem = ({ item, speakers, onEdit, onRemove }) => {
                 <b>{item.title}</b>
             </Grid>
             <Grid item xs={12} sm={3} lg={2} className={classes.cell}>
-                {speakers.map(speaker => speaker && speaker.name + ' \n')}
+                {speakers.map(speaker => (
+                    <div key={speaker.id}>{speaker && speaker.name}</div>
+                ))}
             </Grid>
             <Grid item xs={12} sm={3} lg={2} className={classes.cell}>
                 {item.trackTitle}

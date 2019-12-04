@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { isEmpty } from 'lodash'
 import TalkListItem from './TalkListItem'
 import {
     getFilteredSessionsSelector,
@@ -23,6 +24,7 @@ import { projectApi } from '../../../core/setupType/projectApi'
 import { addNotification } from '../../notification/notifcationActions'
 import TalkAddEditPanel from './TalkAddEditPanel'
 import moment from 'moment'
+import { addSpeaker } from '../../../core/speakers/speakerActions'
 
 const TalkList = () => {
     const dispatch = useDispatch()
@@ -54,15 +56,18 @@ const TalkList = () => {
         setSidePanelOpen(true)
     }
 
-    const onEditTalkClicked = speaker => {
+    const onEditTalkClicked = talk => {
         if (talkNotReadableCheck()) return
-        setEditTalk(speaker)
+        setEditTalk({
+            ...talk,
+            speakers: talk ? talk.speakers.map(id => speakersMap[id]) : [],
+        })
         setSidePanelOpen(true)
     }
 
-    const onRemoveTalkClicked = speaker => {
+    const onRemoveTalkClicked = talk => {
         if (talkNotReadableCheck()) return
-        dispatch(removeTalk(speaker))
+        dispatch(removeTalk(talk))
     }
 
     const maybeCloseSidePanel = shouldContinueAfterSubmit => {
@@ -73,10 +78,11 @@ const TalkList = () => {
         setEditTalk(null)
     }
 
-    const removeMomentFromSpeaker = speaker => ({
-        ...speaker,
-        startTime: moment(speaker.startTime).toISOString(),
-        endTime: moment(speaker.endTime).toISOString(),
+    const reformatTalk = talk => ({
+        ...talk,
+        startTime: moment(talk.startTime).toISOString(),
+        endTime: moment(talk.endTime).toISOString(),
+        speakers: talk.speakers.map(speaker => speaker.id),
     })
 
     return (
@@ -96,14 +102,15 @@ const TalkList = () => {
                 existingTracks={tracks}
                 existingSpeakers={speakersArray}
                 onClose={() => maybeCloseSidePanel()}
-                onSubmit={(speaker, shouldContinueAfterSubmit) => {
-                    const fixedSpeaker = removeMomentFromSpeaker(speaker)
+                onSpeakerAdd={speaker => dispatch(addSpeaker(speaker))}
+                onSubmit={(talk, shouldContinueAfterSubmit) => {
+                    const fixedTalk = reformatTalk(talk)
                     if (editingTalk) {
-                        return dispatch(editTalk(fixedSpeaker)).then(() =>
+                        return dispatch(editTalk(fixedTalk)).then(() =>
                             maybeCloseSidePanel(shouldContinueAfterSubmit)
                         )
                     }
-                    return dispatch(addTalk(fixedSpeaker)).then(() =>
+                    return dispatch(addTalk(fixedTalk)).then(() =>
                         maybeCloseSidePanel(shouldContinueAfterSubmit)
                     )
                 }}
@@ -113,7 +120,11 @@ const TalkList = () => {
                 <TalkListItem
                     item={talk}
                     key={talk.id}
-                    speakers={talk.speakers.map(id => speakersMap[id])}
+                    speakers={
+                        isEmpty(speakersMap)
+                            ? []
+                            : talk.speakers.map(id => speakersMap[id])
+                    }
                     onEdit={onEditTalkClicked}
                     onRemove={onRemoveTalkClicked}
                 />

@@ -40,13 +40,15 @@ export const addSpeaker = speaker => dispatch => {
     return projectApi
         .addSpeaker(speaker)
         .then(id => {
+            const newSpeaker = {
+                ...speaker,
+                id,
+            }
             dispatch({
                 type: ADD_SPEAKER_SUCCESS,
-                payload: {
-                    ...speaker,
-                    id,
-                },
+                payload: newSpeaker,
             })
+            return newSpeaker
         })
         .catch(error => {
             dispatch({

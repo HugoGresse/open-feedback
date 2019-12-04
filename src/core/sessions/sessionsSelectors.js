@@ -121,28 +121,31 @@ export const getCurrentSessionsGroupByTrackSelector = createSelector(
 export const getTracksSelector = createSelector(
     getSessionsAsArraySelector,
     talks => {
-        return talks
-            .map(talk => talk.trackTitle)
-            .filter(track => !!track)
-            .sort()
+        return [
+            ...new Set(
+                talks.map(talk => talk.trackTitle).filter(track => !!track)
+            ),
+        ].sort()
     }
 )
 
 export const getTagsSelector = createSelector(
     getSessionsAsArraySelector,
     talks => {
-        return talks
-            .reduce((acc, talk) => {
-                if (!talk.tags) {
-                    return acc
-                }
-                talk.tags.forEach(tag => {
-                    if (!acc.includes(tag)) {
-                        acc.push(tag)
+        return [
+            ...new Set(
+                talks.reduce((acc, talk) => {
+                    if (!talk.tags) {
+                        return acc
                     }
-                })
-                return acc
-            }, [])
-            .sort()
+                    talk.tags.forEach(tag => {
+                        if (!acc.includes(tag)) {
+                            acc.push(tag)
+                        }
+                    })
+                    return acc
+                }, [])
+            ),
+        ].sort()
     }
 )
