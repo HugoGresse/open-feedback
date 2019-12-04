@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik'
 import { object, string } from 'yup'
 import SidePanelLayout from '../../baseComponents/layouts/SidePanelLayout'
 import OFButton from '../../baseComponents/OFButton'
-import OFFormControlInputFormiked from '../../baseComponents/OFFormControlInputFormiked'
+import OFFormControlInputFormiked from '../../baseComponents/form/OFFormControlInputFormiked'
 
 const schema = object().shape({
     name: string()
