@@ -122,12 +122,8 @@ export const getTracksSelector = createSelector(
     getSessionsAsArraySelector,
     talks => {
         return talks
-            .reduce((acc, talk) => {
-                if (!acc.includes(talk)) {
-                    acc.push(talk)
-                }
-                return acc
-            }, [])
+            .map(talk => talk.trackTitle)
+            .filter(track => !!track)
             .sort()
     }
 )

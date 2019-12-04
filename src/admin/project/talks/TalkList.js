@@ -4,9 +4,14 @@ import TalkListItem from './TalkListItem'
 import {
     getFilteredSessionsSelector,
     getSessionsFilterSelector,
+    getTagsSelector,
+    getTracksSelector,
 } from '../../../core/sessions/sessionsSelectors'
 import { setTalksFilter } from '../../../core/sessions/sessionsActions'
-import { getSpeakersListSelector } from '../../../core/speakers/speakerSelectors'
+import {
+    getSpeakersAsArraySelector,
+    getSpeakersListSelector,
+} from '../../../core/speakers/speakerSelectors'
 import Grid from '@material-ui/core/Grid'
 import OFListHeader from '../../baseComponents/layouts/OFListHeader'
 import {
@@ -22,8 +27,11 @@ import moment from 'moment'
 const TalkList = () => {
     const dispatch = useDispatch()
     const talks = useSelector(getFilteredSessionsSelector)
-    const speakers = useSelector(getSpeakersListSelector)
+    const speakersMap = useSelector(getSpeakersListSelector)
+    const speakersArray = useSelector(getSpeakersAsArraySelector)
     const filter = useSelector(getSessionsFilterSelector)
+    const tags = useSelector(getTagsSelector)
+    const tracks = useSelector(getTracksSelector)
     const [sidePanelOpen, setSidePanelOpen] = useState(true)
     const [editingTalk, setEditTalk] = useState(null)
 
@@ -84,6 +92,9 @@ const TalkList = () => {
             <TalkAddEditPanel
                 isOpen={sidePanelOpen}
                 talk={editingTalk}
+                existingTags={tags}
+                existingTracks={tracks}
+                existingSpeakers={speakersArray}
                 onClose={() => maybeCloseSidePanel()}
                 onSubmit={(speaker, shouldContinueAfterSubmit) => {
                     const fixedSpeaker = removeMomentFromSpeaker(speaker)
@@ -102,7 +113,7 @@ const TalkList = () => {
                 <TalkListItem
                     item={talk}
                     key={talk.id}
-                    speakers={talk.speakers.map(id => speakers[id])}
+                    speakers={talk.speakers.map(id => speakersMap[id])}
                     onEdit={onEditTalkClicked}
                     onRemove={onRemoveTalkClicked}
                 />
