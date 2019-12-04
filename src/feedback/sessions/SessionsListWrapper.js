@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getSessions } from '../../core/sessions/sessionsActions'
+import { getTalks } from '../../core/sessions/sessionsActions'
 import { setSelectedSession } from '../session/core/sessionActions'
 import * as speakerActions from '../../core/speakers/speakerActions'
 import { setSelectedDate } from './../project/projectActions'
@@ -9,7 +9,7 @@ import { getVotesBySessionSelector } from '../vote/voteSelectors'
 import {
     getCurrentSessionsGroupByTrackSelector,
     getSessionsLoadError,
-    isSessionsLoadingSelector
+    isSessionsLoadingSelector,
 } from '../../core/sessions/sessionsSelectors'
 import Error from '../../baseComponents/customComponent/Error'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
@@ -37,7 +37,7 @@ class SessionsListWrapper extends Component {
         const {
             errorSessionsLoad,
             currentSessionsByTrack,
-            sessionIsLoading
+            sessionIsLoading,
         } = this.props
 
         if (errorSessionsLoad) {
@@ -74,20 +74,17 @@ const mapStateToProps = state => ({
     userSessionVote: getVotesBySessionSelector(state),
     errorSessionsLoad: getSessionsLoadError(state),
     currentSessionsByTrack: getCurrentSessionsGroupByTrackSelector(state),
-    sessionIsLoading: isSessionsLoadingSelector(state)
+    sessionIsLoading: isSessionsLoadingSelector(state),
 })
 
 const mapDispatchToProps = Object.assign(
     {},
     {
-        getSessions: getSessions,
+        getSessions: getTalks,
         setSelectedSession: setSelectedSession,
         getSpeakers: speakerActions.getSpeakers,
-        setSelectedDate: setSelectedDate
+        setSelectedDate: setSelectedDate,
     }
 )
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(SessionsListWrapper)
+export default connect(mapStateToProps, mapDispatchToProps)(SessionsListWrapper)

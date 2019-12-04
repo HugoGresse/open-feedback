@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 import SearchIcon from '@material-ui/icons/Search'
-import {setSessionsFilter} from '../../core/sessions/sessionsActions'
-import {COLORS} from '../../constants/colors'
-import {SCREEN_SIZES} from '../../constants/constants'
+import { setTalksFilter } from '../../core/sessions/sessionsActions'
+import { COLORS } from '../../constants/colors'
+import { SCREEN_SIZES } from '../../constants/constants'
 import BigInput from '../../baseComponents/design/BigInput'
 import Box from '../../baseComponents/design/Box'
-import {useDispatch} from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 const SearchBarStyled = styled(Box)`
     margin-top: 10px;
@@ -31,8 +31,10 @@ const SearchBar = () => {
         <SearchBarStyled>
             <div className="wrapper">
                 <BigInput
-                    onChange={event => dispatch(setSessionsFilter(event.target.value))}
-                    icon={<SearchIcon/>}
+                    onChange={event =>
+                        dispatch(setTalksFilter(event.target.value))
+                    }
+                    icon={<SearchIcon />}
                     className="search"
                     placeholder="Search speakers, talks, tags,..."
                 />

@@ -2,9 +2,9 @@ import React from 'react'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
 import IconButton from '@material-ui/core/IconButton'
-import { getDateFromStartTime } from "../../../core/sessions/sessionsUtils"
-import Grid from "@material-ui/core/Grid"
-import makeStyles from "@material-ui/core/styles/makeStyles"
+import { getDateFromStartTime } from '../../../core/sessions/sessionsUtils'
+import Grid from '@material-ui/core/Grid'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import OFListItem from '../../baseComponents/layouts/OFListItem'
 
 const useStyles = makeStyles(theme => ({
@@ -15,19 +15,15 @@ const useStyles = makeStyles(theme => ({
         },
     },
     buttonCell: {
-        textAlign: 'right'
-    }
+        textAlign: 'right',
+    },
 }))
 
-
-const TalkListItem = ({item, speakers}) => {
+const TalkListItem = ({ item, speakers, onEdit, onRemove }) => {
     const classes = useStyles()
 
-    const onButtonClick = () => {
-        alert('Talks are read only here. You can probably update them through your Hoverboard Firestore or json url ' +
-            'depending on your setup.')
-    }
-    return <OFListItem>
+    return (
+        <OFListItem>
             <Grid item xs={12} sm={4} lg={6} className={classes.cell}>
                 <b>{item.title}</b>
             </Grid>
@@ -36,19 +32,20 @@ const TalkListItem = ({item, speakers}) => {
             </Grid>
             <Grid item xs={12} sm={3} lg={2} className={classes.cell}>
                 {item.trackTitle}
-                <br/>
+                <br />
                 {getDateFromStartTime(item.startTime)}
             </Grid>
             <Grid item xs={12} sm={2} lg={2} className={classes.buttonCell}>
-                <IconButton aria-label="edit" onClick={() => onButtonClick()}>
-                    <EditIcon/>
+                <IconButton aria-label="edit" onClick={() => onEdit(item)}>
+                    <EditIcon />
                 </IconButton>
 
-                <IconButton aria-label="delete" onClick={() => onButtonClick()}>
-                    <DeleteIcon/>
+                <IconButton aria-label="delete" onClick={() => onRemove(item)}>
+                    <DeleteIcon />
                 </IconButton>
             </Grid>
         </OFListItem>
+    )
 }
 
 export default TalkListItem

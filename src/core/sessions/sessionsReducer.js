@@ -1,18 +1,25 @@
 import {
-    CLEAR_SESSIONS,
+    ADD_SESSION_SUCCESS,
+    EDIT_SESSION_SUCCESS,
     GET_SESSIONS_ERROR,
     GET_SESSIONS_LOADING,
     GET_SESSIONS_SUCCESS,
-    SET_SESSIONS_FILTER
+    REMOVE_SESSION_SUCCESS,
+    SET_SESSIONS_FILTER,
 } from './sessionsActionTypes'
 import { GET_SESSION_SUCCESS } from '../../feedback/session/core/sessionActionTypes'
+import {
+    ADD_SPEAKER_ERROR,
+    EDIT_SPEAKER_ERROR,
+    REMOVE_SPEAKER_ERROR,
+} from '../speakers/speakerActionTypes'
 
 const initState = {
     list: {},
     filter: null,
     errorSessionsLoad: null,
     loading: false,
-    loaded: false
+    loaded: false,
 }
 
 const sessionsReducer = (state = initState, { payload, type }) => {
@@ -22,34 +29,62 @@ const sessionsReducer = (state = initState, { payload, type }) => {
                 ...state,
                 list: {
                     ...state.list,
-                    ...payload
-                }
+                    ...payload,
+                },
             }
         case GET_SESSIONS_LOADING:
             return {
                 ...state,
-                loading: true
+                loading: true,
             }
         case GET_SESSIONS_SUCCESS:
             return {
                 ...state,
                 list: payload,
                 loading: false,
-                loaded: true
+                loaded: true,
             }
         case SET_SESSIONS_FILTER:
             return {
                 ...state,
-                filter: payload
+                filter: payload,
             }
-        case GET_SESSIONS_ERROR:
-            console.error(payload)
+        case ADD_SESSION_SUCCESS:
+        case EDIT_SESSION_SUCCESS:
             return {
                 ...state,
-                errorSessionsLoad: payload
+                list: {
+                    ...state.list,
+                    [payload.id]: payload,
+                },
             }
-        case CLEAR_SESSIONS:
-            return initState
+        case REMOVE_SESSION_SUCCESS: {
+            const {
+                // eslint-disable-next-line no-unused-vars
+                [payload.id]: value,
+                ...list
+            } = state.list
+
+            return {
+                ...state,
+                list: {
+                    ...list,
+                },
+            }
+        }
+        case ADD_SPEAKER_ERROR:
+        case EDIT_SPEAKER_ERROR:
+        case REMOVE_SPEAKER_ERROR:
+            // eslint-disable-next-line no-console
+            console.error(type, payload)
+            return state
+        case GET_SESSIONS_ERROR:
+            // eslint-disable-next-line no-console
+            console.error(type, payload)
+            return {
+                ...state,
+                errorSessionsLoad: payload,
+            }
         default:
             return state
     }
