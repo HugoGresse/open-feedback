@@ -23,8 +23,10 @@ class OpenfeedbackApi {
             .doc(sessionId)
             .get()
             .then(talkDoc => ({
-                id: talkDoc.id,
-                ...talkDoc.data(),
+                [talkDoc.id]: {
+                    id: talkDoc.id,
+                    ...talkDoc.data(),
+                },
             }))
     }
 
