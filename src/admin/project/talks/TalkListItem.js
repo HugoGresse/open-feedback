@@ -20,9 +20,6 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-// TODO :
-// 3. dashboard and other pages
-// 4. responsive on talk list
 const TalkListItem = ({ item, speakers, onEdit, onRemove }) => {
     const classes = useStyles()
 
