@@ -8,17 +8,23 @@ import {
     GET_PROJECTS_ERROR,
     GET_PROJECTS_SUCCESS,
     INIT_PROJECTAPI,
-    SELECT_PROJECT
+    SELECT_PROJECT,
 } from './projectActionTypes'
-import {deleteField, fireStoreMainInstance, serverTimestamp} from '../../../firebase'
-import {getUserSelector} from '../../auth/authSelectors'
-import {getSelectedProjectIdSelector, getSelectedProjectSelector} from './projectSelectors'
-import {ADD_NOTIFICATION} from '../../notification/notificationActionTypes'
-import {CLEAR_SESSIONS} from '../../../core/sessions/sessionsActionTypes'
-import {CLEAR_SESSION_VOTES} from '../dashboard/dashboardActionTypes'
-import {history} from '../../../App'
-import {initProjectApi} from "../../../core/setupType/projectApi"
-import {newRandomHexColor} from '../../../utils/colorsUtils'
+import {
+    deleteField,
+    fireStoreMainInstance,
+    serverTimestamp,
+} from '../../../firebase'
+import { getUserSelector } from '../../auth/authSelectors'
+import {
+    getSelectedProjectIdSelector,
+    getSelectedProjectSelector,
+} from './projectSelectors'
+import { ADD_NOTIFICATION } from '../../notification/notificationActionTypes'
+import { CLEAR_SESSION_VOTES } from '../dashboard/dashboardActionTypes'
+import { history } from '../../../App'
+import { initProjectApi } from '../../../core/setupType/projectApi'
+import { newRandomHexColor } from '../../../utils/colorsUtils'
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -31,25 +37,27 @@ export const getProjects = () => {
                 projectsSnapshot.forEach(doc => {
                     projects.push({
                         id: doc.id,
-                        ...doc.data()
+                        ...doc.data(),
                     })
                 })
 
                 dispatch({
                     type: GET_PROJECTS_SUCCESS,
-                    payload: projects
+                    payload: projects,
                 })
             })
             .then(() => {
-                dispatch(initProjectApiIfReady(
-                    getSelectedProjectIdSelector(getState()),
-                    getSelectedProjectSelector(getState()))
+                dispatch(
+                    initProjectApiIfReady(
+                        getSelectedProjectIdSelector(getState()),
+                        getSelectedProjectSelector(getState())
+                    )
                 )
             })
             .catch(err => {
                 dispatch({
                     type: GET_PROJECTS_ERROR,
-                    payload: err.toString()
+                    payload: err.toString(),
                 })
             })
     }
@@ -66,14 +74,14 @@ export const getProject = () => {
                     type: GET_PROJECT_SUCCESS,
                     payload: {
                         id: doc.id,
-                        ...doc.data()
-                    }
+                        ...doc.data(),
+                    },
                 })
             })
             .catch(err => {
                 dispatch({
                     type: GET_PROJECT_ERROR,
-                    payload: err.toString()
+                    payload: err.toString(),
                 })
             })
     }
@@ -88,18 +96,16 @@ export const selectProject = projectId => (dispatch, getState) => {
 
     dispatch({
         type: CLEAR_SESSION_VOTES,
-        payload: projectId
-    })
-    dispatch({
-        type: CLEAR_SESSIONS,
-        payload: projectId
+        payload: projectId,
     })
     dispatch({
         type: SELECT_PROJECT,
-        payload: projectId
+        payload: projectId,
     })
 
-    dispatch(initProjectApiIfReady(projectId, getSelectedProjectSelector(getState())))
+    dispatch(
+        initProjectApiIfReady(projectId, getSelectedProjectSelector(getState()))
+    )
 
     // If we have switch the project at runtime
     if (
@@ -123,7 +129,10 @@ export const selectProject = projectId => (dispatch, getState) => {
 }
 
 export const editProject = projectData => (dispatch, getState) => {
-    if (!projectData.restrictVoteRange && projectData.restrictVoteRange !== undefined) {
+    if (
+        !projectData.restrictVoteRange &&
+        projectData.restrictVoteRange !== undefined
+    ) {
         projectData.voteStartTime = deleteField()
         projectData.voteEndTime = deleteField()
     }
@@ -132,19 +141,19 @@ export const editProject = projectData => (dispatch, getState) => {
     return fireStoreMainInstance
         .collection('projects')
         .doc(getSelectedProjectIdSelector(getState()))
-        .set(projectData, {merge: true})
+        .set(projectData, { merge: true })
         .then(() => {
             dispatch({
                 type: ADD_NOTIFICATION,
                 payload: {
                     type: 'success',
-                    message: 'Event saved'
-                }
+                    message: 'Event saved',
+                },
             })
 
             dispatch({
                 type: EDIT_PROJECT_SUCCESS,
-                payload: projectData
+                payload: projectData,
             })
         })
         .catch(err => {
@@ -152,13 +161,13 @@ export const editProject = projectData => (dispatch, getState) => {
                 type: ADD_NOTIFICATION,
                 payload: {
                     type: 'error',
-                    message: 'Failed to save the event'
-                }
+                    message: 'Failed to save the event',
+                },
             })
 
             dispatch({
                 type: EDIT_PROJECT_ERROR,
-                payload: err.toString()
+                payload: err.toString(),
             })
         })
 }
@@ -177,12 +186,12 @@ export const newProject = projectData => (dispatch, getState) => {
                 type: ADD_NOTIFICATION,
                 payload: {
                     type: 'success',
-                    message: 'New event created! Redirecting you now...'
-                }
+                    message: 'New event created! Redirecting you now...',
+                },
             })
             dispatch({
                 type: ADD_PROJECT_SUCCESS,
-                payload: docRef.id
+                payload: docRef.id,
             })
             return docRef.id
         })
@@ -191,22 +200,21 @@ export const newProject = projectData => (dispatch, getState) => {
                 type: ADD_NOTIFICATION,
                 payload: {
                     type: 'error',
-                    message: 'Fail to create a new event, ' + err.toString()
-                }
+                    message: 'Fail to create a new event, ' + err.toString(),
+                },
             })
             dispatch({
                 type: ADD_PROJECT_ERROR,
-                payload: err.toString()
+                payload: err.toString(),
             })
         })
 }
-
 
 export const initProjectApiIfReady = (projectId, project) => dispatch => {
     if (projectId && project) {
         initProjectApi(project.setupType, project)
         dispatch({
-            type: INIT_PROJECTAPI
+            type: INIT_PROJECTAPI,
         })
     }
 }

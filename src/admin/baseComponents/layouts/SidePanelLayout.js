@@ -1,20 +1,46 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
-import Box  from '@material-ui/core/Box'
+import Box from '@material-ui/core/Box'
 import CloseIcon from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
+import Drawer from '@material-ui/core/Drawer'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
-const SidePanelLayout = ({title, onClose, children}) => {
+const useStyles = makeStyles(theme => ({
+    paper: {
+        maxWidth: 300,
+        padding: 36,
+        [theme.breakpoints.down('xs')]: {
+            padding: 18,
+            width: 'calc(100% - 36px)',
+        },
+    },
+}))
 
-    return <Box margin={1}>
-        <Box textAlign="right" marginBottom={2}>
-            <IconButton aria-label="Close the side panel" onClick={onClose}>
-                <CloseIcon/>
-            </IconButton>
-        </Box>
-        <Typography variant="h6">{title}</Typography>
-        {children}
-    </Box>
+const SidePanelLayout = ({ title, isOpen, onClose, children }) => {
+    const classes = useStyles()
+
+    return (
+        <Drawer
+            anchor="right"
+            classes={{
+                paper: classes.paper,
+            }}
+            open={isOpen}
+            onClose={onClose}>
+            <Box margin={1}>
+                <Box textAlign="right" marginBottom={2}>
+                    <IconButton
+                        aria-label="Close the side panel"
+                        onClick={onClose}>
+                        <CloseIcon />
+                    </IconButton>
+                </Box>
+                <Typography variant="h6">{title}</Typography>
+                {children}
+            </Box>
+        </Drawer>
+    )
 }
 
 export default SidePanelLayout

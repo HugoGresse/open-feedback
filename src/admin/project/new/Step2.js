@@ -4,17 +4,18 @@ import { object, string } from 'yup'
 import { Typography } from '@material-ui/core'
 import { Field, Form, Formik } from 'formik'
 import OFButton from '../../baseComponents/OFButton'
-import RadioButtonGroup from '../../baseComponents/RadioButtonGroup'
-import OFRadioButtonFormiked from '../../baseComponents/OFRadioButtonFormiked'
+import RadioButtonGroup from '../../baseComponents/form/RadioButtonGroup'
+import OFRadioButtonFormiked from '../../baseComponents/form/OFRadioButtonFormiked'
 import {
     PROJECT_TYPE_HOVERBOARDV2,
-    PROJECT_TYPE_JSONURL
+    PROJECT_TYPE_JSONURL,
 } from '../../../core/setupType/projectApi'
 import Box from '@material-ui/core/Box'
 
 const schema = object().shape({
-    projectType: string().required('You need to choose how you want to setup the project.'
-    )
+    projectType: string().required(
+        'You need to choose how you want to setup the project.'
+    ),
 })
 
 const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
@@ -22,13 +23,11 @@ const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
         <NewProjectLayout
             stepTitle="Create a new event (step 2/3)"
             title="How do you want to load your data?"
-            onCancel={onCancel}
-        >
+            onCancel={onCancel}>
             <Formik
                 validationSchema={schema}
                 initialValues={initialValues}
-                onSubmit={values => onSubmit(values.projectType)}
-            >
+                onSubmit={values => onSubmit(values.projectType)}>
                 {({ isSubmitting }) => (
                     <Form method="POST">
                         <RadioButtonGroup fieldName="projectType">
@@ -104,17 +103,15 @@ const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
                                 style={{
                                     type: 'big',
                                     design: 'text',
-                                    marginTop: 64
-                                }}
-                            >
+                                    marginTop: 64,
+                                }}>
                                 Back
                             </OFButton>
 
                             <OFButton
                                 disabled={isSubmitting}
                                 type="submit"
-                                style={{ type: 'big', marginTop: 64 }}
-                            >
+                                style={{ type: 'big', marginTop: 64 }}>
                                 Continue
                             </OFButton>
                         </Box>

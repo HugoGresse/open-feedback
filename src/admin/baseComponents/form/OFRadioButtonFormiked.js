@@ -5,11 +5,11 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 
 const useStyles = makeStyles(() => ({
     root: {
-        alignItems: 'start'
+        alignItems: 'start',
     },
     label: {
-        padding: 4
-    }
+        padding: 4,
+    },
 }))
 
 const OFRadioButtonFormiked = ({
@@ -32,7 +32,7 @@ const OFRadioButtonFormiked = ({
             label={label}
             classes={{
                 root: classes.root,
-                label: classes.label
+                label: classes.label,
             }}
             {...props}
         />
