@@ -15,7 +15,7 @@ const schema = object().shape({
         .required('The speaker photo url is required.'),
     socialProfil: string()
         .notRequired()
-        .url('The photo url is not a valid url.')
+        .url('The social url is not a valid url.')
         .trim(),
 })
 
