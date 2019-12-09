@@ -59,9 +59,7 @@ const speakerReducer = (state = initState, { payload, type }) => {
 
             return {
                 ...state,
-                list: {
-                    ...list,
-                },
+                list,
             }
         }
         case ADD_SPEAKER_ERROR:

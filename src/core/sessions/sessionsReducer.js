@@ -1,18 +1,16 @@
 import {
+    ADD_SESSION_ERROR,
     ADD_SESSION_SUCCESS,
+    EDIT_SESSION_ERROR,
     EDIT_SESSION_SUCCESS,
     GET_SESSIONS_ERROR,
     GET_SESSIONS_LOADING,
     GET_SESSIONS_SUCCESS,
+    REMOVE_SESSION_ERROR,
     REMOVE_SESSION_SUCCESS,
     SET_SESSIONS_FILTER,
 } from './sessionsActionTypes'
 import { GET_SESSION_SUCCESS } from '../../feedback/session/core/sessionActionTypes'
-import {
-    ADD_SPEAKER_ERROR,
-    EDIT_SPEAKER_ERROR,
-    REMOVE_SPEAKER_ERROR,
-} from '../speakers/speakerActionTypes'
 
 const initState = {
     list: {},
@@ -67,14 +65,12 @@ const sessionsReducer = (state = initState, { payload, type }) => {
 
             return {
                 ...state,
-                list: {
-                    ...list,
-                },
+                list,
             }
         }
-        case ADD_SPEAKER_ERROR:
-        case EDIT_SPEAKER_ERROR:
-        case REMOVE_SPEAKER_ERROR:
+        case ADD_SESSION_ERROR:
+        case EDIT_SESSION_ERROR:
+        case REMOVE_SESSION_ERROR:
             // eslint-disable-next-line no-console
             console.error(type, payload)
             return state
