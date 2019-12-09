@@ -6,6 +6,7 @@ import { getDateFromStartTime } from '../../../core/sessions/sessionsUtils'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import OFListItem from '../../baseComponents/layouts/OFListItem'
+import TalkListItemSpeakerList from './TalkListItemSpeakerList'
 
 const useStyles = makeStyles(theme => ({
     cell: {
@@ -19,6 +20,9 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
+// TODO :
+// 3. dashboard and other pages
+// 4. responsive on talk list
 const TalkListItem = ({ item, speakers, onEdit, onRemove }) => {
     const classes = useStyles()
 
@@ -27,12 +31,13 @@ const TalkListItem = ({ item, speakers, onEdit, onRemove }) => {
             <Grid item xs={12} sm={4} lg={6} className={classes.cell}>
                 <b>{item.title}</b>
             </Grid>
-            <Grid item xs={12} sm={3} lg={2} className={classes.cell}>
-                {speakers.map(speaker => (
-                    <div key={speaker.id}>{speaker && speaker.name}</div>
-                ))}
+            <Grid item xs={12} sm={4} lg={2} className={classes.cell}>
+                <TalkListItemSpeakerList
+                    speakersIds={item.speakers}
+                    speakers={speakers}
+                />
             </Grid>
-            <Grid item xs={12} sm={3} lg={2} className={classes.cell}>
+            <Grid item xs={12} sm={2} lg={2} className={classes.cell}>
                 {item.trackTitle}
                 <br />
                 {getDateFromStartTime(item.startTime)}

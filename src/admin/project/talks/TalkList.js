@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { isEmpty } from 'lodash'
 import TalkListItem from './TalkListItem'
 import {
     getFilteredSessionsSelector,
@@ -34,7 +33,7 @@ const TalkList = () => {
     const filter = useSelector(getSessionsFilterSelector)
     const tags = useSelector(getTagsSelector)
     const tracks = useSelector(getTracksSelector)
-    const [sidePanelOpen, setSidePanelOpen] = useState(true)
+    const [sidePanelOpen, setSidePanelOpen] = useState(false)
     const [editingTalk, setEditTalk] = useState(null)
 
     const talkNotReadableCheck = () => {
@@ -60,7 +59,11 @@ const TalkList = () => {
         if (talkNotReadableCheck()) return
         setEditTalk({
             ...talk,
-            speakers: talk ? talk.speakers.map(id => speakersMap[id]) : [],
+            speakers: talk
+                ? talk.speakers.map(id =>
+                      speakersMap[id] ? speakersMap[id] : { id: id, name: id }
+                  )
+                : [],
         })
         setSidePanelOpen(true)
     }
@@ -120,11 +123,7 @@ const TalkList = () => {
                 <TalkListItem
                     item={talk}
                     key={talk.id}
-                    speakers={
-                        isEmpty(speakersMap)
-                            ? []
-                            : talk.speakers.map(id => speakersMap[id])
-                    }
+                    speakers={speakersMap}
                     onEdit={onEditTalkClicked}
                     onRemove={onRemoveTalkClicked}
                 />
