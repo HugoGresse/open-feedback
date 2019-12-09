@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import { useEffect } from 'react'
 
 /**
  * From https://github.com/jaredpalmer/formik/issues/271#issuecomment-500217679
@@ -12,7 +12,7 @@ import {useEffect} from 'react'
  * </Formik>
  * @return {null}
  */
-export function FormikObserver({value, onChange}) {
+export function FormikObserver({ value, onChange }) {
     useEffect(() => {
         onChange(value)
         // eslint-disable-next-line

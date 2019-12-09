@@ -21,14 +21,8 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const SpeakerListItem = ({ speaker }) => {
+const SpeakerListItem = ({ speaker, onEdit, onRemove }) => {
     const classes = useStyles()
-    const onButtonClick = () => {
-        alert(
-            'Speakers are read only here. You can probably update them through your Hoverboard Firestore or json url ' +
-                'depending on your setup.'
-        )
-    }
 
     return (
         <OFListItem>
@@ -49,11 +43,13 @@ const SpeakerListItem = ({ speaker }) => {
                 </Typography>
             </Grid>
             <Grid item xs={12} sm={2} className={classes.buttonCell}>
-                <IconButton aria-label="edit" onClick={() => onButtonClick()}>
+                <IconButton aria-label="edit" onClick={() => onEdit(speaker)}>
                     <EditIcon />
                 </IconButton>
 
-                <IconButton aria-label="delete" onClick={() => onButtonClick()}>
+                <IconButton
+                    aria-label="delete"
+                    onClick={() => onRemove(speaker)}>
                     <DeleteIcon />
                 </IconButton>
             </Grid>

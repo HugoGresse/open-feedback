@@ -1,5 +1,11 @@
 export const GET_SESSIONS_SUCCESS = 'core/sessions/get/success'
 export const GET_SESSIONS_LOADING = 'core/sessions/get/loading'
 export const GET_SESSIONS_ERROR = 'core/sessions/get/error'
-export const CLEAR_SESSIONS = 'core/sessions/clear'
 export const SET_SESSIONS_FILTER = 'core/sessions/filter'
+
+export const ADD_SESSION_SUCCESS = 'core/session/add/success'
+export const ADD_SESSION_ERROR = 'core/session/add/error'
+export const EDIT_SESSION_SUCCESS = 'core/session/edit/success'
+export const EDIT_SESSION_ERROR = 'core/session/edit/error'
+export const REMOVE_SESSION_SUCCESS = 'core/session/remove/success'
+export const REMOVE_SESSION_ERROR = 'core/session/remove/error'

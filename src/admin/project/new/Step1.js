@@ -2,12 +2,12 @@ import React from 'react'
 import NewProjectLayout from './NewProjectLayout'
 import { object, string } from 'yup'
 import { Form, Formik } from 'formik'
-import OFFormControlInputFormiked from '../../baseComponents/OFFormControlInputFormiked'
+import OFFormControlInputFormiked from '../../baseComponents/form/OFFormControlInputFormiked'
 import OFButton from '../../baseComponents/OFButton'
 import Box from '@material-ui/core/Box'
 
 const schema = object().shape({
-    name: string().required('The event name is required')
+    name: string().required('The event name is required'),
 })
 
 const Step1 = ({ onCancel, onSubmit, initialValues }) => {
@@ -15,13 +15,11 @@ const Step1 = ({ onCancel, onSubmit, initialValues }) => {
         <NewProjectLayout
             stepTitle="Create a new event (step 1/3)"
             title="What's your event name?"
-            onCancel={onCancel}
-        >
+            onCancel={onCancel}>
             <Formik
                 validationSchema={schema}
                 initialValues={initialValues}
-                onSubmit={values => onSubmit(values.name)}
-            >
+                onSubmit={values => onSubmit(values.name)}>
                 {({ isSubmitting }) => (
                     <Form method="POST">
                         <OFFormControlInputFormiked
@@ -35,8 +33,7 @@ const Step1 = ({ onCancel, onSubmit, initialValues }) => {
                             <OFButton
                                 disabled={isSubmitting}
                                 type="submit"
-                                style={{ type: 'big', marginTop: 64 }}
-                            >
+                                style={{ type: 'big', marginTop: 64 }}>
                                 Continue
                             </OFButton>
                         </Box>

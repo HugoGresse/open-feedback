@@ -84,7 +84,9 @@ export const getFilteredSessionsSelector = createSelector(
 
             const tagMatch =
                 session.tags &&
-                session.tags.filter(tag => tag.toLowerCase().includes(cleanedFilterInput)).length > 0
+                session.tags.filter(tag =>
+                    tag.toLowerCase().includes(cleanedFilterInput)
+                ).length > 0
 
             return titleMatch || speakerMatch > 0 || tagMatch
         })
@@ -109,9 +111,41 @@ export const getCurrentSessionsGroupByTrackSelector = createSelector(
             .reduce((acc, track) => {
                 acc.push({
                     track: track,
-                    sessions: sessionsGroupByTrack[track]
+                    sessions: sessionsGroupByTrack[track],
                 })
                 return acc
             }, [])
+    }
+)
+
+export const getTracksSelector = createSelector(
+    getSessionsAsArraySelector,
+    talks => {
+        return [
+            ...new Set(
+                talks.map(talk => talk.trackTitle).filter(track => !!track)
+            ),
+        ].sort()
+    }
+)
+
+export const getTagsSelector = createSelector(
+    getSessionsAsArraySelector,
+    talks => {
+        return [
+            ...new Set(
+                talks.reduce((acc, talk) => {
+                    if (!talk.tags) {
+                        return acc
+                    }
+                    talk.tags.forEach(tag => {
+                        if (!acc.includes(tag)) {
+                            acc.push(tag)
+                        }
+                    })
+                    return acc
+                }, [])
+            ),
+        ].sort()
     }
 )

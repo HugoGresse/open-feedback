@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { fontSize, fontWeight, height, space, width } from 'styled-system'
-import { COLORS } from '../../constants/colors'
+import { COLORS } from '../../../constants/colors'
 
 const OFTextAreaWrapper = styled.div`
     ${width}
     ${height}
-    
+
     position: relative;
 `
 

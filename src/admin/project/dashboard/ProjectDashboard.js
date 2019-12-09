@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent'
 import { getSessionVotes, getUserVotes } from './dashboardActions'
-import { getSessions } from '../../../core/sessions/sessionsActions'
+import { getTalks } from '../../../core/sessions/sessionsActions'
 import { getProject } from '../../../feedback/project/projectActions'
 import { getProjectSelector } from '../../../feedback/project/projectSelectors'
 import { Grid } from '@material-ui/core'
@@ -52,7 +52,7 @@ class ProjectDashboard extends Component {
 const mapStateToProps = state => ({
     project: getProjectSelector(state),
     isSessionsLoaded: isSessionLoadedSelector(state),
-    selectedProjectId: getSelectedProjectIdSelector(state)
+    selectedProjectId: getSelectedProjectIdSelector(state),
 })
 
 const mapDispatchToProps = Object.assign(
@@ -61,7 +61,7 @@ const mapDispatchToProps = Object.assign(
         getProject: getProject,
         getSessionVotes: getSessionVotes,
         getUserVotes: getUserVotes,
-        getSessions: getSessions
+        getSessions: getTalks,
     }
 )
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectDashboard)
