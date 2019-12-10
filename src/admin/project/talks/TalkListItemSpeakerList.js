@@ -8,12 +8,6 @@ const useStyles = makeStyles(() => ({
     chip: {
         marginBottom: 4,
         maxWidth: '100%',
-        overflow: 'hidden',
-    },
-    label: {
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        display: 'block',
     },
 }))
 
@@ -26,10 +20,10 @@ const TalkListItemSpeakerList = ({ speakers, speakersIds }) => {
                 <Chip
                     classes={{
                         root: classes.chip,
-                        label: classes.label,
                     }}
                     key={speakerId}
                     label={speakers[speakerId].name}
+                    variant="outlined"
                     avatar={
                         <Avatar
                             alt={speakers[speakerId].name}

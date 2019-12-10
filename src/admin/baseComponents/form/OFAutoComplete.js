@@ -26,6 +26,11 @@ const OFAutoComplete = ({ field, form, dataArray, keyToDisplay, ...other }) => {
             onChange={(event, elements) =>
                 form.setFieldValue(field.name, elements, false)
             }
+            onInputChange={(event, value) => {
+                if (other.freeSolo && !other.multiple) {
+                    form.setFieldValue(field.name, value, false)
+                }
+            }}
             renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
                     <Tag
