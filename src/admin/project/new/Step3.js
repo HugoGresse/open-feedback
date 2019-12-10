@@ -3,11 +3,11 @@ import Step3Hoverboardv2 from './Step3Hoverboardv2'
 import Step3JSON from './Step3JSON'
 import {
     PROJECT_TYPE_HOVERBOARDV2,
-    PROJECT_TYPE_JSONURL
+    PROJECT_TYPE_JSONURL,
 } from '../../../core/setupType/projectApi'
 
 const stepTitle = 'Create a new event (step 3/3)'
-const submitText = 'Create the event'
+const submitText = 'Create event'
 const backText = 'Back'
 const rightColumnTitle = 'Validation'
 
@@ -26,7 +26,7 @@ const Step3 = ({ onCancel, onBack, onSubmit, projectType, initialValues }) => {
                         initialValues || {
                             projectId: '',
                             apiKey: '',
-                            databaseURL: ''
+                            databaseURL: '',
                         }
                     }
                 />
@@ -43,7 +43,7 @@ const Step3 = ({ onCancel, onBack, onSubmit, projectType, initialValues }) => {
                     rightColumnTitle={rightColumnTitle}
                     initialValues={
                         initialValues || {
-                            jsonUrl: ''
+                            jsonUrl: '',
                         }
                     }
                 />

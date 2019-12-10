@@ -9,6 +9,7 @@ import OFRadioButtonFormiked from '../../baseComponents/form/OFRadioButtonFormik
 import {
     PROJECT_TYPE_HOVERBOARDV2,
     PROJECT_TYPE_JSONURL,
+    PROJECT_TYPE_OPENFEEDBACK,
 } from '../../../core/setupType/projectApi'
 import Box from '@material-ui/core/Box'
 
@@ -28,9 +29,29 @@ const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
                 validationSchema={schema}
                 initialValues={initialValues}
                 onSubmit={values => onSubmit(values.projectType)}>
-                {({ isSubmitting }) => (
+                {({ isSubmitting, values }) => (
                     <Form method="POST">
                         <RadioButtonGroup fieldName="projectType">
+                            <Field
+                                component={OFRadioButtonFormiked}
+                                name="projectType"
+                                id={PROJECT_TYPE_OPENFEEDBACK}
+                                label={
+                                    <div>
+                                        <Typography variant="h6">
+                                            OpenFeedback Database
+                                        </Typography>
+                                        <Typography variant="subtitle1">
+                                            You can manually enter the
+                                            talks/speakers/schedule on
+                                            OpenFeedback. It will not be in sync
+                                            with another service if you are
+                                            using one. No additional
+                                            configuration is required.
+                                        </Typography>
+                                    </div>
+                                }
+                            />
                             <Field
                                 component={OFRadioButtonFormiked}
                                 name="projectType"
@@ -60,36 +81,14 @@ const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
                                             Link to JSON file
                                         </Typography>
                                         <Typography variant="subtitle1">
-                                            By providing a url to a .json file
-                                            that you’ll either host (on
+                                            By providing a url to a .json that
+                                            you’ll either host (on
                                             gist.github.com or another static
                                             server) or a dynamic answer from
                                             your own database/api. The json
                                             model will need to match
                                             OpenFeedback one, you’ll be able to
                                             check it on the next screen.
-                                        </Typography>
-                                    </div>
-                                }
-                            />
-                            <Field
-                                component={OFRadioButtonFormiked}
-                                name="projectType"
-                                id="openfeedback"
-                                disabled
-                                label={
-                                    <div>
-                                        <Typography variant="h6">
-                                            OpenFeedback Database (not available
-                                            yet)
-                                        </Typography>
-                                        <Typography variant="subtitle1">
-                                            You can manually enter the
-                                            talks/speakers/schedule on
-                                            OpenFeedback. It will not be in sync
-                                            with another service if you are
-                                            using one. No additional
-                                            configuration is required.
                                         </Typography>
                                     </div>
                                 }
@@ -112,7 +111,10 @@ const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
                                 disabled={isSubmitting}
                                 type="submit"
                                 style={{ type: 'big', marginTop: 64 }}>
-                                Continue
+                                {values.projectType ===
+                                PROJECT_TYPE_OPENFEEDBACK
+                                    ? 'Create event'
+                                    : 'Continue'}
                             </OFButton>
                         </Box>
                     </Form>
