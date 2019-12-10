@@ -23,6 +23,7 @@ const TalkListItemSpeakerList = ({ speakers, speakersIds }) => {
                     }}
                     key={speakerId}
                     label={speakers[speakerId].name}
+                    variant="outlined"
                     avatar={
                         <Avatar
                             alt={speakers[speakerId].name}

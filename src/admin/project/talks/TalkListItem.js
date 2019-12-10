@@ -1,12 +1,15 @@
 import React from 'react'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
+import RoomIcon from '@material-ui/icons/Room'
+import CalendarIcon from '@material-ui/icons/CalendarToday'
 import IconButton from '@material-ui/core/IconButton'
 import { getDateFromStartTime } from '../../../core/sessions/sessionsUtils'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import OFListItem from '../../baseComponents/layouts/OFListItem'
 import TalkListItemSpeakerList from './TalkListItemSpeakerList'
+import Chip from '@material-ui/core/Chip'
 
 const useStyles = makeStyles(theme => ({
     cell: {
@@ -35,9 +38,25 @@ const TalkListItem = ({ item, speakers, onEdit, onRemove }) => {
                 />
             </Grid>
             <Grid item xs={12} sm={2} lg={2} className={classes.cell}>
-                {item.trackTitle}
-                <br />
-                {getDateFromStartTime(item.startTime)}
+                {item.trackTitle && (
+                    <Chip
+                        icon={<RoomIcon />}
+                        size="small"
+                        label={item.trackTitle}
+                        style={{
+                            marginBottom: item.startTime ? 5 : 0,
+                            marginRight: 5,
+                        }}
+                        variant="outlined"
+                    />
+                )}
+                <Chip
+                    icon={<CalendarIcon />}
+                    size="small"
+                    label={getDateFromStartTime(item.startTime)}
+                    style={{ marginBottom: item.startTime ? 5 : 0 }}
+                    variant="outlined"
+                />
             </Grid>
             <Grid item xs={12} sm={2} lg={2} className={classes.buttonCell}>
                 <IconButton aria-label="edit" onClick={() => onEdit(item)}>
