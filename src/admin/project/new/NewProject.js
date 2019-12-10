@@ -9,18 +9,19 @@ import Step3 from './Step3'
 import { useDispatch } from 'react-redux'
 import { newProject } from '../core/projectActions'
 import { history } from '../../../App'
+import { PROJECT_TYPE_OPENFEEDBACK } from '../../../core/setupType/projectApi'
 
 const useStyles = makeStyles({
     container: {
         minHeight: '100vh',
-        minWidth: '100vw'
+        minWidth: '100vw',
     },
     leftContainer: {
-        background: COLORS.ADMIN_BACKGROUND_LIGHT
+        background: COLORS.ADMIN_BACKGROUND_LIGHT,
     },
     rightContainer: {
-        background: COLORS.RED_ORANGE
-    }
+        background: COLORS.RED_ORANGE,
+    },
 })
 const NewProject = ({ onCancel }) => {
     const classes = useStyles()
@@ -30,6 +31,12 @@ const NewProject = ({ onCancel }) => {
     const [projectName, setProjectName] = useState('')
     const [projectType, setProjectType] = useState('')
     const [step3Data, setStep3Data] = useState()
+
+    const createEvent = project => {
+        return dispatch(newProject(project)).then(projectId => {
+            return history.push(`/admin/${projectId}/setting/event`)
+        })
+    }
 
     return (
         <Grid container className={classes.container}>
@@ -49,11 +56,17 @@ const NewProject = ({ onCancel }) => {
                         onCancel={onCancel}
                         onBack={() => setCurrentStep(1)}
                         onSubmit={newProjectType => {
-                            setCurrentStep(3)
+                            if (newProjectType === PROJECT_TYPE_OPENFEEDBACK) {
+                                return createEvent({
+                                    name: projectName,
+                                    setupType: newProjectType,
+                                })
+                            }
+                            setProjectType(newProjectType)
                             if (projectType !== newProjectType) {
                                 setStep3Data()
                             }
-                            setProjectType(newProjectType)
+                            setCurrentStep(3)
                         }}
                         initialValues={{ projectType: projectType }}
                     />
@@ -68,19 +81,13 @@ const NewProject = ({ onCancel }) => {
                         }}
                         initialValues={step3Data}
                         projectType={projectType}
-                        onSubmit={data => {
-                            dispatch(
-                                newProject({
-                                    name: projectName,
-                                    setupType: projectType,
-                                    config: data
-                                })
-                            ).then(projectId => {
-                                history.push(
-                                    `/admin/${projectId}/setting/event`
-                                )
+                        onSubmit={config =>
+                            createEvent({
+                                name: projectName,
+                                setupType: projectType,
+                                config: config,
                             })
-                        }}
+                        }
                     />
                 )}
             </Grid>
