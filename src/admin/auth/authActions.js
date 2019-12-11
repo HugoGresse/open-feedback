@@ -1,12 +1,16 @@
-import {LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT} from './authActionTypes'
-import {isLoggedSelector} from './authSelectors'
-import {authProvider, fireStoreMainInstance, serverTimestamp} from '../../firebase'
-import {history} from '../../App'
-import {isEmpty} from 'lodash'
+import { LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT } from './authActionTypes'
+import { isLoggedSelector, isUserValidSelector } from './authSelectors'
+import {
+    authProvider,
+    fireStoreMainInstance,
+    serverTimestamp,
+} from '../../firebase'
+import { history } from '../../App'
+import { isEmpty } from 'lodash'
 
 export const didSignIn = (user, error) => {
     return async (dispatch, getState) => {
-        if (isLoggedSelector(getState())) {
+        if (isLoggedSelector(getState()) && isUserValidSelector(getState())) {
             return
         }
 
@@ -14,13 +18,19 @@ export const didSignIn = (user, error) => {
             if (user.isAnonymous) {
                 dispatch({
                     type: LOGIN_ERROR,
-                    payload: 'You cannot use the admin in anonymous mode'
+                    payload: 'You cannot use the admin in anonymous mode',
                 })
             } else {
-                const displayName = getDataFromProviderDataOrUser(user, 'displayName')
+                const displayName = getDataFromProviderDataOrUser(
+                    user,
+                    'displayName'
+                )
                 const photoURL = getDataFromProviderDataOrUser(user, 'photoURL')
                 const email = getDataFromProviderDataOrUser(user, 'email')
-                const emailVerified = getDataFromProviderDataOrUser(user, 'emailVerified')
+                const emailVerified = getDataFromProviderDataOrUser(
+                    user,
+                    'emailVerified'
+                )
                 const phone = getDataFromProviderDataOrUser(user, 'phoneNumber')
 
                 dispatch({
@@ -28,8 +38,8 @@ export const didSignIn = (user, error) => {
                     payload: {
                         ...user,
                         displayName,
-                        photoURL
-                    }
+                        photoURL,
+                    },
                 })
 
                 const userInDb = await getUserFromDB(user.uid)
@@ -37,17 +47,37 @@ export const didSignIn = (user, error) => {
                 if (userInDb.exists) {
                     // update photoURL
                     const userDbData = userInDb.data()
-                    const displayNameDb = getDataFromProviderDataOrUser(userDbData, 'displayName')
-                    const photoURLDb = getDataFromProviderDataOrUser(userDbData, 'photoURL')
-                    const emailDb = getDataFromProviderDataOrUser(userDbData, 'email')
+                    const displayNameDb = getDataFromProviderDataOrUser(
+                        userDbData,
+                        'displayName'
+                    )
+                    const photoURLDb = getDataFromProviderDataOrUser(
+                        userDbData,
+                        'photoURL'
+                    )
+                    const emailDb = getDataFromProviderDataOrUser(
+                        userDbData,
+                        'email'
+                    )
                     const emailVerifiedDb = userDbData.emailVerified
-                    const phoneDb = getDataFromProviderDataOrUser(userDbData, 'phoneNumber')
-                    if (displayNameDb !== displayName ||
+                    const phoneDb = getDataFromProviderDataOrUser(
+                        userDbData,
+                        'phoneNumber'
+                    )
+                    if (
+                        displayNameDb !== displayName ||
                         photoURLDb !== photoURL ||
                         emailDb !== email ||
                         phoneDb !== phone ||
-                        emailVerifiedDb !== emailVerified) {
-                        await updateUser(user, displayName, photoURL, emailDb, phone)
+                        emailVerifiedDb !== emailVerified
+                    ) {
+                        await updateUser(
+                            user,
+                            displayName,
+                            photoURL,
+                            emailDb,
+                            phone
+                        )
                     }
                 } else {
                     await createUser(user, displayName, photoURL, phone)
@@ -56,7 +86,7 @@ export const didSignIn = (user, error) => {
         } else {
             dispatch({
                 type: LOGIN_ERROR,
-                payload: error
+                payload: error,
             })
         }
     }
@@ -65,7 +95,7 @@ export const didSignIn = (user, error) => {
 export const signOut = () => dispatch => {
     authProvider.signOut().then(() => {
         dispatch({
-            type: LOGOUT
+            type: LOGOUT,
         })
         if (history.location.pathname === '/admin/') {
             window.location.reload()
@@ -75,10 +105,11 @@ export const signOut = () => dispatch => {
     })
 }
 
-const getUserFromDB = async (uid) => await fireStoreMainInstance
-    .collection('users')
-    .doc(uid)
-    .get()
+const getUserFromDB = async uid =>
+    await fireStoreMainInstance
+        .collection('users')
+        .doc(uid)
+        .get()
 
 const createUser = async (user, displayName, photoURL, phone) => {
     const userField = {
@@ -103,7 +134,7 @@ const updateUser = async (user, displayName, photoURL, email, phone) => {
         photoURL: photoURL,
         email: email,
         emailVerified: user.emailVerified,
-        phoneNumber: phone
+        phoneNumber: phone,
     }
 
     return fireStoreMainInstance
@@ -114,17 +145,17 @@ const updateUser = async (user, displayName, photoURL, email, phone) => {
 
 export const getDataFromProviderDataOrUser = (user, keyToGet) => {
     if (!user) {
-        return ""
+        return ''
     }
     if (user[keyToGet]) {
         return user[keyToGet]
     }
     if (isEmpty(user.providerData)) {
-        return ""
+        return ''
     }
     const providerData = user.providerData.filter(data => data[keyToGet])
     if (providerData.length > 0) {
         return providerData[0][keyToGet]
     }
-    return ""
+    return ''
 }

@@ -1,13 +1,17 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
-import {COLORS} from '../../constants/colors'
+import { COLORS } from '../../constants/colors'
 import logoWhite from '../../assets/logo-openfeedback-white.png'
 import Box from '../../baseComponents/design/Box'
-import {StyledFirebaseAuth} from 'react-firebaseui'
-import {auth, authProvider} from '../../firebase'
-import {connect} from 'react-redux'
-import {getLoginErrorSelector, getUserSelector, isLoggedSelector} from './authSelectors'
-import {didSignIn, signOut} from './authActions'
+import { StyledFirebaseAuth } from 'react-firebaseui'
+import { auth, authProvider } from '../../firebase'
+import { connect } from 'react-redux'
+import {
+    getLoginErrorSelector,
+    getUserSelector,
+    isLoggedSelector,
+} from './authSelectors'
+import { didSignIn, signOut } from './authActions'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.RED_ORANGE};
@@ -29,8 +33,10 @@ class Login extends Component {
                     tempUser = user
                     this.props.didSignIn(user)
                 }
-                if(!user.emailVerified && !user.phoneNumber){
-                    user.sendEmailVerification().then(() => {
+                if (!user.emailVerified && !user.phoneNumber) {
+                    user.sendEmailVerification({
+                        url: `https://${process.env.REACT_APP_AUTH_DOMAIN}/admin/`,
+                    }).then(() => {
                         // Email sent.
                     })
                 }
@@ -48,10 +54,6 @@ class Login extends Component {
     }
 
     render() {
-        if(this.props.user && !this.props.user.emailVerified && !this.props.user.phoneNumber && !this.props.user.isAnonymous) {
-            return "You need to verify your email using the link you've received in your inbox and refresh this page after. Thanks."
-        }
-
         if (this.props.isLoggedIn) {
             return this.props.children
         }
@@ -64,13 +66,12 @@ class Login extends Component {
                     justifyContent="center"
                     alignItems="center"
                     flexGrow="1"
-                    textAlign="center"
-                >
+                    textAlign="center">
                     <img
                         height="40"
                         src={logoWhite}
                         alt="open feedback"
-                        style={{marginBottom: '40px'}}
+                        style={{ marginBottom: '40px' }}
                     />
                     <StyledFirebaseAuth
                         uiConfig={{
@@ -80,13 +81,16 @@ class Login extends Component {
                                 auth.GoogleAuthProvider.PROVIDER_ID,
                                 auth.GithubAuthProvider.PROVIDER_ID,
                                 auth.EmailAuthProvider.PROVIDER_ID,
-                                auth.PhoneAuthProvider.PROVIDER_ID
+                                auth.PhoneAuthProvider.PROVIDER_ID,
                             ],
                             callbacks: {
                                 // Avoid redirects after sign-in.
                                 signInSuccessWithAuthResult: () => false,
                                 signInFailure: error => {
-                                    if (error.code !== 'firebaseui/anonymous-upgrade-merge-conflict') {
+                                    if (
+                                        error.code !==
+                                        'firebaseui/anonymous-upgrade-merge-conflict'
+                                    ) {
                                         return Promise.resolve()
                                     }
 
@@ -99,17 +103,16 @@ class Login extends Component {
                                                 return currentUser.delete()
                                             }
                                         })
-                                }
+                                },
                             },
-                            autoUpgradeAnonymousUsers: true
-                        }
-                        }
+                            autoUpgradeAnonymousUsers: true,
+                        }}
                         firebaseAuth={authProvider}
                     />
 
-                    {this.props.loginError && <div>
-                        {this.props.loginError}
-                    </div>}
+                    {this.props.loginError && (
+                        <div>{this.props.loginError}</div>
+                    )}
                 </Box>
             </Wrapper>
         )
@@ -119,18 +122,15 @@ class Login extends Component {
 const mapStateToProps = state => ({
     isLoggedIn: isLoggedSelector(state),
     loginError: getLoginErrorSelector(state),
-    user: getUserSelector(state)
+    user: getUserSelector(state),
 })
 
 const mapDispatchToProps = Object.assign(
     {},
     {
         didSignIn: didSignIn,
-        signOut: signOut
+        signOut: signOut,
     }
 )
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Login)
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
