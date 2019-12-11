@@ -74,8 +74,8 @@ const Login = ({ children }) => {
                 <StyledFirebaseAuth
                     firebaseAuth={authProvider}
                     uiConfig={{
-                        signInFlow: 'popup',
-                        signInSuccessUrl: '/',
+                        signInFlow: 'redirect',
+                        signInSuccessUrl: '/admin/',
                         signInOptions: [
                             auth.GoogleAuthProvider.PROVIDER_ID,
                             auth.GithubAuthProvider.PROVIDER_ID,
