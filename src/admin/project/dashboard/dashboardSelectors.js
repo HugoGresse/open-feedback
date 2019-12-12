@@ -1,36 +1,36 @@
 import { createSelector } from 'reselect'
 import {
-    getSessionsListSelector,
-    isSessionLoadedSelector
-} from '../../../core/sessions/sessionsSelectors'
+    getTalksListSelector,
+    isTalkLoadedSelector,
+} from '../../../core/talks/talksSelectors'
 import { getAdminStateSelector } from '../../adminSelector'
 import { groupBy } from 'lodash'
 import {
     getBooleanVoteItemsSelector,
-    getCommentVoteItemSelector
+    getCommentVoteItemSelector,
 } from '../settings/votingForm/votingFormSelectors'
 import { round1Decimals } from '../../../utils/numberUtils'
 
 const getDashboard = state => getAdminStateSelector(state).adminDashboard
 const getDashboardData = state => getDashboard(state).data
-const getSessionVotes = state => getDashboardData(state).sessionVotes
+const getTalkVotes = state => getDashboardData(state).talkVotes
 const getUserVotes = state => getDashboardData(state).userVotes
 
 // MEMOIZED
 
-export const getMostVotedSessionSelector = createSelector(
-    getSessionVotes,
-    getSessionsListSelector,
-    isSessionLoadedSelector,
-    (sessionVotes, sessionlist, isSessionLoaded) => {
-        if (Object.keys(sessionlist).length <= 0 || !isSessionLoaded) {
+export const getMostVotedTalkSelector = createSelector(
+    getTalkVotes,
+    getTalksListSelector,
+    isTalkLoadedSelector,
+    (talkVotes, talklist, isTalkLoaded) => {
+        if (Object.keys(talklist).length <= 0 || !isTalkLoaded) {
             return []
         }
 
         let votes
-        return sessionVotes
-            .reduce((acc, session) => {
-                votes = session.votes
+        return talkVotes
+            .reduce((acc, talk) => {
+                votes = talk.votes
 
                 const voteCount = Object.keys(votes).reduce((acc, id) => {
                     if (Number.isInteger(votes[id])) {
@@ -40,13 +40,13 @@ export const getMostVotedSessionSelector = createSelector(
                 }, 0)
 
                 acc.push({
-                    sessionId: session.id,
+                    talkId: talk.id,
                     voteCount: voteCount,
-                    title: sessionlist[session.id].title,
-                    trackTitle: sessionlist[session.id].trackTitle,
+                    title: talklist[talk.id].title,
+                    trackTitle: talklist[talk.id].trackTitle,
                     date:
-                        sessionlist[session.id].startTime &&
-                        sessionlist[session.id].startTime.split('T')[0]
+                        talklist[talk.id].startTime &&
+                        talklist[talk.id].startTime.split('T')[0],
                 })
 
                 return acc
@@ -83,14 +83,14 @@ export const getVotesByHourSelector = createSelector(
             if (acc[tempDateString]) {
                 acc[tempDateString] = {
                     ...acc[tempDateString],
-                    voteCount: acc[tempDateString].voteCount + 1
+                    voteCount: acc[tempDateString].voteCount + 1,
                 }
             } else {
                 acc[tempDateString] = {
                     date: tempDateString,
                     day:
                         tempDate.getUTCDate() + ' ' + tempDate.getHours() + 'h',
-                    voteCount: 1
+                    voteCount: 1,
                 }
             }
             return acc

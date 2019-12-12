@@ -1,7 +1,7 @@
 import moment from 'moment'
 
-export const formatSessionsWithScheduled = (sessions, schedule) => {
-    const formatedSessions = {}
+export const formatTalksWithScheduledForHoverboardv2 = (talks, schedule) => {
+    const formatedTalks = {}
 
     schedule.forEach(day => {
         const tracks = day.tracks
@@ -11,23 +11,23 @@ export const formatSessionsWithScheduled = (sessions, schedule) => {
                 day.date + 'T' + timeslot.startTime
             ).format()
             const endTime = moment(day.date + 'T' + timeslot.endTime).format()
-            timeslot.sessions.forEach((session, index) => {
-                session.items.forEach(id => {
-                    if (!sessions[id]) return
-                    formatedSessions[id] = {
-                        ...sessions[id],
+            timeslot.sessions.forEach((talk, index) => {
+                talk.items.forEach(id => {
+                    if (!talks[id]) return
+                    formatedTalks[id] = {
+                        ...talks[id],
                         startTime,
                         endTime,
                         ...{
-                            trackTitle: tracks[index].title
-                        }
+                            trackTitle: tracks[index].title,
+                        },
                     }
                 })
             })
         })
     })
 
-    return formatedSessions
+    return formatedTalks
 }
 
 export const getDateFromStartTime = startTime => {

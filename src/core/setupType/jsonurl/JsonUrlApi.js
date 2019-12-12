@@ -16,10 +16,10 @@ class JsonUrlApi {
                 if (this.data.sessions) {
                     let tempId = ''
                     // Convert numeric id to string
-                    Object.values(this.data.sessions).forEach(session => {
-                        tempId = '' + session.id
+                    Object.values(this.data.sessions).forEach(talk => {
+                        tempId = '' + talk.id
                         this.data.sessions[tempId] = {
-                            ...session,
+                            ...talk,
                             id: tempId,
                         }
                     })
@@ -34,14 +34,14 @@ class JsonUrlApi {
         })
     }
 
-    getSessions() {
+    getTalks() {
         return this.getJsonData().then(data => data.sessions)
     }
 
-    getSession(sessionId) {
+    getTalk(talkId) {
         return this.getJsonData().then(data => {
             return {
-                [sessionId]: data.sessions[sessionId],
+                [talkId]: data.sessions[talkId],
             }
         })
     }

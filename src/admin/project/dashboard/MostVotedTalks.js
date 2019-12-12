@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent'
-import { getMostVotedSessionSelector } from './dashboardSelectors'
+import { getMostVotedTalkSelector } from './dashboardSelectors'
 import ThumbsUpIcon from '@material-ui/icons/ThumbUpSharp'
 import DashboardCard from './DashboardCard'
 import Grid from '@material-ui/core/Grid'
@@ -11,29 +11,29 @@ import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 
 const useStyles = makeStyles({
     title: {
-        padding: 0
+        padding: 0,
     },
     count: {
         color: COLORS.RED_ORANGE,
         fontSize: 16,
-        fontWeight: 'bold'
-    }
+        fontWeight: 'bold',
+    },
 })
 
-const MostVotedSessions = () => {
+const MostVotedTalks = () => {
     const classes = useStyles()
-    const mostVotedSessions = useSelector(getMostVotedSessionSelector)
+    const mostVotedTalks = useSelector(getMostVotedTalkSelector)
     const projectId = useSelector(getSelectedProjectIdSelector)
 
-    if (!mostVotedSessions) {
+    if (!mostVotedTalks) {
         return <LoaderMatchParent />
     }
 
     return (
         <DashboardCard title="Most voted" titleIcon={<ThumbsUpIcon />}>
             <Grid container spacing={2}>
-                {mostVotedSessions.map(row => (
-                    <React.Fragment key={row.sessionId}>
+                {mostVotedTalks.map(row => (
+                    <React.Fragment key={row.talkId}>
                         <Grid
                             item
                             xs={10}
@@ -41,8 +41,7 @@ const MostVotedSessions = () => {
                             component="a"
                             target="_blank"
                             style={{ color: '#000' }}
-                            href={`/${projectId}/${row.date}/${row.sessionId}`}
-                        >
+                            href={`/${projectId}/${row.date}/${row.talkId}`}>
                             {row.title}
                         </Grid>
                         <Grid
@@ -51,9 +50,8 @@ const MostVotedSessions = () => {
                             component="a"
                             target="_blank"
                             align="right"
-                            href={`/${projectId}/${row.date}/${row.sessionId}`}
-                            className={classes.count}
-                        >
+                            href={`/${projectId}/${row.date}/${row.talkId}`}
+                            className={classes.count}>
                             {row.voteCount}
                         </Grid>
                     </React.Fragment>
@@ -63,4 +61,4 @@ const MostVotedSessions = () => {
     )
 }
 
-export default MostVotedSessions
+export default MostVotedTalks

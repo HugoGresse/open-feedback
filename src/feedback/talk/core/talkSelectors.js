@@ -1,42 +1,42 @@
 import { createSelector } from 'reselect'
 
 import { getSpeakersListSelector } from '../../../core/speakers/speakerSelectors'
-import { getSessionsListSelector } from '../../../core/sessions/sessionsSelectors'
+import { getTalksListSelector } from '../../../core/talks/talksSelectors'
 import { getProjectVoteResultsSelector } from '../../project/projectSelectors'
 
-export const getSessionSelector = state => state.session
+export const getTalkSelector = state => state.talk
 
-export const getSelectedSessionIdSelector = state =>
-    getSessionSelector(state).selected
-export const getSessionLoadErrorSelector = state =>
-    getSessionSelector(state).errorSessionLoad
+export const getSelectedTalkIdSelector = state =>
+    getTalkSelector(state).selected
+export const getTalkLoadErrorSelector = state =>
+    getTalkSelector(state).errorTalkLoad
 
-export const getSelectedSessionSelector = createSelector(
-    getSessionsListSelector,
-    getSelectedSessionIdSelector,
-    (sessions, selectedSessionId) => {
-        return sessions[selectedSessionId]
+export const getSelectedTalkSelector = createSelector(
+    getTalksListSelector,
+    getSelectedTalkIdSelector,
+    (talks, selectedTalkId) => {
+        return talks[selectedTalkId]
     }
 )
 
-export const getSpeakersForSelectedSessionSelector = createSelector(
-    getSelectedSessionSelector,
+export const getSpeakersForSelectedTalkSelector = createSelector(
+    getSelectedTalkSelector,
     getSpeakersListSelector,
-    (session, speakers) => {
-        if (!session || !session.speakers) return []
+    (talk, speakers) => {
+        if (!talk || !talk.speakers) return []
         return Object.values(speakers).filter(speaker => {
-            return session.speakers.includes(speaker.id)
+            return talk.speakers.includes(speaker.id)
         })
     }
 )
 export const getVoteResultSelectorSelector = createSelector(
-    getSelectedSessionIdSelector,
+    getSelectedTalkIdSelector,
     getProjectVoteResultsSelector,
-    (selectedSessionId, voteResults) => {
-        if (!voteResults || !voteResults[selectedSessionId]) {
+    (selectedTalkId, voteResults) => {
+        if (!voteResults || !voteResults[selectedTalkId]) {
             return []
         }
-        let results = voteResults[selectedSessionId]
+        let results = voteResults[selectedTalkId]
 
         // Transform results.id.{ id: voteText1, id: voteText2, id: voteText3} into an array
         let transformResult = {}
@@ -51,7 +51,7 @@ export const getVoteResultSelectorSelector = createSelector(
                     transformResult[key].push({
                         ...value2,
                         updatedAt: value2.updatedAt.toDate(),
-                        createdAt: value2.createdAt.toDate()
+                        createdAt: value2.createdAt.toDate(),
                     })
                 })
                 transformResult[key] = transformResult[key].sort(

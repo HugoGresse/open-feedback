@@ -17,7 +17,7 @@ export const getProjectVoteItemsSelector = state =>
     getProjectSelector(state).voteItems
 
 export const getProjectVoteResultsSelector = state =>
-    getProjectSelector(state).sessionVotes
+    getProjectSelector(state).talkVotes
 
 export const getProjectLoadErrorSelector = state =>
     getProjects(state).projectLoadError

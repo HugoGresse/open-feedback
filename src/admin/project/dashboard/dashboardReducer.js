@@ -1,42 +1,42 @@
 import {
-    CLEAR_SESSION_VOTES,
-    GET_SESSION_VOTES_SUCCESS,
-    GET_USER_VOTES_SUCCESS
+    CLEAR_TALK_VOTES,
+    GET_TALK_VOTES_SUCCESS,
+    GET_USER_VOTES_SUCCESS,
 } from './dashboardActionTypes'
 import { LOGOUT } from '../../auth/authActionTypes'
 
 const initState = {
     data: {
-        sessionVotes: [],
-        userVotes: []
+        talkVotes: [],
+        userVotes: [],
     },
-    sessionVotesLoaded: false,
-    sessionVotesError: null,
-    userVotesLoaded: false
+    talkVotesLoaded: false,
+    talkVotesError: null,
+    userVotesLoaded: false,
 }
 
 const adminDashboardReducer = (state = initState, { payload, type }) => {
     switch (type) {
-        case GET_SESSION_VOTES_SUCCESS:
+        case GET_TALK_VOTES_SUCCESS:
             return {
                 ...state,
                 data: {
                     ...state.data,
-                    sessionVotes: payload
+                    talkVotes: payload,
                 },
-                sessionVotesLoaded: true
+                talkVotesLoaded: true,
             }
         case GET_USER_VOTES_SUCCESS:
             return {
                 ...state,
                 data: {
                     ...state.data,
-                    userVotes: payload
+                    userVotes: payload,
                 },
-                userVotesLoaded: true
+                userVotesLoaded: true,
             }
         case LOGOUT:
-        case CLEAR_SESSION_VOTES:
+        case CLEAR_TALK_VOTES:
             return initState
         default:
             return state

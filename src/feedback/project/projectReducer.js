@@ -4,7 +4,7 @@ import {
     GET_PROJECT_VOTE_RESULT_ERROR,
     GET_PROJECT_VOTE_RESULT_SUCCESS,
     INCREMENT_VOTE_LOCALLY,
-    SET_SELECTED_DATE
+    SET_SELECTED_DATE,
 } from './projectActionTypes'
 import { nowTimestamp } from '../../firebase'
 import { ADD_VOTE_SUCCESS } from '../vote/voteActionTypes'
@@ -18,12 +18,12 @@ const initState = {
         name: null,
         id: null,
         voteItems: null,
-        sessionVotes: null,
-        chipColors: []
+        talkVotes: null,
+        chipColors: [],
     },
     selectedDate: '',
     projectLoadError: null,
-    projectVotesError: null
+    projectVotesError: null,
 }
 
 const projectReducer = (state = initState, { payload, type }) => {
@@ -32,8 +32,8 @@ const projectReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 data: {
-                    ...payload
-                }
+                    ...payload,
+                },
             }
 
         case GET_PROJECT_VOTE_RESULT_SUCCESS:
@@ -41,40 +41,38 @@ const projectReducer = (state = initState, { payload, type }) => {
                 ...state,
                 data: {
                     ...state.data,
-                    sessionVotes: payload
-                }
+                    talkVotes: payload,
+                },
             }
         case ADD_VOTE_SUCCESS: {
             // Only useful for Text votes
             if (!payload.vote[payload.newVoteId].text) {
                 return {
-                    ...state
+                    ...state,
                 }
             }
             // Replace tempVoteId by the new id
-            const sessionVotesVoteItemContent = {
-                ...state.data.sessionVotes[payload.sessionId][
-                    payload.voteItemId
-                    ],
-                ...payload.vote
+            const talkVotesVoteItemContent = {
+                ...state.data.talkVotes[payload.talkId][payload.voteItemId],
+                ...payload.vote,
             }
 
-            delete sessionVotesVoteItemContent[payload.tempVoteId]
+            delete talkVotesVoteItemContent[payload.tempVoteId]
 
             return {
                 ...state,
                 data: {
                     ...state.data,
-                    sessionVotes: {
-                        ...state.data.sessionVotes,
-                        [payload.sessionId]: {
-                            ...state.data.sessionVotes[payload.sessionId],
+                    talkVotes: {
+                        ...state.data.talkVotes,
+                        [payload.talkId]: {
+                            ...state.data.talkVotes[payload.talkId],
                             [payload.voteItemId]: {
-                                ...sessionVotesVoteItemContent
-                            }
-                        }
-                    }
-                }
+                                ...talkVotesVoteItemContent,
+                            },
+                        },
+                    },
+                },
             }
         }
         case INCREMENT_VOTE_LOCALLY: {
@@ -83,8 +81,7 @@ const projectReducer = (state = initState, { payload, type }) => {
 
             let precedentData = null
             try {
-                precedentData =
-                    data.sessionVotes[vote.sessionId][vote.voteItemId]
+                precedentData = data.talkVotes[vote.talkId][vote.voteItemId]
             } catch (e) {
                 precedentData = null
             }
@@ -93,7 +90,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                 if (payload.amount === -1) {
                     // Remove a vote from the aggregate localy before database update
                     newVoteValue = {
-                        ...precedentData
+                        ...precedentData,
                     }
                     delete newVoteValue[vote.id]
                 } else {
@@ -108,8 +105,8 @@ const projectReducer = (state = initState, { payload, type }) => {
                                 vote.createdAt._methodName ===
                                     'FieldValue.serverTimestamp'
                                     ? nowTimestamp()
-                                    : nowTimestamp()
-                        }
+                                    : nowTimestamp(),
+                        },
                     }
                 }
             } else {
@@ -119,18 +116,18 @@ const projectReducer = (state = initState, { payload, type }) => {
                 newVoteValue = precedentData + payload.amount
             }
 
-            if (!data.sessionVotes || !data.sessionVotes[vote.sessionId]) {
+            if (!data.talkVotes || !data.talkVotes[vote.talkId]) {
                 return {
                     ...state,
                     data: {
                         ...data,
-                        sessionVotes: {
-                            ...data.sessionVotes,
-                            [vote.sessionId]: {
-                                [vote.voteItemId]: newVoteValue
-                            }
-                        }
-                    }
+                        talkVotes: {
+                            ...data.talkVotes,
+                            [vote.talkId]: {
+                                [vote.voteItemId]: newVoteValue,
+                            },
+                        },
+                    },
                 }
             }
 
@@ -138,33 +135,33 @@ const projectReducer = (state = initState, { payload, type }) => {
                 ...state,
                 data: {
                     ...data,
-                    sessionVotes: {
-                        ...data.sessionVotes,
-                        [vote.sessionId]: {
-                            ...data.sessionVotes[vote.sessionId],
-                            [vote.voteItemId]: newVoteValue
-                        }
-                    }
-                }
+                    talkVotes: {
+                        ...data.talkVotes,
+                        [vote.talkId]: {
+                            ...data.talkVotes[vote.talkId],
+                            [vote.voteItemId]: newVoteValue,
+                        },
+                    },
+                },
             }
         }
         case GET_PROJECT_VOTE_RESULT_ERROR:
             console.error(payload)
             return {
                 ...state,
-                projectVotesError: payload
+                projectVotesError: payload,
             }
         case GET_PROJECT_ERROR:
             console.error(payload)
             return {
                 ...state,
-                projectLoadError: payload
+                projectLoadError: payload,
             }
 
         case SET_SELECTED_DATE:
             return {
                 ...state,
-                selectedDate: payload.date
+                selectedDate: payload.date,
             }
         default:
             return state

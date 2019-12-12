@@ -2,20 +2,20 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent'
-import { getSessionVotes, getUserVotes } from './dashboardActions'
-import { getTalks } from '../../../core/sessions/sessionsActions'
+import { getTalkVotes, getUserVotes } from './dashboardActions'
+import { getTalks } from '../../../core/talks/talksActions'
 import { getProject } from '../../../feedback/project/projectActions'
 import { getProjectSelector } from '../../../feedback/project/projectSelectors'
 import { Grid } from '@material-ui/core'
-import { isSessionLoadedSelector } from '../../../core/sessions/sessionsSelectors'
-import MostVotedSessions from './MostVotedSessions'
+import { isTalkLoadedSelector } from '../../../core/talks/talksSelectors'
+import MostVotedTalks from './MostVotedTalks'
 import VoteTimeline from './VoteTimeline'
 import Highlights from './Highlights'
 
 class ProjectDashboard extends Component {
     componentDidMount() {
         this.props.getProject(this.props.selectedProjectId)
-        this.props.getSessionVotes()
+        this.props.getTalkVotes()
         this.props.getUserVotes()
     }
 
@@ -24,7 +24,7 @@ class ProjectDashboard extends Component {
             (!prevProps.project && this.props.project) ||
             prevProps.project.id !== this.props.project.id
         ) {
-            this.props.getSessions()
+            this.props.getTalks()
         }
     }
 
@@ -39,7 +39,7 @@ class ProjectDashboard extends Component {
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
                     <Highlights />
-                    <MostVotedSessions />
+                    <MostVotedTalks />
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <VoteTimeline />
@@ -51,7 +51,7 @@ class ProjectDashboard extends Component {
 
 const mapStateToProps = state => ({
     project: getProjectSelector(state),
-    isSessionsLoaded: isSessionLoadedSelector(state),
+    isTalksLoaded: isTalkLoadedSelector(state),
     selectedProjectId: getSelectedProjectIdSelector(state),
 })
 
@@ -59,9 +59,9 @@ const mapDispatchToProps = Object.assign(
     {},
     {
         getProject: getProject,
-        getSessionVotes: getSessionVotes,
+        getTalkVotes: getTalkVotes,
         getUserVotes: getUserVotes,
-        getSessions: getTalks,
+        getTalks: getTalks,
     }
 )
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectDashboard)

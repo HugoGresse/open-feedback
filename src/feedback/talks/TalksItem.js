@@ -8,12 +8,12 @@ import { Link } from 'react-router-dom'
 import connect from 'react-redux/es/connect/connect'
 import { getSpeakersListSelector } from '../../core/speakers/speakerSelectors'
 import SpeakerList from '../speaker/SpeakerList'
-import { getDateFromStartTime } from '../../core/sessions/sessionsUtils'
+import { getDateFromStartTime } from '../../core/talks/talksUtils'
 import { getProjectSelector } from '../project/projectSelectors'
 
 const styles = theme => ({
     itemContainer: {
-        margin: -1
+        margin: -1,
     },
     paper: {
         padding: theme.spacing(2),
@@ -27,28 +27,28 @@ const styles = theme => ({
         boxSizing: 'border-box',
         '&:hover': {
             backgroundColor: '#fafafa',
-            cursor: 'pointer'
+            cursor: 'pointer',
         },
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        transition: 'all 200ms ease-out'
+        transition: 'all 200ms ease-out',
     },
     paperSelected: {
-        opacity: 0.5
+        opacity: 0.5,
     },
     a: {
-        display: 'block'
-    }
+        display: 'block',
+    },
 })
 
-export const SessionsItem = props => {
+export const TalksItem = props => {
     const {
         classes,
-        session,
+        talk,
         speakersEntities,
         userVote,
-        currentProjectId
+        currentProjectId,
     } = props
 
     const itemClasses = `${classes.paper} ${
@@ -56,17 +56,21 @@ export const SessionsItem = props => {
     }`
 
     const speakers =
-        session.speakers &&
-        session.speakers.map(speakerId => speakersEntities[speakerId])
-    const date = getDateFromStartTime(session.startTime)
+        talk.speakers &&
+        talk.speakers.map(speakerId => speakersEntities[speakerId])
+    const date = getDateFromStartTime(talk.startTime)
     return (
-        <Grid item xs={12} sm={6} md={4} className={`${classes.itemContainer} session`}>
+        <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            className={`${classes.itemContainer} talk`}>
             <Link
-                to={`/${currentProjectId}/${date}/${session.id}`}
-                className={classes.a}
-            >
+                to={`/${currentProjectId}/${date}/${talk.id}`}
+                className={classes.a}>
                 <Paper className={itemClasses}>
-                    {session.title}
+                    {talk.title}
                     {speakers && (
                         <SpeakerList speakers={speakers} size="small" />
                     )}
@@ -76,18 +80,15 @@ export const SessionsItem = props => {
     )
 }
 
-SessionsItem.propTypes = {
+TalksItem.propTypes = {
     classes: PropTypes.object.isRequired,
-    session: PropTypes.object.isRequired,
-    userVote: PropTypes.object
+    talk: PropTypes.object.isRequired,
+    userVote: PropTypes.object,
 }
 
 const mapStateToProps = state => ({
     speakersEntities: getSpeakersListSelector(state),
-    currentProjectId: getProjectSelector(state).id
+    currentProjectId: getProjectSelector(state).id,
 })
 
-export default connect(
-    mapStateToProps,
-    {}
-)(withStyles(styles)(SessionsItem))
+export default connect(mapStateToProps, {})(withStyles(styles)(TalksItem))

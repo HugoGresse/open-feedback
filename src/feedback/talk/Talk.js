@@ -4,11 +4,11 @@ import moment from 'moment'
 import styled from 'styled-components'
 
 import {
-    getSelectedSessionSelector,
-    getSessionLoadErrorSelector,
-    getSpeakersForSelectedSessionSelector
-} from './core/sessionSelectors'
-import { getSession, setSelectedSession } from './core/sessionActions'
+    getSelectedTalkSelector,
+    getTalkLoadErrorSelector,
+    getSpeakersForSelectedTalkSelector,
+} from './core/talkSelectors'
+import { getTalk, setSelectedTalk } from './core/talkActions'
 import { getSpeakers } from '../../core/speakers/speakerActions'
 import { getVoteResult } from '../project/projectActions'
 import {
@@ -17,19 +17,22 @@ import {
     removeVoteLoadError,
     removeVotePostError,
     updateVote,
-    voteFor
+    voteFor,
 } from '../vote/voteActions'
 
-import { getProjectChipColorsSelector, getProjectVoteItemsOrderedSelector } from '../project/projectSelectors'
-import { getVoteResultSelectorSelector } from '../session/core/sessionSelectors'
+import {
+    getProjectChipColorsSelector,
+    getProjectVoteItemsOrderedSelector,
+} from '../project/projectSelectors'
+import { getVoteResultSelectorSelector } from '../talk/core/talkSelectors'
 import {
     getErrorVotePostSelector,
     getErrorVotesLoadSelector,
-    getUserVotesBySessionAndVoteItemSelector
+    getUserVotesByTalkAndVoteItemSelector,
 } from '../vote/voteSelectors'
 
 import Grid from '@material-ui/core/Grid'
-import SessionVote from './SessionVote'
+import TalkVote from './TalkVote'
 import SpeakerList from '../speaker/SpeakerList'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 import Error from '../../baseComponents/customComponent/Error'
@@ -57,16 +60,16 @@ const ChipList = styled.span`
     margin-left: 5px;
 `
 
-class Session extends Component {
+class Talk extends Component {
     componentDidMount() {
-        const id = this.props.match.params.sessionId
-        this.props.getSession(id)
-        this.props.setSelectedSession(id)
+        const id = this.props.match.params.talkId
+        this.props.getTalk(id)
+        this.props.setSelectedTalk(id)
         this.props.getSpeakers()
         this.props.getVoteResult()
     }
 
-    getSpeakersString(session, speakers) {
+    getSpeakersString(talk, speakers) {
         if (speakers.length === 0) {
             return ''
         }
@@ -95,7 +98,7 @@ class Session extends Component {
                     break
             }
         } else {
-            this.props.voteFor(this.props.session.id, voteItem, data)
+            this.props.voteFor(this.props.talk.id, voteItem, data)
         }
     }
 
@@ -115,26 +118,26 @@ class Session extends Component {
     render() {
         const {
             speakers,
-            session,
+            talk,
             voteItems,
             userVotes,
             voteResults,
-            errorSessionLoad,
+            errorTalkLoad,
             errorVotePost,
             errorVotesLoad,
-            chipColors
+            chipColors,
         } = this.props
 
-        if (errorSessionLoad) {
+        if (errorTalkLoad) {
             return (
                 <Error
-                    error="Unable to load the session/speakers/vote options"
-                    errorDetail={errorSessionLoad}
+                    error="Unable to load the talk/speakers/vote options"
+                    errorDetail={errorTalkLoad}
                 />
             )
         }
 
-        if (!session || !speakers || !voteItems) {
+        if (!talk || !speakers || !voteItems) {
             return <LoaderMatchParent />
         }
 
@@ -165,24 +168,24 @@ class Session extends Component {
             <div>
                 <Header>
                     <Title mb="15px">
-                        {session.title}
+                        {talk.title}
                         <ChipList>
-                            {session.tags &&
-                                session.tags.map((tag, key) => (
+                            {talk.tags &&
+                                talk.tags.map((tag, key) => (
                                     <span key={key}>#{tag}</span>
                                 ))}
                         </ChipList>
                     </Title>
                     <DateTime>
-                        {moment.parseZone(session.startTime).format('dddd D')} /{' '}
-                        {moment.parseZone(session.startTime).format('H:mm ')}-
-                        {moment.parseZone(session.endTime).format(' H:mm')}
+                        {moment.parseZone(talk.startTime).format('dddd D')} /{' '}
+                        {moment.parseZone(talk.startTime).format('H:mm ')}-
+                        {moment.parseZone(talk.endTime).format(' H:mm')}
                     </DateTime>
                     <SpeakerList speakers={speakers} />
                 </Header>
                 <Grid container spacing={SPACING.LAYOUT}>
                     {voteItems.map((voteItem, key) => (
-                        <SessionVote
+                        <TalkVote
                             key={key}
                             voteItem={voteItem}
                             userVote={userVotes[voteItem.id]}
@@ -199,22 +202,22 @@ class Session extends Component {
 }
 
 const mapStateToProps = state => ({
-    session: getSelectedSessionSelector(state),
-    speakers: getSpeakersForSelectedSessionSelector(state),
+    talk: getSelectedTalkSelector(state),
+    speakers: getSpeakersForSelectedTalkSelector(state),
     voteItems: getProjectVoteItemsOrderedSelector(state),
-    userVotes: getUserVotesBySessionAndVoteItemSelector(state),
+    userVotes: getUserVotesByTalkAndVoteItemSelector(state),
     voteResults: getVoteResultSelectorSelector(state),
-    errorSessionLoad: getSessionLoadErrorSelector(state),
+    errorTalkLoad: getTalkLoadErrorSelector(state),
     errorVotePost: getErrorVotePostSelector(state),
     errorVotesLoad: getErrorVotesLoadSelector(state),
-    chipColors: getProjectChipColorsSelector(state)
+    chipColors: getProjectChipColorsSelector(state),
 })
 
 const mapDispatchToProps = Object.assign(
     {},
     {
-        getSession: getSession,
-        setSelectedSession: setSelectedSession,
+        getTalk: getTalk,
+        setSelectedTalk: setSelectedTalk,
         getSpeakers: getSpeakers,
         getVoteResult: getVoteResult,
         voteFor: voteFor,
@@ -222,11 +225,8 @@ const mapDispatchToProps = Object.assign(
         updateVote: updateVote,
         removeVoteLoadError: removeVoteLoadError,
         removeVotePostError: removeVotePostError,
-        getVotes: getVotes
+        getVotes: getVotes,
     }
 )
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Session)
+export default connect(mapStateToProps, mapDispatchToProps)(Talk)

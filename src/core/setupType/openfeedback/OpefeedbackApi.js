@@ -10,17 +10,17 @@ class OpenfeedbackApi {
         return fireStoreMainInstance.collection('projects').doc(this.projectId)
     }
 
-    getSessions() {
+    getTalks() {
         return this.firestoreProject()
             .collection('talks')
             .get()
             .then(talksSnapshot => convertSnapshotToMap(talksSnapshot))
     }
 
-    getSession(sessionId) {
+    getTalk(talkId) {
         return this.firestoreProject()
             .collection('talks')
-            .doc(sessionId)
+            .doc(talkId)
             .get()
             .then(talkDoc => ({
                 [talkDoc.id]: {
@@ -37,31 +37,31 @@ class OpenfeedbackApi {
             .then(talksSnapshot => convertSnapshotToMap(talksSnapshot))
     }
 
-    addSession(newSession) {
+    addTalk(newTalk) {
         return this.firestoreProject()
             .collection('talks')
             .add({
-                ...newSession,
+                ...newTalk,
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
             })
             .then(docRef => docRef.id)
     }
 
-    removeSession(sessionId) {
+    removeTalk(talkId) {
         return this.firestoreProject()
             .collection('talks')
-            .doc(sessionId)
+            .doc(talkId)
             .delete()
     }
 
-    editSession(session) {
+    editTalk(talk) {
         return this.firestoreProject()
             .collection('talks')
-            .doc(session.id)
+            .doc(talk.id)
             .set(
                 {
-                    ...session,
+                    ...talk,
                     updatedAt: serverTimestamp(),
                 },
                 { merge: true }

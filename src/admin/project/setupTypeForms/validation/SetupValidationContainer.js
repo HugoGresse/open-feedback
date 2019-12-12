@@ -1,11 +1,15 @@
-import SetupValidation, {STATE_ERROR, STATE_IDLE, STATE_LOADING, STATE_SUCCESS} from './SetupValidation'
+import SetupValidation, {
+    STATE_ERROR,
+    STATE_IDLE,
+    STATE_LOADING,
+    STATE_SUCCESS,
+} from './SetupValidation'
 import validate from '../../../../core/setupType/validation'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import validationText from './validationString'
-import {sprintf} from '../../../../utils/stringUtils'
+import { sprintf } from '../../../../utils/stringUtils'
 
-const SetupValidationContainer = ({api, setupType}) => {
-
+const SetupValidationContainer = ({ api, setupType }) => {
     const [validationProcessing, onValidationChange] = useState(false)
     const [validationResult, setValidationResult] = useState(null)
 
@@ -30,70 +34,100 @@ const SetupValidationContainer = ({api, setupType}) => {
         modelState = STATE_LOADING
     } else if (connectionState === STATE_ERROR) {
         modelState = STATE_ERROR
-        modelText = "Previous step failed"
+        modelText = 'Previous step failed'
     } else if (validationResult) {
         modelSubtitleText = sprintf(
-            validationText.model[setupType].session.sessionCount,
-            validationResult.session.sessionCount,
-            validationResult.speaker.speakerCount)
+            validationText.model[setupType].talk.talkCount,
+            validationResult.talk.talkCount,
+            validationResult.speaker.speakerCount
+        )
 
         if (validationResult.isSuccessful) {
             modelState = STATE_SUCCESS
             modelText = validationText.validModel
 
-            if(validationResult.session.noSpeakers) {
-                modelSubtitleText += '\n' + sprintf(validationText.model[setupType].session.noSpeakers, validationResult.session.noSpeakers)
+            if (validationResult.talk.noSpeakers) {
+                modelSubtitleText +=
+                    '\n' +
+                    sprintf(
+                        validationText.model[setupType].talk.noSpeakers,
+                        validationResult.talk.noSpeakers
+                    )
             }
-            if(validationResult.session.speakersMissing) {
-                modelSubtitleText += '\n' + sprintf(validationText.model[setupType].session.speakersMissing, validationResult.session.speakersMissing)
+            if (validationResult.talk.speakersMissing) {
+                modelSubtitleText +=
+                    '\n' +
+                    sprintf(
+                        validationText.model[setupType].talk.speakersMissing,
+                        validationResult.talk.speakersMissing
+                    )
             }
         } else {
             modelState = STATE_ERROR
             modelText = validationText.notValidModel
 
-            if (!validationResult.sessionsObjectFound || !validationResult.speakersObjectFound) {
+            if (
+                !validationResult.talksObjectFound ||
+                !validationResult.speakersObjectFound
+            ) {
                 let text = ''
 
-                if (!validationResult.sessionsObjectFound) {
-                    text += "sessions"
+                if (!validationResult.talksObjectFound) {
+                    text += 'talks'
                 }
                 if (!validationResult.speakersObjectFound) {
-                    text += " and speakers"
+                    text += ' and speakers'
                 }
-                modelSubtitleText += '\n' + sprintf(validationText.model[setupType].speakersOrSessionsObjectFound, text)
+                modelSubtitleText +=
+                    '\n' +
+                    sprintf(
+                        validationText.model[setupType]
+                            .speakersOrTalksObjectFound,
+                        text
+                    )
             } else {
-                const resultSession = validationResult.session
+                const resultTalk = validationResult.talk
                 const resultSpeaker = validationResult.speaker
 
-                ;['idValid', 'titleValid', 'startEndTimeValid', 'trackTitleValid', 'speakersValid'].forEach(el => {
-                    if (!resultSession[el]) {
-                        modelSubtitleText += '\n' + validationText.model[setupType].session[el]
+                ;[
+                    'idValid',
+                    'titleValid',
+                    'startEndTimeValid',
+                    'trackTitleValid',
+                    'speakersValid',
+                ].forEach(el => {
+                    if (!resultTalk[el]) {
+                        modelSubtitleText +=
+                            '\n' + validationText.model[setupType].talk[el]
                     }
                 })
                 ;['idValid', 'nameValid', 'photoUrlValid'].forEach(el => {
                     if (!resultSpeaker[el]) {
-                        modelSubtitleText += '\n' + validationText.model[setupType].speaker[el]
+                        modelSubtitleText +=
+                            '\n' + validationText.model[setupType].speaker[el]
                     }
                 })
-
-
             }
         }
     }
 
-    return <SetupValidation processing={validationProcessing}
-                            connectionState={connectionState}
-                            modelState={modelState}
-                            onValidateClick={() => {
-                                onValidationChange(true)
-                                validate(api).then(result => {
-                                    setValidationResult(result)
-                                    onValidationChange(false)
-                                })
-                            }}
-                            connectionText={connectionText}
-                            modelText={modelText}
-                            modelSubtitleText={modelSubtitleText}/>
+    return (
+        <SetupValidation
+            processing={validationProcessing}
+            connectionState={connectionState}
+            modelState={modelState}
+            onValidateClick={() => {
+                onValidationChange(true)
+                validate(api).then(result => {
+                    setValidationResult(result)
+                    onValidationChange(false)
+                })
+            }}
+            connectionText={connectionText}
+            modelText={modelText}
+            modelSubtitleText={modelSubtitleText}
+        />
+    )
 }
 
 export default SetupValidationContainer

@@ -1,28 +1,28 @@
 import {
-    ADD_SESSION_ERROR,
-    ADD_SESSION_SUCCESS,
-    EDIT_SESSION_ERROR,
-    EDIT_SESSION_SUCCESS,
-    GET_SESSIONS_ERROR,
-    GET_SESSIONS_LOADING,
-    GET_SESSIONS_SUCCESS,
-    REMOVE_SESSION_ERROR,
-    REMOVE_SESSION_SUCCESS,
-    SET_SESSIONS_FILTER,
-} from './sessionsActionTypes'
-import { GET_SESSION_SUCCESS } from '../../feedback/session/core/sessionActionTypes'
+    ADD_TALK_ERROR,
+    ADD_TALK_SUCCESS,
+    EDIT_TALK_ERROR,
+    EDIT_TALK_SUCCESS,
+    GET_TALKS_ERROR,
+    GET_TALKS_LOADING,
+    GET_TALKS_SUCCESS,
+    REMOVE_TALK_ERROR,
+    REMOVE_TALK_SUCCESS,
+    SET_TALKS_FILTER,
+} from './talksActionTypes'
+import { GET_TALK_SUCCESS } from '../../feedback/talk/core/talkActionTypes'
 
 const initState = {
     list: {},
     filter: null,
-    errorSessionsLoad: null,
+    errorTalksLoad: null,
     loading: false,
     loaded: false,
 }
 
-const sessionsReducer = (state = initState, { payload, type }) => {
+const talksReducer = (state = initState, { payload, type }) => {
     switch (type) {
-        case GET_SESSION_SUCCESS:
+        case GET_TALK_SUCCESS:
             return {
                 ...state,
                 list: {
@@ -30,25 +30,25 @@ const sessionsReducer = (state = initState, { payload, type }) => {
                     ...payload,
                 },
             }
-        case GET_SESSIONS_LOADING:
+        case GET_TALKS_LOADING:
             return {
                 ...state,
                 loading: true,
             }
-        case GET_SESSIONS_SUCCESS:
+        case GET_TALKS_SUCCESS:
             return {
                 ...state,
                 list: payload,
                 loading: false,
                 loaded: true,
             }
-        case SET_SESSIONS_FILTER:
+        case SET_TALKS_FILTER:
             return {
                 ...state,
                 filter: payload,
             }
-        case ADD_SESSION_SUCCESS:
-        case EDIT_SESSION_SUCCESS:
+        case ADD_TALK_SUCCESS:
+        case EDIT_TALK_SUCCESS:
             return {
                 ...state,
                 list: {
@@ -56,7 +56,7 @@ const sessionsReducer = (state = initState, { payload, type }) => {
                     [payload.id]: payload,
                 },
             }
-        case REMOVE_SESSION_SUCCESS: {
+        case REMOVE_TALK_SUCCESS: {
             const {
                 // eslint-disable-next-line no-unused-vars
                 [payload.id]: value,
@@ -68,22 +68,22 @@ const sessionsReducer = (state = initState, { payload, type }) => {
                 list,
             }
         }
-        case ADD_SESSION_ERROR:
-        case EDIT_SESSION_ERROR:
-        case REMOVE_SESSION_ERROR:
+        case ADD_TALK_ERROR:
+        case EDIT_TALK_ERROR:
+        case REMOVE_TALK_ERROR:
             // eslint-disable-next-line no-console
             console.error(type, payload)
             return state
-        case GET_SESSIONS_ERROR:
+        case GET_TALKS_ERROR:
             // eslint-disable-next-line no-console
             console.error(type, payload)
             return {
                 ...state,
-                errorSessionsLoad: payload,
+                errorTalksLoad: payload,
             }
         default:
             return state
     }
 }
 
-export default sessionsReducer
+export default talksReducer

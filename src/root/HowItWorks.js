@@ -50,7 +50,7 @@ class Header extends Component {
 
                     <List>
                         <li>
-                            Importer vos sessions et vos talks pour générer des
+                            Importer vos talks et vos talks pour générer des
                             formulaires
                         </li>
                         <li>

@@ -1,47 +1,44 @@
 import { createSelector } from 'reselect'
 import groupBy from 'lodash/groupBy'
-import { getDateFromStartTime } from './sessionsUtils'
+import { getDateFromStartTime } from './talksUtils'
 import { getProjectSelectedDateSelector } from '../../feedback/project/projectSelectors'
 import { getSpeakersListSelector } from '../speakers/speakerSelectors'
 
-export const getSessionsSelector = state => state.sessions
+export const getTalksSelector = state => state.talks
 
-export const getSessionsListSelector = state => getSessionsSelector(state).list
+export const getTalksListSelector = state => getTalksSelector(state).list
 
-export const getSessionsFilterSelector = state =>
-    getSessionsSelector(state).filter || ''
+export const getTalksFilterSelector = state =>
+    getTalksSelector(state).filter || ''
 
-export const getSessionsLoadError = state =>
-    getSessionsSelector(state).errorSessionsLoad
+export const getTalksLoadError = state => getTalksSelector(state).errorTalksLoad
 
-export const isSessionsLoadingSelector = state =>
-    getSessionsSelector(state).loading
+export const isTalksLoadingSelector = state => getTalksSelector(state).loading
 
-export const isSessionLoadedSelector = state =>
-    getSessionsSelector(state).loaded
+export const isTalkLoadedSelector = state => getTalksSelector(state).loaded
 
 //  MEMOIZED SELECTORS HERE
 
-export const getSessionsAsArraySelector = createSelector(
-    getSessionsListSelector,
-    sessions => {
-        return Object.keys(sessions).reduce((acc, id) => {
-            if (sessions[id].hideInFeedback) {
-                // Some sessions are not displayed (break time, etc)
+export const getTalksAsArraySelector = createSelector(
+    getTalksListSelector,
+    talks => {
+        return Object.keys(talks).reduce((acc, id) => {
+            if (talks[id].hideInFeedback) {
+                // Some talks are not displayed (break time, etc)
                 return acc
             }
-            acc.push(sessions[id])
+            acc.push(talks[id])
             return acc
         }, [])
     }
 )
 
-export const getSessionsDatesSelector = createSelector(
-    getSessionsAsArraySelector,
-    sessions => {
-        return sessions
-            .reduce((acc, session) => {
-                const date = getDateFromStartTime(session.startTime)
+export const getTalksDatesSelector = createSelector(
+    getTalksAsArraySelector,
+    talks => {
+        return talks
+            .reduce((acc, talk) => {
+                const date = getDateFromStartTime(talk.startTime)
                 if (!acc.includes(date)) {
                     acc.push(date)
                 }
@@ -51,23 +48,23 @@ export const getSessionsDatesSelector = createSelector(
     }
 )
 
-export const getFilteredSessionsSelector = createSelector(
-    getSessionsAsArraySelector,
-    getSessionsFilterSelector,
+export const getFilteredTalksSelector = createSelector(
+    getTalksAsArraySelector,
+    getTalksFilterSelector,
     getSpeakersListSelector,
-    (sessions, filter, speakers) => {
+    (talks, filter, speakers) => {
         const cleanedFilterInput = filter.toLowerCase().trim()
 
-        return sessions.filter(session => {
-            const titleMatch = session.title
+        return talks.filter(talk => {
+            const titleMatch = talk.title
                 .toLowerCase()
                 .includes(cleanedFilterInput)
 
             let speakerMatch = 0
-            if (!session.speakers) {
+            if (!talk.speakers) {
                 speakerMatch = -1
             } else if (
-                session.speakers
+                talk.speakers
                     .filter(speakerId => speakerId.length > 0)
                     .map(speakerId => speakers[speakerId])
                     .filter(speaker => speaker && speaker.name)
@@ -83,8 +80,8 @@ export const getFilteredSessionsSelector = createSelector(
             }
 
             const tagMatch =
-                session.tags &&
-                session.tags.filter(tag =>
+                talk.tags &&
+                talk.tags.filter(tag =>
                     tag.toLowerCase().includes(cleanedFilterInput)
                 ).length > 0
 
@@ -93,25 +90,25 @@ export const getFilteredSessionsSelector = createSelector(
     }
 )
 
-export const getCurrentSessionsGroupByTrackSelector = createSelector(
-    getFilteredSessionsSelector,
+export const getCurrentTalksGroupByTrackSelector = createSelector(
+    getFilteredTalksSelector,
     getProjectSelectedDateSelector,
-    (sessions, date) => {
-        const filteredSessions = sessions.filter(session => {
-            return date === getDateFromStartTime(session.startTime)
+    (talks, date) => {
+        const filteredTalks = talks.filter(talk => {
+            return date === getDateFromStartTime(talk.startTime)
         })
 
-        const sessionsGroupByTrack = groupBy(
-            filteredSessions,
-            session => session.trackTitle
+        const talksGroupByTrack = groupBy(
+            filteredTalks,
+            talk => talk.trackTitle
         )
 
-        return Object.keys(sessionsGroupByTrack)
+        return Object.keys(talksGroupByTrack)
             .sort()
             .reduce((acc, track) => {
                 acc.push({
                     track: track,
-                    sessions: sessionsGroupByTrack[track],
+                    talks: talksGroupByTrack[track],
                 })
                 return acc
             }, [])
@@ -119,7 +116,7 @@ export const getCurrentSessionsGroupByTrackSelector = createSelector(
 )
 
 export const getTracksSelector = createSelector(
-    getSessionsAsArraySelector,
+    getTalksAsArraySelector,
     talks => {
         return [
             ...new Set(
@@ -130,7 +127,7 @@ export const getTracksSelector = createSelector(
 )
 
 export const getTagsSelector = createSelector(
-    getSessionsAsArraySelector,
+    getTalksAsArraySelector,
     talks => {
         return [
             ...new Set(

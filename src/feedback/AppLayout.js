@@ -9,14 +9,14 @@ import * as authActions from './auth/authActions'
 import {
     getProjectLoadErrorSelector,
     getProjectSelector,
-    getProjectVotesErrorSelector
+    getProjectVotesErrorSelector,
 } from './project/projectSelectors'
 import * as projectActions from './project/projectActions'
 import Error from '../baseComponents/customComponent/Error'
 import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent'
 import { getLoginErrorSelector } from './auth/authSelectors'
 import Footer from './layout/Footer'
-import { getSessionsDatesSelector } from '../core/sessions/sessionsSelectors'
+import { getTalksDatesSelector } from '../core/talks/talksSelectors'
 
 const styles = theme => ({
     loading: {
@@ -25,7 +25,7 @@ const styles = theme => ({
         alignItems: 'center',
         height: '100vh',
         justifyContent: 'center',
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     layout: {
         marginLeft: 0,
@@ -35,13 +35,13 @@ const styles = theme => ({
         [theme.breakpoints.up(900 + theme.spacing(6))]: {
             width: 900,
             marginLeft: 'auto',
-            marginRight: 'auto'
+            marginRight: 'auto',
         },
         [theme.breakpoints.down('sm')]: {
             paddingLeft: theme.spacing(2),
-            paddingRight: theme.spacing(2)
-        }
-    }
+            paddingRight: theme.spacing(2),
+        },
+    },
 })
 
 class AppLayout extends Component {
@@ -72,7 +72,7 @@ class AppLayout extends Component {
             projectLoadError,
             projectVotesError,
             loginError,
-            children
+            children,
         } = this.props
 
         if (loginError) {
@@ -113,10 +113,10 @@ class AppLayout extends Component {
 
 const mapStateToProps = state => ({
     project: getProjectSelector(state),
-    dates: getSessionsDatesSelector(state),
+    dates: getTalksDatesSelector(state),
     projectLoadError: getProjectLoadErrorSelector(state),
     projectVotesError: getProjectVotesErrorSelector(state),
-    loginError: getLoginErrorSelector(state)
+    loginError: getLoginErrorSelector(state),
 })
 
 const mapDispatchToProps = Object.assign({}, projectActions, authActions)
