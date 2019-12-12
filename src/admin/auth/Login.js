@@ -50,7 +50,7 @@ const Login = ({ children }) => {
         return () => {
             unregisterAuthObserver()
         }
-    }, [])
+    }, [dispatch, tempUser])
 
     if (isLoggedIn) {
         return children
