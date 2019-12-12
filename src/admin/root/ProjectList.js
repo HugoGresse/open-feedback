@@ -7,8 +7,10 @@ import AddIcon from '@material-ui/icons/Add'
 import COLORS from '../../constants/colors'
 import CardActionArea from '@material-ui/core/CardActionArea'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import Paper from '@material-ui/core/Paper'
+import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     newEventCard: {
         textAlign: 'center',
         color: COLORS.RED_ORANGE,
@@ -20,10 +22,27 @@ const useStyles = makeStyles({
     cardContent: {
         minHeight: 140,
     },
-})
+    loaderContainer: {
+        padding: theme.spacing(2, 2),
+    },
+}))
 
-const RootContent = ({ projects, onNewEventClick, onProjectSelected }) => {
+const ProjectList = ({
+    projects,
+    isProjectsLoaded,
+    onNewEventClick,
+    onProjectSelected,
+}) => {
     const classes = useStyles()
+
+    if (!isProjectsLoaded) {
+        return (
+            <Paper className={classes.loaderContainer}>
+                <LoaderMatchParent height="50" />
+            </Paper>
+        )
+    }
+
     return (
         <>
             <Grid item xs={6} sm={6} md={4} key="new-event">
@@ -60,4 +79,4 @@ const RootContent = ({ projects, onNewEventClick, onProjectSelected }) => {
     )
 }
 
-export default RootContent
+export default ProjectList
