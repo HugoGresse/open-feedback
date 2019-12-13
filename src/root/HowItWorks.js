@@ -50,22 +50,20 @@ class Header extends Component {
 
                     <List>
                         <li>
-                            Importer vos talks et vos talks pour générer des
-                            formulaires
+                            Import or manually add speakers & talks to generate
+                            voting form
                         </li>
+                        <li>Share a link or a QR Code with the attendees</li>
                         <li>
-                            Partager un lien ou un QR code avec les participants
-                        </li>
-                        <li>
-                            Laisser les participants noter les talks sans besoin
-                            de se connecter
+                            Let the attendees rate and give feedback without any
+                            login
                         </li>
                     </List>
 
                     <CompatibilityText flex alignItems="center">
-                        Compatible avec le programme{' '}
+                        Compatible with{' '}
                         <img height="40" src={hoverboard} alt="hoverboard" /> et{' '}
-                        <img height="50" src={firebase} alt="Fire base" />
+                        <img height="50" src={firebase} alt="Firebase" />
                     </CompatibilityText>
                 </Grid>
             </Wrapper>
