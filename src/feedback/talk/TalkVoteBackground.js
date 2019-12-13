@@ -6,25 +6,25 @@ import { getRandomArbitrary } from '../utils/Random'
 
 const styles = theme => ({
     canvas: {
-        position: 'absolute'
+        position: 'absolute',
     },
     refElement: {
         position: 'absolute',
         width: '100%',
-        height: '100%'
-    }
+        height: '100%',
+    },
 })
 
 const circleRadius = 15
 
-class SessionItemVoteBackground extends Component {
+class TalkItemVoteBackground extends Component {
     constructor(props) {
         super(props)
         this.refElement = React.createRef()
         this.canvasRef = React.createRef()
         this.canvasState = {
             isDrawn: false,
-            circles: []
+            circles: [],
         }
     }
 
@@ -42,7 +42,7 @@ class SessionItemVoteBackground extends Component {
             if (this.props.count !== prevProps.count) {
                 this.canvasState = {
                     ...this.canvasState,
-                    isDrawn: false
+                    isDrawn: false,
                 }
             }
             this.createRandomCircle(
@@ -75,7 +75,7 @@ class SessionItemVoteBackground extends Component {
             for (let i = 0; i < diff; i++) {
                 circles.push({
                     x: getRandomArbitrary(0, width),
-                    y: getRandomArbitrary(0, height)
+                    y: getRandomArbitrary(0, height),
                 })
             }
         } else if (count < circles.length) {
@@ -105,7 +105,7 @@ class SessionItemVoteBackground extends Component {
         this.canvasState = {
             ...this.canvasState,
             circles: circles,
-            isDrawn: true
+            isDrawn: true,
         }
     }
 
@@ -121,10 +121,10 @@ class SessionItemVoteBackground extends Component {
     }
 }
 
-SessionItemVoteBackground.propTypes = {
+TalkItemVoteBackground.propTypes = {
     classes: PropTypes.object.isRequired,
     count: PropTypes.number,
-    colors: PropTypes.array
+    colors: PropTypes.array,
 }
 
-export default withStyles(styles)(SessionItemVoteBackground)
+export default withStyles(styles)(TalkItemVoteBackground)

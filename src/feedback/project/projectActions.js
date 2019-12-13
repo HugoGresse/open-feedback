@@ -3,7 +3,7 @@ import {
     GET_PROJECT_SUCCESS,
     GET_PROJECT_VOTE_RESULT_ERROR,
     GET_PROJECT_VOTE_RESULT_SUCCESS,
-    SET_SELECTED_DATE
+    SET_SELECTED_DATE,
 } from './projectActionTypes'
 import { fireStoreMainInstance } from '../../firebase'
 import { getProjectSelector } from './projectSelectors'
@@ -24,20 +24,20 @@ export const getProject = projectId => {
 
                     dispatch({
                         type: GET_PROJECT_SUCCESS,
-                        payload: project
+                        payload: project,
                     })
                 } else {
                     dispatch({
                         type: GET_PROJECT_ERROR,
                         payload:
-                            'Unknown project id, probably some copy-past issue?'
+                            'Unknown project id, probably some copy-past issue?',
                     })
                 }
             })
             .catch(err => {
                 dispatch({
                     type: GET_PROJECT_ERROR,
-                    payload: err.toString()
+                    payload: err.toString(),
                 })
             })
     }
@@ -46,8 +46,8 @@ export const getProject = projectId => {
 export const setSelectedDate = date => ({
     type: SET_SELECTED_DATE,
     payload: {
-        date: date
-    }
+        date: date,
+    },
 })
 
 export const getVoteResult = () => {
@@ -58,23 +58,23 @@ export const getVoteResult = () => {
             .collection('sessionVotes')
             .get()
             .then(projectSnapshot => {
-                const sessions = {}
+                const talks = {}
                 projectSnapshot.forEach(doc => {
-                    sessions[doc.id] = {
+                    talks[doc.id] = {
                         ...doc.data(),
-                        id: doc.id
+                        id: doc.id,
                     }
                 })
 
                 dispatch({
                     type: GET_PROJECT_VOTE_RESULT_SUCCESS,
-                    payload: sessions
+                    payload: talks,
                 })
             })
             .catch(err => {
                 dispatch({
                     type: GET_PROJECT_VOTE_RESULT_ERROR,
-                    payload: err
+                    payload: err,
                 })
             })
     }

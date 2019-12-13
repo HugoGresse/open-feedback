@@ -1,12 +1,11 @@
 import { Route, Switch } from 'react-router-dom'
 
-import React from "react"
-import AppLayout from "./AppLayout"
-import SessionsListWrapper from "./sessions/SessionsListWrapper"
-import Session from "./session/Session"
+import React from 'react'
+import AppLayout from './AppLayout'
+import TalksListWrapper from './talks/TalksListWrapper'
+import Talk from './talk/Talk'
 
 const FeedbackApp = () => {
-
     return (
         <Switch>
             <Route
@@ -14,7 +13,7 @@ const FeedbackApp = () => {
                 path="/:projectId"
                 render={props => (
                     <AppLayout {...props}>
-                        <SessionsListWrapper {...props} />
+                        <TalksListWrapper {...props} />
                     </AppLayout>
                 )}
             />
@@ -23,22 +22,20 @@ const FeedbackApp = () => {
                 path="/:projectId/:date"
                 render={props => (
                     <AppLayout {...props}>
-                        <SessionsListWrapper {...props} />
+                        <TalksListWrapper {...props} />
                     </AppLayout>
                 )}
             />
             <Route
-                path="/:projectId/:date/:sessionId"
+                path="/:projectId/:date/:talkId"
                 render={props => (
                     <AppLayout {...props}>
-                        <Session {...props} />
+                        <Talk {...props} />
                     </AppLayout>
                 )}
             />
-
         </Switch>
     )
-
 }
 
 export default FeedbackApp

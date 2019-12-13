@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions'
-import * as admin from "firebase-admin"
+import * as admin from 'firebase-admin'
 import * as firebase from 'firebase'
 import DocumentData = firebase.firestore.DocumentData
 
@@ -45,7 +45,7 @@ export const incrementVoteAggregate = (
     if (
         !newVote ||
         !isIdValid(newVote.projectId) ||
-        !isIdValid(newVote.sessionId) ||
+        !isIdValid(newVote.talkId) ||
         !isIdValid(newVote.voteItemId) ||
         !isIdValid(newVote.userId) ||
         !newVote.id
@@ -54,71 +54,67 @@ export const incrementVoteAggregate = (
         return
     }
 
-    const sessionVoteDb = firestoreDb
+    const talkVoteDb = firestoreDb
         .collection('projects')
         .doc(newVote.projectId)
         .collection('sessionVotes')
-        .doc(String(newVote.sessionId))
+        .doc(String(newVote.talkId))
 
-    return sessionVoteDb
+    return talkVoteDb
         .get()
         .then(snapshot => {
             let aggregatedValue
-            const session = snapshot.data()
+            const talk = snapshot.data()
 
             if (newVote.text) {
                 const voteText = {
                     text: newVote.text,
                     createdAt: newVote.createdAt,
                     updatedAt: newVote.updatedAt,
-                    userId: newVote.userId
+                    userId: newVote.userId,
                 }
                 if (increment > 0) {
                     if (
                         !snapshot.exists ||
-                        !session ||
-                        !session[newVote.voteItemId]
+                        !talk ||
+                        !talk[newVote.voteItemId]
                     ) {
                         aggregatedValue = { [newVoteId]: voteText }
                     } else {
                         aggregatedValue = {
-                            ...session[newVote.voteItemId],
-                            [newVoteId]: voteText
+                            ...talk[newVote.voteItemId],
+                            [newVoteId]: voteText,
                         }
                     }
                 } else {
                     if (
                         !snapshot.exists ||
-                        !session ||
-                        !session[newVote.voteItemId]
+                        !talk ||
+                        !talk[newVote.voteItemId]
                     ) {
                         aggregatedValue = {}
                     } else {
-                        aggregatedValue = session[newVote.voteItemId]
+                        aggregatedValue = talk[newVote.voteItemId]
                         aggregatedValue[newVoteId] = {}
                     }
                 }
             } else {
-                if (
-                    !snapshot.exists ||
-                    !session ||
-                    !session[newVote.voteItemId]
-                ) {
+                if (!snapshot.exists || !talk || !talk[newVote.voteItemId]) {
                     aggregatedValue = increment
                 } else {
-                    aggregatedValue = session[newVote.voteItemId] + increment
+                    aggregatedValue = talk[newVote.voteItemId] + increment
                 }
             }
 
-            return sessionVoteDb.set(
+            return talkVoteDb.set(
                 {
-                    [newVote.voteItemId]: aggregatedValue
+                    [newVote.voteItemId]: aggregatedValue,
                 },
                 { merge: true }
             )
         })
         .catch(err => {
-            console.log('Error getting documents session', err)
+            console.log('Error getting documents talk', err)
             return err
         })
 }

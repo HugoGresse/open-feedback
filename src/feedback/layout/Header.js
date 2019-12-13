@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import {Link, useParams} from 'react-router-dom'
-import {COLORS} from '../../constants/colors'
+import { Link, useParams } from 'react-router-dom'
+import { COLORS } from '../../constants/colors'
 import Title from '../../baseComponents/design/Title'
-import {SCREEN_SIZES} from '../../constants/constants'
+import { SCREEN_SIZES } from '../../constants/constants'
 import SearchBar from './SearchBar'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import CalendarToday from '@material-ui/icons/CalendarToday'
-import {Hidden} from '@material-ui/core/es'
+import { Hidden } from '@material-ui/core/es'
 
 const Logo = styled.img`
     margin-right: 20px;
@@ -34,13 +34,13 @@ const IconWrapper = styled.div`
     min-width: 28px;
     position: absolute;
     ${props =>
-    props.left &&
-    `
+        props.left &&
+        `
         left: 20px;
     `}
     ${props =>
-    props.right &&
-    `
+        props.right &&
+        `
         right: 20px;
     `}
     svg {
@@ -61,18 +61,17 @@ const BoxCenter = styled.div`
     }
 `
 
-const Header = ({project}) => {
+const Header = ({ project }) => {
     const matchParams = useParams()
 
     return (
         <HeaderStyled>
             <div className="header">
                 <IconWrapper left>
-                    {matchParams.sessionId && (
+                    {matchParams.talkId && (
                         <Link
-                            to={`/${matchParams.projectId}/${matchParams.date}`}
-                        >
-                            <ArrowBack/>
+                            to={`/${matchParams.projectId}/${matchParams.date}`}>
+                            <ArrowBack />
                         </Link>
                     )}
                 </IconWrapper>
@@ -80,9 +79,8 @@ const Header = ({project}) => {
                     <a
                         href={project.scheduleLink}
                         target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <CalendarToday/>
+                        rel="noopener noreferrer">
+                        <CalendarToday />
                     </a>
                 </IconWrapper>
                 <BoxCenter>
@@ -93,17 +91,13 @@ const Header = ({project}) => {
                         alt="logo"
                     />
                     <Hidden smDown>
-                        <Title
-                            component="h1"
-                            fontSize={24}
-                            fontWeight={400}
-                        >
+                        <Title component="h1" fontSize={24} fontWeight={400}>
                             {project.name}
                         </Title>
                     </Hidden>
                 </BoxCenter>
             </div>
-            {!matchParams.sessionId && <SearchBar/>}
+            {!matchParams.talkId && <SearchBar />}
         </HeaderStyled>
     )
 }

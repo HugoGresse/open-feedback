@@ -1,13 +1,13 @@
 import {
-    GET_SESSION_VOTES_ERROR,
-    GET_SESSION_VOTES_SUCCESS,
+    GET_TALK_VOTES_ERROR,
+    GET_TALK_VOTES_SUCCESS,
     GET_USER_VOTES_ERROR,
-    GET_USER_VOTES_SUCCESS
+    GET_USER_VOTES_SUCCESS,
 } from './dashboardActionTypes'
 import { fireStoreMainInstance } from '../../../firebase'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 
-export const getSessionVotes = () => {
+export const getTalkVotes = () => {
     return (dispatch, getState) => {
         return fireStoreMainInstance
             .collection('projects')
@@ -15,23 +15,23 @@ export const getSessionVotes = () => {
             .collection('sessionVotes')
             .get()
             .then(snapshot => {
-                const sessionVotes = []
+                const talkVotes = []
                 snapshot.forEach(doc => {
-                    sessionVotes.push({
+                    talkVotes.push({
                         id: doc.id,
-                        votes: doc.data()
+                        votes: doc.data(),
                     })
                 })
 
                 dispatch({
-                    type: GET_SESSION_VOTES_SUCCESS,
-                    payload: sessionVotes
+                    type: GET_TALK_VOTES_SUCCESS,
+                    payload: talkVotes,
                 })
             })
             .catch(err => {
                 dispatch({
-                    type: GET_SESSION_VOTES_ERROR,
-                    payload: err.toString()
+                    type: GET_TALK_VOTES_ERROR,
+                    payload: err.toString(),
                 })
             })
     }
@@ -50,19 +50,19 @@ export const getUserVotes = () => {
                 snapshot.forEach(doc => {
                     userVotes.push({
                         fireStoreId: doc.id,
-                        ...doc.data()
+                        ...doc.data(),
                     })
                 })
 
                 dispatch({
                     type: GET_USER_VOTES_SUCCESS,
-                    payload: userVotes
+                    payload: userVotes,
                 })
             })
             .catch(err => {
                 dispatch({
                     type: GET_USER_VOTES_ERROR,
-                    payload: err.toString()
+                    payload: err.toString(),
                 })
             })
     }

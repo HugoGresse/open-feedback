@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import styled from 'styled-components'
-import { getSessionsDatesSelector } from '../../core/sessions/sessionsSelectors'
+import { getTalksDatesSelector } from '../../core/talks/talksSelectors'
 import {
     getProjectSelectedDateSelector,
-    getProjectSelector
+    getProjectSelector,
 } from '../project/projectSelectors'
 import { COLORS } from '../../constants/colors'
 import { Link } from 'react-router-dom'
@@ -32,12 +32,12 @@ const MenuItem = styled.div`
     }
 `
 
-class SessionsDateMenu extends Component {
+class TalksDateMenu extends Component {
     render() {
-        const { sessionsDates, selectedDate, currentProjectId } = this.props
+        const { talksDates, selectedDate, currentProjectId } = this.props
         return (
             <Menu>
-                {sessionsDates.map(date => (
+                {talksDates.map(date => (
                     <MenuItem key={date} selected={selectedDate === date}>
                         <Link to={`/${currentProjectId}/${date}`}>
                             {moment(date).format('dddd D')}
@@ -50,12 +50,9 @@ class SessionsDateMenu extends Component {
 }
 
 const mapStateToProps = state => ({
-    sessionsDates: getSessionsDatesSelector(state),
+    talksDates: getTalksDatesSelector(state),
     selectedDate: getProjectSelectedDateSelector(state),
-    currentProjectId: getProjectSelector(state).id
+    currentProjectId: getProjectSelector(state).id,
 })
 
-export default connect(
-    mapStateToProps,
-    null
-)(SessionsDateMenu)
+export default connect(mapStateToProps, null)(TalksDateMenu)

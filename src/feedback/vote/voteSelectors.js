@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { getSelectedSessionIdSelector } from '../session/core/sessionSelectors'
+import { getSelectedTalkIdSelector } from '../talk/core/talkSelectors'
 
 const getVotes = state => state.votes
 
@@ -12,13 +12,13 @@ export const getErrorVotesLoadSelector = state => getVotes(state).errorVotesLoad
 
 //  MEMOIZED SELECTORS HERE
 
-export const getUserVotesBySessionAndVoteItemSelector = createSelector(
+export const getUserVotesByTalkAndVoteItemSelector = createSelector(
     getCurrentUserVotesSelector,
-    getSelectedSessionIdSelector,
-    (votes, sessionId) => {
+    getSelectedTalkIdSelector,
+    (votes, talkId) => {
         const result = {}
         Object.values(votes)
-            .filter(vote => vote.sessionId === sessionId)
+            .filter(vote => vote.talkId === talkId)
             .forEach(vote => {
                 result[vote.voteItemId] = vote
             })
@@ -26,12 +26,12 @@ export const getUserVotesBySessionAndVoteItemSelector = createSelector(
     }
 )
 
-export const getVotesBySessionSelector = createSelector(
+export const getVotesByTalkSelector = createSelector(
     getCurrentUserVotesSelector,
-    (votes, sessionId) => {
+    (votes, talkId) => {
         const result = {}
         Object.values(votes).forEach(vote => {
-            result[vote.sessionId] = vote
+            result[vote.talkId] = vote
         })
         return result
     }
