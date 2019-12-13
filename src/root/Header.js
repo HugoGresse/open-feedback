@@ -32,14 +32,28 @@ const Menu = styled.ul`
     li {
         display: inline;
         margin-left: 30px;
+        margin: 10px;
     }
     a {
         color: ${COLORS.WHITE};
         opacity: 0.7;
         transition: all 0.2s ease;
+        padding: 10px;
         &:hover {
             opacity: 1;
         }
+    }
+`
+
+const LinkButton = styled.a`
+    color: ${COLORS.WHITE};
+    transition: all 0.2s ease;
+    border: 1px solid ${COLORS.WHITE};
+    border-radius: 5px;
+    margin: 40px 10px 10px;
+    padding: 10px;
+    &:hover {
+        opacity: 1;
     }
 `
 
@@ -50,15 +64,17 @@ class Header extends Component {
                 <Box
                     className="wrapperLogoMenu"
                     flex
-                    justifyContent="space-between"
-                >
+                    justifyContent="space-between">
                     <img height="40" src={logoWhite} alt="open feedback" />
                     <Menu>
                         <li>
-                            <a href="#howitworks">Comment ça marche ?</a>
+                            <a href="#howitworks">How it works</a>
                         </li>
                         <li>
-                            <a href="/eaJnyMXD3oNfhrrnBYDT">Démo</a>
+                            <a href="/eaJnyMXD3oNfhrrnBYDT">Demo</a>
+                        </li>
+                        <li>
+                            <a href="/admin/">Admin</a>
                         </li>
                     </Menu>
                 </Box>
@@ -68,17 +84,16 @@ class Header extends Component {
                     justifyContent="center"
                     alignItems="center"
                     flexGrow="1"
-                    textAlign="center"
-                >
+                    textAlign="center">
                     <Title component="h1" m={0} color={COLORS.WHITE}>
-                        Collecter des feedback simplement
+                        Collect feedbacks easily
                     </Title>
                     <Title component="h3" m={0} color={COLORS.WHITE}>
-                        Conférences, meetups, évènements,...
+                        Conferences, meetups, events, summit...
                     </Title>
-                    {/*<Button mt={40} outline color={COLORS.WHITE} disable>
-                        Créer votre événement
-                    </Button>*/}
+                    <LinkButton href="/admin/">
+                        Create your event now
+                    </LinkButton>
                 </Box>
             </Wrapper>
         )

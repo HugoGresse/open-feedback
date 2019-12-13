@@ -46,7 +46,7 @@ class Header extends Component {
                     </Grid>
                 </Hidden>
                 <Grid className="left" item xs={12} sm={6}>
-                    <Title>Comment ça marche ?</Title>
+                    <Title>How it works?</Title>
 
                     <List>
                         <li>
