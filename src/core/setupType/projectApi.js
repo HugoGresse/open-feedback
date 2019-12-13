@@ -8,23 +8,23 @@ export const PROJECT_TYPE_OPENFEEDBACK = 'openfeedbackv1'
 
 const notImplementApi = {
     // eslint-disable-next-line no-unused-vars
-    getSessions() {
+    getTalks() {
         logProjectNotInitialized()
     },
     // eslint-disable-next-line no-unused-vars
-    getSession(sessionId) {
+    getTalk(talkId) {
         logProjectNotInitialized()
     },
     // eslint-disable-next-line no-unused-vars
-    addSession(newSession) {
+    addTalk(newTalk) {
         logProjectNotInitialized()
     },
     // eslint-disable-next-line no-unused-vars
-    removeSession(sessionId) {
+    removeTalk(talkId) {
         logProjectNotInitialized()
     },
     // eslint-disable-next-line no-unused-vars
-    editSession(session) {
+    editTalk(talk) {
         logProjectNotInitialized()
     },
     // eslint-disable-next-line no-unused-vars

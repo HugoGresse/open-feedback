@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { isProjectApiInitSelector } from '../core/projectSelectors'
-import { getTalks } from '../../../core/sessions/sessionsActions'
+import { getTalks } from '../../../core/talks/talksActions'
 import { getSpeakers } from '../../../core/speakers/speakerActions'
 import OFPaper from '../../baseComponents/OFPaper'
 import TalkList from './TalkList'

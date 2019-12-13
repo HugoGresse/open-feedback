@@ -1,11 +1,11 @@
 import moment from 'moment'
 
-const validate = async (api) => {
+const validate = async api => {
     let result = {
         dataAvailable: false,
         speakersObjectFound: false,
-        sessionsObjectFound: false,
-        session: {
+        talksObjectFound: false,
+        talk: {
             idValid: false,
             titleValid: false,
             startEndTimeValid: false,
@@ -13,31 +13,34 @@ const validate = async (api) => {
             speakersValid: false,
             noSpeakers: 0,
             speakersMissing: 0,
-            sessionCount: 0
+            talkCount: 0,
         },
         speaker: {
             idValid: false,
             nameValid: false,
             photoUrlValid: false,
-            speakerCount: 0
-        }
+            speakerCount: 0,
+        },
     }
 
     try {
-        const sessions = await api.getSessions()
+        const talks = await api.getTalks()
         const speakers = await api.getSpeakers()
 
         result.dataAvailable = true
 
-        const sessionsResult = validateSessions(sessions, speakers)
+        const talksResult = validateTalks(talks, speakers)
         const speakerResult = validateSpeakers(speakers)
 
         return {
             ...result,
-            ...sessionsResult,
+            ...talksResult,
             ...speakerResult,
-            isSuccessful: sessionsResult.sessionsObjectFound && !Object.values(sessionsResult.session).includes(false) &&
-                speakerResult.speakersObjectFound && !Object.values(speakerResult.speaker).includes(false)
+            isSuccessful:
+                talksResult.talksObjectFound &&
+                !Object.values(talksResult.talk).includes(false) &&
+                speakerResult.speakersObjectFound &&
+                !Object.values(speakerResult.speaker).includes(false),
         }
     } catch (error) {
         // eslint-disable-next-line no-console
@@ -47,10 +50,10 @@ const validate = async (api) => {
     return result
 }
 
-const validateSessions = (sessions, speakers) => {
+const validateTalks = (talks, speakers) => {
     const result = {
-        sessionsObjectFound: true,
-        session: {
+        talksObjectFound: true,
+        talk: {
             idValid: true,
             titleValid: true,
             startEndTimeValid: true,
@@ -58,13 +61,13 @@ const validateSessions = (sessions, speakers) => {
             speakersValid: true,
             noSpeakers: 0,
             speakersMissing: 0,
-            sessionCount: 0
-        }
+            talkCount: 0,
+        },
     }
-    if (!sessions || typeof sessions !== 'object') {
+    if (!talks || typeof talks !== 'object') {
         return {
-            sessionsObjectFound: false,
-            session: {
+            talksObjectFound: false,
+            talk: {
                 idValid: false,
                 titleValid: false,
                 startEndTimeValid: false,
@@ -72,16 +75,16 @@ const validateSessions = (sessions, speakers) => {
                 speakersValid: false,
                 noSpeakers: 0,
                 speakersMissing: 0,
-                sessionCount: 0
-            }
+                talkCount: 0,
+            },
         }
     }
 
-    const sessionKeys = Object.keys(sessions)
-    if (sessionKeys.length <= 0) {
+    const talkKeys = Object.keys(talks)
+    if (talkKeys.length <= 0) {
         return {
-            sessionsObjectFound: false,
-            session: {
+            talksObjectFound: false,
+            talk: {
                 idValid: false,
                 titleValid: false,
                 startEndTimeValid: false,
@@ -89,41 +92,47 @@ const validateSessions = (sessions, speakers) => {
                 speakersValid: false,
                 noSpeakers: 0,
                 speakersMissing: 0,
-                sessionCount: 0
-            }
+                talkCount: 0,
+            },
         }
     } else {
-        let tempSession
-        sessionKeys.forEach(key => {
-            tempSession = sessions[key]
-            if (tempSession || typeof sessions === 'object') {
-                result.session.sessionCount++
+        let tempTalk
+        talkKeys.forEach(key => {
+            tempTalk = talks[key]
+            if (tempTalk || typeof talks === 'object') {
+                result.talk.talkCount++
 
-                if (key !== tempSession.id) {
-                    result.session.idValid = false
+                if (key !== tempTalk.id) {
+                    result.talk.idValid = false
                 }
-                if (!tempSession.title) {
-                    result.session.titleValid = false
+                if (!tempTalk.title) {
+                    result.talk.titleValid = false
                 }
-                if (!tempSession.startTime || !tempSession.endTime) {
-                    result.session.startEndTimeValid = false
-                } else if (!moment(tempSession.startTime).isValid() || !moment(tempSession.endTime).isValid()) {
-                    result.session.startEndTimeValid = false
+                if (!tempTalk.startTime || !tempTalk.endTime) {
+                    result.talk.startEndTimeValid = false
+                } else if (
+                    !moment(tempTalk.startTime).isValid() ||
+                    !moment(tempTalk.endTime).isValid()
+                ) {
+                    result.talk.startEndTimeValid = false
                 }
 
-                if (!tempSession.trackTitle) {
-                    result.session.trackTitleValid = false
+                if (!tempTalk.trackTitle) {
+                    result.talk.trackTitleValid = false
                 }
-                if (!tempSession.speakers || tempSession.speakers.constructor !== Array) {
-                    result.session.speakersValid = false
+                if (
+                    !tempTalk.speakers ||
+                    tempTalk.speakers.constructor !== Array
+                ) {
+                    result.talk.speakersValid = false
                 } else {
-                    tempSession.speakers.forEach(speakerId => {
+                    tempTalk.speakers.forEach(speakerId => {
                         if (!speakers || !speakers[speakerId]) {
-                            result.session.speakersMissing++
+                            result.talk.speakersMissing++
                         }
                     })
-                    if (tempSession.speakers.length <= 0) {
-                        result.session.noSpeakers++
+                    if (tempTalk.speakers.length <= 0) {
+                        result.talk.noSpeakers++
                     }
                 }
             }
@@ -133,15 +142,15 @@ const validateSessions = (sessions, speakers) => {
     return result
 }
 
-const validateSpeakers = (speakers) => {
+const validateSpeakers = speakers => {
     const result = {
         speakersObjectFound: true,
         speaker: {
             idValid: true,
             nameValid: true,
             photoUrlValid: true,
-            speakerCount: 0
-        }
+            speakerCount: 0,
+        },
     }
     if (!speakers || typeof speakers !== 'object') {
         return {
@@ -150,8 +159,8 @@ const validateSpeakers = (speakers) => {
                 idValid: false,
                 nameValid: false,
                 photoUrlValid: false,
-                speakerCount: 0
-            }
+                speakerCount: 0,
+            },
         }
     }
 
@@ -163,8 +172,8 @@ const validateSpeakers = (speakers) => {
                 idValid: false,
                 nameValid: false,
                 photoUrlValid: false,
-                speakerCount: 0
-            }
+                speakerCount: 0,
+            },
         }
     } else {
         let speaker
@@ -178,7 +187,11 @@ const validateSpeakers = (speakers) => {
             if (!speaker.name) {
                 result.speaker.nameValid = false
             }
-            if (!speaker.photoUrl || (!speaker.photoUrl.startsWith("https://") && !speaker.photoUrl.startsWith("http://"))) {
+            if (
+                !speaker.photoUrl ||
+                (!speaker.photoUrl.startsWith('https://') &&
+                    !speaker.photoUrl.startsWith('http://'))
+            ) {
                 result.speaker.photoUrlValid = false
             }
         })

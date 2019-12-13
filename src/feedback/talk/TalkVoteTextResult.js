@@ -7,18 +7,18 @@ const styles = theme => ({
     date: {
         color: '#888',
         fontSize: 14,
-        marginBottom: 0
+        marginBottom: 0,
     },
     comment: {
         borderBottom: '1px solid #e8e8e8',
         paddingBottom: 15,
         marginTop: 10,
         wordBreak: 'break-word',
-        whiteSpace: 'pre-wrap'
-    }
+        whiteSpace: 'pre-wrap',
+    },
 })
 
-class SessionVoteTextResult extends Component {
+class TalkVoteTextResult extends Component {
     render() {
         const { result, classes } = this.props
 
@@ -37,9 +37,9 @@ class SessionVoteTextResult extends Component {
     }
 }
 
-SessionVoteTextResult.propTypes = {
+TalkVoteTextResult.propTypes = {
     classes: PropTypes.object.isRequired,
-    result: PropTypes.array.isRequired
+    result: PropTypes.array.isRequired,
 }
 
-export default withStyles(styles)(SessionVoteTextResult)
+export default withStyles(styles)(TalkVoteTextResult)

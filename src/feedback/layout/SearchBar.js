@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import SearchIcon from '@material-ui/icons/Search'
-import { setTalksFilter } from '../../core/sessions/sessionsActions'
+import { setTalksFilter } from '../../core/talks/talksActions'
 import { COLORS } from '../../constants/colors'
 import { SCREEN_SIZES } from '../../constants/constants'
 import BigInput from '../../baseComponents/design/BigInput'

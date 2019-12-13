@@ -9,21 +9,21 @@ import {
     REMOVE_VOTE_BEFORE_SUCCESS,
     REMOVE_VOTE_SUCCESS,
     UPDATE_VOTE_ERROR,
-    UPDATE_VOTE_SUCCESS
+    UPDATE_VOTE_SUCCESS,
 } from './voteActionTypes'
 import {
     fireStoreMainInstance,
     nowTimestamp,
-    serverTimestamp
+    serverTimestamp,
 } from '../../firebase'
-import {getUserSelector} from '../auth/authSelectors'
-import {getProjectSelector} from '../project/projectSelectors'
-import {getCurrentUserVotesSelector} from './voteSelectors'
-import {INCREMENT_VOTE_LOCALLY} from '../project/projectActionTypes'
-import {VOTE_TYPE_TEXT} from './voteReducer'
-import {checkDateBeforeVote} from './checkDataBeforeVote'
+import { getUserSelector } from '../auth/authSelectors'
+import { getProjectSelector } from '../project/projectSelectors'
+import { getCurrentUserVotesSelector } from './voteSelectors'
+import { INCREMENT_VOTE_LOCALLY } from '../project/projectActionTypes'
+import { VOTE_TYPE_TEXT } from './voteReducer'
+import { checkDateBeforeVote } from './checkDataBeforeVote'
 
-export const voteFor = (sessionId, voteItem, data) => {
+export const voteFor = (talkId, voteItem, data) => {
     return (dispatch, getState) => {
         if (checkDateBeforeVote(dispatch, getState())) {
             return
@@ -34,8 +34,8 @@ export const voteFor = (sessionId, voteItem, data) => {
                 type: ADD_VOTE_ERROR,
                 payload: {
                     error:
-                        'You are logged in to the admin, your vote will not be anonymous.'
-                }
+                        'You are logged in to the admin, your vote will not be anonymous.',
+                },
             })
         }
 
@@ -43,12 +43,12 @@ export const voteFor = (sessionId, voteItem, data) => {
 
         const voteContent = {
             projectId: projectId,
-            sessionId: sessionId,
+            talkId: talkId,
             voteItemId: voteItem.id,
             id: new Date().getTime(),
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
-            userId: getUserSelector(getState()).uid
+            userId: getUserSelector(getState()).uid,
         }
 
         if (voteItem.type === VOTE_TYPE_TEXT) {
@@ -63,17 +63,17 @@ export const voteFor = (sessionId, voteItem, data) => {
             payload: {
                 [voteContent.id]: {
                     ...voteContent,
-                    temp: true
-                }
-            }
+                    temp: true,
+                },
+            },
         })
 
         dispatch({
             type: INCREMENT_VOTE_LOCALLY,
             payload: {
                 vote: voteContent,
-                amount: 1
-            }
+                amount: 1,
+            },
         })
 
         fireStoreMainInstance
@@ -90,14 +90,14 @@ export const voteFor = (sessionId, voteItem, data) => {
                                 ...voteContent,
                                 id: docRef.id,
                                 createdAt: nowTimestamp(),
-                                updatedAt: nowTimestamp()
-                            }
+                                updatedAt: nowTimestamp(),
+                            },
                         },
-                        sessionId: voteContent.sessionId,
+                        talkId: voteContent.talkId,
                         voteItemId: voteContent.voteItemId,
                         tempVoteId: voteContent.id,
-                        newVoteId: docRef.id
-                    }
+                        newVoteId: docRef.id,
+                    },
                 })
             })
             .catch(error => {
@@ -105,16 +105,16 @@ export const voteFor = (sessionId, voteItem, data) => {
                     type: ADD_VOTE_ERROR,
                     payload: {
                         error: `Unable to save the vote, ${error}`,
-                        tempVoteId: voteContent.id
-                    }
+                        tempVoteId: voteContent.id,
+                    },
                 })
 
                 dispatch({
                     type: INCREMENT_VOTE_LOCALLY,
                     payload: {
                         vote: voteContent,
-                        amount: -1
-                    }
+                        amount: -1,
+                    },
                 })
             })
     }
@@ -136,15 +136,15 @@ export const removeVote = voteToDelete => {
 
         dispatch({
             type: REMOVE_VOTE_BEFORE_SUCCESS,
-            payload: voteToDelete
+            payload: voteToDelete,
         })
 
         dispatch({
             type: INCREMENT_VOTE_LOCALLY,
             payload: {
                 vote: voteToDelete,
-                amount: -1
-            }
+                amount: -1,
+            },
         })
 
         fireStoreMainInstance
@@ -156,7 +156,7 @@ export const removeVote = voteToDelete => {
             .then(() => {
                 dispatch({
                     type: REMOVE_VOTE_SUCCESS,
-                    payload: voteToDelete
+                    payload: voteToDelete,
                 })
             })
             .catch(error => {
@@ -164,16 +164,16 @@ export const removeVote = voteToDelete => {
                     type: ADD_VOTE_ERROR,
                     payload: {
                         error: `Unable to save the vote, ${error}`,
-                        voteWhichShouldHaveBeenDeleted: voteToDelete
-                    }
+                        voteWhichShouldHaveBeenDeleted: voteToDelete,
+                    },
                 })
 
                 dispatch({
                     type: INCREMENT_VOTE_LOCALLY,
                     payload: {
                         vote: voteToDelete,
-                        amount: 1
-                    }
+                        amount: 1,
+                    },
                 })
             })
     }
@@ -189,9 +189,9 @@ export const updateVote = (vote, data) => (dispatch, getState) => {
         payload: {
             vote: {
                 ...vote,
-                text: data.trim()
-            }
-        }
+                text: data.trim(),
+            },
+        },
     })
 
     fireStoreMainInstance
@@ -201,7 +201,7 @@ export const updateVote = (vote, data) => (dispatch, getState) => {
         .doc(vote.id)
         .update({
             text: data,
-            updatedAt: serverTimestamp()
+            updatedAt: serverTimestamp(),
         })
         .then(() => {
             dispatch({
@@ -210,10 +210,10 @@ export const updateVote = (vote, data) => (dispatch, getState) => {
                     vote: {
                         [vote.id]: {
                             ...vote,
-                            text: data
-                        }
-                    }
-                }
+                            text: data,
+                        },
+                    },
+                },
             })
         })
         .catch(error => {
@@ -221,8 +221,8 @@ export const updateVote = (vote, data) => (dispatch, getState) => {
                 type: UPDATE_VOTE_ERROR,
                 payload: {
                     error: error.toString(),
-                    voteId: vote.id
-                }
+                    voteId: vote.id,
+                },
             })
         })
 }
@@ -243,22 +243,22 @@ export const getVotes = () => {
                 })
                 dispatch({
                     type: GET_USER_VOTES_SUCCESS,
-                    payload: votes
+                    payload: votes,
                 })
             })
             .catch(error => {
                 dispatch({
                     type: GET_USER_VOTES_ERROR,
-                    payload: error
+                    payload: error,
                 })
             })
     }
 }
 
 export const removeVotePostError = () => ({
-    type: DELETE_VOTE_POST_ERROR
+    type: DELETE_VOTE_POST_ERROR,
 })
 
 export const removeVoteLoadError = () => ({
-    type: DELETE_VOTE_LOAD_ERROR
+    type: DELETE_VOTE_LOAD_ERROR,
 })

@@ -7,11 +7,11 @@ import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
-import SessionVoteTextResult from './SessionVoteTextResult'
+import TalkVoteTextResult from './TalkVoteTextResult'
 
 const styles = theme => ({
     itemContainer: {
-        margin: -1
+        margin: -1,
     },
     item: {
         overflow: 'hidden',
@@ -24,56 +24,56 @@ const styles = theme => ({
         height: '95px',
         boxSizing: 'border-box',
         '&:hover': {
-            backgroundColor: '#f6f6f6'
+            backgroundColor: '#f6f6f6',
         },
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
-        transition: 'all 200ms ease-out'
+        transition: 'all 200ms ease-out',
     },
     selectedItem: {
-        boxShadow: 'inset 0 0 0 5px ' + theme.palette.grey[300]
+        boxShadow: 'inset 0 0 0 5px ' + theme.palette.grey[300],
     },
     voteTitle: {
         color: theme.palette.grey[800],
-        zIndex: 2
+        zIndex: 2,
     },
     voteResult: {
         position: 'absolute',
         bottom: '5px',
         fontSize: '14px',
         transition: 'all 200ms ease-in-out',
-        zIndex: 2
+        zIndex: 2,
     },
     backgroundCanvas: {
-        width: '100%'
+        width: '100%',
     },
     textArea: {
         width: '100%',
-        height: '100%'
+        height: '100%',
     },
     leftIcon: {
         marginRight: theme.spacing(1),
-        fontSize: 20
+        fontSize: 20,
     },
     buttonContainer: {
         marginTop: 10,
         marginBottom: 30,
         display: 'flex',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
     },
     saveButton: {
-        backgroundColor: '#6a96ff'
-    }
+        backgroundColor: '#6a96ff',
+    },
 })
 
-class SessionVoteText extends Component {
+class TalkVoteText extends Component {
     constructor(props) {
         super(props)
         this.state = {
             comment: '',
-            dataLoaded: false
+            dataLoaded: false,
         }
     }
 
@@ -87,14 +87,14 @@ class SessionVoteText extends Component {
             this.setState({
                 ...this.state,
                 dataLoaded: true,
-                comment: this.props.currentUserVote.text
+                comment: this.props.currentUserVote.text,
             })
         }
     }
 
     onTextChange = event => {
         this.setState({
-            comment: event.target.value
+            comment: event.target.value,
         })
     }
 
@@ -103,7 +103,7 @@ class SessionVoteText extends Component {
             this.props.onVoteChange(this.props.voteItem, null)
         }
         this.setState({
-            comment: ''
+            comment: '',
         })
     }
 
@@ -120,8 +120,7 @@ class SessionVoteText extends Component {
                 xs={12}
                 sm={12}
                 md={12}
-                className={classes.itemContainer}
-            >
+                className={classes.itemContainer}>
                 <Paper elevation={1} className={classes.item}>
                     <TextField
                         multiline
@@ -130,7 +129,7 @@ class SessionVoteText extends Component {
                         rows="3"
                         rowsMax="6"
                         InputProps={{
-                            disableUnderline: true
+                            disableUnderline: true,
                         }}
                         className={classes.textArea}
                         placeholder={voteItem.name}
@@ -155,24 +154,23 @@ class SessionVoteText extends Component {
                                     voteItem,
                                     this.state.comment
                                 )
-                            }
-                        >
+                            }>
                             <SaveIcon className={classes.leftIcon} />
                             {saveUpdateText}
                         </Button>
                     </div>
                 )}
 
-                {voteResult && <SessionVoteTextResult result={voteResult} />}
+                {voteResult && <TalkVoteTextResult result={voteResult} />}
             </Grid>
         )
     }
 }
 
-SessionVoteText.propTypes = {
+TalkVoteText.propTypes = {
     classes: PropTypes.object.isRequired,
     voteItem: PropTypes.object.isRequired,
-    chipColors: PropTypes.array
+    chipColors: PropTypes.array,
 }
 
-export default withStyles(styles)(SessionVoteText)
+export default withStyles(styles)(TalkVoteText)

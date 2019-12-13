@@ -2,23 +2,19 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import TalkListItem from './TalkListItem'
 import {
-    getFilteredSessionsSelector,
-    getSessionsFilterSelector,
+    getFilteredTalksSelector,
+    getTalksFilterSelector,
     getTagsSelector,
     getTracksSelector,
-} from '../../../core/sessions/sessionsSelectors'
-import { setTalksFilter } from '../../../core/sessions/sessionsActions'
+} from '../../../core/talks/talksSelectors'
+import { setTalksFilter } from '../../../core/talks/talksActions'
 import {
     getSpeakersAsArraySelector,
     getSpeakersListSelector,
 } from '../../../core/speakers/speakerSelectors'
 import Grid from '@material-ui/core/Grid'
 import OFListHeader from '../../baseComponents/layouts/OFListHeader'
-import {
-    addTalk,
-    editTalk,
-    removeTalk,
-} from '../../../core/sessions/sessionsActions'
+import { addTalk, editTalk, removeTalk } from '../../../core/talks/talksActions'
 import { projectApi } from '../../../core/setupType/projectApi'
 import { addNotification } from '../../notification/notifcationActions'
 import TalkAddEditPanel from './TalkAddEditPanel'
@@ -27,10 +23,10 @@ import { addSpeaker } from '../../../core/speakers/speakerActions'
 
 const TalkList = () => {
     const dispatch = useDispatch()
-    const talks = useSelector(getFilteredSessionsSelector)
+    const talks = useSelector(getFilteredTalksSelector)
     const speakersMap = useSelector(getSpeakersListSelector)
     const speakersArray = useSelector(getSpeakersAsArraySelector)
-    const filter = useSelector(getSessionsFilterSelector)
+    const filter = useSelector(getTalksFilterSelector)
     const tags = useSelector(getTagsSelector)
     const tracks = useSelector(getTracksSelector)
     const [sidePanelOpen, setSidePanelOpen] = useState(false)

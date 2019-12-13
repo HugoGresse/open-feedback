@@ -62,13 +62,13 @@ describe('Navigate on talk list', function() {
 
         // Speaker
         cy.get('.search').type('Michel')
-        cy.get('.session').should('have.length', 2)
+        cy.get('.talk').should('have.length', 2)
 
         // Tags
         cy.get('.search')
             .clear()
             .type('Front')
-        cy.get('.session')
+        cy.get('.talk')
             .should('have.length', 2)
             .should('contain', 'React')
 
@@ -76,7 +76,7 @@ describe('Navigate on talk list', function() {
         cy.get('.search')
             .clear()
             .type('Vue > React')
-        cy.get('.session')
+        cy.get('.talk')
             .should('have.length', 1)
             .should('contain', 'Vue > React')
     })

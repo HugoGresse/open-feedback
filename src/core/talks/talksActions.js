@@ -1,35 +1,35 @@
 import {
-    GET_SESSIONS_ERROR,
-    GET_SESSIONS_LOADING,
-    GET_SESSIONS_SUCCESS,
-    SET_SESSIONS_FILTER,
-    ADD_SESSION_ERROR,
-    ADD_SESSION_SUCCESS,
-    EDIT_SESSION_ERROR,
-    EDIT_SESSION_SUCCESS,
-    REMOVE_SESSION_ERROR,
-    REMOVE_SESSION_SUCCESS,
-} from './sessionsActionTypes'
+    GET_TALKS_ERROR,
+    GET_TALKS_LOADING,
+    GET_TALKS_SUCCESS,
+    SET_TALKS_FILTER,
+    ADD_TALK_ERROR,
+    ADD_TALK_SUCCESS,
+    EDIT_TALK_ERROR,
+    EDIT_TALK_SUCCESS,
+    REMOVE_TALK_ERROR,
+    REMOVE_TALK_SUCCESS,
+} from './talksActionTypes'
 import { projectApi } from '../setupType/projectApi'
 import { ADD_NOTIFICATION } from '../../admin/notification/notificationActionTypes'
 
 export const getTalks = () => {
     return dispatch => {
         dispatch({
-            type: GET_SESSIONS_LOADING,
+            type: GET_TALKS_LOADING,
         })
 
         projectApi
-            .getSessions()
-            .then(sessionsWithSchedule => {
+            .getTalks()
+            .then(talksWithSchedule => {
                 dispatch({
-                    type: GET_SESSIONS_SUCCESS,
-                    payload: sessionsWithSchedule,
+                    type: GET_TALKS_SUCCESS,
+                    payload: talksWithSchedule,
                 })
             })
             .catch(err => {
                 dispatch({
-                    type: GET_SESSIONS_ERROR,
+                    type: GET_TALKS_ERROR,
                     payload: err.toString(),
                 })
             })
@@ -39,27 +39,27 @@ export const getTalks = () => {
 export const setTalksFilter = filter => {
     return dispatch => {
         dispatch({
-            type: SET_SESSIONS_FILTER,
+            type: SET_TALKS_FILTER,
             payload: filter,
         })
     }
 }
 
-export const addTalk = session => dispatch => {
+export const addTalk = talk => dispatch => {
     return projectApi
-        .addSession(session)
+        .addTalk(talk)
         .then(id => {
             dispatch({
-                type: ADD_SESSION_SUCCESS,
+                type: ADD_TALK_SUCCESS,
                 payload: {
-                    ...session,
+                    ...talk,
                     id,
                 },
             })
         })
         .catch(error => {
             dispatch({
-                type: ADD_SESSION_ERROR,
+                type: ADD_TALK_ERROR,
                 payload: {
                     error: error,
                 },
@@ -74,18 +74,18 @@ export const addTalk = session => dispatch => {
         })
 }
 
-export const editTalk = session => dispatch => {
+export const editTalk = talk => dispatch => {
     return projectApi
-        .editSession(session)
+        .editTalk(talk)
         .then(() => {
             dispatch({
-                type: EDIT_SESSION_SUCCESS,
-                payload: session,
+                type: EDIT_TALK_SUCCESS,
+                payload: talk,
             })
         })
         .catch(error => {
             dispatch({
-                type: EDIT_SESSION_ERROR,
+                type: EDIT_TALK_ERROR,
                 payload: {
                     error: error,
                 },
@@ -100,18 +100,18 @@ export const editTalk = session => dispatch => {
         })
 }
 
-export const removeTalk = session => dispatch => {
+export const removeTalk = talk => dispatch => {
     return projectApi
-        .removeSession(session.id)
+        .removeTalk(talk.id)
         .then(() => {
             dispatch({
-                type: REMOVE_SESSION_SUCCESS,
-                payload: session,
+                type: REMOVE_TALK_SUCCESS,
+                payload: talk,
             })
         })
         .catch(error => {
             dispatch({
-                type: REMOVE_SESSION_ERROR,
+                type: REMOVE_TALK_ERROR,
                 payload: {
                     error: error,
                 },

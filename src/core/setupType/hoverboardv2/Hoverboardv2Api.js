@@ -1,5 +1,5 @@
 import firebase from 'firebase/app'
-import { formatSessionsWithScheduled } from '../../sessions/sessionsUtils'
+import { formatTalksWithScheduledForHoverboardv2 } from '../../talks/talksUtils'
 
 class Hoverboardv2Api {
     constructor(config) {
@@ -19,18 +19,18 @@ class Hoverboardv2Api {
         return firebase.app(this.config.projectId).firestore()
     }
 
-    getSessions() {
+    getTalks() {
         const firestore = this.getFirestore()
 
         const schedulePromise = firestore.collection('schedule').get()
-        const sessionsPromise = firestore.collection('sessions').get()
+        const talksPromise = firestore.collection('sessions').get()
 
-        return Promise.all([schedulePromise, sessionsPromise]).then(
-            ([resultSchedule, resultSessions]) => {
-                let sessions = {}
+        return Promise.all([schedulePromise, talksPromise]).then(
+            ([resultSchedule, resultTalks]) => {
+                let talks = {}
                 let schedule = []
-                resultSessions.forEach(doc => {
-                    sessions[doc.id] = {
+                resultTalks.forEach(doc => {
+                    talks[doc.id] = {
                         ...doc.data(),
                         id: doc.id,
                     }
@@ -40,34 +40,34 @@ class Hoverboardv2Api {
                     schedule.push(doc.data())
                 })
 
-                return formatSessionsWithScheduled(sessions, schedule)
+                return formatTalksWithScheduledForHoverboardv2(talks, schedule)
             }
         )
     }
 
-    getSession(sessionId) {
+    getTalk(talkId) {
         const firestore = this.getFirestore()
         const schedulePromise = firestore.collection('schedule').get()
-        const sessionsPromise = firestore
+        const talksPromise = firestore
             .collection('sessions')
-            .doc(sessionId)
+            .doc(talkId)
             .get()
 
-        return Promise.all([schedulePromise, sessionsPromise]).then(
-            ([resultSchedule, resultSessions]) => {
-                let sessions = {}
+        return Promise.all([schedulePromise, talksPromise]).then(
+            ([resultSchedule, resultTalks]) => {
+                let talks = {}
                 let schedule = []
 
-                sessions[sessionId] = {
-                    ...resultSessions.data(),
-                    id: resultSessions.id,
+                talks[talkId] = {
+                    ...resultTalks.data(),
+                    id: resultTalks.id,
                 }
 
                 resultSchedule.forEach(doc => {
                     schedule.push(doc.data())
                 })
 
-                return formatSessionsWithScheduled(sessions, schedule)
+                return formatTalksWithScheduledForHoverboardv2(talks, schedule)
             }
         )
     }
