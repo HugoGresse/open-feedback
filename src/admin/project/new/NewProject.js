@@ -7,8 +7,7 @@ import Step1 from './Step1'
 import Step2 from './Step2'
 import Step3 from './Step3'
 import { useDispatch } from 'react-redux'
-import { newProject } from '../core/projectActions'
-import { history } from '../../../App'
+import { getProjects, newProject, selectProject } from '../core/projectActions'
 import { PROJECT_TYPE_OPENFEEDBACK } from '../../../core/setupType/projectApi'
 
 const useStyles = makeStyles({
@@ -33,9 +32,16 @@ const NewProject = ({ onCancel }) => {
     const [step3Data, setStep3Data] = useState()
 
     const createEvent = project => {
-        return dispatch(newProject(project)).then(projectId => {
-            return history.push(`/admin/${projectId}/setting/event`)
-        })
+        return (
+            dispatch(newProject(project))
+                .then(projectId => {
+                    return Promise.all([dispatch(getProjects()), projectId])
+                })
+                // eslint-disable-next-line no-unused-vars
+                .then(([getProjectResult, projectId]) =>
+                    dispatch(selectProject(projectId))
+                )
+        )
     }
 
     return (

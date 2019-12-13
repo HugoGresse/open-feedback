@@ -23,7 +23,13 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const TalkListItem = ({ item, speakers, onEdit, onRemove }) => {
+const TalkListItem = ({
+    item,
+    speakers,
+    onEdit,
+    onRemove,
+    onSpeakerClicked,
+}) => {
     const classes = useStyles()
 
     return (
@@ -35,6 +41,7 @@ const TalkListItem = ({ item, speakers, onEdit, onRemove }) => {
                 <TalkListItemSpeakerList
                     speakersIds={item.speakers}
                     speakers={speakers}
+                    onSpeakerClicked={onSpeakerClicked}
                 />
             </Grid>
             <Grid item xs={12} sm={2} lg={2} className={classes.cell}>
