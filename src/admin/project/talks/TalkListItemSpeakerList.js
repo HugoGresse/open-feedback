@@ -3,6 +3,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Chip from '@material-ui/core/Chip'
 import Avatar from '@material-ui/core/Avatar'
 import Tooltip from '@material-ui/core/Tooltip'
+import WarningIcon from '@material-ui/icons/Warning'
 
 const useStyles = makeStyles(() => ({
     chip: {
@@ -40,6 +41,8 @@ const TalkListItemSpeakerList = ({ speakers, speakersIds }) => {
                     <Chip
                         label={speakerId}
                         className={classes.chip}
+                        variant="outlined"
+                        icon={<WarningIcon style={{ width: 20 }} />}
                         classes={{
                             root: classes.chip,
                             label: classes.label,
