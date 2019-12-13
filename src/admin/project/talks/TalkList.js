@@ -122,6 +122,9 @@ const TalkList = () => {
                     speakers={speakersMap}
                     onEdit={onEditTalkClicked}
                     onRemove={onRemoveTalkClicked}
+                    onSpeakerClicked={speakerName =>
+                        dispatch(setTalksFilter(speakerName))
+                    }
                 />
             ))}
         </Grid>

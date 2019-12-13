@@ -3,6 +3,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Chip from '@material-ui/core/Chip'
 import Avatar from '@material-ui/core/Avatar'
 import Tooltip from '@material-ui/core/Tooltip'
+import WarningIcon from '@material-ui/icons/Warning'
 
 const useStyles = makeStyles(() => ({
     chip: {
@@ -11,7 +12,11 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-const TalkListItemSpeakerList = ({ speakers, speakersIds }) => {
+const TalkListItemSpeakerList = ({
+    speakers,
+    speakersIds,
+    onSpeakerClicked,
+}) => {
     const classes = useStyles()
 
     return speakersIds.map(speakerId => {
@@ -24,6 +29,7 @@ const TalkListItemSpeakerList = ({ speakers, speakersIds }) => {
                     key={speakerId}
                     label={speakers[speakerId].name}
                     variant="outlined"
+                    onClick={() => onSpeakerClicked(speakers[speakerId].name)}
                     avatar={
                         <Avatar
                             alt={speakers[speakerId].name}
@@ -40,6 +46,8 @@ const TalkListItemSpeakerList = ({ speakers, speakersIds }) => {
                     <Chip
                         label={speakerId}
                         className={classes.chip}
+                        variant="outlined"
+                        icon={<WarningIcon style={{ width: 20 }} />}
                         classes={{
                             root: classes.chip,
                             label: classes.label,
