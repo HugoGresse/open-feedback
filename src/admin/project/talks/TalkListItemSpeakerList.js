@@ -12,7 +12,11 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-const TalkListItemSpeakerList = ({ speakers, speakersIds }) => {
+const TalkListItemSpeakerList = ({
+    speakers,
+    speakersIds,
+    onSpeakerClicked,
+}) => {
     const classes = useStyles()
 
     return speakersIds.map(speakerId => {
@@ -25,6 +29,7 @@ const TalkListItemSpeakerList = ({ speakers, speakersIds }) => {
                     key={speakerId}
                     label={speakers[speakerId].name}
                     variant="outlined"
+                    onClick={() => onSpeakerClicked(speakers[speakerId].name)}
                     avatar={
                         <Avatar
                             alt={speakers[speakerId].name}
