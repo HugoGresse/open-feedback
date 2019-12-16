@@ -23,7 +23,7 @@
         "docz": "^1.2.0",
         "docz-theme-default": "^1.2.0",
         "env-cmd": "^10.0.1",
-        "firebase": "^7.5.2",
+        "firebase": "^7.6.0",
         "formik": "^2.0.8",
         "history": "^4.10.1",
         "lodash": "4.17.15",
