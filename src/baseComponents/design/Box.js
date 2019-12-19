@@ -15,10 +15,12 @@ import {
     maxWidth,
     space,
     textAlign,
-    width
+    width,
+    position,
 } from 'styled-system'
 
 const BoxStyled = styled.div`
+    ${position}
     ${width}
     ${height}
     ${maxWidth}
@@ -36,19 +38,19 @@ const BoxStyled = styled.div`
     ${background}
 
     ${props =>
-    props.flex &&
-    `
+        props.flex &&
+        `
     display: flex;
   `}
 
     ${props =>
-    props.flexGrow &&
-    `
+        props.flexGrow &&
+        `
     flex-grow: ${props.flexGrow};
   `}
 `
 
-const Box = ({children, ...props}) => {
+const Box = ({ children, ...props }) => {
     return <BoxStyled {...props}>{children}</BoxStyled>
 }
 
