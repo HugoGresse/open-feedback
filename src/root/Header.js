@@ -9,6 +9,7 @@ import MokckupBG from './images/mockup-phone-bg.png'
 import MokckupOverlay from './images/mockup-phone-overlay.png'
 import DemoOF from './images/of-demo.webp'
 import Menu from './Menu'
+import InnerWrapper from './component/InnerWrapper'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.RED_ORANGE};
@@ -54,13 +55,6 @@ const Wrapper = styled(Box)`
             margin-left: 0;
         }
     }
-`
-
-const InnerWrapper = styled(Box)`
-    max-width: 1100px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
 `
 
 const LinkButton = styled.a`

@@ -1,35 +1,70 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../constants/colors'
-import phone from '../assets/phone.png'
-import hoverboard from '../assets/hoverboard.png'
-import firebase from '../assets/firebase.png'
 import Title from '../baseComponents/design/Title'
 import Box from '../baseComponents/design/Box'
-import { Grid } from '@material-ui/core/es'
-import Hidden from '@material-ui/core/Hidden'
+import InnerWrapper from './component/InnerWrapper'
 
-const Wrapper = styled(Grid)`
-    padding: 0px 15px 0 15px;
-    display: flex;
-    .right {
-        display: flex;
-        align-items: flex-end;
-        justify-content: flex-end;
-        padding-right: 10%;
+import adminImage from './images/admin-new.webp'
+import newImage from './images/new.png'
+import qrcodeImage from './images/qrcode.png'
+import bulleImage from './images/bulle.png'
+import hoverboard from './images/hoverboard.png'
+
+const InnerWrapperResponsive = styled(InnerWrapper)`
+    @media (max-width: 640px) {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
-    .left {
-        padding: 50px 0;
+`
+
+const DemoContainer = styled.div`
+    background: #000;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 90%;
+    margin: 0 auto;
+
+    img {
+        display: block;
+        max-height: 600px;
+        max-width: 100%;
+    }
+`
+
+const BoxRight = styled(Box)`
+    padding-left: 40px;
+
+    h2 {
+        margin-top: 0;
+        margin-bottom: 40px;
+
+        @media (max-width: 640px) {
+            margin-top: 40px;
+        }
     }
 `
 
 const List = styled.ul`
     li {
-        margin-bottom: 40px;
+        margin-bottom: 30px;
+        list-style: none;
+
+        img {
+            width: 30px;
+            height: 30px;
+            background-color: ${COLORS.RED_ORANGE};
+            border-radius: 15px;
+            margin: -0 10px 0 -40px;
+            top: 10px;
+            position: relative;
+        }
     }
 `
 
 const CompatibilityText = styled(Box)`
+    margin-top 20px;
     color: ${COLORS.GRAY};
     img {
         margin: 0 5px;
@@ -39,34 +74,45 @@ const CompatibilityText = styled(Box)`
 class Header extends Component {
     render() {
         return (
-            <Wrapper container id="howitworks">
-                <Hidden xsDown>
-                    <Grid className="right" item sm={6}>
-                        <img height="300" src={phone} alt="Phone" />
-                    </Grid>
-                </Hidden>
-                <Grid className="left" item xs={12} sm={6}>
-                    <Title>How it works?</Title>
+            <Box backgroundColor="#eee" padding={40}>
+                <InnerWrapperResponsive id="howitworks" flex>
+                    <Box>
+                        <DemoContainer>
+                            <img src={adminImage} alt="Demo admin" />
+                        </DemoContainer>
+                    </Box>
+                    <BoxRight>
+                        <Title>How it works</Title>
 
-                    <List>
-                        <li>
-                            Import or manually add speakers & talks to generate
-                            voting form
-                        </li>
-                        <li>Share a link or a QR Code with the attendees</li>
-                        <li>
-                            Let the attendees rate and give feedback without any
-                            login
-                        </li>
-                    </List>
+                        <List>
+                            <li>
+                                <img src={newImage} alt="" />
+                                Create your event in 3 clicks, add talks &
+                                speakers manually or connect OpenFeedback to
+                                your api
+                            </li>
+                            <li>
+                                <img src={qrcodeImage} alt="" />
+                                Share a QR Code with the attendees (during Q&A
+                                or break time)
+                            </li>
+                            <li>
+                                <img src={bulleImage} alt="" />
+                                Attendees can vote at anytime, no extra work
+                            </li>
+                        </List>
 
-                    <CompatibilityText flex alignItems="center">
-                        Compatible with{' '}
-                        <img height="40" src={hoverboard} alt="hoverboard" /> et{' '}
-                        <img height="50" src={firebase} alt="Firebase" />
-                    </CompatibilityText>
-                </Grid>
-            </Wrapper>
+                        <CompatibilityText flex alignItems="center">
+                            Also compatible with
+                            <img
+                                height="40"
+                                src={hoverboard}
+                                alt="hoverboard"
+                            />
+                        </CompatibilityText>
+                    </BoxRight>
+                </InnerWrapperResponsive>
+            </Box>
         )
     }
 }

@@ -13,7 +13,7 @@ const Wrapper = styled(Box)`
     flex-direction: column;
 `
 
-class Header extends Component {
+class FAQ extends Component {
     render() {
         return (
             <Wrapper>
@@ -23,10 +23,9 @@ class Header extends Component {
                     justifyContent="center"
                     alignItems="center"
                     flexGrow="1"
-                    textAlign="center"
-                >
+                    textAlign="center">
                     <Title component="h3" m={0}>
-                        Prêt à recevoir des feedback ?
+                        TODO
                     </Title>
                     <Button mt={40} color={COLORS.RED_ORANGE}>
                         Créer votre événement
@@ -37,4 +36,4 @@ class Header extends Component {
     }
 }
 
-export default Header
+export default FAQ
