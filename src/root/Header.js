@@ -33,6 +33,7 @@ const Wrapper = styled(Box)`
     .headerHeroText {
         padding: 200px 0;
         flex-grow: 0.5;
+        max-width: 500px;
     }
 
     @media (max-width: 640px) {
@@ -48,11 +49,24 @@ const Wrapper = styled(Box)`
             justify-content: center;
         }
         .headerHeroText {
-            padding: 40px 0;
+            padding: 40px 20px;
         }
         .mockupContainerPosition {
             position: relative;
             margin-left: 0;
+        }
+    }
+
+    @media (min-width: 640px) and (max-width: 900px) {
+        .headerHeroText {
+            max-width: 30%;
+            padding-right: 70px;
+            padding-left: 20px;
+        }
+    }
+    @media (min-width: 900px) and (max-width: 1150px) {
+        .headerHeroText {
+            max-width: 40%;
         }
     }
 `
@@ -139,7 +153,7 @@ class Header extends Component {
                             </Title>
                             <Title component="h3" m={0} color={COLORS.WHITE}>
                                 Ideal solution for conferences, meetups, events,
-                                summit and more.
+                                summit, training and more.
                             </Title>
                             <br />
                             <br />
