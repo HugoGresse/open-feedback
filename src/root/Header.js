@@ -86,7 +86,7 @@ const LinkButton = styled.a`
     margin: 10px;
     padding: 10px;
     min-width: 170px;
-    max-width:100%:
+    max-width: 100%;
     &:hover {
         box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
     }

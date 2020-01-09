@@ -44,6 +44,9 @@ const Menu = () => {
                 <li>
                     <a href="#howitworks">How it works</a>
                 </li>
+                <li>
+                    <a href="#faq">FAQ</a>
+                </li>
                 <li className="outline">
                     <a href="/admin/">Login</a>
                 </li>

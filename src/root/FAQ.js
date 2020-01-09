@@ -48,7 +48,7 @@ class FAQ extends Component {
                     alignItems="center"
                     flexGrow="1"
                     textAlign="center">
-                    <Title>FAQ</Title>
+                    <Title id="faq">FAQ</Title>
 
                     <List>
                         <li>
