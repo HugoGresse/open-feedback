@@ -7,44 +7,48 @@ import {
     MOVE_UP_VOTEITEM,
     SAVE_VOTEITEMS_ERROR,
     SAVE_VOTEITEMS_ONGOING,
-    SAVE_VOTEITEMS_SUCCESS
+    SAVE_VOTEITEMS_SUCCESS,
 } from './votingFormActionTypes'
-import {fireStoreMainInstance} from '../../../../firebase'
-import {getSelectedProjectIdSelector, getSelectedProjectSelector} from '../../core/projectSelectors'
-import {ADD_NOTIFICATION} from '../../../notification/notificationActionTypes'
+import { fireStoreMainInstance } from '../../../../firebase'
+import {
+    getSelectedProjectIdSelector,
+    getSelectedProjectSelector,
+} from '../../core/projectSelectors'
+import { ADD_NOTIFICATION } from '../../../notification/notificationActionTypes'
 import {
     getBooleanVoteItemsSelector,
     getCommentVoteItemSelector,
-    getVoteItemsSelector
+    getVoteItemsSelector,
 } from './votingFormSelectors'
-import {newId} from '../../../../utils/stringUtils'
+import { newId } from '../../../../utils/stringUtils'
 
-export const getVoteItems = () => (dispatch, getState) => dispatch({
-    type: GET_VOTEITEMS_SUCCESS,
-    payload: getSelectedProjectSelector(getState()).voteItems || []
-})
+export const getVoteItems = () => (dispatch, getState) =>
+    dispatch({
+        type: GET_VOTEITEMS_SUCCESS,
+        payload: getSelectedProjectSelector(getState()).voteItems || [],
+    })
 
 export const onVoteItemChange = voteItem => ({
     type: EDIT_VOTEITEM,
-    payload: voteItem
+    payload: voteItem,
 })
 
 export const onVoteItemMoveUp = voteItem => ({
     type: MOVE_UP_VOTEITEM,
-    payload: voteItem
+    payload: voteItem,
 })
 
 export const onVoteItemMoveDown = voteItem => ({
     type: MOVE_DOWN_VOTEITEM,
-    payload: voteItem
+    payload: voteItem,
 })
 
 export const onVoteItemDelete = voteItem => ({
     type: DELETE_VOTEITEM,
-    payload: voteItem
+    payload: voteItem,
 })
 
-export const onVoteItemAddBoolean = () => {
+export const onVoteItemAddBoolean = optionalName => {
     return (dispatch, getState) => {
         const voteItems = getBooleanVoteItemsSelector(getState())
         const position =
@@ -54,10 +58,10 @@ export const onVoteItemAddBoolean = () => {
             type: ADD_VOTEITEM,
             payload: {
                 id: newId(),
-                name: '',
+                name: optionalName || '',
                 position: position,
-                type: 'boolean'
-            }
+                type: 'boolean',
+            },
         })
     }
 }
@@ -70,13 +74,13 @@ export const toggleVoteComment = enableComment => {
                 payload: {
                     id: newId(),
                     name: 'Comment',
-                    type: 'text'
-                }
+                    type: 'text',
+                },
             })
         } else {
             dispatch({
                 type: DELETE_VOTEITEM,
-                payload: getCommentVoteItemSelector(getState())
+                payload: getCommentVoteItemSelector(getState()),
             })
         }
 
@@ -92,42 +96,44 @@ export const saveVoteItems = () => {
         const selectedProjectId = getSelectedProjectIdSelector(getState())
 
         dispatch({
-            type: SAVE_VOTEITEMS_ONGOING
+            type: SAVE_VOTEITEMS_ONGOING,
         })
-
 
         return fireStoreMainInstance
             .collection('projects')
             .doc(selectedProjectId)
-            .set({
-                voteItems
-            }, {merge: true})
+            .set(
+                {
+                    voteItems,
+                },
+                { merge: true }
+            )
             .then(() => {
                 dispatch({
                     type: ADD_NOTIFICATION,
                     payload: {
                         type: 'success',
-                        message: 'Voting form saved'
-                    }
+                        message: 'Voting form saved',
+                    },
                 })
 
                 dispatch({
-                    type: SAVE_VOTEITEMS_SUCCESS
+                    type: SAVE_VOTEITEMS_SUCCESS,
                 })
             })
             .catch(error => {
                 console.error(error)
                 dispatch({
                     type: SAVE_VOTEITEMS_ERROR,
-                    payload: error
+                    payload: error,
                 })
 
                 dispatch({
                     type: ADD_NOTIFICATION,
                     payload: {
                         type: 'error',
-                        message: 'Saving failed, ' + JSON.stringify(error)
-                    }
+                        message: 'Saving failed, ' + JSON.stringify(error),
+                    },
                 })
             })
     }

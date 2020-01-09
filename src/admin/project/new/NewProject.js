@@ -7,7 +7,12 @@ import Step1 from './Step1'
 import Step2 from './Step2'
 import Step3 from './Step3'
 import { useDispatch } from 'react-redux'
-import { getProjects, newProject, selectProject } from '../core/projectActions'
+import {
+    fillDefaultProjectData,
+    getProjects,
+    newProject,
+    selectProject,
+} from '../core/projectActions'
 import { PROJECT_TYPE_OPENFEEDBACK } from '../../../core/setupType/projectApi'
 
 const useStyles = makeStyles({
@@ -38,9 +43,13 @@ const NewProject = ({ onCancel }) => {
                     return Promise.all([dispatch(getProjects()), projectId])
                 })
                 // eslint-disable-next-line no-unused-vars
-                .then(([getProjectResult, projectId]) =>
-                    dispatch(selectProject(projectId))
+                .then(
+                    async ([getProjectResult, projectId]) =>
+                        await dispatch(selectProject(projectId))
                 )
+                .then(() => {
+                    dispatch(fillDefaultProjectData())
+                })
         )
     }
 

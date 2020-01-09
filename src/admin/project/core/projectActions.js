@@ -25,6 +25,10 @@ import { CLEAR_TALK_VOTES } from '../dashboard/dashboardActionTypes'
 import { history } from '../../../App'
 import { initProjectApi } from '../../../core/setupType/projectApi'
 import { newRandomHexColor } from '../../../utils/colorsUtils'
+import {
+    onVoteItemAddBoolean,
+    toggleVoteComment,
+} from '../settings/votingForm/votingFormActions'
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -217,4 +221,16 @@ export const initProjectApiIfReady = (projectId, project) => dispatch => {
             type: INIT_PROJECTAPI,
         })
     }
+}
+
+export const fillDefaultProjectData = () => dispatch => {
+    dispatch(onVoteItemAddBoolean('Fun 😃'))
+    dispatch(onVoteItemAddBoolean("I've learned a lot 🤓"))
+    dispatch(onVoteItemAddBoolean('Very interesting 👍'))
+    dispatch(onVoteItemAddBoolean('Good speaker 👏'))
+    dispatch(onVoteItemAddBoolean('Not clear 🧐'))
+    dispatch(onVoteItemAddBoolean('Too technical 🤖'))
+    dispatch(onVoteItemAddBoolean('Lack of demo/example 🤔'))
+    dispatch(onVoteItemAddBoolean('Too complex 🤯'))
+    dispatch(toggleVoteComment(true))
 }
