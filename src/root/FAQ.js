@@ -57,7 +57,7 @@ class FAQ extends Component {
                             </FAQTitle>
                             OpenFeedback is hosted on Firebase/Google Cloud
                             Platform with a pay as you go plan. It mean that the
-                            infrastucture will scale as expected. <br />
+                            infrastucture will scale as expected. <br /> <br />
                             It has already been used by Sunny Tech and BDX.io
                             without issue with 300 voters and 1600 votes each in
                             two days. Feedback related features are tested on
@@ -66,16 +66,17 @@ class FAQ extends Component {
                         <li>
                             <FAQTitle>Is the vote count accurate?</FAQTitle>
                             TL;DR: no. It should be close to 98% of the real
-                            vote count. While in most use case it is not a big
-                            issue, the vote count aggregation can be re-process
-                            after the event to have the exact count. Contact{' '}
+                            vote count. <br /> While in most use case it is not
+                            a big issue, the vote count aggregation can be
+                            re-process after the event to have the exact count.{' '}
+                            <br /> <br /> Contact{' '}
                             {process.env.REACT_APP_ADMIN_EMAIL} if needed.
                         </li>
                         <li>
                             <FAQTitle>How much does it cost?</FAQTitle>
-                            Open Feedback is currently free for everyone. When
-                            the service will be more used, it may have a paying
-                            tier but it will stay free for NGO and
+                            Open Feedback is currently free for everyone. <br />{' '}
+                            <br /> When the service will be more used, it may
+                            have a paying tier but it will stay free for NGO and
                             non-profitable organization.
                         </li>
                         <li>
@@ -83,14 +84,18 @@ class FAQ extends Component {
                                 How to increase the participation/votes?
                             </FAQTitle>
                             Without much communication, not many feedback will
-                            be received through Open Feedback. To increase this,
-                            you may try the following: - display QRCode on wall,
-                            website, printed map/design - notify
-                            attendees/voters to give feedbacks after the event.
-                            Doing this, ensure you let add some days to the vote
-                            end time. - promote OpenFeedback to all speakers so
-                            they display the QRCode going directly to their talk
-                            during their Q&A.
+                            be received through Open Feedback. <br />
+                            <br />{' '}
+                            <b>
+                                To increase this, you may try the following:
+                            </b>{' '}
+                            <br /> - display QRCode on wall, website, printed
+                            map/design <br /> - notify attendees/voters to give
+                            feedbacks after the event. Doing this, ensure you
+                            let add some days to the vote end time. <br /> -
+                            promote OpenFeedback to all speakers so they display
+                            the QRCode going directly to their talk during their
+                            Q&A.
                         </li>
 
                         <li>
