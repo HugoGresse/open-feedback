@@ -1,5 +1,6 @@
 import {
     ADD_PROJECT_ERROR,
+    ADD_PROJECT_ONGOING,
     ADD_PROJECT_SUCCESS,
     EDIT_PROJECT_ERROR,
     EDIT_PROJECT_SUCCESS,
@@ -177,6 +178,10 @@ export const editProject = projectData => (dispatch, getState) => {
 }
 
 export const newProject = projectData => (dispatch, getState) => {
+    dispatch({
+        type: ADD_PROJECT_ONGOING,
+    })
+
     projectData.owner = getUserSelector(getState()).uid
     projectData.members = [projectData.owner]
     projectData.createdAt = serverTimestamp()
@@ -217,7 +222,7 @@ export const newProject = projectData => (dispatch, getState) => {
 }
 
 export const initProjectApiIfReady = (projectId, project) => dispatch => {
-    if (projectId && project) {
+    if (projectId && project && project.setupType) {
         initProjectApi(project.setupType, project)
         dispatch({
             type: INIT_PROJECTAPI,

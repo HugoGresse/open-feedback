@@ -37,20 +37,16 @@ const NewProject = ({ onCancel }) => {
     const [step3Data, setStep3Data] = useState()
 
     const createEvent = project => {
-        return (
-            dispatch(newProject(project))
-                .then(projectId => {
-                    return Promise.all([dispatch(getProjects()), projectId])
-                })
-                // eslint-disable-next-line no-unused-vars
-                .then(
-                    async ([getProjectResult, projectId]) =>
-                        await dispatch(selectProject(projectId))
-                )
-                .then(() => {
-                    dispatch(fillDefaultProjectData())
-                })
-        )
+        return dispatch(newProject(project))
+            .then(projectId => {
+                return Promise.all([
+                    dispatch(getProjects()),
+                    dispatch(selectProject(projectId)),
+                ])
+            })
+            .then(() => {
+                dispatch(fillDefaultProjectData())
+            })
     }
 
     return (
