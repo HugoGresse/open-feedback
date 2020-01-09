@@ -181,6 +181,8 @@ export const newProject = projectData => (dispatch, getState) => {
     projectData.members = [projectData.owner]
     projectData.createdAt = serverTimestamp()
     projectData.chipColors = [newRandomHexColor()]
+    projectData.favicon = `${window.location.protocol}//${window.location.host}/favicon-32x32.png`
+    projectData.logoSmall = `${window.location.protocol}//${window.location.host}/android-chrome-192x192.png`
 
     return fireStoreMainInstance
         .collection('projects')

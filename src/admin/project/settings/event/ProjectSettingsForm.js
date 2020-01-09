@@ -18,9 +18,7 @@ import Collapse from '@material-ui/core/Collapse'
 
 const schema = object().shape({
     name: string().required('The project name is required'),
-    scheduleLink: string()
-        .url('The schedule link is not a valid url')
-        .required('The schedule link is required'),
+    scheduleLink: string().url('The schedule link is not a valid url'),
     logoUrl: string()
         .url('The logo is not a valid url')
         .required('The logo is required'),
