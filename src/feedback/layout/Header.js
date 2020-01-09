@@ -75,14 +75,16 @@ const Header = ({ project }) => {
                         </Link>
                     )}
                 </IconWrapper>
-                <IconWrapper right>
-                    <a
-                        href={project.scheduleLink}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <CalendarToday />
-                    </a>
-                </IconWrapper>
+                {project.scheduleLink && (
+                    <IconWrapper right>
+                        <a
+                            href={project.scheduleLink}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            <CalendarToday />
+                        </a>
+                    </IconWrapper>
+                )}
                 <BoxCenter>
                     <Logo
                         src={project.logoSmall}
