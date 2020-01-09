@@ -24,7 +24,7 @@
         "form-data": "^3.0.0",
         "lodash": "^4.17.15",
         "node-fetch": "^2.6.0",
-        "ts-jest": "^24.2.0"
+        "ts-jest": "^24.3.0"
     },
     "devDependencies": {
         "@types/node-fetch": "^2.5.4",
