@@ -12,7 +12,7 @@ import MostVotedTalks from './MostVotedTalks'
 import VoteTimeline from './VoteTimeline'
 import Highlights from './Highlights'
 
-class ProjectDashboard extends Component {
+class Dashboard extends Component {
     componentDidMount() {
         this.props.getProject(this.props.selectedProjectId)
         this.props.getTalkVotes()
@@ -27,6 +27,7 @@ class ProjectDashboard extends Component {
             this.props.getTalks()
         }
     }
+    x
 
     render() {
         const { project } = this.props
@@ -64,4 +65,4 @@ const mapDispatchToProps = Object.assign(
         getTalks: getTalks,
     }
 )
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectDashboard)
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

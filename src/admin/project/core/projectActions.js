@@ -1,5 +1,6 @@
 import {
     ADD_PROJECT_ERROR,
+    ADD_PROJECT_ONGOING,
     ADD_PROJECT_SUCCESS,
     EDIT_PROJECT_ERROR,
     EDIT_PROJECT_SUCCESS,
@@ -25,6 +26,10 @@ import { CLEAR_TALK_VOTES } from '../dashboard/dashboardActionTypes'
 import { history } from '../../../App'
 import { initProjectApi } from '../../../core/setupType/projectApi'
 import { newRandomHexColor } from '../../../utils/colorsUtils'
+import {
+    onVoteItemAddBoolean,
+    toggleVoteComment,
+} from '../settings/votingForm/votingFormActions'
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -173,10 +178,16 @@ export const editProject = projectData => (dispatch, getState) => {
 }
 
 export const newProject = projectData => (dispatch, getState) => {
+    dispatch({
+        type: ADD_PROJECT_ONGOING,
+    })
+
     projectData.owner = getUserSelector(getState()).uid
     projectData.members = [projectData.owner]
     projectData.createdAt = serverTimestamp()
     projectData.chipColors = [newRandomHexColor()]
+    projectData.favicon = `${window.location.protocol}//${window.location.host}/favicon-32x32.png`
+    projectData.logoSmall = `${window.location.protocol}//${window.location.host}/android-chrome-192x192.png`
 
     return fireStoreMainInstance
         .collection('projects')
@@ -211,10 +222,22 @@ export const newProject = projectData => (dispatch, getState) => {
 }
 
 export const initProjectApiIfReady = (projectId, project) => dispatch => {
-    if (projectId && project) {
+    if (projectId && project && project.setupType) {
         initProjectApi(project.setupType, project)
         dispatch({
             type: INIT_PROJECTAPI,
         })
     }
+}
+
+export const fillDefaultProjectData = () => dispatch => {
+    dispatch(onVoteItemAddBoolean('Fun 😃'))
+    dispatch(onVoteItemAddBoolean("I've learned a lot 🤓"))
+    dispatch(onVoteItemAddBoolean('Very interesting 👍'))
+    dispatch(onVoteItemAddBoolean('Good speaker 👏'))
+    dispatch(onVoteItemAddBoolean('Not clear 🧐'))
+    dispatch(onVoteItemAddBoolean('Too technical 🤖'))
+    dispatch(onVoteItemAddBoolean('Lack of demo/example 🤔'))
+    dispatch(onVoteItemAddBoolean('Too complex 🤯'))
+    dispatch(toggleVoteComment(true))
 }

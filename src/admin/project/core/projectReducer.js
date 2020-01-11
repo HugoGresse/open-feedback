@@ -1,35 +1,42 @@
 import {
+    ADD_PROJECT_ONGOING,
     EDIT_PROJECT_SUCCESS,
     GET_PROJECT_SUCCESS,
     GET_PROJECTS_ERROR,
     GET_PROJECTS_SUCCESS,
     INIT_PROJECTAPI,
-    SELECT_PROJECT
+    SELECT_PROJECT,
 } from './projectActionTypes'
 import { LOGOUT } from '../../auth/authActionTypes'
 
 const initState = {
     data: {
-        projects: []
+        projects: [],
     },
     projectApiInit: false,
     projectsLoaded: false,
     projectLoadError: null,
     projectVotesError: null,
-    selectedProjectId: null
+    selectedProjectId: null,
 }
 
 const projectReducer = (state = initState, { payload, type }) => {
     switch (type) {
         case LOGOUT:
             return initState
+        case ADD_PROJECT_ONGOING:
+            return {
+                ...state,
+                // prevent the Project component to display 404 during a short period
+                projectsLoaded: false,
+            }
         case GET_PROJECTS_SUCCESS:
             return {
                 ...state,
                 data: {
-                    projects: payload
+                    projects: payload,
                 },
-                projectsLoaded: true
+                projectsLoaded: true,
             }
         case GET_PROJECT_SUCCESS: {
             const newProjectsArray = Array.from(state.data.projects).filter(
@@ -42,21 +49,21 @@ const projectReducer = (state = initState, { payload, type }) => {
                 ...state,
                 data: {
                     ...state.data,
-                    projects: newProjectsArray
-                }
+                    projects: newProjectsArray,
+                },
             }
         }
         case SELECT_PROJECT:
             return {
                 ...state,
-                selectedProjectId: payload
+                selectedProjectId: payload,
             }
         case EDIT_PROJECT_SUCCESS: {
             const projects = state.data.projects.map(project => {
                 if (project.id === state.selectedProjectId) {
                     return {
                         ...project,
-                        ...payload
+                        ...payload,
                     }
                 }
                 return project
@@ -66,21 +73,21 @@ const projectReducer = (state = initState, { payload, type }) => {
                 ...state,
                 data: {
                     ...state.data,
-                    projects: projects
-                }
+                    projects: projects,
+                },
             }
         }
         case INIT_PROJECTAPI: {
             return {
                 ...state,
-                projectApiInit: true
+                projectApiInit: true,
             }
         }
         case GET_PROJECTS_ERROR:
             console.error(payload)
             return {
                 ...state,
-                projectLoadError: payload
+                projectLoadError: payload,
             }
         default:
             return state
