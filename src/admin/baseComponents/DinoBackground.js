@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Box from '@material-ui/core/Box'
-import { newRandomHexColor } from '../../../../utils/colorsUtils'
+import { newRandomHexColor } from '../../utils/colorsUtils'
 
 const useStyles = makeStyles({
     canvas: {

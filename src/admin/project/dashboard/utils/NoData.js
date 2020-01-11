@@ -1,6 +1,6 @@
 import React from 'react'
 import Box from '@material-ui/core/Box'
-import DinoBackground from './DinoBackground'
+import DinoBackground from '../../../baseComponents/DinoBackground'
 
 const NoData = ({ children, datas, speed }) => {
     if (datas.filter(data => !!data).length > 0) {
