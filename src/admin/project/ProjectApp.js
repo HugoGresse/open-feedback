@@ -1,5 +1,5 @@
 import RoutingMap from '../RoutingMap'
-import ProjectDashboard from './dashboard/ProjectDashboard'
+import ProjectDashboard from './dashboard/Dashboard'
 import Talks from './talks/Talks'
 import Speakers from './speakers/Speakers'
 import VotingForm from './settings/votingForm/VotingForm'
