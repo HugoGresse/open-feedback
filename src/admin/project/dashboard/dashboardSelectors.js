@@ -128,12 +128,12 @@ const getCommentVotesSelector = createSelector(
     }
 )
 
-export const getTotalVotersSelector = createSelector(
+export const getTotalVoterCountSelector = createSelector(
     getVoteByUserSelector,
     voteByUser => Object.keys(voteByUser).length
 )
 
-export const getTotalVotesSelector = createSelector(
+export const getTotalVoteCountSelector = createSelector(
     getBooleanVotesSelector,
     booleanVotes => booleanVotes.length
 )
@@ -144,8 +144,8 @@ export const getTotalCommentsSelector = createSelector(
 )
 
 export const getBooleanCountByUser = createSelector(
-    getTotalVotesSelector,
-    getTotalVotersSelector,
+    getTotalVoteCountSelector,
+    getTotalVoterCountSelector,
     (voteCount, voters) => {
         if (!voters) {
             return 0
@@ -156,7 +156,7 @@ export const getBooleanCountByUser = createSelector(
 
 export const getCommentCountByUser = createSelector(
     getTotalCommentsSelector,
-    getTotalVotersSelector,
+    getTotalVoterCountSelector,
     (commentCount, voters) => {
         if (!voters) {
             return 0
