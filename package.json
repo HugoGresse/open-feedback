@@ -8,7 +8,7 @@
         "cypress": "^3.8.1",
         "eslint-plugin-cypress": "^2.8.1",
         "firebase-tools": "^7.9.0",
-        "husky": "^4.0.5",
+        "husky": "^4.0.7",
         "lint-staged": "^9.5.0",
         "prettier": "^1.19.1",
         "react-scripts": "3.3.0"
