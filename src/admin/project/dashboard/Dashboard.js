@@ -40,10 +40,10 @@ class Dashboard extends Component {
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
                     <Highlights />
-                    <MostVotedTalks />
+                    <MostVotedTalks dinoStartDelay={5000} />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <VoteTimeline />
+                    <VoteTimeline dinoStartDelay={2600} />
                 </Grid>
             </Grid>
         )

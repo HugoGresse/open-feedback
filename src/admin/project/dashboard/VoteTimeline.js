@@ -14,7 +14,7 @@ import NoData from './utils/NoData'
 
 class VoteTimeline extends Component {
     render() {
-        const { votesByHour } = this.props
+        const { votesByHour, dinoStartDelay } = this.props
 
         if (!votesByHour) {
             return <CircularProgress />
@@ -24,7 +24,7 @@ class VoteTimeline extends Component {
             <DashboardCard
                 title="Votes per hour"
                 titleIcon={<InsertChartOutlined />}>
-                <NoData datas={votesByHour} speed={3}>
+                <NoData datas={votesByHour} dinoStartDelay={dinoStartDelay}>
                     <ResponsiveContainer height={250} width="80%">
                         <AreaChart data={votesByHour} strokeWidth={2}>
                             <defs>
