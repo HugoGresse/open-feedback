@@ -47,8 +47,7 @@ const Highlights = () => {
                     commentCount,
                     voteCountByUser,
                     commentCountByUser,
-                ]}
-                speed={5}>
+                ]}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Typography variant="body1">Total Voters</Typography>
