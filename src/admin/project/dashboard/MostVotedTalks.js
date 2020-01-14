@@ -21,7 +21,7 @@ const useStyles = makeStyles({
     },
 })
 
-const MostVotedTalks = () => {
+const MostVotedTalks = ({ dinoStartDelay }) => {
     const classes = useStyles()
     const mostVotedTalks = useSelector(getMostVotedTalkSelector)
     const projectId = useSelector(getSelectedProjectIdSelector)
@@ -32,7 +32,7 @@ const MostVotedTalks = () => {
 
     return (
         <DashboardCard title="Most voted" titleIcon={<ThumbsUpIcon />}>
-            <NoData datas={mostVotedTalks} speed={8}>
+            <NoData datas={mostVotedTalks} dinoStartDelay={dinoStartDelay}>
                 <Grid container spacing={2}>
                     {mostVotedTalks.map(row => (
                         <React.Fragment key={row.talkId}>
