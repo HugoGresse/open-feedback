@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import Box from '@material-ui/core/Box'
 import { newRandomHexColor } from '../../utils/colorsUtils'
 
 const useStyles = makeStyles({
+    container: {
+        height: 200,
+        width: '100%',
+        position: 'absolute',
+    },
     canvas: {
         position: 'relative',
     },
@@ -14,7 +18,14 @@ const useStyles = makeStyles({
     },
 })
 
-const DinoBackground = ({ speed = 5 }) => {
+const DinoBackground = ({
+    speed = 5,
+    snake = true,
+    spacing = 1000,
+    offsetY = 0,
+    dinoScale = 1,
+    startDelay = 0,
+}) => {
     const classes = useStyles()
     const [canvasRef] = useState(React.createRef())
     const [refElement] = useState(React.createRef())
@@ -23,8 +34,6 @@ const DinoBackground = ({ speed = 5 }) => {
         if (!canvasRef || !canvasRef.current || !refElement) return
         const ctx = canvasRef.current.getContext('2d')
         const dinoWidth = 40
-        const dinoScale = 0.2
-        const dinoYOffset = 90
 
         if (refElement.current != null) {
             const width = refElement.current.clientWidth
@@ -37,7 +46,7 @@ const DinoBackground = ({ speed = 5 }) => {
             ctx.scale(scale, scale)
         }
 
-        let moveX = 0
+        let moveX = -dinoWidth * 2
         let firstColor = `#${newRandomHexColor()}88`
         let secondColor = `#${newRandomHexColor()}88`
         let firstSwift = false
@@ -48,7 +57,7 @@ const DinoBackground = ({ speed = 5 }) => {
                 return
             }
             isFirstHalf = moveX < refElement.current.clientWidth / 2
-            model = moveX % 100 > 50 || moveX % 100 < 0
+            model = moveX % 50 > 25 || moveX % 50 < 0
 
             moveX += speed
 
@@ -65,7 +74,7 @@ const DinoBackground = ({ speed = 5 }) => {
                 ctx.fillStyle = secondColor
             }
 
-            Dino(ctx, dinoScale, moveX, dinoYOffset, model)
+            Dino(ctx, dinoScale, moveX, offsetY, model)
 
             if ((firstSwift && isFirstHalf) || (!firstSwift && !isFirstHalf)) {
                 ctx.fillStyle = firstColor
@@ -73,43 +82,65 @@ const DinoBackground = ({ speed = 5 }) => {
                 ctx.fillStyle = secondColor
             }
 
-            Dino(
-                ctx,
-                dinoScale,
-                -refElement.current.clientWidth + moveX,
-                dinoYOffset,
-                model
-            )
+            if (snake) {
+                Dino(
+                    ctx,
+                    dinoScale,
+                    -refElement.current.clientWidth + moveX + spacing,
+                    offsetY,
+                    model
+                )
 
-            if ((firstSwift && !isFirstHalf) || (!firstSwift && isFirstHalf)) {
-                ctx.fillStyle = firstColor
-            } else {
-                ctx.fillStyle = secondColor
+                if (
+                    (firstSwift && !isFirstHalf) ||
+                    (!firstSwift && isFirstHalf)
+                ) {
+                    ctx.fillStyle = firstColor
+                } else {
+                    ctx.fillStyle = secondColor
+                }
+
+                Dino(
+                    ctx,
+                    dinoScale,
+                    refElement.current.clientWidth + moveX + spacing,
+                    offsetY,
+                    model
+                )
             }
 
-            Dino(
-                ctx,
-                dinoScale,
-                refElement.current.clientWidth + moveX,
-                dinoYOffset,
-                model
-            )
-
-            if (moveX > refElement.current.clientWidth - dinoWidth) {
-                moveX = -dinoWidth
+            if (moveX > refElement.current.clientWidth - dinoWidth + spacing) {
+                if (spacing > refElement.current.clientWidth) {
+                    moveX = -dinoWidth * 2
+                } else {
+                    moveX = -dinoWidth
+                }
                 firstSwift = !firstSwift
             }
 
             window.requestAnimationFrame(animate)
         }
-        animate()
-    }, [canvasRef, refElement, speed])
+        const timeout = setTimeout(animate, startDelay)
+
+        return () => {
+            clearTimeout(timeout)
+        }
+    }, [
+        canvasRef,
+        refElement,
+        speed,
+        dinoScale,
+        offsetY,
+        snake,
+        spacing,
+        startDelay,
+    ])
 
     return (
-        <Box height="200px" position="absolute" width="100%">
+        <div className={classes.container}>
             <div ref={refElement} className={classes.refElement} />
             <canvas ref={canvasRef} className={classes.canvas} style={{}} />
-        </Box>
+        </div>
     )
 }
 
