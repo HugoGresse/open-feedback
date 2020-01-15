@@ -1,4 +1,15 @@
 import { stringGenerator } from '../../utils/generateString'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+
+firebase.initializeApp({
+    apiKey: Cypress.env('REACT_APP_API_KEY'),
+    authDomain: Cypress.env('REACT_APP_AUTH_DOMAIN'),
+    databaseURL: Cypress.env('REACT_APP_DATABASE_URL'),
+    projectId: Cypress.env('REACT_APP_PROJECT_ID'),
+    storageBucket: Cypress.env('REACT_APP_STORAGE_BUCKET'),
+    appId: Cypress.env('REACT_APP_APPID'),
+})
 
 describe('Test creating a new project', function() {
     const data = {
@@ -26,9 +37,14 @@ describe('Test creating a new project', function() {
         tag4: 'Design',
     }
 
-    it('New OpenFeedback project', function() {
-        cy.adminLogin()
+    beforeEach(function() {
+        const email = Cypress.env('adminUserEmail')
+        const pwd = Cypress.env('adminUserPassword')
+        firebase.auth().signInWithEmailAndPassword(email, pwd)
+    })
 
+    it('New OpenFeedback project', function() {
+        cy.visit('/admin')
         cy.contains('Create a new event').click()
 
         cy.get('input[type=text]').type(data.projectName)
@@ -78,8 +94,7 @@ describe('Test creating a new project', function() {
     })
 
     it('New OpenFeedback project 2', function() {
-        cy.adminLogin()
-
+        cy.visit('/admin')
         cy.contains('Create a new event').click()
 
         cy.get('input[type=text]').type(data.projectName)
