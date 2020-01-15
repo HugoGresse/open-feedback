@@ -10,6 +10,8 @@ const useStyles = makeStyles(theme => ({
     paper: {
         maxWidth: 300,
         padding: 36,
+        height: 'auto',
+        bottom: 0,
         [theme.breakpoints.down('xs')]: {
             padding: 18,
             width: 'calc(100% - 36px)',
