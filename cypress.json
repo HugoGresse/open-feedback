@@ -1,7 +1,9 @@
 {
     "baseUrl": "http://localhost:3000",
     "env": {
-        "firestoreTestProjectId": "xo5qvbJCpYPpU74yGW7W"
+        "firestoreTestProjectId": "xo5qvbJCpYPpU74yGW7W",
+        "adminUserEmail": "nesem36179@janmail.org",
+        "adminUserPassword": "azerty$"
     },
     "projectId": "3nv53o"
 }
