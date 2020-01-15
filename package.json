@@ -7,7 +7,7 @@
         "babel-loader": "8.0.6",
         "cypress": "^3.8.2",
         "eslint-plugin-cypress": "^2.8.1",
-        "firebase-tools": "^7.11.0",
+        "firebase-tools": "^7.12.1",
         "husky": "^4.0.10",
         "lint-staged": "^9.5.0",
         "prettier": "^1.19.1",
