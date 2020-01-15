@@ -177,11 +177,11 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                         aria-label="something"
                         className={classes.userBox}>
                         <ListItem>
-                            <ListItemAvatar>
-                                {user.photoURL && (
+                            {user.photoURL && (
+                                <ListItemAvatar>
                                     <Avatar alt="user" src={user.photoURL} />
-                                )}
-                            </ListItemAvatar>
+                                </ListItemAvatar>
+                            )}
                             <ListItemText
                                 primaryTypographyProps={{
                                     color: 'textPrimary',
