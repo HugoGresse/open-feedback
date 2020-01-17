@@ -103,8 +103,7 @@ describe('Test creating a new project', function() {
             .click()
         cy.get('input[id=trackTitle]').should('have.value', data.track1)
         cy.get('input[id=tags]').focus()
-        // TODO : tag are not saved if enter is not pressed
-        //cy.contains(data.tag1).click()
+        cy.contains(data.tag1).click()
         cy.get('input[id=speakers]').type(data.speaker2.name)
         cy.get('#speakers-popup')
             .children()
