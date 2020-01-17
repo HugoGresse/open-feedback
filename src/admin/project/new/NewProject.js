@@ -44,9 +44,9 @@ const NewProject = ({ onCancel }) => {
                     dispatch(selectProject(projectId)),
                 ])
             })
-            .then(() => {
-                dispatch(fillDefaultProjectData())
-                dispatch(getProject())
+            .then(async () => {
+                await dispatch(fillDefaultProjectData())
+                await dispatch(getProject())
             })
     }
 
