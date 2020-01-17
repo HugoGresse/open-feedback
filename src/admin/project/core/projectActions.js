@@ -69,28 +69,29 @@ export const getProjects = () => {
     }
 }
 
-export const getProject = (selectedProjectId = null) => {
-    return (dispatch, getState) => {
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(selectedProjectId || getSelectedProjectIdSelector(getState()))
-            .get()
-            .then(doc => {
-                dispatch({
-                    type: GET_PROJECT_SUCCESS,
-                    payload: {
-                        id: doc.id,
-                        ...doc.data(),
-                    },
-                })
+export const getProject = (selectedProjectId = null) => (
+    dispatch,
+    getState
+) => {
+    return fireStoreMainInstance
+        .collection('projects')
+        .doc(selectedProjectId || getSelectedProjectIdSelector(getState()))
+        .get()
+        .then(doc => {
+            dispatch({
+                type: GET_PROJECT_SUCCESS,
+                payload: {
+                    id: doc.id,
+                    ...doc.data(),
+                },
             })
-            .catch(err => {
-                dispatch({
-                    type: GET_PROJECT_ERROR,
-                    payload: err.toString(),
-                })
+        })
+        .catch(err => {
+            dispatch({
+                type: GET_PROJECT_ERROR,
+                payload: err.toString(),
             })
-    }
+        })
 }
 
 export const selectProject = projectId => (dispatch, getState) => {
@@ -231,14 +232,14 @@ export const initProjectApiIfReady = (projectId, project) => dispatch => {
     }
 }
 
-export const fillDefaultProjectData = () => dispatch => {
-    dispatch(onVoteItemAddBoolean('Fun 😃'))
-    dispatch(onVoteItemAddBoolean("I've learned a lot 🤓"))
-    dispatch(onVoteItemAddBoolean('Very interesting 👍'))
-    dispatch(onVoteItemAddBoolean('Good speaker 👏'))
-    dispatch(onVoteItemAddBoolean('Not clear 🧐'))
-    dispatch(onVoteItemAddBoolean('Too technical 🤖'))
-    dispatch(onVoteItemAddBoolean('Lack of demo/example 🤔'))
-    dispatch(onVoteItemAddBoolean('Too complex 🤯'))
-    dispatch(toggleVoteComment(true))
+export const fillDefaultProjectData = () => async dispatch => {
+    await dispatch(onVoteItemAddBoolean('Fun 😃'))
+    await dispatch(onVoteItemAddBoolean("I've learned a lot 🤓"))
+    await dispatch(onVoteItemAddBoolean('Very interesting 👍'))
+    await dispatch(onVoteItemAddBoolean('Good speaker 👏'))
+    await dispatch(onVoteItemAddBoolean('Not clear 🧐'))
+    await dispatch(onVoteItemAddBoolean('Too technical 🤖'))
+    await dispatch(onVoteItemAddBoolean('Lack of demo/example 🤔'))
+    await dispatch(onVoteItemAddBoolean('Too complex 🤯'))
+    return await dispatch(toggleVoteComment(true))
 }
