@@ -15,7 +15,7 @@
     },
     "main": "lib/index.js",
     "dependencies": {
-        "@types/jest": "^24.0.25",
+        "@types/jest": "^24.9.0",
         "@types/jest-expect-message": "^1.0.1",
         "firebase": "^7.5.2",
         "firebase-admin": "^8.8.0",
