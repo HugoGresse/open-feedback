@@ -9,7 +9,7 @@ import Step3 from './Step3'
 import { useDispatch } from 'react-redux'
 import {
     fillDefaultProjectData,
-    getProjects,
+    getProject,
     newProject,
     selectProject,
 } from '../core/projectActions'
@@ -40,12 +40,13 @@ const NewProject = ({ onCancel }) => {
         return dispatch(newProject(project))
             .then(projectId => {
                 return Promise.all([
-                    dispatch(getProjects()),
+                    dispatch(getProject(projectId)),
                     dispatch(selectProject(projectId)),
                 ])
             })
             .then(() => {
                 dispatch(fillDefaultProjectData())
+                dispatch(getProject())
             })
     }
 

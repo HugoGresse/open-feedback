@@ -68,11 +68,11 @@ export const getProjects = () => {
     }
 }
 
-export const getProject = () => {
+export const getProject = (selectedProjectId = null) => {
     return (dispatch, getState) => {
         return fireStoreMainInstance
             .collection('projects')
-            .doc(getSelectedProjectIdSelector(getState()))
+            .doc(selectedProjectId || getSelectedProjectIdSelector(getState()))
             .get()
             .then(doc => {
                 dispatch({
