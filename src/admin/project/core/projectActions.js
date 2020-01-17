@@ -36,6 +36,7 @@ export const getProjects = () => {
         return fireStoreMainInstance
             .collection('projects')
             .where(`members`, 'array-contains', getUserSelector(getState()).uid)
+            .orderBy('createdAt', 'desc')
             .get()
             .then(projectsSnapshot => {
                 const projects = []
