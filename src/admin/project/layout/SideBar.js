@@ -4,7 +4,7 @@ import logo from '../../../assets/logo-openfeedback-color&white.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserSelector } from '../../auth/authSelectors'
 import { signOut } from '../../auth/authActions'
-import { createMuiTheme, Link } from '@material-ui/core'
+import { createMuiTheme } from '@material-ui/core'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -28,6 +28,7 @@ import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import RoutingMap from '../../RoutingMap'
 import Drawer from '@material-ui/core/Drawer'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import { Link } from 'react-router-dom'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -93,7 +94,7 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                 <div className={classes.container}>
                     <List component="nav">
                         <ListItem className={classes.logoContainer}>
-                            <Link href="/admin/">
+                            <Link to="/admin/">
                                 <img
                                     className={classes.logo}
                                     src={logo}
