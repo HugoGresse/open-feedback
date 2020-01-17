@@ -101,7 +101,7 @@ describe('Test creating a new project', function() {
         cy.get('input[id=trackTitle]').should('have.value', data.track1)
         cy.get('input[id=tags]').focus()
         cy.contains(data.tag1).click()
-        cy.get('input[id=speakers]').type(data.speaker2.name)
+        cy.get('input[id=speakers]').type(data.speaker2.name, { delay: 70 })
         cy.get('#speakers-popup')
             .children()
             .first()
