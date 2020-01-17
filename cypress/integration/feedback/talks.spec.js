@@ -1,4 +1,6 @@
 describe('Navigate on talk list', function() {
+    const testProjectId = Cypress.env('firestoreTestProjectId')
+
     it('Check talks are loaded & displayed', function() {
         cy.visitFeedbackProject()
 
@@ -14,7 +16,7 @@ describe('Navigate on talk list', function() {
                     .should(
                         'have.attr',
                         'href',
-                        '/xo5qvbJCpYPpU74yGW7W/2019-06-27/4'
+                        `/${testProjectId}/2019-06-27/4`
                     )
                     .should('contain', 'Vue > React, this is why')
                     .should('contain', 'Pierre')
@@ -27,7 +29,7 @@ describe('Navigate on talk list', function() {
                 cy.get('a').click()
             })
         cy.get('h2').should('contain', 'Vue > React, this is why#Front')
-        cy.url().should('include', '/xo5qvbJCpYPpU74yGW7W')
+        cy.url().should('include', `/${testProjectId}`)
     })
 
     it('Check dates changes the displayed talks', function() {
@@ -36,7 +38,7 @@ describe('Navigate on talk list', function() {
         cy.get('h3').should('have.length', 3)
 
         cy.contains('Friday 28')
-            .should('have.attr', 'href', '/xo5qvbJCpYPpU74yGW7W/2019-06-28')
+            .should('have.attr', 'href', `/${testProjectId}/2019-06-28`)
             .click()
 
         cy.get('h3').should('have.length', 1)
@@ -50,7 +52,7 @@ describe('Navigate on talk list', function() {
                     .should(
                         'have.attr',
                         'href',
-                        '/xo5qvbJCpYPpU74yGW7W/2019-06-28/0'
+                        `/${testProjectId}/2019-06-28/0`
                     )
                     .should('contain', 'Un talk super bien')
                     .should('contain', 'Pierre')
