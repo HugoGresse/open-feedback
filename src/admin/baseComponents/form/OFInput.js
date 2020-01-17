@@ -48,17 +48,20 @@ const useStyles = makeStyles({
 
 function OFInput(props) {
     const classes = useStyles()
+
+    const { forwardedRef, ...otherProps } = props
+
     return (
         <>
-            {props.icon && <IconWrapper>{props.icon}</IconWrapper>}
+            {otherProps.icon && <IconWrapper>{otherProps.icon}</IconWrapper>}
             <OFInputStyled
-                icon={props.icon}
+                icon={otherProps.icon}
                 classes={{
                     focused: classes.focusedInput,
                     input: classes.selectedInput,
                 }}
-                ref={props.forwardedRef}
-                {...props}
+                ref={forwardedRef}
+                {...otherProps}
             />
         </>
     )

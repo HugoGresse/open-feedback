@@ -35,6 +35,7 @@ describe('Test creating a new project', function() {
         tag2: 'Back',
         tag3: 'Infra',
         tag4: 'Design',
+        voteItem1: 'This is just a simple boring test',
     }
 
     beforeEach(function() {
@@ -45,19 +46,16 @@ describe('Test creating a new project', function() {
 
     it('New OpenFeedback project', function() {
         cy.visit('/admin')
+
         cy.contains('Create a new event').click()
-
         cy.get('input[type=text]').type(data.projectName)
-
         cy.contains('Continue').click()
-
         cy.get('input[value=openfeedbackv1]').check()
-
         cy.contains('Create event').click()
-
+        // After redirect
         cy.contains(data.projectName)
 
-        // Add a talk without speaker
+        // -- Add a talk without speaker
         cy.contains('Talks').click()
         cy.contains('Add talks').click()
         cy.get('input[name=title]').type(data.talk1Name)
@@ -67,7 +65,7 @@ describe('Test creating a new project', function() {
             .first()
             .click()
 
-        // Edit the added talk to add 2 speaker
+        // -- Edit the added talk to add 2 speaker
         cy.contains(data.talk1Name)
             .parent()
             .parent()
@@ -91,5 +89,52 @@ describe('Test creating a new project', function() {
         cy.contains(data.talk1Name).should('be.visible')
         cy.contains(data.speaker1.name).should('be.visible')
         cy.contains(data.speaker2.name).should('be.visible')
+
+        // -- Add a new talk with existing stuff
+        cy.contains('Add talks').click()
+        cy.get('input[name=title]').type(data.talk2Name)
+        cy.get('input[id=trackTitle]').focus()
+        cy.get('#trackTitle-popup')
+            .children()
+            .first()
+            .click()
+        cy.get('input[id=trackTitle]').should('have.value', data.track1)
+        cy.get('input[id=tags]').focus()
+        cy.contains(data.tag1).click()
+        cy.get('input[id=speakers]').type(data.speaker2.name)
+        cy.get('#speakers-popup')
+            .children()
+            .first()
+            .click()
+        cy.get('button[type=submit]')
+            .first()
+            .click()
+        cy.contains(data.talk2Name).should('be.visible')
+        cy.get(`span:contains(${data.speaker2.name})`).should('have.length', 2)
+
+        // -- Add a vote item
+        cy.contains('Voting Form').click()
+        cy.get('input[type=text]').should('have.length', 8)
+        cy.contains('New item').click()
+        cy.get('input[type=text]')
+            .last()
+            .type(data.voteItem1)
+        cy.contains('Save').click()
+        cy.get('input[type=text]').should('have.length', 9)
+
+        // Go to the event and to the first added talk
+        cy.contains('See event')
+            .invoke('removeAttr', 'target')
+            .click()
+
+        cy.get('#root').should('contain', data.talk1Name)
+        cy.get('#root').should('contain', data.speaker1.name)
+        cy.get('#root').should('contain', data.talk2Name)
+        cy.get('#root').should('contain', data.speaker2.name)
+
+        cy.contains(data.talk1Name).click()
+
+        cy.get('h2').should('contain', data.talk1Name)
+        cy.get('#root').should('contain', data.voteItem1)
     })
 })
