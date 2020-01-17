@@ -35,6 +35,7 @@ describe('Test creating a new project', function() {
         tag2: 'Back',
         tag3: 'Infra',
         tag4: 'Design',
+        voteItem1: 'This is just a simple boring test',
     }
 
     beforeEach(function() {
@@ -57,7 +58,7 @@ describe('Test creating a new project', function() {
 
         cy.contains(data.projectName)
 
-        // Add a talk without speaker
+        // -- Add a talk without speaker
         cy.contains('Talks').click()
         cy.contains('Add talks').click()
         cy.get('input[name=title]').type(data.talk1Name)
@@ -67,7 +68,7 @@ describe('Test creating a new project', function() {
             .first()
             .click()
 
-        // Edit the added talk to add 2 speaker
+        // -- Edit the added talk to add 2 speaker
         cy.contains(data.talk1Name)
             .parent()
             .parent()
@@ -91,5 +92,38 @@ describe('Test creating a new project', function() {
         cy.contains(data.talk1Name).should('be.visible')
         cy.contains(data.speaker1.name).should('be.visible')
         cy.contains(data.speaker2.name).should('be.visible')
+
+        // -- Add a new talk with existing stuff
+        cy.contains('Add talks').click()
+        cy.get('input[name=title]').type(data.talk2Name)
+        cy.get('input[id=trackTitle]').focus()
+        cy.get('#trackTitle-popup')
+            .children()
+            .first()
+            .click()
+        cy.get('input[id=trackTitle]').should('have.value', data.track1)
+        cy.get('input[id=tags]').focus()
+        // TODO : tag are not saved if enter is not pressed
+        //cy.contains(data.tag1).click()
+        cy.get('input[id=speakers]').type(data.speaker2.name)
+        cy.get('#speakers-popup')
+            .children()
+            .first()
+            .click()
+        cy.get('button[type=submit]')
+            .first()
+            .click()
+        cy.contains(data.talk2Name).should('be.visible')
+        cy.get(`span:contains(${data.speaker2.name})`).should('have.length', 2)
+
+        // -- Add a vote item
+        cy.contains('Voting Form').click()
+        cy.get('input[type=text]').should('have.length', 8)
+        cy.contains('New item').click()
+        cy.get('input[type=text]')
+            .last()
+            .type(data.voteItem1)
+        cy.contains('Save').click()
+        cy.get('input[type=text]').should('have.length', 9)
     })
 })
