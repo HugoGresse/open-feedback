@@ -20,6 +20,7 @@ import { addNotification } from '../../notification/notifcationActions'
 import TalkAddEditPanel from './TalkAddEditPanel'
 import moment from 'moment'
 import { addSpeaker } from '../../../core/speakers/speakerActions'
+import { useTranslation } from 'react-i18next'
 
 const TalkList = () => {
     const dispatch = useDispatch()
@@ -31,14 +32,14 @@ const TalkList = () => {
     const tracks = useSelector(getTracksSelector)
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
     const [editingTalk, setEditTalk] = useState(null)
+    const { t } = useTranslation()
 
     const talkNotReadableCheck = () => {
         if (projectApi.isReadOnly()) {
             dispatch(
                 addNotification({
                     type: 'error',
-                    message:
-                        'Talks cannot be changed from OpenFeedback itself for this project. Refer to your external services configuration to do so.',
+                    message: t('talks.cannotChange'),
                 })
             )
             return true
@@ -91,7 +92,7 @@ const TalkList = () => {
                 filterChange={value => dispatch(setTalksFilter(value))}
                 buttonProcessing={false}
                 buttonClick={() => onAddTalkClicked()}
-                buttonText="Add talks"
+                buttonText={t('talks.addTalks')}
             />
 
             <TalkAddEditPanel

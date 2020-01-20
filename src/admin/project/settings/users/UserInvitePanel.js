@@ -4,23 +4,21 @@ import OFFormControlInputFormiked from '../../../baseComponents/form/OFFormContr
 import OFButton from '../../../baseComponents/OFButton'
 import React from 'react'
 import { object, string } from 'yup'
-
-const schema = object().shape({
-    email: string()
-        .email('The member email must be a valid email, you bitch!')
-        .required(
-            'The member email is required. You think you can invite Nobody? Well... no.'
-        ),
-})
+import { useTranslation } from 'react-i18next'
 
 const UserInvitePanel = ({ isOpen, onClose, onSubmit }) => {
+    const { t } = useTranslation()
     return (
         <SidePanelLayout
-            title="Add a new member to the event"
+            title={t('settingsUser.add')}
             isOpen={isOpen}
             onClose={onClose}>
             <Formik
-                validationSchema={schema}
+                validationSchema={object().shape({
+                    email: string()
+                        .email(t('settingsUser.emailNotValid'))
+                        .required(t('settingsUser.emailRequired')),
+                })}
                 initialValues={{
                     email: '',
                 }}
@@ -28,7 +26,7 @@ const UserInvitePanel = ({ isOpen, onClose, onSubmit }) => {
                 {({ isSubmitting }) => (
                     <Form method="POST">
                         <OFFormControlInputFormiked
-                            name="Member email"
+                            name={t('settingsUser.memberEmail')}
                             fieldName="email"
                             type="text"
                             isSubmitting={isSubmitting}
@@ -42,7 +40,7 @@ const UserInvitePanel = ({ isOpen, onClose, onSubmit }) => {
                                 marginTop: 64,
                                 width: '100%',
                             }}>
-                            Add member
+                            {t('settingsUser.submit')}
                         </OFButton>
                     </Form>
                 )}

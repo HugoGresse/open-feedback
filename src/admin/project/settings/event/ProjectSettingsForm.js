@@ -15,20 +15,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { SwitchFormiked } from '../../../baseComponents/form/SwitchFormiked'
 import moment from 'moment'
 import Collapse from '@material-ui/core/Collapse'
-
-const schema = object().shape({
-    name: string().required('The project name is required'),
-    scheduleLink: string().url('The schedule link is not a valid url'),
-    logoUrl: string()
-        .url('The logo is not a valid url')
-        .required('The logo is required'),
-    faviconUrl: string()
-        .url('The favicon is not a valid url')
-        .required('The favicon is required'),
-    restrictVoteRange: boolean(),
-    voteStartTime: string(),
-    voteEndTime: string(),
-})
+import { useTranslation } from 'react-i18next'
+import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
 
 const useStyles = makeStyles(theme => ({
     buttonContainer: {
@@ -42,6 +30,7 @@ const useStyles = makeStyles(theme => ({
 const ProjectSettingsForm = ({ project }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
+    const { t } = useTranslation()
     const [errorOnSubmit, setErrorSubmit] = useState(false)
 
     const initialValues = {
@@ -57,7 +46,21 @@ const ProjectSettingsForm = ({ project }) => {
 
     return (
         <Formik
-            validationSchema={schema}
+            validationSchema={object().shape({
+                name: string().required(t('settingsEvent.fieldNameRequired')),
+                scheduleLink: string().url(
+                    t('settingsEvent.fieldScheduleNotValid')
+                ),
+                logoUrl: string()
+                    .url(t('settingsEvent.fieldLogoUrlNotValid'))
+                    .required(t('settingsEvent.fieldLogoUrlRequired')),
+                faviconUrl: string()
+                    .url(t('settingsEvent.fieldFaviconUrlNotValid'))
+                    .required(t('settingsEvent.fieldFaviconUrlRequired')),
+                restrictVoteRange: boolean(),
+                voteStartTime: string(),
+                voteEndTime: string(),
+            })}
             initialValues={initialValues}
             onSubmit={values =>
                 dispatch(
@@ -81,14 +84,14 @@ const ProjectSettingsForm = ({ project }) => {
                         <Grid item xs={12} sm={6}>
                             <Typography variant="h5">Event</Typography>
                             <OFFormControlInputFormiked
-                                name="Name"
+                                name={t('settingsEvent.fieldName')}
                                 fieldName="name"
                                 type="text"
                                 isSubmitting={isSubmitting}
                             />
 
                             <OFFormControlInputFormiked
-                                name="Schedule Link"
+                                name={t('settingsEvent.fieldSchedule')}
                                 fieldName="scheduleLink"
                                 type="text"
                                 isSubmitting={isSubmitting}
@@ -96,7 +99,7 @@ const ProjectSettingsForm = ({ project }) => {
 
                             <OFFormControlFormiked fieldName="restrictVoteRange">
                                 <FormControlLabel
-                                    label="Restrict vote open/close time"
+                                    label={t('settingsEvent.fieldVoteRange')}
                                     control={
                                         <Field
                                             name="restrictVoteRange"
@@ -109,7 +112,7 @@ const ProjectSettingsForm = ({ project }) => {
                             <Collapse in={values.restrictVoteRange}>
                                 <div>
                                     <OFFormControlFormiked
-                                        name="Vote open time (in your local timezone)"
+                                        name={t('settingsEvent.fieldVoteOpen')}
                                         fieldName="voteStartTime">
                                         <Field
                                             name="voteStartTime"
@@ -119,7 +122,7 @@ const ProjectSettingsForm = ({ project }) => {
                                     </OFFormControlFormiked>
 
                                     <OFFormControlFormiked
-                                        name="Vote end time (in your local timezone)"
+                                        name={t('settingsEvent.fieldVoteClose')}
                                         fieldName="voteEndTime">
                                         <Field
                                             name="voteEndTime"
@@ -133,21 +136,21 @@ const ProjectSettingsForm = ({ project }) => {
                         <Grid item xs={12} sm={6}>
                             <Typography variant="h5">Theme</Typography>
                             <OFFormControlInputFormiked
-                                name="Logo url (around 100*100px)"
+                                name={t('settingsEvent.fieldLogoUrl')}
                                 fieldName="logoUrl"
                                 type="text"
                                 isSubmitting={isSubmitting}
                             />
 
                             <OFFormControlInputFormiked
-                                name="Favicon url (.png or .ico)"
+                                name={t('settingsEvent.fieldLogoUrl')}
                                 fieldName="faviconUrl"
                                 type="text"
                                 isSubmitting={isSubmitting}
                             />
 
                             <OFFormControlFormiked
-                                name="Chip Colors"
+                                name={t('settingsEvent.fieldChipColors')}
                                 fieldName="chipColors">
                                 <Field
                                     name="chipColors"
@@ -167,16 +170,14 @@ const ProjectSettingsForm = ({ project }) => {
                                         setErrorSubmit(false)
                                     }
                                 }}>
-                                Save
+                                {t('settingsEvent.save')}
                             </OFButton>
 
                             {errorOnSubmit &&
                                 errorArrayContainError(errors) && (
-                                    <Typography style={{}}>
-                                        You have some error in here, would you
-                                        mind fixing it before saving? Much
-                                        appreciated.
-                                    </Typography>
+                                    <TranslatedTypography i18nKey="settingsEvent.error">
+                                        errorMsg{' '}
+                                    </TranslatedTypography>
                                 )}
                         </Grid>
                     </Grid>

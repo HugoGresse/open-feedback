@@ -1,30 +1,30 @@
 export default {
     dashboard: {
-        name: 'Dashboard',
-        url: '/dashboard'
+        i18key: 'rooting.dashboard',
+        url: '/dashboard',
     },
     talks: {
-        name: 'Talks',
-        url: '/talks'
+        i18key: 'rooting.talks',
+        url: '/talks',
     },
     speakers: {
-        name: 'Speakers',
-        url: '/speakers'
+        i18key: 'rooting.speakers',
+        url: '/speakers',
     },
     settingEvent: {
-        name: 'Event & Theme',
-        url: '/setting/event'
+        i18key: 'rooting.settingEvent',
+        url: '/setting/event',
     },
     settingVotingform: {
-        name: 'Voting Form',
-        url: '/setting/votingform'
+        i18key: 'rooting.settingVotingform',
+        url: '/setting/votingform',
     },
     settingSetup: {
-        name: 'Setup',
-        url: '/setting/setup'
+        i18key: 'rooting.settingSetup',
+        url: '/setting/setup',
     },
     settingUsers: {
-        name: 'Users',
-        url: '/setting/users'
-    }
+        i18key: 'rooting.settingUsers',
+        url: '/setting/users',
+    },
 }

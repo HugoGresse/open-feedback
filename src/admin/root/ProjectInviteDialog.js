@@ -1,23 +1,28 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
     listenForInvite,
-    unsubscribeRealtimeInviteListener
+    unsubscribeRealtimeInviteListener,
 } from '../project/settings/users/usersActions'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import {Box} from '@material-ui/core'
-import {isEmpty} from 'lodash'
-import {getInviteSelector, getUsersSelector} from '../project/settings/users/usersSelectors'
-import {history} from '../../App'
+import { Box } from '@material-ui/core'
+import { isEmpty } from 'lodash'
+import {
+    getInviteSelector,
+    getUsersSelector,
+} from '../project/settings/users/usersSelectors'
+import { history } from '../../App'
+import { useTranslation } from 'react-i18next'
 
-const ProjectInviteDialog = ({inviteId}) => {
+const ProjectInviteDialog = ({ inviteId }) => {
     const dispatch = useDispatch()
     const invite = useSelector(getInviteSelector)
     const currentUser = useSelector(getUsersSelector)
+    const { t } = useTranslation()
 
     useEffect(() => {
         dispatch(listenForInvite(inviteId))
@@ -30,30 +35,36 @@ const ProjectInviteDialog = ({inviteId}) => {
         history.push(history.location.pathname)
     }
 
-    let text = ""
+    let text = ''
     if (invite) {
-        if(invite.destinationUserInfo !== currentUser.email && invite.destinationUserInfo !== currentUser.phoneNumber) {
+        if (
+            invite.destinationUserInfo !== currentUser.email &&
+            invite.destinationUserInfo !== currentUser.phoneNumber
+        ) {
             history.push(history.location.pathname)
         }
         if (invite.status === 'emailSent') {
-            text = "You'll be redirected to the event soon"
+            text = t("You'll be redirected to the event soon")
         }
     } else {
-        text = "You've already used this invitation"
+        text = t("You've already used this invitation")
     }
 
-    return <Dialog onClose={() => closeDialog()} aria-labelledby="event invitation" open={!isEmpty(inviteId)}>
-        <DialogTitle>Event invitation</DialogTitle>
-        <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-                {text}
-            </DialogContentText>
-            <Box margin={2}>
-                <CircularProgress/>
-            </Box>
-        </DialogContent>
-    </Dialog>
-
-
+    return (
+        <Dialog
+            onClose={() => closeDialog()}
+            aria-labelledby="event invitation"
+            open={!isEmpty(inviteId)}>
+            <DialogTitle>Event invitation</DialogTitle>
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    {text}
+                </DialogContentText>
+                <Box margin={2}>
+                    <CircularProgress />
+                </Box>
+            </DialogContent>
+        </Dialog>
+    )
 }
 export default ProjectInviteDialog

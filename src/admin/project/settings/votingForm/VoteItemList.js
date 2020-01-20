@@ -18,8 +18,10 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import OFListHeader from '../../../baseComponents/layouts/OFListHeader'
 import OFListItem from '../../../baseComponents/layouts/OFListItem'
+import { useTranslation } from 'react-i18next'
 
 const VoteItemList = () => {
+    const { t } = useTranslation()
     const dispatch = useDispatch()
     const voteItems = useSelector(getBooleanVoteItemsSelector)
     const isSaving = useSelector(isSavingSelector)
@@ -27,11 +29,11 @@ const VoteItemList = () => {
     return (
         <Grid container>
             <OFListHeader
-                title="Vote items"
+                title={t('settingsVotingForm.title')}
                 disableFilter={true}
                 buttonProcessing={isSaving}
                 buttonClick={() => dispatch(saveVoteItems())}
-                buttonText="Save"
+                buttonText={t('common.save')}
             />
             {voteItems.map(item => (
                 <VoteItem
@@ -56,7 +58,7 @@ const VoteItemList = () => {
                     aria-label="new vote item"
                     onClick={() => dispatch(onVoteItemAddBoolean())}>
                     <AddIcon style={{ marginRight: 6 }} />
-                    New item
+                    {t('settingsVotingForm.new')}
                 </Button>
             </OFListItem>
         </Grid>
