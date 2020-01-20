@@ -120,13 +120,13 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                         <OFMenuItem
                             to={`${baseUrl}/${selectedProjectId}${RoutingMap.dashboard.url}`}
                             icon={<ExploreIcon />}
-                            text={RoutingMap.dashboard.name}
+                            text={t(RoutingMap.dashboard.i18key)}
                             iconClassName={classes.listItemIcon}
                         />
 
                         <OFMenuItem
                             to={`${baseUrl}/${selectedProjectId}${RoutingMap.talks.url}`}
-                            text={RoutingMap.talks.name}
+                            text={t(RoutingMap.talks.i18key)}
                             icon={<SlideshowIcon />}
                             iconClassName={classes.listItemIcon}
                         />
@@ -134,7 +134,7 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                         <OFMenuItem
                             to={`${baseUrl}/${selectedProjectId}${RoutingMap.speakers.url}`}
                             icon={<RecordVoiceOverIcon />}
-                            text={RoutingMap.speakers.name}
+                            text={t(RoutingMap.speakers.i18key)}
                             iconClassName={classes.listItemIcon}
                         />
                     </List>
@@ -151,25 +151,25 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                             </ListSubheader>
                         }>
                         <OFMenuItem
-                            text={RoutingMap.settingEvent.name}
+                            text={t(RoutingMap.settingEvent.i18key)}
                             iconClassName={classes.listItemIcon}
                             icon={<EventNoteIcon />}
                             to={`${baseUrl}/${selectedProjectId}${RoutingMap.settingEvent.url}`}
                         />
                         <OFMenuItem
-                            text={RoutingMap.settingVotingform.name}
+                            text={t(RoutingMap.settingVotingform.i18key)}
                             iconClassName={classes.listItemIcon}
                             icon={<HowToVoteIcon />}
                             to={`${baseUrl}/${selectedProjectId}${RoutingMap.settingVotingform.url}`}
                         />
                         <OFMenuItem
-                            text={RoutingMap.settingSetup.name}
+                            text={t(RoutingMap.settingSetup.i18key)}
                             iconClassName={classes.listItemIcon}
                             icon={<SettingsIcon />}
                             to={`${baseUrl}/${selectedProjectId}${RoutingMap.settingSetup.url}`}
                         />
                         <OFMenuItem
-                            text={RoutingMap.settingUsers.name}
+                            text={t(RoutingMap.settingUsers.i18key)}
                             iconClassName={classes.listItemIcon}
                             icon={<PeopleIcon />}
                             to={`${baseUrl}/${selectedProjectId}${RoutingMap.settingUsers.url}`}

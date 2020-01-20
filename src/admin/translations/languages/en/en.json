@@ -68,6 +68,15 @@
         "title": "Your OpenFeedback events",
         "userNotVerified": "User not verified"
     },
+    "rooting": {
+        "dashboard": "Dashboard",
+        "talks": "Talks",
+        "speakers": "Speakers",
+        "settingEvent": "Event & Theme",
+        "settingVotingform": "Voting Form",
+        "settingSetup": "Setup",
+        "settingUsers": "Users"
+    },
     "settingsEvent": {
         "cancel": "Cancel",
         "chooseColor": "Choose the color",
