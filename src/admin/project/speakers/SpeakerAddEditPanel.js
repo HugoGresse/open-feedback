@@ -4,31 +4,31 @@ import { object, string } from 'yup'
 import SidePanelLayout from '../../baseComponents/layouts/SidePanelLayout'
 import OFButton from '../../baseComponents/OFButton'
 import OFFormControlInputFormiked from '../../baseComponents/form/OFFormControlInputFormiked'
-
-const schema = object().shape({
-    name: string()
-        .trim()
-        .required('The speaker name is required.'),
-    photoUrl: string()
-        .url('The photo url is not a valid url.')
-        .trim()
-        .required('The speaker photo url is required.'),
-    socialProfil: string()
-        .notRequired()
-        .url('The social url is not a valid url.')
-        .trim(),
-})
+import { useTranslation } from 'react-i18next'
 
 const SpeakerAddEditPanel = ({ isOpen, speaker, onClose, onSubmit }) => {
+    const { t } = useTranslation()
     const [shouldContinueAfterSubmit, setContinueAfterSubmit] = useState(false)
 
     return (
         <SidePanelLayout
             isOpen={isOpen}
             onClose={onClose}
-            title="Add a new speaker to the event">
+            title={t('Add a new speaker to the event')}>
             <Formik
-                validationSchema={schema}
+                validationSchema={object().shape({
+                    name: string()
+                        .trim()
+                        .required(t('speakers.addTitle')),
+                    photoUrl: string()
+                        .url(t('speakers.photoValid'))
+                        .trim()
+                        .required(t('speakers.photoRequired')),
+                    socialProfil: string()
+                        .notRequired()
+                        .url(t('speakers.socialValid'))
+                        .trim(),
+                })}
                 initialValues={
                     speaker || {
                         name: '',
@@ -45,19 +45,19 @@ const SpeakerAddEditPanel = ({ isOpen, speaker, onClose, onSubmit }) => {
                 {({ isSubmitting }) => (
                     <Form method="POST">
                         <OFFormControlInputFormiked
-                            name="Name*"
+                            name={t('speakers.name')}
                             fieldName="name"
                             type="text"
                             isSubmitting={isSubmitting}
                         />
                         <OFFormControlInputFormiked
-                            name="Photo url*"
+                            name={t('speakers.photoUrl')}
                             fieldName="photoUrl"
                             type="url"
                             isSubmitting={isSubmitting}
                         />
                         <OFFormControlInputFormiked
-                            name="Social profil page"
+                            name={t('speakers.social')}
                             fieldName="socialProfil"
                             type="url"
                             isSubmitting={isSubmitting}
@@ -72,7 +72,7 @@ const SpeakerAddEditPanel = ({ isOpen, speaker, onClose, onSubmit }) => {
                                 width: '100%',
                             }}
                             onClick={() => setContinueAfterSubmit(false)}>
-                            {speaker ? 'Save' : 'Add speaker'}
+                            {speaker ? t('common.save') : t('speakers.submit')}
                         </OFButton>
                         {!speaker && (
                             <OFButton
@@ -85,7 +85,7 @@ const SpeakerAddEditPanel = ({ isOpen, speaker, onClose, onSubmit }) => {
                                     width: '100%',
                                 }}
                                 onClick={() => setContinueAfterSubmit(true)}>
-                                Add speaker & continue
+                                {t('speakers.submitContinue')}
                             </OFButton>
                         )}
                     </Form>

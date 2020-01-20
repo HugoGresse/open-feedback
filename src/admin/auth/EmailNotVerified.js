@@ -4,13 +4,15 @@ import CardContent from '@material-ui/core/CardContent'
 import OFButton from '../baseComponents/OFButton'
 import { authProvider } from '../../firebase'
 import { didSignIn } from './authActions'
+import { useTranslation } from 'react-i18next'
 
 const EmailNotVerified = ({ dispatch }) => {
+    const { t } = useTranslation()
+
     return (
         <Card>
             <CardContent>
-                You need to verify your email using the link you&apos;ve
-                received in your inbox.
+                {t('auth.emailNotVerified')}
                 <br />
                 <br />
                 <OFButton
@@ -22,7 +24,7 @@ const EmailNotVerified = ({ dispatch }) => {
                                 dispatch(didSignIn(authProvider.currentUser))
                             })
                     }}>
-                    Retry
+                    {t('auth.retry')}
                 </OFButton>
             </CardContent>
         </Card>

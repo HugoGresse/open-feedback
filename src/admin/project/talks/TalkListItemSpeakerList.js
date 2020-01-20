@@ -4,6 +4,7 @@ import Chip from '@material-ui/core/Chip'
 import Avatar from '@material-ui/core/Avatar'
 import Tooltip from '@material-ui/core/Tooltip'
 import WarningIcon from '@material-ui/icons/Warning'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(() => ({
     chip: {
@@ -18,6 +19,7 @@ const TalkListItemSpeakerList = ({
     onSpeakerClicked,
 }) => {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     return speakersIds.map(speakerId => {
         if (speakers[speakerId]) {
@@ -40,9 +42,7 @@ const TalkListItemSpeakerList = ({
             )
         } else {
             return (
-                <Tooltip
-                    title="This speaker is missing from the data, probably deleted"
-                    key={speakerId}>
+                <Tooltip title={t('talks.speakerMissing')} key={speakerId}>
                     <Chip
                         label={speakerId}
                         className={classes.chip}

@@ -11,6 +11,7 @@ import { FormikObserver } from '../../baseComponents/form/FormikObserver'
 import jsonModel from './jsonmodel'
 import clipboardCopy from 'clipboard-copy'
 import Button from '@material-ui/core/Button'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(() => ({
     jsonShowButton: {
@@ -34,12 +35,6 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-const schema = object().shape({
-    jsonUrl: string()
-        .url('The JSON URL must be a valid url')
-        .required('The JSON URL is required'),
-})
-
 const SetupJSONForm = ({
     onBack,
     onSubmit,
@@ -50,10 +45,15 @@ const SetupJSONForm = ({
 }) => {
     const classes = useStyles()
     const [isExampleOpen, setExampleOpen] = useState(false)
+    const { t } = useTranslation()
 
     return (
         <Formik
-            validationSchema={schema}
+            validationSchema={object().shape({
+                jsonUrl: string()
+                    .url(t('settingsSetup.json.jsonUrlValid'))
+                    .required(t('settingsSetup.json.jsonUrlRequired')),
+            })}
             initialValues={initialValues}
             onSubmit={values =>
                 onSubmit({
@@ -69,7 +69,7 @@ const SetupJSONForm = ({
                         />
                     )}
                     <OFFormControlInputFormiked
-                        name="JSON URL"
+                        name={t('settingsSetup.json.fieldJsonUrl')}
                         fieldName="jsonUrl"
                         type="text"
                         isSubmitting={isSubmitting}
@@ -79,7 +79,8 @@ const SetupJSONForm = ({
                         <Button
                             className={classes.jsonShowButton}
                             onClick={() => setExampleOpen(!isExampleOpen)}>
-                            Show JSON model <ArrowDownIcon />
+                            {t('settingsSetup.json.showJsonModel')}{' '}
+                            <ArrowDownIcon />
                         </Button>
                         <Collapse
                             in={isExampleOpen}
@@ -93,7 +94,7 @@ const SetupJSONForm = ({
                                         JSON.stringify(jsonModel, undefined, 4)
                                     )
                                 }>
-                                Copy
+                                {t('common.copy')}
                             </OFButton>
                             <pre className={classes.jsonExamplePre}>
                                 {JSON.stringify(jsonModel, undefined, 4)}

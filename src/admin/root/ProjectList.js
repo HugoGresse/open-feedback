@@ -9,6 +9,7 @@ import CardActionArea from '@material-ui/core/CardActionArea'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Paper from '@material-ui/core/Paper'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(theme => ({
     newEventCard: {
@@ -34,6 +35,7 @@ const ProjectList = ({
     onProjectSelected,
 }) => {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     if (!isProjectsLoaded) {
         return (
@@ -50,7 +52,7 @@ const ProjectList = ({
                     <CardActionArea onClick={() => onNewEventClick()}>
                         <CardContent className={classes.cardContent}>
                             <AddIcon />
-                            <Typography>Create a new event</Typography>
+                            <Typography>{t('Create a new event')}</Typography>
                         </CardContent>
                     </CardActionArea>
                 </Card>

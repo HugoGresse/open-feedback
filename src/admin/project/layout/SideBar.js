@@ -29,6 +29,7 @@ import RoutingMap from '../../RoutingMap'
 import Drawer from '@material-ui/core/Drawer'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -77,6 +78,7 @@ const useStyles = makeStyles({
 const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
     const dispatch = useDispatch()
     const classes = useStyles()
+    const { t } = useTranslation()
 
     const user = useSelector(getUserSelector)
     const selectedProjectId = useSelector(getSelectedProjectIdSelector)
@@ -111,7 +113,9 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                         className={classes.list}
                         onClick={event => toggleDrawer(event)}
                         subheader={
-                            <ListSubheader component="div">DATA</ListSubheader>
+                            <ListSubheader component="div">
+                                {t('layout.sidebar.data')}
+                            </ListSubheader>
                         }>
                         <OFMenuItem
                             to={`${baseUrl}/${selectedProjectId}${RoutingMap.dashboard.url}`}
@@ -143,7 +147,7 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                         onClick={event => toggleDrawer(event)}
                         subheader={
                             <ListSubheader component="div">
-                                SETTINGS
+                                {t('layout.sidebar.settings')}
                             </ListSubheader>
                         }>
                         <OFMenuItem
@@ -175,7 +179,7 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
 
                     <List
                         component="nav"
-                        aria-label="something"
+                        aria-label="user/logout"
                         className={classes.userBox}>
                         <ListItem>
                             {user.photoURL && (

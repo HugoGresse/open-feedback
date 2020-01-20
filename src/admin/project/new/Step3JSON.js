@@ -1,23 +1,24 @@
 import React from 'react'
 import NewProjectLayout from './NewProjectLayout'
 import SetupJSON from '../setupTypeForms/SetupJSON'
+import { useTranslation } from 'react-i18next'
 
 const Step3JSON = ({
-                       onCancel,
-                       onBack,
-                       onSubmit,
-                       stepTitle,
-                       submitText,
-                       backText,
-                       initialValues,
-                       rightColumnTitle
-                   }) => {
+    onCancel,
+    onBack,
+    onSubmit,
+    stepTitle,
+    submitText,
+    backText,
+    initialValues,
+    rightColumnTitle,
+}) => {
+    const { t } = useTranslation()
     return (
         <NewProjectLayout
             stepTitle={stepTitle}
-            title="Where is your JSON file?"
-            onCancel={onCancel}
-        >
+            title={t('newEvent.step3.jsonurl')}
+            onCancel={onCancel}>
             <SetupJSON
                 initialValues={initialValues}
                 onBack={onBack}
@@ -26,7 +27,7 @@ const Step3JSON = ({
                 rightColumnTitle={rightColumnTitle}
                 onSubmit={values =>
                     onSubmit({
-                        jsonUrl: values.jsonUrl
+                        jsonUrl: values.jsonUrl,
                     })
                 }
             />
