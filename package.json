@@ -47,7 +47,7 @@
         "reselect": "^4.0.0",
         "styled-components": "^5.0.0",
         "styled-system": "^5.1.4",
-        "wait-on": "^3.3.0",
+        "wait-on": "^4.0.0",
         "yup": "^0.28.0"
     },
     "scripts": {
