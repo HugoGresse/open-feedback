@@ -5,14 +5,7 @@ import OFFormControlInputFormiked from '../../baseComponents/form/OFFormControlI
 import OFButton from '../../baseComponents/OFButton'
 import Box from '@material-ui/core/Box'
 import { FormikObserver } from '../../baseComponents/form/FormikObserver'
-
-const schema = object().shape({
-    projectId: string().required('The Firebase project ID is required'),
-    apiKey: string().required('The API Key is required'),
-    databaseURL: string()
-        .url('The database URL must be a valid url')
-        .required('The database URL is required'),
-})
+import { useTranslation } from 'react-i18next'
 
 const SetupHoverboardv2Form = ({
     onBack,
@@ -22,9 +15,18 @@ const SetupHoverboardv2Form = ({
     initialValues,
     onFormChange,
 }) => {
+    const { t } = useTranslation()
     return (
         <Formik
-            validationSchema={schema}
+            validationSchema={object().shape({
+                projectId: string().required(
+                    t('settingsSetup.projectIdRequired')
+                ),
+                apiKey: string().required(t('settingsSetup.apiKeyRequired')),
+                databaseURL: string()
+                    .url(t('settingsSetup.dbUrlValid'))
+                    .required(t('settingsSetup.dbUrlRequired')),
+            })}
             initialValues={initialValues}
             onSubmit={values =>
                 onSubmit({

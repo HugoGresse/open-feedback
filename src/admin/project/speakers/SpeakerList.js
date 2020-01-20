@@ -16,6 +16,7 @@ import OFListHeader from '../../baseComponents/layouts/OFListHeader'
 import SpeakerAddEditPanel from './SpeakerAddEditPanel'
 import { projectApi } from '../../../core/setupType/projectApi'
 import { addNotification } from '../../notification/notifcationActions'
+import { useTranslation } from 'react-i18next'
 
 const SpeakerList = () => {
     const dispatch = useDispatch()
@@ -23,14 +24,14 @@ const SpeakerList = () => {
     const filter = useSelector(getSpeakersFilter)
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
     const [editingSpeaker, setEditSpeaker] = useState(null)
+    const { t } = useTranslation()
 
     const speakerNotReadableCheck = () => {
         if (projectApi.isReadOnly()) {
             dispatch(
                 addNotification({
                     type: 'error',
-                    message:
-                        'Speakers cannot be changed from OpenFeedback itself for this project. Refer to your external services configuration to do so.',
+                    message: t('speakers.cannotChange'),
                 })
             )
             return true
@@ -68,7 +69,7 @@ const SpeakerList = () => {
                 filterValue={filter}
                 filterChange={value => dispatch(filterSpeakers(value))}
                 buttonClick={onAddSpeakerClicked}
-                buttonText="Add speaker"
+                buttonText={t('speakers.addButton')}
             />
 
             <SpeakerAddEditPanel

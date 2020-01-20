@@ -1,0 +1,179 @@
+{
+    "auth": {
+        "emailNotVerified": "You need to verify your email using the link you've received in your inbox.",
+        "retry": "Retry"
+    },
+    "baseComponents": {
+        "search": "Search"
+    },
+    "common": {
+        "back": "Back",
+        "cancel": "Cancel",
+        "copy": "Copy",
+        "save": "Save"
+    },
+    "dashboard": {
+        "comments": "Comments",
+        "commentsPerUser": "Comments per user",
+        "highlights": "Highlights",
+        "mostVoted": "Most voted",
+        "noVotes": "No votes yet",
+        "totalVoters": "Total Voters",
+        "votes": "Votes",
+        "votesPerHour": "Votes per hour",
+        "votesPerUser": "Votes per user"
+    },
+    "layout": {
+        "404": "The requested URL {{pathname}} was not found on this server.",
+        "seeEvent": "See event",
+        "sidebar": {
+            "data": "DATA",
+            "settings": "SETTINGS"
+        }
+    },
+    "newEvent": {
+        "step1": {
+            "fieldName": "Event name",
+            "name": "What's your event name?",
+            "nameRequired": "The event name is required",
+            "submit": "Continue",
+            "title": "Create a new event (step 1/3)"
+        },
+        "step2": {
+            "back": "Back",
+            "continue": "Continue",
+            "create": "Create event",
+            "projectTypeHoverboard": "Hoverboard v2 Firestore",
+            "projectTypeHoverboardDetail": "The talks/speakers/schedule will be retrieved directly on page load from your own Firestore database that follow Hoverboard v2 model.",
+            "projectTypeJsonurl": "JSON link (ex: your API)",
+            "projectTypeJsonurlDetail": "Provide an url to a .json that you’ll either host (on gist.github.com or another static server) or a dynamic answer from your own database/api. The json model will need to match OpenFeedback one, you’ll be able to check it on the next screen.",
+            "projectTypeOpenfeedback": "OpenFeedback Database (default)",
+            "projectTypeOpenfeedbackDetail": "You can manually enter the talks/speakers/schedule on OpenFeedback. It will not be in sync with another service if you are using one. No additional configuration is required.",
+            "projectTypeRequired": "You need to choose how you want to setup the event.",
+            "stepTitle": "Create a new event (step 2/3)",
+            "title": "How do you want to load your data?"
+        },
+        "step3": {
+            "back": "Back",
+            "firebaseCredentials": "Enter your Firebase credentials",
+            "jsonurl": "What's the url of the json?",
+            "notManaged": "This project type is not managed, this should not happen, either your not a good dev, or ¯\\_(ツ)_/¯",
+            "stepTitle": "Create a new event (step 3/3)",
+            "submit": "Create event",
+            "validation": "Validation"
+        }
+    },
+    "root": {
+        "create": "Create a new event",
+        "title": "Your OpenFeedback events",
+        "userNotVerified": "User not verified"
+    },
+    "rooting": {
+        "dashboard": "Dashboard",
+        "talks": "Talks",
+        "speakers": "Speakers",
+        "settingEvent": "Event & Theme",
+        "settingVotingform": "Voting Form",
+        "settingSetup": "Setup",
+        "settingUsers": "Users"
+    },
+    "settingsEvent": {
+        "cancel": "Cancel",
+        "chooseColor": "Choose the color",
+        "delete": "Delete",
+        "error": "You have some error, would you mind fixing it before saving? Much appreciated.",
+        "fieldChipColors": "Chip Colors",
+        "fieldFaviconUrl": "Favicon url (.png or .ico)",
+        "fieldFaviconUrlNotValid": "The favicon is not a valid url",
+        "fieldFaviconUrlRequired": "The favicon is required",
+        "fieldLogoUrl": "Logo url (around 100*100px)",
+        "fieldLogoUrlNotValid": "The logo is not a valid url",
+        "fieldLogoUrlRequired": "The logo is required",
+        "fieldName": "Name",
+        "fieldNameRequired": "The project name is required",
+        "fieldSchedule": "Schedule link",
+        "fieldScheduleNotValid": "The schedule link is not a valid url",
+        "fieldVoteClose": "Vote end time (in your local timezone)",
+        "fieldVoteOpen": "Vote open time (in your local timezone)",
+        "fieldVoteRange": "Restrict voting open/close date",
+        "pick": "Pick",
+        "save": "Save"
+    },
+    "settingsSetup": {
+        "cannotChange": "You cannot change the setup mode after creating the event.",
+        "config": "Configuration",
+        "hoverboard": {
+            "apiKeyRequired": "The API Key is required",
+            "dbUrlRequired": "The database URL is required",
+            "dbUrlValid": "The database URL must be a valid url",
+            "projectIdRequired": "The Firebase project ID is required"
+        },
+        "json": {
+            "fieldJsonUrl": "JSON URL",
+            "jsonUrlRequired": "The JSON URL is required",
+            "jsonUrlValid": "The JSON URL must be a valid url",
+            "showJsonModel": "Show JSON model"
+        },
+        "setupMode": "Setup Mode",
+        "validateConfig": "VALIDATE CONFIG",
+        "validation": "Validation"
+    },
+    "settingsUser": {
+        "add": "Add a new member to the event",
+        "addButton": "Add a member",
+        "emailNotValid": "The member email must be a valid email, sneaky one!",
+        "emailRequired": "The member email is required. You think you can invite Nobody? Well... no.",
+        "invitation": "Invitation",
+        "invite": {
+            "default": "has disappeared",
+            "emailSent": "sent",
+            "error": "errored",
+            "new": "created"
+        },
+        "invites": "PENDING INVITES",
+        "member": "Member",
+        "memberEmail": "Member email",
+        "on": "on",
+        "owner": "Owner",
+        "status": "Invitation to become Member",
+        "submit": "Add member"
+    },
+    "settingsVotingForm": {
+        "enableComment": "Enable comment",
+        "new": "New item",
+        "options": "Options",
+        "title": "Vote items"
+    },
+    "speakers": {
+        "addButton": "Add speaker",
+        "addTitle": "Add a new speaker to the event",
+        "cannotChange": "Speakers cannot be changed from OpenFeedback itself for this project. Refer to your external services configuration to do so.",
+        "name": "Name*",
+        "nameRequired": "The speaker name is required.",
+        "photoRequired": "The speaker photo url is required.",
+        "photoUrl": "Photo url*",
+        "photoValid": "The photo url is not a valid url.",
+        "social": "Social profil page",
+        "socialValid": "The social url is not a valid url.",
+        "submit": "Add speaker",
+        "submitContinue": "Add speaker & continue"
+    },
+    "talks": {
+        "addTalks": "Add talks",
+        "cannotChange": "Talks cannot be changed from OpenFeedback itself for this project. Refer to your external services configuration to do so.",
+        "fieldEndTime": "End time*",
+        "fieldEndTimeRequired": "The end time is required.",
+        "fieldSpeakers": "Speaker(s)",
+        "fieldStartTime": "Start time*",
+        "fieldStartTimeRequired": "The start time is required.",
+        "fieldTags": "Tags",
+        "fieldTitle": "Title*",
+        "fieldTitleRequired": "The talk title is required.",
+        "fieldTrack": "Track title",
+        "speakerMissing": "This speaker is missing from the data, probably deleted",
+        "submit": "Add talk",
+        "submitContinue": "Add talk & continue",
+        "titleAdd": "Add a new talk to the event",
+        "titleEdit": "Edit a talk"
+    }
+}
