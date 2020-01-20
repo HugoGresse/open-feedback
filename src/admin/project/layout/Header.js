@@ -93,7 +93,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
             .filter(key => {
                 return location.pathname.includes(RoutingMap[key].url)
             })
-            .map(key => RoutingMap[key].name)
+            .map(key => t(RoutingMap[key].i18key))
     }
 
     const menuId = 'primary-project-selection-menu'
