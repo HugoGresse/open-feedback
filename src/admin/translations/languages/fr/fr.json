@@ -23,6 +23,16 @@
         "votesPerHour": "Vote par heure",
         "votesPerUser": "Vote par utilisateur"
     },
+    "defaultVotingForm": {
+        "fun": "Drôle/original 😃",
+        "learned": "Très enrichissant 🤓",
+        "interesting": "Super intéressant 👍",
+        "speaker": "Très bon orateur 👏",
+        "nclear": "Pas clair 🧐",
+        "technical": "Trop technique 🤖",
+        "example": "Pas assez de démo/example 🤔",
+        "complex": "Trop complexe 🤯"
+    },
     "layout": {
         "404": "L'URL demandée {{pathname}} est introuvable sur ce serveur.",
         "seeEvent": "Voir l'évènement",
@@ -47,7 +57,7 @@
             "projectTypeHoverboardDetail": "Les présentations/présentateurs/calendrier seront récupérés directement au chargement de la page à partir de votre propre base de données Firestore en suivant le modèle de Hoverboard v2.",
             "projectTypeJsonurl": "JSON link (ex: votre API)",
             "projectTypeJsonurlDetail": "Vous fournissez une URL vers un .json que vous hébergerez (sur gist.github.com ou un autre serveur static) ou une API pour votre propre base de donnée. Le modèle du .json devra correspondre à celui d'OpenFeedback, vous pourrez le vérifier sur l'écran suivant. ",
-            "projectTypeOpenfeedback": "Base de donnée d'OpenFeedback (par défaut)",
+            "projectTypeOpenfeedback": "Base de donnée OpenFeedback (par défaut)",
             "projectTypeOpenfeedbackDetail": "Vous pouvez saisir manuellement les présentations / présentateurs / calendrier sur OpenFeedback. Ils ne seront pas synchronisé avec un autre service si. Aucune configuration supplémentaire n'est requise.",
             "projectTypeRequired": "Vous devez choisir la façon dont vous souhaitez configurer l'évènement",
             "stepTitle": "Créer un nouvel évènement (étape 2/3)",

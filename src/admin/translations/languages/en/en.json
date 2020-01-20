@@ -23,6 +23,16 @@
         "votesPerHour": "Votes per hour",
         "votesPerUser": "Votes per user"
     },
+    "defaultVotingForm": {
+        "fun": "Fun 😃",
+        "learned": "I've learned a lot 🤓",
+        "interesting": "Very interesting 👍",
+        "speaker": "Good speaker 👏",
+        "nclear": "Not clear 🧐",
+        "technical": "Too technical 🤖",
+        "example": "Lack of demo/example 🤔",
+        "complex": "Too complex 🤯"
+    },
     "layout": {
         "404": "The requested URL {{pathname}} was not found on this server.",
         "seeEvent": "See event",
