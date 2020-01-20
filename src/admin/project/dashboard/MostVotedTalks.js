@@ -9,6 +9,7 @@ import COLORS from '../../../constants/colors'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import NoData from './utils/NoData'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles({
     title: {
@@ -25,13 +26,16 @@ const MostVotedTalks = ({ dinoStartDelay }) => {
     const classes = useStyles()
     const mostVotedTalks = useSelector(getMostVotedTalkSelector)
     const projectId = useSelector(getSelectedProjectIdSelector)
+    const { t } = useTranslation()
 
     if (!mostVotedTalks) {
         return <LoaderMatchParent />
     }
 
     return (
-        <DashboardCard title="Most voted" titleIcon={<ThumbsUpIcon />}>
+        <DashboardCard
+            title={t('dashboard.mostVoted')}
+            titleIcon={<ThumbsUpIcon />}>
             <NoData datas={mostVotedTalks} dinoStartDelay={dinoStartDelay}>
                 <Grid container spacing={2}>
                     {mostVotedTalks.map(row => (

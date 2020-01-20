@@ -1,23 +1,25 @@
 import React from 'react'
 import NewProjectLayout from './NewProjectLayout'
 import SetupHoverboardv2 from '../setupTypeForms/SetupHoverboardv2'
+import { useTranslation } from 'react-i18next'
 
 const Step3Hoverboardv2 = ({
-                               onCancel,
-                               onBack,
-                               onSubmit,
-                               stepTitle,
-                               submitText,
-                               backText,
-                               initialValues,
-                               rightColumnTitle
-                           }) => {
+    onCancel,
+    onBack,
+    onSubmit,
+    stepTitle,
+    submitText,
+    backText,
+    initialValues,
+    rightColumnTitle,
+}) => {
+    const { t } = useTranslation()
+
     return (
         <NewProjectLayout
             stepTitle={stepTitle}
-            title="Enter your Firebase credentials"
-            onCancel={onCancel}
-        >
+            title={t('newEvent.step3.firebaseCredentials')}
+            onCancel={onCancel}>
             <SetupHoverboardv2
                 initialValues={initialValues}
                 onBack={onBack}
@@ -28,7 +30,7 @@ const Step3Hoverboardv2 = ({
                     onSubmit({
                         apiKey: values.apiKey,
                         projectId: values.projectId,
-                        databaseURL: values.databaseURL
+                        databaseURL: values.databaseURL,
                     })
                 }
             />

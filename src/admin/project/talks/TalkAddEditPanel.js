@@ -10,21 +10,7 @@ import OFAutoComplete from '../../baseComponents/form/OFAutoComplete'
 import OFFormControlInputFormiked from '../../baseComponents/form/OFFormControlInputFormiked'
 import OFDateTimePickerFormiked from '../../baseComponents/form/OFDateTimePickerFormiked'
 import SpeakerAddEditPanel from '../speakers/SpeakerAddEditPanel'
-
-const schema = object().shape({
-    title: string()
-        .trim()
-        .required('The talk title is required.'),
-    trackTitle: string().trim(),
-    tags: array().of(string()),
-    startTime: string()
-        .trim()
-        .required('The start time is required.'),
-    endTime: string()
-        .trim()
-        .required('The end time is required.'),
-    speakers: array().of(string()),
-})
+import { useTranslation } from 'react-i18next'
 
 const TalkAddEditPanel = ({
     isOpen,
@@ -38,16 +24,30 @@ const TalkAddEditPanel = ({
 }) => {
     const [shouldContinueAfterSubmit, setContinueAfterSubmit] = useState(false)
     const [addingASpeaker, setSpeakerAdd] = useState(false)
+    const { t } = useTranslation()
 
     return (
         <>
             <SidePanelLayout
                 isOpen={isOpen}
                 onClose={onClose}
-                title="Add a new talk to the event">
+                title={talk ? t('talks.titleEdit') : t('talks.titleAdd')}>
                 <MuiPickersUtilsProvider utils={MomentUtils}>
                     <Formik
-                        validationSchema={schema}
+                        validationSchema={object().shape({
+                            title: string()
+                                .trim()
+                                .required(t('talks.fieldTitleRequired')),
+                            trackTitle: string().trim(),
+                            tags: array().of(string()),
+                            startTime: string()
+                                .trim()
+                                .required(t('talks.fieldStartTimeRequired')),
+                            endTime: string()
+                                .trim()
+                                .required(t('talks.fieldEndTimeRequired')),
+                            speakers: array().of(string()),
+                        })}
                         initialValues={
                             talk || {
                                 title: '',
@@ -67,14 +67,14 @@ const TalkAddEditPanel = ({
                         {({ isSubmitting, setFieldValue, values }) => (
                             <Form method="POST">
                                 <OFFormControlInputFormiked
-                                    name="Title*"
+                                    name={t('talks.fieldTitle')}
                                     fieldName="title"
                                     type="text"
                                     isSubmitting={isSubmitting}
                                 />
 
                                 <OFFormControlFormiked
-                                    name="Start time*"
+                                    name={t('talks.fieldStartTime')}
                                     fieldName="startTime">
                                     <Field
                                         name="startTime"
@@ -84,7 +84,7 @@ const TalkAddEditPanel = ({
                                 </OFFormControlFormiked>
 
                                 <OFFormControlFormiked
-                                    name="End time*"
+                                    name={t('talks.fieldEndTime')}
                                     fieldName="endTime">
                                     <Field
                                         name="endTime"
@@ -94,7 +94,7 @@ const TalkAddEditPanel = ({
                                 </OFFormControlFormiked>
 
                                 <OFFormControlFormiked
-                                    name="Track title"
+                                    name={t('talks.fieldTrack')}
                                     fieldName="trackTitle"
                                     type="text">
                                     <Field
@@ -106,7 +106,7 @@ const TalkAddEditPanel = ({
                                 </OFFormControlFormiked>
 
                                 <OFFormControlFormiked
-                                    name="Tags"
+                                    name={t('talks.fieldTags')}
                                     fieldName="tags"
                                     type="text">
                                     <Field
@@ -119,7 +119,7 @@ const TalkAddEditPanel = ({
                                 </OFFormControlFormiked>
 
                                 <OFFormControlFormiked
-                                    name="Speaker(s)"
+                                    name={t('talks.fieldSpeakers')}
                                     fieldName="speakers"
                                     type="text">
                                     <Field
@@ -151,7 +151,9 @@ const TalkAddEditPanel = ({
                                     onClick={() =>
                                         setContinueAfterSubmit(false)
                                     }>
-                                    {talk ? 'Save' : 'Add talk'}
+                                    {talk
+                                        ? t('common.save')
+                                        : t('talks.submit')}
                                 </OFButton>
                                 {!talk && (
                                     <OFButton
@@ -166,7 +168,7 @@ const TalkAddEditPanel = ({
                                         onClick={() =>
                                             setContinueAfterSubmit(true)
                                         }>
-                                        Add talk & continue
+                                        {t('talks.submitContinue')}
                                     </OFButton>
                                 )}
 

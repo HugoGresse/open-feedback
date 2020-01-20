@@ -39,15 +39,17 @@ export const getMostVotedTalkSelector = createSelector(
                     return acc + 1
                 }, 0)
 
-                acc.push({
-                    talkId: talk.id,
-                    voteCount: voteCount,
-                    title: talklist[talk.id].title,
-                    trackTitle: talklist[talk.id].trackTitle,
-                    date:
-                        talklist[talk.id].startTime &&
-                        talklist[talk.id].startTime.split('T')[0],
-                })
+                if (talklist[talk.id]) {
+                    acc.push({
+                        talkId: talk.id,
+                        voteCount: voteCount,
+                        title: talklist[talk.id].title,
+                        trackTitle: talklist[talk.id].trackTitle,
+                        date:
+                            talklist[talk.id].startTime &&
+                            talklist[talk.id].startTime.split('T')[0],
+                    })
+                }
 
                 return acc
             }, [])

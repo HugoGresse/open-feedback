@@ -3,16 +3,16 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import AddIcon from '@material-ui/icons/AddCircleOutline'
 import ColorBlock from './ColorBlock'
 import IconButton from '@material-ui/core/IconButton'
-import {newRandomHexColor} from '../../../../utils/colorsUtils'
+import { newRandomHexColor } from '../../../../utils/colorsUtils'
 
 const useStyles = makeStyles(() => ({
     colorBlock: {
-        float: 'left'
+        float: 'left',
     },
     addButton: {
         float: 'left',
-        padding: 8
-    }
+        padding: 8,
+    },
 }))
 
 const ChipColorsEditor = ({ field, form }) => {
@@ -32,7 +32,6 @@ const ChipColorsEditor = ({ field, form }) => {
 
     const addColor = () => {
         const values = field.value || []
-        // Generate new random color
         values.push(newRandomHexColor())
         form.setFieldValue(field.name, values)
     }
@@ -46,27 +45,27 @@ const ChipColorsEditor = ({ field, form }) => {
 
     return (
         <div>
-            {field.value && field.value.map((color, index) => {
-                return (
-                    <ColorBlock
-                        key={index + color}
-                        color={color}
-                        className={classes.colorBlock}
-                        disabled={form.isSubmitting}
-                        onColorChanged={newColor =>
-                            onColorChanges(color, newColor)
-                        }
-                        onColorDeleted={color => onColorDeleted(color)}
-                    />
-                )
-            })}
+            {field.value &&
+                field.value.map((color, index) => {
+                    return (
+                        <ColorBlock
+                            key={index + color}
+                            color={color}
+                            className={classes.colorBlock}
+                            disabled={form.isSubmitting}
+                            onColorChanged={newColor =>
+                                onColorChanges(color, newColor)
+                            }
+                            onColorDeleted={color => onColorDeleted(color)}
+                        />
+                    )
+                })}
             <IconButton
                 className={classes.addButton}
                 component="div"
                 aria-label="new chip color"
                 disabled={form.isSubmitting}
-                onClick={() => addColor()}
-            >
+                onClick={() => addColor()}>
                 <AddIcon />
             </IconButton>
         </div>

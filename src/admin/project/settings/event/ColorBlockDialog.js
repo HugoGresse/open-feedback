@@ -6,9 +6,11 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import DeleteIcon from '@material-ui/icons/Delete'
+import { useTranslation } from 'react-i18next'
 
 const ColorBlockDialog = ({ color, open, onClose, onColorDeleted }) => {
     const [pickerColor, setColor] = useState(`#${color}`)
+    const { t } = useTranslation()
 
     const onColorPicked = data => {
         setColor(data.hex)
@@ -18,9 +20,10 @@ const ColorBlockDialog = ({ color, open, onClose, onColorDeleted }) => {
         <Dialog
             open={open}
             onClose={onClose(pickerColor.replace('#', ''))}
-            aria-labelledby="dialog-color-picker"
-        >
-            <DialogTitle id="dialog-color-picker">Choose the color</DialogTitle>
+            aria-labelledby="dialog-color-picker">
+            <DialogTitle id="dialog-color-picker">
+                {t('settingsEvent.chooseColor')}
+            </DialogTitle>
             <DialogContent>
                 <ChromePicker
                     color={pickerColor}
@@ -32,20 +35,18 @@ const ColorBlockDialog = ({ color, open, onClose, onColorDeleted }) => {
             <DialogActions>
                 <Button onClick={onColorDeleted(pickerColor.replace('#', ''))}>
                     <DeleteIcon />
-                    Delete
+                    {t('settingsEvent.delete')}
+                </Button>
+                <Button
+                    onClick={onClose(pickerColor.replace('#', ''))}
+                    color="primary">
+                    {t('settingsEvent.cancel')}
                 </Button>
                 <Button
                     onClick={onClose(pickerColor.replace('#', ''))}
                     color="primary"
-                >
-                    Cancel
-                </Button>
-                <Button
-                    onClick={onClose(pickerColor.replace('#', ''))}
-                    color="primary"
-                    variant="contained"
-                >
-                    Pick
+                    variant="contained">
+                    {t('settingsEvent.pick')}
                 </Button>
             </DialogActions>
         </Dialog>
