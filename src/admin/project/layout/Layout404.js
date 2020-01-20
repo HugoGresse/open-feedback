@@ -1,7 +1,7 @@
 import { Box, makeStyles } from '@material-ui/core'
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
-import { Trans, useTranslation } from 'react-i18next'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles(() => ({
     quatrecentquatre: {

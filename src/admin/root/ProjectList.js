@@ -52,7 +52,7 @@ const ProjectList = ({
                     <CardActionArea onClick={() => onNewEventClick()}>
                         <CardContent className={classes.cardContent}>
                             <AddIcon />
-                            <Typography>{t('Create a new event')}</Typography>
+                            <Typography>{t('root.create')}</Typography>
                         </CardContent>
                     </CardActionArea>
                 </Card>

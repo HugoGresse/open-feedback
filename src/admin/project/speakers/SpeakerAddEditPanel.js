@@ -14,7 +14,7 @@ const SpeakerAddEditPanel = ({ isOpen, speaker, onClose, onSubmit }) => {
         <SidePanelLayout
             isOpen={isOpen}
             onClose={onClose}
-            title={t('Add a new speaker to the event')}>
+            title={t('speakers.addTitle')}>
             <Formik
                 validationSchema={object().shape({
                     name: string()
