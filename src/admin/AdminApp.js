@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react'
+import { I18nextProvider } from 'react-i18next'
+import i18n from './translations/i18n'
 import { setFavicon } from '../feedback/layout/utils'
 import Login from './auth/Login'
 import { Route, Switch, useParams } from 'react-router-dom'
@@ -33,22 +35,27 @@ const AdminApp = () => {
     const { projectId } = useParams()
 
     return (
-        <Login>
-            <MuiThemeProvider theme={innerTheme}>
-                <Switch>
-                    <Route exact path="/admin/" component={AdminRoot} />
+        <I18nextProvider i18n={i18n}>
+            <Login>
+                <MuiThemeProvider theme={innerTheme}>
+                    <Switch>
+                        <Route exact path="/admin/" component={AdminRoot} />
 
-                    <Route
-                        path="/admin/:projectId"
-                        render={props => (
-                            <ProjectApp match={props.match} key={projectId} />
-                        )}
-                    />
-                </Switch>
+                        <Route
+                            path="/admin/:projectId"
+                            render={props => (
+                                <ProjectApp
+                                    match={props.match}
+                                    key={projectId}
+                                />
+                            )}
+                        />
+                    </Switch>
 
-                <Notifications />
-            </MuiThemeProvider>
-        </Login>
+                    <Notifications />
+                </MuiThemeProvider>
+            </Login>
+        </I18nextProvider>
     )
 }
 

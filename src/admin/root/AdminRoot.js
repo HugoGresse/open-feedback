@@ -17,6 +17,7 @@ import { isUserValidSelector } from '../auth/authSelectors'
 import RootContentLayout from './RootContentLayout'
 import EmailNotVerified from '../auth/EmailNotVerified'
 import { authProvider } from '../../firebase'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles({
     container: {
@@ -40,6 +41,7 @@ const AdminRoot = () => {
     const isUserValid = useSelector(isUserValidSelector)
     const isProjectsLoaded = useSelector(isProjectsLoadedSelector)
     const [isNewProjectOpen, setNewProjectOpen] = useState(false)
+    const { t } = useTranslation()
 
     useEffect(() => {
         authProvider.currentUser
@@ -56,8 +58,8 @@ const AdminRoot = () => {
                 <RootContentLayout
                     title={
                         isUserValid
-                            ? 'Your OpenFeedback events'
-                            : 'User not verified'
+                            ? t('root.title')
+                            : t('root.userNotVerified')
                     }>
                     {!isUserValid && <EmailNotVerified dispatch={dispatch} />}
 

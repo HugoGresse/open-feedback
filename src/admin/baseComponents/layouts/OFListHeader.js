@@ -6,6 +6,7 @@ import OFButton from '../OFButton'
 import React from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Typography } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(theme => ({
     progress: {
@@ -35,6 +36,7 @@ const OFListHeader = ({
     buttonClick,
     buttonText,
 }) => {
+    const { t } = useTranslation()
     const classes = useStyles({ title: !!title })
 
     return (
@@ -47,7 +49,7 @@ const OFListHeader = ({
             {!disableFilter && (
                 <Grid item xs={12} sm={6}>
                     <OFInput
-                        placeholder="Search"
+                        placeholder={t('baseComponents.search')}
                         value={filterValue}
                         onChange={event => filterChange(event.target.value)}
                     />

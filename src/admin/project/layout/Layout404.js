@@ -1,6 +1,7 @@
 import { Box, makeStyles } from '@material-ui/core'
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles(() => ({
     quatrecentquatre: {
@@ -48,6 +49,7 @@ const useStyles = makeStyles(() => ({
 
 const Layout404 = () => {
     const classes = useStyles()
+    const pathname = window.location.pathname
 
     return (
         <Box padding={4} bgcolor="#eee">
@@ -56,8 +58,10 @@ const Layout404 = () => {
             </Typography>
 
             <Typography>
-                The requested URL {window.location.pathname} was not found on
-                this server.
+                <Trans i18nKey="layout.404">
+                    The requested URL {{ pathname }} was not found on this
+                    server.
+                </Trans>
             </Typography>
 
             <pre> ¯\_(ツ)_/¯</pre>

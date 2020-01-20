@@ -1,0 +1,179 @@
+{
+    "auth": {
+        "emailNotVerified": "Vous devez vérifier vote adresse email en utilisant le lien que vous avez reçu dans votre boîte email.",
+        "retry": "Réessayez"
+    },
+    "baseComponents": {
+        "search": "Recherche"
+    },
+    "common": {
+        "back": "Retour",
+        "cancel": "Annuler",
+        "copy": "Copier",
+        "save": "Sauvegarder"
+    },
+    "dashboard": {
+        "comments": "Commentaires",
+        "commentsPerUser": "Commentaires par utilisateur",
+        "highlights": "Chiffres clés",
+        "mostVoted": "Les plus votés",
+        "noVotes": "Pas encore de vote",
+        "totalVoters": "Votants",
+        "votes": "Votes",
+        "votesPerHour": "Vote par heure",
+        "votesPerUser": "Vote par utilisateur"
+    },
+    "layout": {
+        "404": "L'URL demandée {{pathname}} est introuvable sur ce serveur.",
+        "seeEvent": "Voir l'évènement",
+        "sidebar": {
+            "data": "DONNÉES",
+            "settings": "RÉGLAGES"
+        }
+    },
+    "newEvent": {
+        "step1": {
+            "fieldName": "Nom de l'évènement",
+            "name": "Quel est le nom de votre évènement ?",
+            "nameRequired": "Le nom de l'évènement est requis",
+            "submit": "Continuer",
+            "title": "Créer un nouvel évènement (étape 1/3)"
+        },
+        "step2": {
+            "back": "Retour",
+            "continue": "Continuer",
+            "create": "Créer un évènement",
+            "projectTypeHoverboard": "Hoverboard v2 Firestore",
+            "projectTypeHoverboardDetail": "Les présentations/présentateurs/calendrier seront récupérés directement au chargement de la page à partir de votre propre base de données Firestore en suivant le modèle de Hoverboard v2.",
+            "projectTypeJsonurl": "JSON link (ex: votre API)",
+            "projectTypeJsonurlDetail": "Vous fournissez une URL vers un .json que vous hébergerez (sur gist.github.com ou un autre serveur static) ou une API pour votre propre base de donnée. Le modèle du .json devra correspondre à celui d'OpenFeedback, vous pourrez le vérifier sur l'écran suivant. ",
+            "projectTypeOpenfeedback": "Base de donnée d'OpenFeedback (par défaut)",
+            "projectTypeOpenfeedbackDetail": "Vous pouvez saisir manuellement les présentations / présentateurs / calendrier sur OpenFeedback. Ils ne seront pas synchronisé avec un autre service si. Aucune configuration supplémentaire n'est requise.",
+            "projectTypeRequired": "Vous devez choisir la façon dont vous souhaitez configurer l'évènement",
+            "stepTitle": "Créer un nouvel évènement (étape 2/3)",
+            "title": "Comment voulez-vous charger vos données ?"
+        },
+        "step3": {
+            "back": "Retour",
+            "firebaseCredentials": "Entrez vos informations d'identification Firebase",
+            "jsonurl": "Quelle est l'url du json ?",
+            "notManaged": "Ce type de projet n'est pas géré, cela ne devrait pas se produire, soit vous n'êtes pas un bon développeur, soit ¯ \\ _ (ツ) _ / ¯",
+            "stepTitle": "Créer un nouvel événement (étape 3/3)",
+            "submit": "Créer l'événement",
+            "validation": "Validation"
+        }
+    },
+    "root": {
+        "create": "Créer un nouvel événement",
+        "title": "Vos événements OpenFeedback",
+        "userNotVerified": "Utilisateur non vérifié"
+    },
+    "rooting": {
+        "dashboard": "Statistiques",
+        "talks": "Présentations",
+        "speakers": "Présentateurs",
+        "settingEvent": "Évènement & thème",
+        "settingVotingform": "Bulletin de vote",
+        "settingSetup": "Paramètres",
+        "settingUsers": "Utilisateurs"
+    },
+    "settingsEvent": {
+        "cancel": "Annuler",
+        "chooseColor": "Choisissez la couleur",
+        "delete": "Supprimer",
+        "error": "Vous avez une erreur, cela vous dérangerait-il de la corriger avant de l'enregistrer? Merci beaucoup.",
+        "fieldChipColors": "Couleurs des pastilles",
+        "fieldFaviconUrl": "URL du favicon (.png ou .ico)",
+        "fieldFaviconUrlNotValid": "Le favicon n'est pas une URL valide",
+        "fieldFaviconUrlRequired": "Le favicon est obligatoire",
+        "fieldLogoUrl": "URL du logo (environ 100 * 100 px)",
+        "fieldLogoUrlNotValid": "Le logo n'est pas une URL valide",
+        "fieldLogoUrlRequired": "Le logo est obligatoire",
+        "fieldName": "Nom",
+        "fieldNameRequired": "Le nom du projet est obligatoire",
+        "fieldSchedule": "Lien du calendrier",
+        "fieldScheduleNotValid": "Le lien du calendrier n'est pas une URL valide",
+        "fieldVoteClose": "Heure de fin des votes (dans votre fuseau horaire local)",
+        "fieldVoteOpen": "Heure du début des votes (dans votre fuseau horaire local)",
+        "fieldVoteRange": "Restreindre la date de début/fin des votes",
+        "pick": "Choisir",
+        "save": "Sauvegarder"
+    },
+    "settingsSetup": {
+        "cannotChange": "Vous ne pouvez pas changer le mode de configuration après avoir créé l'évènement.",
+        "config": "Configuration",
+        "hoverboard": {
+            "apiKeyRequired": "La clé API est requise",
+            "dbUrlRequired": "L'URL de la base de données est obligatoire",
+            "dbUrlValid": "L'URL de la base de données doit être une URL valide",
+            "projectIdRequired": "L'ID de projet Firebase est obligatoire"
+        },
+        "json": {
+            "fieldJsonUrl": "URL JSON",
+            "jsonUrlRequired": "L'URL JSON est obligatoire",
+            "jsonUrlValid": "L'URL JSON doit être une URL valide",
+            "showJsonModel": "Afficher le modèle JSON"
+        },
+        "setupMode": "Mode de configuration",
+        "validateConfig": "VALIDER LA CONFIG",
+        "validation": "Validation"
+    },
+    "settingsUser": {
+        "add": "Ajouter un nouveau membre à l'événement",
+        "addButton": "Ajouter un membre",
+        "emailNotValid": "L'email du membre doit être un email valide, sournois!",
+        "emailRequired": "L'adresse email du membre est obligatoire. Vous pensez que vous ne pouvez inviter Personne? Et bien non.",
+        "invitation": "Invitation",
+        "invite": {
+            "default": "a disparu",
+            "emailSent": "envoyé",
+            "error": "échoué",
+            "new": "créé"
+        },
+        "invites": "INVITATIONS EN ATTENTE",
+        "member": "Membre",
+        "memberEmail": "Email du membre",
+        "on": "le",
+        "owner": "Propriétaire",
+        "status": "Invitation à devenir membre",
+        "submit": "Ajouter un membre"
+    },
+    "settingsVotingForm": {
+        "enableComment": "Activer les commentaires",
+        "new": "Nouvel choix de vote",
+        "options": "Options",
+        "title": "Choix de vote"
+    },
+    "speakers": {
+        "addButton": "Ajouter un présentateur",
+        "addTitle": "Ajouter un·e nouveau·elle présentateur·e à l'événement",
+        "cannotChange": "Les présentateurs ne peuvent pas être modifiés depuis OpenFeedback pour ce projet. Reportez-vous à la configuration de vos services externes pour le faire.",
+        "name": "Prénom/nom*",
+        "nameRequired": "Le prénom du présentat·eur·rice est obligatoire.",
+        "photoRequired": "L'URL de la photo du présentat·eur·rice est requise.",
+        "photoUrl": "URL de la photo*",
+        "photoValid": "L'URL de la photo n'est pas une URL valide.",
+        "social": "Page de profil sur un réseau social",
+        "socialValid": "L'URL du réseau social n'est pas une URL valide.",
+        "submit": "Ajouter un·e présentat·eur·rice",
+        "submitContinue": "Ajouter un·e présentat·eur·rice et continuer"
+    },
+    "talks": {
+        "addTalks": "Ajouter des présentations",
+        "cannotChange": "Les présentations ne peuvent pas être modifiées depuis OpenFeedback pour ce projet. Reportez-vous à la configuration de vos services externes pour le faire.",
+        "fieldEndTime": "Heure de fin*",
+        "fieldEndTimeRequired": "L'heure de fin est requise.",
+        "fieldSpeakers": "Présentat·eur·rice(s)",
+        "fieldStartTime": "Heure de début*",
+        "fieldStartTimeRequired": "L'heure de début est requise.",
+        "fieldTags": "Mots clés",
+        "fieldTitle": "Titre*",
+        "fieldTitleRequired": "Le titre de la présentation est obligatoire.",
+        "fieldTrack": "Titre de la salle",
+        "speakerMissing": "Ce présentat·eur·rice est absent·e des données, probablement supprimé",
+        "submit": "Ajouter une présentation",
+        "submitContinue": "Ajouter une présentation et continuer",
+        "titleAdd": "Ajouter une nouvelle présentation à l'événement",
+        "titleEdit": "Modifier une présentation"
+    }
+}

@@ -1,8 +1,11 @@
 import React from 'react'
 import Box from '@material-ui/core/Box'
 import DinoBackground from '../../../baseComponents/DinoBackground'
+import { useTranslation } from 'react-i18next'
 
 const NoData = ({ children, datas, dinoStartDelay = 0 }) => {
+    const { t } = useTranslation()
+
     if (datas.filter(data => !!data).length > 0) {
         return children
     }
@@ -10,7 +13,7 @@ const NoData = ({ children, datas, dinoStartDelay = 0 }) => {
 
     return (
         <Box display="flex" justifyContent="center" height="150px">
-            No votes yet
+            {t('dashboard.noVotes')}
             <DinoBackground
                 snake={false}
                 speed={3}
