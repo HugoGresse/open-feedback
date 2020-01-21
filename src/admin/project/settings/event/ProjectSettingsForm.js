@@ -62,8 +62,8 @@ const ProjectSettingsForm = ({ project }) => {
                 voteEndTime: string(),
             })}
             initialValues={initialValues}
-            onSubmit={values => {
-                return dispatch(
+            onSubmit={values =>
+                dispatch(
                     editProject({
                         chipColors: values.chipColors,
                         favicon: values.faviconUrl,
@@ -79,7 +79,7 @@ const ProjectSettingsForm = ({ project }) => {
                         ).toISO(),
                     })
                 )
-            }}>
+            }>
             {({ isSubmitting, values, errors }) => (
                 <Form method="POST">
                     <Grid container spacing={2}>
