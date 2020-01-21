@@ -11,6 +11,7 @@ import OFFormControlInputFormiked from '../../baseComponents/form/OFFormControlI
 import OFDateTimePickerFormiked from '../../baseComponents/form/OFDateTimePickerFormiked'
 import SpeakerAddEditPanel from '../speakers/SpeakerAddEditPanel'
 import { useTranslation } from 'react-i18next'
+import { DateTime } from 'luxon'
 
 const TalkAddEditPanel = ({
     isOpen,
@@ -55,8 +56,8 @@ const TalkAddEditPanel = ({
                                 title: '',
                                 trackTitle: '',
                                 tags: [],
-                                startTime: Date.now(),
-                                endTime: Date.now(),
+                                startTime: DateTime.local().toISO(),
+                                endTime: DateTime.local().toISO(),
                                 speakers: [],
                             }
                         }
