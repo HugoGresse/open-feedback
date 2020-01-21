@@ -7,9 +7,9 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import OFListItem from '../../../baseComponents/layouts/OFListItem'
 import { Box } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
-import moment from 'moment'
 import { useTranslation } from 'react-i18next'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
+import { DateTime } from 'luxon'
 
 const useStyles = makeStyles(theme => ({
     icon: {
@@ -46,9 +46,9 @@ const UserInviteItem = ({ invite, cancelInvite }) => {
                         <Typography style={{ color: '#999' }}>
                             {t('settingsUser.invitation')} {inviteStatus}{' '}
                             {t('settingsUser.on')}{' '}
-                            {moment
-                                .parseZone(invite.updatedAt.toDate())
-                                .format('MMMM Do Y')}
+                            {DateTime.fromJSDate(
+                                invite.updatedAt.toDate()
+                            ).toFormat('DDD')}
                         </Typography>
                     </Box>
                 </Box>

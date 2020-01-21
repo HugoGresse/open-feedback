@@ -1,4 +1,4 @@
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 const validate = async api => {
     let result = {
@@ -111,8 +111,8 @@ const validateTalks = (talks, speakers) => {
                 if (!tempTalk.startTime || !tempTalk.endTime) {
                     result.talk.startEndTimeValid = false
                 } else if (
-                    !moment(tempTalk.startTime).isValid() ||
-                    !moment(tempTalk.endTime).isValid()
+                    !DateTime.fromISO(tempTalk.startTime).isValid ||
+                    !DateTime.fromISO(tempTalk.endTime).isValid
                 ) {
                     result.talk.startEndTimeValid = false
                 }

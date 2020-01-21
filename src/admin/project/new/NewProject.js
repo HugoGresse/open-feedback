@@ -14,6 +14,7 @@ import {
     selectProject,
 } from '../core/projectActions'
 import { PROJECT_TYPE_OPENFEEDBACK } from '../../../core/setupType/projectApi'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles({
     container: {
@@ -30,6 +31,7 @@ const useStyles = makeStyles({
 const NewProject = ({ onCancel }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
+    const { t } = useTranslation()
 
     const [currentStep, setCurrentStep] = useState(1)
     const [projectName, setProjectName] = useState('')
@@ -45,7 +47,7 @@ const NewProject = ({ onCancel }) => {
                 ])
             })
             .then(async () => {
-                await dispatch(fillDefaultProjectData())
+                await dispatch(fillDefaultProjectData(t))
                 await dispatch(getProject())
             })
     }

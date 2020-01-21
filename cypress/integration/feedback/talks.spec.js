@@ -5,7 +5,7 @@ describe('Navigate on talk list', function() {
         cy.visitFeedbackProject()
 
         cy.get('h3').should('have.length', 3)
-        cy.get('body').should('contain', 'Thursday 27')
+        cy.get('body').should('contain', '27 Thursday')
 
         cy.get('h3')
             .first()
@@ -37,7 +37,7 @@ describe('Navigate on talk list', function() {
 
         cy.get('h3').should('have.length', 3)
 
-        cy.contains('Friday 28')
+        cy.contains('28 Friday')
             .should('have.attr', 'href', `/${testProjectId}/2019-06-28`)
             .click()
 

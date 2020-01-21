@@ -5,12 +5,13 @@ import SidePanelLayout from '../../baseComponents/layouts/SidePanelLayout'
 import OFButton from '../../baseComponents/OFButton'
 import OFFormControlFormiked from '../../baseComponents/form/OFFormControlFormiked'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import MomentUtils from '@date-io/moment'
+import LuxonUtils from '@date-io/luxon'
 import OFAutoComplete from '../../baseComponents/form/OFAutoComplete'
 import OFFormControlInputFormiked from '../../baseComponents/form/OFFormControlInputFormiked'
 import OFDateTimePickerFormiked from '../../baseComponents/form/OFDateTimePickerFormiked'
 import SpeakerAddEditPanel from '../speakers/SpeakerAddEditPanel'
 import { useTranslation } from 'react-i18next'
+import { DateTime } from 'luxon'
 
 const TalkAddEditPanel = ({
     isOpen,
@@ -32,7 +33,9 @@ const TalkAddEditPanel = ({
                 isOpen={isOpen}
                 onClose={onClose}
                 title={talk ? t('talks.titleEdit') : t('talks.titleAdd')}>
-                <MuiPickersUtilsProvider utils={MomentUtils}>
+                <MuiPickersUtilsProvider
+                    utils={LuxonUtils}
+                    locale={navigator.language || navigator.userLanguage}>
                     <Formik
                         validationSchema={object().shape({
                             title: string()
@@ -53,8 +56,8 @@ const TalkAddEditPanel = ({
                                 title: '',
                                 trackTitle: '',
                                 tags: [],
-                                startTime: Date.now(),
-                                endTime: Date.now(),
+                                startTime: DateTime.local().toISO(),
+                                endTime: DateTime.local().toISO(),
                                 speakers: [],
                             }
                         }
@@ -78,7 +81,7 @@ const TalkAddEditPanel = ({
                                     fieldName="startTime">
                                     <Field
                                         name="startTime"
-                                        format="Y/MM/DD HH:mm"
+                                        format="FFF"
                                         component={OFDateTimePickerFormiked}
                                     />
                                 </OFFormControlFormiked>
@@ -88,7 +91,7 @@ const TalkAddEditPanel = ({
                                     fieldName="endTime">
                                     <Field
                                         name="endTime"
-                                        format="Y/MM/DD HH:mm"
+                                        format="FFF"
                                         component={OFDateTimePickerFormiked}
                                     />
                                 </OFFormControlFormiked>
