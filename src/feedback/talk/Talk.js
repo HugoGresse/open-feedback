@@ -177,19 +177,21 @@ class Talk extends Component {
                         </ChipList>
                     </Title>
                     <DateTimeContainer>
-                        {DateTime.fromISO(talk.startTime).toLocaleString({
+                        {DateTime.fromISO(talk.startTime, {
+                            setZone: true,
+                        }).toLocaleString({
                             weekday: 'long',
                             month: 'long',
                             day: 'numeric',
                         })}
                         {' / '}
-                        {DateTime.fromISO(talk.startTime).toLocaleString(
-                            DateTime.TIME_SIMPLE
-                        )}
+                        {DateTime.fromISO(talk.startTime, { setZone: true })
+                            .setZone('local', { keepLocalTime: true })
+                            .toLocaleString(DateTime.TIME_SIMPLE)}
                         {' - '}
-                        {DateTime.fromISO(talk.endTime).toLocaleString(
-                            DateTime.TIME_SIMPLE
-                        )}
+                        {DateTime.fromISO(talk.endTime, {
+                            setZone: true,
+                        }).toLocaleString(DateTime.TIME_SIMPLE)}
                     </DateTimeContainer>
                     <SpeakerList speakers={speakers} />
                 </Header>
