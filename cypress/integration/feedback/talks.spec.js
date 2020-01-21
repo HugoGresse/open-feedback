@@ -37,7 +37,7 @@ describe('Navigate on talk list', function() {
 
         cy.get('h3').should('have.length', 3)
 
-        cy.contains('Friday 28')
+        cy.contains('Friday, June 28')
             .should('have.attr', 'href', `/${testProjectId}/2019-06-28`)
             .click()
 
