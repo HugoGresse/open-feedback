@@ -103,8 +103,8 @@
         "fieldNameRequired": "Le nom du projet est obligatoire",
         "fieldSchedule": "Lien du calendrier",
         "fieldScheduleNotValid": "Le lien du calendrier n'est pas une URL valide",
-        "fieldVoteClose": "Heure de fin des votes (dans votre fuseau horaire local)",
-        "fieldVoteOpen": "Heure du début des votes (dans votre fuseau horaire local)",
+        "fieldVoteClose": "Heure de fin des votes (dans votre fuseau horaire)",
+        "fieldVoteOpen": "Heure du début des votes (dans votre fuseau horaire)",
         "fieldVoteRange": "Restreindre la date de début/fin des votes",
         "pick": "Choisir",
         "save": "Sauvegarder"

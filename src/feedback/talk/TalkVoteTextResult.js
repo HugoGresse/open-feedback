@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core'
 import PropTypes from 'prop-types'
-import moment from 'moment'
+import DateTime from 'luxon/src/datetime'
 
-const styles = theme => ({
+const styles = () => ({
     date: {
         color: '#888',
         fontSize: 14,
@@ -27,7 +27,7 @@ class TalkVoteTextResult extends Component {
                 {result.map((item, key) => (
                     <div key={key}>
                         <p className={classes.date}>
-                            {moment(item.updatedAt).fromNow()}
+                            {DateTime.fromJSDate(item.updatedAt).toRelative()}
                         </p>
                         <p className={classes.comment}>{item.text}</p>
                     </div>

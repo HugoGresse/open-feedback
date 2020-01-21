@@ -18,7 +18,6 @@ import { addTalk, editTalk, removeTalk } from '../../../core/talks/talksActions'
 import { projectApi } from '../../../core/setupType/projectApi'
 import { addNotification } from '../../notification/notifcationActions'
 import TalkAddEditPanel from './TalkAddEditPanel'
-import moment from 'moment'
 import { addSpeaker } from '../../../core/speakers/speakerActions'
 import { useTranslation } from 'react-i18next'
 
@@ -80,8 +79,6 @@ const TalkList = () => {
 
     const reformatTalk = talk => ({
         ...talk,
-        startTime: moment(talk.startTime).toISOString(),
-        endTime: moment(talk.endTime).toISOString(),
         speakers: talk.speakers.map(speaker => speaker.id),
     })
 

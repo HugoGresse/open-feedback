@@ -4,12 +4,12 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import RoomIcon from '@material-ui/icons/Room'
 import CalendarIcon from '@material-ui/icons/CalendarToday'
 import IconButton from '@material-ui/core/IconButton'
-import { getDateFromStartTime } from '../../../core/talks/talksUtils'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import OFListItem from '../../baseComponents/layouts/OFListItem'
 import TalkListItemSpeakerList from './TalkListItemSpeakerList'
 import Chip from '@material-ui/core/Chip'
+import { DateTime } from 'luxon'
 
 const useStyles = makeStyles(theme => ({
     cell: {
@@ -60,7 +60,7 @@ const TalkListItem = ({
                 <Chip
                     icon={<CalendarIcon />}
                     size="small"
-                    label={getDateFromStartTime(item.startTime)}
+                    label={DateTime.fromISO(item.startTime).toLocaleString()}
                     style={{ marginBottom: item.startTime ? 5 : 0 }}
                     variant="outlined"
                 />

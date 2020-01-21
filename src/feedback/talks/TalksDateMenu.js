@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import moment from 'moment'
 import styled from 'styled-components'
 import { getTalksDatesSelector } from '../../core/talks/talksSelectors'
 import {
@@ -9,6 +8,7 @@ import {
 } from '../project/projectSelectors'
 import { COLORS } from '../../constants/colors'
 import { Link } from 'react-router-dom'
+import DateTime from 'luxon/src/datetime'
 
 const Menu = styled.div`
     display: flex;
@@ -18,12 +18,11 @@ const Menu = styled.div`
 
 const MenuItem = styled.div`
     color: ${COLORS.LIGHT_GRAY};
-    /* padding: 10px; */
     ${props =>
         props.selected &&
         `
-        color: ${COLORS.BLACK}
-        border-bottom: 2px ${COLORS.RED_ORANGE} solid
+        color: ${COLORS.BLACK};
+        border-bottom: 2px ${COLORS.RED_ORANGE} solid;
     `};
     a {
         color: inherit;
@@ -35,12 +34,16 @@ const MenuItem = styled.div`
 class TalksDateMenu extends Component {
     render() {
         const { talksDates, selectedDate, currentProjectId } = this.props
+
         return (
             <Menu>
                 {talksDates.map(date => (
                     <MenuItem key={date} selected={selectedDate === date}>
                         <Link to={`/${currentProjectId}/${date}`}>
-                            {moment(date).format('dddd D')}
+                            {DateTime.fromISO(date).toLocaleString({
+                                weekday: 'long',
+                                day: 'numeric',
+                            })}
                         </Link>
                     </MenuItem>
                 ))}
