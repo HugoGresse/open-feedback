@@ -232,14 +232,14 @@ export const initProjectApiIfReady = (projectId, project) => dispatch => {
     }
 }
 
-export const fillDefaultProjectData = () => async dispatch => {
-    await dispatch(onVoteItemAddBoolean('Fun 😃'))
-    await dispatch(onVoteItemAddBoolean("I've learned a lot 🤓"))
-    await dispatch(onVoteItemAddBoolean('Very interesting 👍'))
-    await dispatch(onVoteItemAddBoolean('Good speaker 👏'))
-    await dispatch(onVoteItemAddBoolean('Not clear 🧐'))
-    await dispatch(onVoteItemAddBoolean('Too technical 🤖'))
-    await dispatch(onVoteItemAddBoolean('Lack of demo/example 🤔'))
-    await dispatch(onVoteItemAddBoolean('Too complex 🤯'))
+export const fillDefaultProjectData = t => async dispatch => {
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.fun')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.learned')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.interesting')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.speaker')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.nclear')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.technical')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.example')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.complex')))
     return await dispatch(toggleVoteComment(true))
 }

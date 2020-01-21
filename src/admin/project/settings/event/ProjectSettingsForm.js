@@ -13,10 +13,10 @@ import OFFormControlInputFormiked from '../../../baseComponents/form/OFFormContr
 import OFDateTimePickerFormiked from '../../../baseComponents/form/OFDateTimePickerFormiked'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { SwitchFormiked } from '../../../baseComponents/form/SwitchFormiked'
-import moment from 'moment'
 import Collapse from '@material-ui/core/Collapse'
 import { useTranslation } from 'react-i18next'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
+import { DateTime } from 'luxon'
 
 const useStyles = makeStyles(theme => ({
     buttonContainer: {
@@ -40,8 +40,8 @@ const ProjectSettingsForm = ({ project }) => {
         faviconUrl: project.favicon || '',
         chipColors: project.chipColors,
         restrictVoteRange: !!project.voteStartTime,
-        voteStartTime: project.voteStartTime || Date.now(),
-        voteEndTime: project.voteEndTime || Date.now(),
+        voteStartTime: project.voteStartTime || DateTime.local().toISO(),
+        voteEndTime: project.voteEndTime || DateTime.local().toISO(),
     }
 
     return (
@@ -71,10 +71,12 @@ const ProjectSettingsForm = ({ project }) => {
                         name: values.name,
                         scheduleLink: values.scheduleLink,
                         restrictVoteRange: values.restrictVoteRange,
-                        voteStartTime: moment(
+                        voteStartTime: DateTime.fromISO(
                             values.voteStartTime
-                        ).toISOString(),
-                        voteEndTime: moment(values.voteEndTime).toISOString(),
+                        ).toISO(),
+                        voteEndTime: DateTime.fromISO(
+                            values.voteEndTime
+                        ).toISO(),
                     })
                 )
             }>
@@ -116,7 +118,7 @@ const ProjectSettingsForm = ({ project }) => {
                                         fieldName="voteStartTime">
                                         <Field
                                             name="voteStartTime"
-                                            format="dddd, MMMM Do, Y [at] HH[h]mm [(]Z[)]"
+                                            format="FFF"
                                             component={OFDateTimePickerFormiked}
                                         />
                                     </OFFormControlFormiked>
@@ -126,7 +128,7 @@ const ProjectSettingsForm = ({ project }) => {
                                         fieldName="voteEndTime">
                                         <Field
                                             name="voteEndTime"
-                                            format="dddd, MMMM Do, Y [at] HH[h]mm [(]Z[)]"
+                                            format="FFF"
                                             component={OFDateTimePickerFormiked}
                                         />
                                     </OFFormControlFormiked>

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import moment from 'moment'
 import styled from 'styled-components'
 
 import {
@@ -41,12 +40,13 @@ import Title from '../../baseComponents/design/Title'
 import { COLORS } from '../../constants/colors'
 import { SPACING } from '../../constants/constants'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../vote/voteReducer'
+import { DateTime } from 'luxon'
 
 const Header = styled.div`
     margin-bottom: 30px;
 `
 
-const DateTime = styled.div`
+const DateTimeContainer = styled.div`
     font-size: '18px';
     display: 'flex';
     flex-direction: 'column';
@@ -176,11 +176,23 @@ class Talk extends Component {
                                 ))}
                         </ChipList>
                     </Title>
-                    <DateTime>
-                        {moment.parseZone(talk.startTime).format('dddd D')} /{' '}
-                        {moment.parseZone(talk.startTime).format('H:mm ')}-
-                        {moment.parseZone(talk.endTime).format(' H:mm')}
-                    </DateTime>
+                    <DateTimeContainer>
+                        {DateTime.fromISO(talk.startTime, {
+                            setZone: true,
+                        }).toLocaleString({
+                            weekday: 'long',
+                            month: 'long',
+                            day: 'numeric',
+                        })}
+                        {' / '}
+                        {DateTime.fromISO(talk.startTime, { setZone: true })
+                            .setZone('local', { keepLocalTime: true })
+                            .toLocaleString(DateTime.TIME_SIMPLE)}
+                        {' - '}
+                        {DateTime.fromISO(talk.endTime, {
+                            setZone: true,
+                        }).toLocaleString(DateTime.TIME_SIMPLE)}
+                    </DateTimeContainer>
                     <SpeakerList speakers={speakers} />
                 </Header>
                 <Grid container spacing={SPACING.LAYOUT}>

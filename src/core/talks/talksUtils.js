@@ -1,4 +1,4 @@
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 export const formatTalksWithScheduledForHoverboardv2 = (talks, schedule) => {
     const formatedTalks = {}
@@ -7,10 +7,12 @@ export const formatTalksWithScheduledForHoverboardv2 = (talks, schedule) => {
         const tracks = day.tracks
 
         day.timeslots.forEach(timeslot => {
-            const startTime = moment(
+            const startTime = DateTime.fromISO(
                 day.date + 'T' + timeslot.startTime
-            ).format()
-            const endTime = moment(day.date + 'T' + timeslot.endTime).format()
+            ).toISO()
+            const endTime = DateTime.fromISO(
+                day.date + 'T' + timeslot.endTime
+            ).toISO()
             timeslot.sessions.forEach((talk, index) => {
                 talk.items.forEach(id => {
                     if (!talks[id]) return
@@ -18,9 +20,7 @@ export const formatTalksWithScheduledForHoverboardv2 = (talks, schedule) => {
                         ...talks[id],
                         startTime,
                         endTime,
-                        ...{
-                            trackTitle: tracks[index].title,
-                        },
+                        trackTitle: tracks[index].title,
                     }
                 })
             })
@@ -31,5 +31,5 @@ export const formatTalksWithScheduledForHoverboardv2 = (talks, schedule) => {
 }
 
 export const getDateFromStartTime = startTime => {
-    return moment(startTime).format('YYYY-MM-DD')
+    return DateTime.fromISO(startTime).toFormat('yyyy-MM-dd')
 }

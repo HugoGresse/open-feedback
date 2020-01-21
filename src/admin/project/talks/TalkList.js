@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { DateTime } from 'luxon'
 import TalkListItem from './TalkListItem'
 import {
     getFilteredTalksSelector,
@@ -18,7 +19,6 @@ import { addTalk, editTalk, removeTalk } from '../../../core/talks/talksActions'
 import { projectApi } from '../../../core/setupType/projectApi'
 import { addNotification } from '../../notification/notifcationActions'
 import TalkAddEditPanel from './TalkAddEditPanel'
-import moment from 'moment'
 import { addSpeaker } from '../../../core/speakers/speakerActions'
 import { useTranslation } from 'react-i18next'
 
@@ -80,8 +80,8 @@ const TalkList = () => {
 
     const reformatTalk = talk => ({
         ...talk,
-        startTime: moment(talk.startTime).toISOString(),
-        endTime: moment(talk.endTime).toISOString(),
+        startTime: DateTime.fromISO(talk.startTime).toISO(),
+        endTime: DateTime.fromISO(talk.endTime).toISO(),
         speakers: talk.speakers.map(speaker => speaker.id),
     })
 

@@ -7,7 +7,7 @@ describe('Single talk', function() {
         cy.get('h2')
             .parent()
             .should('contain', 'Un talk super bien')
-            .should('contain', 'Friday 28')
+            .should('contain', 'Friday, June 28')
             .should('contain', '9:00')
             .should('contain', '9:50')
             .should('contain', 'Pierre')
@@ -33,7 +33,7 @@ describe('Single talk', function() {
 
     it('Check that boolean vote does work (increment/decrement count)', function() {
         cy.visitFeedbackProject('2019-06-28/0', {
-            clearUserSession: true
+            clearUserSession: true,
         })
 
         // to test if this help fixing this random test
@@ -47,7 +47,9 @@ describe('Single talk', function() {
                 .click()
 
             cy.getVoteCountData(voteButtonText).should(voteCount => {
-                expect(voteCount, "Vote count incremented").to.equal(originalVoteCount + 1)
+                expect(voteCount, 'Vote count incremented').to.equal(
+                    originalVoteCount + 1
+                )
             })
 
             // eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -57,14 +59,16 @@ describe('Single talk', function() {
                 .click()
 
             cy.getVoteCountData(voteButtonText).should(voteCount => {
-                expect(voteCount, "Vote count decremented").to.equal(originalVoteCount)
+                expect(voteCount, 'Vote count decremented').to.equal(
+                    originalVoteCount
+                )
             })
         })
     })
 
     it('Check that text vote does work (post, edit and delete)', function() {
         cy.visitFeedbackProject('2019-06-28/0', {
-            clearUserSession: true
+            clearUserSession: true,
         })
 
         const inputText = stringGenerator()
