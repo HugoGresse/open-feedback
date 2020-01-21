@@ -40,7 +40,7 @@ import Title from '../../baseComponents/design/Title'
 import { COLORS } from '../../constants/colors'
 import { SPACING } from '../../constants/constants'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../vote/voteReducer'
-import DateTime from 'luxon/src/datetime'
+import { DateTime } from 'luxon'
 
 const Header = styled.div`
     margin-bottom: 30px;
@@ -181,8 +181,8 @@ class Talk extends Component {
                             weekday: 'long',
                             month: 'long',
                             day: 'numeric',
-                        })}{' '}
-                        {'/ '}
+                        })}
+                        {' / '}
                         {DateTime.fromISO(talk.startTime).toLocaleString(
                             DateTime.TIME_SIMPLE
                         )}

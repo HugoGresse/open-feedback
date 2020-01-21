@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { DateTime } from 'luxon'
 import TalkListItem from './TalkListItem'
 import {
     getFilteredTalksSelector,
@@ -79,6 +80,8 @@ const TalkList = () => {
 
     const reformatTalk = talk => ({
         ...talk,
+        startTime: DateTime.fromISO(talk.startTime).toISO(),
+        endTime: DateTime.fromISO(talk.endTime).toISO(),
         speakers: talk.speakers.map(speaker => speaker.id),
     })
 

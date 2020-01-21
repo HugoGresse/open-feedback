@@ -16,7 +16,7 @@ import { SwitchFormiked } from '../../../baseComponents/form/SwitchFormiked'
 import Collapse from '@material-ui/core/Collapse'
 import { useTranslation } from 'react-i18next'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
-import DateTime from 'luxon/src/datetime'
+import { DateTime } from 'luxon'
 
 const useStyles = makeStyles(theme => ({
     buttonContainer: {

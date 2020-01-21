@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core'
 import PropTypes from 'prop-types'
-import DateTime from 'luxon/src/datetime'
+import { DateTime } from 'luxon'
 
 const styles = () => ({
     date: {

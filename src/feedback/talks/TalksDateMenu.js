@@ -8,7 +8,7 @@ import {
 } from '../project/projectSelectors'
 import { COLORS } from '../../constants/colors'
 import { Link } from 'react-router-dom'
-import DateTime from 'luxon/src/datetime'
+import { DateTime } from 'luxon'
 
 const Menu = styled.div`
     display: flex;
