@@ -3,6 +3,7 @@ import logoWhite from '../assets/logo-openfeedback-white.png'
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../constants/colors'
+import { useTranslation } from 'react-i18next'
 
 const MenuList = styled.ul`
     @media (max-width: 640px) {
@@ -37,18 +38,20 @@ const MenuList = styled.ul`
 `
 
 const Menu = () => {
+    const { t } = useTranslation()
+
     return (
         <Box className="wrapperLogoMenu" flex justifyContent="space-between">
             <img height="40" src={logoWhite} alt="open feedback" />
             <MenuList>
                 <li>
-                    <a href="#howitworks">How it works</a>
+                    <a href="#howitworks">{t('menu.howitworks')}</a>
                 </li>
                 <li>
-                    <a href="#faq">FAQ</a>
+                    <a href="#faq">{t('menu.faq')}</a>
                 </li>
                 <li className="outline">
-                    <a href="/admin/">Login</a>
+                    <a href="/admin/">{t('menu.login')}</a>
                 </li>
             </MenuList>
         </Box>
