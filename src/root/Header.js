@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../constants/colors'
 import Title from '../baseComponents/design/Title'
@@ -10,6 +10,7 @@ import MokckupOverlay from './images/mockup-phone-overlay.png'
 import DemoOF from './images/of-demo.webp'
 import Menu from './Menu'
 import InnerWrapper from './component/InnerWrapper'
+import { useTranslation } from 'react-i18next'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.RED_ORANGE};
@@ -79,7 +80,7 @@ const LinkButton = styled.a`
     ${props =>
         props.variant === 'outline'
             ? `background : none`
-            : `background:  ${COLORS.WHITE}`}
+            : `background:  ${COLORS.WHITE}`};
     transition: all 0.2s ease;
     border: 1px solid ${COLORS.WHITE};
     border-radius: 5px;
@@ -129,66 +130,65 @@ const AnimatedMask = styled.div`
     }
 `
 
-class Header extends Component {
-    render() {
-        return (
-            <Wrapper>
-                <InnerWrapper>
-                    <Menu />
-                    <Box flex flexDirection="row" className="headerContent">
-                        <Box
-                            flex
-                            flexDirection="column"
-                            justifyContent="center"
-                            alignItems="center"
-                            flexGrow="1"
-                            textAlign="center"
-                            className="headerHeroText">
-                            <Title
-                                component="h1"
-                                m={0}
-                                color={COLORS.WHITE}
-                                fontWeight={600}>
-                                Collect feedbacks easily
-                            </Title>
-                            <Title component="h3" m={0} color={COLORS.WHITE}>
-                                Ideal solution for conferences, meetups, events,
-                                summit, training and more.
-                            </Title>
-                            <br />
-                            <br />
-                            <LinkButton href="/admin/">
-                                Create your event now
-                            </LinkButton>
-                            <LinkButton
-                                href="/eaJnyMXD3oNfhrrnBYDT/"
-                                variant="outline">
-                                Demo
-                            </LinkButton>
-                        </Box>
+const Header = () => {
+    const { t } = useTranslation()
 
-                        <Box
-                            flex
-                            flexDirection="column"
-                            justifyContent="flex-end"
-                            alignItems="center"
-                            flexGrow="1"
-                            textAlign="center">
-                            <Box className="mockupContainerPosition">
-                                <MockupContainer>
-                                    <img src={MokckupBG} alt="" />
-                                    <AnimatedMask>
-                                        <img src={DemoOF} alt="" />
-                                    </AnimatedMask>
-                                    <img src={MokckupOverlay} alt="" />
-                                </MockupContainer>
-                            </Box>
+    return (
+        <Wrapper>
+            <InnerWrapper>
+                <Menu />
+                <Box flex flexDirection="row" className="headerContent">
+                    <Box
+                        flex
+                        flexDirection="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        flexGrow="1"
+                        textAlign="center"
+                        className="headerHeroText">
+                        <Title
+                            component="h1"
+                            m={0}
+                            color={COLORS.WHITE}
+                            fontWeight={600}>
+                            {t('home.title')}
+                        </Title>
+                        <Title component="h3" m={0} color={COLORS.WHITE}>
+                            {t('home.subtitle')}
+                        </Title>
+                        <br />
+                        <br />
+                        <LinkButton href="/admin/">
+                            {t('home.headerAction')}
+                        </LinkButton>
+                        <LinkButton
+                            href="/eaJnyMXD3oNfhrrnBYDT/"
+                            variant="outline">
+                            {t('home.headerActionDemo')}
+                        </LinkButton>
+                    </Box>
+
+                    <Box
+                        flex
+                        flexDirection="column"
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        flexGrow="1"
+                        textAlign="center">
+                        <Box className="mockupContainerPosition">
+                            <MockupContainer>
+                                <img src={MokckupBG} alt="" />
+                                <AnimatedMask>
+                                    <img src={DemoOF} alt="" />
+                                </AnimatedMask>
+                                <img src={MokckupOverlay} alt="" />
+                            </MockupContainer>
                         </Box>
                     </Box>
-                </InnerWrapper>
-            </Wrapper>
-        )
-    }
+                </Box>
+            </InnerWrapper>
+        </Wrapper>
+    )
 }
 
 export default Header

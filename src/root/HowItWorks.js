@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../constants/colors'
 import Title from '../baseComponents/design/Title'
@@ -10,6 +10,7 @@ import newImage from './images/new.png'
 import qrcodeImage from './images/qrcode.png'
 import bulleImage from './images/bulle.png'
 import hoverboard from './images/hoverboard.png'
+import { useTranslation } from 'react-i18next'
 
 const InnerWrapperResponsive = styled(InnerWrapper)`
     @media (max-width: 640px) {
@@ -71,50 +72,43 @@ const CompatibilityText = styled(Box)`
     }
 `
 
-class Header extends Component {
-    render() {
-        return (
-            <Box backgroundColor="#eee" padding={40}>
-                <InnerWrapperResponsive id="howitworks" flex>
-                    <Box>
-                        <DemoContainer>
-                            <img src={adminImage} alt="Demo admin" />
-                        </DemoContainer>
-                    </Box>
-                    <BoxRight>
-                        <Title>How it works</Title>
+const Header = () => {
+    const { t } = useTranslation()
 
-                        <List>
-                            <li>
-                                <img src={newImage} alt="" />
-                                Create your event in 3 clicks, add talks &
-                                speakers manually or connect OpenFeedback to
-                                your api
-                            </li>
-                            <li>
-                                <img src={qrcodeImage} alt="" />
-                                Share a QR Code with the attendees (during Q&A
-                                or break time)
-                            </li>
-                            <li>
-                                <img src={bulleImage} alt="" />
-                                Attendees can vote at anytime, no extra work
-                            </li>
-                        </List>
+    return (
+        <Box backgroundColor="#eee" padding={40}>
+            <InnerWrapperResponsive id="howitworks" flex>
+                <Box>
+                    <DemoContainer>
+                        <img src={adminImage} alt="Demo admin" />
+                    </DemoContainer>
+                </Box>
+                <BoxRight>
+                    <Title>{t('home.howItWorks')}</Title>
 
-                        <CompatibilityText flex alignItems="center">
-                            Also compatible with
-                            <img
-                                height="40"
-                                src={hoverboard}
-                                alt="hoverboard"
-                            />
-                        </CompatibilityText>
-                    </BoxRight>
-                </InnerWrapperResponsive>
-            </Box>
-        )
-    }
+                    <List>
+                        <li>
+                            <img src={newImage} alt="" />
+                            {t('home.3clicks')}
+                        </li>
+                        <li>
+                            <img src={qrcodeImage} alt="" />
+                            {t('home.scan')}
+                        </li>
+                        <li>
+                            <img src={bulleImage} alt="" />
+                            {t('home.vote')}
+                        </li>
+                    </List>
+
+                    <CompatibilityText flex alignItems="center">
+                        {t('home.compatibleHoverboard')}
+                        <img height="40" src={hoverboard} alt="hoverboard" />
+                    </CompatibilityText>
+                </BoxRight>
+            </InnerWrapperResponsive>
+        </Box>
+    )
 }
 
 export default Header
