@@ -3,41 +3,28 @@ name: Run End to End test using Cypress
 on: [push]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [12.x]
-
+  cypress-run:
+    name: Run End to end test using Cypress
+    runs-on: ubuntu-16.04
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Cypress run
+      uses: cypress-io/github-action@v1
       with:
-        node-version: ${{ matrix.node-version }}
-    - name: npm install, build
-      run: |
-        npm install
-        npm run build
-        ./node_modules/.bin/firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} &
-        npx wait-on http://localhost:3000
+        build: npm run build
+        start: npx firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}
+        wait-on: http://localhost:3000
+        record: true
       env:
-        CI: true
+        CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_DASHBOARD_KEY }}
         REACT_APP_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
         REACT_APP_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
         REACT_APP_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
         REACT_APP_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
         REACT_APP_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
-    - name: Run Cypress
-      run: |
-          COMMIT_INFO_BRANCH=${GITHUB_REF}
-          ./node_modules/.bin/cypress run --record --key ${{ secrets.CYPRESS_DASHBOARD_KEY }}
-      env:
-         COMMIT_INFO_BRANCH: ${GITHUB_REF}
-         CYPRESS_REACT_APP_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
-         CYPRESS_REACT_APP_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
-         CYPRESS_REACT_APP_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
-         CYPRESS_REACT_APP_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
-         CYPRESS_REACT_APP_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
+        CYPRESS_REACT_APP_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
+        CYPRESS_REACT_APP_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
+        CYPRESS_REACT_APP_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
+        CYPRESS_REACT_APP_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
+        CYPRESS_REACT_APP_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}

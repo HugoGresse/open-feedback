@@ -4,10 +4,10 @@ import { createBrowserHistory } from 'history'
 import initAndTrackWithGoogleAnalytics from './utils/google-analytics/GoogleAnalytics'
 import './App.css'
 
-import Root from './root/Root'
 import Page404 from './Page404'
 import SuspendedAdminApp from './admin/SuspendedAdminApp'
 import FeedbackApp from './feedback/FeedbackApp'
+import SuspendedRootApp from './root/SuspendedRootApp'
 
 export const history = createBrowserHistory()
 
@@ -17,7 +17,7 @@ const App = () => {
     return (
         <Router history={history}>
             <Switch>
-                <Route exact path="/" component={Root} />
+                <Route exact path="/" component={SuspendedRootApp} />
                 <Redirect strict exact from="/admin" to="/admin/" />
                 <Route path="/admin/" component={SuspendedAdminApp} />
                 <Route path="/:projectId" component={FeedbackApp} />

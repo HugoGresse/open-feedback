@@ -4,6 +4,8 @@ import Header from './Header'
 import Footer from './Footer'
 import HowItWorks from './HowItWorks'
 import FAQ from './FAQ'
+import { I18nextProvider } from 'react-i18next'
+import i18n from './translations/i18n'
 
 class Root extends Component {
     componentDidMount() {
@@ -12,12 +14,12 @@ class Root extends Component {
 
     render() {
         return (
-            <div>
+            <I18nextProvider i18n={i18n}>
                 <Header />
                 <HowItWorks />
                 <FAQ />
                 <Footer />
-            </div>
+            </I18nextProvider>
         )
     }
 }
