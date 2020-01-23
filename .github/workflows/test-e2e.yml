@@ -9,13 +9,12 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v1
-    - name: npm install, build
-      run: ls -la ./node_modules/.bin
     - name: Cypress run
       uses: cypress-io/github-action@v1
       with:
         build: npm run build
         start: |
+            ls -la ./node_modules/.bin &
             ./node_modules/.bin/firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} &
             npx wait-on http://localhost:3000
         record: true
