@@ -13,7 +13,7 @@ jobs:
       uses: cypress-io/github-action@v1
       with:
         build: npm run build
-        start: ls
+        start: ls ./node_modules/.bin/
         record: true
       env:
         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_DASHBOARD_KEY }}
