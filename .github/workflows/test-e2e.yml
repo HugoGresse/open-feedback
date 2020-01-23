@@ -13,7 +13,9 @@ jobs:
       uses: cypress-io/github-action@v1
       with:
         build: npm run build
-        start: chmod +x ./node_modules/.bin/firebase && ./node_modules/.bin/firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}
+        start: |
+            chmod +x ./node_modules/.bin/firebase
+            ./node_modules/.bin/firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}
         wait-on: http://localhost:3000
         record: true
       env:
