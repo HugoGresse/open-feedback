@@ -14,7 +14,7 @@ jobs:
       with:
         build: npm run build
         start: |
-            ls -la ./node_modules/.bin &
+            ls -la "./node_modules/.bin" &&
             ./node_modules/.bin/firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} &
             npx wait-on http://localhost:3000
         record: true
