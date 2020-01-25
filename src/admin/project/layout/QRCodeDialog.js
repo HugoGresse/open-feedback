@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { lazy } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import OFButton from '../../baseComponents/OFButton'
-import QRCode from 'qrcode.react'
 import GetAppIcon from '@material-ui/icons/GetApp'
 import FileSaver from 'file-saver'
+const QRCode = lazy(() => import('qrcode.react'))
 
 const QRCodeDialog = ({ open, handleClose, data, name }) => {
     const downloadImage = () => {

@@ -47,6 +47,7 @@ const useStyles = makeStyles({
         textAlign: 'right',
     },
     topRightButton: {
+        marginLeft: 10,
         background: COLORS.ADMIN_BACKGROUND,
         '&:hover': {
             background: COLORS.ADMIN_BACKGROUND,
@@ -59,7 +60,6 @@ const useStyles = makeStyles({
             filter: 'brightness(150%)',
         },
         minWidth: 0,
-        marginRight: 10,
     },
     topRightIcon: {
         marginRight: 10,
@@ -85,7 +85,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
     const { t } = useTranslation()
 
     const [anchorEventSelect, setAnchorEventSelect] = useState(null)
-    const [qrCodeDialogOpen, setQRCodeDialogOpen] = useState(true)
+    const [qrCodeDialogOpen, setQRCodeDialogOpen] = useState(false)
 
     const onProjectSelectedChange = projectId => {
         dispatch(selectProject(projectId))
@@ -122,7 +122,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                     xs={12}
                                     className={classes.topHeader}>
                                     <Grid container justify="space-between">
-                                        <Grid item xs={12} sm={8}>
+                                        <Grid item xs={12} sm={7}>
                                             <Hidden mdUp>
                                                 <IconButton
                                                     onClick={event =>
@@ -157,7 +157,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                         <Grid
                                             item
                                             xs={12}
-                                            sm={4}
+                                            sm={5}
                                             className={classes.topRight}>
                                             {selectedProject && (
                                                 <Button
@@ -225,7 +225,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                 open={qrCodeDialogOpen}
                 handleClose={() => setQRCodeDialogOpen(false)}
                 name={selectedProject.name}
-                data={`/${selectedProjectId}`}
+                data={`${window.location.origin}/${selectedProjectId}`}
             />
         </>
     )
