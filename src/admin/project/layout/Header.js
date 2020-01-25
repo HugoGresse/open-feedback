@@ -170,7 +170,10 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                                         )
                                                     }>
                                                     <Icon>
-                                                        <img src={QRCode} />
+                                                        <img
+                                                            src={QRCode}
+                                                            alt="QRCode generator"
+                                                        />
                                                     </Icon>
                                                 </Button>
                                             )}
