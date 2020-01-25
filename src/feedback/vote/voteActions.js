@@ -23,6 +23,9 @@ import { INCREMENT_VOTE_LOCALLY } from '../project/projectActionTypes'
 import { VOTE_TYPE_TEXT } from './voteReducer'
 import { checkDateBeforeVote } from './checkDataBeforeVote'
 
+const MODE_INCREMENT = 'increment'
+const MODE_DECREMENT = 'decrement'
+
 export const voteFor = (talkId, voteItem, data) => {
     return (dispatch, getState) => {
         if (checkDateBeforeVote(dispatch, getState())) {
@@ -45,10 +48,11 @@ export const voteFor = (talkId, voteItem, data) => {
             projectId: projectId,
             talkId: talkId,
             voteItemId: voteItem.id,
-            id: new Date().getTime(),
+            id: new Date().getTime().toString(),
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
             userId: getUserSelector(getState()).uid,
+            mode: MODE_INCREMENT,
         }
 
         if (voteItem.type === VOTE_TYPE_TEXT) {
@@ -152,7 +156,13 @@ export const removeVote = voteToDelete => {
             .doc(getProjectSelector(getState()).id)
             .collection('userVotes')
             .doc(voteToDelete.id)
-            .delete()
+            .set(
+                {
+                    mode: MODE_DECREMENT,
+                    updatedAt: serverTimestamp(),
+                },
+                { merge: true }
+            )
             .then(() => {
                 dispatch({
                     type: REMOVE_VOTE_SUCCESS,
@@ -234,6 +244,7 @@ export const getVotes = () => {
             .doc(getProjectSelector(getState()).id)
             .collection('userVotes')
             .where('userId', '==', getUserSelector(getState()).uid)
+            .where('mode', '==', MODE_INCREMENT)
             .get()
             .then(voteSnapshot => {
                 const votes = {}
