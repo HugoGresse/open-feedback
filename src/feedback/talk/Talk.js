@@ -25,9 +25,9 @@ import {
 } from '../project/projectSelectors'
 import { getVoteResultSelectorSelector } from '../talk/core/talkSelectors'
 import {
+    getActiveUserVotesByTalkAndVoteItemSelector,
     getErrorVotePostSelector,
     getErrorVotesLoadSelector,
-    getUserVotesByTalkAndVoteItemSelector,
 } from '../vote/voteSelectors'
 
 import Grid from '@material-ui/core/Grid'
@@ -217,7 +217,7 @@ const mapStateToProps = state => ({
     talk: getSelectedTalkSelector(state),
     speakers: getSpeakersForSelectedTalkSelector(state),
     voteItems: getProjectVoteItemsOrderedSelector(state),
-    userVotes: getUserVotesByTalkAndVoteItemSelector(state),
+    userVotes: getActiveUserVotesByTalkAndVoteItemSelector(state),
     voteResults: getVoteResultSelectorSelector(state),
     errorTalkLoad: getTalkLoadErrorSelector(state),
     errorVotePost: getErrorVotePostSelector(state),

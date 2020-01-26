@@ -1,7 +1,7 @@
-export const VOTE_MODE_INCREMENT: 'increment' = 'increment'
-export const VOTE_MODE_DECREMENT: 'decrement' = 'decrement'
+export const VOTE_STATUS_ACTIVE: 'active' = 'active'
+export const VOTE_STATUS_DELETED: 'deleted' = 'deleted'
 
-export type VoteMode = typeof VOTE_MODE_INCREMENT | typeof VOTE_MODE_DECREMENT
+export type VoteStatus = typeof VOTE_STATUS_ACTIVE | typeof VOTE_STATUS_DELETED
 
 export interface VoteData {
     projectId: string
@@ -11,7 +11,7 @@ export interface VoteData {
     updatedAt: object
     userId: string
     text?: string
-    mode: VoteMode
+    status: VoteStatus
 }
 
 export class Vote {
@@ -35,15 +35,15 @@ export class Vote {
         return !!this.voteData.text
     }
 
-    public willIncrement(): boolean {
-        return this.voteData.mode === VOTE_MODE_INCREMENT || !this.voteData.mode
+    public isActive(): boolean {
+        return this.voteData.status === VOTE_STATUS_ACTIVE
     }
 
     public getIncrementValue(): number {
-        switch (this.voteData.mode) {
-            case VOTE_MODE_INCREMENT:
+        switch (this.voteData.status) {
+            case VOTE_STATUS_ACTIVE:
                 return 1
-            case VOTE_MODE_DECREMENT:
+            case VOTE_STATUS_DELETED:
                 return -1
             default:
                 return 0
