@@ -9,13 +9,14 @@ import {
     REMOVE_VOTE_BEFORE_SUCCESS,
     REMOVE_VOTE_SUCCESS,
     UPDATE_VOTE_ERROR,
-    UPDATE_VOTE_SUCCESS
+    UPDATE_VOTE_SUCCESS,
 } from './voteActionTypes'
+import { VOTE_STATUS_DELETED } from '../../core/contants'
 
 const initState = {
     currentUserVotes: {},
     errorVotePost: null,
-    errorVotesLoad: null
+    errorVotesLoad: null,
 }
 
 export const VOTE_TYPE_BOOLEAN = 'boolean'
@@ -26,33 +27,35 @@ const voteReducer = (state = initState, { payload, type }) => {
         case GET_USER_VOTES_SUCCESS:
             return {
                 ...state,
-                currentUserVotes: payload
+                currentUserVotes: payload,
             }
         case ADD_VOTE_BEFORE_SUCCESS:
             return {
                 ...state,
                 currentUserVotes: {
                     ...state.currentUserVotes,
-                    ...payload
-                }
+                    ...payload,
+                },
             }
         case ADD_VOTE_SUCCESS: {
-            const newVotes = {
+            const newVoteState = {
                 ...state.currentUserVotes,
-                ...payload.vote
+                [payload.voteId]: {
+                    ...state.currentUserVotes[payload.voteId],
+                    pending: false,
+                },
             }
-            delete newVotes[payload.tempVoteId]
 
             return {
                 ...state,
-                currentUserVotes: newVotes
+                currentUserVotes: newVoteState,
             }
         }
         case ADD_VOTE_ERROR: {
             const newVoteState = {
-                ...state.currentUserVotes
+                ...state.currentUserVotes,
             }
-            delete newVoteState[payload.tempVoteId]
+            delete newVoteState[payload.voteId]
 
             // eslint-disable-next-line no-console
             console.error(payload.error)
@@ -60,53 +63,56 @@ const voteReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 currentUserVotes: newVoteState,
-                errorVotePost: payload.error.toString()
+                errorVotePost: payload.error.toString(),
             }
         }
-        case REMOVE_VOTE_BEFORE_SUCCESS:{
+        case REMOVE_VOTE_BEFORE_SUCCESS: {
             const removeVotesState = {
-                ...state.currentUserVotes
+                ...state.currentUserVotes,
+                [payload.id]: {
+                    ...state.currentUserVotes[payload.id],
+                    status: VOTE_STATUS_DELETED,
+                },
             }
-            delete removeVotesState[payload.id]
             return {
                 ...state,
-                currentUserVotes: removeVotesState
+                currentUserVotes: removeVotesState,
             }
         }
         case REMOVE_VOTE_SUCCESS:
             // Do nothing, state already change in REMOVE_VOTE_BEFORE_SUCCESS
             return {
-                ...state
+                ...state,
             }
         case GET_USER_VOTES_ERROR:
             // eslint-disable-next-line no-console
             console.error(payload)
             return {
                 ...state,
-                errorVotesLoad: payload.toString()
+                errorVotesLoad: payload.toString(),
             }
         case DELETE_VOTE_POST_ERROR:
             return {
                 ...state,
-                errorVotePost: null
+                errorVotePost: null,
             }
         case DELETE_VOTE_LOAD_ERROR:
             return {
                 ...state,
-                errorVotesLoad: null
+                errorVotesLoad: null,
             }
         case UPDATE_VOTE_SUCCESS:
             return {
                 ...state,
                 currentUserVotes: {
                     ...state.currentUserVotes,
-                    ...payload.vote
-                }
+                    ...payload.vote,
+                },
             }
         case UPDATE_VOTE_ERROR:
             return {
                 ...state,
-                errorVotePost: payload.error.toString()
+                errorVotePost: payload.error.toString(),
             }
         default:
             return state

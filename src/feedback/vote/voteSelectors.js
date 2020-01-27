@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
 import { getSelectedTalkIdSelector } from '../talk/core/talkSelectors'
+import { VOTE_STATUS_ACTIVE } from '../../core/contants'
 
 const getVotes = state => state.votes
 
@@ -19,6 +20,23 @@ export const getUserVotesByTalkAndVoteItemSelector = createSelector(
         const result = {}
         Object.values(votes)
             .filter(vote => vote.talkId === talkId)
+            .forEach(vote => {
+                result[vote.voteItemId] = vote
+            })
+        return result
+    }
+)
+
+export const getActiveUserVotesByTalkAndVoteItemSelector = createSelector(
+    getCurrentUserVotesSelector,
+    getSelectedTalkIdSelector,
+    (votes, talkId) => {
+        const result = {}
+        Object.values(votes)
+            .filter(
+                vote =>
+                    vote.talkId === talkId && vote.status === VOTE_STATUS_ACTIVE
+            )
             .forEach(vote => {
                 result[vote.voteItemId] = vote
             })

@@ -11,17 +11,17 @@ import {
     UPDATE_VOTE_ERROR,
     UPDATE_VOTE_SUCCESS,
 } from './voteActionTypes'
-import {
-    fireStoreMainInstance,
-    nowTimestamp,
-    serverTimestamp,
-} from '../../firebase'
+import { fireStoreMainInstance, serverTimestamp } from '../../firebase'
 import { getUserSelector } from '../auth/authSelectors'
 import { getProjectSelector } from '../project/projectSelectors'
-import { getCurrentUserVotesSelector } from './voteSelectors'
+import {
+    getCurrentUserVotesSelector,
+    getUserVotesByTalkAndVoteItemSelector,
+} from './voteSelectors'
 import { INCREMENT_VOTE_LOCALLY } from '../project/projectActionTypes'
 import { VOTE_TYPE_TEXT } from './voteReducer'
 import { checkDateBeforeVote } from './checkDataBeforeVote'
+import { VOTE_STATUS_ACTIVE, VOTE_STATUS_DELETED } from '../../core/contants'
 
 export const voteFor = (talkId, voteItem, data) => {
     return (dispatch, getState) => {
@@ -41,14 +41,32 @@ export const voteFor = (talkId, voteItem, data) => {
 
         const projectId = getProjectSelector(getState()).id
 
+        const existingVote = getUserVotesByTalkAndVoteItemSelector(getState())[
+            voteItem.id
+        ]
+
+        let id = ''
+        if (existingVote) {
+            id = existingVote.id
+        } else {
+            id = fireStoreMainInstance
+                .collection('projects')
+                .doc(projectId)
+                .collection('userVotes')
+                .doc().id
+        }
+
         const voteContent = {
             projectId: projectId,
             talkId: talkId,
             voteItemId: voteItem.id,
-            id: new Date().getTime(),
-            createdAt: serverTimestamp(),
+            id: id,
+            createdAt: existingVote
+                ? existingVote.createdAt
+                : serverTimestamp(),
             updatedAt: serverTimestamp(),
             userId: getUserSelector(getState()).uid,
+            status: VOTE_STATUS_ACTIVE,
         }
 
         if (voteItem.type === VOTE_TYPE_TEXT) {
@@ -63,7 +81,7 @@ export const voteFor = (talkId, voteItem, data) => {
             payload: {
                 [voteContent.id]: {
                     ...voteContent,
-                    temp: true,
+                    pending: true,
                 },
             },
         })
@@ -80,23 +98,13 @@ export const voteFor = (talkId, voteItem, data) => {
             .collection('projects')
             .doc(projectId)
             .collection('userVotes')
-            .add(voteContent)
-            .then(docRef => {
+            .doc(id)
+            .set(voteContent, { merge: true })
+            .then(() => {
                 dispatch({
                     type: ADD_VOTE_SUCCESS,
                     payload: {
-                        vote: {
-                            [docRef.id]: {
-                                ...voteContent,
-                                id: docRef.id,
-                                createdAt: nowTimestamp(),
-                                updatedAt: nowTimestamp(),
-                            },
-                        },
-                        talkId: voteContent.talkId,
-                        voteItemId: voteContent.voteItemId,
-                        tempVoteId: voteContent.id,
-                        newVoteId: docRef.id,
+                        voteId: id,
                     },
                 })
             })
@@ -105,7 +113,7 @@ export const voteFor = (talkId, voteItem, data) => {
                     type: ADD_VOTE_ERROR,
                     payload: {
                         error: `Unable to save the vote, ${error}`,
-                        tempVoteId: voteContent.id,
+                        voteId: voteContent.id,
                     },
                 })
 
@@ -122,7 +130,7 @@ export const voteFor = (talkId, voteItem, data) => {
 
 export const removeVote = voteToDelete => {
     return (dispatch, getState) => {
-        if (getCurrentUserVotesSelector(getState())[voteToDelete.id].temp) {
+        if (getCurrentUserVotesSelector(getState())[voteToDelete.id].pending) {
             // eslint-disable-next-line no-console
             console.info(
                 'Unable to delete vote as it has not been writed on the database'
@@ -152,7 +160,13 @@ export const removeVote = voteToDelete => {
             .doc(getProjectSelector(getState()).id)
             .collection('userVotes')
             .doc(voteToDelete.id)
-            .delete()
+            .set(
+                {
+                    status: VOTE_STATUS_DELETED,
+                    updatedAt: serverTimestamp(),
+                },
+                { merge: true }
+            )
             .then(() => {
                 dispatch({
                     type: REMOVE_VOTE_SUCCESS,
