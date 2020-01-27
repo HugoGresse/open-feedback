@@ -5,8 +5,8 @@ import {
     VOTE_STATUS_ACTIVE,
     VoteData,
 } from './models/vote'
-import firebase from 'firebase'
-import FieldValue = firebase.firestore.FieldValue
+import * as admin from 'firebase-admin'
+export const FieldValue = admin.firestore.FieldValue
 
 const getMockedFirestore = (docData: {}) =>
     (({
