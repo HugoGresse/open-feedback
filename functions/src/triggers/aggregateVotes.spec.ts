@@ -1,10 +1,10 @@
 import { incrementVoteAggregate } from './aggregateVotes'
 import {
     Vote,
-    VOTE_MODE_DECREMENT,
-    VOTE_MODE_INCREMENT,
+    VOTE_STATUS_DELETED,
+    VOTE_STATUS_ACTIVE,
     VoteData,
-} from './models/Vote'
+} from './models/vote'
 import firebase from 'firebase'
 import FieldValue = firebase.firestore.FieldValue
 
@@ -36,7 +36,7 @@ describe('incrementVoteAggregate', () => {
             talkId: 's1',
             voteItemId: 'vi1',
             userId: 'u1',
-            mode: VOTE_MODE_INCREMENT,
+            status: VOTE_STATUS_ACTIVE,
             createdAt: {},
             updatedAt: {},
         }
@@ -52,7 +52,7 @@ describe('incrementVoteAggregate', () => {
             talkId: 's1',
             voteItemId: 'vi1',
             userId: 'u1',
-            mode: VOTE_MODE_DECREMENT,
+            status: VOTE_STATUS_DELETED,
             createdAt: {},
             updatedAt: {},
         }
@@ -68,7 +68,7 @@ describe('incrementVoteAggregate', () => {
             talkId: 's1',
             voteItemId: 'vi1',
             userId: 'u1',
-            mode: VOTE_MODE_INCREMENT,
+            status: VOTE_STATUS_ACTIVE,
             createdAt: {},
             updatedAt: {},
         }
@@ -86,7 +86,7 @@ describe('incrementVoteAggregate', () => {
             talkId: 's1',
             voteItemId: 'vi1',
             userId: 'u1',
-            mode: VOTE_MODE_DECREMENT,
+            status: VOTE_STATUS_DELETED,
             createdAt: {},
             updatedAt: {},
         }
@@ -107,7 +107,7 @@ describe('incrementVoteAggregate', () => {
             voteItemId: 'vi1',
             userId: 'u1',
             text: 'toto1',
-            mode: VOTE_MODE_INCREMENT,
+            status: VOTE_STATUS_ACTIVE,
             createdAt: {},
             updatedAt: {},
         }
@@ -133,7 +133,7 @@ describe('incrementVoteAggregate', () => {
             voteItemId: 'vi1',
             userId: 'u1',
             text: 'toto1',
-            mode: VOTE_MODE_DECREMENT,
+            status: VOTE_STATUS_DELETED,
             createdAt: {},
             updatedAt: {},
         }
@@ -152,7 +152,7 @@ describe('incrementVoteAggregate', () => {
             voteItemId: 'vi1',
             userId: 'u1',
             text: 'grosminé',
-            mode: VOTE_MODE_INCREMENT,
+            status: VOTE_STATUS_ACTIVE,
             createdAt: {},
             updatedAt: {},
         }
@@ -195,7 +195,7 @@ describe('incrementVoteAggregate', () => {
             voteItemId: 'vi1',
             userId: 'u1',
             text: 'anything',
-            mode: VOTE_MODE_DECREMENT,
+            status: VOTE_STATUS_DELETED,
             createdAt: {},
             updatedAt: {},
         }

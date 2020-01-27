@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
-import { Vote, VoteData } from './models/Vote'
+import { Vote, VoteData } from './models/vote'
 import { firestoreIncrement } from '../helpers/firebaseInit'
 
 export const aggregateVotesCreate = functions.firestore
@@ -49,7 +49,7 @@ export const incrementVoteAggregate = (
                     updatedAt: vote.voteData.updatedAt,
                     userId: vote.voteData.userId,
                 }
-                if (vote.willIncrement()) {
+                if (vote.isActive()) {
                     if (
                         !snapshot.exists ||
                         !talk ||
