@@ -10,11 +10,17 @@ import {
     getCommentVoteItemSelector,
 } from '../settings/votingForm/votingFormSelectors'
 import { round1Decimals } from '../../../utils/numberUtils'
+import { VOTE_STATUS_ACTIVE } from '../../../core/contants'
 
 const getDashboard = state => getAdminStateSelector(state).adminDashboard
 const getDashboardData = state => getDashboard(state).data
 const getTalkVotes = state => getDashboardData(state).talkVotes
 const getUserVotes = state => getDashboardData(state).userVotes
+
+export const getActiveUserVoteSelector = createSelector(
+    getUserVotes,
+    userVotes => userVotes.filter(vote => vote.status === VOTE_STATUS_ACTIVE)
+)
 
 // MEMOIZED
 
@@ -67,7 +73,7 @@ export const getMostVotedTalkSelector = createSelector(
 )
 
 export const getVotesByHourSelector = createSelector(
-    getUserVotes,
+    getActiveUserVoteSelector,
     userVotes => {
         let tempDate
         let tempDateString
@@ -101,12 +107,13 @@ export const getVotesByHourSelector = createSelector(
     }
 )
 
-const getVoteByUserSelector = createSelector(getUserVotes, userVotes =>
-    groupBy(userVotes, 'userId')
+const getVoteByUserSelector = createSelector(
+    getActiveUserVoteSelector,
+    userVotes => groupBy(userVotes, 'userId')
 )
 
 const getBooleanVotesSelector = createSelector(
-    getUserVotes,
+    getActiveUserVoteSelector,
     getBooleanVoteItemsSelector,
     (userVotes, booleanVoteItems) => {
         const booleansVoteItemIds = booleanVoteItems.map(item => item.id)
@@ -117,7 +124,7 @@ const getBooleanVotesSelector = createSelector(
 )
 
 const getCommentVotesSelector = createSelector(
-    getUserVotes,
+    getActiveUserVoteSelector,
     getCommentVoteItemSelector,
     (userVotes, textVoteItems) => {
         if (!textVoteItems) {

@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import { getSelectedTalkIdSelector } from '../talk/core/talkSelectors'
-import { VOTE_STATUS_ACTIVE } from './voteActions'
+import { VOTE_STATUS_ACTIVE } from '../../core/contants'
 
 const getVotes = state => state.votes
 

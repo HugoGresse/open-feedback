@@ -11,7 +11,7 @@ import {
     UPDATE_VOTE_ERROR,
     UPDATE_VOTE_SUCCESS,
 } from './voteActionTypes'
-import { VOTE_STATUS_DELETED } from './voteActions'
+import { VOTE_STATUS_DELETED } from '../../core/contants'
 
 const initState = {
     currentUserVotes: {},

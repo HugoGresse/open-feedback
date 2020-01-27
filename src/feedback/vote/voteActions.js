@@ -21,9 +21,7 @@ import {
 import { INCREMENT_VOTE_LOCALLY } from '../project/projectActionTypes'
 import { VOTE_TYPE_TEXT } from './voteReducer'
 import { checkDateBeforeVote } from './checkDataBeforeVote'
-
-export const VOTE_STATUS_ACTIVE = 'active'
-export const VOTE_STATUS_DELETED = 'deleted'
+import { VOTE_STATUS_ACTIVE, VOTE_STATUS_DELETED } from '../../core/contants'
 
 export const voteFor = (talkId, voteItem, data) => {
     return (dispatch, getState) => {
@@ -242,8 +240,6 @@ export const updateVote = (vote, data) => (dispatch, getState) => {
             })
         })
 }
-
-// TODO update dashboard vote
 
 export const getVotes = () => {
     return (dispatch, getState) => {

@@ -15,7 +15,7 @@ function getTransitionProps(props, options) {
             style.transitionDuration || typeof timeout === 'number'
                 ? timeout
                 : timeout[options.mode] || 0,
-        delay: style.transitionDelay
+        delay: style.transitionDelay,
     }
 }
 
@@ -27,7 +27,6 @@ function getTranslateValue(direction, node) {
 
     let offsetX = 0
 
-    // TODO
     const offsetY = 70
 
     if (direction === 'left') {
@@ -59,7 +58,7 @@ export function setTranslateValue(direction, node) {
 
 const defaultTimeout = {
     enter: 200,
-    exit: 200
+    exit: 200,
 }
 
 /**
@@ -107,19 +106,19 @@ const Translate = React.forwardRef(function Translate(props, ref) {
         const transitionProps = getTransitionProps(
             { timeout, style },
             {
-                mode: 'enter'
+                mode: 'enter',
             }
         )
         node.style.webkitTransition = theme.transitions.create(
             '-webkit-transform',
             {
                 ...transitionProps,
-                easing: theme.transitions.easing.easeOut
+                easing: theme.transitions.easing.easeOut,
             }
         )
         node.style.transition = theme.transitions.create('transform', {
             ...transitionProps,
-            easing: theme.transitions.easing.easeOut
+            easing: theme.transitions.easing.easeOut,
         })
         node.style.webkitTransform = 'none'
         node.style.transform = 'none'
@@ -133,19 +132,19 @@ const Translate = React.forwardRef(function Translate(props, ref) {
         const transitionProps = getTransitionProps(
             { timeout, style },
             {
-                mode: 'exit'
+                mode: 'exit',
             }
         )
         node.style.webkitTransition = theme.transitions.create(
             '-webkit-transform',
             {
                 ...transitionProps,
-                easing: theme.transitions.easing.sharp
+                easing: theme.transitions.easing.sharp,
             }
         )
         node.style.transition = theme.transitions.create('transform', {
             ...transitionProps,
-            easing: theme.transitions.easing.sharp
+            easing: theme.transitions.easing.sharp,
         })
         setTranslateValue(direction, node)
 
@@ -203,16 +202,15 @@ const Translate = React.forwardRef(function Translate(props, ref) {
             appear
             in={inProp}
             timeout={timeout}
-            {...other}
-        >
+            {...other}>
             {(state, childProps) => {
                 return React.cloneElement(children, {
                     ref: handleRef,
                     style: {
                         ...style,
-                        ...children.props.style
+                        ...children.props.style,
                     },
-                    ...childProps
+                    ...childProps,
                 })
             }}
         </Transition>
