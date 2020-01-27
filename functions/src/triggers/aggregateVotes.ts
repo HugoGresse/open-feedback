@@ -1,27 +1,14 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
-import * as firebase from 'firebase'
-import DocumentData = firebase.firestore.DocumentData
+import { Vote, VoteData } from './models/vote'
+import { firestoreIncrement } from '../helpers/firebaseInit'
 
 export const aggregateVotesCreate = functions.firestore
     .document('/projects/{projectId}/userVotes/{voteId}')
     .onCreate(snapshot => {
         return incrementVoteAggregate(
             admin.firestore(),
-            snapshot.id,
-            snapshot.data(),
-            +1
-        )
-    })
-
-export const aggregateVotesDelete = functions.firestore
-    .document('/projects/{projectId}/userVotes/{voteId}')
-    .onDelete(snapshot => {
-        return incrementVoteAggregate(
-            admin.firestore(),
-            snapshot.id,
-            snapshot.data(),
-            -1
+            new Vote(snapshot.id, snapshot.data() as VoteData)
         )
     })
 
@@ -30,85 +17,78 @@ export const aggregateVotesUpdate = functions.firestore
     .onUpdate(change => {
         return incrementVoteAggregate(
             admin.firestore(),
-            change.after.id,
-            change.after.data(),
-            1
+            new Vote(change.after.id, change.after.data() as VoteData)
         )
     })
 
 export const incrementVoteAggregate = (
     firestoreDb: FirebaseFirestore.Firestore,
-    newVoteId: string,
-    newVote: DocumentData | undefined,
-    increment: number
+    vote: Vote
 ) => {
-    if (
-        !newVote ||
-        !isIdValid(newVote.projectId) ||
-        !isIdValid(newVote.talkId) ||
-        !isIdValid(newVote.voteItemId) ||
-        !isIdValid(newVote.userId) ||
-        !newVote.id
-    ) {
-        console.error('newVotes ids are not valid', newVote)
+    if (!vote || !vote.isValid()) {
+        console.error('newVotes ids are not valid', JSON.stringify(vote))
         return
     }
 
     const talkVoteDb = firestoreDb
         .collection('projects')
-        .doc(newVote.projectId)
+        .doc(vote.voteData.projectId)
         .collection('sessionVotes')
-        .doc(String(newVote.talkId))
+        .doc(String(vote.voteData.talkId))
 
     return talkVoteDb
         .get()
         .then(snapshot => {
-            let aggregatedValue
             const talk = snapshot.data()
 
-            if (newVote.text) {
+            if (vote.isTextVote()) {
+                let aggregatedValue
                 const voteText = {
-                    text: newVote.text,
-                    createdAt: newVote.createdAt,
-                    updatedAt: newVote.updatedAt,
-                    userId: newVote.userId,
+                    text: vote.voteData.text,
+                    createdAt: vote.voteData.createdAt,
+                    updatedAt: vote.voteData.updatedAt,
+                    userId: vote.voteData.userId,
                 }
-                if (increment > 0) {
+                if (vote.isActive()) {
                     if (
                         !snapshot.exists ||
                         !talk ||
-                        !talk[newVote.voteItemId]
+                        !talk[vote.voteData.voteItemId]
                     ) {
-                        aggregatedValue = { [newVoteId]: voteText }
+                        aggregatedValue = { [vote.id]: voteText }
                     } else {
                         aggregatedValue = {
-                            ...talk[newVote.voteItemId],
-                            [newVoteId]: voteText,
+                            ...talk[vote.voteData.voteItemId],
+                            [vote.id]: voteText,
                         }
                     }
                 } else {
                     if (
                         !snapshot.exists ||
                         !talk ||
-                        !talk[newVote.voteItemId]
+                        !talk[vote.voteData.voteItemId]
                     ) {
                         aggregatedValue = {}
                     } else {
-                        aggregatedValue = talk[newVote.voteItemId]
-                        aggregatedValue[newVoteId] = {}
+                        aggregatedValue = talk[vote.voteData.voteItemId]
+                        aggregatedValue[vote.id] = {}
                     }
                 }
-            } else {
-                if (!snapshot.exists || !talk || !talk[newVote.voteItemId]) {
-                    aggregatedValue = increment
-                } else {
-                    aggregatedValue = talk[newVote.voteItemId] + increment
-                }
+
+                return talkVoteDb.set(
+                    {
+                        [vote.voteData.voteItemId]: aggregatedValue,
+                    },
+                    { merge: true }
+                )
             }
 
+            // Boolean vote
             return talkVoteDb.set(
                 {
-                    [newVote.voteItemId]: aggregatedValue,
+                    [vote.voteData.voteItemId]: firestoreIncrement(
+                        vote.getIncrementValue()
+                    ),
                 },
                 { merge: true }
             )
@@ -117,7 +97,4 @@ export const incrementVoteAggregate = (
             console.log('Error getting documents talk', err)
             return err
         })
-}
-const isIdValid = (id: any): boolean => {
-    return id && id.length > 0
 }

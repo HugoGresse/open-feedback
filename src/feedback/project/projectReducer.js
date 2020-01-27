@@ -46,33 +46,8 @@ const projectReducer = (state = initState, { payload, type }) => {
             }
         case ADD_VOTE_SUCCESS: {
             // Only useful for Text votes
-            if (!payload.vote[payload.newVoteId].text) {
-                return {
-                    ...state,
-                }
-            }
-            // Replace tempVoteId by the new id
-            const talkVotesVoteItemContent = {
-                ...state.data.talkVotes[payload.talkId][payload.voteItemId],
-                ...payload.vote,
-            }
-
-            delete talkVotesVoteItemContent[payload.tempVoteId]
-
             return {
                 ...state,
-                data: {
-                    ...state.data,
-                    talkVotes: {
-                        ...state.data.talkVotes,
-                        [payload.talkId]: {
-                            ...state.data.talkVotes[payload.talkId],
-                            [payload.voteItemId]: {
-                                ...talkVotesVoteItemContent,
-                            },
-                        },
-                    },
-                },
             }
         }
         case INCREMENT_VOTE_LOCALLY: {
@@ -100,12 +75,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                             ...vote,
                             text: vote.text,
                             updatedAt: nowTimestamp(),
-                            createdAt:
-                                vote.createdAt &&
-                                vote.createdAt._methodName ===
-                                    'FieldValue.serverTimestamp'
-                                    ? nowTimestamp()
-                                    : nowTimestamp(),
+                            createdAt: nowTimestamp(),
                         },
                     }
                 }

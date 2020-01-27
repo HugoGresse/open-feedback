@@ -27,7 +27,9 @@ class TalkVoteTextResult extends Component {
                 {result.map((item, key) => (
                     <div key={key}>
                         <p className={classes.date}>
-                            {DateTime.fromJSDate(item.updatedAt).toRelative()}
+                            {DateTime.fromJSDate(item.updatedAt)
+                                .minus({ seconds: 1 })
+                                .toRelative()}
                         </p>
                         <p className={classes.comment}>{item.text}</p>
                     </div>
