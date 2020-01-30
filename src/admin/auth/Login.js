@@ -8,6 +8,8 @@ import { auth, authProvider } from '../../firebase'
 import { useDispatch, useSelector } from 'react-redux'
 import { getLoginErrorSelector, isLoggedSelector } from './authSelectors'
 import { didSignIn, signOut } from './authActions'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.RED_ORANGE};
@@ -22,6 +24,7 @@ const Login = ({ children }) => {
     const isLoggedIn = useSelector(isLoggedSelector)
     const loginError = useSelector(getLoginErrorSelector)
     const [tempUser, setTempUser] = useState(authProvider.currentUser)
+    const [loaderDisplayed, setLoaderDisplay] = useState(false)
 
     useEffect(() => {
         const unregisterAuthObserver = authProvider.onAuthStateChanged(user => {
@@ -71,8 +74,16 @@ const Login = ({ children }) => {
                     alt="open feedback"
                     style={{ marginBottom: '40px' }}
                 />
+                {loaderDisplayed && (
+                    <LoaderMatchParent style={{ color: 'white' }} height={40} />
+                )}
                 <StyledFirebaseAuth
                     firebaseAuth={authProvider}
+                    uiCallback={firebaseUI => {
+                        if (firebaseUI.isPendingRedirect()) {
+                            setLoaderDisplay(true)
+                        }
+                    }}
                     uiConfig={{
                         signInFlow: 'redirect',
                         signInSuccessUrl: '/admin/',
@@ -102,6 +113,11 @@ const Login = ({ children }) => {
                                             return currentUser.delete()
                                         }
                                     })
+                            },
+                            uiShown: () => {
+                                // Add additional time because for third party sign in (google) the uisown is called but
+                                // nothing is displayed...
+                                setTimeout(() => setLoaderDisplay(false), 2000)
                             },
                         },
                         autoUpgradeAnonymousUsers: true,
