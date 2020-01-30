@@ -126,7 +126,12 @@
         },
         "setupMode": "Setup Mode",
         "validateConfig": "VALIDATE CONFIG",
-        "validation": "Validation"
+        "validation": "Validation",
+        "deleteEvent": {
+            "button": "Delete event",
+            "confirmTitle": "Are you sure you want to delete the event?",
+            "confirmDescription": "Deleting the event is definitive, there will not be any data left, all votes will be deleted."
+        }
     },
     "settingsUser": {
         "add": "Add a new member to the event",

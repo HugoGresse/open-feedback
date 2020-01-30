@@ -28,6 +28,7 @@ service cloud.firestore {
             allow list: if authenticated() && isAdmin(resource.data) && (isEmailVerified() || isPhoneNumberAccount());
             allow create: if authenticated();
             allow update: if authenticated() && isAdmin(resource.data) && (isEmailVerified() || isPhoneNumberAccount());
+            allow delete: if authenticated() && isAdmin(resource.data) && (isEmailVerified() || isPhoneNumberAccount());
 
             // Deprecated
             match /voteItems/{voteItemsId} {
