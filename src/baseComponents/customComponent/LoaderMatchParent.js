@@ -1,10 +1,9 @@
-import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core'
+import React from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import styled from 'styled-components'
 
 const LoaderMatchParentStyled = styled.div`
-    
+
     text-align: center;
     display: flex;
     align-items: center;
@@ -15,24 +14,24 @@ const LoaderMatchParentStyled = styled.div`
     animation: 1s appearDelayed;
     animation-delay: 500ms;
     animation-fill-mode: forwards;
-        
+
     @keyframes appearDelayed {
         from {opacity: 0;}
         to {opacity: 1;}
     }
-    
+
     ${props =>
         props.width &&
         `
     width: ${props.width};
     `}
-    
+
     ${props =>
         props.height &&
         `
     height: ${props.height};
     `}
-    
+
     ${props =>
         props.maxWidth &&
         `
@@ -40,21 +39,20 @@ const LoaderMatchParentStyled = styled.div`
     `}
 `
 
-const styles = () => ({})
-
-class LoaderMatchParent extends Component {
-    render() {
-        return (
-            <LoaderMatchParentStyled {...this.props}>
-                <CircularProgress />
-            </LoaderMatchParentStyled>
-        )
-    }
+const LoaderMatchParent = ({
+    height = '100vh',
+    width = '100%',
+    style = {},
+    maxWidth = undefined,
+}) => {
+    return (
+        <LoaderMatchParentStyled
+            height={height}
+            width={width}
+            maxWidth={maxWidth}>
+            <CircularProgress style={style} />
+        </LoaderMatchParentStyled>
+    )
 }
 
-LoaderMatchParent.defaultProps = {
-    height: '100vh',
-    maxWidth: '100%',
-}
-
-export default withStyles(styles)(LoaderMatchParent)
+export default LoaderMatchParent

@@ -6,9 +6,12 @@ import OFButton from '../../baseComponents/OFButton'
 import GetAppIcon from '@material-ui/icons/GetApp'
 import FileSaver from 'file-saver'
 import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent'
+import { useTranslation } from 'react-i18next'
 const QRCode = lazy(() => import('qrcode.react'))
 
 const QRCodeDialog = ({ open, handleClose, data, name }) => {
+    const { t } = useTranslation()
+
     const downloadImage = () => {
         const canvas = document.querySelector('#dialog-qrcode canvas')
         if (canvas) {
@@ -39,10 +42,10 @@ const QRCodeDialog = ({ open, handleClose, data, name }) => {
             <DialogActions style={{ justifyContent: 'space-between' }}>
                 <OFButton onClick={downloadImage}>
                     <GetAppIcon />
-                    Download
+                    {t('common.download')}
                 </OFButton>
                 <OFButton onClick={handleClose} style={{ design: 'text' }}>
-                    Close
+                    {t('common.close')}
                 </OFButton>
             </DialogActions>
         </Dialog>
