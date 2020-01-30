@@ -5,7 +5,7 @@
     "homepage": "https://openfeedback.io/",
     "devDependencies": {
         "babel-loader": "8.0.6",
-        "cypress": "^3.8.2",
+        "cypress": "^3.8.3",
         "eslint-plugin-cypress": "^2.8.1",
         "firebase-tools": "^7.12.1",
         "husky": "^4.2.1",
