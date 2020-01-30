@@ -8,7 +8,6 @@ import { auth, authProvider } from '../../firebase'
 import { useDispatch, useSelector } from 'react-redux'
 import { getLoginErrorSelector, isLoggedSelector } from './authSelectors'
 import { didSignIn, signOut } from './authActions'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 
 const Wrapper = styled(Box)`
