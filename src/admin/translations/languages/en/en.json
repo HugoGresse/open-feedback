@@ -10,7 +10,9 @@
         "back": "Back",
         "cancel": "Cancel",
         "copy": "Copy",
-        "save": "Save"
+        "save": "Save",
+        "download": "Download",
+        "close": "Close"
     },
     "dashboard": {
         "comments": "Comments",
