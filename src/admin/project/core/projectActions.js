@@ -223,6 +223,30 @@ export const newProject = projectData => (dispatch, getState) => {
         })
 }
 
+export const deleteProject = projectId => dispatch => {
+    return fireStoreMainInstance
+        .collection('projects')
+        .doc(projectId)
+        .delete()
+        .then(() => {
+            history.push(
+                history.location.pathname.substring(
+                    0,
+                    history.location.pathname.indexOf(projectId)
+                )
+            )
+        })
+        .catch(error => {
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: {
+                    type: 'error',
+                    message: 'Failed to delete the event, ' + error.toString(),
+                },
+            })
+        })
+}
+
 export const initProjectApiIfReady = (projectId, project) => dispatch => {
     if (projectId && project && project.setupType) {
         initProjectApi(project.setupType, project)

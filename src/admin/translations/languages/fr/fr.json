@@ -126,7 +126,12 @@
         },
         "setupMode": "Mode de configuration",
         "validateConfig": "VALIDER LA CONFIG",
-        "validation": "Validation"
+        "validation": "Validation",
+        "deleteEvent": {
+            "button": "Supprimer l'évènement",
+            "confirmTitle": "Êtes-vous sur de vouloir supprimer l'évènement ?",
+            "confirmDescription": "Supprimer l'évènement est définitif, il n'y aura plus de données et les votes seront supprimé."
+        }
     },
     "settingsUser": {
         "add": "Ajouter un nouveau membre à l'événement",
