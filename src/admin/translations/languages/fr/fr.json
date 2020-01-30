@@ -10,7 +10,9 @@
         "back": "Retour",
         "cancel": "Annuler",
         "copy": "Copier",
-        "save": "Sauvegarder"
+        "save": "Sauvegarder",
+        "download": "Télécharger",
+        "close": "Fermer"
     },
     "dashboard": {
         "comments": "Commentaires",
