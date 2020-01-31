@@ -16,7 +16,6 @@ import {
 } from '../core/projectActions'
 import { PROJECT_TYPE_OPENFEEDBACK } from '../../../core/setupType/projectApi'
 import { useTranslation } from 'react-i18next'
-import { normalizeAndRemoveDiacritics } from '../../../utils/stringUtils'
 
 const useStyles = makeStyles({
     container: {
@@ -31,13 +30,12 @@ const useStyles = makeStyles({
     },
 })
 
-const projectIdDefaultValue = getNewProjectId()
-
 const NewProject = ({ onCancel }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const { t } = useTranslation()
 
+    const projectIdDefaultValue = getNewProjectId()
     const [currentStep, setCurrentStep] = useState(1)
     const [projectName, setProjectName] = useState('')
     const [projectId, setProjectId] = useState(projectIdDefaultValue)
