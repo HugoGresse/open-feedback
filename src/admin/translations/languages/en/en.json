@@ -49,7 +49,11 @@
             "name": "What's your event name?",
             "nameRequired": "The event name is required",
             "submit": "Continue",
-            "title": "Create a new event (step 1/3)"
+            "title": "Create a new event (step 1/3)",
+            "eventIdName": "Event ID",
+            "eventIdDescription": "Your global Event ID used for the feedback URL and more. Once the event is created, the ID cannot be changed.",
+            "eventIdRequired": "The event ID is required",
+            "eventIdExist": "This event ID is not available"
         },
         "step2": {
             "back": "Back",

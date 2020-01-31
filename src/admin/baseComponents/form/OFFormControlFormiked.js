@@ -2,7 +2,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import React from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { ErrorMessage } from 'formik'
+import { ErrorMessage, useField } from 'formik'
 import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
@@ -20,8 +20,15 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const OFFormControlFormiked = ({ name, fieldName, children }) => {
+const OFFormControlFormiked = ({
+    name,
+    fieldName,
+    displayErrorMessageDirectly,
+    children,
+}) => {
     const classes = useStyles()
+    // eslint-disable-next-line no-unused-vars
+    const [field, meta, helpers] = useField(fieldName)
 
     return (
         <FormControl className={classes.formControl}>
@@ -29,14 +36,21 @@ const OFFormControlFormiked = ({ name, fieldName, children }) => {
                 {name}
             </InputLabel>
             {children}
-            <ErrorMessage
-                name={fieldName}
-                render={msg => (
-                    <Typography className={classes.errorMessage}>
-                        {msg}
-                    </Typography>
-                )}
-            />
+            {displayErrorMessageDirectly && meta.error && (
+                <Typography className={classes.errorMessage}>
+                    {meta.error}
+                </Typography>
+            )}
+            {!displayErrorMessageDirectly && (
+                <ErrorMessage
+                    name={fieldName}
+                    render={msg => (
+                        <Typography className={classes.errorMessage}>
+                            {msg}
+                        </Typography>
+                    )}
+                />
+            )}
         </FormControl>
     )
 }

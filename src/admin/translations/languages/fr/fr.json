@@ -49,7 +49,11 @@
             "name": "Quel est le nom de votre évènement ?",
             "nameRequired": "Le nom de l'évènement est requis",
             "submit": "Continuer",
-            "title": "Créer un nouvel évènement (étape 1/3)"
+            "title": "Créer un nouvel évènement (étape 1/3)",
+            "eventIdName": "ID de l'évènement",
+            "eventIdDescription": "Votre identifiant d'évènement global unique, utilisé dans votre URL de feedback et d'autres éléments. Une fois l'évènement créé, l'identifiant ne peut pas être modifié.",
+            "eventIdRequired": "L'ID de l'évènement est requis",
+            "eventIdExist": "Cet identifiant n'est pas disponible"
         },
         "step2": {
             "back": "Retour",

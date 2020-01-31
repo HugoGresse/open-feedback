@@ -179,6 +179,10 @@ export const editProject = projectData => (dispatch, getState) => {
         })
 }
 
+export const getNewProjectId = () => {
+    return fireStoreMainInstance.collection('projects').doc().id
+}
+
 export const newProject = projectData => (dispatch, getState) => {
     dispatch({
         type: ADD_PROJECT_ONGOING,
@@ -193,8 +197,9 @@ export const newProject = projectData => (dispatch, getState) => {
 
     return fireStoreMainInstance
         .collection('projects')
-        .add(projectData)
-        .then(docRef => {
+        .doc(projectData.id)
+        .set(projectData)
+        .then(() => {
             dispatch({
                 type: ADD_NOTIFICATION,
                 payload: {
@@ -204,9 +209,9 @@ export const newProject = projectData => (dispatch, getState) => {
             })
             dispatch({
                 type: ADD_PROJECT_SUCCESS,
-                payload: docRef.id,
+                payload: projectData.id,
             })
-            return docRef.id
+            return projectData.id
         })
         .catch(err => {
             dispatch({
@@ -220,6 +225,20 @@ export const newProject = projectData => (dispatch, getState) => {
                 type: ADD_PROJECT_ERROR,
                 payload: err.toString(),
             })
+        })
+}
+
+// Not using Thinks (dispatch, etc)
+export const doesProjectExist = projectId => {
+    return fireStoreMainInstance
+        .collection('projects')
+        .doc(projectId)
+        .get()
+        .then(result => result.exists)
+        .catch(error => {
+            // eslint-disable-next-line no-console
+            console.error(error)
+            return true
         })
 }
 

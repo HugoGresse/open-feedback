@@ -9,6 +9,7 @@ import Step3 from './Step3'
 import { useDispatch } from 'react-redux'
 import {
     fillDefaultProjectData,
+    getNewProjectId,
     getProject,
     newProject,
     selectProject,
@@ -35,6 +36,7 @@ const NewProject = ({ onCancel }) => {
 
     const [currentStep, setCurrentStep] = useState(1)
     const [projectName, setProjectName] = useState('')
+    const [projectId, setProjectId] = useState(getNewProjectId())
     const [projectType, setProjectType] = useState('')
     const [step3Data, setStep3Data] = useState()
 
@@ -58,11 +60,12 @@ const NewProject = ({ onCancel }) => {
                 {currentStep === 1 && (
                     <Step1
                         onCancel={onCancel}
-                        onSubmit={projectName => {
+                        onSubmit={(projectName, projectId) => {
                             setCurrentStep(2)
                             setProjectName(projectName)
+                            setProjectId(projectId)
                         }}
-                        initialValues={{ name: projectName }}
+                        initialValues={{ name: projectName, id: projectId }}
                     />
                 )}
                 {currentStep === 2 && (
@@ -72,6 +75,7 @@ const NewProject = ({ onCancel }) => {
                         onSubmit={newProjectType => {
                             if (newProjectType === PROJECT_TYPE_OPENFEEDBACK) {
                                 return createEvent({
+                                    id: projectId,
                                     name: projectName,
                                     setupType: newProjectType,
                                 })
@@ -97,6 +101,7 @@ const NewProject = ({ onCancel }) => {
                         projectType={projectType}
                         onSubmit={config =>
                             createEvent({
+                                id: projectId,
                                 name: projectName,
                                 setupType: projectType,
                                 config: config,
