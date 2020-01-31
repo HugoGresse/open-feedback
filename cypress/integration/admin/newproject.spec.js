@@ -48,7 +48,7 @@ describe('Test creating a new project', function() {
         cy.visit('/admin')
 
         cy.contains('Create a new event').click()
-        cy.get('input[type=text]').type(data.projectName)
+        cy.get('input[name=name]').type(data.projectName)
         cy.contains('Continue').click()
         cy.get('input[value=openfeedbackv1]').check()
         cy.contains('Create event').click()
