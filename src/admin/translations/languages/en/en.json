@@ -53,7 +53,8 @@
             "eventIdName": "Event ID",
             "eventIdDescription": "Your global Event ID used for the feedback URL and more. Once the event is created, the ID cannot be changed.",
             "eventIdRequired": "The event ID is required",
-            "eventIdExist": "This event ID is not available"
+            "eventIdExist": "This event ID is not available",
+            "eventIdNotValid": "The event ID must only contain lower case letters, numbers and hyphen"
         },
         "step2": {
             "back": "Back",

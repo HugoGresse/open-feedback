@@ -16,6 +16,7 @@ import {
 } from '../core/projectActions'
 import { PROJECT_TYPE_OPENFEEDBACK } from '../../../core/setupType/projectApi'
 import { useTranslation } from 'react-i18next'
+import { normalizeAndRemoveDiacritics } from '../../../utils/stringUtils'
 
 const useStyles = makeStyles({
     container: {
@@ -29,6 +30,9 @@ const useStyles = makeStyles({
         background: COLORS.RED_ORANGE,
     },
 })
+
+const projectIdDefaultValue = getNewProjectId()
+
 const NewProject = ({ onCancel }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -36,12 +40,12 @@ const NewProject = ({ onCancel }) => {
 
     const [currentStep, setCurrentStep] = useState(1)
     const [projectName, setProjectName] = useState('')
-    const [projectId, setProjectId] = useState(getNewProjectId())
+    const [projectId, setProjectId] = useState(projectIdDefaultValue)
     const [projectType, setProjectType] = useState('')
     const [step3Data, setStep3Data] = useState()
 
-    const createEvent = project => {
-        return dispatch(newProject(project))
+    const createEvent = (id, data) => {
+        return dispatch(newProject(id, data))
             .then(projectId => {
                 return Promise.all([
                     dispatch(getProject(projectId)),
@@ -63,7 +67,11 @@ const NewProject = ({ onCancel }) => {
                         onSubmit={(projectName, projectId) => {
                             setCurrentStep(2)
                             setProjectName(projectName)
-                            setProjectId(projectId)
+                            if (projectId !== projectIdDefaultValue) {
+                                setProjectId(projectId.trim().toLowerCase())
+                            } else {
+                                setProjectId(projectId)
+                            }
                         }}
                         initialValues={{ name: projectName, id: projectId }}
                     />
@@ -74,8 +82,7 @@ const NewProject = ({ onCancel }) => {
                         onBack={() => setCurrentStep(1)}
                         onSubmit={newProjectType => {
                             if (newProjectType === PROJECT_TYPE_OPENFEEDBACK) {
-                                return createEvent({
-                                    id: projectId,
+                                return createEvent(projectId, {
                                     name: projectName,
                                     setupType: newProjectType,
                                 })
@@ -100,8 +107,7 @@ const NewProject = ({ onCancel }) => {
                         initialValues={step3Data}
                         projectType={projectType}
                         onSubmit={config =>
-                            createEvent({
-                                id: projectId,
+                            createEvent(projectId, {
                                 name: projectName,
                                 setupType: projectType,
                                 config: config,

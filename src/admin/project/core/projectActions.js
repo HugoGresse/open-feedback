@@ -183,7 +183,7 @@ export const getNewProjectId = () => {
     return fireStoreMainInstance.collection('projects').doc().id
 }
 
-export const newProject = projectData => (dispatch, getState) => {
+export const newProject = (projectId, projectData) => (dispatch, getState) => {
     dispatch({
         type: ADD_PROJECT_ONGOING,
     })
@@ -197,7 +197,7 @@ export const newProject = projectData => (dispatch, getState) => {
 
     return fireStoreMainInstance
         .collection('projects')
-        .doc(projectData.id)
+        .doc(projectId)
         .set(projectData)
         .then(() => {
             dispatch({
@@ -209,9 +209,9 @@ export const newProject = projectData => (dispatch, getState) => {
             })
             dispatch({
                 type: ADD_PROJECT_SUCCESS,
-                payload: projectData.id,
+                payload: projectId,
             })
-            return projectData.id
+            return projectId
         })
         .catch(err => {
             dispatch({

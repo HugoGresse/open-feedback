@@ -53,7 +53,8 @@
             "eventIdName": "ID de l'évènement",
             "eventIdDescription": "Votre identifiant d'évènement global unique, utilisé dans votre URL de feedback et d'autres éléments. Une fois l'évènement créé, l'identifiant ne peut pas être modifié.",
             "eventIdRequired": "L'ID de l'évènement est requis",
-            "eventIdExist": "Cet identifiant n'est pas disponible"
+            "eventIdExist": "Cet identifiant n'est pas disponible",
+            "eventIdNotValid": "L'ID de l'évènement ne peut contenir que des chiffres, des lettres minuscules et des traits d'union"
         },
         "step2": {
             "back": "Retour",

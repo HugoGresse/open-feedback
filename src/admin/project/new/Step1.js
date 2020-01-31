@@ -36,6 +36,10 @@ const Step1 = ({ onCancel, onSubmit, initialValues }) => {
                     id: string()
                         .lowercase()
                         .trim()
+                        .matches(
+                            /^[a-z0-9-]+$/,
+                            t('newEvent.step1.eventIdNotValid')
+                        )
                         .required(t('newEvent.step1.eventIdRequired'))
                         .test(
                             'alreadyExist',
@@ -52,7 +56,7 @@ const Step1 = ({ onCancel, onSubmit, initialValues }) => {
                 })}
                 initialValues={initialValues}
                 onSubmit={values =>
-                    onSubmit(values.name, values.id.toLowerCase().trim())
+                    onSubmit(values.name.trim(), values.id.trim())
                 }>
                 {({ isSubmitting, values, setFieldValue, errors }) => (
                     <Form method="POST">
