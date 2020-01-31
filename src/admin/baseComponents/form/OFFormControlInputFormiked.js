@@ -9,9 +9,14 @@ const OFFormControlInputFormiked = ({
     type,
     value,
     isSubmitting,
+    displayErrorMessageDirectly = false,
+    autoFocus = false,
 }) => {
     return (
-        <OFFormControlFormiked name={name} fieldName={fieldName}>
+        <OFFormControlFormiked
+            name={name}
+            fieldName={fieldName}
+            displayErrorMessageDirectly={displayErrorMessageDirectly}>
             <Field type={type} name={fieldName} disabled={isSubmitting}>
                 {({ field, form }) => (
                     <OFInput
@@ -19,6 +24,7 @@ const OFFormControlInputFormiked = ({
                         name={field.name}
                         value={value}
                         disabled={isSubmitting}
+                        autoFocus={autoFocus}
                         {...field}
                     />
                 )}
