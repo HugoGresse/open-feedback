@@ -1,0 +1,11 @@
+{
+    "comment": {
+        "delete": "Delete comment",
+        "update": "Update comment",
+        "save": "Post comment"
+    },
+    "searchPlaceholder": "Search",
+    "footer": {
+        "madeBy": "Powered by"
+    }
+}
