@@ -7,6 +7,9 @@ import React from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Typography } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 
 const useStyles = makeStyles(theme => ({
     progress: {
@@ -52,6 +55,15 @@ const OFListHeader = ({
                         placeholder={t('baseComponents.search')}
                         value={filterValue}
                         onChange={event => filterChange(event.target.value)}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="Remove current search"
+                                    onClick={() => filterChange('')}>
+                                    {filterValue ? <CloseIcon /> : ''}
+                                </IconButton>
+                            </InputAdornment>
+                        }
                     />
                 </Grid>
             )}

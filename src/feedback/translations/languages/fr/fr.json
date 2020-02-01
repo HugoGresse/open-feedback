@@ -1,0 +1,11 @@
+{
+    "comment": {
+        "delete": "Supprimer le commentaire",
+        "update": "Mettre à jour le commentaire",
+        "save": "Poster le commentaire"
+    },
+    "searchPlaceholder": "Recherche",
+    "footer": {
+        "madeBy": "Propulsé par"
+    }
+}
