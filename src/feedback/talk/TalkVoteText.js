@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import TalkVoteTextResult from './TalkVoteTextResult'
+import { Trans } from 'react-i18next'
 
 const styles = theme => ({
     itemContainer: {
@@ -110,9 +111,9 @@ class TalkVoteText extends Component {
     render() {
         const { classes, voteItem, voteResult } = this.props
 
-        const saveUpdateText = this.props.currentUserVote
-            ? 'Update comment'
-            : 'Save comment'
+        const saveUpdateKey = this.props.currentUserVote
+            ? 'comment.update'
+            : 'comment.save'
 
         return (
             <Grid
@@ -142,7 +143,9 @@ class TalkVoteText extends Component {
                     <div className={classes.buttonContainer}>
                         <Button onClick={() => this.onVoteDelete()}>
                             <DeleteIcon className={classes.leftIcon} />
-                            Delete comment
+                            <Trans i18nKey="comment.delete">
+                                Delete comment
+                            </Trans>
                         </Button>
 
                         <Button
@@ -156,7 +159,7 @@ class TalkVoteText extends Component {
                                 )
                             }>
                             <SaveIcon className={classes.leftIcon} />
-                            {saveUpdateText}
+                            <Trans i18nKey={saveUpdateKey} />
                         </Button>
                     </div>
                 )}

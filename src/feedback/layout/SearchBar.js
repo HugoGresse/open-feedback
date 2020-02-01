@@ -7,6 +7,7 @@ import { SCREEN_SIZES } from '../../constants/constants'
 import BigInput from '../../baseComponents/design/BigInput'
 import Box from '../../baseComponents/design/Box'
 import { useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 
 const SearchBarStyled = styled(Box)`
     margin-top: 10px;
@@ -25,6 +26,7 @@ const SearchBarStyled = styled(Box)`
 `
 
 const SearchBar = () => {
+    const { t } = useTranslation()
     const dispatch = useDispatch()
 
     return (
@@ -36,7 +38,7 @@ const SearchBar = () => {
                     }
                     icon={<SearchIcon />}
                     className="search"
-                    placeholder="Search speakers, talks, tags,..."
+                    placeholder={t('searchPlaceholder')}
                 />
             </div>
         </SearchBarStyled>

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/colors'
 
 import logoColor from '../../assets/logo-openfeedback-color.png'
+import { useTranslation } from 'react-i18next'
 
 const FooterStyled = styled.div`
     color: ${COLORS.LIGHT_GRAY};
@@ -18,14 +19,15 @@ const FooterStyled = styled.div`
 `
 
 const Footer = () => {
+    const { t } = useTranslation()
+
     return (
         <FooterStyled>
-            <span className="Footer__Text">Fabricoté par</span>
+            <span className="Footer__Text">{t('footer.madeBy')}</span>
             <a
                 href="https://github.com/HugoGresse/open-feedback"
                 target="_blank"
-                rel="noopener noreferrer" 
-            >
+                rel="noopener noreferrer">
                 <img height="25" src={logoColor} alt="open feedback" />
             </a>
         </FooterStyled>
