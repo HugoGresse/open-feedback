@@ -76,7 +76,7 @@ describe('Single talk', function() {
         const voteTextAreaSelector = 'textarea[placeholder="Comment"]'
 
         cy.get(voteTextAreaSelector).type(inputText)
-        cy.contains('Save comment').click()
+        cy.contains('Post comment').click()
         cy.get('.comments').should('contain', inputText)
 
         cy.get(voteTextAreaSelector).type(textEdited)
