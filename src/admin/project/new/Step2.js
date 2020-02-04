@@ -4,7 +4,7 @@ import { object, string } from 'yup'
 import { Field, Form, Formik } from 'formik'
 import OFButton from '../../baseComponents/OFButton'
 import RadioButtonGroup from '../../baseComponents/form/RadioButtonGroup'
-import OFRadioButtonFormiked from '../../baseComponents/form/OFRadioButtonFormiked'
+import OFRadioButtonFormiked from '../../baseComponents/form/formik/OFRadioButtonFormiked'
 import {
     PROJECT_TYPE_HOVERBOARDV2,
     PROJECT_TYPE_JSONURL,
