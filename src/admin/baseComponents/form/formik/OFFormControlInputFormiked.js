@@ -1,4 +1,4 @@
-import OFInput from './OFInput'
+import OFInput from '../input/OFInput'
 import React from 'react'
 import { Field } from 'formik'
 import OFFormControlFormiked from './OFFormControlFormiked'

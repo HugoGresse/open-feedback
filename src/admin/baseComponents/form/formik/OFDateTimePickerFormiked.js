@@ -1,6 +1,6 @@
 import React from 'react'
 import { DateTimePicker } from '@material-ui/pickers'
-import OFInputForDateTimePicker from './OFInputForDateTimePicker'
+import OFInputForDateTimePicker from '../OFInputForDateTimePicker'
 
 const OFDateTimePickerFormiked = ({ field, form, ...other }) => {
     const currentError = form.errors[field.name]

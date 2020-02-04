@@ -1,5 +1,5 @@
 import Grid from '@material-ui/core/Grid'
-import OFInput from '../form/OFInput'
+import OFInput from '../form/input/OFInput'
 import Fade from '@material-ui/core/Fade'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import OFButton from '../OFButton'
