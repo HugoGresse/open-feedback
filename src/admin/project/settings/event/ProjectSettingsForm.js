@@ -2,17 +2,17 @@ import React, { useState } from 'react'
 import { object, string, boolean } from 'yup'
 import { Typography } from '@material-ui/core'
 import { Field, Form, Formik } from 'formik'
-import OFFormControlFormiked from '../../../baseComponents/form/formik/OFFormControlFormiked'
+import OFFormControl from '../../../baseComponents/form/formcontrol/OFFormControl'
 import Grid from '@material-ui/core/Grid'
-import OFButton from '../../../baseComponents/OFButton'
+import OFButton from '../../../baseComponents/button/OFButton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { useDispatch } from 'react-redux'
 import { editProject } from '../../core/projectActions'
 import ChipColorsEditor from './ChipColorsEditor'
-import OFFormControlInputFormiked from '../../../baseComponents/form/formik/OFFormControlInputFormiked'
-import OFDateTimePickerFormiked from '../../../baseComponents/form/formik/OFDateTimePickerFormiked'
+import OFFormControlInputFormiked from '../../../baseComponents/form/formcontrol/OFFormControlInputFormiked'
+import OFDateTimePicker from '../../../baseComponents/form/datetimepicker/OFDateTimePicker'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import { SwitchFormiked } from '../../../baseComponents/form/formik/SwitchFormiked'
+import { OFSwitch } from '../../../baseComponents/form/switch/OFSwitch'
 import Collapse from '@material-ui/core/Collapse'
 import { useTranslation } from 'react-i18next'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
@@ -99,39 +99,39 @@ const ProjectSettingsForm = ({ project }) => {
                                 isSubmitting={isSubmitting}
                             />
 
-                            <OFFormControlFormiked fieldName="restrictVoteRange">
+                            <OFFormControl fieldName="restrictVoteRange">
                                 <FormControlLabel
                                     label={t('settingsEvent.fieldVoteRange')}
                                     control={
                                         <Field
                                             name="restrictVoteRange"
-                                            component={SwitchFormiked}
+                                            component={OFSwitch}
                                         />
                                     }
                                 />
-                            </OFFormControlFormiked>
+                            </OFFormControl>
 
                             <Collapse in={values.restrictVoteRange}>
                                 <div>
-                                    <OFFormControlFormiked
+                                    <OFFormControl
                                         name={t('settingsEvent.fieldVoteOpen')}
                                         fieldName="voteStartTime">
                                         <Field
                                             name="voteStartTime"
                                             format="FFF"
-                                            component={OFDateTimePickerFormiked}
+                                            component={OFDateTimePicker}
                                         />
-                                    </OFFormControlFormiked>
+                                    </OFFormControl>
 
-                                    <OFFormControlFormiked
+                                    <OFFormControl
                                         name={t('settingsEvent.fieldVoteClose')}
                                         fieldName="voteEndTime">
                                         <Field
                                             name="voteEndTime"
                                             format="FFF"
-                                            component={OFDateTimePickerFormiked}
+                                            component={OFDateTimePicker}
                                         />
-                                    </OFFormControlFormiked>
+                                    </OFFormControl>
                                 </div>
                             </Collapse>
                         </Grid>
@@ -151,14 +151,14 @@ const ProjectSettingsForm = ({ project }) => {
                                 isSubmitting={isSubmitting}
                             />
 
-                            <OFFormControlFormiked
+                            <OFFormControl
                                 name={t('settingsEvent.fieldChipColors')}
                                 fieldName="chipColors">
                                 <Field
                                     name="chipColors"
                                     component={ChipColorsEditor}
                                 />
-                            </OFFormControlFormiked>
+                            </OFFormControl>
                         </Grid>
 
                         <Grid item xs={12} className={classes.buttonContainer}>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { COLORS } from '../../constants/colors'
+import { COLORS } from '../../../constants/colors'
 import Button from '@material-ui/core/Button'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { darken, fade, lighten } from '@material-ui/core/styles'

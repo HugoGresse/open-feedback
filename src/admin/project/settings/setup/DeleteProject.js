@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import OFButton from '../../../baseComponents/OFButton'
+import OFButton from '../../../baseComponents/button/OFButton'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { useTranslation } from 'react-i18next'
 import Box from '@material-ui/core/Box'

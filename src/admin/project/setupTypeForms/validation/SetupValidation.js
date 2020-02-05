@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core'
-import OFButton from '../../../baseComponents/OFButton'
+import OFButton from '../../../baseComponents/button/OFButton'
 import React from 'react'
 
 import CheckIcon from '@material-ui/icons/CheckCircle'

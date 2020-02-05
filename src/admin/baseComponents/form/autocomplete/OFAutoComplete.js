@@ -1,7 +1,7 @@
 import React from 'react'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import Tag from './Tag'
-import OFInput from './input/OFInput'
+import OFInput from '../input/OFInput'
 import styled from 'styled-components'
 
 const AutoCompleteInput = styled(({ forwardedRef2, ...props }) => (

@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-const OFRadioButtonFormiked = ({
+const OFRadioButton = ({
     field: { name, value, onChange, onBlur },
     id,
     label,
@@ -39,4 +39,4 @@ const OFRadioButtonFormiked = ({
     )
 }
 
-export default OFRadioButtonFormiked
+export default OFRadioButton

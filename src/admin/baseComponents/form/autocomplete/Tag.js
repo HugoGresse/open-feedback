@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import CloseIcon from '@material-ui/icons/Close'
-import COLORS from '../../../constants/colors'
+import COLORS from '../../../../constants/colors'
 import React from 'react'
 
 const Tag = styled(({ label, onDelete, ...props }) => (

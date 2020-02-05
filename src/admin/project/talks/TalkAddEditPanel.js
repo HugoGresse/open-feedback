@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { Field, Form, Formik } from 'formik'
 import { object, string, array } from 'yup'
 import SidePanelLayout from '../../baseComponents/layouts/SidePanelLayout'
-import OFButton from '../../baseComponents/OFButton'
-import OFFormControlFormiked from '../../baseComponents/form/formik/OFFormControlFormiked'
+import OFButton from '../../baseComponents/button/OFButton'
+import OFFormControl from '../../baseComponents/form/formcontrol/OFFormControl'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import LuxonUtils from '@date-io/luxon'
-import OFAutoComplete from '../../baseComponents/form/OFAutoComplete'
-import OFFormControlInputFormiked from '../../baseComponents/form/formik/OFFormControlInputFormiked'
-import OFDateTimePickerFormiked from '../../baseComponents/form/formik/OFDateTimePickerFormiked'
+import OFAutoComplete from '../../baseComponents/form/autocomplete/OFAutoComplete'
+import OFFormControlInputFormiked from '../../baseComponents/form/formcontrol/OFFormControlInputFormiked'
+import OFDateTimePicker from '../../baseComponents/form/datetimepicker/OFDateTimePicker'
 import SpeakerAddEditPanel from '../speakers/SpeakerAddEditPanel'
 import { useTranslation } from 'react-i18next'
 import { DateTime } from 'luxon'
@@ -76,27 +76,27 @@ const TalkAddEditPanel = ({
                                     isSubmitting={isSubmitting}
                                 />
 
-                                <OFFormControlFormiked
+                                <OFFormControl
                                     name={t('talks.fieldStartTime')}
                                     fieldName="startTime">
                                     <Field
                                         name="startTime"
                                         format="FFF"
-                                        component={OFDateTimePickerFormiked}
+                                        component={OFDateTimePicker}
                                     />
-                                </OFFormControlFormiked>
+                                </OFFormControl>
 
-                                <OFFormControlFormiked
+                                <OFFormControl
                                     name={t('talks.fieldEndTime')}
                                     fieldName="endTime">
                                     <Field
                                         name="endTime"
                                         format="FFF"
-                                        component={OFDateTimePickerFormiked}
+                                        component={OFDateTimePicker}
                                     />
-                                </OFFormControlFormiked>
+                                </OFFormControl>
 
-                                <OFFormControlFormiked
+                                <OFFormControl
                                     name={t('talks.fieldTrack')}
                                     fieldName="trackTitle"
                                     type="text">
@@ -106,9 +106,9 @@ const TalkAddEditPanel = ({
                                         freeSolo={true}
                                         component={OFAutoComplete}
                                     />
-                                </OFFormControlFormiked>
+                                </OFFormControl>
 
-                                <OFFormControlFormiked
+                                <OFFormControl
                                     name={t('talks.fieldTags')}
                                     fieldName="tags"
                                     type="text">
@@ -119,9 +119,9 @@ const TalkAddEditPanel = ({
                                         multiple={true}
                                         component={OFAutoComplete}
                                     />
-                                </OFFormControlFormiked>
+                                </OFFormControl>
 
-                                <OFFormControlFormiked
+                                <OFFormControl
                                     name={t('talks.fieldSpeakers')}
                                     fieldName="speakers"
                                     type="text">
@@ -141,7 +141,7 @@ const TalkAddEditPanel = ({
                                         multiple={true}
                                         component={OFAutoComplete}
                                     />
-                                </OFFormControlFormiked>
+                                </OFFormControl>
 
                                 <OFButton
                                     disabled={isSubmitting}
