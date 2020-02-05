@@ -1,4 +1,4 @@
-import OFFormControl from '../formcontrol2/OFFormControl'
+import OFFormControl from '../formControl/OFFormControl'
 import React from 'react'
 import { Field, Formik } from 'formik'
 import FormControlLabel from '@material-ui/core/FormControlLabel'

@@ -4,7 +4,7 @@ import { Field, Formik } from 'formik'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { OFSwitch } from '../switch/OFSwitch'
 import OFFormControlInputFormiked from './OFFormControlInputFormiked'
-import OFAutoComplete from '../autocomplete2/OFAutoComplete'
+import OFAutoComplete from '../autoComplete/OFAutoComplete'
 
 export default {
     component: OFFormControl,

@@ -4,7 +4,7 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import { Formik } from 'formik'
-import OFFormControlInputFormiked from '../formcontrol2/OFFormControlInputFormiked'
+import OFFormControlInputFormiked from '../formControl/OFFormControlInputFormiked'
 
 export default {
     component: OFInput,

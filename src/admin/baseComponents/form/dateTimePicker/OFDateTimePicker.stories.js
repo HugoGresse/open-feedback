@@ -3,7 +3,7 @@ import React from 'react'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import LuxonUtils from '@date-io/luxon'
 import { Field, Formik } from 'formik'
-import OFFormControl from '../formcontrol2/OFFormControl'
+import OFFormControl from '../formControl/OFFormControl'
 
 export default {
     component: OFDateTimePicker,

@@ -1,6 +1,6 @@
 import SidePanelLayout from '../../../baseComponents/layouts/SidePanelLayout'
 import { Form, Formik } from 'formik'
-import OFFormControlInputFormiked from '../../../baseComponents/form/formcontrol2/OFFormControlInputFormiked'
+import OFFormControlInputFormiked from '../../../baseComponents/form/formControl/OFFormControlInputFormiked'
 import OFButton from '../../../baseComponents/button/OFButton'
 import React from 'react'
 import { object, string } from 'yup'
