@@ -4,11 +4,11 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import { Formik } from 'formik'
-import OFFormControlInputFormiked from '../formcontrol/OFFormControlInputFormiked'
+import OFFormControlInputFormiked from '../formcontrol2/OFFormControlInputFormiked'
 
 export default {
     component: OFInput,
-    title: 'Admin/Components/Input',
+    title: 'Admin|Input',
 }
 
 export const defaultUsage = () => (

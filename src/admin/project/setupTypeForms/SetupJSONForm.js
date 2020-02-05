@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { object, string } from 'yup'
 import { Form, Formik } from 'formik'
-import OFFormControlInputFormiked from '../../baseComponents/form/formcontrol/OFFormControlInputFormiked'
+import OFFormControlInputFormiked from '../../baseComponents/form/formcontrol2/OFFormControlInputFormiked'
 import OFButton from '../../baseComponents/button/OFButton'
 import Collapse from '@material-ui/core/Collapse'
 import makeStyles from '@material-ui/core/styles/makeStyles'

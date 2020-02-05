@@ -3,8 +3,8 @@ import NewProjectLayout from './NewProjectLayout'
 import { object, string } from 'yup'
 import { Field, Form, Formik } from 'formik'
 import OFButton from '../../baseComponents/button/OFButton'
-import RadioButtonGroup from '../../baseComponents/form/radiobutton/RadioButtonGroup'
-import OFRadioButton from '../../baseComponents/form/radiobutton/OFRadioButton'
+import RadioButtonGroup from '../../baseComponents/form/radiobutton2/RadioButtonGroup'
+import OFRadioButton from '../../baseComponents/form/radiobutton2/OFRadioButton'
 import {
     PROJECT_TYPE_HOVERBOARDV2,
     PROJECT_TYPE_JSONURL,

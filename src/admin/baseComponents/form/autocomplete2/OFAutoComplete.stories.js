@@ -5,7 +5,7 @@ const data = ['Web', 'Back', 'Cloud', 'UX', 'Design', 'Food', 'Biking']
 
 export default {
     component: OFAutoComplete,
-    title: 'Admin/Components/AutoComplete',
+    title: 'Admin|AutoComplete',
 }
 
 export const defaultUsage = () => {

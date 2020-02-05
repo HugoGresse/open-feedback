@@ -3,7 +3,7 @@ import React from 'react'
 
 export default {
     component: OFTextArea,
-    title: 'Admin/Components/TextArea',
+    title: 'Admin|TextArea',
 }
 
 export const defaultUsage = () => (
