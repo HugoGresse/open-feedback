@@ -2,9 +2,9 @@ import React from 'react'
 import NewProjectLayout from './NewProjectLayout'
 import { object, string } from 'yup'
 import { Field, Form, Formik } from 'formik'
-import OFButton from '../../baseComponents/OFButton'
-import RadioButtonGroup from '../../baseComponents/form/RadioButtonGroup'
-import OFRadioButtonFormiked from '../../baseComponents/form/OFRadioButtonFormiked'
+import OFButton from '../../baseComponents/button/OFButton'
+import RadioButtonGroup from '../../baseComponents/form/radioButton/RadioButtonGroup'
+import OFRadioButton from '../../baseComponents/form/radioButton/OFRadioButton'
 import {
     PROJECT_TYPE_HOVERBOARDV2,
     PROJECT_TYPE_JSONURL,
@@ -34,7 +34,7 @@ const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
                     <Form method="POST">
                         <RadioButtonGroup fieldName="projectType">
                             <Field
-                                component={OFRadioButtonFormiked}
+                                component={OFRadioButton}
                                 name="projectType"
                                 id={PROJECT_TYPE_OPENFEEDBACK}
                                 label={
@@ -53,7 +53,7 @@ const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
                                 }
                             />
                             <Field
-                                component={OFRadioButtonFormiked}
+                                component={OFRadioButton}
                                 name="projectType"
                                 id={PROJECT_TYPE_HOVERBOARDV2}
                                 label={
@@ -73,7 +73,7 @@ const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
                             />
 
                             <Field
-                                component={OFRadioButtonFormiked}
+                                component={OFRadioButton}
                                 name="projectType"
                                 id={PROJECT_TYPE_JSONURL}
                                 label={

@@ -2,7 +2,7 @@ import React from 'react'
 import { DateTimePicker } from '@material-ui/pickers'
 import OFInputForDateTimePicker from './OFInputForDateTimePicker'
 
-const OFDateTimePickerFormiked = ({ field, form, ...other }) => {
+const OFDateTimePicker = ({ field, form, ...other }) => {
     const currentError = form.errors[field.name]
 
     return (
@@ -29,4 +29,4 @@ const OFDateTimePickerFormiked = ({ field, form, ...other }) => {
     )
 }
 
-export default OFDateTimePickerFormiked
+export default OFDateTimePicker

@@ -1,10 +1,10 @@
 import React from 'react'
 import { object, string } from 'yup'
 import { Form, Formik } from 'formik'
-import OFFormControlInputFormiked from '../../baseComponents/form/OFFormControlInputFormiked'
-import OFButton from '../../baseComponents/OFButton'
+import OFFormControlInputFormiked from '../../baseComponents/form/formControl/OFFormControlInputFormiked'
+import OFButton from '../../baseComponents/button/OFButton'
 import Box from '@material-ui/core/Box'
-import { FormikObserver } from '../../baseComponents/form/FormikObserver'
+import { FormikObserver } from '../../baseComponents/form/formik/FormikObserver'
 import { useTranslation } from 'react-i18next'
 
 const SetupHoverboardv2Form = ({

@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const OFFormControlFormiked = ({
+const OFFormControl = ({
     name,
     fieldName,
     displayErrorMessageDirectly,
@@ -55,4 +55,4 @@ const OFFormControlFormiked = ({
     )
 }
 
-export default OFFormControlFormiked
+export default OFFormControl

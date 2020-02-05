@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { Form, Formik } from 'formik'
 import { object, string } from 'yup'
 import SidePanelLayout from '../../baseComponents/layouts/SidePanelLayout'
-import OFButton from '../../baseComponents/OFButton'
-import OFFormControlInputFormiked from '../../baseComponents/form/OFFormControlInputFormiked'
+import OFButton from '../../baseComponents/button/OFButton'
+import OFFormControlInputFormiked from '../../baseComponents/form/formControl/OFFormControlInputFormiked'
 import { useTranslation } from 'react-i18next'
 
 const SpeakerAddEditPanel = ({ isOpen, speaker, onClose, onSubmit }) => {

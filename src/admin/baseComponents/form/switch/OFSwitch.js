@@ -16,4 +16,4 @@ const fieldToSwitch = ({
     }
 }
 
-export const SwitchFormiked = props => <MuiSwitch {...fieldToSwitch(props)} />
+export const OFSwitch = props => <MuiSwitch {...fieldToSwitch(props)} />

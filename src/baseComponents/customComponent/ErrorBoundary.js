@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import OFButton from '../../admin/baseComponents/OFButton'
+import OFButton from '../../admin/baseComponents/button/OFButton'
 import Box from '@material-ui/core/Box'
 import createAlert from '../../utils/alerting/createAlert'
 import { ALERT_REACT_CATCHED_ERROR_ADMIN } from '../../utils/alerting/alerts'
