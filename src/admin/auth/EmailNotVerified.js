@@ -1,7 +1,7 @@
 import React from 'react'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import OFButton from '../baseComponents/OFButton'
+import OFButton from '../baseComponents/button/OFButton'
 import { authProvider } from '../../firebase'
 import { didSignIn } from './authActions'
 import { useTranslation } from 'react-i18next'

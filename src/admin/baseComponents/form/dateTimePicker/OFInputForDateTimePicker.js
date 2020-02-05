@@ -1,5 +1,5 @@
 import React from 'react'
-import OFInput from './OFInput'
+import OFInput from '../input/OFInput'
 
 const OFInputForDateTimePicker = ({
     icon,

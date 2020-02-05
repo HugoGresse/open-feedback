@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { fontSize, fontWeight, space } from 'styled-system'
-import { COLORS } from '../../../constants/colors'
+import { COLORS } from '../../../../constants/colors'
 import InputBase from '@material-ui/core/InputBase'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 

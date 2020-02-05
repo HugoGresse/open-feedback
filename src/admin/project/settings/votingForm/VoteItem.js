@@ -1,5 +1,5 @@
 import React from 'react'
-import OFInput from '../../../baseComponents/form/OFInput'
+import OFInput from '../../../baseComponents/form/input/OFInput'
 import ArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import ArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import DeleteIcon from '@material-ui/icons/Delete'

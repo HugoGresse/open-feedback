@@ -1,7 +1,7 @@
-import OFInput from './OFInput'
+import OFInput from '../input/OFInput'
 import React from 'react'
 import { Field } from 'formik'
-import OFFormControlFormiked from './OFFormControlFormiked'
+import OFFormControl from './OFFormControl'
 
 const OFFormControlInputFormiked = ({
     name,
@@ -13,7 +13,7 @@ const OFFormControlInputFormiked = ({
     autoFocus = false,
 }) => {
     return (
-        <OFFormControlFormiked
+        <OFFormControl
             name={name}
             fieldName={fieldName}
             displayErrorMessageDirectly={displayErrorMessageDirectly}>
@@ -29,7 +29,7 @@ const OFFormControlInputFormiked = ({
                     />
                 )}
             </Field>
-        </OFFormControlFormiked>
+        </OFFormControl>
     )
 }
 
