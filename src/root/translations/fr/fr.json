@@ -16,7 +16,7 @@
         "compatibleHoverboard": "Aussi compatible avec"
     },
     "faq": {
-        "scale": "Est-ce que OpenFeedback scale ? Est-ce le service est fiable ?",
+        "scale": "Est-ce que OpenFeedback scale ? Le service est il fiable ?",
         "scaleAnswer": "OpenFeedback est hébergé sur Firebase/Google Cloud Platform avec un pricing facturé à l'utilisation. Cela veux dire que l'infrastucture s'adaptera à la charge sans soucis. <br/><br/> OpenFeedback a déjà était utilisé par Sunny Tech et BDX.io sans soucis avec 300 votants et 1600 votes chacun en deux jours. Le service est testé à chaque modification.",
         "accurate": "Est-ce que le décompte des votes est précis ?",
         "accurateAnswer": "Pas vraiment. Le décompte devrait être proche à 98% exacte.<br/>Dans la plupart cela ne devrait pas être un problème mais si vous avez besoin du vrai décompte,  il peut être recalculté après l'évènement. <br/> <br/> Contactez {{adminEmail}} si besoin.",

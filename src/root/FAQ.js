@@ -13,12 +13,19 @@ const List = styled.ul`
 
     li {
         display: inline-block;
-        width: calc(50% - 20px);
+        width: calc(50% - 60px);
         max-width: 100%;
         margin: 0 10px 30px 10px;
         list-style: none;
         vertical-align: top;
         text-align: justify;
+        box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.2);
+        padding: 0 20px 20px;
+        border-radius: 4px;
+    }
+
+    a {
+        color: ${COLORS.RED_ORANGE};
     }
 
     @media (max-width: 640px) {
@@ -30,10 +37,9 @@ const List = styled.ul`
 
 const FAQTitle = styled.h6`
     font-size: 1rem;
-    padding: 10px;
-    background: ${COLORS.RED_ORANGE};
-    color: ${COLORS.WHITE};
-    border-left: 6px solid ${COLORS.DARK_RED_ORANGE};
+    font-weight: 500;
+    padding: 10px 0;
+    color: ${COLORS.RED_ORANGE};
     margin-top: 10px;
     margin-bottom: 10px;
 `
