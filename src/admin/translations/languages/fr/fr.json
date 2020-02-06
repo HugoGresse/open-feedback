@@ -32,7 +32,7 @@
         "speaker": "Très bon orateur 👏",
         "nclear": "Pas clair 🧐",
         "technical": "Trop technique 🤖",
-        "example": "Pas assez de démo/example 🤔",
+        "example": "Pas assez de démo/exemple 🤔",
         "complex": "Trop complexe 🤯"
     },
     "layout": {
@@ -164,7 +164,9 @@
         "enableComment": "Activer les commentaires",
         "new": "Nouveau choix de vote",
         "options": "Options",
-        "title": "Choix de vote"
+        "title": "Choix de vote",
+        "resetToDefault": "Réinitialiser",
+        "resetToDefaultDialogTitle": "Êtes-vous sur de vouloir réinitialiser le formulaire ?"
     },
     "speakers": {
         "addButton": "Ajouter un orateur·rice",
