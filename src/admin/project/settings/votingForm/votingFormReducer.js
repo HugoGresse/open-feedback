@@ -1,5 +1,6 @@
 import {
     ADD_VOTEITEM,
+    DELETE_ALL_VOTEITEMS,
     DELETE_VOTEITEM,
     EDIT_VOTEITEM,
     GET_VOTEITEMS_SUCCESS,
@@ -7,12 +8,12 @@ import {
     MOVE_UP_VOTEITEM,
     SAVE_VOTEITEMS_ERROR,
     SAVE_VOTEITEMS_ONGOING,
-    SAVE_VOTEITEMS_SUCCESS
+    SAVE_VOTEITEMS_SUCCESS,
 } from './votingFormActionTypes'
 
 const initState = {
     voteItems: [],
-    ongoingSave: false
+    ongoingSave: false,
 }
 
 const votingFormReducer = (state = initState, { payload, type }) => {
@@ -20,7 +21,7 @@ const votingFormReducer = (state = initState, { payload, type }) => {
         case GET_VOTEITEMS_SUCCESS:
             return {
                 ...state,
-                voteItems: payload
+                voteItems: payload,
             }
         case EDIT_VOTEITEM: {
             const voteItems = state.voteItems.map(item => {
@@ -32,7 +33,7 @@ const votingFormReducer = (state = initState, { payload, type }) => {
 
             return {
                 ...state,
-                voteItems: voteItems
+                voteItems: voteItems,
             }
         }
 
@@ -43,12 +44,12 @@ const votingFormReducer = (state = initState, { payload, type }) => {
                 if (item.id === payload.id) {
                     return {
                         ...item,
-                        position: newPosition
+                        position: newPosition,
                     }
                 } else if (item.position === newPosition) {
                     return {
                         ...item,
-                        position: item.position + 1
+                        position: item.position + 1,
                     }
                 }
                 return item
@@ -56,7 +57,7 @@ const votingFormReducer = (state = initState, { payload, type }) => {
 
             return {
                 ...state,
-                voteItems: voteItems
+                voteItems: voteItems,
             }
         }
 
@@ -67,12 +68,12 @@ const votingFormReducer = (state = initState, { payload, type }) => {
                 if (item.id === payload.id) {
                     return {
                         ...item,
-                        position: newPosition
+                        position: newPosition,
                     }
                 } else if (item.position === newPosition) {
                     return {
                         ...item,
-                        position: item.position - 1
+                        position: item.position - 1,
                     }
                 }
                 return item
@@ -80,7 +81,7 @@ const votingFormReducer = (state = initState, { payload, type }) => {
 
             return {
                 ...state,
-                voteItems: voteItems
+                voteItems: voteItems,
             }
         }
         case DELETE_VOTEITEM: {
@@ -89,31 +90,36 @@ const votingFormReducer = (state = initState, { payload, type }) => {
             )
             const voteItems = [
                 ...state.voteItems.slice(0, indexToRemove),
-                ...state.voteItems.slice(indexToRemove + 1)
+                ...state.voteItems.slice(indexToRemove + 1),
             ]
 
             return {
                 ...state,
-                voteItems: voteItems
+                voteItems: voteItems,
             }
         }
-
+        case DELETE_ALL_VOTEITEMS: {
+            return {
+                ...state,
+                voteItems: [],
+            }
+        }
         case ADD_VOTEITEM: {
             return {
                 ...state,
-                voteItems: [...state.voteItems, payload]
+                voteItems: [...state.voteItems, payload],
             }
         }
         case SAVE_VOTEITEMS_SUCCESS:
         case SAVE_VOTEITEMS_ERROR:
             return {
                 ...state,
-                ongoingSave: false
+                ongoingSave: false,
             }
         case SAVE_VOTEITEMS_ONGOING:
             return {
                 ...state,
-                ongoingSave: true
+                ongoingSave: true,
             }
         default:
             return state

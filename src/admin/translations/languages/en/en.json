@@ -164,7 +164,9 @@
         "enableComment": "Enable comment",
         "new": "New item",
         "options": "Options",
-        "title": "Vote items"
+        "title": "Vote items",
+        "resetToDefault": "Reset",
+        "resetToDefaultDialogTitle": "Are you sure to reset the voting form?"
     },
     "speakers": {
         "addButton": "Add speaker",
