@@ -16,6 +16,8 @@ import {
 } from '../core/projectActions'
 import { PROJECT_TYPE_OPENFEEDBACK } from '../../../core/setupType/projectApi'
 import { useTranslation } from 'react-i18next'
+import { sleep } from '../../../utils/sleep'
+import { getVoteItems } from '../settings/votingForm/votingFormActions'
 
 const useStyles = makeStyles({
     container: {
@@ -52,7 +54,10 @@ const NewProject = ({ onCancel }) => {
             })
             .then(async () => {
                 await dispatch(fillDefaultProjectData(t))
+                // The votes was saved in db but the query to retrieve does not returns them if queried directly after (sometimes)
+                await sleep(1500)
                 await dispatch(getProject())
+                await dispatch(getVoteItems())
             })
     }
 
