@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid'
 import { getVoteItems } from './votingFormActions'
 import OFPaper from '../../../baseComponents/OFPaper'
 import OFCard from '../../../baseComponents/OFCard'
+import VotingFormFooter from './VotingFormFooter'
 
 const VotingForm = () => {
     const dispatch = useDispatch()
@@ -28,6 +29,7 @@ const VotingForm = () => {
                 <OFPaper>
                     <VoteItemList />
                 </OFPaper>
+                <VotingFormFooter />
             </Grid>
         </Grid>
     )

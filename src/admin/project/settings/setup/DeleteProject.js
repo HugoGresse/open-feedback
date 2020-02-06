@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import OFButton from '../../../baseComponents/button/OFButton'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { useTranslation } from 'react-i18next'
-import Box from '@material-ui/core/Box'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -11,6 +10,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteProject } from '../../core/projectActions'
 import { getSelectedProjectIdSelector } from '../../core/projectSelectors'
+import BottomActionLayout from '../../layout/BottomActionLayout'
 
 const DeleteProject = () => {
     const dispatch = useDispatch()
@@ -19,11 +19,7 @@ const DeleteProject = () => {
     const [isDialogOpen, setDialogOpen] = useState(false)
 
     return (
-        <Box
-            textAlign="center"
-            borderTop="1px solid #ccc"
-            marginTop={5}
-            paddingTop={4}>
+        <BottomActionLayout>
             <OFButton
                 style={{ design: 'text' }}
                 onClick={() => setDialogOpen(true)}>
@@ -62,7 +58,7 @@ const DeleteProject = () => {
                     </OFButton>
                 </DialogActions>
             </Dialog>
-        </Box>
+        </BottomActionLayout>
     )
 }
 

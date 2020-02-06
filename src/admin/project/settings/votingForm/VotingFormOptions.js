@@ -31,6 +31,8 @@ function VotingFormOptions({ classes }) {
 
             <Divider />
 
+            <br />
+
             <FormControlLabel
                 control={
                     <Switch

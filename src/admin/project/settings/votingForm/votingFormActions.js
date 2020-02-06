@@ -1,5 +1,6 @@
 import {
     ADD_VOTEITEM,
+    DELETE_ALL_VOTEITEMS,
     DELETE_VOTEITEM,
     EDIT_VOTEITEM,
     GET_VOTEITEMS_SUCCESS,
@@ -88,8 +89,6 @@ export const toggleVoteComment = enableComment => {
     }
 }
 
-// This method is probably way too complicated and the voteItems should have probably be better in a plain object field
-// rather than in a collection...
 export const saveVoteItems = () => {
     return (dispatch, getState) => {
         const voteItems = getVoteItemsSelector(getState())
@@ -137,4 +136,25 @@ export const saveVoteItems = () => {
                 })
             })
     }
+}
+
+export const deleteAllVoteItems = () => async dispatch => {
+    dispatch({
+        type: DELETE_ALL_VOTEITEMS,
+    })
+}
+
+export const fillDefaultVotingForm = (t, replace) => async dispatch => {
+    if (replace) {
+        await dispatch(deleteAllVoteItems())
+    }
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.fun')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.learned')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.interesting')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.speaker')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.nclear')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.technical')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.example')))
+    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.complex')))
+    await dispatch(toggleVoteComment(true))
 }
