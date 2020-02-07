@@ -72,6 +72,7 @@ const voteReducer = (state = initState, { payload, type }) => {
                 [payload.id]: {
                     ...state.currentUserVotes[payload.id],
                     status: VOTE_STATUS_DELETED,
+                    pending: true,
                 },
             }
             return {
@@ -79,11 +80,21 @@ const voteReducer = (state = initState, { payload, type }) => {
                 currentUserVotes: removeVotesState,
             }
         }
-        case REMOVE_VOTE_SUCCESS:
-            // Do nothing, state already change in REMOVE_VOTE_BEFORE_SUCCESS
+        case REMOVE_VOTE_SUCCESS: {
+            const newVoteState = {
+                ...state.currentUserVotes,
+                [payload.id]: {
+                    ...state.currentUserVotes[payload.id],
+                    pending: false,
+                    // status already changed in REMOVE_VOTE_BEFORE_SUCCESS
+                },
+            }
+
             return {
                 ...state,
+                currentUserVotes: newVoteState,
             }
+        }
         case GET_USER_VOTES_ERROR:
             // eslint-disable-next-line no-console
             console.error(payload)
