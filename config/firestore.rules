@@ -5,7 +5,6 @@ service cloud.firestore {
         function authenticated() { return request.auth.uid != null }
         function limitOne() { return request.query.limit <= 1 }
         function userNotExists() { return !exists(/databases/$(database)/documents/users/$(request.auth.uid)) }
-        function itsRequestedByMe() { return request.resource.data.uid == request.auth.uid }
         function itsMyDocument(userId) { return request.auth.uid == userId }
         function isAdmin(data) { return data.owner == request.auth.uid || request.auth.uid in data.members}
         function isAnonymous() { return request.auth.token.firebase.sign_in_provider == 'anonymous'}
@@ -43,6 +42,10 @@ service cloud.firestore {
 
             match /aggregatedVotes/{session} {
                 allow list: if true;
+
+                match /{voteItemIdCollection}/{shardId} {
+                    allow list: if true;
+                }
             }
 
             match /userVotes/{ref} {

@@ -24,6 +24,7 @@ export class Vote {
             !isIdValid(this.voteData.talkId) ||
             !isIdValid(this.voteData.voteItemId) ||
             !isIdValid(this.voteData.userId) ||
+            !isIdValid(this.voteData.status) ||
             !this.id
         ) {
             return false

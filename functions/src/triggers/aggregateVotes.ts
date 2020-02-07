@@ -2,6 +2,11 @@ import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 import { Vote, VoteData } from './models/vote'
 import { firestoreIncrement } from '../helpers/firebaseInit'
+import { createTransactionCollisionAvoider } from '../helpers/transactionCollisionAvoider'
+import { random } from '../helpers/random'
+import DocumentReference = admin.firestore.DocumentReference
+
+const shardCount = 5
 
 export const aggregateVotesCreate = functions.firestore
     .document('/projects/{projectId}/userVotes/{voteId}')
@@ -21,7 +26,7 @@ export const aggregateVotesUpdate = functions.firestore
         )
     })
 
-export const incrementVoteAggregate = (
+export const incrementVoteAggregate = async (
     firestoreDb: FirebaseFirestore.Firestore,
     vote: Vote
 ) => {
@@ -30,71 +35,108 @@ export const incrementVoteAggregate = (
         return
     }
 
-    const talkVoteDb = firestoreDb
+    // TODO :
+    // Update get votes
+    // add migration script
+    // Update dashboards
+
+    const aggregatedTalkRef = firestoreDb
         .collection('projects')
         .doc(vote.voteData.projectId)
-        .collection('sessionVotes')
+        .collection('aggregatedVotes')
         .doc(String(vote.voteData.talkId))
 
-    return talkVoteDb
-        .get()
-        .then(snapshot => {
-            const talk = snapshot.data()
+    await maybeCreateTalkAggregatedDocument(aggregatedTalkRef)
 
-            if (vote.isTextVote()) {
-                let aggregatedValue
-                const voteText = {
-                    text: vote.voteData.text,
-                    createdAt: vote.voteData.createdAt,
-                    updatedAt: vote.voteData.updatedAt,
-                    userId: vote.voteData.userId,
-                }
-                if (vote.isActive()) {
-                    if (
-                        !snapshot.exists ||
-                        !talk ||
-                        !talk[vote.voteData.voteItemId]
-                    ) {
-                        aggregatedValue = { [vote.id]: voteText }
-                    } else {
-                        aggregatedValue = {
-                            ...talk[vote.voteData.voteItemId],
-                            [vote.id]: voteText,
-                        }
-                    }
-                } else {
-                    if (
-                        !snapshot.exists ||
-                        !talk ||
-                        !talk[vote.voteData.voteItemId]
-                    ) {
-                        aggregatedValue = {}
-                    } else {
-                        aggregatedValue = talk[vote.voteData.voteItemId]
-                        aggregatedValue[vote.id] = {}
-                    }
-                }
+    const shardRef = aggregatedTalkRef
+        .collection(vote.voteData.voteItemId)
+        .doc(random(0, shardCount).toString())
 
-                return talkVoteDb.set(
-                    {
-                        [vote.voteData.voteItemId]: aggregatedValue,
-                    },
-                    { merge: true }
-                )
+    if (vote.isTextVote()) {
+        return incrementTextVote(firestoreDb, shardRef, vote)
+    }
+
+    return incrementBooleanVote(firestoreDb, shardRef, vote)
+}
+
+const maybeCreateTalkAggregatedDocument = async (
+    ref: DocumentReference
+): Promise<any> => {
+    const doc = await ref.get()
+    if (doc.exists) {
+        return Promise.resolve()
+    }
+    return ref.set(
+        {
+            shardCount: shardCount,
+        },
+        { merge: true }
+    )
+}
+
+const incrementBooleanVote = (
+    firestoreDb: FirebaseFirestore.Firestore,
+    shardRef: DocumentReference,
+    vote: Vote
+) => {
+    const batch = firestoreDb.batch()
+
+    batch.set(
+        shardRef,
+        {
+            votes: firestoreIncrement(vote.getIncrementValue()),
+        },
+        { merge: true }
+    )
+
+    return batch.commit()
+}
+
+const incrementTextVote = (
+    firestoreDb: FirebaseFirestore.Firestore,
+    shardRef: DocumentReference,
+    vote: Vote
+) => {
+    const collisionAvoider = createTransactionCollisionAvoider()
+
+    return firestoreDb.runTransaction(async transaction => {
+        // If two many transaction are colliding, add delay before running it
+        await collisionAvoider.avoidCollision()
+
+        const snapshot = await transaction.get(shardRef)
+        const talk = snapshot.data()
+
+        let aggregatedValue
+        const voteText = {
+            text: vote.voteData.text,
+            createdAt: vote.voteData.createdAt,
+            updatedAt: vote.voteData.updatedAt,
+            userId: vote.voteData.userId,
+        }
+        if (vote.isActive()) {
+            if (!snapshot.exists || !talk || !talk[vote.voteData.voteItemId]) {
+                aggregatedValue = { [vote.id]: voteText }
+            } else {
+                aggregatedValue = {
+                    ...talk[vote.voteData.voteItemId],
+                    [vote.id]: voteText,
+                }
             }
+        } else {
+            if (!snapshot.exists || !talk || !talk[vote.voteData.voteItemId]) {
+                aggregatedValue = {}
+            } else {
+                aggregatedValue = talk[vote.voteData.voteItemId]
+                aggregatedValue[vote.id] = {}
+            }
+        }
 
-            // Boolean vote
-            return talkVoteDb.set(
-                {
-                    [vote.voteData.voteItemId]: firestoreIncrement(
-                        vote.getIncrementValue()
-                    ),
-                },
-                { merge: true }
-            )
-        })
-        .catch(err => {
-            console.log('Error getting documents talk', err)
-            return err
-        })
+        return transaction.set(
+            shardRef,
+            {
+                votes: aggregatedValue,
+            },
+            { merge: true }
+        )
+    })
 }
