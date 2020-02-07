@@ -1,6 +1,7 @@
 import {
     ADD_TALK_ERROR,
     ADD_TALK_SUCCESS,
+    CLEAR_TALKS,
     EDIT_TALK_ERROR,
     EDIT_TALK_SUCCESS,
     GET_TALKS_ERROR,
@@ -81,6 +82,8 @@ const talksReducer = (state = initState, { payload, type }) => {
                 ...state,
                 errorTalksLoad: payload,
             }
+        case CLEAR_TALKS:
+            return initState
         default:
             return state
     }

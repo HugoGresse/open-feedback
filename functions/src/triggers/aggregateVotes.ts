@@ -26,6 +26,17 @@ export const aggregateVotesUpdate = functions.firestore
         )
     })
 
+/**
+ * This aggregate the vote to be "easily" read afterward.
+ * Aggregation is splitted in many shard per vote item to prevent transaction collision.
+ * Each shard is a document inside a collection with only one "votes" field. This field is either the sum of some votes
+ * (like votes: 5) or a map of text votes (like {id1: {text: "toto"}, id2: {text:"titi"}}.
+ *
+ * The base voteItem document inside the aggregateVotes collection need at least one field to be considered existing by
+ * Firestore.
+ * @param firestoreDb
+ * @param vote
+ */
 export const incrementVoteAggregate = async (
     firestoreDb: FirebaseFirestore.Firestore,
     vote: Vote
@@ -36,7 +47,6 @@ export const incrementVoteAggregate = async (
     }
 
     // TODO :
-    // Update get votes
     // add migration script
     // Update dashboards
 

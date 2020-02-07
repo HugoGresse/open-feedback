@@ -42,7 +42,7 @@ export const getMostVotedTalkSelector = createSelector(
                     if (Number.isInteger(votes[id])) {
                         return acc + votes[id]
                     }
-                    return acc + 1
+                    return acc + Object.keys(votes[id]).length
                 }, 0)
 
                 if (talklist[talk.id]) {

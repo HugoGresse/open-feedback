@@ -10,6 +10,7 @@ import {
     SAVE_VOTEITEMS_ONGOING,
     SAVE_VOTEITEMS_SUCCESS,
 } from './votingFormActionTypes'
+import { SELECT_PROJECT } from '../../core/projectActionTypes'
 
 const initState = {
     voteItems: [],
@@ -121,6 +122,8 @@ const votingFormReducer = (state = initState, { payload, type }) => {
                 ...state,
                 ongoingSave: true,
             }
+        case SELECT_PROJECT:
+            return initState
         default:
             return state
     }

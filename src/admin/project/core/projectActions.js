@@ -22,10 +22,10 @@ import {
     getSelectedProjectSelector,
 } from './projectSelectors'
 import { ADD_NOTIFICATION } from '../../notification/notificationActionTypes'
-import { CLEAR_TALK_VOTES } from '../dashboard/dashboardActionTypes'
 import { history } from '../../../App'
 import { initProjectApi } from '../../../core/setupType/projectApi'
 import { newRandomHexColor } from '../../../utils/colorsUtils'
+import { CLEAR_TALKS } from '../../../core/talks/talksActionTypes'
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -98,8 +98,7 @@ export const selectProject = projectId => (dispatch, getState) => {
     }
 
     dispatch({
-        type: CLEAR_TALK_VOTES,
-        payload: projectId,
+        type: CLEAR_TALKS,
     })
     dispatch({
         type: SELECT_PROJECT,

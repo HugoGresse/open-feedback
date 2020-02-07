@@ -2,6 +2,7 @@ export const GET_TALKS_SUCCESS = 'core/talks/get/success'
 export const GET_TALKS_LOADING = 'core/talks/get/loading'
 export const GET_TALKS_ERROR = 'core/talks/get/error'
 export const SET_TALKS_FILTER = 'core/talks/filter'
+export const CLEAR_TALKS = 'core/talks/clear'
 
 export const ADD_TALK_SUCCESS = 'core/talk/add/success'
 export const ADD_TALK_ERROR = 'core/talk/add/error'

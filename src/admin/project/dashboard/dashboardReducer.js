@@ -1,9 +1,9 @@
 import {
-    CLEAR_TALK_VOTES,
     GET_TALK_VOTES_SUCCESS,
     GET_USER_VOTES_SUCCESS,
 } from './dashboardActionTypes'
 import { LOGOUT } from '../../auth/authActionTypes'
+import { SELECT_PROJECT } from '../core/projectActionTypes'
 
 const initState = {
     data: {
@@ -36,7 +36,7 @@ const adminDashboardReducer = (state = initState, { payload, type }) => {
                 userVotesLoaded: true,
             }
         case LOGOUT:
-        case CLEAR_TALK_VOTES:
+        case SELECT_PROJECT:
             return initState
         default:
             return state

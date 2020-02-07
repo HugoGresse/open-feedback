@@ -11,11 +11,11 @@ import { isTalkLoadedSelector } from '../../../core/talks/talksSelectors'
 import MostVotedTalks from './MostVotedTalks'
 import VoteTimeline from './VoteTimeline'
 import Highlights from './Highlights'
+import { getVoteItems } from '../settings/votingForm/votingFormActions'
 
 class Dashboard extends Component {
     componentDidMount() {
         this.props.getProject(this.props.selectedProjectId)
-        this.props.getTalkVotes()
         this.props.getUserVotes()
     }
 
@@ -26,8 +26,12 @@ class Dashboard extends Component {
         ) {
             this.props.getTalks()
         }
+
+        if (this.props.isTalksLoaded) {
+            this.props.getTalkVotes()
+            this.props.getVoteItems()
+        }
     }
-    x
 
     render() {
         const { project } = this.props
@@ -63,6 +67,7 @@ const mapDispatchToProps = Object.assign(
         getTalkVotes: getTalkVotes,
         getUserVotes: getUserVotes,
         getTalks: getTalks,
+        getVoteItems: getVoteItems,
     }
 )
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
