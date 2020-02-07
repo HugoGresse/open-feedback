@@ -6,8 +6,13 @@ import {
     SET_SELECTED_DATE,
 } from './projectActionTypes'
 import { fireStoreMainInstance } from '../../firebase'
-import { getProjectSelector } from './projectSelectors'
+import {
+    getProjectSelector,
+    getProjectVoteItemsSelector,
+} from './projectSelectors'
 import { initProjectApi } from '../../core/setupType/projectApi'
+import { getSelectedTalkIdSelector } from '../talk/core/talkSelectors'
+import { VOTE_TYPE_TEXT } from '../vote/voteReducer'
 
 export const getProject = projectId => {
     return (dispatch, getState) => {
@@ -51,31 +56,53 @@ export const setSelectedDate = date => ({
 })
 
 export const getVoteResult = () => {
-    return (dispatch, getState) => {
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(getProjectSelector(getState()).id)
-            .collection('sessionVotes')
-            .get()
-            .then(projectSnapshot => {
-                const talks = {}
-                projectSnapshot.forEach(doc => {
-                    talks[doc.id] = {
-                        ...doc.data(),
-                        id: doc.id,
+    return async (dispatch, getState) => {
+        const selectedTalkId = getSelectedTalkIdSelector(getState())
+        const voteItemList = getProjectVoteItemsSelector(getState())
+
+        if (!voteItemList || voteItemList.length <= 0) {
+            return
+        }
+
+        try {
+            const aggregatesVotesCollectionRef = fireStoreMainInstance
+                .collection('projects')
+                .doc(getProjectSelector(getState()).id)
+                .collection('aggregatedVotes')
+                .doc(selectedTalkId)
+
+            const voteItemResults = {}
+            for (const voteItem of voteItemList) {
+                const querySnapshots = await aggregatesVotesCollectionRef
+                    .collection(voteItem.id)
+                    .get()
+
+                voteItemResults[voteItem.id] =
+                    voteItem.type === VOTE_TYPE_TEXT ? {} : 0
+
+                querySnapshots.forEach(document => {
+                    if (voteItem.type === VOTE_TYPE_TEXT) {
+                        voteItemResults[voteItem.id] = {
+                            ...voteItemResults[voteItem.id],
+                            ...document.data().votes,
+                        }
+                    } else {
+                        voteItemResults[voteItem.id] += document.data().votes
                     }
                 })
+            }
 
-                dispatch({
-                    type: GET_PROJECT_VOTE_RESULT_SUCCESS,
-                    payload: talks,
-                })
+            dispatch({
+                type: GET_PROJECT_VOTE_RESULT_SUCCESS,
+                payload: {
+                    [selectedTalkId]: voteItemResults,
+                },
             })
-            .catch(err => {
-                dispatch({
-                    type: GET_PROJECT_VOTE_RESULT_ERROR,
-                    payload: err,
-                })
+        } catch (error) {
+            dispatch({
+                type: GET_PROJECT_VOTE_RESULT_ERROR,
+                payload: error,
             })
+        }
     }
 }
