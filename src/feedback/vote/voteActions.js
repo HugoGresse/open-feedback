@@ -47,6 +47,14 @@ export const voteFor = (talkId, voteItem, data) => {
 
         let id = ''
         if (existingVote) {
+            if (existingVote.pending) {
+                // eslint-disable-next-line no-console
+                console.info(
+                    'Unable to modify a vote that has not been writed on the database'
+                )
+                return
+            }
+
             id = existingVote.id
         } else {
             id = fireStoreMainInstance
