@@ -67,14 +67,14 @@ export const onVoteItemAddBoolean = optionalName => {
     }
 }
 
-export const toggleVoteComment = enableComment => {
+export const toggleVoteComment = (enableComment, translation) => {
     return (dispatch, getState) => {
         if (enableComment) {
             dispatch({
                 type: ADD_VOTEITEM,
                 payload: {
                     id: newId(),
-                    name: 'Comment',
+                    name: translation('defaultVotingForm.comment'),
                     type: 'text',
                 },
             })
@@ -156,5 +156,5 @@ export const fillDefaultVotingForm = (t, replace) => async dispatch => {
     await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.technical')))
     await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.example')))
     await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.complex')))
-    await dispatch(toggleVoteComment(true))
+    await dispatch(toggleVoteComment(true, t))
 }

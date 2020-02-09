@@ -33,7 +33,8 @@
         "nclear": "Not clear 🧐",
         "technical": "Too technical 🤖",
         "example": "Lack of demo/example 🤔",
-        "complex": "Too complex 🤯"
+        "complex": "Too complex 🤯",
+        "comment": "Comment"
     },
     "layout": {
         "404": "The requested URL {{pathname}} was not found on this server.",
