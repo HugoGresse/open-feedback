@@ -57,7 +57,7 @@ const NewProject = ({ onCancel }) => {
             .then(async () => {
                 await dispatch(fillDefaultVotingForm(t))
                 // The votes was saved in db but the query to retrieve does not returns them if queried directly after (sometimes)
-                await sleep(1500)
+                await sleep(1000)
                 await dispatch(getProject())
                 await dispatch(getVoteItems())
             })

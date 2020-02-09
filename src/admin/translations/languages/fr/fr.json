@@ -33,7 +33,8 @@
         "nclear": "Pas clair 🧐",
         "technical": "Trop technique 🤖",
         "example": "Pas assez de démo/exemple 🤔",
-        "complex": "Trop complexe 🤯"
+        "complex": "Trop complexe 🤯",
+        "comment": "Commentaire"
     },
     "layout": {
         "404": "L'URL demandée {{pathname}} est introuvable sur ce serveur.",
