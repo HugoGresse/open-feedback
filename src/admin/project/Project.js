@@ -4,7 +4,7 @@ import {
     getSelectedProjectSelector,
     isProjectsLoadedSelector,
 } from './core/projectSelectors'
-import { selectProject } from './core/projectActions'
+import { selectProject, unselectProject } from './core/projectActions'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 import Layout404 from './layout/Layout404'
 
@@ -13,6 +13,9 @@ const Project = ({ children, match }) => {
 
     useEffect(() => {
         dispatch(selectProject(match.params.projectId))
+        return () => {
+            dispatch(unselectProject(null))
+        }
     }, [dispatch, match.params.projectId])
 
     const selectedProject = useSelector(getSelectedProjectSelector)

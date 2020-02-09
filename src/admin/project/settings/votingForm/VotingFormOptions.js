@@ -40,7 +40,7 @@ function VotingFormOptions({ classes }) {
                         value="toto"
                         color="primary"
                         onChange={event =>
-                            dispatch(toggleVoteComment(event.target.checked))
+                            dispatch(toggleVoteComment(event.target.checked, t))
                         }
                         inputProps={{ 'aria-label': 'primary checkbox' }}
                     />

@@ -90,6 +90,24 @@ export const getProject = (selectedProjectId = null) => (
         })
 }
 
+export const unselectProject = () => (dispatch, getState) => {
+    const projectId = getSelectedProjectIdSelector(getState())
+
+    if (!projectId) {
+        return Promise.resolve()
+    }
+
+    dispatch({
+        type: CLEAR_TALK_VOTES,
+        payload: projectId,
+    })
+    dispatch({
+        type: SELECT_PROJECT,
+        payload: null,
+    })
+    return Promise.resolve()
+}
+
 export const selectProject = projectId => (dispatch, getState) => {
     const currentSelectedProjectId = getSelectedProjectIdSelector(getState())
     if (currentSelectedProjectId === projectId) {
