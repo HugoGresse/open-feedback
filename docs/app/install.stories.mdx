@@ -28,6 +28,7 @@ Create a firebase project with the [firebase console](https://console.firebase.g
   * `REACT_APP_STORAGE_BUCKET=<STORAGE_BUCKET>`
   * `REACT_APP_GOOGLE_ANALYTICS=<GOOGLE_ANALYTICS>`
 
+5. In package.json, change `homepage` to your instance url.
 
 ### Configure Google Analytics (optional)
 You can add a Google Analytics by adding your Analytics ID to the environment variable in `REACT_APP_GOOGLE_ANALYTICS` in `.env.loval`.
@@ -106,6 +107,16 @@ npm i
 
 The next deploy will also deploy Firebase Cloud Functions
 
+### Configure the service account
+
+In the firebase console, create a new account with editor permissions and download the json key file.
+
+Configure your app mode:
+
+    firebase functions:config:set app.env="production" # or "development"
+
+Copy the json key file in `functions/serviceAccountKey.production.json` (or serviceAccountKey.development.json)
+
 ## Deploy
 
 ### Pre-requisites
@@ -129,3 +140,4 @@ npm run deploy
 
 Install dependencies for the app and cloud functions.
 
+The first time your run the app, it may fail to do firestore queries due to missing indexes. If that happens, you'll see an error message in the console with a link that you can follow to create the indices.
