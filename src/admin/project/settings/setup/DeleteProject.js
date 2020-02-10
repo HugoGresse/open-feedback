@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deleteProject } from '../../core/projectActions'
 import { getSelectedProjectIdSelector } from '../../core/projectSelectors'
 import BottomActionLayout from '../../layout/BottomActionLayout'
+import { history } from '../../../../App'
 
 const DeleteProject = () => {
     const dispatch = useDispatch()
@@ -52,7 +53,22 @@ const DeleteProject = () => {
                         {t('common.cancel')}
                     </OFButton>
                     <OFButton
-                        onClick={() => dispatch(deleteProject(projectId))}
+                        onClick={() =>
+                            dispatch(deleteProject(projectId, t))
+                                .then(() => {
+                                    history.push(
+                                        history.location.pathname.substring(
+                                            0,
+                                            history.location.pathname.indexOf(
+                                                projectId
+                                            )
+                                        )
+                                    )
+                                })
+                                .catch(() => {
+                                    // nothing to do
+                                })
+                        }
                         style={{ customBg: '#FF2222' }}>
                         {t('settingsSetup.deleteEvent.button')}
                     </OFButton>

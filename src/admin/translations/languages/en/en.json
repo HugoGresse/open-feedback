@@ -138,7 +138,12 @@
         "deleteEvent": {
             "button": "Delete event",
             "confirmTitle": "Are you sure you want to delete the event?",
-            "confirmDescription": "Deleting the event is definitive, there will not be any data left, all votes will be deleted."
+            "confirmDescription": "Deleting the event is definitive, there will not be any data left, all votes will be deleted.",
+            "deleted": "Event deleted!",
+            "errors": {
+                "permissionDenied": "Only the event owner can delete the event.",
+                "defaultError": "Failed to delete the event, "
+            }
         }
     },
     "settingsUser": {
