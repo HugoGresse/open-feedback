@@ -7,9 +7,8 @@ export {
     aggregateVotesCreate,
     aggregateVotesUpdate,
 } from './triggers/aggregateVotes'
-
 export { userInviteCreated } from './triggers/userInvite'
-
 export { userCreate } from './triggers/userCreate'
 
-export { alert } from './http/alert'
+export { alert } from './callable/alert'
+export { deleteProject } from './callable/deleteProject'

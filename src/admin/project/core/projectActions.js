@@ -14,6 +14,7 @@ import {
 import {
     deleteField,
     fireStoreMainInstance,
+    functions,
     serverTimestamp,
 } from '../../../firebase'
 import { getUserSelector } from '../../auth/authSelectors'
@@ -256,29 +257,49 @@ export const doesProjectExist = projectId => {
         })
 }
 
-export const deleteProject = projectId => dispatch => {
-    return fireStoreMainInstance
-        .collection('projects')
-        .doc(projectId)
-        .delete()
-        .then(() => {
-            history.push(
-                history.location.pathname.substring(
-                    0,
-                    history.location.pathname.indexOf(projectId)
-                )
-            )
+export const deleteProject = (projectId, t) => dispatch =>
+    functions
+        .deleteProject({
+            projectId: projectId,
         })
-        .catch(error => {
+        // eslint-disable-next-line no-console
+        .then(() => {
             dispatch({
                 type: ADD_NOTIFICATION,
                 payload: {
-                    type: 'error',
-                    message: 'Failed to delete the event, ' + error.toString(),
+                    type: 'success',
+                    message: t('settingsSetup.deleteEvent.deleted'),
                 },
             })
         })
-}
+        .catch(error => {
+            // eslint-disable-next-line no-console
+            console.error(error)
+
+            if (error.code === 'permission-denied') {
+                dispatch({
+                    type: ADD_NOTIFICATION,
+                    payload: {
+                        type: 'error',
+                        message: t(
+                            'settingsSetup.deleteEvent.errors.permissionDenied'
+                        ),
+                    },
+                })
+            } else {
+                dispatch({
+                    type: ADD_NOTIFICATION,
+                    payload: {
+                        type: 'error',
+                        message:
+                            t('settingsSetup.deleteEvent.errors.defaultError') +
+                            error.toString(),
+                    },
+                })
+            }
+
+            return Promise.reject()
+        })
 
 export const initProjectApiIfReady = (projectId, project) => dispatch => {
     if (projectId && project && project.setupType) {

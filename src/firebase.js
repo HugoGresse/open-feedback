@@ -23,6 +23,7 @@ export const nowTimestamp = firebase.firestore.Timestamp.now
 export const deleteField = firebase.firestore.FieldValue.delete
 export const functions = {
     alert: firebase.functions().httpsCallable('alert'),
+    deleteProject: firebase.functions().httpsCallable('deleteProject'),
 }
 
 if (process.env.NODE_ENV === 'production') {
