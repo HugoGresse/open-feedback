@@ -26,7 +26,9 @@ import { newId } from '../../../../utils/stringUtils'
 export const getVoteItems = () => (dispatch, getState) =>
     dispatch({
         type: GET_VOTEITEMS_SUCCESS,
-        payload: getSelectedProjectSelector(getState()).voteItems || [],
+        payload: getSelectedProjectSelector(getState())
+            ? getSelectedProjectSelector(getState()).voteItems
+            : [],
     })
 
 export const onVoteItemChange = voteItem => ({

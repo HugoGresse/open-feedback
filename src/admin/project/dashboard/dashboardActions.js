@@ -9,9 +9,15 @@ import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 
 export const getTalkVotes = () => {
     return (dispatch, getState) => {
+        const projectId = getSelectedProjectIdSelector(getState())
+
+        if (!projectId) {
+            return
+        }
+
         return fireStoreMainInstance
             .collection('projects')
-            .doc(getSelectedProjectIdSelector(getState()))
+            .doc(projectId)
             .collection('sessionVotes')
             .get()
             .then(snapshot => {
@@ -39,9 +45,14 @@ export const getTalkVotes = () => {
 
 export const getUserVotes = () => {
     return (dispatch, getState) => {
+        const projectId = getSelectedProjectIdSelector(getState())
+
+        if (!projectId) {
+            return
+        }
         return fireStoreMainInstance
             .collection('projects')
-            .doc(getSelectedProjectIdSelector(getState()))
+            .doc(projectId)
             .collection('userVotes')
             .orderBy('createdAt')
             .get()
