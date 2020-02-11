@@ -33,7 +33,14 @@ const Dashboard = () => {
 
     return (
         <Grid container spacing={3}>
-            <Box bgcolor={COLORS.RED_ORANGE} height={300} width="100%"></Box>
+            <Box
+                bgcolor={COLORS.RED_ORANGE}
+                height={180}
+                width="100%"
+                position="absolute"
+                top={0}
+                left={0}
+            />
             <Grid item xs={12} md={6}>
                 <Highlights />
                 <MostVotedTalks dinoStartDelay={5000} />

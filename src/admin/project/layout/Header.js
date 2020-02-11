@@ -6,7 +6,6 @@ import { MuiThemeProvider } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import TranslateOnScroll from './TranslateOnScroll'
 import ArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import EyeIcon from '@material-ui/icons/RemoveRedEyeOutlined'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -27,7 +26,9 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import QRCode from './svg/qrcode.svg'
 import Icon from '@material-ui/core/Icon'
 import QRCodeDialog from './QRCodeDialog'
-import { history } from '../../../App'
+import { changeProjectUrlWithHistory } from '../utils/changeProjectUrlWithHistory'
+import useScrollTrigger from '@material-ui/core/useScrollTrigger'
+import Translate from './Translate'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -38,7 +39,7 @@ const innerTheme = createMuiTheme({
 const useStyles = makeStyles({
     appbar: {
         background: COLORS.RED_ORANGE,
-        boxShadow: 'none',
+        boxShadow: props => (props.shadow ? null : 'none'),
     },
     topHeader: {
         marginTop: 20,
@@ -78,7 +79,6 @@ const useStyles = makeStyles({
 })
 
 const Header = ({ refTarget, location, toggleDrawer }) => {
-    const classes = useStyles()
     const selectedProjectId = useSelector(getSelectedProjectIdSelector)
     const selectedProject = useSelector(getSelectedProjectSelector)
     const projects = useSelector(getSortedProjectsSelector)
@@ -86,31 +86,15 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
 
     const [anchorEventSelect, setAnchorEventSelect] = useState(null)
     const [qrCodeDialogOpen, setQRCodeDialogOpen] = useState(false)
+    const trigger = useScrollTrigger({ target: refTarget || window })
+    const triggerScrollShadow = useScrollTrigger({
+        target: refTarget || window,
+        disableHysteresis: true,
+    })
+    const classes = useStyles({ shadow: triggerScrollShadow })
 
     const onProjectSelectedChange = projectId => {
-        if (projectId === selectedProjectId) {
-            return
-        }
-
-        // If we have switch the project at runtime
-        if (
-            selectedProjectId &&
-            history.location.pathname.includes(selectedProjectId)
-        ) {
-            const redirectUrl = history.location.pathname.replace(
-                selectedProjectId,
-                projectId
-            )
-
-            history.push(redirectUrl)
-        } else if (
-            !selectedProjectId &&
-            history.location.pathname.includes(projectId)
-        ) {
-            // No nothing, hard refresh, id in url but not in states
-        } else {
-            history.push(`${history.location.pathname}${projectId}`)
-        }
+        changeProjectUrlWithHistory(selectedProjectId, projectId)
         setAnchorEventSelect(null)
     }
 
@@ -135,7 +119,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
     return (
         <>
             <MuiThemeProvider theme={innerTheme}>
-                <TranslateOnScroll refTarget={refTarget}>
+                <Translate in={!trigger}>
                     <AppBar position="sticky" className={classes.appbar}>
                         <Toolbar>
                             <Grid container>
@@ -228,7 +212,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                             </Grid>
                         </Toolbar>
                     </AppBar>
-                </TranslateOnScroll>
+                </Translate>
                 <Menu
                     anchorEl={anchorEventSelect}
                     anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
