@@ -26,7 +26,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import QRCode from './svg/qrcode.svg'
 import Icon from '@material-ui/core/Icon'
 import QRCodeDialog from './QRCodeDialog'
-import { changeProjectUrlWithHistory } from '../utils/changeProjectUrlWithHistory'
+import { redirectToProject } from '../utils/redirectToProject'
 import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 import Translate from './Translate'
 
@@ -94,7 +94,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
     const classes = useStyles({ shadow: triggerScrollShadow })
 
     const onProjectSelectedChange = projectId => {
-        changeProjectUrlWithHistory(selectedProjectId, projectId)
+        redirectToProject(selectedProjectId, projectId)
         setAnchorEventSelect(null)
     }
 

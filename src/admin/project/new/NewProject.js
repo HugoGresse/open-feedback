@@ -20,7 +20,7 @@ import {
     fillDefaultVotingForm,
     getVoteItems,
 } from '../settings/votingForm/votingFormActions'
-import { changeProjectUrlWithHistory } from '../utils/changeProjectUrlWithHistory'
+import { redirectToProject } from '../utils/redirectToProject'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { DialogContent } from '@material-ui/core'
@@ -69,7 +69,7 @@ const NewProject = ({ onCancel }) => {
                 await dispatch(getVoteItems())
 
                 setCreatingEvent(false)
-                changeProjectUrlWithHistory(null, projectId)
+                redirectToProject(null, projectId)
             })
     }
 
