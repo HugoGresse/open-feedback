@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-    getSelectedProjectIdSelector,
     getSelectedProjectSelector,
     isProjectsLoadedSelector,
 } from './core/projectSelectors'
@@ -20,10 +19,8 @@ const Project = ({ children, match }) => {
     }, [dispatch, match.params.projectId])
 
     const selectedProject = useSelector(getSelectedProjectSelector)
-    const selectedProject2 = useSelector(getSelectedProjectIdSelector)
     const isProjectsLoaded = useSelector(isProjectsLoadedSelector)
 
-    console.log('selected', selectedProject2, selectedProject)
     if (selectedProject) return children
     if (isProjectsLoaded && !selectedProject) return <Layout404 />
     return <LoaderMatchParent />
