@@ -20,6 +20,11 @@ import {
     fillDefaultVotingForm,
     getVoteItems,
 } from '../settings/votingForm/votingFormActions'
+import { changeProjectUrlWithHistory } from '../utils/changeProjectUrlWithHistory'
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import { DialogContent } from '@material-ui/core'
+import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent'
 
 const useStyles = makeStyles({
     container: {
@@ -45,8 +50,10 @@ const NewProject = ({ onCancel }) => {
     const [projectId, setProjectId] = useState(projectIdDefaultValue)
     const [projectType, setProjectType] = useState('')
     const [step3Data, setStep3Data] = useState()
+    const [isCreatingEvent, setCreatingEvent] = useState(false)
 
     const createEvent = (id, data) => {
+        setCreatingEvent(true)
         return dispatch(newProject(id, data))
             .then(projectId => {
                 return Promise.all([
@@ -60,6 +67,9 @@ const NewProject = ({ onCancel }) => {
                 await sleep(1000)
                 await dispatch(getProject())
                 await dispatch(getVoteItems())
+
+                setCreatingEvent(false)
+                changeProjectUrlWithHistory(null, projectId)
             })
     }
 
@@ -125,6 +135,16 @@ const NewProject = ({ onCancel }) => {
             <Hidden xsDown>
                 <Grid item sm={3} className={classes.rightContainer} />
             </Hidden>
+            <Dialog
+                aria-labelledby="creating-event-waiting"
+                open={isCreatingEvent}>
+                <DialogTitle id="creating-event-waiting">
+                    {t('newEvent.dialogCreating')}
+                </DialogTitle>
+                <DialogContent>
+                    <LoaderMatchParent height="80px" />
+                </DialogContent>
+            </Dialog>
         </Grid>
     )
 }

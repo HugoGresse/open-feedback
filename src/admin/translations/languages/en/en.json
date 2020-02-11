@@ -79,7 +79,8 @@
             "stepTitle": "Create a new event (step 3/3)",
             "submit": "Create event",
             "validation": "Validation"
-        }
+        },
+        "dialogCreating": "Creating the event..."
     },
     "root": {
         "create": "Create a new event",
