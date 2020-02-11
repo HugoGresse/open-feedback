@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { COLORS } from '../../../constants/colors'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { createMuiTheme, Grid } from '@material-ui/core'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
@@ -15,7 +15,6 @@ import {
     getSelectedProjectSelector,
     getSortedProjectsSelector,
 } from '../core/projectSelectors'
-import { selectProject } from '../core/projectActions'
 import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
 import RoutingMap from '../../RoutingMap'
@@ -28,6 +27,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import QRCode from './svg/qrcode.svg'
 import Icon from '@material-ui/core/Icon'
 import QRCodeDialog from './QRCodeDialog'
+import { history } from '../../../App'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -38,6 +38,7 @@ const innerTheme = createMuiTheme({
 const useStyles = makeStyles({
     appbar: {
         background: COLORS.RED_ORANGE,
+        boxShadow: 'none',
     },
     topHeader: {
         marginTop: 20,
@@ -78,7 +79,6 @@ const useStyles = makeStyles({
 
 const Header = ({ refTarget, location, toggleDrawer }) => {
     const classes = useStyles()
-    const dispatch = useDispatch()
     const selectedProjectId = useSelector(getSelectedProjectIdSelector)
     const selectedProject = useSelector(getSelectedProjectSelector)
     const projects = useSelector(getSortedProjectsSelector)
@@ -88,7 +88,29 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
     const [qrCodeDialogOpen, setQRCodeDialogOpen] = useState(false)
 
     const onProjectSelectedChange = projectId => {
-        dispatch(selectProject(projectId))
+        if (projectId === selectedProjectId) {
+            return
+        }
+
+        // If we have switch the project at runtime
+        if (
+            selectedProjectId &&
+            history.location.pathname.includes(selectedProjectId)
+        ) {
+            const redirectUrl = history.location.pathname.replace(
+                selectedProjectId,
+                projectId
+            )
+
+            history.push(redirectUrl)
+        } else if (
+            !selectedProjectId &&
+            history.location.pathname.includes(projectId)
+        ) {
+            // No nothing, hard refresh, id in url but not in states
+        } else {
+            history.push(`${history.location.pathname}${projectId}`)
+        }
         setAnchorEventSelect(null)
     }
 

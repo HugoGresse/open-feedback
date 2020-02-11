@@ -4,7 +4,7 @@ import {
     isProjectsLoadedSelector,
 } from '../project/core/projectSelectors'
 import { useDispatch, useSelector } from 'react-redux'
-import { getProjects, selectProject } from '../project/core/projectActions'
+import { getProjects } from '../project/core/projectActions'
 import RootHeader from './RootHeader'
 import { Box, Slide } from '@material-ui/core'
 import COLORS from '../../constants/colors'
@@ -18,6 +18,7 @@ import RootContentLayout from './RootContentLayout'
 import EmailNotVerified from '../auth/EmailNotVerified'
 import { authProvider } from '../../firebase'
 import { useTranslation } from 'react-i18next'
+import { history } from '../../App'
 
 const useStyles = makeStyles({
     container: {
@@ -69,7 +70,9 @@ const AdminRoot = () => {
                             isProjectsLoaded={isProjectsLoaded}
                             onNewEventClick={() => setNewProjectOpen(true)}
                             onProjectSelected={projectId =>
-                                dispatch(selectProject(projectId))
+                                history.push(
+                                    `${history.location.pathname}${projectId}`
+                                )
                             }
                         />
                     )}
