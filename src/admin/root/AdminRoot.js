@@ -18,7 +18,6 @@ import RootContentLayout from './RootContentLayout'
 import EmailNotVerified from '../auth/EmailNotVerified'
 import { authProvider } from '../../firebase'
 import { useTranslation } from 'react-i18next'
-import { history } from '../../App'
 import { redirectToProject } from '../project/utils/redirectToProject'
 
 const useStyles = makeStyles({
