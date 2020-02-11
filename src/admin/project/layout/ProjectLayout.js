@@ -24,6 +24,7 @@ const innerTheme = createMuiTheme({
 const useStyles = makeStyles(() => ({
     container: {
         padding: 24,
+        position: 'relative',
     },
     sidebar: {
         overflow: 'auto',

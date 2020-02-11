@@ -79,7 +79,8 @@
             "stepTitle": "Créer un nouvel événement (étape 3/3)",
             "submit": "Créer l'événement",
             "validation": "Validation"
-        }
+        },
+        "dialogCreating": "Création de l'évènement..."
     },
     "root": {
         "create": "Créer un nouvel événement",
