@@ -44,7 +44,7 @@
         "env-cmd": "^10.0.1",
         "file-saver": "^2.0.2",
         "firebase": "^7.8.1",
-        "formik": "^2.1.3",
+        "formik": "^2.1.4",
         "history": "^4.10.1",
         "i18next": "^19.1.0",
         "i18next-browser-languagedetector": "^4.0.1",
