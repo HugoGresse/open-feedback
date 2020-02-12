@@ -37,6 +37,8 @@ export const getTalksWithVotesSelector = createSelector(
 
         let votes
         let voteObject
+        let voteItemObject
+        let commentCount
         return talkList.reduce((acc, talk) => {
             voteObject = talkVotes[talk.id]
 
@@ -46,31 +48,37 @@ export const getTalksWithVotesSelector = createSelector(
                 votes = voteObject.votes
             }
 
-            const voteCount = Object.keys(votes).reduce((acc, id) => {
-                if (Number.isInteger(votes[id])) {
-                    return acc + votes[id]
-                }
-                return acc + 1
-            }, 0)
+            const voteCounts = Object.keys(votes).reduce(
+                (acc, id) => {
+                    voteItemObject = votes[id]
+                    if (Number.isInteger(voteItemObject)) {
+                        return {
+                            ...acc,
+                            votes: acc.votes + voteItemObject,
+                        }
+                    }
+                    commentCount = Object.keys(voteItemObject).length
+                    return {
+                        ...acc,
+                        votes: acc.votes + commentCount,
+                        comments: acc.comments + commentCount,
+                    }
+                },
+                { votes: 0, comments: 0 }
+            )
 
-            if (talkList[talk.id]) {
-                acc.push({
-                    talkId: talk.id,
-                    voteCount: voteCount,
-                    title: talkList[talk.id].title,
-                    trackTitle: talkList[talk.id].trackTitle,
-                    speakers:
-                        talkList[talk.id].speakers &&
-                        Object.keys(speakers).length > 0
-                            ? talkList[talk.id].speakers.map(
-                                  speakerId => speakers[speakerId]
-                              )
-                            : [],
-                    date:
-                        talkList[talk.id].startTime &&
-                        talkList[talk.id].startTime.split('T')[0],
-                })
-            }
+            acc.push({
+                talkId: talk.id,
+                voteCount: voteCounts.votes,
+                commentCount: voteCounts.comments,
+                title: talk.title,
+                trackTitle: talk.trackTitle,
+                speakers:
+                    talk.speakers && Object.keys(speakers).length > 0
+                        ? talk.speakers.map(speakerId => speakers[speakerId])
+                        : [],
+                date: talk.startTime && talk.startTime.split('T')[0],
+            })
 
             return acc
         }, [])
@@ -103,6 +111,22 @@ export const getLeastVotedTalkSelector = createSelector(
                 }
                 if (a.voteCount > b.voteCount) {
                     return 1
+                }
+                return 0
+            })
+            .slice(0, 10)
+)
+
+export const getMostCommentedTalkSelector = createSelector(
+    getTalksWithVotesSelector,
+    talksWithVotes =>
+        talksWithVotes
+            .sort((a, b) => {
+                if (a.commentCount < b.commentCount) {
+                    return 1
+                }
+                if (a.commentCount > b.commentCount) {
+                    return -1
                 }
                 return 0
             })

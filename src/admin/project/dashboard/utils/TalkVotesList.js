@@ -34,6 +34,7 @@ const TalkVotesList = ({
     title,
     titleIcon,
     dinoStartDelay,
+    countKey,
 }) => {
     const classes = useStyles()
 
@@ -69,7 +70,7 @@ const TalkVotesList = ({
                                 align="right"
                                 href={`/${projectId}/${row.date}/${row.talkId}`}
                                 className={classes.count}>
-                                {row.voteCount}
+                                {row[countKey]}
                             </Grid>
                         </React.Fragment>
                     ))}

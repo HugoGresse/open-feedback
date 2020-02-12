@@ -19,6 +19,7 @@ const MostVotedTalks = ({ dinoStartDelay }) => {
     return (
         <TalkVotesList
             dataArray={mostVotedTalks}
+            countKey="voteCount"
             loading={!mostVotedTalks}
             projectId={projectId}
             dinoStartDelay={dinoStartDelay}

@@ -12,7 +12,8 @@ import Highlights from './Highlights'
 import COLORS from '../../../constants/colors'
 import { getProject } from '../../../feedback/project/projectActions'
 import { getSpeakers } from '../../../core/speakers/speakerActions'
-import LessVotedTalks from './LeastVotedTalks'
+import LeastVotedTalks from './LeastVotedTalks'
+import MostCommentedTalks from './MostCommentedTalks'
 
 const Dashboard = () => {
     const dispatch = useDispatch()
@@ -51,7 +52,10 @@ const Dashboard = () => {
                 <MostVotedTalks dinoStartDelay={5000} />
             </Grid>
             <Grid item xs={12} md={6}>
-                <LessVotedTalks dinoStartDelay={5000} />
+                <LeastVotedTalks dinoStartDelay={5000} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+                <MostCommentedTalks dinoStartDelay={5000} />
             </Grid>
             <Grid item xs={12} md={6}>
                 <VoteTimeline dinoStartDelay={2600} />
