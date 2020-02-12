@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import {
-    getTalksListSelector,
+    getTalksAsArraySelector,
     isTalkLoadedSelector,
 } from '../../../core/talks/talksSelectors'
 import { getAdminStateSelector } from '../../adminSelector'
@@ -25,49 +25,62 @@ export const getActiveUserVoteSelector = createSelector(
 
 // MEMOIZED
 
-export const getMostVotedTalkSelector = createSelector(
+export const getTalksWithVotesSelector = createSelector(
     getTalkVotes,
-    getTalksListSelector,
+    getTalksAsArraySelector,
     isTalkLoadedSelector,
     getSpeakersListSelector,
-    (talkVotes, talklist, isTalkLoaded, speakers) => {
-        if (Object.keys(talklist).length <= 0 || !isTalkLoaded) {
+    (talkVotes, talkList, isTalkLoaded, speakers) => {
+        if (Object.keys(talkList).length <= 0 || !isTalkLoaded) {
             return []
         }
 
         let votes
-        return talkVotes
-            .reduce((acc, talk) => {
-                votes = talk.votes
+        let voteObject
+        return talkList.reduce((acc, talk) => {
+            voteObject = talkVotes[talk.id]
 
-                const voteCount = Object.keys(votes).reduce((acc, id) => {
-                    if (Number.isInteger(votes[id])) {
-                        return acc + votes[id]
-                    }
-                    return acc + 1
-                }, 0)
+            if (!voteObject) {
+                votes = {}
+            } else {
+                votes = voteObject.votes
+            }
 
-                if (talklist[talk.id]) {
-                    acc.push({
-                        talkId: talk.id,
-                        voteCount: voteCount,
-                        title: talklist[talk.id].title,
-                        trackTitle: talklist[talk.id].trackTitle,
-                        speakers:
-                            talklist[talk.id].speakers &&
-                            Object.keys(speakers).length > 0
-                                ? talklist[talk.id].speakers.map(
-                                      speakerId => speakers[speakerId]
-                                  )
-                                : [],
-                        date:
-                            talklist[talk.id].startTime &&
-                            talklist[talk.id].startTime.split('T')[0],
-                    })
+            const voteCount = Object.keys(votes).reduce((acc, id) => {
+                if (Number.isInteger(votes[id])) {
+                    return acc + votes[id]
                 }
+                return acc + 1
+            }, 0)
 
-                return acc
-            }, [])
+            if (talkList[talk.id]) {
+                acc.push({
+                    talkId: talk.id,
+                    voteCount: voteCount,
+                    title: talkList[talk.id].title,
+                    trackTitle: talkList[talk.id].trackTitle,
+                    speakers:
+                        talkList[talk.id].speakers &&
+                        Object.keys(speakers).length > 0
+                            ? talkList[talk.id].speakers.map(
+                                  speakerId => speakers[speakerId]
+                              )
+                            : [],
+                    date:
+                        talkList[talk.id].startTime &&
+                        talkList[talk.id].startTime.split('T')[0],
+                })
+            }
+
+            return acc
+        }, [])
+    }
+)
+
+export const getMostVotedTalkSelector = createSelector(
+    getTalksWithVotesSelector,
+    talksWithVotes =>
+        talksWithVotes
             .sort((a, b) => {
                 if (a.voteCount < b.voteCount) {
                     return 1
@@ -77,8 +90,23 @@ export const getMostVotedTalkSelector = createSelector(
                 }
                 return 0
             })
-            .slice(0, 20)
-    }
+            .slice(0, 10)
+)
+
+export const getLeastVotedTalkSelector = createSelector(
+    getTalksWithVotesSelector,
+    talksWithVotes =>
+        talksWithVotes
+            .sort((a, b) => {
+                if (a.voteCount < b.voteCount) {
+                    return -1
+                }
+                if (a.voteCount > b.voteCount) {
+                    return 1
+                }
+                return 0
+            })
+            .slice(0, 10)
 )
 
 export const getVotesByHourSelector = createSelector(
