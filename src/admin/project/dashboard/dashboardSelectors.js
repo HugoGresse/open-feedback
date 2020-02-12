@@ -11,6 +11,7 @@ import {
 } from '../settings/votingForm/votingFormSelectors'
 import { round1Decimals } from '../../../utils/numberUtils'
 import { VOTE_STATUS_ACTIVE } from '../../../core/contants'
+import { getSpeakersListSelector } from '../../../core/speakers/speakerSelectors'
 
 const getDashboard = state => getAdminStateSelector(state).adminDashboard
 const getDashboardData = state => getDashboard(state).data
@@ -28,7 +29,8 @@ export const getMostVotedTalkSelector = createSelector(
     getTalkVotes,
     getTalksListSelector,
     isTalkLoadedSelector,
-    (talkVotes, talklist, isTalkLoaded) => {
+    getSpeakersListSelector,
+    (talkVotes, talklist, isTalkLoaded, speakers) => {
         if (Object.keys(talklist).length <= 0 || !isTalkLoaded) {
             return []
         }
@@ -51,6 +53,13 @@ export const getMostVotedTalkSelector = createSelector(
                         voteCount: voteCount,
                         title: talklist[talk.id].title,
                         trackTitle: talklist[talk.id].trackTitle,
+                        speakers:
+                            talklist[talk.id].speakers &&
+                            Object.keys(speakers).length > 0
+                                ? talklist[talk.id].speakers.map(
+                                      speakerId => speakers[speakerId]
+                                  )
+                                : [],
                         date:
                             talklist[talk.id].startTime &&
                             talklist[talk.id].startTime.split('T')[0],

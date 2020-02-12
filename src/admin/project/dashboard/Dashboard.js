@@ -11,6 +11,7 @@ import VoteTimeline from './VoteTimeline'
 import Highlights from './Highlights'
 import COLORS from '../../../constants/colors'
 import { getProject } from '../../../feedback/project/projectActions'
+import { getSpeakers } from '../../../core/speakers/speakerActions'
 
 const Dashboard = () => {
     const dispatch = useDispatch()
@@ -22,6 +23,7 @@ const Dashboard = () => {
             dispatch(getTalkVotes())
             dispatch(getUserVotes())
             dispatch(getTalks())
+            dispatch(getSpeakers())
         } else if (selectedProjectId) {
             dispatch(getProject(selectedProjectId))
         }

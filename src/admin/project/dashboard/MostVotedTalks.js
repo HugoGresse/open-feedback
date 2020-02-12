@@ -20,6 +20,9 @@ const useStyles = makeStyles({
         fontSize: 16,
         fontWeight: 'bold',
     },
+    speakers: {
+        color: COLORS.LIGHT_GRAY,
+    },
 })
 
 const MostVotedTalks = ({ dinoStartDelay }) => {
@@ -49,6 +52,11 @@ const MostVotedTalks = ({ dinoStartDelay }) => {
                                 style={{ color: '#000' }}
                                 href={`/${projectId}/${row.date}/${row.talkId}`}>
                                 {row.title}
+                                <div className={classes.speakers}>
+                                    {row.speakers
+                                        .map(speaker => speaker.name)
+                                        .join(', ')}
+                                </div>
                             </Grid>
                             <Grid
                                 item
