@@ -45,6 +45,9 @@ const Dashboard = () => {
                 top={0}
                 left={0}
             />
+            <Grid item xs={12} md={12}>
+                <VoteTimeline dinoStartDelay={2600} />
+            </Grid>
             <Grid item xs={12} md={6}>
                 <Highlights />
             </Grid>
@@ -56,9 +59,6 @@ const Dashboard = () => {
             </Grid>
             <Grid item xs={12} md={6}>
                 <MostCommentedTalks dinoStartDelay={5000} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-                <VoteTimeline dinoStartDelay={2600} />
             </Grid>
         </Grid>
     )

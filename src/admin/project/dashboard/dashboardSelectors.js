@@ -9,9 +9,10 @@ import {
     getBooleanVoteItemsSelector,
     getCommentVoteItemSelector,
 } from '../settings/votingForm/votingFormSelectors'
-import { round1Decimals } from '../../../utils/numberUtils'
+import { round1Decimals, twoDigits } from '../../../utils/numberUtils'
 import { VOTE_STATUS_ACTIVE } from '../../../core/contants'
 import { getSpeakersListSelector } from '../../../core/speakers/speakerSelectors'
+import { DateTime } from 'luxon'
 
 const getDashboard = state => getAdminStateSelector(state).adminDashboard
 const getDashboardData = state => getDashboard(state).data
@@ -139,15 +140,8 @@ export const getVotesByHourSelector = createSelector(
         let tempDate
         let tempDateString
         const collection = userVotes.reduce((acc, userVote) => {
-            tempDate = userVote.createdAt.toDate()
-            tempDateString =
-                tempDate.getUTCFullYear() +
-                '-' +
-                (tempDate.getUTCMonth() + 1) +
-                '-' +
-                tempDate.getUTCDate() +
-                ' ' +
-                tempDate.getHours()
+            tempDate = DateTime.fromJSDate(userVote.createdAt.toDate())
+            tempDateString = `${tempDate.year}-${tempDate.month}-${tempDate.day} ${tempDate.hour}`
 
             if (acc[tempDateString]) {
                 acc[tempDateString] = {
@@ -156,15 +150,69 @@ export const getVotesByHourSelector = createSelector(
                 }
             } else {
                 acc[tempDateString] = {
-                    date: tempDateString,
-                    day:
-                        tempDate.getUTCDate() + ' ' + tempDate.getHours() + 'h',
+                    date: tempDate,
+                    day: `${tempDate.year}-${twoDigits(
+                        tempDate.month
+                    )}-${twoDigits(tempDate.day)}`,
+                    hour: tempDate.hour,
                     voteCount: 1,
                 }
             }
             return acc
         }, [])
         return Object.values(collection)
+    }
+)
+
+export const getVotesByDaySelector = createSelector(
+    getVotesByHourSelector,
+    votesByHours => {
+        const hours = [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+        ]
+        return votesByHours.reduce((acc, hourVote) => {
+            if (!acc[hourVote.day]) {
+                acc[hourVote.day] = []
+                // Add missing hours
+                hours.forEach(hour => {
+                    acc[hourVote.day][hour] = {
+                        x: twoDigits(hour),
+                        y: 0,
+                        dateTime: hourVote.date.set({ hour, minute: 0 }),
+                    }
+                })
+            }
+            acc[hourVote.day][hourVote.hour] = {
+                x: twoDigits(hourVote.hour),
+                y: hourVote.voteCount,
+                dateTime: hourVote.date.set({ minute: 0 }),
+            }
+
+            return acc
+        }, {})
     }
 )
 

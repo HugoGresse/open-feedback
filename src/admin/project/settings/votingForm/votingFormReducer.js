@@ -21,7 +21,7 @@ const votingFormReducer = (state = initState, { payload, type }) => {
         case GET_VOTEITEMS_SUCCESS:
             return {
                 ...state,
-                voteItems: payload,
+                voteItems: payload || [],
             }
         case EDIT_VOTEITEM: {
             const voteItems = state.voteItems.map(item => {

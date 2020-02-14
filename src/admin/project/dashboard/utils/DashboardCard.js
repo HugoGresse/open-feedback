@@ -4,7 +4,7 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import withStyles from '@material-ui/core/styles/withStyles'
-import COLORS from '../../../../constants/colors'
+import { Box } from '@material-ui/core'
 
 const styles = theme => ({
     container: {
@@ -16,12 +16,6 @@ const styles = theme => ({
             paddingBottom: 16,
         },
     },
-    title: {
-        marginBottom: 24,
-        color: COLORS.BLACK,
-        position: 'relative',
-        top: -8,
-    },
     icon: {
         position: 'relative',
         top: 5,
@@ -30,7 +24,7 @@ const styles = theme => ({
     },
 })
 
-function DashboardCard({ title, titleIcon, children, classes }) {
+function DashboardCard({ title, titleIcon, rightChildren, children, classes }) {
     if (!children) {
         return <LoaderMatchParent />
     }
@@ -38,14 +32,17 @@ function DashboardCard({ title, titleIcon, children, classes }) {
     return (
         <Card className={classes.container}>
             <CardContent className={classes.content}>
-                <Typography
-                    component="h1"
-                    className={classes.title}
-                    color="textSecondary"
-                    gutterBottom>
-                    <span className={classes.icon}>{titleIcon}</span>
-                    {title}
-                </Typography>
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    top={-8}
+                    marginBottom={2}>
+                    <Typography component="h1" gutterBottom>
+                        <span className={classes.icon}>{titleIcon}</span>
+                        {title}
+                    </Typography>
+                    {rightChildren && <div>{rightChildren}</div>}
+                </Box>
 
                 {children}
             </CardContent>
