@@ -6,10 +6,11 @@ import Typography from '@material-ui/core/Typography'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Box } from '@material-ui/core'
 
-const styles = theme => ({
+const styles = () => ({
     container: {
-        marginBottom: theme.spacing(3),
+        marginBottom: 0,
         position: 'relative',
+        minHeight: 400,
     },
     content: {
         '&:last-child': {
