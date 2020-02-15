@@ -99,7 +99,7 @@ export const getMostVotedTalkSelector = createSelector(
                 }
                 return 0
             })
-            .slice(0, 10)
+            .slice(0, 30)
 )
 
 export const getLeastVotedTalkSelector = createSelector(
@@ -115,7 +115,7 @@ export const getLeastVotedTalkSelector = createSelector(
                 }
                 return 0
             })
-            .slice(0, 10)
+            .slice(0, 30)
 )
 
 export const getMostCommentedTalkSelector = createSelector(
@@ -131,7 +131,7 @@ export const getMostCommentedTalkSelector = createSelector(
                 }
                 return 0
             })
-            .slice(0, 10)
+            .slice(0, 30)
 )
 
 export const getVotesByHourSelector = createSelector(

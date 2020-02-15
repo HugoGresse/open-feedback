@@ -45,20 +45,20 @@ const Dashboard = () => {
                 top={0}
                 left={0}
             />
-            <Grid item xs={12} md={12}>
-                <VoteTimeline dinoStartDelay={2600} />
-            </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} lg={4}>
                 <Highlights />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} lg={4}>
                 <MostVotedTalks dinoStartDelay={5000} />
             </Grid>
-            <Grid item xs={12} md={6}>
-                <LeastVotedTalks dinoStartDelay={5000} />
-            </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} lg={4}>
                 <MostCommentedTalks dinoStartDelay={5000} />
+            </Grid>
+            <Grid item xs={12} md={6} lg={8}>
+                <VoteTimeline dinoStartDelay={2600} />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+                <LeastVotedTalks dinoStartDelay={5000} />
             </Grid>
         </Grid>
     )
