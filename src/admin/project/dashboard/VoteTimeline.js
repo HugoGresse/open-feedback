@@ -1,85 +1,82 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { getVotesByHourSelector } from './dashboardSelectors'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import XAxis from 'recharts/es6/cartesian/XAxis'
-import YAxis from 'recharts/es6/cartesian/YAxis'
-import Tooltip from 'recharts/es6/component/Tooltip'
-import AreaChart from 'recharts/es6/chart/AreaChart'
-import Area from 'recharts/es6/cartesian/Area'
-import ResponsiveContainer from 'recharts/es6/component/ResponsiveContainer'
+import { getVotesByDaySelector } from './dashboardSelectors'
 import DashboardCard from './utils/DashboardCard'
 import InsertChartOutlined from '@material-ui/icons/InsertChartOutlined'
 import NoData from './utils/NoData'
 import { useTranslation } from 'react-i18next'
+import Box from '@material-ui/core/Box'
+import OFButton from '../../baseComponents/button/OFButton'
+import ArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
+import ArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
+import Typography from '@material-ui/core/Typography'
+import { DateTime } from 'luxon'
+import VoteTimelineGraph from './VoteTimelineGraph'
 
+const dateFormat = { month: 'long', day: 'numeric', year: 'numeric' }
 const VoteTimeline = ({ dinoStartDelay }) => {
-    const votesByHour = useSelector(getVotesByHourSelector)
+    const voteByDay = useSelector(getVotesByDaySelector)
+    const [selectedIndex, setSelectedIndex] = useState(-1)
     const { t } = useTranslation()
 
-    if (!votesByHour) {
-        return <CircularProgress />
+    const voteByDayKeys = Object.keys(voteByDay)
+
+    const changeDate = newIndex => {
+        if (voteByDayKeys[newIndex] !== undefined) {
+            setSelectedIndex(newIndex)
+        }
     }
+
+    if (selectedIndex === -1 && voteByDayKeys.length > 0) {
+        setSelectedIndex(0)
+    }
+
+    const selectedDate = voteByDayKeys[selectedIndex]
+
+    const votes = voteByDay[selectedDate]
+    const dateTime = DateTime.fromISO(selectedDate)
 
     return (
         <DashboardCard
             title={t('dashboard.votesPerHour')}
-            titleIcon={<InsertChartOutlined />}>
-            <NoData datas={votesByHour} dinoStartDelay={dinoStartDelay}>
-                <ResponsiveContainer height={250} width="80%">
-                    <AreaChart data={votesByHour} strokeWidth={2}>
-                        <defs>
-                            <linearGradient
-                                id="gradient"
-                                x1="0"
-                                y1="0"
-                                x2="0"
-                                y2="1">
-                                <stop
-                                    offset="5%"
-                                    stopColor="#8884d8"
-                                    stopOpacity={0.8}
-                                />
-                                <stop
-                                    offset="95%"
-                                    stopColor="#8884d8"
-                                    stopOpacity={0}
-                                />
-                            </linearGradient>
-                            <linearGradient
-                                id="colorPv"
-                                x1="0"
-                                y1="0"
-                                x2="0"
-                                y2="1">
-                                <stop
-                                    offset="5%"
-                                    stopColor="#82ca9d"
-                                    stopOpacity={0.8}
-                                />
-                                <stop
-                                    offset="95%"
-                                    stopColor="#82ca9d"
-                                    stopOpacity={0}
-                                />
-                            </linearGradient>
-                        </defs>
-                        <XAxis
-                            dataKey="day"
-                            axisLine={false}
-                            tickLine={false}
-                        />
-                        <YAxis axisLine={false} tickLine={false} />
-                        <Tooltip />
-                        <Area
-                            type="monotone"
-                            dataKey="voteCount"
-                            stroke="#8884d8"
-                            fillOpacity={1}
-                            fill="url(#gradient)"
-                        />
-                    </AreaChart>
-                </ResponsiveContainer>
+            titleIcon={<InsertChartOutlined />}
+            rightChildren={
+                <Typography component="h2">
+                    <OFButton
+                        style={{
+                            design: 'text',
+                            minWidth: '20px',
+                            marginTop: -2,
+                            display:
+                                selectedIndex === 0 || !votes
+                                    ? 'none'
+                                    : 'inline-flex',
+                        }}
+                        onClick={() => changeDate(selectedIndex - 1)}>
+                        <ArrowLeftIcon />
+                    </OFButton>
+                    {votes && dateTime.toLocaleString(dateFormat)}
+                    <OFButton
+                        style={{
+                            design: 'text',
+                            minWidth: '20px',
+                            marginTop: -2,
+                            display:
+                                selectedIndex + 1 < voteByDayKeys.length
+                                    ? 'inline-flex'
+                                    : 'none',
+                        }}
+                        onClick={() => changeDate(selectedIndex + 1)}>
+                        <ArrowRightIcon />
+                    </OFButton>
+                </Typography>
+            }>
+            <NoData datas={voteByDayKeys} dinoStartDelay={dinoStartDelay}>
+                {votes && (
+                    <Box height={300}>
+                        <VoteTimelineGraph votes={votes} />
+                    </Box>
+                )}
             </NoData>
         </DashboardCard>
     )

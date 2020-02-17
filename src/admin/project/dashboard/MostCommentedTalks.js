@@ -1,29 +1,29 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent'
-import { getMostVotedTalkSelector } from './dashboardSelectors'
+import { getMostCommentedTalkSelector } from './dashboardSelectors'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import { useTranslation } from 'react-i18next'
 import TalkVotesList from './utils/TalkVotesList'
-import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown'
+import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDownOutlined'
 
 const MostVotedTalks = ({ dinoStartDelay }) => {
-    const mostVotedTalks = useSelector(getMostVotedTalkSelector)
+    const talk = useSelector(getMostCommentedTalkSelector)
     const projectId = useSelector(getSelectedProjectIdSelector)
     const { t } = useTranslation()
 
-    if (!mostVotedTalks) {
+    if (!talk) {
         return <LoaderMatchParent />
     }
 
     return (
         <TalkVotesList
-            dataArray={mostVotedTalks}
-            countKey="voteCount"
-            loading={!mostVotedTalks}
+            dataArray={talk}
+            countKey="commentCount"
+            loading={!talk}
             projectId={projectId}
             dinoStartDelay={dinoStartDelay}
-            title={t('dashboard.mostVoted')}
+            title={t('dashboard.mostCommented')}
             titleIcon={<ThumbsUpDownIcon />}
         />
     )

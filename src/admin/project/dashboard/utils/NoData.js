@@ -18,8 +18,8 @@ const NoData = ({ children, datas, dinoStartDelay = 0 }) => {
                 snake={false}
                 speed={3}
                 dinoScale={0.2}
-                offsetY={90}
-                spacing={isDesktop ? 1500 : 1000}
+                offsetY={isDesktop ? 260 : 90}
+                spacing={isDesktop ? 2500 : 1000}
                 startDelay={isDesktop ? dinoStartDelay * 1.4 : dinoStartDelay}
             />
         </Box>
