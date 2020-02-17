@@ -90,6 +90,7 @@ export const getMostVotedTalkSelector = createSelector(
     getTalksWithVotesSelector,
     talksWithVotes =>
         talksWithVotes
+            .filter(talk => talk.voteCount > 0)
             .sort((a, b) => {
                 if (a.voteCount < b.voteCount) {
                     return 1
@@ -122,6 +123,7 @@ export const getMostCommentedTalkSelector = createSelector(
     getTalksWithVotesSelector,
     talksWithVotes =>
         talksWithVotes
+            .filter(talk => talk.commentCount > 0)
             .sort((a, b) => {
                 if (a.commentCount < b.commentCount) {
                     return 1
