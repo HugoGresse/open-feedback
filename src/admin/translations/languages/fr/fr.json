@@ -17,10 +17,10 @@
     "dashboard": {
         "comments": "Commentaires",
         "commentsPerUser": "Commentaires par utilisateur",
-        "highlights": "Chiffres clés",
+        "highlights": "Chiffres clé",
         "mostVoted": "Les plus votés",
         "noVotes": "Pas encore de vote",
-        "totalVoters": "Votants",
+        "totalVoters": "Votant",
         "votes": "Votes",
         "votesPerHour": "Vote par heure",
         "votesPerUser": "Vote par utilisateur"
@@ -62,11 +62,11 @@
             "continue": "Continuer",
             "create": "Créer un évènement",
             "projectTypeHoverboard": "Hoverboard v2 Firestore",
-            "projectTypeHoverboardDetail": "Les présentations/orateurs/calendrier seront récupérés directement au chargement de la page à partir de votre propre base de données Firestore en suivant le modèle de Hoverboard v2.",
+            "projectTypeHoverboardDetail": "Les présentations / orateurs / calendrier seront récupérés directement au chargement de la page à partir de votre propre base de données Firestore en suivant le modèle de Hoverboard v2.",
             "projectTypeJsonurl": "JSON link (ex: votre API)",
-            "projectTypeJsonurlDetail": "Vous fournissez une URL vers un .json que vous hébergerez (sur gist.github.com ou un autre serveur static) ou une API pour votre propre base de donnée. Le modèle du .json devra correspondre à celui d'OpenFeedback, vous pourrez le vérifier sur l'écran suivant. ",
+            "projectTypeJsonurlDetail": "Vous fournissez une URL vers un .json que vous hébergerez (sur gist.github.com ou un autre serveur statique) ou une API pour votre propre base de donnée. Le modèle du .json devra correspondre à celui d'OpenFeedback, vous pourrez le vérifier sur l'écran suivant. ",
             "projectTypeOpenfeedback": "Base de donnée OpenFeedback (par défaut)",
-            "projectTypeOpenfeedbackDetail": "Vous pouvez saisir manuellement les présentations / orateurs / calendrier sur OpenFeedback. Ils ne seront pas synchronisé avec un autre service si. Aucune configuration supplémentaire n'est requise.",
+            "projectTypeOpenfeedbackDetail": "Vous pouvez saisir manuellement les présentations / orateurs / calendrier sur OpenFeedback. Ils ne seront pas synchronisés avec un autre service. Aucune configuration supplémentaire n'est requise.",
             "projectTypeRequired": "Vous devez choisir la façon dont vous souhaitez configurer l'évènement",
             "stepTitle": "Créer un nouvel évènement (étape 2/3)",
             "title": "Comment voulez-vous charger vos données ?"
@@ -74,7 +74,7 @@
         "step3": {
             "back": "Retour",
             "firebaseCredentials": "Entrez vos informations d'identification Firebase",
-            "jsonurl": "Quelle est l'url du json ?",
+            "jsonurl": "Quelle est l'URL du json ?",
             "notManaged": "Ce type de projet n'est pas géré, cela ne devrait pas se produire, soit vous n'êtes pas un bon développeur, soit ¯ \\ _ (ツ) _ / ¯",
             "stepTitle": "Créer un nouvel événement (étape 3/3)",
             "submit": "Créer l'événement",
@@ -84,7 +84,7 @@
     },
     "root": {
         "create": "Créer un nouvel événement",
-        "title": "Vos événements OpenFeedback",
+        "title": "Vos évènements OpenFeedback",
         "userNotVerified": "Utilisateur non vérifié"
     },
     "rooting": {
@@ -100,7 +100,7 @@
         "cancel": "Annuler",
         "chooseColor": "Choisissez la couleur",
         "delete": "Supprimer",
-        "error": "Vous avez une erreur, cela vous dérangerait-il de la corriger avant de l'enregistrer? Merci beaucoup.",
+        "error": "Vous avez une erreur, cela vous dérangerait-il de la corriger avant de l'enregistrer ? Merci beaucoup.",
         "fieldChipColors": "Couleurs des pastilles",
         "fieldFaviconUrl": "URL du favicon (.png ou .ico)",
         "fieldFaviconUrlNotValid": "Le favicon n'est pas une URL valide",
@@ -138,8 +138,8 @@
         "validation": "Validation",
         "deleteEvent": {
             "button": "Supprimer l'évènement",
-            "confirmTitle": "Êtes-vous sur de vouloir supprimer l'évènement ?",
-            "confirmDescription": "Supprimer l'évènement est définitif, il n'y aura plus de données et les votes seront supprimé.",
+            "confirmTitle": "Êtes-vous sûr de vouloir supprimer l'évènement ?",
+            "confirmDescription": "Supprimer l'évènement est définitif, il n'y aura plus de donnée et les votes seront supprimés.",
             "deleted": "Évènement supprimé !",
             "errors": {
                 "permissionDenied": "Seul le propriétaire de l'évènement peut le supprimer.",
@@ -151,7 +151,7 @@
         "add": "Ajouter un nouveau membre à l'événement",
         "addButton": "Ajouter un membre",
         "emailNotValid": "L'email du membre doit être un email valide, sournois!",
-        "emailRequired": "L'adresse email du membre est obligatoire. Vous pensez que vous ne pouvez inviter Personne? Et bien non.",
+        "emailRequired": "L'adresse email du membre est obligatoire. Pensez-vous que vous pourriez inviter Personne ? Et bien non !",
         "invitation": "Invitation",
         "invite": {
             "default": "a disparu",
@@ -159,7 +159,7 @@
             "error": "échoué",
             "new": "créé"
         },
-        "invites": "INVITATIONS EN ATTENTE",
+        "invites": "INVITATION(S) EN ATTENTE",
         "member": "Membre",
         "memberEmail": "Email du membre",
         "on": "le",
@@ -173,15 +173,15 @@
         "options": "Options",
         "title": "Choix de vote",
         "resetToDefault": "Réinitialiser",
-        "resetToDefaultDialogTitle": "Êtes-vous sur de vouloir réinitialiser le formulaire ?"
+        "resetToDefaultDialogTitle": "Êtes-vous sûr de vouloir réinitialiser le formulaire ?"
     },
     "speakers": {
         "addButton": "Ajouter un orateur·rice",
         "addTitle": "Ajouter un·e nouveau·elle orateur·rice à l'événement",
-        "cannotChange": "Les orat·eurs·rices ne peuvent pas être modifiés depuis OpenFeedback pour ce projet. Reportez-vous à la configuration de vos services externes pour le faire.",
+        "cannotChange": "Les orat·eurs·rices ne peuvent pas être modifié·e·s depuis OpenFeedback pour ce projet. Reportez-vous à la configuration de vos services externes pour le faire.",
         "name": "Prénom/nom*",
         "nameRequired": "Le prénom du orateur·rice est obligatoire.",
-        "photoRequired": "L'URL de la photo du orateur·rice est requise.",
+        "photoRequired": "L'URL de la photo de l'orateur·rice est requise.",
         "photoUrl": "URL de la photo*",
         "photoValid": "L'URL de la photo n'est pas une URL valide.",
         "social": "Page de profil sur un réseau social",
@@ -194,14 +194,14 @@
         "cannotChange": "Les présentations ne peuvent pas être modifiées depuis OpenFeedback pour ce projet. Reportez-vous à la configuration de vos services externes pour le faire.",
         "fieldEndTime": "Heure de fin*",
         "fieldEndTimeRequired": "L'heure de fin est requise.",
-        "fieldSpeakers": "Orateur·rice(s)",
+        "fieldSpeakers": "Orateur·rice·s",
         "fieldStartTime": "Heure de début*",
         "fieldStartTimeRequired": "L'heure de début est requise.",
         "fieldTags": "Mots clés",
         "fieldTitle": "Titre*",
         "fieldTitleRequired": "Le titre de la présentation est obligatoire.",
         "fieldTrack": "Titre de la salle",
-        "speakerMissing": "Cette orateur·rice est absent·e des données, probablement supprimé",
+        "speakerMissing": "Cet·te orateur·rice est absent·e des données, il·elle a probablement été supprimé·e",
         "submit": "Ajouter une présentation",
         "submitContinue": "Ajouter une présentation et continuer",
         "titleAdd": "Ajouter une nouvelle présentation à l'événement",
