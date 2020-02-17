@@ -76,7 +76,11 @@ const TalkVotesList = ({
                         onClick={() => setIndex(selectedIndex - 1)}>
                         <ArrowLeftIcon />
                     </OFButton>
-                    {selectedIndex + 1}/{counts / previewCount}
+                    {counts / previewCount > 1 && (
+                        <span>
+                            {selectedIndex + 1}/{counts / previewCount}
+                        </span>
+                    )}
                     <OFButton
                         style={{
                             design: 'text',
