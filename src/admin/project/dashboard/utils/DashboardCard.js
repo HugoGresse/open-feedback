@@ -5,6 +5,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Box } from '@material-ui/core'
+import Grid from '@material-ui/core/Grid'
 
 const styles = theme => ({
     container: {
@@ -18,6 +19,9 @@ const styles = theme => ({
         '&:last-child': {
             paddingBottom: 16,
         },
+    },
+    header: {
+        marginBottom: 10,
     },
     icon: {
         position: 'relative',
@@ -35,18 +39,20 @@ function DashboardCard({ title, titleIcon, rightChildren, children, classes }) {
     return (
         <Card className={classes.container}>
             <CardContent className={classes.content}>
-                <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    top={-8}
-                    marginBottom={2}>
-                    <Typography component="h1" gutterBottom>
-                        <span className={classes.icon}>{titleIcon}</span>
-                        {title}
-                    </Typography>
-                    {rightChildren && <div>{rightChildren}</div>}
-                </Box>
-
+                <Grid
+                    container
+                    justify="space-between"
+                    className={classes.header}>
+                    <Grid item xs={12} sm={6}>
+                        <Typography component="h1" gutterBottom>
+                            <span className={classes.icon}>{titleIcon}</span>
+                            {title}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6} component={Box} textAlign="right">
+                        {rightChildren && <div>{rightChildren}</div>}
+                    </Grid>
+                </Grid>
                 {children}
             </CardContent>
         </Card>
