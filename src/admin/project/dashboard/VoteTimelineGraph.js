@@ -2,8 +2,13 @@ import React from 'react'
 import { ResponsiveLine } from '@nivo/line'
 import { useTheme } from '@nivo/core'
 import COLORS from '../../../constants/colors'
+import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
+import useThemeMui from '@material-ui/core/styles/useTheme'
 
 const VoteTimelineGraph = ({ votes }) => {
+    const theme = useThemeMui()
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
     return (
         <ResponsiveLine
             data={[
@@ -19,13 +24,11 @@ const VoteTimelineGraph = ({ votes }) => {
             sliceTooltip={Tooltip}
             axisBottom={{
                 orient: 'bottom',
-                tickSize: 4,
-                tickCount: 2,
-                renderTick: HorizontalTick,
+                tickValues: 10,
+                renderTick: HorizontalTick(isMobile ? 2 : 100),
             }}
             axisLeft={{
                 orient: 'left',
-                tickSize: 0,
                 tickValues: 4,
                 renderTick: VerticalTick,
             }}
@@ -66,23 +69,25 @@ const VerticalTick = tick => {
     )
 }
 
-const HorizontalTick = tick => {
-    const theme = useTheme()
-
+const HorizontalTick = pointToDisplay => tick => {
     // Hide first tick at 0, 0
     if (tick.tickIndex === 0) {
         return null
     }
 
+    let opacity = tick.opacity
+    if (parseInt(tick.value) % pointToDisplay === 0) {
+        opacity = 0
+    }
+
     return (
-        <g opacity={tick.opacity} transform={`translate(${tick.x},${tick.y})`}>
+        <g opacity={opacity} transform={`translate(${tick.x},${tick.y})`}>
             <line stroke="#ccc" strokeWidth={1} y1={0} y2={7} />
             <g transform={`translate(0,${tick.y + 16})`}>
                 <text
                     textAnchor="middle"
                     dominantBaseline="middle"
                     style={{
-                        ...theme.axis.ticks.text,
                         fill: '#888',
                         fontSize: 12,
                     }}>
@@ -101,6 +106,7 @@ const Tooltip = ({ slice }) => {
                 borderRadius: 5,
                 boxShadow: '0 1px 4px #999',
                 backgroundColor: '#FFF',
+                maxWidth: '40vw',
             }}>
             {slice.points.map(point => (
                 <div
@@ -108,7 +114,7 @@ const Tooltip = ({ slice }) => {
                     style={{
                         color: point.serieColor,
                     }}>
-                    <strong>{point.data.yFormatted} vote(s)</strong>{' '}
+                    <strong>{point.data.yFormatted} vote(s)</strong> <br />
                     {point.data.dateTime.toLocaleString({
                         weekday: 'long',
                         month: 'long',
