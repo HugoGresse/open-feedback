@@ -29,7 +29,7 @@
         "babel-loader": "^8.0.6",
         "cypress": "^4.0.1",
         "eslint-plugin-cypress": "^2.9.0",
-        "firebase-tools": "^7.12.1",
+        "firebase-tools": "^7.13.0",
         "husky": "^4.2.1",
         "lint-staged": "^10.0.7",
         "prettier": "^1.19.1",
