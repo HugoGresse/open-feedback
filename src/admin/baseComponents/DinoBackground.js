@@ -4,7 +4,7 @@ import { newRandomHexColor } from '../../utils/colorsUtils'
 
 const useStyles = makeStyles({
     container: {
-        height: 200,
+        height: 250,
         width: '100%',
         position: 'absolute',
     },
