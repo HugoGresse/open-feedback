@@ -39,10 +39,12 @@ service cloud.firestore {
             // Should be replaced by aggregated votes...
             match /sessionVotes/{session} {
                 allow list: if true;
+                allow read: if true;
             }
 
             match /aggregatedVotes/{session} {
                 allow list: if true;
+                allow read: if true;
             }
 
             match /userVotes/{ref} {
