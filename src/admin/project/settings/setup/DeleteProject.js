@@ -12,12 +12,14 @@ import { deleteProject } from '../../core/projectActions'
 import { getSelectedProjectIdSelector } from '../../core/projectSelectors'
 import BottomActionLayout from '../../layout/BottomActionLayout'
 import { history } from '../../../../App'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const DeleteProject = () => {
     const dispatch = useDispatch()
     const projectId = useSelector(getSelectedProjectIdSelector)
     const { t } = useTranslation()
     const [isDialogOpen, setDialogOpen] = useState(false)
+    const [isDeleting, setDeleteState] = useState(false)
 
     return (
         <BottomActionLayout>
@@ -48,12 +50,14 @@ const DeleteProject = () => {
                 </DialogContent>
                 <DialogActions>
                     <OFButton
+                        disabled={isDeleting}
                         onClick={() => setDialogOpen(false)}
                         style={{ design: 'text' }}>
                         {t('common.cancel')}
                     </OFButton>
                     <OFButton
-                        onClick={() =>
+                        onClick={() => {
+                            setDeleteState(true)
                             dispatch(deleteProject(projectId, t))
                                 .then(() => {
                                     history.push(
@@ -66,11 +70,23 @@ const DeleteProject = () => {
                                     )
                                 })
                                 .catch(() => {
+                                    setDeleteState(false)
                                     // nothing to do
                                 })
-                        }
+                        }}
+                        disabled={isDeleting}
                         style={{ customBg: '#FF2222' }}>
                         {t('settingsSetup.deleteEvent.button')}
+                        {isDeleting && (
+                            <CircularProgress
+                                style={{
+                                    height: 20,
+                                    width: 20,
+                                    color: 'white',
+                                    marginLeft: 10,
+                                }}
+                            />
+                        )}
                     </OFButton>
                 </DialogActions>
             </Dialog>
