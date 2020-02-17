@@ -20,13 +20,13 @@ export const getTalkVotes = () => {
             .doc(projectId)
             .collection('sessionVotes')
             .get()
-            .then(snapshot => {
-                const talkVotes = []
-                snapshot.forEach(doc => {
-                    talkVotes.push({
+            .then(snapshots => {
+                const talkVotes = {}
+                snapshots.forEach(doc => {
+                    talkVotes[doc.id] = {
                         id: doc.id,
                         votes: doc.data(),
-                    })
+                    }
                 })
 
                 dispatch({

@@ -19,6 +19,8 @@
         "commentsPerUser": "Commentaires par utilisateur",
         "highlights": "Chiffres clé",
         "mostVoted": "Les plus votés",
+        "leastVotedTalks": "Les moins votés",
+        "mostCommented": "Les plus commentés",
         "noVotes": "Pas encore de vote",
         "totalVoters": "Votant",
         "votes": "Votes",

@@ -11,6 +11,9 @@ import VoteTimeline from './VoteTimeline'
 import Highlights from './Highlights'
 import COLORS from '../../../constants/colors'
 import { getProject } from '../../../feedback/project/projectActions'
+import { getSpeakers } from '../../../core/speakers/speakerActions'
+import LeastVotedTalks from './LeastVotedTalks'
+import MostCommentedTalks from './MostCommentedTalks'
 
 const Dashboard = () => {
     const dispatch = useDispatch()
@@ -22,6 +25,7 @@ const Dashboard = () => {
             dispatch(getTalkVotes())
             dispatch(getUserVotes())
             dispatch(getTalks())
+            dispatch(getSpeakers())
         } else if (selectedProjectId) {
             dispatch(getProject(selectedProjectId))
         }
@@ -41,12 +45,20 @@ const Dashboard = () => {
                 top={0}
                 left={0}
             />
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} lg={4}>
                 <Highlights />
-                <MostVotedTalks dinoStartDelay={5000} />
             </Grid>
-            <Grid item xs={12} md={6}>
-                <VoteTimeline dinoStartDelay={2600} />
+            <Grid item xs={12} md={6} lg={4}>
+                <MostVotedTalks dinoStartDelay={2000} />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+                <MostCommentedTalks dinoStartDelay={4000} />
+            </Grid>
+            <Grid item xs={12} md={6} lg={8}>
+                <VoteTimeline dinoStartDelay={6000} />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+                <LeastVotedTalks dinoStartDelay={10000} />
             </Grid>
         </Grid>
     )

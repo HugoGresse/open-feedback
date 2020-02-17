@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import {
-    getTalksListSelector,
+    getTalksAsArraySelector,
     isTalkLoadedSelector,
 } from '../../../core/talks/talksSelectors'
 import { getAdminStateSelector } from '../../adminSelector'
@@ -9,8 +9,10 @@ import {
     getBooleanVoteItemsSelector,
     getCommentVoteItemSelector,
 } from '../settings/votingForm/votingFormSelectors'
-import { round1Decimals } from '../../../utils/numberUtils'
+import { round1Decimals, twoDigits } from '../../../utils/numberUtils'
 import { VOTE_STATUS_ACTIVE } from '../../../core/contants'
+import { getSpeakersListSelector } from '../../../core/speakers/speakerSelectors'
+import { DateTime } from 'luxon'
 
 const getDashboard = state => getAdminStateSelector(state).adminDashboard
 const getDashboardData = state => getDashboard(state).data
@@ -24,41 +26,71 @@ export const getActiveUserVoteSelector = createSelector(
 
 // MEMOIZED
 
-export const getMostVotedTalkSelector = createSelector(
+export const getTalksWithVotesSelector = createSelector(
     getTalkVotes,
-    getTalksListSelector,
+    getTalksAsArraySelector,
     isTalkLoadedSelector,
-    (talkVotes, talklist, isTalkLoaded) => {
-        if (Object.keys(talklist).length <= 0 || !isTalkLoaded) {
+    getSpeakersListSelector,
+    (talkVotes, talkList, isTalkLoaded, speakers) => {
+        if (Object.keys(talkList).length <= 0 || !isTalkLoaded) {
             return []
         }
 
         let votes
-        return talkVotes
-            .reduce((acc, talk) => {
-                votes = talk.votes
+        let voteObject
+        let voteItemObject
+        let commentCount
+        return talkList.reduce((acc, talk) => {
+            voteObject = talkVotes[talk.id]
 
-                const voteCount = Object.keys(votes).reduce((acc, id) => {
-                    if (Number.isInteger(votes[id])) {
-                        return acc + votes[id]
+            if (!voteObject) {
+                votes = {}
+            } else {
+                votes = voteObject.votes
+            }
+
+            const voteCounts = Object.keys(votes).reduce(
+                (acc, id) => {
+                    voteItemObject = votes[id]
+                    if (Number.isInteger(voteItemObject)) {
+                        return {
+                            ...acc,
+                            votes: acc.votes + voteItemObject,
+                        }
                     }
-                    return acc + 1
-                }, 0)
+                    commentCount = Object.keys(voteItemObject).length
+                    return {
+                        ...acc,
+                        votes: acc.votes + commentCount,
+                        comments: acc.comments + commentCount,
+                    }
+                },
+                { votes: 0, comments: 0 }
+            )
 
-                if (talklist[talk.id]) {
-                    acc.push({
-                        talkId: talk.id,
-                        voteCount: voteCount,
-                        title: talklist[talk.id].title,
-                        trackTitle: talklist[talk.id].trackTitle,
-                        date:
-                            talklist[talk.id].startTime &&
-                            talklist[talk.id].startTime.split('T')[0],
-                    })
-                }
+            acc.push({
+                talkId: talk.id,
+                voteCount: voteCounts.votes,
+                commentCount: voteCounts.comments,
+                title: talk.title,
+                trackTitle: talk.trackTitle,
+                speakers:
+                    talk.speakers && Object.keys(speakers).length > 0
+                        ? talk.speakers.map(speakerId => speakers[speakerId])
+                        : [],
+                date: talk.startTime && talk.startTime.split('T')[0],
+            })
 
-                return acc
-            }, [])
+            return acc
+        }, [])
+    }
+)
+
+export const getMostVotedTalkSelector = createSelector(
+    getTalksWithVotesSelector,
+    talksWithVotes =>
+        talksWithVotes
+            .filter(talk => talk.voteCount > 0)
             .sort((a, b) => {
                 if (a.voteCount < b.voteCount) {
                     return 1
@@ -68,8 +100,40 @@ export const getMostVotedTalkSelector = createSelector(
                 }
                 return 0
             })
-            .slice(0, 20)
-    }
+            .slice(0, 30)
+)
+
+export const getLeastVotedTalkSelector = createSelector(
+    getTalksWithVotesSelector,
+    talksWithVotes =>
+        talksWithVotes
+            .sort((a, b) => {
+                if (a.voteCount < b.voteCount) {
+                    return -1
+                }
+                if (a.voteCount > b.voteCount) {
+                    return 1
+                }
+                return 0
+            })
+            .slice(0, 30)
+)
+
+export const getMostCommentedTalkSelector = createSelector(
+    getTalksWithVotesSelector,
+    talksWithVotes =>
+        talksWithVotes
+            .filter(talk => talk.commentCount > 0)
+            .sort((a, b) => {
+                if (a.commentCount < b.commentCount) {
+                    return 1
+                }
+                if (a.commentCount > b.commentCount) {
+                    return -1
+                }
+                return 0
+            })
+            .slice(0, 30)
 )
 
 export const getVotesByHourSelector = createSelector(
@@ -78,15 +142,8 @@ export const getVotesByHourSelector = createSelector(
         let tempDate
         let tempDateString
         const collection = userVotes.reduce((acc, userVote) => {
-            tempDate = userVote.createdAt.toDate()
-            tempDateString =
-                tempDate.getUTCFullYear() +
-                '-' +
-                (tempDate.getUTCMonth() + 1) +
-                '-' +
-                tempDate.getUTCDate() +
-                ' ' +
-                tempDate.getHours()
+            tempDate = DateTime.fromJSDate(userVote.createdAt.toDate())
+            tempDateString = `${tempDate.year}-${tempDate.month}-${tempDate.day} ${tempDate.hour}`
 
             if (acc[tempDateString]) {
                 acc[tempDateString] = {
@@ -95,15 +152,69 @@ export const getVotesByHourSelector = createSelector(
                 }
             } else {
                 acc[tempDateString] = {
-                    date: tempDateString,
-                    day:
-                        tempDate.getUTCDate() + ' ' + tempDate.getHours() + 'h',
+                    date: tempDate,
+                    day: `${tempDate.year}-${twoDigits(
+                        tempDate.month
+                    )}-${twoDigits(tempDate.day)}`,
+                    hour: tempDate.hour,
                     voteCount: 1,
                 }
             }
             return acc
         }, [])
         return Object.values(collection)
+    }
+)
+
+export const getVotesByDaySelector = createSelector(
+    getVotesByHourSelector,
+    votesByHours => {
+        const hours = [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+        ]
+        return votesByHours.reduce((acc, hourVote) => {
+            if (!acc[hourVote.day]) {
+                acc[hourVote.day] = []
+                // Add missing hours
+                hours.forEach(hour => {
+                    acc[hourVote.day][hour] = {
+                        x: twoDigits(hour),
+                        y: 0,
+                        dateTime: hourVote.date.set({ hour, minute: 0 }),
+                    }
+                })
+            }
+            acc[hourVote.day][hourVote.hour] = {
+                x: twoDigits(hourVote.hour),
+                y: hourVote.voteCount,
+                dateTime: hourVote.date.set({ minute: 0 }),
+            }
+
+            return acc
+        }, {})
     }
 )
 

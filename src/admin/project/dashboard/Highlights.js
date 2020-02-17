@@ -17,6 +17,7 @@ import { getVoteItems } from '../settings/votingForm/votingFormActions'
 import NoData from './utils/NoData'
 import { useTranslation } from 'react-i18next'
 import TranslatedTypography from '../../baseComponents/TranslatedTypography'
+import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 
 const useStyles = makeStyles({
     count: {
@@ -28,6 +29,7 @@ const useStyles = makeStyles({
 
 const Highlights = () => {
     const classes = useStyles()
+    const projectId = useSelector(getSelectedProjectIdSelector)
     const voterCount = useSelector(getTotalVoterCountSelector)
     const voteCount = useSelector(getTotalVoteCountSelector)
     const commentCount = useSelector(getTotalCommentsSelector)
@@ -39,7 +41,7 @@ const Highlights = () => {
 
     useEffect(() => {
         dispatch(getVoteItems())
-    }, [dispatch])
+    }, [dispatch, projectId])
 
     return (
         <DashboardCard

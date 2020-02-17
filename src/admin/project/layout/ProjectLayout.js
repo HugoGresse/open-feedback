@@ -24,6 +24,8 @@ const innerTheme = createMuiTheme({
 const useStyles = makeStyles(() => ({
     container: {
         padding: 24,
+    },
+    containerWrapped: {
         position: 'relative',
     },
     sidebar: {
@@ -87,11 +89,13 @@ const ProjectLayout = ({ baseUrl, children }) => {
                     toggleDrawer={toggleDrawer(true)}
                 />
 
-                <Container maxWidth="lg" className={classes.container}>
-                    <MuiThemeProvider theme={innerTheme}>
-                        {children}
-                    </MuiThemeProvider>
-                </Container>
+                <div className={classes.containerWrapped}>
+                    <Container maxWidth="lg" className={classes.container}>
+                        <MuiThemeProvider theme={innerTheme}>
+                            {children}
+                        </MuiThemeProvider>
+                    </Container>
+                </div>
             </div>
         </Box>
     )
