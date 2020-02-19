@@ -16,17 +16,18 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-const TextVoteList = ({ textVotes, onVoteHideClick }) => {
+const TextVoteList = ({ textVotes, onVoteHideClick, onVoteExpandClick }) => {
     const classes = useStyles()
 
     return (
         <Grid container spacing={2}>
             {textVotes &&
                 textVotes.map(vote => (
-                    <Grid item key={vote.firestoreId} xs={12} sm={6} md={4}>
+                    <Grid item key={vote.voteId} xs={12} sm={6} md={4}>
                         <div className={classes.container}>
                             <TextVoteItem
                                 vote={vote}
+                                onVoteExpandClick={onVoteExpandClick}
                                 onVoteHideClick={onVoteHideClick}
                             />
                         </div>

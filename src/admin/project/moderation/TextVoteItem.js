@@ -39,7 +39,7 @@ const TextVoteItem = ({ vote, onVoteExpandClick, onVoteHideClick }) => {
                 {text}
                 {isCutted && (
                     <OFButton
-                        onClick={onVoteExpandClick}
+                        onClick={() => onVoteExpandClick(vote)}
                         style={{
                             design: 'text',
                             type: 'small',

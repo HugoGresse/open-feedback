@@ -12,7 +12,13 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-const TalkListItem = ({ talk, speakers, votes, onSpeakerClicked }) => {
+const TalkListItem = ({
+    talk,
+    speakers,
+    votes,
+    onSpeakerClicked,
+    onVoteExpandClick,
+}) => {
     const classes = useStyles()
 
     return (
@@ -38,6 +44,7 @@ const TalkListItem = ({ talk, speakers, votes, onSpeakerClicked }) => {
                         // TODO
                         console.log('TODO : hide vote')
                     }}
+                    onVoteExpandClick={onVoteExpandClick}
                 />
             </Grid>
         </OFListItem>
