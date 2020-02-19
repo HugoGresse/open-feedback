@@ -28,7 +28,7 @@
         "@storybook/react": "5.3.13",
         "babel-loader": "^8.0.6",
         "cypress": "^4.0.2",
-        "eslint-plugin-cypress": "^2.9.0",
+        "eslint-plugin-cypress": "^2.10.2",
         "firebase-tools": "^7.13.0",
         "husky": "^4.2.1",
         "lint-staged": "^10.0.7",
