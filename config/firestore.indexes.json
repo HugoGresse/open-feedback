@@ -13,6 +13,34 @@
                     "order": "DESCENDING"
                 }
             ]
+        },
+        {
+            "collectionGroup": "userVotes",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "status",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "text",
+                    "order": "ASCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "userVotes",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "talkId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "text",
+                    "order": "ASCENDING"
+                }
+            ]
         }
     ],
     "fieldOverrides": []

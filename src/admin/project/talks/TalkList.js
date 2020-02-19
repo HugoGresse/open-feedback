@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DateTime } from 'luxon'
 import TalkListItem from './TalkListItem'
@@ -33,6 +33,12 @@ const TalkList = () => {
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
     const [editingTalk, setEditTalk] = useState(null)
     const { t } = useTranslation()
+
+    useEffect(() => {
+        return () => {
+            dispatch(setTalksFilter(null))
+        }
+    }, [dispatch])
 
     const talkNotReadableCheck = () => {
         if (projectApi.isReadOnly()) {

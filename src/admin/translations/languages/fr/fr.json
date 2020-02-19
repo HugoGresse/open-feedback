@@ -93,6 +93,7 @@
         "dashboard": "Statistiques",
         "talks": "Présentations",
         "speakers": "Orateurs",
+        "moderation": "Modération",
         "settingEvent": "Évènement & thème",
         "settingVotingform": "Bulletin de vote",
         "settingSetup": "Paramètres",
@@ -208,5 +209,10 @@
         "submitContinue": "Ajouter une présentation et continuer",
         "titleAdd": "Ajouter une nouvelle présentation à l'événement",
         "titleEdit": "Modifier une présentation"
+    },
+    "moderation": {
+        "open": "Ouvrir la présentation",
+        "hide": "Cacher",
+        "hidden": "Votes cachés"
     }
 }

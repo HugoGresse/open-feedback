@@ -90,6 +90,19 @@ export const getFilteredTalksSelector = createSelector(
     }
 )
 
+export const getFilteredTalksAsMapSelector = createSelector(
+    getFilteredTalksSelector,
+    talks => {
+        const data = {}
+
+        talks.forEach(talk => {
+            data[talk.id] = talk
+        })
+
+        return data
+    }
+)
+
 export const getCurrentTalksGroupByTrackSelector = createSelector(
     getFilteredTalksSelector,
     getProjectSelectedDateSelector,
