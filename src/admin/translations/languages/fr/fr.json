@@ -213,6 +213,11 @@
     "moderation": {
         "open": "Ouvrir la présentation",
         "hide": "Cacher",
-        "hidden": "Votes cachés"
+        "hidden": "Votes cachés",
+        "hideDialogTitle": "Cacher le vote",
+        "hideDialogDescription": "En cachant un vote, vous empechez tous le monde en dehors des administrateurs de l'évènement de le voir. Le votant pourra toujours le mettre à jour mais le vote restera caché jusqu'à ce que vous décidiez de l'afficher.",
+        "unhideDialogTitle": "Décacher le vote",
+        "unhideDialogDescription": "Décacher le vote pour qu'il soit visible de tous le monde.",
+        "unhideDialogConfirm": "Décacher le vote"
     }
 }

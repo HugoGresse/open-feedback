@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { DateTime } from 'luxon'
 import BlockIcon from '@material-ui/icons/Block'
 import Box from '@material-ui/core/Box'
+import { VOTE_STATUS_HIDDEN } from '../../../core/contants'
 
 const useStyles = makeStyles(() => ({
     date: {
@@ -55,7 +56,9 @@ const TextVoteItem = ({ vote, onVoteExpandClick, onVoteHideClick }) => {
                         design: 'text',
                     }}>
                     <BlockIcon />
-                    {t('moderation.hide')}
+                    {vote.status === VOTE_STATUS_HIDDEN
+                        ? t('moderation.unhideDialogConfirm')
+                        : t('moderation.hide')}
                 </OFButton>
             </Box>
         </div>

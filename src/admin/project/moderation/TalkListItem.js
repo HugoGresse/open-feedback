@@ -5,6 +5,9 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Typography from '@material-ui/core/Typography'
 import TalkListItemSpeakerList from '../talks/TalkListItemSpeakerList'
 import TextVoteList from './TextVoteList'
+import { VOTE_STATUS_ACTIVE, VOTE_STATUS_HIDDEN } from '../../../core/contants'
+import CollapsePanel from '../../baseComponents/CollapsePanel'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(() => ({
     headerCell: {
@@ -18,8 +21,13 @@ const TalkListItem = ({
     votes,
     onSpeakerClicked,
     onVoteExpandClick,
+    onVoteHideClick,
 }) => {
     const classes = useStyles()
+    const { t } = useTranslation()
+
+    const activeVotes = votes.filter(vote => vote.status === VOTE_STATUS_ACTIVE)
+    const hiddenVotes = votes.filter(vote => vote.status === VOTE_STATUS_HIDDEN)
 
     return (
         <OFListItem>
@@ -39,14 +47,22 @@ const TalkListItem = ({
             </Grid>
             <Grid xs={12} item>
                 <TextVoteList
-                    textVotes={votes}
-                    onVoteHideClick={voteId => {
-                        // TODO
-                        console.log('TODO : hide vote')
-                    }}
+                    textVotes={activeVotes}
+                    onVoteHideClick={onVoteHideClick}
                     onVoteExpandClick={onVoteExpandClick}
                 />
             </Grid>
+            {hiddenVotes.length > 0 && (
+                <Grid xs={12} item>
+                    <CollapsePanel buttonText={t('moderation.hidden')}>
+                        <TextVoteList
+                            textVotes={hiddenVotes}
+                            onVoteHideClick={onVoteHideClick}
+                            onVoteExpandClick={onVoteExpandClick}
+                        />
+                    </CollapsePanel>
+                </Grid>
+            )}
         </OFListItem>
     )
 }

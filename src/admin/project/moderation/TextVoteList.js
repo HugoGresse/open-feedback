@@ -9,10 +9,8 @@ const useStyles = makeStyles(() => ({
         borderRadius: 10,
         padding: '13px 16px',
         wordBreak: 'break-word',
-    },
-    content: {
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
+        height: '100%',
+        boxSizing: 'border-box',
     },
 }))
 
