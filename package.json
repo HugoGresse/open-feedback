@@ -30,7 +30,7 @@
         "cypress": "^4.0.2",
         "eslint-plugin-cypress": "^2.9.0",
         "firebase-tools": "^7.13.0",
-        "husky": "^4.2.1",
+        "husky": "^4.2.3",
         "lint-staged": "^10.0.7",
         "prettier": "^1.19.1",
         "react-scripts": "3.3.1"
