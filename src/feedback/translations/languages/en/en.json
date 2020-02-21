@@ -2,7 +2,8 @@
     "comment": {
         "delete": "Delete comment",
         "update": "Update comment",
-        "save": "Post comment"
+        "save": "Post comment",
+        "hidden": "Your vote has been hidden by the event organizer. Contact them for more information"
     },
     "searchPlaceholder": "Search",
     "footer": {

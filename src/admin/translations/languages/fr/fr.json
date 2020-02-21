@@ -93,6 +93,7 @@
         "dashboard": "Statistiques",
         "talks": "Présentations",
         "speakers": "Orateurs",
+        "moderation": "Modération",
         "settingEvent": "Évènement & thème",
         "settingVotingform": "Bulletin de vote",
         "settingSetup": "Paramètres",
@@ -208,5 +209,15 @@
         "submitContinue": "Ajouter une présentation et continuer",
         "titleAdd": "Ajouter une nouvelle présentation à l'événement",
         "titleEdit": "Modifier une présentation"
+    },
+    "moderation": {
+        "open": "Ouvrir la présentation",
+        "hide": "Cacher",
+        "hidden": "Votes cachés",
+        "hideDialogTitle": "Cacher le vote",
+        "hideDialogDescription": "En cachant un vote, vous empêchez tout le monde en dehors des administrateurs de l'évènement voir le vote. Le votant pourra toujours le mettre à jour mais le vote restera caché jusqu'à ce que vous décidiez de l'afficher.",
+        "unhideDialogTitle": "Décacher le vote",
+        "unhideDialogDescription": "Décacher le vote pour qu'il soit visible de tout le monde.",
+        "unhideDialogConfirm": "Décacher le vote"
     }
 }

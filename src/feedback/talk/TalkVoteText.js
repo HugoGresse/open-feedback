@@ -3,12 +3,15 @@ import { withStyles } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import SaveIcon from '@material-ui/icons/Save'
 import DeleteIcon from '@material-ui/icons/Delete'
+import InfoIcon from '@material-ui/icons/Info'
 import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import TalkVoteTextResult from './TalkVoteTextResult'
 import { Trans } from 'react-i18next'
+import { VOTE_STATUS_HIDDEN } from '../../core/contants'
+import COLORS from '../../constants/colors'
 
 const styles = theme => ({
     itemContainer: {
@@ -67,6 +70,16 @@ const styles = theme => ({
     saveButton: {
         backgroundColor: '#6a96ff',
     },
+    voteHidden: {
+        padding: 10,
+        background: COLORS.RED_ORANGE,
+        color: 'white',
+        margin: '16px 0',
+        borderRadius: 6,
+    },
+    voteHiddenIcon: {
+        verticalAlign: 'text-bottom',
+    },
 })
 
 class TalkVoteText extends Component {
@@ -74,6 +87,7 @@ class TalkVoteText extends Component {
         super(props)
         this.state = {
             comment: '',
+            status: null,
             dataLoaded: false,
         }
     }
@@ -89,6 +103,7 @@ class TalkVoteText extends Component {
                 ...this.state,
                 dataLoaded: true,
                 comment: this.props.currentUserVote.text,
+                status: this.props.currentUserVote.status,
             })
         }
     }
@@ -105,6 +120,7 @@ class TalkVoteText extends Component {
         }
         this.setState({
             comment: '',
+            status: null,
         })
     }
 
@@ -138,6 +154,12 @@ class TalkVoteText extends Component {
                         value={this.state.comment}
                     />
                 </Paper>
+                {this.state.status && this.state.status === VOTE_STATUS_HIDDEN && (
+                    <div className={classes.voteHidden}>
+                        <InfoIcon className={classes.voteHiddenIcon} />
+                        <Trans i18nKey="comment.hidden" />
+                    </div>
+                )}
 
                 {this.state.comment && (
                     <div className={classes.buttonContainer}>

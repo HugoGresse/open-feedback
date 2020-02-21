@@ -14,7 +14,7 @@ i18n.use(LanguageDetector).init({
         },
     },
     fallbackLng: 'en',
-    debug: process.env.NODE_ENV !== 'production',
+    debug: false,
 
     // have a common namespace used around the full app
     ns: ['translations'],

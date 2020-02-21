@@ -58,3 +58,34 @@ export const hashString = value => {
     }
     return hash
 }
+
+/**
+ * Cut a string if too long and add ellipsis
+ * From https://stackoverflow.com/a/50477423/1377145
+ * @returns array an array with the string as first item and if the string was cutted as second
+ */
+export const textEllipsis = (
+    str,
+    maxLength,
+    { side = 'end', ellipsis = '...' } = {}
+) => {
+    if (!str) {
+        return ['', false]
+    }
+    if (str.length > maxLength) {
+        switch (side) {
+            case 'start':
+                return [
+                    ellipsis + str.slice(-(maxLength - ellipsis.length)),
+                    true,
+                ]
+            case 'end':
+            default:
+                return [
+                    str.slice(0, maxLength - ellipsis.length) + ellipsis,
+                    true,
+                ]
+        }
+    }
+    return [str, false]
+}
