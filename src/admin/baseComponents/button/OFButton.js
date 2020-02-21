@@ -14,7 +14,12 @@ const useStyles = makeStyles(theme => ({
                 : COLORS.RED_ORANGE,
         color: props =>
             props.design === 'text' ? theme.primaryText : COLORS.WHITE,
-        padding: props => (props.type === 'big' ? '12px 32px' : '6px 8px'),
+        padding: props =>
+            props.type === 'big'
+                ? '12px 32px'
+                : props.type === 'small'
+                ? '3px 4px'
+                : '6px 8px',
         '&:hover': {
             background: props =>
                 props.design === 'text'

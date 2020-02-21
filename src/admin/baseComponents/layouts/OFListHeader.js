@@ -77,7 +77,11 @@ const OFListHeader = ({
                     <CircularProgress size={30} className={classes.progress} />
                 </Fade>
 
-                <OFButton onClick={() => buttonClick()}>{buttonText}</OFButton>
+                {buttonText && (
+                    <OFButton onClick={() => buttonClick()}>
+                        {buttonText}
+                    </OFButton>
+                )}
             </Grid>
         </Grid>
     )

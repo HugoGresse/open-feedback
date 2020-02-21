@@ -50,7 +50,7 @@ service cloud.firestore {
             match /userVotes/{ref} {
                 allow read: if authenticated() && resource.data.userId == request.auth.uid || isAdmin(projectData(projectId));
                 allow create: if authenticated() && request.resource.data.userId == request.auth.uid;
-                allow update: if authenticated() && resource.data.userId == request.auth.uid;
+                allow update: if authenticated() && resource.data.userId == request.auth.uid || isAdmin(projectData(projectId));
             }
 
             match /speakers/{speakerId} {

@@ -11,6 +11,10 @@ export default {
         i18key: 'rooting.speakers',
         url: '/speakers',
     },
+    moderation: {
+        i18key: 'rooting.moderation',
+        url: '/moderation',
+    },
     settingEvent: {
         i18key: 'rooting.settingEvent',
         url: '/setting/event',

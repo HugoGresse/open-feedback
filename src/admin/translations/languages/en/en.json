@@ -93,6 +93,7 @@
         "dashboard": "Dashboard",
         "talks": "Talks",
         "speakers": "Speakers",
+        "moderation": "Moderation",
         "settingEvent": "Event & Theme",
         "settingVotingform": "Voting Form",
         "settingSetup": "Setup",
@@ -208,5 +209,15 @@
         "submitContinue": "Add talk & continue",
         "titleAdd": "Add a new talk to the event",
         "titleEdit": "Edit a talk"
+    },
+    "moderation": {
+        "open": "Open talk",
+        "hide": "hide",
+        "hidden": "Hidden votes",
+        "hideDialogTitle": "Hide vote",
+        "hideDialogDescription": "Hiding the vote will prevent everyone except the OpenFeedback member to see the vote. The user will still be able to update it but it will not be visible again until you decide to.",
+        "unhideDialogTitle": "Unhidding a vote",
+        "unhideDialogDescription": "Unhiding the vote so it will be visible publicly.",
+        "unhideDialogConfirm": "Unhide the vote"
     }
 }

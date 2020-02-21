@@ -22,6 +22,7 @@ import PowerSettingsIcon from '@material-ui/icons/PowerSettingsNew'
 import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver'
 import SettingsIcon from '@material-ui/icons/Settings'
 import SlideshowIcon from '@material-ui/icons/Slideshow'
+import CommentIcon from '@material-ui/icons/Comment'
 import IconButton from '@material-ui/core/IconButton'
 import OFMenuItem from './OFMenuItem'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
@@ -123,18 +124,22 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                             text={t(RoutingMap.dashboard.i18key)}
                             iconClassName={classes.listItemIcon}
                         />
-
                         <OFMenuItem
                             to={`${baseUrl}/${selectedProjectId}${RoutingMap.talks.url}`}
                             text={t(RoutingMap.talks.i18key)}
                             icon={<SlideshowIcon />}
                             iconClassName={classes.listItemIcon}
                         />
-
                         <OFMenuItem
                             to={`${baseUrl}/${selectedProjectId}${RoutingMap.speakers.url}`}
                             icon={<RecordVoiceOverIcon />}
                             text={t(RoutingMap.speakers.i18key)}
+                            iconClassName={classes.listItemIcon}
+                        />
+                        <OFMenuItem
+                            to={`${baseUrl}/${selectedProjectId}${RoutingMap.moderation.url}`}
+                            icon={<CommentIcon />}
+                            text={t(RoutingMap.moderation.i18key)}
                             iconClassName={classes.listItemIcon}
                         />
                     </List>

@@ -2,7 +2,8 @@
     "comment": {
         "delete": "Supprimer le commentaire",
         "update": "Mettre à jour le commentaire",
-        "save": "Poster le commentaire"
+        "save": "Poster le commentaire",
+        "hidden": "Votre vote a été caché par les organisateurs de l'évènement. Contactez les si vous voulez plus d'informations."
     },
     "searchPlaceholder": "Recherche",
     "footer": {

@@ -13,6 +13,7 @@ import ProjectLayout from './layout/ProjectLayout'
 import { useDispatch } from 'react-redux'
 import { getProjects } from './core/projectActions'
 import Layout404 from './layout/Layout404'
+import Moderation from './moderation/Moderation'
 
 const ProjectApp = ({ match }) => {
     const dispatch = useDispatch()
@@ -45,6 +46,11 @@ const ProjectApp = ({ match }) => {
                         exact
                         path={`${match.url}${RoutingMap.speakers.url}`}
                         render={props => <Speakers {...props} />}
+                    />
+                    <Route
+                        exact
+                        path={`${match.url}${RoutingMap.moderation.url}`}
+                        render={props => <Moderation {...props} />}
                     />
 
                     <Route
