@@ -9,7 +9,7 @@ import {
     getTalksFilterSelector,
 } from '../../../core/talks/talksSelectors'
 import { setTalksFilter } from '../../../core/talks/talksActions'
-import { getTextUserVotes, hideVote, unhideVote } from './moderationActions'
+import { hideVote, unhideVote } from './moderationActions'
 import {
     getTextVotesSelector,
     isTextVotesLoadedSelector,
@@ -20,7 +20,9 @@ import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMat
 import SimpleDialog from '../../baseComponents/layouts/SimpleDialog'
 import TranslatedTypography from '../../baseComponents/TranslatedTypography'
 import { VOTE_STATUS_ACTIVE, VOTE_STATUS_HIDDEN } from '../../../core/contants'
+import OFPagination from '../../baseComponents/layouts/OFPagination'
 
+const itemPerPage = 10
 const TalkList = () => {
     const dispatch = useDispatch()
     const talks = useSelector(getFilteredTalksAsMapSelector)
@@ -30,20 +32,25 @@ const TalkList = () => {
     const isVotesLoaded = useSelector(isTextVotesLoadedSelector)
     const { t } = useTranslation()
 
-    const [fromIndex, setFromIndex] = useState(0)
-    const [toIndex, setToIndex] = useState(50)
+    const [currentPage, setPage] = useState(1)
     const [selectedVote, setSelectedVote] = useState(null)
     const [changingVote, setChangingVote] = useState(null)
     const [isVoteStatusChanging, setVoteStatusChange] = useState(false)
 
     const talkKeys = Object.keys(votesWithTalkId)
-    const selectedKeys = talkKeys.slice(fromIndex, toIndex)
+    const selectedKeys = talkKeys.slice(
+        (currentPage - 1) * itemPerPage,
+        (currentPage - 1) * itemPerPage + itemPerPage
+    )
 
     const isChangingVoteHide =
         changingVote && changingVote.status === VOTE_STATUS_ACTIVE
 
+    const movePage = newPage => {
+        setPage(newPage)
+    }
+
     useEffect(() => {
-        dispatch(getTextUserVotes())
         return () => {
             dispatch(setTalksFilter(null))
         }
@@ -79,6 +86,12 @@ const TalkList = () => {
                     />
                 )
             })}
+
+            <OFPagination
+                count={talkKeys ? Math.ceil(talkKeys.length / itemPerPage) : 0}
+                current={currentPage}
+                onChange={(event, page) => movePage(page)}
+            />
 
             <SimpleDialog
                 onClose={() => setSelectedVote(null)}
