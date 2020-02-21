@@ -17,7 +17,7 @@ const Moderation = () => {
             dispatch(getTalks())
             dispatch(getTextUserVotes())
         }
-    }, [isProjectApiInit])
+    }, [dispatch, isProjectApiInit])
 
     return (
         <OFPaper>
