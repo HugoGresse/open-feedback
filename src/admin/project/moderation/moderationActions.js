@@ -179,7 +179,7 @@ export const unhideVote = vote => (dispatch, getState) => {
                 type: ADD_NOTIFICATION,
                 payload: {
                     type: 'error',
-                    message: 'Failed to hide the vote, ' + error.toString(),
+                    message: 'Failed to unhide the vote, ' + error.toString(),
                 },
             })
         })

@@ -27,20 +27,6 @@
                     "order": "ASCENDING"
                 }
             ]
-        },
-        {
-            "collectionGroup": "userVotes",
-            "queryScope": "COLLECTION",
-            "fields": [
-                {
-                    "fieldPath": "talkId",
-                    "order": "ASCENDING"
-                },
-                {
-                    "fieldPath": "text",
-                    "order": "ASCENDING"
-                }
-            ]
         }
     ],
     "fieldOverrides": []

@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import TalkListItemSpeakerList from '../talks/TalkListItemSpeakerList'
 import TextVoteList from './TextVoteList'
 import { VOTE_STATUS_ACTIVE, VOTE_STATUS_HIDDEN } from '../../../core/contants'
-import CollapsePanel from '../../baseComponents/CollapsePanel'
+import CollapsePanel from '../../baseComponents/layouts/CollapsePanel'
 import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(() => ({

@@ -17,7 +17,7 @@ import {
 import Typography from '@material-ui/core/Typography'
 import { useTranslation } from 'react-i18next'
 import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent'
-import SimpleDialog from '../../baseComponents/SimpleDialog'
+import SimpleDialog from '../../baseComponents/layouts/SimpleDialog'
 import TranslatedTypography from '../../baseComponents/TranslatedTypography'
 import { VOTE_STATUS_ACTIVE, VOTE_STATUS_HIDDEN } from '../../../core/contants'
 

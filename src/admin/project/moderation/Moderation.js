@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import Grid from '@material-ui/core/Grid'
 import OFPaper from '../../baseComponents/OFPaper'
 import TalkList from './TalkList'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,13 +18,9 @@ const Moderation = () => {
     }, [isProjectApiInit, dispatch])
 
     return (
-        <Grid container spacing={2}>
-            <Grid item xs={12}>
-                <OFPaper>
-                    <TalkList />
-                </OFPaper>
-            </Grid>
-        </Grid>
+        <OFPaper>
+            <TalkList />
+        </OFPaper>
     )
 }
 

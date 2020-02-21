@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Collapse } from '@material-ui/core'
 import ArrowDown from '@material-ui/icons/KeyboardArrowDown'
-import OFButton from './button/OFButton'
+import OFButton from '../button/OFButton'
 
 const CollapsePanel = ({ children, buttonText }) => {
     const [isExpanded, setExpanded] = useState(false)
