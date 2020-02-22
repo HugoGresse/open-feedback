@@ -10,7 +10,6 @@ import {
 } from '../project/settings/users/usersActions'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { Box } from '@material-ui/core'
-import { isEmpty } from 'lodash'
 import {
     getInviteSelector,
     getUsersSelector,
@@ -54,7 +53,7 @@ const ProjectInviteDialog = ({ inviteId }) => {
         <Dialog
             onClose={() => closeDialog()}
             aria-labelledby="event invitation"
-            open={!isEmpty(inviteId)}>
+            open={!!inviteId}>
             <DialogTitle>Event invitation</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
