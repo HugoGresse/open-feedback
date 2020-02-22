@@ -6,6 +6,7 @@ import {
     serverTimestamp,
 } from '../../firebase'
 import { history } from '../../App'
+import { isEmpty } from 'lodash'
 
 export const didSignIn = (user, error) => {
     return async (dispatch, getState) => {
@@ -149,7 +150,7 @@ export const getDataFromProviderDataOrUser = (user, keyToGet) => {
     if (user[keyToGet]) {
         return user[keyToGet]
     }
-    if (!user.providerData || user.providerData.length === 0) {
+    if (isEmpty(user.providerData)) {
         return ''
     }
     const providerData = user.providerData.filter(data => data[keyToGet])
