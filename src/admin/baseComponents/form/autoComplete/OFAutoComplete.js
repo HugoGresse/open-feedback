@@ -24,7 +24,7 @@ const OFAutoComplete = ({ field, form, dataArray, keyToDisplay, ...other }) => {
             getOptionLabel={option => getLabel(option)}
             id={field.name}
             disabled={!!form.isSubmitting}
-            defaultValue={field.value}
+            defaultValue={form.initialValues[field.name]}
             blurOnSelect={true}
             onClose={() => {
                 if (
