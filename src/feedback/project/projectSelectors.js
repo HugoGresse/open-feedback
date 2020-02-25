@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect'
 import { VOTE_TYPE_TEXT } from '../vote/voteReducer'
-import { orderBy } from 'lodash/collection'
 
 const getProjects = state => state.project
 const getProjectsData = state => state.project.data
@@ -38,10 +37,9 @@ export const getProjectVoteItemsOrderedSelector = createSelector(
         if (!voteItems) {
             return []
         }
-        return orderBy(
-            voteItems.sort(a => (a.type === VOTE_TYPE_TEXT ? 1 : -1)),
-            ['position'],
-            ['asc']
-        )
+        return voteItems.sort((a, b) => {
+            if (a.type === VOTE_TYPE_TEXT) return 1
+            return a.position > b.position ? 1 : -1
+        })
     }
 )
