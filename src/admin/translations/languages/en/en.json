@@ -174,12 +174,12 @@
         "submit": "Add member"
     },
     "settingsVotingForm": {
-        "enableComment": "Enable comment",
         "new": "New item",
-        "options": "Options",
         "title": "Vote items",
         "resetToDefault": "Reset",
-        "resetToDefaultDialogTitle": "Are you sure to reset the voting form?"
+        "resetToDefaultDialogTitle": "Are you sure to reset the voting form?",
+        "typeText": "Text",
+        "typeBoolean": "Chip"
     },
     "speakers": {
         "addButton": "Add speaker",

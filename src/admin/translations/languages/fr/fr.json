@@ -174,12 +174,12 @@
         "submit": "Ajouter un membre"
     },
     "settingsVotingForm": {
-        "enableComment": "Activer les commentaires",
         "new": "Nouveau choix de vote",
-        "options": "Options",
         "title": "Choix de vote",
         "resetToDefault": "Réinitialiser",
-        "resetToDefaultDialogTitle": "Êtes-vous sûr de vouloir réinitialiser le formulaire ?"
+        "resetToDefaultDialogTitle": "Êtes-vous sûr de vouloir réinitialiser le formulaire ?",
+        "typeText": "Texte",
+        "typeBoolean": "Pastille"
     },
     "speakers": {
         "addButton": "Ajouter un orateur·rice",

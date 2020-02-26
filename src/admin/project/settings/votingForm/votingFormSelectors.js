@@ -8,8 +8,13 @@ export const isSavingSelector = state => getVotingForm(state).ongoingSave
 
 // MEMOIZED
 
-export const getBooleanVoteItemsSelector = createSelector(
+export const getSortedVoteItemsSelector = createSelector(
     getVoteItemsSelector,
+    voteItems => voteItems.sort((a, b) => a.position - b.position)
+)
+
+export const getBooleanVoteItemsSelector = createSelector(
+    getSortedVoteItemsSelector,
     voteItems => {
         return voteItems
             .filter(item => item.type === 'boolean')
@@ -18,7 +23,7 @@ export const getBooleanVoteItemsSelector = createSelector(
 )
 
 export const getCommentVoteItemSelector = createSelector(
-    getVoteItemsSelector,
+    getSortedVoteItemsSelector,
     voteItems => {
         return voteItems.filter(item => item.type === 'text')[0]
     }

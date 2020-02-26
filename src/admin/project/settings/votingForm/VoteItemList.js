@@ -3,11 +3,11 @@ import AddIcon from '@material-ui/icons/AddCircleOutline'
 import VoteItem from './VoteItem'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-    getBooleanVoteItemsSelector,
+    getSortedVoteItemsSelector,
     isSavingSelector,
 } from './votingFormSelectors'
 import {
-    onVoteItemAddBoolean,
+    addVoteItem,
     onVoteItemChange,
     onVoteItemDelete,
     onVoteItemMoveDown,
@@ -19,11 +19,12 @@ import Grid from '@material-ui/core/Grid'
 import OFListHeader from '../../../baseComponents/layouts/OFListHeader'
 import OFListItem from '../../../baseComponents/layouts/OFListItem'
 import { useTranslation } from 'react-i18next'
+import { VOTE_TYPE_BOOLEAN } from '../../../../core/contants'
 
 const VoteItemList = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
-    const voteItems = useSelector(getBooleanVoteItemsSelector)
+    const voteItems = useSelector(getSortedVoteItemsSelector)
     const isSaving = useSelector(isSavingSelector)
 
     return (
@@ -47,16 +48,28 @@ const VoteItemList = () => {
                             })
                         )
                     }
+                    onTypeChange={type =>
+                        dispatch(
+                            onVoteItemChange({
+                                ...item,
+                                type,
+                            })
+                        )
+                    }
                     onMoveUp={() => dispatch(onVoteItemMoveUp(item))}
                     onMoveDown={() => dispatch(onVoteItemMoveDown(item))}
                     onDelete={() => dispatch(onVoteItemDelete(item))}
-                    onEnterPressed={() => dispatch(onVoteItemAddBoolean())}
+                    onEnterPressed={() =>
+                        dispatch(addVoteItem(undefined, VOTE_TYPE_BOOLEAN))
+                    }
                 />
             ))}
             <OFListItem style={{ paddingLeft: 20, paddingRight: 20 }}>
                 <Button
                     aria-label="new vote item"
-                    onClick={() => dispatch(onVoteItemAddBoolean())}>
+                    onClick={() =>
+                        dispatch(addVoteItem(undefined, VOTE_TYPE_BOOLEAN))
+                    }>
                     <AddIcon style={{ marginRight: 6 }} />
                     {t('settingsVotingForm.new')}
                 </Button>

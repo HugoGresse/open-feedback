@@ -18,10 +18,10 @@ import {
 import { ADD_NOTIFICATION } from '../../../notification/notificationActionTypes'
 import {
     getBooleanVoteItemsSelector,
-    getCommentVoteItemSelector,
     getVoteItemsSelector,
 } from './votingFormSelectors'
 import { newId } from '../../../../utils/stringUtils'
+import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../../../core/contants'
 
 export const getVoteItems = () => (dispatch, getState) =>
     dispatch({
@@ -51,11 +51,14 @@ export const onVoteItemDelete = voteItem => ({
     payload: voteItem,
 })
 
-export const onVoteItemAddBoolean = optionalName => {
+export const addVoteItem = (optionalName, type) => {
     return (dispatch, getState) => {
-        const voteItems = getBooleanVoteItemsSelector(getState())
+        const voteItems = getVoteItemsSelector(getState())
         const position =
-            voteItems.length > 0 ? voteItems.slice(-1)[0].position + 1 : 0
+            voteItems.length > 0
+                ? (voteItems[voteItems.length - 1].position ||
+                      voteItems.length) + 1
+                : 0
 
         return dispatch({
             type: ADD_VOTEITEM,
@@ -63,31 +66,9 @@ export const onVoteItemAddBoolean = optionalName => {
                 id: newId(),
                 name: optionalName || '',
                 position: position,
-                type: 'boolean',
+                type: type,
             },
         })
-    }
-}
-
-export const toggleVoteComment = (enableComment, translation) => {
-    return (dispatch, getState) => {
-        if (enableComment) {
-            dispatch({
-                type: ADD_VOTEITEM,
-                payload: {
-                    id: newId(),
-                    name: translation('defaultVotingForm.comment'),
-                    type: 'text',
-                },
-            })
-        } else {
-            dispatch({
-                type: DELETE_VOTEITEM,
-                payload: getCommentVoteItemSelector(getState()),
-            })
-        }
-
-        return dispatch(saveVoteItems())
     }
 }
 
@@ -150,13 +131,27 @@ export const fillDefaultVotingForm = (t, replace) => async dispatch => {
     if (replace) {
         await dispatch(deleteAllVoteItems())
     }
-    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.fun')))
-    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.learned')))
-    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.interesting')))
-    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.speaker')))
-    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.nclear')))
-    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.technical')))
-    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.example')))
-    await dispatch(onVoteItemAddBoolean(t('defaultVotingForm.complex')))
-    await dispatch(toggleVoteComment(true, t))
+    await dispatch(addVoteItem(t('defaultVotingForm.fun'), VOTE_TYPE_BOOLEAN))
+    await dispatch(
+        addVoteItem(t('defaultVotingForm.learned'), VOTE_TYPE_BOOLEAN)
+    )
+    await dispatch(
+        addVoteItem(t('defaultVotingForm.interesting'), VOTE_TYPE_BOOLEAN)
+    )
+    await dispatch(
+        addVoteItem(t('defaultVotingForm.speaker'), VOTE_TYPE_BOOLEAN)
+    )
+    await dispatch(
+        addVoteItem(t('defaultVotingForm.nclear'), VOTE_TYPE_BOOLEAN)
+    )
+    await dispatch(
+        addVoteItem(t('defaultVotingForm.technical'), VOTE_TYPE_BOOLEAN)
+    )
+    await dispatch(
+        addVoteItem(t('defaultVotingForm.example'), VOTE_TYPE_BOOLEAN)
+    )
+    await dispatch(
+        addVoteItem(t('defaultVotingForm.complex'), VOTE_TYPE_BOOLEAN)
+    )
+    await dispatch(addVoteItem(t('defaultVotingForm.comment'), VOTE_TYPE_TEXT))
 }
