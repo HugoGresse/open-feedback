@@ -11,6 +11,7 @@
         "cancel": "Cancel",
         "copy": "Copy",
         "save": "Save",
+        "saved": "Saved",
         "download": "Download",
         "close": "Close"
     },
@@ -148,7 +149,9 @@
                 "permissionDenied": "Only the event owner can delete the event.",
                 "defaultError": "Failed to delete the event, "
             }
-        }
+        },
+        "settings": "Settings",
+        "languages": "Additional languages (for the voting form)"
     },
     "settingsUser": {
         "add": "Add a new member to the event",

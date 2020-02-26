@@ -12,7 +12,8 @@
         "copy": "Copier",
         "save": "Sauvegarder",
         "download": "Télécharger",
-        "close": "Fermer"
+        "close": "Fermer",
+        "saved": "Sauvegardé"
     },
     "dashboard": {
         "comments": "Commentaires",
@@ -148,7 +149,9 @@
                 "permissionDenied": "Seul le propriétaire de l'évènement peut le supprimer.",
                 "defaultError": "Erreur lors de la suppression de l'évènement, "
             }
-        }
+        },
+        "settings": "Paramètres",
+        "languages": "Langues additionnelles (pour le bulletin de votes)"
     },
     "settingsUser": {
         "add": "Ajouter un nouveau membre à l'événement",
