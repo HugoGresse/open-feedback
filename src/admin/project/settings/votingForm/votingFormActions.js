@@ -10,18 +10,16 @@ import {
     SAVE_VOTEITEMS_ONGOING,
     SAVE_VOTEITEMS_SUCCESS,
 } from './votingFormActionTypes'
-import { fireStoreMainInstance } from '../../../../firebase'
+import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase'
 import {
     getSelectedProjectIdSelector,
     getSelectedProjectSelector,
 } from '../../core/projectSelectors'
 import { ADD_NOTIFICATION } from '../../../notification/notificationActionTypes'
-import {
-    getBooleanVoteItemsSelector,
-    getVoteItemsSelector,
-} from './votingFormSelectors'
+import { getVoteItemsSelector } from './votingFormSelectors'
 import { newId } from '../../../../utils/stringUtils'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../../../core/contants'
+import { filterMap } from '../../../../utils/mapUtils'
 
 export const getVoteItems = () => (dispatch, getState) =>
     dispatch({
@@ -77,6 +75,28 @@ export const saveVoteItems = () => {
         const voteItems = getVoteItemsSelector(getState())
         const selectedProjectId = getSelectedProjectIdSelector(getState())
 
+        let tempLanguages = {}
+        const cleanedVoteItems = voteItems
+            .filter(item => item.name)
+            .map(item => {
+                if (!item.languages) return item
+
+                tempLanguages = filterMap(
+                    item.languages,
+                    translatedName => translatedName
+                )
+
+                if (Object.keys(tempLanguages).length === 0) {
+                    delete item.languages
+                    return item
+                }
+
+                return {
+                    ...item,
+                    languages: tempLanguages,
+                }
+            })
+
         dispatch({
             type: SAVE_VOTEITEMS_ONGOING,
         })
@@ -86,7 +106,8 @@ export const saveVoteItems = () => {
             .doc(selectedProjectId)
             .set(
                 {
-                    voteItems,
+                    voteItems: cleanedVoteItems,
+                    updatedAt: serverTimestamp(),
                 },
                 { merge: true }
             )
@@ -101,6 +122,7 @@ export const saveVoteItems = () => {
 
                 dispatch({
                     type: SAVE_VOTEITEMS_SUCCESS,
+                    payload: cleanedVoteItems,
                 })
             })
             .catch(error => {

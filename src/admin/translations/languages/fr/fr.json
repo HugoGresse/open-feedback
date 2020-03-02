@@ -179,7 +179,8 @@
         "resetToDefault": "Réinitialiser",
         "resetToDefaultDialogTitle": "Êtes-vous sûr de vouloir réinitialiser le formulaire ?",
         "typeText": "Texte",
-        "typeBoolean": "Pastille"
+        "typeBoolean": "Pastille",
+        "editLang": "Vous pouvez modifier les langues depuis la page Évènement & thème. "
     },
     "speakers": {
         "addButton": "Ajouter un orateur·rice",

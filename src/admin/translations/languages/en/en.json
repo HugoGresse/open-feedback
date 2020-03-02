@@ -179,7 +179,8 @@
         "resetToDefault": "Reset",
         "resetToDefaultDialogTitle": "Are you sure to reset the voting form?",
         "typeText": "Text",
-        "typeBoolean": "Chip"
+        "typeBoolean": "Chip",
+        "editLang": "You can edit the languages from the Event & Theme page"
     },
     "speakers": {
         "addButton": "Add speaker",

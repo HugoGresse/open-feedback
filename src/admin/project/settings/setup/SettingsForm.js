@@ -14,14 +14,7 @@ import FormikAutoSave from '../../../baseComponents/form/autoSave/FormikAutoSave
 import AutoSaveNotice from '../../../baseComponents/layouts/AutoSaveNotice'
 import { editProject } from '../../core/projectActions'
 import Box from '@material-ui/core/Box'
-
-const langMapToArray = Object.keys(LangMap).reduce((acc, tag) => {
-    acc.push({
-        ...LangMap[tag],
-        tag,
-    })
-    return acc
-}, [])
+import langMapArray from '../../utils/convertLangMapArray'
 
 const SettingsForm = () => {
     const dispatch = useDispatch()
@@ -55,7 +48,7 @@ const SettingsForm = () => {
                                 <Field
                                     name="languages"
                                     value={values.languages}
-                                    dataArray={langMapToArray}
+                                    dataArray={langMapArray}
                                     keyToDisplay="englishName"
                                     multiple={true}
                                     component={OFAutoComplete}

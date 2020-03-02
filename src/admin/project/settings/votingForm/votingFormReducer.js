@@ -115,6 +115,11 @@ const votingFormReducer = (state = initState, { payload, type }) => {
             }
         }
         case SAVE_VOTEITEMS_SUCCESS:
+            return {
+                ...state,
+                ongoingSave: false,
+                voteItems: payload,
+            }
         case SAVE_VOTEITEMS_ERROR:
             return {
                 ...state,

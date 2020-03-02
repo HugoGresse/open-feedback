@@ -20,6 +20,7 @@ const OFInputStyled = styled(InputBase)`
         props.error ? `box-shadow: 0px 1px 3px rgba(255,0,0, 0.3);` : ``}
     width: 100%;
     background: ${COLORS.WHITE};
+    border-radius: 2px;
     box-sizing: border-box;
     ${fontSize}
     ${fontWeight}

@@ -28,10 +28,3 @@ export const getCommentVoteItemSelector = createSelector(
         return voteItems.filter(item => item.type === 'text')[0]
     }
 )
-
-export const isCommentEnableSelector = createSelector(
-    getCommentVoteItemSelector,
-    item => {
-        return !!item
-    }
-)
