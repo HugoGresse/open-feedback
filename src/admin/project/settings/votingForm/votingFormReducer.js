@@ -6,6 +6,7 @@ import {
     GET_VOTEITEMS_SUCCESS,
     MOVE_DOWN_VOTEITEM,
     MOVE_UP_VOTEITEM,
+    SAVE_VOTEITEM_CONFIRM,
     SAVE_VOTEITEMS_ERROR,
     SAVE_VOTEITEMS_ONGOING,
     SAVE_VOTEITEMS_SUCCESS,
@@ -15,6 +16,7 @@ import { SELECT_PROJECT } from '../../core/projectActionTypes'
 const initState = {
     voteItems: [],
     ongoingSave: false,
+    shouldConfirmSave: false,
 }
 
 const votingFormReducer = (state = initState, { payload, type }) => {
@@ -28,8 +30,15 @@ const votingFormReducer = (state = initState, { payload, type }) => {
                 voteItems: payload || [],
             }
         case EDIT_VOTEITEM: {
+            let shouldConfirm = state.shouldConfirmSave
             const voteItems = state.voteItems.map(item => {
                 if (item.id === payload.id) {
+                    return payload
+                }
+
+                if (item.id === payload.oldId) {
+                    // Type changed, new id has been generated
+                    shouldConfirm = true
                     return payload
                 }
                 return item
@@ -38,6 +47,7 @@ const votingFormReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 voteItems: voteItems,
+                shouldConfirmSave: shouldConfirm,
             }
         }
 
@@ -100,6 +110,9 @@ const votingFormReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 voteItems: voteItems,
+                shouldConfirmSave: state.shouldConfirmSave
+                    ? true
+                    : !payload.local,
             }
         }
         case DELETE_ALL_VOTEITEMS: {
@@ -114,6 +127,11 @@ const votingFormReducer = (state = initState, { payload, type }) => {
                 voteItems: [...state.voteItems, payload],
             }
         }
+        case SAVE_VOTEITEM_CONFIRM:
+            return {
+                ...state,
+                shouldConfirmSave: false,
+            }
         case SAVE_VOTEITEMS_SUCCESS:
             return {
                 ...state,

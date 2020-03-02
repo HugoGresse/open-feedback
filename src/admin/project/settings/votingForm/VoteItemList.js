@@ -4,6 +4,7 @@ import VoteItem from './VoteItem'
 import { useDispatch, useSelector } from 'react-redux'
 import {
     getSortedVoteItemsSelector,
+    shouldConfirmSaveSelector,
     isSavingSelector,
 } from './votingFormSelectors'
 import {
@@ -12,6 +13,7 @@ import {
     onVoteItemDelete,
     onVoteItemMoveDown,
     onVoteItemMoveUp,
+    onVoteItemSaveConfirmed,
     saveVoteItems,
 } from './votingFormActions'
 import Button from '@material-ui/core/Button'
@@ -21,6 +23,8 @@ import OFListItem from '../../../baseComponents/layouts/OFListItem'
 import { useTranslation } from 'react-i18next'
 import { VOTE_TYPE_BOOLEAN } from '../../../../core/contants'
 import { getLanguagesSelector } from '../../core/projectSelectors'
+import SimpleDialog from '../../../baseComponents/layouts/SimpleDialog'
+import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
 
 const VoteItemList = () => {
     const { t } = useTranslation()
@@ -28,7 +32,18 @@ const VoteItemList = () => {
     const voteItems = useSelector(getSortedVoteItemsSelector)
     const isSaving = useSelector(isSavingSelector)
     const languages = useSelector(getLanguagesSelector)
+    const hasTypeChanged = useSelector(shouldConfirmSaveSelector)
     const [focusId, setFocusId] = useState()
+    const [isTypeChangeDialogOpen, setTypeChangedDialog] = useState(false)
+
+    const save = byPassTypeChange => {
+        if (hasTypeChanged && !byPassTypeChange) {
+            setTypeChangedDialog(true)
+            return
+        }
+        dispatch(saveVoteItems())
+        setFocusId()
+    }
 
     return (
         <Grid container>
@@ -36,7 +51,7 @@ const VoteItemList = () => {
                 title={t('settingsVotingForm.title')}
                 disableFilter={true}
                 buttonProcessing={isSaving}
-                buttonClick={() => dispatch(saveVoteItems())}
+                buttonClick={save}
                 buttonText={t('common.save')}
             />
             {voteItems.map((item, index) => (
@@ -76,8 +91,7 @@ const VoteItemList = () => {
                     onDelete={() => dispatch(onVoteItemDelete(item))}
                     onFocus={() => setFocusId(item.id)}
                     focusId={focusId}
-                    onEnterPressed={voteItem => {
-                        console.log(index, voteItems.length)
+                    onEnterPressed={() => {
                         if (index >= voteItems.length - 1) {
                             dispatch(addVoteItem(undefined, VOTE_TYPE_BOOLEAN))
                         } else {
@@ -96,6 +110,20 @@ const VoteItemList = () => {
                     {t('settingsVotingForm.new')}
                 </Button>
             </OFListItem>
+
+            <SimpleDialog
+                onClose={() => setTypeChangedDialog(false)}
+                onConfirm={() => {
+                    setTypeChangedDialog(false)
+                    dispatch(onVoteItemSaveConfirmed())
+                    save(true)
+                }}
+                title={t('settingsVotingForm.typeChangeDialogTitle')}
+                cancelText={t('common.cancel')}
+                confirmText={t('settingsVotingForm.typeChangeDialogConfirm')}
+                open={isTypeChangeDialogOpen}>
+                <TranslatedTypography i18nKey="settingsVotingForm.typeChangeDialogDesc" />
+            </SimpleDialog>
         </Grid>
     )
 }

@@ -6,6 +6,7 @@ import {
     GET_VOTEITEMS_SUCCESS,
     MOVE_DOWN_VOTEITEM,
     MOVE_UP_VOTEITEM,
+    SAVE_VOTEITEM_CONFIRM,
     SAVE_VOTEITEMS_ERROR,
     SAVE_VOTEITEMS_ONGOING,
     SAVE_VOTEITEMS_SUCCESS,
@@ -29,10 +30,24 @@ export const getVoteItems = () => (dispatch, getState) =>
             : [],
     })
 
-export const onVoteItemChange = voteItem => ({
-    type: EDIT_VOTEITEM,
-    payload: voteItem,
-})
+export const onVoteItemChange = voteItem => (dispatch, getState) => {
+    const savedVoteItems = getVoteItemsSelector(getState())
+    const savedVoteItem = savedVoteItems.filter(item => voteItem.id === item.id)
+
+    const editedVoteItem = {
+        ...voteItem,
+    }
+
+    if (!editedVoteItem.local && editedVoteItem.type !== savedVoteItem.type) {
+        editedVoteItem.oldId = editedVoteItem.id
+        editedVoteItem.id = newId()
+    }
+
+    dispatch({
+        type: EDIT_VOTEITEM,
+        payload: editedVoteItem,
+    })
+}
 
 export const onVoteItemMoveUp = voteItem => ({
     type: MOVE_UP_VOTEITEM,
@@ -49,14 +64,21 @@ export const onVoteItemDelete = voteItem => ({
     payload: voteItem,
 })
 
+export const onVoteItemSaveConfirmed = () => ({
+    type: SAVE_VOTEITEM_CONFIRM,
+})
+
 export const addVoteItem = (optionalName, type) => {
     return (dispatch, getState) => {
         const voteItems = getVoteItemsSelector(getState())
-        const position =
-            voteItems.length > 0
-                ? (voteItems[voteItems.length - 1].position ||
-                      voteItems.length) + 1
-                : 0
+        let position = 0
+        if (voteItems.length > 0) {
+            if (voteItems[voteItems.length - 1].position >= 0) {
+                position = voteItems[voteItems.length - 1].position + 1
+            } else {
+                position = voteItems.length
+            }
+        }
 
         return dispatch({
             type: ADD_VOTEITEM,
@@ -65,6 +87,7 @@ export const addVoteItem = (optionalName, type) => {
                 name: optionalName || '',
                 position: position,
                 type: type,
+                local: true,
             },
         })
     }
@@ -79,6 +102,8 @@ export const saveVoteItems = () => {
         const cleanedVoteItems = voteItems
             .filter(item => item.name)
             .map(item => {
+                delete item.local
+
                 if (!item.languages) return item
 
                 tempLanguages = filterMap(

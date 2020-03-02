@@ -180,7 +180,10 @@
         "resetToDefaultDialogTitle": "Are you sure to reset the voting form?",
         "typeText": "Text",
         "typeBoolean": "Chip",
-        "editLang": "You can edit the languages from the Event & Theme page"
+        "editLang": "You can edit the languages from the Event & Theme page",
+        "typeChangeDialogTitle": "Vote type changed",
+        "typeChangeDialogDesc": "A vote type has changed or a vote item has been deleted. If there are already votes linked to this vote item, they will not be visible.",
+        "typeChangeDialogConfirm": "Save"
     },
     "speakers": {
         "addButton": "Add speaker",
