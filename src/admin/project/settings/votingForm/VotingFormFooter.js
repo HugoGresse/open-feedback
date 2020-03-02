@@ -35,7 +35,7 @@ const VotingForm = () => {
                     setIsSaving(true)
                     dispatch(fillDefaultVotingForm(t, true)).then(async () => {
                         await dispatch(saveVoteItems())
-                        await sleep(500) // dela on firestore...
+                        await sleep(1000) // dela on firestore...
                         await dispatch(getProject())
                         await dispatch(getVoteItems())
                         setDialogOpen(false)
