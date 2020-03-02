@@ -9,9 +9,10 @@ import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import TalkVoteTextResult from './TalkVoteTextResult'
-import { Trans } from 'react-i18next'
+import { Trans, withTranslation } from 'react-i18next'
 import { VOTE_STATUS_HIDDEN } from '../../core/contants'
 import COLORS from '../../constants/colors'
+import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
     itemContainer: {
@@ -125,7 +126,7 @@ class TalkVoteText extends Component {
     }
 
     render() {
-        const { classes, voteItem, voteResult } = this.props
+        const { classes, voteItem, voteResult, t } = this.props
 
         const saveUpdateKey = this.props.currentUserVote
             ? 'comment.update'
@@ -138,18 +139,17 @@ class TalkVoteText extends Component {
                 sm={12}
                 md={12}
                 className={classes.itemContainer}>
+                <Typography variant="h6">{voteItem.name}</Typography>
                 <Paper elevation={1} className={classes.item}>
                     <TextField
                         multiline
                         fullWidth
                         margin="none"
-                        rows="3"
-                        rowsMax="6"
                         InputProps={{
                             disableUnderline: true,
                         }}
                         className={classes.textArea}
-                        placeholder={voteItem.name}
+                        placeholder={t('comment.placeholder')}
                         onChange={this.onTextChange}
                         value={this.state.comment}
                     />
@@ -198,4 +198,4 @@ TalkVoteText.propTypes = {
     chipColors: PropTypes.array,
 }
 
-export default withStyles(styles)(TalkVoteText)
+export default withStyles(styles)(withTranslation()(TalkVoteText))
