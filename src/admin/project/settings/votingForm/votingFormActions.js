@@ -31,8 +31,9 @@ export const getVoteItems = () => (dispatch, getState) =>
     })
 
 export const onVoteItemChange = voteItem => (dispatch, getState) => {
-    const savedVoteItems = getVoteItemsSelector(getState())
-    const savedVoteItem = savedVoteItems.filter(item => voteItem.id === item.id)
+    const savedVoteItem = getVoteItemsSelector(getState()).filter(
+        item => voteItem.id === item.id
+    )[0]
 
     const editedVoteItem = {
         ...voteItem,
