@@ -178,6 +178,7 @@
         "title": "Choix de vote",
         "resetToDefault": "Réinitialiser",
         "resetToDefaultDialogTitle": "Êtes-vous sûr de vouloir réinitialiser le formulaire ?",
+        "resetToDefaultDialogDesc": "Les votes existant ne seront plus affiché, les statistiques listerons toujours ces votes.",
         "typeText": "Texte",
         "typeBoolean": "Pastille",
         "editLang": "Vous pouvez modifier les langues depuis la page Évènement & thème.",

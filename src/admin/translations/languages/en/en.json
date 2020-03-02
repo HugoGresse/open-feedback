@@ -178,6 +178,7 @@
         "title": "Vote items",
         "resetToDefault": "Reset",
         "resetToDefaultDialogTitle": "Are you sure to reset the voting form?",
+        "resetToDefaultDialogDesc": "Existing votes will no longer be displayed, dashboard will still list them.",
         "typeText": "Text",
         "typeBoolean": "Chip",
         "editLang": "You can edit the languages from the Event & Theme page",
