@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import OFInput from '../../../baseComponents/form/input/OFInput'
 import ArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import ArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
@@ -68,7 +68,7 @@ const VoteItem = ({
         if (focusId !== item.id && focusedLangIndex >= 0) {
             setFocusLangIndex(-1)
         }
-    }, [focusId, setFocusLangIndex])
+    }, [focusId, setFocusLangIndex, focusedLangIndex, item.id])
 
     return (
         <OFListItem style={{ paddingLeft: 20, paddingRight: 20 }}>
