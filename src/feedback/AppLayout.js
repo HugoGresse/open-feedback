@@ -17,6 +17,8 @@ import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchPare
 import { getLoginErrorSelector } from './auth/authSelectors'
 import Footer from './layout/Footer'
 import { getTalksDatesSelector } from '../core/talks/talksSelectors'
+import { Redirect } from 'react-router-dom'
+import HardRedirect from '../baseComponents/HardRedirect'
 
 const styles = theme => ({
     loading: {
@@ -84,10 +86,14 @@ class AppLayout extends Component {
             )
         } else if (projectLoadError) {
             return (
-                <Error
-                    error="Unable to load the project."
-                    errorDetail={projectLoadError}
-                />
+                <>
+                    <Error
+                        error="Unable to load the project."
+                        errorDetail={projectLoadError}
+                    />
+
+                    <HardRedirect to="/404" />
+                </>
             )
         } else if (projectVotesError) {
             return (
