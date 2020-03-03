@@ -1,5 +1,6 @@
 import { getAdminStateSelector } from '../../../adminSelector'
 import { createSelector } from 'reselect'
+import { VOTE_TYPE_TEXT } from '../../../../core/contants'
 
 const getVotingForm = state => getAdminStateSelector(state).adminVotingForm
 
@@ -12,7 +13,11 @@ export const shouldConfirmSaveSelector = state =>
 
 export const getSortedVoteItemsSelector = createSelector(
     getVoteItemsSelector,
-    voteItems => voteItems.sort((a, b) => a.position - b.position)
+    voteItems =>
+        voteItems.sort((a, b) => {
+            if (a.type === VOTE_TYPE_TEXT) return 1
+            return a.position > b.position ? 1 : -1
+        })
 )
 
 export const getBooleanVoteItemsSelector = createSelector(
