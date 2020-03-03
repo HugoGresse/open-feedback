@@ -32,12 +32,12 @@ const VoteItemList = () => {
     const voteItems = useSelector(getSortedVoteItemsSelector)
     const isSaving = useSelector(isSavingSelector)
     const languages = useSelector(getLanguagesSelector)
-    const hasTypeChanged = useSelector(shouldConfirmSaveSelector)
+    const shouldConfirmSave = useSelector(shouldConfirmSaveSelector)
     const [focusId, setFocusId] = useState()
     const [isTypeChangeDialogOpen, setTypeChangedDialog] = useState(false)
 
-    const save = byPassTypeChange => {
-        if (hasTypeChanged && !byPassTypeChange) {
+    const save = bypassConfirm => {
+        if (shouldConfirmSave && !bypassConfirm) {
             setTypeChangedDialog(true)
             return
         }

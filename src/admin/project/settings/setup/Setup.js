@@ -12,7 +12,7 @@ const Setup = () => {
         <>
             <OFCard style={{ marginBottom: 32 }}>
                 <CardContent>
-                    <Suspense fallback={<LoaderMatchParent />}>
+                    <Suspense fallback={<LoaderMatchParent height="100px" />}>
                         <SettingsForm />
                     </Suspense>
                 </CardContent>

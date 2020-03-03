@@ -152,8 +152,7 @@ const VoteItem = ({
             </Grid>
             <Grid item xs={12} sm={2} className={classes.typeCell}>
                 <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
+                    id="vote-item-type"
                     value={item.type}
                     onChange={event => onTypeChange(event.target.value)}
                     input={<OFInput />}>
