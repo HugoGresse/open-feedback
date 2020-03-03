@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { VOTE_TYPE_TEXT } from '../vote/voteReducer'
+import { VOTE_TYPE_TEXT } from '../../core/contants'
 
 const getProjects = state => state.project
 const getProjectsData = state => state.project.data

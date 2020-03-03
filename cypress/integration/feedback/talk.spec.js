@@ -73,19 +73,19 @@ describe('Single talk', function() {
 
         const inputText = stringGenerator()
         const textEdited = stringGenerator()
-        const voteTextAreaSelector = 'textarea[placeholder="Comment"]'
+        const voteTextAreaSelector = 'textarea[placeholder="Your answer"]'
 
         cy.get(voteTextAreaSelector).type(inputText)
-        cy.contains('Post comment').click()
+        cy.contains('Save').click()
         cy.get('.comments').should('contain', inputText)
 
         cy.get(voteTextAreaSelector).type(textEdited)
-        cy.contains('Update comment').click()
+        cy.contains('Update').click()
         cy.get('.comments').should('contain', inputText + textEdited)
 
         // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(500)
-        cy.contains('Delete comment').click()
+        cy.contains('Delete').click()
         cy.get('.comments').should('not.contain', inputText + textEdited)
     })
 })

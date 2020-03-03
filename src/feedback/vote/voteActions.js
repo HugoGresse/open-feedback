@@ -19,9 +19,12 @@ import {
     getUserVotesByTalkAndVoteItemSelector,
 } from './voteSelectors'
 import { INCREMENT_VOTE_LOCALLY } from '../project/projectActionTypes'
-import { VOTE_TYPE_TEXT } from './voteReducer'
 import { checkDateBeforeVote } from './checkDataBeforeVote'
-import { VOTE_STATUS_ACTIVE, VOTE_STATUS_DELETED } from '../../core/contants'
+import {
+    VOTE_STATUS_ACTIVE,
+    VOTE_STATUS_DELETED,
+    VOTE_TYPE_TEXT,
+} from '../../core/contants'
 
 export const voteFor = (talkId, voteItem, data) => {
     return (dispatch, getState) => {

@@ -19,6 +19,11 @@ export const getProject = projectId => {
                 if (projectSnapshot.exists) {
                     const project = projectSnapshot.data()
                     project.id = projectId
+                    // noinspection JSDeprecatedSymbols
+                    project.voteItems = getVoteLabelInClosestLanguage(
+                        project.voteItems,
+                        navigator.language || navigator.userLanguage
+                    )
 
                     initProjectApi(project.setupType, project)
 
@@ -78,4 +83,31 @@ export const getVoteResult = () => {
                 })
             })
     }
+}
+
+const getVoteLabelInClosestLanguage = (voteItems, navigatorLang) => {
+    if (!voteItems) {
+        return []
+    }
+    if (!navigatorLang || voteItems.length === 0) {
+        return voteItems
+    }
+
+    const firstPick = navigatorLang
+    const secondPick = navigatorLang.split('-')[0]
+
+    return voteItems.map(item => {
+        if (!item.languages || item.languages.length === 0) {
+            return item
+        }
+
+        return {
+            ...item,
+            name:
+                item.languages[firstPick] ||
+                item.languages[secondPick] ||
+                item.name ||
+                '',
+        }
+    })
 }

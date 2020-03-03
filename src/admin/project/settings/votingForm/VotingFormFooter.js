@@ -4,16 +4,21 @@ import BottomActionLayout from '../../layout/BottomActionLayout'
 import OFButton from '../../../baseComponents/button/OFButton'
 import { useTranslation } from 'react-i18next'
 import CachedIcon from '@material-ui/icons/Cached'
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import DialogActions from '@material-ui/core/DialogActions'
 import { getProject } from '../../core/projectActions'
-import { fillDefaultVotingForm, getVoteItems } from './votingFormActions'
+import {
+    fillDefaultVotingForm,
+    getVoteItems,
+    saveVoteItems,
+} from './votingFormActions'
+import SimpleDialog from '../../../baseComponents/layouts/SimpleDialog'
+import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
+import { sleep } from '../../../../utils/sleep'
 
 const VotingForm = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const [isDialogOpen, setDialogOpen] = useState(false)
+    const [isSaving, setIsSaving] = useState(false)
 
     return (
         <BottomActionLayout>
@@ -24,34 +29,26 @@ const VotingForm = () => {
                 {t('settingsVotingForm.resetToDefault')}
             </OFButton>
 
-            <Dialog
-                open={isDialogOpen}
+            <SimpleDialog
                 onClose={() => setDialogOpen(false)}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description">
-                <DialogTitle id="alert-dialog-title">
-                    {t('settingsVotingForm.resetToDefaultDialogTitle')}
-                </DialogTitle>
-                <DialogActions>
-                    <OFButton
-                        onClick={() => setDialogOpen(false)}
-                        style={{ design: 'text' }}>
-                        {t('common.cancel')}
-                    </OFButton>
-                    <OFButton
-                        onClick={() =>
-                            dispatch(fillDefaultVotingForm(t, true)).then(
-                                async () => {
-                                    await dispatch(getProject())
-                                    await dispatch(getVoteItems())
-                                    setDialogOpen(false)
-                                }
-                            )
-                        }>
-                        {t('settingsVotingForm.resetToDefault')}
-                    </OFButton>
-                </DialogActions>
-            </Dialog>
+                onConfirm={() => {
+                    setIsSaving(true)
+                    dispatch(fillDefaultVotingForm(t, true)).then(async () => {
+                        await dispatch(saveVoteItems())
+                        await sleep(1000) // delay on firestore...
+                        await dispatch(getProject())
+                        await dispatch(getVoteItems())
+                        setDialogOpen(false)
+                        setIsSaving(false)
+                    })
+                }}
+                title={t('settingsVotingForm.resetToDefaultDialogTitle')}
+                cancelText={t('common.cancel')}
+                confirmText={t('settingsVotingForm.resetToDefault')}
+                confirmLoading={isSaving}
+                open={isDialogOpen}>
+                <TranslatedTypography i18nKey="settingsVotingForm.resetToDefaultDialogDesc" />
+            </SimpleDialog>
         </BottomActionLayout>
     )
 }

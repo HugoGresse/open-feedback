@@ -19,6 +19,7 @@ import { sleep } from '../../../utils/sleep'
 import {
     fillDefaultVotingForm,
     getVoteItems,
+    saveVoteItems,
 } from '../settings/votingForm/votingFormActions'
 import { redirectToProject } from '../utils/redirectToProject'
 import Dialog from '@material-ui/core/Dialog'
@@ -63,6 +64,7 @@ const NewProject = ({ onCancel }) => {
             })
             .then(async () => {
                 await dispatch(fillDefaultVotingForm(t))
+                await dispatch(saveVoteItems())
                 // The votes was saved in db but the query to retrieve does not returns them if queried directly after (sometimes)
                 await sleep(1000)
                 await dispatch(getProject())
