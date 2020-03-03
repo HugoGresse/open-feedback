@@ -17,6 +17,9 @@ export const getMemberIds = state => getSelectedProjectSelector(state).members
 
 export const getOwnerId = state => getSelectedProjectSelector(state).owner
 
+export const getLanguagesSelector = state =>
+    getSelectedProjectSelector(state).languages || []
+
 // MEMOIZED
 
 export const getSortedProjectsSelector = createSelector(

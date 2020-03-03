@@ -1,8 +1,9 @@
 {
     "comment": {
-        "delete": "Delete comment",
-        "update": "Update comment",
-        "save": "Post comment",
+        "placeholder": "Your answer",
+        "delete": "Delete",
+        "update": "Update",
+        "save": "Save",
         "hidden": "Your vote has been hidden by the event organizer. Contact them for more information"
     },
     "searchPlaceholder": "Search",

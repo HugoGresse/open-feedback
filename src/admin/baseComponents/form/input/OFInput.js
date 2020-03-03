@@ -20,8 +20,8 @@ const OFInputStyled = styled(InputBase)`
         props.error ? `box-shadow: 0px 1px 3px rgba(255,0,0, 0.3);` : ``}
     width: 100%;
     background: ${COLORS.WHITE};
+    border-radius: 2px;
     box-sizing: border-box;
-    ${props => (props.icon ? ` padding-left: 40px;` : ` padding-left: 12px;`)}
     ${fontSize}
     ${fontWeight}
     ${space}
@@ -31,7 +31,7 @@ const OFInputStyled = styled(InputBase)`
         color: ${COLORS.LIGHT_GRAY};
     }
     &::selected {
-        background-color: 'transparent'
+        background-color: 'transparent';
     }
 `
 
@@ -40,6 +40,7 @@ const useStyles = makeStyles({
         borderColor: COLORS.RED_ORANGE,
     },
     selectedInput: {
+        paddingLeft: 12,
         '&:-internal-autofill-selected': {
             backgroundColor: 'transparent',
         },
@@ -55,7 +56,6 @@ function OFInput(props) {
         <>
             {otherProps.icon && <IconWrapper>{otherProps.icon}</IconWrapper>}
             <OFInputStyled
-                icon={otherProps.icon}
                 classes={{
                     focused: classes.focusedInput,
                     input: classes.selectedInput,

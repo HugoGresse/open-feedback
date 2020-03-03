@@ -11,6 +11,7 @@
         "cancel": "Cancel",
         "copy": "Copy",
         "save": "Save",
+        "saved": "Saved",
         "download": "Download",
         "close": "Close"
     },
@@ -148,7 +149,9 @@
                 "permissionDenied": "Only the event owner can delete the event.",
                 "defaultError": "Failed to delete the event, "
             }
-        }
+        },
+        "settings": "Settings",
+        "languages": "Additional languages (for the voting form)"
     },
     "settingsUser": {
         "add": "Add a new member to the event",
@@ -171,12 +174,17 @@
         "submit": "Add member"
     },
     "settingsVotingForm": {
-        "enableComment": "Enable comment",
         "new": "New item",
-        "options": "Options",
         "title": "Vote items",
         "resetToDefault": "Reset",
-        "resetToDefaultDialogTitle": "Are you sure to reset the voting form?"
+        "resetToDefaultDialogTitle": "Are you sure to reset the voting form?",
+        "resetToDefaultDialogDesc": "Existing votes will no longer be displayed, dashboard will still list them.",
+        "typeText": "Text",
+        "typeBoolean": "Chip",
+        "editLang": "You can edit the languages from the Event & Theme page",
+        "typeChangeDialogTitle": "Vote type changed",
+        "typeChangeDialogDesc": "A vote type has changed or a vote item has been deleted. If there are already votes linked to this vote item, they will not be visible.",
+        "typeChangeDialogConfirm": "Save"
     },
     "speakers": {
         "addButton": "Add speaker",

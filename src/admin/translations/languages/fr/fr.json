@@ -12,7 +12,8 @@
         "copy": "Copier",
         "save": "Sauvegarder",
         "download": "Télécharger",
-        "close": "Fermer"
+        "close": "Fermer",
+        "saved": "Sauvegarder"
     },
     "dashboard": {
         "comments": "Commentaires",
@@ -148,7 +149,9 @@
                 "permissionDenied": "Seul le propriétaire de l'évènement peut le supprimer.",
                 "defaultError": "Erreur lors de la suppression de l'évènement, "
             }
-        }
+        },
+        "settings": "Paramètres",
+        "languages": "Langues additionnelles (pour le bulletin de votes)"
     },
     "settingsUser": {
         "add": "Ajouter un nouveau membre à l'événement",
@@ -171,12 +174,17 @@
         "submit": "Ajouter un membre"
     },
     "settingsVotingForm": {
-        "enableComment": "Activer les commentaires",
         "new": "Nouveau choix de vote",
-        "options": "Options",
         "title": "Choix de vote",
         "resetToDefault": "Réinitialiser",
-        "resetToDefaultDialogTitle": "Êtes-vous sûr de vouloir réinitialiser le formulaire ?"
+        "resetToDefaultDialogTitle": "Êtes-vous sûr de vouloir réinitialiser le formulaire ?",
+        "resetToDefaultDialogDesc": "Les votes existant ne seront plus affiché, les statistiques listeront toujours ces votes.",
+        "typeText": "Texte",
+        "typeBoolean": "Pastille",
+        "editLang": "Vous pouvez modifier les langues depuis la page Évènement & thème.",
+        "typeChangeDialogTitle": "Changement de type de vote",
+        "typeChangeDialogDesc": "Le type d'un choix de vote a changé ou un choix de vote a été supprimé. Si il y a déjà des votes liés à ce choix, ils ne seront plus visible.",
+        "typeChangeDialogConfirm": "Sauvegarder"
     },
     "speakers": {
         "addButton": "Ajouter un orateur·rice",
