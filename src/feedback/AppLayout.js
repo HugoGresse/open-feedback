@@ -17,7 +17,6 @@ import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchPare
 import { getLoginErrorSelector } from './auth/authSelectors'
 import Footer from './layout/Footer'
 import { getTalksDatesSelector } from '../core/talks/talksSelectors'
-import { Redirect } from 'react-router-dom'
 import HardRedirect from '../baseComponents/HardRedirect'
 
 const styles = theme => ({
