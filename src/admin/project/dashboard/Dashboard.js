@@ -48,14 +48,14 @@ const Dashboard = () => {
             <Grid item xs={12} md={6} lg={4}>
                 <Highlights />
             </Grid>
+            <Grid item xs={12} md={6} lg={8}>
+                <VoteTimeline dinoStartDelay={6000} />
+            </Grid>
             <Grid item xs={12} md={6} lg={4}>
                 <MostVotedTalks dinoStartDelay={2000} />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
                 <MostCommentedTalks dinoStartDelay={4000} />
-            </Grid>
-            <Grid item xs={12} md={6} lg={8}>
-                <VoteTimeline dinoStartDelay={6000} />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
                 <LeastVotedTalks dinoStartDelay={10000} />

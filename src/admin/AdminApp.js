@@ -8,6 +8,7 @@ import AdminRoot from './root/AdminRoot'
 import Notifications from './notification/Notifications'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
 import ProjectApp from './project/ProjectApp'
+import Helmet from 'react-helmet/es/Helmet'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -36,6 +37,9 @@ const AdminApp = () => {
 
     return (
         <I18nextProvider i18n={i18n}>
+            <Helmet>
+                <title>Admin - Open Feedback</title>
+            </Helmet>
             <Login>
                 <MuiThemeProvider theme={innerTheme}>
                     <Switch>
