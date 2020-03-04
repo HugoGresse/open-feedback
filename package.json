@@ -27,7 +27,7 @@
         "@storybook/preset-create-react-app": "^1.5.2",
         "@storybook/react": "5.3.14",
         "babel-loader": "^8.0.6",
-        "cypress": "^4.0.2",
+        "cypress": "^4.1.0",
         "eslint-plugin-cypress": "^2.10.3",
         "firebase-tools": "^7.13.1",
         "husky": "^4.2.3",
