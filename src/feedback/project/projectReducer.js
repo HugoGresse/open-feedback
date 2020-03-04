@@ -1,5 +1,6 @@
 import {
     GET_PROJECT_ERROR,
+    GET_PROJECT_NOTFOUND,
     GET_PROJECT_SUCCESS,
     GET_PROJECT_VOTE_RESULT_ERROR,
     GET_PROJECT_VOTE_RESULT_SUCCESS,
@@ -120,6 +121,11 @@ const projectReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 projectVotesError: payload,
+            }
+        case GET_PROJECT_NOTFOUND:
+            return {
+                ...state,
+                projectLoadNotFound: true,
             }
         case GET_PROJECT_ERROR:
             console.error(payload)
