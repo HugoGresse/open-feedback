@@ -32,6 +32,6 @@ export const getBooleanVoteItemsSelector = createSelector(
 export const getCommentVoteItemSelector = createSelector(
     getSortedVoteItemsSelector,
     voteItems => {
-        return voteItems.filter(item => item.type === 'text')[0]
+        return voteItems.filter(item => item.type === 'text')
     }
 )

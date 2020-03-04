@@ -117,6 +117,7 @@ const projectReducer = (state = initState, { payload, type }) => {
             }
         }
         case GET_PROJECT_VOTE_RESULT_ERROR:
+            // eslint-disable-next-line no-console
             console.error(payload)
             return {
                 ...state,
@@ -128,6 +129,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                 projectLoadNotFound: true,
             }
         case GET_PROJECT_ERROR:
+            // eslint-disable-next-line no-console
             console.error(payload)
             return {
                 ...state,

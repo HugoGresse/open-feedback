@@ -58,6 +58,7 @@ const TalkVotesList = ({
     const hasMore =
         dataArray &&
         dataArray.slice((selectedIndex + 1) * previewCount).length > 0
+    const numberOfPages = Math.ceil(counts / previewCount)
 
     return (
         <DashboardCard
@@ -76,9 +77,9 @@ const TalkVotesList = ({
                         onClick={() => setIndex(selectedIndex - 1)}>
                         <ArrowLeftIcon />
                     </OFButton>
-                    {counts / previewCount > 1 && (
+                    {numberOfPages > 1 && (
                         <span>
-                            {selectedIndex + 1}/{counts / previewCount}
+                            {selectedIndex + 1}/{numberOfPages}
                         </span>
                     )}
                     <OFButton
