@@ -58,7 +58,7 @@
         "polished": "^3.4.4",
         "prop-types": "latest",
         "qrcode.react": "^1.0.0",
-        "react": "^16.12.0",
+        "react": "^16.13.0",
         "react-color": "^2.18.0",
         "react-dom": "^16.13.0",
         "react-firebaseui": "^4.1.0",
