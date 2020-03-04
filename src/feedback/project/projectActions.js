@@ -55,34 +55,30 @@ export const setSelectedDate = date => ({
     },
 })
 
-export const getVoteResult = () => {
-    return (dispatch, getState) => {
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(getProjectSelector(getState()).id)
-            .collection('sessionVotes')
-            .get()
-            .then(projectSnapshot => {
-                const talks = {}
-                projectSnapshot.forEach(doc => {
-                    talks[doc.id] = {
-                        ...doc.data(),
-                        id: doc.id,
-                    }
-                })
+export const getVoteResult = talkId => (dispatch, getState) => {
+    return fireStoreMainInstance
+        .collection('projects')
+        .doc(getProjectSelector(getState()).id)
+        .collection('sessionVotes')
+        .doc(talkId)
+        .get()
+        .then(talkSnapshot => {
+            const talk = {
+                id: talkSnapshot.id,
+                ...talkSnapshot.data(),
+            }
 
-                dispatch({
-                    type: GET_PROJECT_VOTE_RESULT_SUCCESS,
-                    payload: talks,
-                })
+            dispatch({
+                type: GET_PROJECT_VOTE_RESULT_SUCCESS,
+                payload: talk,
             })
-            .catch(err => {
-                dispatch({
-                    type: GET_PROJECT_VOTE_RESULT_ERROR,
-                    payload: err,
-                })
+        })
+        .catch(err => {
+            dispatch({
+                type: GET_PROJECT_VOTE_RESULT_ERROR,
+                payload: err,
             })
-    }
+        })
 }
 
 const getVoteLabelInClosestLanguage = (voteItems, navigatorLang) => {

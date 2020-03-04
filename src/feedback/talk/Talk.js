@@ -66,7 +66,7 @@ class Talk extends Component {
         this.props.getTalk(id)
         this.props.setSelectedTalk(id)
         this.props.getSpeakers()
-        this.props.getVoteResult()
+        this.props.getVoteResult(id)
     }
 
     getSpeakersString(talk, speakers) {
