@@ -153,7 +153,11 @@ const Header = () => {
                             fontWeight={600}>
                             {t('home.title')}
                         </Title>
-                        <Title component="h3" m={0} color={COLORS.WHITE}>
+                        <Title
+                            component="h2"
+                            m={0}
+                            color={COLORS.WHITE}
+                            fontSize="1.4em">
                             {t('home.subtitle')}
                         </Title>
                         <br />

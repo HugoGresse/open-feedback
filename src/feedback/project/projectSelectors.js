@@ -20,6 +20,9 @@ export const getProjectVoteResultsSelector = state =>
 
 export const getProjectLoadErrorSelector = state =>
     getProjects(state).projectLoadError
+export const isProjectNotFoundSelector = state =>
+    getProjects(state).projectLoadNotFound
+
 export const getProjectSelectedDateSelector = state =>
     getProjects(state).selectedDate
 
