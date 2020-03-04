@@ -21,7 +21,7 @@ const App = () => {
                 <Redirect strict exact from="/admin" to="/admin/" />
                 <Route path="/admin/" component={SuspendedAdminApp} />
                 <Route path="/:projectId" component={FeedbackApp} />
-                <Route component={Page404} />
+                <Route component={Page404} status={404} />
             </Switch>
         </Router>
     )

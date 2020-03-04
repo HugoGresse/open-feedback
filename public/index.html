@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <link rel="shortcut icon">
-    <link rel="canonical" href="%PUBLIC_URL%" />
+    <link rel="canonical" href="%PUBLIC_URL%"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
     <!--
@@ -16,7 +16,30 @@
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
     -->
-    <title>Open Feedback</title>
+    <title>Open Feedback - gather feedback for conferences, meetups, events</title>
+
+    <meta name="description" content="Gather anonymous feedback in a glance. Add speakers, talks, create your voting form and share Open Feedback to your voters. Ideal for conferences or any events.">
+    <meta name="author" content="Hugo Gresse" />
+    <meta name="keywords" content="Feedback, Open Feedback, event feedback, conferences feedback, anonymous feedback, free feedback service, open source feedback"/>
+
+    <meta property="og:title" content="Open Feedback - gather feedback for conferences, meetups, events" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="%PUBLIC_URL%" />
+    <meta property="og:description" content="Gather anonymous feedback in a glance. Add speakers, talks, create your voting form and share Open Feedback to your voters. Ideal for conferences or any events." />
+    <meta property="og:site_name" content="Open Feedback" />
+
+    <script type="application/ld+json">
+        [ {
+            "@context" : "http://schema.org",
+            "@type" : "SoftwareApplication",
+            "name" : "Open Feedback",
+            "author" : {
+                "@type" : "Person",
+                "name" : "Hugo Gresse"
+            }
+        } ]
+    </script>
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
@@ -24,21 +47,21 @@
     <!-- prettier-ignore -->
     <script type="application/javascript">!function(n,e){var t,o,i,c=[],f={passive:!0,capture:!0},r=new Date,a="pointerup",u="pointercancel";function p(n,c){t||(t=c,o=n,i=new Date,w(e),s())}function s(){o>=0&&o<i-r&&(c.forEach(function(n){n(o,t)}),c=[])}function l(t){if(t.cancelable){var o=(t.timeStamp>1e12?new Date:performance.now())-t.timeStamp;"pointerdown"==t.type?function(t,o){function i(){p(t,o),r()}function c(){r()}function r(){e(a,i,f),e(u,c,f)}n(a,i,f),n(u,c,f)}(o,t):p(o,t)}}function w(n){["click","mousedown","keydown","touchstart","pointerdown"].forEach(function(e){n(e,l,f)})}w(n),self.perfMetrics=self.perfMetrics||{},self.perfMetrics.onFirstInputDelay=function(n){c.push(n),s()}}(addEventListener,removeEventListener);</script>
 
-  </head>
-  <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+</head>
+<body>
+<noscript>
+    You need to enable JavaScript to run this app.
+</noscript>
+<div id="root"></div>
+<!--
+  This HTML file is a template.
+  If you open it directly in the browser, you will see an empty page.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+  You can add webfonts, meta tags, or analytics to this file.
+  The build step will place the bundled scripts into the <body> tag.
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+  To begin the development, run `npm start` or `yarn start`.
+  To create a production bundle, use `npm run build` or `yarn build`.
+-->
+</body>
 </html>
