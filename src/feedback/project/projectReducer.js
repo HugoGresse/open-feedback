@@ -42,7 +42,10 @@ const projectReducer = (state = initState, { payload, type }) => {
                 ...state,
                 data: {
                     ...state.data,
-                    talkVotes: payload,
+                    talkVotes: {
+                        ...state.data.talkVotes,
+                        [payload.id]: payload,
+                    },
                 },
             }
         case ADD_VOTE_SUCCESS: {

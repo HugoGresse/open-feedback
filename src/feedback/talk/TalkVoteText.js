@@ -20,13 +20,12 @@ const styles = theme => ({
     },
     item: {
         overflow: 'hidden',
-        padding: theme.spacing(2),
+        padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
         textAlign: 'center',
         fontSize: '17px',
         borderRadius: '0',
         color: theme.palette.text.secondary,
         boxShadow: 'inset 0 0 0 1px ' + theme.palette.grey[300],
-        height: '95px',
         boxSizing: 'border-box',
         '&:hover': {
             backgroundColor: '#f6f6f6',
