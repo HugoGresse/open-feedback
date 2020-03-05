@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import groupBy from 'lodash/groupBy'
 import { getDateFromStartTime } from './talksUtils'
 import { getProjectSelectedDateSelector } from '../../feedback/project/projectSelectors'
 import { getSpeakersListSelector } from '../speakers/speakerSelectors'
@@ -110,17 +111,10 @@ export const getCurrentTalksGroupByTrackSelector = createSelector(
             return date === getDateFromStartTime(talk.startTime)
         })
 
-        if (filteredTalks.length === 0) {
-            return []
-        }
-        const talksGroupByTrack = filteredTalks.reduce((acc, curr) => {
-            if (!acc[curr.trackTitle]) {
-                acc[curr.trackTitle] = []
-            }
-            acc[curr.trackTitle].push(curr)
-
-            return acc
-        }, {})
+        const talksGroupByTrack = groupBy(
+            filteredTalks,
+            talk => talk.trackTitle
+        )
 
         return Object.keys(talksGroupByTrack)
             .sort()

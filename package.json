@@ -22,57 +22,55 @@
         "build-storybook": "build-storybook -s public"
     },
     "devDependencies": {
-        "@storybook/addon-docs": "^5.3.14",
-        "@storybook/addons": "^5.3.14",
+        "@storybook/addon-docs": "^5.3.13",
+        "@storybook/addons": "^5.3.13",
         "@storybook/preset-create-react-app": "^1.5.2",
-        "@storybook/react": "5.3.14",
+        "@storybook/react": "5.3.13",
         "babel-loader": "^8.0.6",
-        "cypress": "^4.1.0",
+        "cypress": "^4.0.2",
         "eslint-plugin-cypress": "^2.10.3",
-        "firebase-tools": "^7.14.0",
+        "firebase-tools": "^7.13.1",
         "husky": "^4.2.3",
-        "lint-staged": "^10.0.8",
+        "lint-staged": "^10.0.7",
         "prettier": "^1.19.1",
-        "react-scripts": "3.4.0"
+        "react-scripts": "3.3.1"
     },
     "dependencies": {
         "@date-io/luxon": "^1.3.13",
-        "@material-ui/core": "^4.9.5",
+        "@material-ui/core": "^4.9.3",
         "@material-ui/icons": "^4.5.1",
-        "@material-ui/lab": "^4.0.0-alpha.45",
+        "@material-ui/lab": "^4.0.0-alpha.43",
         "@material-ui/pickers": "^3.2.10",
         "@nivo/core": "^0.61.0",
         "@nivo/line": "^0.61.1",
         "clipboard-copy": "^3.1.0",
         "env-cmd": "^10.1.0",
         "file-saver": "^2.0.2",
-        "firebase": "^7.9.3",
+        "firebase": "^7.8.2",
         "formik": "^2.1.4",
         "history": "^4.10.1",
-        "i18next": "^19.3.2",
-        "i18next-browser-languagedetector": "^4.0.2",
+        "i18next": "^19.3.1",
+        "i18next-browser-languagedetector": "^4.0.1",
         "i18next-scanner": "^2.10.3",
-        "langmap": "0.0.16",
         "lodash": "4.17.15",
         "luxon": "^1.21.3",
         "polished": "^3.4.4",
         "prop-types": "latest",
         "qrcode.react": "^1.0.0",
-        "react": "^16.13.0",
+        "react": "^16.12.0",
         "react-color": "^2.18.0",
-        "react-dom": "^16.13.0",
+        "react-dom": "^16.12.0",
         "react-firebaseui": "^4.1.0",
         "react-ga": "^2.7.0",
-        "react-helmet": "^5.2.1",
         "react-i18next": "^11.3.3",
-        "react-redux": "^7.2.0",
+        "react-redux": "^7.1.3",
         "react-router-dom": "^5.1.2",
         "redux": "^4.0.5",
         "redux-thunk": "^2.3.0",
         "reselect": "^4.0.0",
         "styled-components": "^5.0.1",
         "styled-system": "^5.1.5",
-        "wait-on": "^4.0.1",
+        "wait-on": "^3.3.0",
         "yup": "^0.28.1"
     },
     "eslintConfig": {
@@ -94,7 +92,8 @@
     },
     "lint-staged": {
         "*.{ts,js,json,css,md}": [
-            "prettier --write"
+            "prettier --write",
+            "git add"
         ]
     }
 }

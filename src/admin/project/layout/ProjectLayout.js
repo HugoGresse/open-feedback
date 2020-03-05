@@ -8,9 +8,6 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
 import useTheme from '@material-ui/core/styles/useTheme'
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import Helmet from 'react-helmet/es/Helmet'
-import { useSelector } from 'react-redux'
-import { getSelectedProjectSelector } from '../core/projectSelectors'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -40,7 +37,6 @@ const useStyles = makeStyles(() => ({
 const ProjectLayout = ({ baseUrl, children }) => {
     const classes = useStyles()
 
-    const project = useSelector(getSelectedProjectSelector)
     const [scrollTargetRef, setRef] = useState(undefined)
 
     const scrollRef = useCallback(node => {
@@ -79,12 +75,6 @@ const ProjectLayout = ({ baseUrl, children }) => {
             flexGrow="1"
             height="100vh"
             background={COLORS.ADMIN_BACKGROUND_LIGHT}>
-            {project && (
-                <Helmet>
-                    <title>{project.name} - Admin</title>
-                </Helmet>
-            )}
-
             <SideBar
                 baseUrl={baseUrl}
                 className={classes.sidebar}

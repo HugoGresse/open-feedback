@@ -1,6 +1,5 @@
 export const GET_PROJECT_SUCCESS = 'project/get/success'
 export const GET_PROJECT_ERROR = 'project/get/error'
-export const GET_PROJECT_NOTFOUND = 'project/get/notFound'
 export const GET_PROJECT_VOTE_RESULT_SUCCESS = 'project/getVoteResult/success'
 export const GET_PROJECT_VOTE_RESULT_ERROR = 'project/getVoteResult/error'
 export const INCREMENT_VOTE_LOCALLY = 'project/incrementVoteLocally'

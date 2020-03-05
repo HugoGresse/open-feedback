@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
-import { VOTE_TYPE_TEXT } from '../../core/contants'
+import { VOTE_TYPE_TEXT } from '../vote/voteReducer'
+import { orderBy } from 'lodash/collection'
 
 const getProjects = state => state.project
 const getProjectsData = state => state.project.data
@@ -20,9 +21,6 @@ export const getProjectVoteResultsSelector = state =>
 
 export const getProjectLoadErrorSelector = state =>
     getProjects(state).projectLoadError
-export const isProjectNotFoundSelector = state =>
-    getProjects(state).projectLoadNotFound
-
 export const getProjectSelectedDateSelector = state =>
     getProjects(state).selectedDate
 
@@ -40,9 +38,10 @@ export const getProjectVoteItemsOrderedSelector = createSelector(
         if (!voteItems) {
             return []
         }
-        return voteItems.sort((a, b) => {
-            if (a.type === VOTE_TYPE_TEXT) return 1
-            return a.position > b.position ? 1 : -1
-        })
+        return orderBy(
+            voteItems.sort(a => (a.type === VOTE_TYPE_TEXT ? 1 : -1)),
+            ['position'],
+            ['asc']
+        )
     }
 )

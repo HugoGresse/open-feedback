@@ -39,8 +39,8 @@ import Snackbar from '../../baseComponents/customComponent/Snackbar'
 import Title from '../../baseComponents/design/Title'
 import { COLORS } from '../../constants/colors'
 import { SPACING } from '../../constants/constants'
+import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../vote/voteReducer'
 import { DateTime } from 'luxon'
-import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../core/contants'
 
 const Header = styled.div`
     margin-bottom: 30px;

@@ -114,13 +114,13 @@ describe('Test creating a new project', function() {
 
         // -- Add a vote item
         cy.contains('Voting Form').click()
-        cy.get('input[type=text]').should('have.length', 9)
+        cy.get('input[type=text]').should('have.length', 8)
         cy.contains('New item').click()
         cy.get('input[type=text]')
             .last()
             .type(data.voteItem1)
         cy.contains('Save').click()
-        cy.get('input[type=text]').should('have.length', 10)
+        cy.get('input[type=text]').should('have.length', 9)
 
         // Go to the event and to the first added talk
         cy.contains('See event')

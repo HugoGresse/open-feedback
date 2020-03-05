@@ -241,7 +241,7 @@ const getCommentVotesSelector = createSelector(
         if (!textVoteItems) {
             return []
         }
-        const textVoteItemIds = textVoteItems.map(item => item.id)
+        const textVoteItemIds = [textVoteItems.id]
         return userVotes.filter(vote =>
             textVoteItemIds.includes(vote.voteItemId)
         )

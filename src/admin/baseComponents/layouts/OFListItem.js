@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
                 ? lighten(fade(theme.palette.divider, 1), 0.88)
                 : darken(fade(theme.palette.divider, 1), 0.68)
         }`,
-        alignItems: 'flex-start',
+        alignItems: 'center',
     },
 }))
 

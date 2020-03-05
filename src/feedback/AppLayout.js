@@ -10,7 +10,6 @@ import {
     getProjectLoadErrorSelector,
     getProjectSelector,
     getProjectVotesErrorSelector,
-    isProjectNotFoundSelector,
 } from './project/projectSelectors'
 import * as projectActions from './project/projectActions'
 import Error from '../baseComponents/customComponent/Error'
@@ -18,7 +17,6 @@ import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchPare
 import { getLoginErrorSelector } from './auth/authSelectors'
 import Footer from './layout/Footer'
 import { getTalksDatesSelector } from '../core/talks/talksSelectors'
-import HardRedirect from '../baseComponents/HardRedirect'
 
 const styles = theme => ({
     loading: {
@@ -73,7 +71,6 @@ class AppLayout extends Component {
             project,
             projectLoadError,
             projectVotesError,
-            projectNotFound,
             loginError,
             children,
         } = this.props
@@ -92,8 +89,6 @@ class AppLayout extends Component {
                     errorDetail={projectLoadError}
                 />
             )
-        } else if (projectNotFound) {
-            return <HardRedirect to="/404" />
         } else if (projectVotesError) {
             return (
                 <Error
@@ -120,7 +115,6 @@ const mapStateToProps = state => ({
     project: getProjectSelector(state),
     dates: getTalksDatesSelector(state),
     projectLoadError: getProjectLoadErrorSelector(state),
-    projectNotFound: isProjectNotFoundSelector(state),
     projectVotesError: getProjectVotesErrorSelector(state),
     loginError: getLoginErrorSelector(state),
 })
