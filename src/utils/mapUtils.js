@@ -9,3 +9,5 @@ export const filterMap = (inputMap, filterFunc) => {
 
     return newMap
 }
+
+export const isEmptyMap = map => map && Object.keys(map).length === 0

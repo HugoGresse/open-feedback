@@ -17,13 +17,29 @@ import SpeakerAddEditPanel from './SpeakerAddEditPanel'
 import { projectApi } from '../../../core/setupType/projectApi'
 import { addNotification } from '../../notification/notifcationActions'
 import { useTranslation } from 'react-i18next'
+import { isTalkLoadedSelector } from '../../../core/talks/talksSelectors'
+import { getTalks } from '../../../core/talks/talksActions'
+import { filterMap, isEmptyMap } from '../../../utils/mapUtils'
+import SimpleDialog from '../../baseComponents/layouts/SimpleDialog'
+import {
+    fillDefaultVotingForm,
+    getVoteItems,
+    saveVoteItems,
+} from '../settings/votingForm/votingFormActions'
+import { sleep } from '../../../utils/sleep'
+import { getProject } from '../core/projectActions'
+import TranslatedTypography from '../../baseComponents/TranslatedTypography'
+import BottomActionLayout from '../layout/BottomActionLayout'
 
 const SpeakerList = () => {
     const dispatch = useDispatch()
     const speakers = useSelector(getFilteredSpeakers)
+    const isTalkLoaded = useSelector(isTalkLoadedSelector)
     const filter = useSelector(getSpeakersFilter)
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
     const [editingSpeaker, setEditSpeaker] = useState(null)
+    const [speakerToRemove, setSpeakerToRemove] = useState()
+    const [isRemovingSpeaker, setIsRemovingSpeaker] = useState(false)
     const { t } = useTranslation()
 
     const speakerNotReadableCheck = () => {
@@ -50,9 +66,22 @@ const SpeakerList = () => {
         setSidePanelOpen(true)
     }
 
-    const onRemoveSpeakerClicked = speaker => {
+    const onRemoveSpeakerClicked = async speaker => {
         if (speakerNotReadableCheck()) return
-        dispatch(removeSpeaker(speaker))
+
+        const talks = await dispatch(getTalks())
+        const isUsed = !isEmptyMap(
+            filterMap(
+                talks,
+                talk => talk.speakers && talk.speakers.includes(speaker.id)
+            )
+        )
+
+        if (!isUsed) {
+            dispatch(removeSpeaker(speaker))
+            return
+        }
+        setSpeakerToRemove(speaker)
     }
 
     const maybeCloseSidePanel = shouldContinueAfterSubmit => {
@@ -96,6 +125,22 @@ const SpeakerList = () => {
                     onRemove={onRemoveSpeakerClicked}
                 />
             ))}
+
+            <SimpleDialog
+                onClose={() => setSpeakerToRemove(null)}
+                onConfirm={() => {
+                    dispatch(removeSpeaker(speakerToRemove)).then(() => {
+                        setSpeakerToRemove(null)
+                        setIsRemovingSpeaker(false)
+                    })
+                }}
+                title={t('speakers.removeConfirmTitle')}
+                cancelText={t('common.cancel')}
+                confirmText={t('speakers.removeConfirmButton')}
+                confirmLoading={isRemovingSpeaker}
+                open={!!speakerToRemove}>
+                <TranslatedTypography i18nKey="speakers.removeConfirmDesc" />
+            </SimpleDialog>
         </Grid>
     )
 }

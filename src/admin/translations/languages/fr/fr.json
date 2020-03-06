@@ -198,7 +198,10 @@
         "social": "Page de profil sur un réseau social",
         "socialValid": "L'URL du réseau social n'est pas une URL valide.",
         "submit": "Ajouter un·e orateur·rice",
-        "submitContinue": "Ajouter un·e orateur·rice et continuer"
+        "submitContinue": "Ajouter un·e orateur·rice et continuer",
+        "removeConfirmTitle": "Orateur·rice lié à des présentations",
+        "removeConfirmDesc": "Cet·te  orateur·rice est lié·e à au moins une présentation, êtes vous sûr de vouloir l'ôter ?",
+        "removeConfirmButton": "Ôter l'orateur·rice"
     },
     "talks": {
         "addTalks": "Ajouter des présentations",
