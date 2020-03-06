@@ -17,24 +17,14 @@ import SpeakerAddEditPanel from './SpeakerAddEditPanel'
 import { projectApi } from '../../../core/setupType/projectApi'
 import { addNotification } from '../../notification/notifcationActions'
 import { useTranslation } from 'react-i18next'
-import { isTalkLoadedSelector } from '../../../core/talks/talksSelectors'
 import { getTalks } from '../../../core/talks/talksActions'
 import { filterMap, isEmptyMap } from '../../../utils/mapUtils'
 import SimpleDialog from '../../baseComponents/layouts/SimpleDialog'
-import {
-    fillDefaultVotingForm,
-    getVoteItems,
-    saveVoteItems,
-} from '../settings/votingForm/votingFormActions'
-import { sleep } from '../../../utils/sleep'
-import { getProject } from '../core/projectActions'
 import TranslatedTypography from '../../baseComponents/TranslatedTypography'
-import BottomActionLayout from '../layout/BottomActionLayout'
 
 const SpeakerList = () => {
     const dispatch = useDispatch()
     const speakers = useSelector(getFilteredSpeakers)
-    const isTalkLoaded = useSelector(isTalkLoadedSelector)
     const filter = useSelector(getSpeakersFilter)
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
     const [editingSpeaker, setEditSpeaker] = useState(null)
