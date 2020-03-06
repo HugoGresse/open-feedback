@@ -193,7 +193,7 @@
         "name": "Prénom/nom*",
         "nameRequired": "Le prénom du orateur·rice est obligatoire.",
         "photoRequired": "L'URL de la photo de l'orateur·rice est requise.",
-        "photoUrl": "URL de la photo*",
+        "photoUrl": "URL de la photo",
         "photoValid": "L'URL de la photo n'est pas une URL valide.",
         "social": "Page de profil sur un réseau social",
         "socialValid": "L'URL du réseau social n'est pas une URL valide.",

@@ -193,7 +193,7 @@
         "name": "Name*",
         "nameRequired": "The speaker name is required.",
         "photoRequired": "The speaker photo url is required.",
-        "photoUrl": "Photo url*",
+        "photoUrl": "Photo url",
         "photoValid": "The photo url is not a valid url.",
         "social": "Social profil page",
         "socialValid": "The social url is not a valid url.",

@@ -21,9 +21,9 @@ const SpeakerAddEditPanel = ({ isOpen, speaker, onClose, onSubmit }) => {
                         .trim()
                         .required(t('speakers.addTitle')),
                     photoUrl: string()
+                        .notRequired()
                         .url(t('speakers.photoValid'))
-                        .trim()
-                        .required(t('speakers.photoRequired')),
+                        .trim(),
                     socialProfil: string()
                         .notRequired()
                         .url(t('speakers.socialValid'))
