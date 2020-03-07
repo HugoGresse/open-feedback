@@ -19,13 +19,14 @@ export const getTalks = () => {
             type: GET_TALKS_LOADING,
         })
 
-        projectApi
+        return projectApi
             .getTalks()
             .then(talksWithSchedule => {
                 dispatch({
                     type: GET_TALKS_SUCCESS,
                     payload: talksWithSchedule,
                 })
+                return talksWithSchedule
             })
             .catch(err => {
                 dispatch({
