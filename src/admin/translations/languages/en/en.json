@@ -193,12 +193,15 @@
         "name": "Name*",
         "nameRequired": "The speaker name is required.",
         "photoRequired": "The speaker photo url is required.",
-        "photoUrl": "Photo url*",
+        "photoUrl": "Photo url",
         "photoValid": "The photo url is not a valid url.",
         "social": "Social profil page",
         "socialValid": "The social url is not a valid url.",
         "submit": "Add speaker",
-        "submitContinue": "Add speaker & continue"
+        "submitContinue": "Add speaker & continue",
+        "removeConfirmTitle": "Speaker linked to existing talk(s)",
+        "removeConfirmDesc": "This speaker is linked to at least one talk, are you sure you want to remove him?",
+        "removeConfirmButton": "Remove speaker"
     },
     "talks": {
         "addTalks": "Add talks",
