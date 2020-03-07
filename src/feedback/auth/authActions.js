@@ -11,7 +11,6 @@ export const signIn = () => {
             return
         }
         authProvider.onAuthStateChanged(user => {
-            console.log('auth hanged', user)
             if (user) {
                 dispatch({
                     type: LOGIN_SUCCESS,
