@@ -1,33 +1,29 @@
 import { createSelector } from 'reselect'
 import { VOTE_TYPE_TEXT } from '../../core/contants'
 
-const getProjects = state => state.project
-const getProjectsData = state => state.project.data
+const getProjectState = state => state.project
+
+const getProject = state => getProjectState(state).project
 
 export const getProjectSelector = state =>
-    getProjectsData(state).id ? getProjectsData(state) : null
-
-export const getProjectConfigSelector = state =>
-    getProjectSelector(state).config
-        ? getProjectSelector(state).config
-        : getProjectSelector(state).firebaseConfig
+    getProject(state).id ? getProject(state) : null
 
 export const getProjectVoteItemsSelector = state =>
     getProjectSelector(state).voteItems
 
 export const getProjectVoteResultsSelector = state =>
-    getProjectSelector(state).talkVotes
+    getProjectState(state).talkVotes
 
 export const getProjectLoadErrorSelector = state =>
-    getProjects(state).projectLoadError
+    getProjectState(state).projectLoadError
 export const isProjectNotFoundSelector = state =>
-    getProjects(state).projectLoadNotFound
+    getProjectState(state).projectLoadNotFound
 
 export const getProjectSelectedDateSelector = state =>
-    getProjects(state).selectedDate
+    getProjectState(state).selectedDate
 
 export const getProjectVotesErrorSelector = state =>
-    getProjects(state).projectVotesError
+    getProjectState(state).projectVotesError
 
 export const getProjectChipColorsSelector = state =>
     getProjectSelector(state).chipColors
