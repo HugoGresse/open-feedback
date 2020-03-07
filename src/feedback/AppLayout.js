@@ -1,26 +1,28 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 
 import Header from './layout/Header'
-import { withStyles } from '@material-ui/core'
 import '../App.css'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory, useParams } from 'react-router-dom'
 import { setFavicon } from './layout/utils'
-import * as authActions from './auth/authActions'
 import {
     getProjectLoadErrorSelector,
     getProjectSelector,
     getProjectVotesErrorSelector,
     isProjectNotFoundSelector,
 } from './project/projectSelectors'
-import * as projectActions from './project/projectActions'
 import Error from '../baseComponents/customComponent/Error'
 import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent'
-import { getLoginErrorSelector } from './auth/authSelectors'
+import { getLoginErrorSelector, isLoggedSelector } from './auth/authSelectors'
 import Footer from './layout/Footer'
 import { getTalksDatesSelector } from '../core/talks/talksSelectors'
 import HardRedirect from '../baseComponents/HardRedirect'
+import { getProject } from './project/projectActions'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import { signIn } from './auth/authActions'
+import { getVotes } from './vote/voteActions'
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
     loading: {
         textAlign: 'center',
         display: 'flex',
@@ -44,90 +46,80 @@ const styles = theme => ({
             paddingRight: theme.spacing(2),
         },
     },
-})
+}))
 
-class AppLayout extends Component {
-    componentDidMount() {
-        if (!this.props.project) {
-            this.props.getProject(this.props.match.params.projectId)
+const AppLayout = ({ children }) => {
+    const classes = useStyles()
+    const dispatch = useDispatch()
+    const history = useHistory()
+    const routerParams = useParams()
+    const project = useSelector(getProjectSelector)
+    const talkDates = useSelector(getTalksDatesSelector)
+
+    const projectLoadError = useSelector(getProjectLoadErrorSelector)
+    const projectNotFound = useSelector(isProjectNotFoundSelector)
+    const projectVotesError = useSelector(getProjectVotesErrorSelector)
+    const loginError = useSelector(getLoginErrorSelector)
+    const isLoggedIn = useSelector(isLoggedSelector)
+
+    useEffect(() => {
+        if (isLoggedIn && project) {
+            dispatch(getVotes())
         }
-    }
+    }, [dispatch, isLoggedIn, project])
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        const { date, projectId } = prevProps.match.params
-
-        if (!date && this.props.dates.length > 0) {
-            this.props.history.replace(`/${projectId}/${this.props.dates[0]}`)
-        }
-        if (!prevProps.project && this.props.project) {
-            const project = this.props.project
+    useEffect(() => {
+        if (!project) {
+            dispatch(getProject(routerParams.projectId))
+        } else {
             document.title = project.name + ' - Feedback'
             setFavicon(project.favicon)
-            this.props.signIn()
+            dispatch(signIn())
         }
-    }
+    }, [routerParams.projectId, project, dispatch])
 
-    render() {
-        const {
-            classes,
-            project,
-            projectLoadError,
-            projectVotesError,
-            projectNotFound,
-            loginError,
-            children,
-        } = this.props
-
-        if (loginError) {
-            return (
-                <Error
-                    error="Fail to anonymously login you."
-                    errorDetail={loginError}
-                />
-            )
-        } else if (projectLoadError) {
-            return (
-                <Error
-                    error="Unable to load the project."
-                    errorDetail={projectLoadError}
-                />
-            )
-        } else if (projectNotFound) {
-            return <HardRedirect to="/404" />
-        } else if (projectVotesError) {
-            return (
-                <Error
-                    error="Unable to load the votes and/or the vote options."
-                    errorDetail={projectVotesError}
-                />
-            )
-        } else if (!project) {
-            return <LoaderMatchParent />
-        } else {
-            return (
-                <div>
-                    <Header project={project} />
-
-                    <div className={classes.layout}> {children}</div>
-                    <Footer />
-                </div>
-            )
+    useEffect(() => {
+        const { date, projectId } = routerParams
+        if (!date && talkDates.length > 0) {
+            history.replace(`/${projectId}/${talkDates[0]}`)
         }
+    }, [routerParams, talkDates, history])
+
+    if (loginError) {
+        return (
+            <Error
+                error="Fail to anonymously login you."
+                errorDetail={loginError}
+            />
+        )
+    } else if (projectLoadError) {
+        return (
+            <Error
+                error="Unable to load the project."
+                errorDetail={projectLoadError}
+            />
+        )
+    } else if (projectNotFound) {
+        return <HardRedirect to="/404" />
+    } else if (projectVotesError) {
+        return (
+            <Error
+                error="Unable to load the votes and/or the vote options."
+                errorDetail={projectVotesError}
+            />
+        )
+    } else if (!project) {
+        return <LoaderMatchParent />
+    } else {
+        return (
+            <div>
+                <Header project={project} />
+
+                <div className={classes.layout}> {children}</div>
+                <Footer />
+            </div>
+        )
     }
 }
 
-const mapStateToProps = state => ({
-    project: getProjectSelector(state),
-    dates: getTalksDatesSelector(state),
-    projectLoadError: getProjectLoadErrorSelector(state),
-    projectNotFound: isProjectNotFoundSelector(state),
-    projectVotesError: getProjectVotesErrorSelector(state),
-    loginError: getLoginErrorSelector(state),
-})
-
-const mapDispatchToProps = Object.assign({}, projectActions, authActions)
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles)(AppLayout))
+export default AppLayout

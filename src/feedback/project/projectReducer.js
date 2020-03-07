@@ -11,17 +11,17 @@ import { nowTimestamp } from '../../firebase'
 import { ADD_VOTE_SUCCESS } from '../vote/voteActionTypes'
 
 const initState = {
-    data: {
+    project: {
+        id: null,
         contact: null,
         favicon: null,
         firebaseConfig: null,
         logoSmall: null,
         name: null,
-        id: null,
         voteItems: null,
-        talkVotes: null,
         chipColors: [],
     },
+    talkVotes: null,
     selectedDate: '',
     projectLoadError: null,
     projectVotesError: null,
@@ -32,7 +32,7 @@ const projectReducer = (state = initState, { payload, type }) => {
         case GET_PROJECT_SUCCESS:
             return {
                 ...state,
-                data: {
+                project: {
                     ...payload,
                 },
             }
@@ -40,12 +40,9 @@ const projectReducer = (state = initState, { payload, type }) => {
         case GET_PROJECT_VOTE_RESULT_SUCCESS:
             return {
                 ...state,
-                data: {
-                    ...state.data,
-                    talkVotes: {
-                        ...state.data.talkVotes,
-                        [payload.id]: payload,
-                    },
+                talkVotes: {
+                    ...state.talkVotes,
+                    [payload.id]: payload,
                 },
             }
         case ADD_VOTE_SUCCESS: {
@@ -56,11 +53,10 @@ const projectReducer = (state = initState, { payload, type }) => {
         }
         case INCREMENT_VOTE_LOCALLY: {
             const vote = payload.vote
-            const data = state.data
 
             let precedentData = null
             try {
-                precedentData = data.talkVotes[vote.talkId][vote.voteItemId]
+                precedentData = state.talkVotes[vote.talkId][vote.voteItemId]
             } catch (e) {
                 precedentData = null
             }
@@ -90,16 +86,13 @@ const projectReducer = (state = initState, { payload, type }) => {
                 newVoteValue = precedentData + payload.amount
             }
 
-            if (!data.talkVotes || !data.talkVotes[vote.talkId]) {
+            if (!state.talkVotes || !state.talkVotes[vote.talkId]) {
                 return {
                     ...state,
-                    data: {
-                        ...data,
-                        talkVotes: {
-                            ...data.talkVotes,
-                            [vote.talkId]: {
-                                [vote.voteItemId]: newVoteValue,
-                            },
+                    talkVotes: {
+                        ...state.talkVotes,
+                        [vote.talkId]: {
+                            [vote.voteItemId]: newVoteValue,
                         },
                     },
                 }
@@ -107,14 +100,11 @@ const projectReducer = (state = initState, { payload, type }) => {
 
             return {
                 ...state,
-                data: {
-                    ...data,
-                    talkVotes: {
-                        ...data.talkVotes,
-                        [vote.talkId]: {
-                            ...data.talkVotes[vote.talkId],
-                            [vote.voteItemId]: newVoteValue,
-                        },
+                talkVotes: {
+                    ...state.talkVotes,
+                    [vote.talkId]: {
+                        ...state.talkVotes[vote.talkId],
+                        [vote.voteItemId]: newVoteValue,
                     },
                 },
             }
