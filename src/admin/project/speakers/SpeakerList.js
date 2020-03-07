@@ -28,7 +28,7 @@ const SpeakerList = () => {
     const filter = useSelector(getSpeakersFilter)
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
     const [editingSpeaker, setEditSpeaker] = useState(null)
-    const [speakerToRemove, setSpeakerToRemove] = useState()
+    const [speakerToRemoveData, setSpeakerToRemoveData] = useState()
     const [isRemovingSpeaker, setIsRemovingSpeaker] = useState(false)
     const { t } = useTranslation()
 
@@ -60,18 +60,20 @@ const SpeakerList = () => {
         if (speakerNotReadableCheck()) return
 
         const talks = await dispatch(getTalks())
-        const isUsed = !isEmptyMap(
-            filterMap(
-                talks,
-                talk => talk.speakers && talk.speakers.includes(speaker.id)
-            )
+        const linkedTalks = filterMap(
+            talks,
+            talk => talk.speakers && talk.speakers.includes(speaker.id)
         )
+        const isUsed = !isEmptyMap(linkedTalks)
 
         if (!isUsed) {
             dispatch(removeSpeaker(speaker))
             return
         }
-        setSpeakerToRemove(speaker)
+        setSpeakerToRemoveData({
+            speaker,
+            linkedTalks,
+        })
     }
 
     const maybeCloseSidePanel = shouldContinueAfterSubmit => {
@@ -117,19 +119,29 @@ const SpeakerList = () => {
             ))}
 
             <SimpleDialog
-                onClose={() => setSpeakerToRemove(null)}
+                onClose={() => setSpeakerToRemoveData(null)}
                 onConfirm={() => {
-                    dispatch(removeSpeaker(speakerToRemove)).then(() => {
-                        setSpeakerToRemove(null)
-                        setIsRemovingSpeaker(false)
-                    })
+                    dispatch(removeSpeaker(speakerToRemoveData.speaker)).then(
+                        () => {
+                            setSpeakerToRemoveData(null)
+                            setIsRemovingSpeaker(false)
+                        }
+                    )
                 }}
                 title={t('speakers.removeConfirmTitle')}
                 cancelText={t('common.cancel')}
                 confirmText={t('speakers.removeConfirmButton')}
                 confirmLoading={isRemovingSpeaker}
-                open={!!speakerToRemove}>
+                open={!!speakerToRemoveData}>
                 <TranslatedTypography i18nKey="speakers.removeConfirmDesc" />
+                {speakerToRemoveData &&
+                    Object.keys(speakerToRemoveData.linkedTalks).map(talkId => {
+                        return (
+                            <li key={talkId}>
+                                {speakerToRemoveData.linkedTalks[talkId].title}
+                            </li>
+                        )
+                    })}
             </SimpleDialog>
         </Grid>
     )
