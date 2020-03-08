@@ -138,7 +138,9 @@ class TalkVoteText extends Component {
                 sm={12}
                 md={12}
                 className={classes.itemContainer}>
-                <Typography variant="h6">{voteItem.name}</Typography>
+                <Typography variant="h6" color="textPrimary">
+                    {voteItem.name}
+                </Typography>
                 <Paper elevation={1} className={classes.item}>
                     <TextField
                         multiline

@@ -1,61 +1,78 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { getTalksDatesSelector } from '../../core/talks/talksSelectors'
 import {
+    getProjectIdSelector,
     getProjectSelectedDateSelector,
-    getProjectSelector,
 } from '../project/projectSelectors'
 import { COLORS } from '../../constants/colors'
 import { Link } from 'react-router-dom'
 import { DateTime } from 'luxon'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
-const Menu = styled.div`
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-`
-
-const MenuItem = styled.div`
-    color: ${COLORS.LIGHT_GRAY};
-    ${props =>
-        props.selected &&
-        `
-        color: ${COLORS.BLACK};
-        border-bottom: 2px ${COLORS.RED_ORANGE} solid;
-    `};
-    a {
-        color: inherit;
-        margin: 10px;
-        display: block;
-    }
-`
-
-class TalksDateMenu extends Component {
-    render() {
-        const { talksDates, selectedDate, currentProjectId } = this.props
-
-        return (
-            <Menu>
-                {talksDates.map(date => (
-                    <MenuItem key={date} selected={selectedDate === date}>
-                        <Link to={`/${currentProjectId}/${date}`}>
-                            {DateTime.fromISO(date).toLocaleString({
-                                weekday: 'long',
-                                day: 'numeric',
-                            })}
-                        </Link>
-                    </MenuItem>
-                ))}
-            </Menu>
-        )
-    }
-}
-
-const mapStateToProps = state => ({
-    talksDates: getTalksDatesSelector(state),
-    selectedDate: getProjectSelectedDateSelector(state),
-    currentProjectId: getProjectSelector(state).id,
+const useStyles = makeStyles({
+    menu: {
+        display: 'flex',
+        justifyContent: 'center',
+        marginBottom: 10,
+    },
 })
 
-export default connect(mapStateToProps, null)(TalksDateMenu)
+const TalksDateMenu = () => {
+    const talksDates = useSelector(getTalksDatesSelector)
+    const selectedDate = useSelector(getProjectSelectedDateSelector)
+    const currentProjectId = useSelector(getProjectIdSelector)
+
+    const classes = useStyles()
+
+    return (
+        <div className={classes.menu}>
+            {talksDates.map(date => (
+                <Item
+                    key={date}
+                    date={date}
+                    url={`/${currentProjectId}/${date}`}
+                    isSelected={selectedDate === date}
+                />
+            ))}
+        </div>
+    )
+}
+
+const useStylesItem = makeStyles(theme => ({
+    item: {
+        color: props =>
+            props.isSelected
+                ? theme.palette.text.primary
+                : theme.palette.text.secondary,
+        borderBottom: props =>
+            props.isSelected ? `2px ${COLORS.RED_ORANGE} solid` : 'none',
+        '&:hover': {
+            color: COLORS.RED_ORANGE,
+        },
+    },
+    a: {
+        padding: 10,
+        color: 'inherit',
+        display: 'block',
+    },
+}))
+
+const Item = ({ date, url, isSelected }) => {
+    const classes = useStylesItem({
+        isSelected,
+    })
+
+    return (
+        <div className={classes.item}>
+            <Link to={`${url}`} className={classes.a}>
+                {DateTime.fromISO(date).toLocaleString({
+                    weekday: 'long',
+                    day: 'numeric',
+                })}
+            </Link>
+        </div>
+    )
+}
+
+export default TalksDateMenu

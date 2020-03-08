@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core'
+import React from 'react'
 import Grid from '@material-ui/core/Grid'
 
 import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
 import TalkVoteBackground from './TalkVoteBackground'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
     itemContainer: {
         margin: -1,
     },
@@ -48,56 +48,46 @@ const styles = theme => ({
     backgroundCanvas: {
         width: '100%',
     },
-})
+}))
 
-class TalkVoteBoolean extends Component {
-    render() {
-        const {
-            classes,
-            voteItem,
-            isSelected,
-            voteResult,
-            chipColors,
-        } = this.props
+const TalkVoteBoolean = ({ voteItem, isSelected, voteResult, chipColors }) => {
+    const classes = useStyles()
+    const paperClasses = `${classes.item} ${
+        isSelected ? classes.selectedItem : ''
+    }`
 
-        const paperClasses = `${classes.item} ${
-            isSelected ? classes.selectedItem : ''
-        }`
-
-        return (
-            <Grid
-                item
-                xs={6}
-                sm={4}
-                md={3}
-                className={classes.itemContainer}
-                onClick={event => this.props.onVoteChange(voteItem)}>
-                <Paper elevation={1} className={paperClasses}>
-                    <span className={classes.voteTitle}>{voteItem.name}</span>
-                    {voteResult > 0 && (
-                        <>
-                            <span className={classes.voteResult}>
-                                {voteResult}{' '}
-                                <span>{voteResult > 1 ? 'votes' : 'vote'}</span>
-                            </span>
-                            <TalkVoteBackground
-                                colors={chipColors}
-                                count={voteResult}
-                            />
-                        </>
-                    )}
-                </Paper>
-            </Grid>
-        )
-    }
+    return (
+        <Grid
+            item
+            xs={6}
+            sm={4}
+            md={3}
+            className={classes.itemContainer}
+            onClick={() => this.props.onVoteChange(voteItem)}>
+            <Paper elevation={1} className={paperClasses}>
+                <span className={classes.voteTitle}>{voteItem.name}</span>
+                {voteResult > 0 && (
+                    <>
+                        <span className={classes.voteResult}>
+                            {voteResult}{' '}
+                            <span>{voteResult > 1 ? 'votes' : 'vote'}</span>
+                        </span>
+                        <TalkVoteBackground
+                            colors={chipColors}
+                            count={voteResult}
+                        />
+                    </>
+                )}
+            </Paper>
+        </Grid>
+    )
 }
 
 TalkVoteBoolean.propTypes = {
-    classes: PropTypes.object.isRequired,
     voteItem: PropTypes.object.isRequired,
     isSelected: PropTypes.bool,
     voteResult: PropTypes.number,
     chipColors: PropTypes.array,
 }
 
-export default withStyles(styles)(TalkVoteBoolean)
+export default TalkVoteBoolean

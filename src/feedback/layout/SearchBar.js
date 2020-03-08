@@ -1,47 +1,49 @@
 import React from 'react'
-import styled from 'styled-components'
 import SearchIcon from '@material-ui/icons/Search'
 import { setTalksFilter } from '../../core/talks/talksActions'
-import { COLORS } from '../../constants/colors'
-import { SCREEN_SIZES } from '../../constants/constants'
 import BigInput from '../../baseComponents/design/BigInput'
-import Box from '../../baseComponents/design/Box'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { useTheme, makeStyles } from '@material-ui/core'
 
-const SearchBarStyled = styled(Box)`
-    margin-top: 10px;
-    background-color: ${COLORS.EXTRA_LIGHT_GRAY};
-    color: ${COLORS.LIGHT_GRAY};
+const useStyles = makeStyles(theme => ({
+    container: {
+        marginTop: 10,
+        backgroundColor: theme.palette.background.paper,
+    },
+    wrapper: {
+        width: '100%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
 
-    .wrapper {
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-
-        @media screen and (min-width: ${SCREEN_SIZES.MD}) {
-            width: 900px;
-        }
-    }
-`
+        [theme.breakpoints.up(900)]: {
+            width: 900,
+        },
+    },
+}))
 
 const SearchBar = () => {
     const { t } = useTranslation()
+    const theme = useTheme()
+    const classes = useStyles()
     const dispatch = useDispatch()
 
     return (
-        <SearchBarStyled>
-            <div className="wrapper">
+        <div className={classes.container}>
+            <div className={classes.wrapper}>
                 <BigInput
                     onChange={event =>
                         dispatch(setTalksFilter(event.target.value))
                     }
-                    icon={<SearchIcon />}
-                    className="search"
+                    icon={
+                        <SearchIcon
+                            style={{ color: theme.palette.text.secondary }}
+                        />
+                    }
                     placeholder={t('searchPlaceholder')}
                 />
             </div>
-        </SearchBarStyled>
+        </div>
     )
 }
 export default SearchBar

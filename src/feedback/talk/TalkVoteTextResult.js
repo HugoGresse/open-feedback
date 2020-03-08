@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { DateTime } from 'luxon'
+import Typography from '@material-ui/core/Typography'
 
 const styles = () => ({
     date: {
@@ -31,7 +32,11 @@ class TalkVoteTextResult extends Component {
                                 .minus({ seconds: 1 })
                                 .toRelative()}
                         </p>
-                        <p className={classes.comment}>{item.text}</p>
+                        <Typography
+                            className={classes.comment}
+                            color="textPrimary">
+                            {item.text}
+                        </Typography>
                     </div>
                 ))}
             </div>

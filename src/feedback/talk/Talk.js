@@ -167,7 +167,7 @@ class Talk extends Component {
         return (
             <div>
                 <Header>
-                    <Title mb="15px">
+                    <Title mb="15px" variant="h1" color="textPrimary">
                         {talk.title}
                         <ChipList>
                             {talk.tags &&

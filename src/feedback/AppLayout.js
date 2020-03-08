@@ -23,6 +23,10 @@ import { signIn } from './auth/authActions'
 import { getVotes } from './vote/voteActions'
 
 const useStyles = makeStyles(theme => ({
+    container: {
+        backgroundColor: theme.palette.background.default,
+        minHeight: '100vh',
+    },
     loading: {
         textAlign: 'center',
         display: 'flex',
@@ -112,7 +116,7 @@ const AppLayout = ({ children }) => {
         return <LoaderMatchParent />
     } else {
         return (
-            <div>
+            <div className={classes.container}>
                 <Header project={project} />
 
                 <div className={classes.layout}> {children}</div>

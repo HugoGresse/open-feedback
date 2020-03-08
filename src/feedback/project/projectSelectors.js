@@ -8,6 +8,8 @@ const getProject = state => getProjectState(state).project
 export const getProjectSelector = state =>
     getProject(state).id ? getProject(state) : null
 
+export const getProjectIdSelector = state => getProject(state).id
+
 export const getProjectVoteItemsSelector = state =>
     getProjectSelector(state).voteItems
 
