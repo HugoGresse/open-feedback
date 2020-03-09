@@ -1,10 +1,11 @@
 import React from 'react'
 import SearchIcon from '@material-ui/icons/Search'
 import { setTalksFilter } from '../../core/talks/talksActions'
-import BigInput from '../../baseComponents/design/BigInput'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { useTheme, makeStyles } from '@material-ui/core'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import InputBase from '@material-ui/core/InputBase'
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -20,6 +21,15 @@ const useStyles = makeStyles(theme => ({
             width: 900,
         },
     },
+    input: {
+        height: 55,
+        width: '100%',
+
+        [theme.breakpoints.down('sm')]: {
+            paddingLeft: 10,
+            paddingRight: 10,
+        },
+    },
 }))
 
 const SearchBar = () => {
@@ -31,16 +41,19 @@ const SearchBar = () => {
     return (
         <div className={classes.container}>
             <div className={classes.wrapper}>
-                <BigInput
+                <InputBase
+                    className={classes.input}
+                    placeholder={t('searchPlaceholder')}
                     onChange={event =>
                         dispatch(setTalksFilter(event.target.value))
                     }
-                    icon={
-                        <SearchIcon
-                            style={{ color: theme.palette.text.secondary }}
-                        />
+                    startAdornment={
+                        <InputAdornment position="start">
+                            <SearchIcon
+                                style={{ color: theme.palette.text.secondary }}
+                            />
+                        </InputAdornment>
                     }
-                    placeholder={t('searchPlaceholder')}
                 />
             </div>
         </div>

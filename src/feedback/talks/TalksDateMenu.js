@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     menu: {
         display: 'flex',
         justifyContent: 'center',
-        marginBottom: 10,
+        marginBottom: 16,
     },
 })
 
