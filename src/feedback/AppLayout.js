@@ -26,6 +26,11 @@ const useStyles = makeStyles(theme => ({
     container: {
         backgroundColor: theme.palette.background.default,
         minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    content: {
+        flex: 1,
     },
     loading: {
         textAlign: 'center',
@@ -117,9 +122,11 @@ const AppLayout = ({ children }) => {
     } else {
         return (
             <div className={classes.container}>
-                <Header project={project} />
+                <div className={classes.content}>
+                    <Header project={project} />
 
-                <div className={classes.layout}> {children}</div>
+                    <div className={classes.layout}> {children}</div>
+                </div>
                 <Footer />
             </div>
         )
