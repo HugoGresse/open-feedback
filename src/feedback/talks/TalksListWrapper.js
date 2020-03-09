@@ -33,7 +33,7 @@ const TalksListWrapper = () => {
 
     useEffect(() => {
         dispatch(setSelectedDate(routerParams.date))
-    }, [routerParams.date])
+    }, [routerParams.date, dispatch])
 
     if (errorTalksLoad) {
         return (

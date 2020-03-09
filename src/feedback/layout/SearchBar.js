@@ -17,13 +17,12 @@ const useStyles = makeStyles(theme => ({
         marginLeft: 'auto',
         marginRight: 'auto',
 
-        [theme.breakpoints.up(900)]: {
+        [theme.breakpoints.up('md')]: {
             width: 900,
         },
     },
     input: {
         height: 55,
-        width: '100%',
 
         [theme.breakpoints.down('sm')]: {
             paddingLeft: 10,
@@ -44,6 +43,7 @@ const SearchBar = () => {
                 <InputBase
                     className={classes.input}
                     placeholder={t('searchPlaceholder')}
+                    fullWidth
                     onChange={event =>
                         dispatch(setTalksFilter(event.target.value))
                     }

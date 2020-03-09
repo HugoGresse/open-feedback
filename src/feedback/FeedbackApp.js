@@ -20,6 +20,10 @@ const FeedbackApp = () => {
                             fontSize: 24,
                             fontWeight: 400,
                         },
+                        h3: {
+                            fontSize: 20,
+                            fontWeight: 400,
+                        },
                     },
                     palette: {
                         type: prefersDarkMode ? 'dark' : 'light',
