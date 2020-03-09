@@ -8,26 +8,10 @@ import SearchBar from './SearchBar'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import CalendarToday from '@material-ui/icons/CalendarToday'
 import { Hidden } from '@material-ui/core/es'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
 const Logo = styled.img`
     margin-right: 20px;
-`
-
-const HeaderStyled = styled.div`
-    top: 0;
-    left: auto;
-    right: 0;
-    position: sticky;
-    z-index: 3;
-    background: ${COLORS.WHITE};
-    box-shadow: 0px 1px 15px ${COLORS.LIGHT_GRAY};
-    margin-bottom: 20px;
-
-    .header {
-        height: 65px;
-        display: flex;
-        align-items: center;
-    }
 `
 
 const IconWrapper = styled.div`
@@ -53,6 +37,7 @@ const BoxCenter = styled.div`
     margin-left: auto;
     margin-right: auto;
     justify-content: center;
+    align-items: center;
     display: flex;
 
     @media screen and (min-width: ${SCREEN_SIZES.MD}) {
@@ -61,12 +46,31 @@ const BoxCenter = styled.div`
     }
 `
 
+const useStyles = makeStyles(theme => ({
+    container: {
+        backgroundColor: theme.palette.pageBackground,
+        top: 0,
+        left: 'auto',
+        right: 0,
+        position: 'sticky',
+        zIndex: 3,
+        boxShadow: `0px 1px 15px ${theme.palette.headerShadow}`,
+        marginBottom: 20,
+    },
+    header: {
+        height: 65,
+        display: 'flex',
+        alignItems: 'center',
+    },
+}))
+
 const Header = ({ project }) => {
+    const classes = useStyles()
     const matchParams = useParams()
 
     return (
-        <HeaderStyled>
-            <div className="header">
+        <div className={classes.container}>
+            <div className={classes.header}>
                 <IconWrapper left>
                     {matchParams.talkId && (
                         <Link
@@ -93,14 +97,14 @@ const Header = ({ project }) => {
                         alt="logo"
                     />
                     <Hidden smDown>
-                        <Title component="h1" fontSize={24} fontWeight={400}>
+                        <Title component="h1" color="textPrimary">
                             {project.name}
                         </Title>
                     </Hidden>
                 </BoxCenter>
             </div>
             {!matchParams.talkId && <SearchBar />}
-        </HeaderStyled>
+        </div>
     )
 }
 

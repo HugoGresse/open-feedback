@@ -1,17 +1,17 @@
-import PropTypes from 'prop-types'
-
-import { withStyles } from '@material-ui/core/styles'
 import React from 'react'
+import PropTypes from 'prop-types'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { Link } from 'react-router-dom'
-import connect from 'react-redux/es/connect/connect'
 import { getSpeakersListSelector } from '../../core/speakers/speakerSelectors'
 import SpeakerList from '../speaker/SpeakerList'
 import { getDateFromStartTime } from '../../core/talks/talksUtils'
-import { getProjectSelector } from '../project/projectSelectors'
+import { getProjectIdSelector } from '../project/projectSelectors'
+import { darken, lighten } from '@material-ui/core'
+import { useSelector } from 'react-redux'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
     itemContainer: {
         margin: -1,
     },
@@ -21,12 +21,16 @@ const styles = theme => ({
         fontSize: '17px',
         boxShadow: 'none',
         borderRadius: '0',
+        backgroundColor: theme.palette.background.default,
         color: theme.palette.text.secondary,
         border: '1px solid ' + theme.palette.grey[300],
         height: '150px',
         boxSizing: 'border-box',
         '&:hover': {
-            backgroundColor: '#fafafa',
+            backgroundColor:
+                theme.palette.type === 'dark'
+                    ? lighten(theme.palette.background.default, 0.2)
+                    : darken(theme.palette.background.default, 0.05),
             cursor: 'pointer',
         },
         display: 'flex',
@@ -40,17 +44,12 @@ const styles = theme => ({
     a: {
         display: 'block',
     },
-})
+}))
 
-export const TalksItem = props => {
-    const {
-        classes,
-        talk,
-        speakersEntities,
-        userVote,
-        currentProjectId,
-    } = props
-
+export const TalksItem = ({ talk, userVote }) => {
+    const classes = useStyles()
+    const speakersEntities = useSelector(getSpeakersListSelector)
+    const currentProjectId = useSelector(getProjectIdSelector)
     const itemClasses = `${classes.paper} ${
         userVote ? classes.paperSelected : ''
     }`
@@ -81,14 +80,8 @@ export const TalksItem = props => {
 }
 
 TalksItem.propTypes = {
-    classes: PropTypes.object.isRequired,
     talk: PropTypes.object.isRequired,
     userVote: PropTypes.object,
 }
 
-const mapStateToProps = state => ({
-    speakersEntities: getSpeakersListSelector(state),
-    currentProjectId: getProjectSelector(state).id,
-})
-
-export default connect(mapStateToProps, {})(withStyles(styles)(TalksItem))
+export default TalksItem

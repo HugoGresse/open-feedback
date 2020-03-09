@@ -1,47 +1,60 @@
-import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { DateTime } from 'luxon'
+import Typography from '@material-ui/core/Typography'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
-const styles = () => ({
+const TalkVoteTextResult = ({ result }) => {
+    return (
+        <div className="comments">
+            {result.map((item, key) => (
+                <VoteText
+                    key={key}
+                    vote={item}
+                    isLast={key === result.length - 1}
+                />
+            ))}
+        </div>
+    )
+}
+
+const useStyles = makeStyles(theme => ({
     date: {
         color: '#888',
         fontSize: 14,
         marginBottom: 0,
     },
     comment: {
-        borderBottom: '1px solid #e8e8e8',
+        borderBottom: props =>
+            props.isLast ? '' : `1px solid ${theme.palette.paperBorder}`,
         paddingBottom: 15,
         marginTop: 10,
         wordBreak: 'break-word',
         whiteSpace: 'pre-wrap',
     },
-})
+}))
 
-class TalkVoteTextResult extends Component {
-    render() {
-        const { result, classes } = this.props
+const VoteText = ({ vote, isLast }) => {
+    const classes = useStyles({
+        isLast,
+    })
 
-        return (
-            <div className="comments">
-                {result.map((item, key) => (
-                    <div key={key}>
-                        <p className={classes.date}>
-                            {DateTime.fromJSDate(item.updatedAt)
-                                .minus({ seconds: 1 })
-                                .toRelative()}
-                        </p>
-                        <p className={classes.comment}>{item.text}</p>
-                    </div>
-                ))}
-            </div>
-        )
-    }
+    return (
+        <div>
+            <p className={classes.date}>
+                {DateTime.fromJSDate(vote.updatedAt)
+                    .minus({ seconds: 1 })
+                    .toRelative()}
+            </p>
+            <Typography className={classes.comment} color="textPrimary">
+                {vote.text}
+            </Typography>
+        </div>
+    )
 }
 
 TalkVoteTextResult.propTypes = {
-    classes: PropTypes.object.isRequired,
     result: PropTypes.array.isRequired,
 }
 
-export default withStyles(styles)(TalkVoteTextResult)
+export default TalkVoteTextResult

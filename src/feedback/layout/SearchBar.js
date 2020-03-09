@@ -1,47 +1,66 @@
 import React from 'react'
-import styled from 'styled-components'
 import SearchIcon from '@material-ui/icons/Search'
 import { setTalksFilter } from '../../core/talks/talksActions'
-import { COLORS } from '../../constants/colors'
-import { SCREEN_SIZES } from '../../constants/constants'
-import BigInput from '../../baseComponents/design/BigInput'
-import Box from '../../baseComponents/design/Box'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { useTheme, makeStyles } from '@material-ui/core'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import InputBase from '@material-ui/core/InputBase'
+import { grey } from '@material-ui/core/colors'
 
-const SearchBarStyled = styled(Box)`
-    margin-top: 10px;
-    background-color: ${COLORS.EXTRA_LIGHT_GRAY};
-    color: ${COLORS.LIGHT_GRAY};
+const useStyles = makeStyles(theme => ({
+    container: {
+        marginTop: 10,
+        backgroundColor:
+            theme.palette.type === 'dark'
+                ? theme.palette.background.paper
+                : grey[100],
+    },
+    wrapper: {
+        width: '100%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
 
-    .wrapper {
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
+        [theme.breakpoints.up('md')]: {
+            width: 900,
+        },
+    },
+    input: {
+        height: 55,
 
-        @media screen and (min-width: ${SCREEN_SIZES.MD}) {
-            width: 900px;
-        }
-    }
-`
+        [theme.breakpoints.down('sm')]: {
+            paddingLeft: 10,
+            paddingRight: 10,
+        },
+    },
+}))
 
 const SearchBar = () => {
     const { t } = useTranslation()
+    const theme = useTheme()
+    const classes = useStyles()
     const dispatch = useDispatch()
 
     return (
-        <SearchBarStyled>
-            <div className="wrapper">
-                <BigInput
+        <div className={classes.container}>
+            <div className={classes.wrapper}>
+                <InputBase
+                    className={classes.input}
+                    placeholder={t('searchPlaceholder')}
+                    fullWidth
                     onChange={event =>
                         dispatch(setTalksFilter(event.target.value))
                     }
-                    icon={<SearchIcon />}
-                    className="search"
-                    placeholder={t('searchPlaceholder')}
+                    startAdornment={
+                        <InputAdornment position="start">
+                            <SearchIcon
+                                style={{ color: theme.palette.text.secondary }}
+                            />
+                        </InputAdornment>
+                    }
                 />
             </div>
-        </SearchBarStyled>
+        </div>
     )
 }
 export default SearchBar

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core'
+import { emphasize, withStyles } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import SaveIcon from '@material-ui/icons/Save'
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -25,10 +25,10 @@ const styles = theme => ({
         fontSize: '17px',
         borderRadius: '0',
         color: theme.palette.text.secondary,
-        boxShadow: 'inset 0 0 0 1px ' + theme.palette.grey[300],
+        boxShadow: 'inset 0 0 0 1px ' + theme.palette.paperBorder,
         boxSizing: 'border-box',
         '&:hover': {
-            backgroundColor: '#f6f6f6',
+            backgroundColor: emphasize(theme.palette.background.paper, 0.07),
         },
         display: 'flex',
         alignItems: 'center',
@@ -37,7 +37,7 @@ const styles = theme => ({
         transition: 'all 200ms ease-out',
     },
     selectedItem: {
-        boxShadow: 'inset 0 0 0 5px ' + theme.palette.grey[300],
+        boxShadow: 'inset 0 0 0 5px ' + theme.palette.paperBorder,
     },
     voteTitle: {
         color: theme.palette.grey[800],
@@ -68,6 +68,7 @@ const styles = theme => ({
         justifyContent: 'flex-end',
     },
     saveButton: {
+        marginLeft: 16,
         backgroundColor: '#6a96ff',
     },
     voteHidden: {
@@ -138,7 +139,9 @@ class TalkVoteText extends Component {
                 sm={12}
                 md={12}
                 className={classes.itemContainer}>
-                <Typography variant="h6">{voteItem.name}</Typography>
+                <Typography variant="h6" color="textPrimary">
+                    {voteItem.name}
+                </Typography>
                 <Paper elevation={1} className={classes.item}>
                     <TextField
                         multiline
