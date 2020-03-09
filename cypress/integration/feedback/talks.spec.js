@@ -63,11 +63,11 @@ describe('Navigate on talk list', function() {
         cy.visitFeedbackProject()
 
         // Speaker
-        cy.get('.search').type('Michel')
+        cy.get('input[value=Search]').type('Michel')
         cy.get('.talk').should('have.length', 2)
 
         // Tags
-        cy.get('.search')
+        cy.get('input[value=Search]')
             .clear()
             .type('Front')
         cy.get('.talk')
@@ -75,7 +75,7 @@ describe('Navigate on talk list', function() {
             .should('contain', 'React')
 
         // Talk
-        cy.get('.search')
+        cy.get('input[value=Search]')
             .clear()
             .type('Vue > React')
         cy.get('.talk')
