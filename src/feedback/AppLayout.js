@@ -24,7 +24,10 @@ import { getVotes } from './vote/voteActions'
 
 const useStyles = makeStyles(theme => ({
     container: {
-        backgroundColor: theme.palette.background.default,
+        backgroundColor:
+            theme.palette.type === 'dark'
+                ? theme.palette.background.default
+                : '#fff',
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
