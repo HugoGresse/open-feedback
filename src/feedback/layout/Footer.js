@@ -1,36 +1,37 @@
 import React from 'react'
-import styled from 'styled-components'
 import { COLORS } from '../../constants/colors'
 
-import logoColor from '../../assets/logo-openfeedback-color.png'
 import { useTranslation } from 'react-i18next'
-
-const FooterStyled = styled.div`
-    color: ${COLORS.LIGHT_GRAY};
-    display: flex;
-    align-items: top;
-    justify-content: center;
-    padding: 20px;
-    margin-top: 50px;
-
-    .Footer__Text {
-        margin-right: 4px;
-    }
-`
+import { Box, useTheme } from '@material-ui/core'
 
 const Footer = () => {
     const { t } = useTranslation()
+    const theme = useTheme()
+
+    const logoColor = theme.palette.type === 'dark' ? 'white' : 'black'
 
     return (
-        <FooterStyled>
-            <span className="Footer__Text">{t('footer.madeBy')}</span>
+        <Box
+            display="flex"
+            alignItems="top"
+            justifyContent="center"
+            padding={1}
+            marginTop={2}
+            color={COLORS.LIGHT_GRAY}>
+            <span style={{ marginRight: 6, marginTop: -2 }}>
+                {t('footer.madeBy')}
+            </span>
             <a
                 href="https://github.com/HugoGresse/open-feedback"
                 target="_blank"
                 rel="noopener noreferrer">
-                <img height="25" src={logoColor} alt="open feedback" />
+                <img
+                    height="25"
+                    src={`/static/logos/openfeedback-${logoColor}-orange.svg`}
+                    alt="open feedback"
+                />
             </a>
-        </FooterStyled>
+        </Box>
     )
 }
 
