@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
 import TalkVoteBackground from './TalkVoteBackground'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import { emphasize } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
     itemContainer: {
@@ -16,11 +17,11 @@ const useStyles = makeStyles(theme => ({
         fontSize: '17px',
         borderRadius: '0',
         color: theme.palette.text.secondary,
-        boxShadow: 'inset 0 0 0 1px ' + theme.palette.grey[300],
+        boxShadow: 'inset 0 0 0 1px ' + theme.palette.paperVoteBorder,
         height: '100px',
         boxSizing: 'border-box',
         '&:hover': {
-            backgroundColor: '#f6f6f6',
+            backgroundColor: emphasize(theme.palette.background.paper, 0.07),
             cursor: 'pointer',
         },
         display: 'flex',
@@ -30,12 +31,12 @@ const useStyles = makeStyles(theme => ({
         transition: 'all 200ms ease-out',
     },
     selectedItem: {
-        boxShadow: 'inset 0 0 0 5px ' + theme.palette.grey[300],
+        boxShadow: 'inset 0 0 0 5px ' + theme.palette.paperVoteBorder,
     },
     voteTitle: {
-        color: '#222',
+        color: theme.palette.textVoteTitle,
         zIndex: 2,
-        textShadow: '0px 0px 6px #fff',
+        textShadow: `0px 0px 6px ${theme.palette.textVoteTitleShadow}`,
     },
     voteResult: {
         position: 'absolute',
@@ -43,14 +44,20 @@ const useStyles = makeStyles(theme => ({
         fontSize: '14px',
         transition: 'all 200ms ease-in-out',
         zIndex: 2,
-        textShadow: '0px 0px 6px #fff',
+        textShadow: `0px 0px 6px ${theme.palette.textVoteTitleShadow}`,
     },
     backgroundCanvas: {
         width: '100%',
     },
 }))
 
-const TalkVoteBoolean = ({ voteItem, isSelected, voteResult, chipColors }) => {
+const TalkVoteBoolean = ({
+    voteItem,
+    isSelected,
+    voteResult,
+    onVoteChange,
+    chipColors,
+}) => {
     const classes = useStyles()
     const paperClasses = `${classes.item} ${
         isSelected ? classes.selectedItem : ''
@@ -63,7 +70,7 @@ const TalkVoteBoolean = ({ voteItem, isSelected, voteResult, chipColors }) => {
             sm={4}
             md={3}
             className={classes.itemContainer}
-            onClick={() => this.props.onVoteChange(voteItem)}>
+            onClick={() => onVoteChange(voteItem)}>
             <Paper elevation={1} className={paperClasses}>
                 <span className={classes.voteTitle}>{voteItem.name}</span>
                 {voteResult > 0 && (

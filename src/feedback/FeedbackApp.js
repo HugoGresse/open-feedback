@@ -7,6 +7,7 @@ import { I18nextProvider } from 'react-i18next'
 import i18n from './translations/i18n'
 import { responsiveFontSizes, useMediaQuery } from '@material-ui/core'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+import { grey } from '@material-ui/core/colors'
 
 const FeedbackApp = () => {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
@@ -28,6 +29,14 @@ const FeedbackApp = () => {
                     palette: {
                         type: prefersDarkMode ? 'dark' : 'light',
                         headerShadow: prefersDarkMode ? '#000' : '#B3B3B3',
+                        paperBorder: prefersDarkMode ? grey[600] : grey[300],
+                        paperVoteBorder: prefersDarkMode
+                            ? grey[400]
+                            : grey[300],
+                        textVoteTitle: prefersDarkMode ? grey[400] : grey[900],
+                        textVoteTitleShadow: prefersDarkMode
+                            ? grey[800]
+                            : grey[50],
                     },
                 })
             ),
