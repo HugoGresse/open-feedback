@@ -48,13 +48,12 @@ const BoxCenter = styled.div`
 
 const useStyles = makeStyles(theme => ({
     container: {
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: theme.palette.pageBackground,
         top: 0,
         left: 'auto',
         right: 0,
         position: 'sticky',
         zIndex: 3,
-        background: COLORS.WHITE,
         boxShadow: `0px 1px 15px ${theme.palette.headerShadow}`,
         marginBottom: 20,
     },

@@ -6,11 +6,15 @@ import { useTranslation } from 'react-i18next'
 import { useTheme, makeStyles } from '@material-ui/core'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import InputBase from '@material-ui/core/InputBase'
+import { grey } from '@material-ui/core/colors'
 
 const useStyles = makeStyles(theme => ({
     container: {
         marginTop: 10,
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor:
+            theme.palette.type === 'dark'
+                ? theme.palette.background.paper
+                : grey[100],
     },
     wrapper: {
         width: '100%',

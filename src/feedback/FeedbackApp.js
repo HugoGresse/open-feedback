@@ -21,6 +21,10 @@ const FeedbackApp = () => {
                             fontSize: 24,
                             fontWeight: 400,
                         },
+                        h2: {
+                            fontSize: 24,
+                            fontWeight: 400,
+                        },
                         h3: {
                             fontSize: 20,
                             fontWeight: 400,
@@ -28,6 +32,7 @@ const FeedbackApp = () => {
                     },
                     palette: {
                         type: prefersDarkMode ? 'dark' : 'light',
+                        pageBackground: prefersDarkMode ? '#303030' : '#fff',
                         headerShadow: prefersDarkMode ? '#000' : '#B3B3B3',
                         paperBorder: prefersDarkMode ? grey[600] : grey[300],
                         paperVoteBorder: prefersDarkMode
