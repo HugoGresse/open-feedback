@@ -1,9 +1,9 @@
-import Box from '../baseComponents/design/Box'
 import logoWhite from '../assets/logo-openfeedback-white.png'
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../constants/colors'
 import { useTranslation } from 'react-i18next'
+import Box from '@material-ui/core/Box'
 
 const MenuList = styled.ul`
     @media (max-width: 640px) {
@@ -41,7 +41,10 @@ const Menu = () => {
     const { t } = useTranslation()
 
     return (
-        <Box className="wrapperLogoMenu" flex justifyContent="space-between">
+        <Box
+            className="wrapperLogoMenu"
+            display="flex"
+            justifyContent="space-between">
             <img height="40" src={logoWhite} alt="open feedback" />
             <MenuList>
                 <li>
