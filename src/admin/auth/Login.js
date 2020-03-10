@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../constants/colors'
 import logoWhite from '../../assets/logo-openfeedback-white.png'
-import Box from '../../baseComponents/design/Box'
 import { StyledFirebaseAuth } from 'react-firebaseui'
 import { auth, authProvider } from '../../firebase'
 import { useDispatch, useSelector } from 'react-redux'
 import { getLoginErrorSelector, isLoggedSelector } from './authSelectors'
 import { didSignIn, signOut } from './authActions'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
-
-const Wrapper = styled(Box)`
-    background: ${COLORS.RED_ORANGE};
-    height: 100vh;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-`
+import Box from '@material-ui/core/Box'
+import COLORS from '../../constants/colors'
 
 const Login = ({ children }) => {
     const dispatch = useDispatch()
@@ -59,9 +50,14 @@ const Login = ({ children }) => {
     }
 
     return (
-        <Wrapper>
+        <Box
+            height="100vh"
+            bgcolor={COLORS.RED_ORANGE}
+            padding={1}
+            display="flex"
+            boxSizing="border-box">
             <Box
-                flex
+                display="flex"
                 flexDirection="column"
                 justifyContent="center"
                 alignItems="center"
@@ -125,7 +121,7 @@ const Login = ({ children }) => {
 
                 {loginError && <div>{loginError}</div>}
             </Box>
-        </Wrapper>
+        </Box>
     )
 }
 

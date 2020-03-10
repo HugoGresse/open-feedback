@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../constants/colors'
-import Title from '../baseComponents/design/Title'
-import Box from '../baseComponents/design/Box'
 import InnerWrapper from './component/InnerWrapper'
 import { Trans, useTranslation } from 'react-i18next'
+import Box from '@material-ui/core/Box'
+import BlockTitle from './component/BlockTitle'
 
 const List = styled.ul`
     padding-inline-start: 0;
@@ -30,7 +30,7 @@ const List = styled.ul`
 
     @media (max-width: 640px) {
         li {
-            width: calc(100% - 20px);
+            width: calc(100% - 60px);
         }
     }
 `
@@ -51,13 +51,15 @@ const FAQ = () => {
     return (
         <InnerWrapper>
             <Box
-                flex
+                display="flex"
                 flexDirection="column"
                 justifyContent="center"
                 alignItems="center"
                 flexGrow="1"
                 textAlign="center">
-                <Title id="faq">FAQ</Title>
+                <BlockTitle id="faq" style={{ marginTop: 16 }}>
+                    FAQ
+                </BlockTitle>
 
                 <List>
                     <li>

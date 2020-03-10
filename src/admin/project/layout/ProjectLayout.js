@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react'
 import SideBar from './SideBar'
-import Box from '../../../baseComponents/design/Box'
 import Header from './Header'
 import COLORS from '../../../constants/colors'
 import Container from '@material-ui/core/Container'
@@ -11,6 +10,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Helmet from 'react-helmet/es/Helmet'
 import { useSelector } from 'react-redux'
 import { getSelectedProjectSelector } from '../core/projectSelectors'
+import Box from '@material-ui/core/Box'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -73,12 +73,12 @@ const ProjectLayout = ({ baseUrl, children }) => {
 
     return (
         <Box
-            flex
+            display="flex"
             flexDirection="row"
             justifyContent="flex-start"
             flexGrow="1"
             height="100vh"
-            background={COLORS.ADMIN_BACKGROUND_LIGHT}>
+            bgcolor={COLORS.ADMIN_BACKGROUND_LIGHT}>
             {project && (
                 <Helmet>
                     <title>{project.name} - Admin</title>
