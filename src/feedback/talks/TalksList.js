@@ -4,7 +4,7 @@ import { setSelectedTalk } from '../talk/core/talkActions'
 import TalksItem from './TalksItem'
 import Grid from '@material-ui/core/Grid'
 import { getVotesByTalkSelector } from '../vote/voteSelectors'
-import Title from '../../baseComponents/design/Title'
+import Title from '../layout/Title'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 
 const useStyles = makeStyles(() => ({

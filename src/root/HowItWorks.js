@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../constants/colors'
-import Title from '../baseComponents/design/Title'
-import Box from '../baseComponents/design/Box'
 import InnerWrapper from './component/InnerWrapper'
 
 import adminImage from './images/admin-new.webp'
@@ -11,9 +9,13 @@ import qrcodeImage from './images/qrcode.png'
 import bulleImage from './images/bulle.png'
 import hoverboard from './images/hoverboard.png'
 import { useTranslation } from 'react-i18next'
+import Box from '@material-ui/core/Box'
+import BlockTitle from './component/BlockTitle'
 
 const InnerWrapperResponsive = styled(InnerWrapper)`
-    @media (max-width: 640px) {
+    display: flex;
+
+    @media (max-width: 980px) {
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -36,12 +38,10 @@ const DemoContainer = styled.div`
 
 const BoxRight = styled(Box)`
     padding-left: 40px;
+    flex-shrink: 4;
 
     h2 {
-        margin-top: 0;
-        margin-bottom: 40px;
-
-        @media (max-width: 640px) {
+        @media (max-width: 980px) {
             margin-top: 40px;
         }
     }
@@ -65,7 +65,7 @@ const List = styled.ul`
 `
 
 const CompatibilityText = styled(Box)`
-    margin-top 20px;
+    margin-top: 20px;
     color: ${COLORS.GRAY};
     img {
         margin: 0 5px;
@@ -76,15 +76,15 @@ const Header = () => {
     const { t } = useTranslation()
 
     return (
-        <Box backgroundColor="#eee" padding={40}>
-            <InnerWrapperResponsive id="howitworks" flex>
+        <Box bgcolor="#eee" padding={4}>
+            <InnerWrapperResponsive id="howitworks">
                 <Box>
                     <DemoContainer>
                         <img src={adminImage} alt="Demo admin" />
                     </DemoContainer>
                 </Box>
                 <BoxRight>
-                    <Title>{t('home.howItWorks')}</Title>
+                    <BlockTitle>{t('home.howItWorks')}</BlockTitle>
 
                     <List>
                         <li>
@@ -101,7 +101,7 @@ const Header = () => {
                         </li>
                     </List>
 
-                    <CompatibilityText flex alignItems="center">
+                    <CompatibilityText display="flex" alignItems="center">
                         {t('home.compatibleHoverboard')}
                         <img height="40" src={hoverboard} alt="hoverboard" />
                     </CompatibilityText>

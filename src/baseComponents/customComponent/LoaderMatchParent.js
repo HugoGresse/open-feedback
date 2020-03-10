@@ -1,43 +1,33 @@
 import React from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import styled from 'styled-components'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import COLORS from '../../constants/colors'
 
-const LoaderMatchParentStyled = styled.div`
+const useStyles = makeStyles(() => ({
+    container: {
+        textAlign: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        opacity: 0,
+        transition: 'all 1s ease-in',
+        animation: '1s $appearDelayed',
+        animationDelay: '500ms',
+        animationFillMode: 'forwards',
+        width: props => props.width,
+        height: props => props.height,
+        maxWidth: props => props.maxWidth,
+        '& > div': {
+            color: COLORS.RED_ORANGE,
+        },
+    },
 
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    opacity: 0;
-    transition: all 1s ease-in;
-    animation: 1s appearDelayed;
-    animation-delay: 500ms;
-    animation-fill-mode: forwards;
-
-    @keyframes appearDelayed {
-        from {opacity: 0;}
-        to {opacity: 1;}
-    }
-
-    ${props =>
-        props.width &&
-        `
-    width: ${props.width};
-    `}
-
-    ${props =>
-        props.height &&
-        `
-    height: ${props.height};
-    `}
-
-    ${props =>
-        props.maxWidth &&
-        `
-    maxWidth: ${props.maxWidth};
-    `}
-`
+    '@keyframes appearDelayed': {
+        from: { opacity: 0 },
+        to: { opacity: 1 },
+    },
+}))
 
 const LoaderMatchParent = ({
     height = '100vh',
@@ -45,13 +35,15 @@ const LoaderMatchParent = ({
     style = {},
     maxWidth = undefined,
 }) => {
+    const classes = useStyles({
+        height,
+        width,
+        maxWidth,
+    })
     return (
-        <LoaderMatchParentStyled
-            height={height}
-            width={width}
-            maxWidth={maxWidth}>
+        <div className={classes.container}>
             <CircularProgress style={style} />
-        </LoaderMatchParentStyled>
+        </div>
     )
 }
 

@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../constants/colors'
-import Title from '../baseComponents/design/Title'
-import Box from '../baseComponents/design/Box'
 
 import BackgroundHeader from './images/background-header.png'
 import MokckupBG from './images/mockup-phone-bg.png'
@@ -11,6 +9,8 @@ import DemoOF from './images/of-demo.webp'
 import Menu from './Menu'
 import InnerWrapper from './component/InnerWrapper'
 import { useTranslation } from 'react-i18next'
+import Box from '@material-ui/core/Box'
+import Typography from '@material-ui/core/Typography'
 
 const Wrapper = styled(Box)`
     background: ${COLORS.RED_ORANGE};
@@ -137,29 +137,24 @@ const Header = () => {
         <Wrapper>
             <InnerWrapper>
                 <Menu />
-                <Box flex flexDirection="row" className="headerContent">
+                <Box
+                    display="flex"
+                    flexDirection="row"
+                    className="headerContent">
                     <Box
-                        flex
+                        display="flex"
                         flexDirection="column"
                         justifyContent="center"
                         alignItems="center"
                         flexGrow="1"
                         textAlign="center"
                         className="headerHeroText">
-                        <Title
-                            component="h1"
-                            m={0}
-                            color={COLORS.WHITE}
-                            fontWeight={600}>
+                        <Typography variant="h1" style={{ color: '#FFFFFF' }}>
                             {t('home.title')}
-                        </Title>
-                        <Title
-                            component="h2"
-                            m={0}
-                            color={COLORS.WHITE}
-                            fontSize="1.4em">
+                        </Typography>
+                        <Typography variant="h2" style={{ color: '#FFFFFF' }}>
                             {t('home.subtitle')}
-                        </Title>
+                        </Typography>
                         <br />
                         <br />
                         <LinkButton href="/admin/">
@@ -173,7 +168,7 @@ const Header = () => {
                     </Box>
 
                     <Box
-                        flex
+                        display="flex"
                         flexDirection="column"
                         justifyContent="flex-end"
                         alignItems="center"

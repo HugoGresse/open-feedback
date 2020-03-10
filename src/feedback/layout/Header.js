@@ -1,52 +1,46 @@
 import React from 'react'
-import styled from 'styled-components'
 import { Link, useParams } from 'react-router-dom'
-import { COLORS } from '../../constants/colors'
-import Title from '../../baseComponents/design/Title'
-import { SCREEN_SIZES } from '../../constants/constants'
+import Title from './Title'
 import SearchBar from './SearchBar'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import CalendarToday from '@material-ui/icons/CalendarToday'
 import { Hidden } from '@material-ui/core/es'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-
-const Logo = styled.img`
-    margin-right: 20px;
-`
-
-const IconWrapper = styled.div`
-    min-width: 28px;
-    position: absolute;
-    ${props =>
-        props.left &&
-        `
-        left: 20px;
-    `}
-    ${props =>
-        props.right &&
-        `
-        right: 20px;
-    `}
-    svg {
-        color: ${COLORS.GRAY};
-    }
-`
-
-const BoxCenter = styled.div`
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-
-    @media screen and (min-width: ${SCREEN_SIZES.MD}) {
-        justify-content: flex-start;
-        width: 900px;
-    }
-`
+import { grey } from '@material-ui/core/colors'
 
 const useStyles = makeStyles(theme => ({
+    logo: {
+        marginRight: 20,
+    },
+    iconLeft: {
+        minWidth: 28,
+        position: 'absolute',
+        left: 20,
+        '& svg': {
+            color: grey[600],
+        },
+    },
+    iconRight: {
+        minWidth: 28,
+        position: 'absolute',
+        right: 20,
+
+        '& svg': {
+            color: grey[600],
+        },
+    },
+    boxCenter: {
+        width: '100%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        justifyContent: 'center',
+        alignItems: 'center',
+        display: 'flex',
+        [theme.breakpoints.up('md')]: {
+            justifyContent: 'flex-start',
+            width: 900,
+        },
+    },
     container: {
         backgroundColor: theme.palette.pageBackground,
         top: 0,
@@ -71,26 +65,27 @@ const Header = ({ project }) => {
     return (
         <div className={classes.container}>
             <div className={classes.header}>
-                <IconWrapper left>
+                <div className={classes.iconLeft}>
                     {matchParams.talkId && (
                         <Link
                             to={`/${matchParams.projectId}/${matchParams.date}`}>
                             <ArrowBack />
                         </Link>
                     )}
-                </IconWrapper>
+                </div>
                 {project.scheduleLink && (
-                    <IconWrapper right>
+                    <div className={classes.iconRight}>
                         <a
                             href={project.scheduleLink}
                             target="_blank"
                             rel="noopener noreferrer">
                             <CalendarToday />
                         </a>
-                    </IconWrapper>
+                    </div>
                 )}
-                <BoxCenter>
-                    <Logo
+                <div className={classes.boxCenter}>
+                    <img
+                        className={classes.logo}
                         src={project.logoSmall}
                         width={60}
                         height={60}
@@ -101,7 +96,7 @@ const Header = ({ project }) => {
                             {project.name}
                         </Title>
                     </Hidden>
-                </BoxCenter>
+                </div>
             </div>
             {!matchParams.talkId && <SearchBar />}
         </div>
