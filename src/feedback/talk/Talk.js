@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
 
 import {
     getSelectedTalkSelector,
@@ -41,24 +40,7 @@ import { COLORS } from '../../constants/colors'
 import { SPACING } from '../../constants/constants'
 import { DateTime } from 'luxon'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../core/contants'
-
-const Header = styled.div`
-    margin-bottom: 30px;
-`
-
-const DateTimeContainer = styled.div`
-    font-size: '18px';
-    display: 'flex';
-    flex-direction: 'column';
-    color: ${COLORS.GRAY};
-    margin-bottom: 15px;
-`
-
-const ChipList = styled.span`
-    font-size: 20px;
-    color: ${COLORS.GRAY};
-    margin-left: 5px;
-`
+import Box from '@material-ui/core/Box'
 
 class Talk extends Component {
     componentDidMount() {
@@ -166,17 +148,21 @@ class Talk extends Component {
         }
         return (
             <div>
-                <Header>
+                <Box marginBottom={4}>
                     <Title variant="h2" color="textPrimary">
                         {talk.title}
-                        <ChipList>
+                        <Box
+                            color={COLORS.GRAY}
+                            fontSize={20}
+                            marginLeft={1}
+                            component="span">
                             {talk.tags &&
                                 talk.tags.map((tag, key) => (
-                                    <span key={key}>#{tag}</span>
+                                    <span key={key}>#{tag} </span>
                                 ))}
-                        </ChipList>
+                        </Box>
                     </Title>
-                    <DateTimeContainer>
+                    <Box fontSize={16} color={COLORS.GRAY} marginBottom={2}>
                         {DateTime.fromISO(talk.startTime, {
                             setZone: true,
                         }).toLocaleString({
@@ -192,9 +178,9 @@ class Talk extends Component {
                         {DateTime.fromISO(talk.endTime, {
                             setZone: true,
                         }).toLocaleString(DateTime.TIME_SIMPLE)}
-                    </DateTimeContainer>
+                    </Box>
                     <SpeakerList speakers={speakers} />
-                </Header>
+                </Box>
                 <Grid container spacing={SPACING.LAYOUT}>
                     {voteItems.map((voteItem, key) => (
                         <TalkVote
