@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import OFButton from '../../admin/baseComponents/button/OFButton'
 import Box from '@material-ui/core/Box'
 import createAlert from '../../utils/alerting/createAlert'
-import { ALERT_REACT_CATCHED_ERROR_ADMIN } from '../../utils/alerting/alerts'
 
 class ErrorBoundary extends Component {
     constructor(props) {
         super(props)
-        this.state = { hasError: false }
+        this.state = {
+            hasError: false,
+        }
     }
 
     static getDerivedStateFromError(error) {
@@ -17,7 +18,7 @@ class ErrorBoundary extends Component {
     componentDidCatch(error, errorInfo) {
         if (process.env.NODE_ENV === 'production') {
             createAlert(
-                ALERT_REACT_CATCHED_ERROR_ADMIN(error, errorInfo.componentStack)
+                this.props.errorToReport(error, errorInfo.componentStack)
             )
         }
     }
@@ -30,6 +31,10 @@ class ErrorBoundary extends Component {
                         Something went wrong. It may be linked to an issue with
                         Open Feedback itself or your internet connection.{' '}
                     </h3>
+                    <p>
+                        An alert has been triggered and someone will hopefully
+                        fix this soon (I think it is me)
+                    </p>
                     <br />
                     <pre>{String(this.state.error)}</pre>
                     <br />
