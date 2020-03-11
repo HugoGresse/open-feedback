@@ -32,7 +32,7 @@ describe('Navigate on talk list', function() {
         cy.url().should('include', `/${testProjectId}`)
     })
 
-    it('Check dates changes the displayed talks', function() {
+    it('Check dates changes the displayed talks + extended search', function() {
         cy.visitFeedbackProject()
 
         cy.get('h3').should('have.length', 3)
@@ -57,6 +57,14 @@ describe('Navigate on talk list', function() {
                     .should('contain', 'Un talk super bien')
                     .should('contain', 'Pierre')
             })
+
+        // Extended search should match more talks
+        cy.get('input[placeholder=Search]').type('random')
+        cy.get('.talk')
+            .should('have.length', 3)
+            .should('contain', 'Why awesome?')
+            .should('contain', 'The one time story telling')
+            .should('contain', 'Random talk about React')
     })
 
     it('Check filter works', function() {
