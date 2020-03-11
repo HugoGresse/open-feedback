@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     container: {
         padding: 16,
         borderRadius: 4,
-        marginTop: 16,
+        marginTop: 32,
         backgroundColor:
             theme.palette.type === 'dark'
                 ? theme.palette.background.paper
