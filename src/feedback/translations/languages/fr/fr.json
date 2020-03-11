@@ -7,7 +7,9 @@
         "hidden": "Votre vote a été caché par les organisateurs de l'évènement. Contactez les si vous voulez plus d'informations."
     },
     "searchPlaceholder": "Recherche",
-    "searchNoMatch": "Aucune présentation ne correspond à vos critères",
+    "searchNoMatchAtAll": "Aucune présentation ne correspond à vos critères.",
+    "searchNoMatch": "Aucune présentation ne correspond à vos critères le",
+    "searchExtendedMatch": "Présentation(s) les autres jours correspondant à votre recherche:",
     "footer": {
         "madeBy": "Propulsé par"
     }

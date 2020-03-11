@@ -1,9 +1,8 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setSelectedTalk } from '../talk/core/talkActions'
 import TalksItem from './TalksItem'
 import Grid from '@material-ui/core/Grid'
-import { getVotesByTalkSelector } from '../vote/voteSelectors'
 import Title from '../layout/Title'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 
@@ -14,11 +13,9 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-const TalksList = ({ talks }) => {
+const TalksList = ({ talks, userTalkVote }) => {
     const dispatch = useDispatch()
     const classes = useStyles()
-
-    const userTalkVote = useSelector(getVotesByTalkSelector)
 
     return talks.map((track, key) => (
         <div key={key}>

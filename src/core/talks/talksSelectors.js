@@ -134,6 +134,16 @@ export const getCurrentTalksGroupByTrackSelector = createSelector(
     }
 )
 
+export const getExtendedSearchTalksSelector = createSelector(
+    getFilteredTalksSelector,
+    getProjectSelectedDateSelector,
+    (talks, selectedDate) => {
+        return talks.filter(
+            talk => selectedDate !== getDateFromStartTime(talk.startTime)
+        )
+    }
+)
+
 export const getTracksSelector = createSelector(
     getTalksAsArraySelector,
     talks => {

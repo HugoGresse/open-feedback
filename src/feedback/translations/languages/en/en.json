@@ -7,7 +7,9 @@
         "hidden": "Your vote has been hidden by the event organizer. Contact them for more information"
     },
     "searchPlaceholder": "Search",
-    "searchNoMatch": "No talk matched your criteria",
+    "searchNoMatchAtAll": "No talk matched your criteria.",
+    "searchNoMatch": "No talk matched your criteria on ",
+    "searchExtendedMatch": "Talk(s) on the other day matching your search:",
     "footer": {
         "madeBy": "Powered by"
     }
