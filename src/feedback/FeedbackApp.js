@@ -8,6 +8,8 @@ import i18n from './translations/i18n'
 import { responsiveFontSizes, useMediaQuery } from '@material-ui/core'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import { grey } from '@material-ui/core/colors'
+import ErrorBoundary from '../baseComponents/customComponent/ErrorBoundary'
+import { ALERT_REACT_CATCHED_ERROR_FEEDBACK } from '../utils/alerting/alerts'
 
 const FeedbackApp = () => {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
@@ -49,38 +51,40 @@ const FeedbackApp = () => {
     )
 
     return (
-        <I18nextProvider i18n={i18n}>
-            <ThemeProvider theme={theme}>
-                <Switch>
-                    <Route
-                        exact
-                        path="/:projectId"
-                        render={props => (
-                            <AppLayout>
-                                <TalksListWrapper {...props} />
-                            </AppLayout>
-                        )}
-                    />
-                    <Route
-                        exact
-                        path="/:projectId/:date"
-                        render={props => (
-                            <AppLayout>
-                                <TalksListWrapper {...props} />
-                            </AppLayout>
-                        )}
-                    />
-                    <Route
-                        path="/:projectId/:date/:talkId"
-                        render={props => (
-                            <AppLayout>
-                                <Talk {...props} />
-                            </AppLayout>
-                        )}
-                    />
-                </Switch>
-            </ThemeProvider>
-        </I18nextProvider>
+        <ErrorBoundary errorToReport={ALERT_REACT_CATCHED_ERROR_FEEDBACK}>
+            <I18nextProvider i18n={i18n}>
+                <ThemeProvider theme={theme}>
+                    <Switch>
+                        <Route
+                            exact
+                            path="/:projectId"
+                            render={props => (
+                                <AppLayout>
+                                    <TalksListWrapper {...props} />
+                                </AppLayout>
+                            )}
+                        />
+                        <Route
+                            exact
+                            path="/:projectId/:date"
+                            render={props => (
+                                <AppLayout>
+                                    <TalksListWrapper {...props} />
+                                </AppLayout>
+                            )}
+                        />
+                        <Route
+                            path="/:projectId/:date/:talkId"
+                            render={props => (
+                                <AppLayout>
+                                    <Talk {...props} />
+                                </AppLayout>
+                            )}
+                        />
+                    </Switch>
+                </ThemeProvider>
+            </I18nextProvider>
+        </ErrorBoundary>
     )
 }
 
