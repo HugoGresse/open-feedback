@@ -17,6 +17,7 @@ import {
     setOpenNotification,
 } from './notifcationActions'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import { useTranslation } from 'react-i18next'
 
 const variantIcon = {
     success: CheckCircleIcon,
@@ -56,6 +57,7 @@ const Notifications = () => {
     const notification = useSelector(getCurrentNotificationSelector)
     const isOpen = useSelector(isNotificationOpenSelector)
     const dispatch = useDispatch()
+    const { t } = useTranslation()
 
     const Icon = notification ? variantIcon[notification.type] : undefined
     const contentClass = notification ? classes[notification.type] : undefined
@@ -69,6 +71,23 @@ const Notifications = () => {
 
     const handleExited = () => {
         dispatch(processNotificationQueue())
+    }
+
+    const getMessage = () => {
+        if (!notification) {
+            return undefined
+        }
+        if (notification.message) {
+            return (
+                <span id="client-snackbar" className={classes.message}>
+                    {' '}
+                    <Icon className={classes.icon} /> {notification.message}{' '}
+                </span>
+            )
+        }
+        if (notification.i18nkey) {
+            return t(notification.i18nkey)
+        }
     }
 
     return (
@@ -85,15 +104,7 @@ const Notifications = () => {
             <SnackbarContent
                 className={contentClass}
                 aria-describedby="client-snackbar"
-                message={
-                    notification && (
-                        <span id="client-snackbar" className={classes.message}>
-                            {' '}
-                            <Icon className={classes.icon} />{' '}
-                            {notification.message}{' '}
-                        </span>
-                    )
-                }
+                message={getMessage()}
                 action={[
                     <IconButton
                         key="close"
