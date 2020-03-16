@@ -21,7 +21,7 @@
         "firebase-admin": "^8.9.2",
         "firebase-functions": "^3.3.0",
         "firebase-functions-test": "^0.2.0",
-        "firebase-tools": "^7.14.0",
+        "firebase-tools": "^7.15.0",
         "form-data": "^3.0.0",
         "lodash": "^4.17.15",
         "node-fetch": "^2.6.0",
