@@ -7,9 +7,15 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import ErrorIcon from '@material-ui/icons/Error'
 import green from '@material-ui/core/colors/green'
 import amber from '@material-ui/core/colors/amber'
-import { getLastNotificationsSelector } from './notificationSelectors'
+import {
+    getCurrentNotificationSelector,
+    isNotificationOpenSelector,
+} from './notificationSelectors'
 import Snackbar from '@material-ui/core/Snackbar'
-import { clearNotification } from './notifcationActions'
+import {
+    processNotificationQueue,
+    setOpenNotification,
+} from './notifcationActions'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 
 const variantIcon = {
@@ -32,13 +38,12 @@ const useStyles = makeStyles(theme => ({
     },
     icon: {
         fontSize: 20,
-
         opacity: 0.9,
         marginRight: theme.spacing(1),
     },
-    iconVariant: {
+    closeIcon: {
+        fontSize: 20,
         opacity: 0.9,
-        marginRight: theme.spacing(1),
     },
     message: {
         display: 'flex',
@@ -48,43 +53,54 @@ const useStyles = makeStyles(theme => ({
 
 const Notifications = () => {
     const classes = useStyles()
-    const notification = useSelector(getLastNotificationsSelector)
+    const notification = useSelector(getCurrentNotificationSelector)
+    const isOpen = useSelector(isNotificationOpenSelector)
     const dispatch = useDispatch()
 
-    if (!notification) {
-        return ''
+    const Icon = notification ? variantIcon[notification.type] : undefined
+    const contentClass = notification ? classes[notification.type] : undefined
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
+        dispatch(setOpenNotification(false))
     }
-    const Icon = variantIcon[notification.type]
-    const contentClass = classes[notification.type]
+
+    const handleExited = () => {
+        dispatch(processNotificationQueue())
+    }
 
     return (
         <Snackbar
+            key={notification ? notification.key : undefined}
             anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'right',
             }}
-            open={!!notification}
+            open={isOpen}
             autoHideDuration={4000}
-            onClose={() => dispatch(clearNotification(notification))}>
+            onClose={handleClose}
+            onExited={handleExited}>
             <SnackbarContent
                 className={contentClass}
                 aria-describedby="client-snackbar"
                 message={
-                    <span id="client-snackbar" className={classes.message}>
-                        {' '}
-                        <Icon className={classes.icon} /> {notification.message}{' '}
-                    </span>
+                    notification && (
+                        <span id="client-snackbar" className={classes.message}>
+                            {' '}
+                            <Icon className={classes.icon} />{' '}
+                            {notification.message}{' '}
+                        </span>
+                    )
                 }
                 action={[
                     <IconButton
                         key="close"
                         aria-label="Close"
                         color="inherit"
-                        className={classes.close}
-                        onClick={() =>
-                            dispatch(clearNotification(notification))
-                        }>
-                        <CloseIcon className={classes.icon} />
+                        onClick={handleClose}>
+                        <CloseIcon className={classes.closeIcon} />
                     </IconButton>,
                 ]}
             />

@@ -1,10 +1,13 @@
 import {
     ADD_NOTIFICATION,
-    REMOVE_NOTIFICATION
+    SET_CURRENT_NOTIFICATION,
+    SET_OPEN_NOTIFICATION,
 } from './notificationActionTypes'
 
 const initState = {
-    notifications: []
+    notifications: [],
+    current: null,
+    isOpen: false,
 }
 
 const notificationReducer = (state = initState, { payload, type }) => {
@@ -12,17 +15,20 @@ const notificationReducer = (state = initState, { payload, type }) => {
         case ADD_NOTIFICATION:
             return {
                 ...state,
-                notifications: state.notifications.concat([payload])
+                notifications: state.notifications.concat([payload]),
             }
-        case REMOVE_NOTIFICATION:
+        case SET_OPEN_NOTIFICATION:
             return {
                 ...state,
-                notifications: state.notifications.filter(item => {
-                    return (
-                        item.type !== payload.type &&
-                        item.message !== payload.message
-                    )
-                })
+                isOpen: payload,
+            }
+        case SET_CURRENT_NOTIFICATION:
+            return {
+                ...state,
+                current: payload,
+                notifications: state.notifications.filter(
+                    item => item.key !== payload.key
+                ),
             }
         default:
             return state
