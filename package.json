@@ -22,7 +22,7 @@
         "build-storybook": "build-storybook -s public"
     },
     "devDependencies": {
-        "@storybook/addon-docs": "^5.3.14",
+        "@storybook/addon-docs": "^5.3.17",
         "@storybook/addons": "^5.3.17",
         "@storybook/preset-create-react-app": "^2.0.0",
         "@storybook/react": "5.3.17",
