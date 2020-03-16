@@ -10,7 +10,7 @@ import {
     REMOVE_SPEAKER_SUCCESS,
 } from './speakerActionTypes'
 import { projectApi } from '../setupType/projectApi'
-import { ADD_NOTIFICATION } from '../../admin/notification/notificationActionTypes'
+import { addNotification } from '../../admin/notification/notifcationActions'
 
 export const getSpeakers = () => dispatch => {
     return projectApi
@@ -57,13 +57,12 @@ export const addSpeaker = speaker => dispatch => {
                     error: error,
                 },
             })
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
+            dispatch(
+                addNotification({
                     type: 'error',
                     message: `Failed to add speaker, ${error}`,
-                },
-            })
+                })
+            )
         })
 }
 
@@ -83,13 +82,12 @@ export const editSpeaker = speaker => dispatch => {
                     error: error,
                 },
             })
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
+            dispatch(
+                addNotification({
                     type: 'error',
                     message: `Failed to edit speaker, ${error}`,
-                },
-            })
+                })
+            )
         })
 }
 
@@ -109,12 +107,11 @@ export const removeSpeaker = speaker => dispatch => {
                     error: error,
                 },
             })
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
+            dispatch(
+                addNotification({
                     type: 'error',
                     message: `Failed to remove speaker, ${error}`,
-                },
-            })
+                })
+            )
         })
 }

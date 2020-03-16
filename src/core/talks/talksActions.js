@@ -11,7 +11,7 @@ import {
     REMOVE_TALK_SUCCESS,
 } from './talksActionTypes'
 import { projectApi } from '../setupType/projectApi'
-import { ADD_NOTIFICATION } from '../../admin/notification/notificationActionTypes'
+import { addNotification } from '../../admin/notification/notifcationActions'
 
 export const getTalks = () => {
     return dispatch => {
@@ -65,13 +65,12 @@ export const addTalk = talk => dispatch => {
                     error: error,
                 },
             })
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
+            dispatch(
+                addNotification({
                     type: 'error',
                     message: `Failed to add talk, ${error}`,
-                },
-            })
+                })
+            )
         })
 }
 
@@ -91,13 +90,12 @@ export const editTalk = talk => dispatch => {
                     error: error,
                 },
             })
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
+            dispatch(
+                addNotification({
                     type: 'error',
                     message: `Failed to edit talk, ${error}`,
-                },
-            })
+                })
+            )
         })
 }
 
@@ -117,12 +115,11 @@ export const removeTalk = talk => dispatch => {
                     error: error,
                 },
             })
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
+            dispatch(
+                addNotification({
                     type: 'error',
                     message: `Failed to remove talk, ${error}`,
-                },
-            })
+                })
+            )
         })
 }

@@ -16,11 +16,11 @@ import {
     getSelectedProjectIdSelector,
     getSelectedProjectSelector,
 } from '../../core/projectSelectors'
-import { ADD_NOTIFICATION } from '../../../notification/notificationActionTypes'
 import { getVoteItemsSelector } from './votingFormSelectors'
 import { newId } from '../../../../utils/stringUtils'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../../../core/contants'
 import { filterMap } from '../../../../utils/mapUtils'
+import { addNotification } from '../../../notification/notifcationActions'
 
 export const getVoteItems = () => (dispatch, getState) =>
     dispatch({
@@ -138,13 +138,12 @@ export const saveVoteItems = () => {
                 { merge: true }
             )
             .then(() => {
-                dispatch({
-                    type: ADD_NOTIFICATION,
-                    payload: {
+                dispatch(
+                    addNotification({
                         type: 'success',
                         message: 'Voting form saved',
-                    },
-                })
+                    })
+                )
 
                 dispatch({
                     type: SAVE_VOTEITEMS_SUCCESS,
@@ -158,13 +157,12 @@ export const saveVoteItems = () => {
                     payload: error,
                 })
 
-                dispatch({
-                    type: ADD_NOTIFICATION,
-                    payload: {
+                dispatch(
+                    addNotification({
                         type: 'error',
                         message: 'Saving failed, ' + JSON.stringify(error),
-                    },
-                })
+                    })
+                )
             })
     }
 }
