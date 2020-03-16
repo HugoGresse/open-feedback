@@ -7,7 +7,7 @@ import {
 import { fireStoreMainInstance, serverTimestamp } from '../../../firebase'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import { VOTE_STATUS_ACTIVE, VOTE_STATUS_HIDDEN } from '../../../core/contants'
-import { ADD_NOTIFICATION } from '../../notification/notificationActionTypes'
+import { addNotification } from '../../notification/notifcationActions'
 
 /**
  * We first get all "active" votes from the aggregation and a second action get the hidden ones. This
@@ -141,13 +141,12 @@ export const hideVote = vote => (dispatch, getState) => {
             })
         })
         .catch(error => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
+            dispatch(
+                addNotification({
                     type: 'error',
                     message: 'Failed to hide the vote, ' + error.toString(),
-                },
-            })
+                })
+            )
         })
 }
 
@@ -175,12 +174,11 @@ export const unhideVote = vote => (dispatch, getState) => {
             })
         })
         .catch(error => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
+            dispatch(
+                addNotification({
                     type: 'error',
                     message: 'Failed to unhide the vote, ' + error.toString(),
-                },
-            })
+                })
+            )
         })
 }

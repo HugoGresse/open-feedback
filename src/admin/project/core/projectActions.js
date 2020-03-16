@@ -22,10 +22,10 @@ import {
     getSelectedProjectIdSelector,
     getSelectedProjectSelector,
 } from './projectSelectors'
-import { ADD_NOTIFICATION } from '../../notification/notificationActionTypes'
 import { CLEAR_TALK_VOTES } from '../dashboard/dashboardActionTypes'
 import { initProjectApi } from '../../../core/setupType/projectApi'
 import { newRandomHexColor } from '../../../utils/colorsUtils'
+import { addNotification } from '../../notification/notifcationActions'
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -142,13 +142,12 @@ export const editProject = projectData => (dispatch, getState) => {
         .doc(getSelectedProjectIdSelector(getState()))
         .set(projectData, { merge: true })
         .then(() => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
+            dispatch(
+                addNotification({
                     type: 'success',
                     message: 'Event saved',
-                },
-            })
+                })
+            )
 
             dispatch({
                 type: EDIT_PROJECT_SUCCESS,
@@ -156,13 +155,12 @@ export const editProject = projectData => (dispatch, getState) => {
             })
         })
         .catch(err => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
+            dispatch(
+                addNotification({
                     type: 'error',
                     message: 'Failed to save the event',
-                },
-            })
+                })
+            )
 
             dispatch({
                 type: EDIT_PROJECT_ERROR,
@@ -192,13 +190,12 @@ export const newProject = (projectId, projectData) => (dispatch, getState) => {
         .doc(projectId)
         .set(projectData)
         .then(() => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
+            dispatch(
+                addNotification({
                     type: 'success',
                     message: 'New event created! Redirecting you now...',
-                },
-            })
+                })
+            )
             dispatch({
                 type: ADD_PROJECT_SUCCESS,
                 payload: projectId,
@@ -206,13 +203,12 @@ export const newProject = (projectId, projectData) => (dispatch, getState) => {
             return projectId
         })
         .catch(err => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
+            dispatch(
+                addNotification({
                     type: 'error',
                     message: 'Fail to create a new event, ' + err.toString(),
-                },
-            })
+                })
+            )
             dispatch({
                 type: ADD_PROJECT_ERROR,
                 payload: err.toString(),
@@ -241,38 +237,35 @@ export const deleteProject = (projectId, t) => dispatch =>
         })
         // eslint-disable-next-line no-console
         .then(() => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: {
+            dispatch(
+                addNotification({
                     type: 'success',
                     message: t('settingsSetup.deleteEvent.deleted'),
-                },
-            })
+                })
+            )
         })
         .catch(error => {
             // eslint-disable-next-line no-console
             console.error(error)
 
             if (error.code === 'permission-denied') {
-                dispatch({
-                    type: ADD_NOTIFICATION,
-                    payload: {
+                dispatch(
+                    addNotification({
                         type: 'error',
                         message: t(
                             'settingsSetup.deleteEvent.errors.permissionDenied'
                         ),
-                    },
-                })
+                    })
+                )
             } else {
-                dispatch({
-                    type: ADD_NOTIFICATION,
-                    payload: {
+                dispatch(
+                    addNotification({
                         type: 'error',
                         message:
                             t('settingsSetup.deleteEvent.errors.defaultError') +
                             error.toString(),
-                    },
-                })
+                    })
+                )
             }
 
             return Promise.reject()
