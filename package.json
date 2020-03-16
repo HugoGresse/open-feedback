@@ -23,7 +23,7 @@
     },
     "devDependencies": {
         "@storybook/addon-docs": "^5.3.14",
-        "@storybook/addons": "^5.3.14",
+        "@storybook/addons": "^5.3.17",
         "@storybook/preset-create-react-app": "^2.0.0",
         "@storybook/react": "5.3.14",
         "babel-loader": "^8.0.6",
