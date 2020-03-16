@@ -1,7 +1,9 @@
 {
     "auth": {
         "emailNotVerified": "Vous devez vérifier vote adresse email en utilisant le lien que vous avez reçu dans votre boîte email.",
-        "retry": "Réessayez"
+        "retry": "Réessayez",
+        "errorLogin": "Érreur lors de l'authentification anonyme.",
+        "errorAnonymous": "Vous ne pouvez pas utiliser l'admin en mode anonyme"
     },
     "baseComponents": {
         "search": "Recherche"
@@ -14,6 +16,15 @@
         "download": "Télécharger",
         "close": "Fermer",
         "saved": "Sauvegarder"
+    },
+    "project": {
+        "errorProjectsLoad": "Érreur lors du chargement des projets.",
+        "errorLoad": "Érreur lros du chargement du projet.",
+        "errorLoadVotes": "Érreur lors du chargement des votes.",
+        "saveSuccess": "Évènement sauvegardé",
+        "saveFail": "Érreur lors de la sauvegarde de l'évènement",
+        "newSuccess": "Nouvel évènement créé! Redirection en cours...",
+        "newFail": "Érreur lors de la création de l'évènement, "
     },
     "dashboard": {
         "comments": "Commentaires",
@@ -147,7 +158,7 @@
             "deleted": "Évènement supprimé !",
             "errors": {
                 "permissionDenied": "Seul le propriétaire de l'évènement peut le supprimer.",
-                "defaultError": "Erreur lors de la suppression de l'évènement, "
+                "defaultError": "Érreur lors de la suppression de l'évènement, "
             }
         },
         "settings": "Paramètres",
@@ -171,7 +182,15 @@
         "on": "le",
         "owner": "Propriétaire",
         "status": "Invitation à devenir membre",
-        "submit": "Ajouter un membre"
+        "submit": "Ajouter un membre",
+        "errorUserNotExist": "L'utilisateur n'exsite pas",
+        "errorUserLoadFail": "Érreur lors du chargement des détails de l'utilisateur, ",
+        "errorUserAlreadyInvited": "L'utilisateur a déjà été invité à l'évènement.",
+        "successInvite": "L'utilisateur a été invité au projet et recevra un email bientôt.",
+        "errorInvite": "Érreur lors de l'invitation de l'utilisateur ",
+        "invitationGetFail": "Érreur lors du chargement de votre invitation, demandez en une nouvelle svp.",
+        "errorPendingInvitesFailed": "Érreur lors du chargement des invitations en attente, ",
+        "cancelInviteFail": "Érreur lors de l'annulation de l'invitation, "
     },
     "settingsVotingForm": {
         "new": "Nouveau choix de vote",
@@ -184,7 +203,9 @@
         "editLang": "Vous pouvez modifier les langues depuis la page Évènement & thème.",
         "typeChangeDialogTitle": "Changement de type de vote",
         "typeChangeDialogDesc": "Le type d'un choix de vote a changé ou un choix de vote a été supprimé. Si il y a déjà des votes liés à ce choix, ils ne seront plus visible.",
-        "typeChangeDialogConfirm": "Sauvegarder"
+        "typeChangeDialogConfirm": "Sauvegarder",
+        "saveSuccess": "Bulletin de vote sauvegardé",
+        "saveFail": "Sauvegarde échoué, "
     },
     "speakers": {
         "addButton": "Ajouter un orateur·rice",
@@ -229,6 +250,8 @@
         "hideDialogDescription": "En cachant un vote, vous empêchez tout le monde en dehors des administrateurs de l'évènement voir le vote. Le votant pourra toujours le mettre à jour mais le vote restera caché jusqu'à ce que vous décidiez de l'afficher.",
         "unhideDialogTitle": "Décacher le vote",
         "unhideDialogDescription": "Décacher le vote pour qu'il soit visible de tout le monde.",
-        "unhideDialogConfirm": "Décacher le vote"
+        "unhideDialogConfirm": "Décacher le vote",
+        "hideVoteFail": "Échec du cachage du vote, ",
+        "unhideVoteFail": "Échec du décachage du vote, "
     }
 }

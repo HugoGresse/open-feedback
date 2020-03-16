@@ -77,6 +77,12 @@ const Notifications = () => {
         if (!notification) {
             return undefined
         }
+        if (notification.i18nkey) {
+            return (
+                t(notification.i18nkey) +
+                (notification.message ? notification.message : '')
+            )
+        }
         if (notification.message) {
             return (
                 <span id="client-snackbar" className={classes.message}>
@@ -84,9 +90,6 @@ const Notifications = () => {
                     <Icon className={classes.icon} /> {notification.message}{' '}
                 </span>
             )
-        }
-        if (notification.i18nkey) {
-            return t(notification.i18nkey)
         }
     }
 

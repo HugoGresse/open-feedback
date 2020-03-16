@@ -1,7 +1,9 @@
 {
     "auth": {
         "emailNotVerified": "You need to verify your email using the link you've received in your inbox.",
-        "retry": "Retry"
+        "retry": "Retry",
+        "errorLogin": "Fail to anonymously login you.",
+        "errorAnonymous": "You cannot use the admin in anonymous mode"
     },
     "baseComponents": {
         "search": "Search"
@@ -14,6 +16,15 @@
         "saved": "Saved",
         "download": "Download",
         "close": "Close"
+    },
+    "project": {
+        "errorProjectsLoad": "Unable to load all projects.",
+        "errorLoad": "Unable to load the project.",
+        "errorLoadVotes": "Unable to load the votes and/or the vote options.",
+        "saveSuccess": "Event saved",
+        "saveFail": "Failed to save the event",
+        "newSuccess": "New event created! Redirecting you now...",
+        "newFail": "Fail to create a new event, "
     },
     "dashboard": {
         "comments": "Comments",
@@ -171,7 +182,15 @@
         "on": "on",
         "owner": "Owner",
         "status": "Invitation to become Member",
-        "submit": "Add member"
+        "submit": "Add member",
+        "errorUserNotExist": "User does not exist",
+        "errorUserLoadFail": "Failed to load user details, ",
+        "errorUserAlreadyInvited": "The user is already invited to the event.",
+        "successInvite": "The user has been invited to the project and should receive an email very soon.",
+        "errorInvite": "Failed to invite user ",
+        "invitationGetFail": "Unable to get your invitation, ask for another one please.",
+        "errorPendingInvitesFailed": "Failed to load pending invites, ",
+        "cancelInviteFail": "Failed to cancel invite, "
     },
     "settingsVotingForm": {
         "new": "New item",
@@ -184,7 +203,9 @@
         "editLang": "You can edit the languages from the Event & Theme page",
         "typeChangeDialogTitle": "Vote type changed",
         "typeChangeDialogDesc": "A vote type has changed or a vote item has been deleted. If there are already votes linked to this vote item, they will not be visible.",
-        "typeChangeDialogConfirm": "Save"
+        "typeChangeDialogConfirm": "Save",
+        "saveSuccess": "Voting form saved",
+        "saveFail": "Saving failed, "
     },
     "speakers": {
         "addButton": "Add speaker",
@@ -229,6 +250,8 @@
         "hideDialogDescription": "Hiding the vote will prevent everyone except the OpenFeedback member to see the vote. The user will still be able to update it but it will not be visible again until you decide to.",
         "unhideDialogTitle": "Unhidding a vote",
         "unhideDialogDescription": "Unhiding the vote so it will be visible publicly.",
-        "unhideDialogConfirm": "Unhide the vote"
+        "unhideDialogConfirm": "Unhide the vote",
+        "hideVoteFail": "Failed to hide the vote, ",
+        "unhideVoteFail": "Failed to unhide the vote, "
     }
 }
