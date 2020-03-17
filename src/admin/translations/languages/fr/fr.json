@@ -2,7 +2,7 @@
     "auth": {
         "emailNotVerified": "Vous devez vérifier vote adresse email en utilisant le lien que vous avez reçu dans votre boîte email.",
         "retry": "Réessayez",
-        "errorLogin": "Érreur lors de l'authentification anonyme.",
+        "errorLogin": "Erreur lors de l'authentification anonyme.",
         "errorAnonymous": "Vous ne pouvez pas utiliser l'admin en mode anonyme"
     },
     "baseComponents": {
@@ -18,13 +18,13 @@
         "saved": "Sauvegarder"
     },
     "project": {
-        "errorProjectsLoad": "Érreur lors du chargement des projets.",
-        "errorLoad": "Érreur lros du chargement du projet.",
-        "errorLoadVotes": "Érreur lors du chargement des votes.",
+        "errorProjectsLoad": "Erreur lors du chargement des projets.",
+        "errorLoad": "Erreur lors du chargement du projet.",
+        "errorLoadVotes": "Erreur lors du chargement des votes.",
         "saveSuccess": "Évènement sauvegardé",
-        "saveFail": "Érreur lors de la sauvegarde de l'évènement",
+        "saveFail": "Erreur lors de la sauvegarde de l'évènement",
         "newSuccess": "Nouvel évènement créé! Redirection en cours...",
-        "newFail": "Érreur lors de la création de l'évènement, "
+        "newFail": "Erreur lors de la création de l'évènement, "
     },
     "dashboard": {
         "comments": "Commentaires",
@@ -158,7 +158,7 @@
             "deleted": "Évènement supprimé !",
             "errors": {
                 "permissionDenied": "Seul le propriétaire de l'évènement peut le supprimer.",
-                "defaultError": "Érreur lors de la suppression de l'évènement, "
+                "defaultError": "Erreur lors de la suppression de l'évènement, "
             }
         },
         "settings": "Paramètres",
@@ -184,13 +184,13 @@
         "status": "Invitation à devenir membre",
         "submit": "Ajouter un membre",
         "errorUserNotExist": "L'utilisateur n'exsite pas",
-        "errorUserLoadFail": "Érreur lors du chargement des détails de l'utilisateur, ",
+        "errorUserLoadFail": "Erreur lors du chargement des détails de l'utilisateur, ",
         "errorUserAlreadyInvited": "L'utilisateur a déjà été invité à l'évènement.",
         "successInvite": "L'utilisateur a été invité au projet et recevra un email bientôt.",
-        "errorInvite": "Érreur lors de l'invitation de l'utilisateur ",
-        "invitationGetFail": "Érreur lors du chargement de votre invitation, demandez en une nouvelle svp.",
-        "errorPendingInvitesFailed": "Érreur lors du chargement des invitations en attente, ",
-        "cancelInviteFail": "Érreur lors de l'annulation de l'invitation, "
+        "errorInvite": "Erreur lors de l'invitation de l'utilisateur ",
+        "invitationGetFail": "Erreur lors du chargement de votre invitation, demandez en une nouvelle svp.",
+        "errorPendingInvitesFailed": "Erreur lors du chargement des invitations en attente, ",
+        "cancelInviteFail": "Erreur lors de l'annulation de l'invitation, "
     },
     "settingsVotingForm": {
         "new": "Nouveau choix de vote",
