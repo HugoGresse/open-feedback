@@ -144,7 +144,8 @@ export const hideVote = vote => (dispatch, getState) => {
             dispatch(
                 addNotification({
                     type: 'error',
-                    message: 'Failed to hide the vote, ' + error.toString(),
+                    i18nkey: 'moderation.hideVoteFail',
+                    message: error.toString(),
                 })
             )
         })
@@ -177,7 +178,8 @@ export const unhideVote = vote => (dispatch, getState) => {
             dispatch(
                 addNotification({
                     type: 'error',
-                    message: 'Failed to unhide the vote, ' + error.toString(),
+                    i18nkey: 'moderation.unhideVoteFail',
+                    message: error.toString(),
                 })
             )
         })

@@ -18,7 +18,7 @@ export const didSignIn = (user, error) => {
             if (user.isAnonymous) {
                 dispatch({
                     type: LOGIN_ERROR,
-                    payload: 'You cannot use the admin in anonymous mode',
+                    payload: 'auth.errorAnonymous',
                 })
             } else {
                 const displayName = getDataFromProviderDataOrUser(

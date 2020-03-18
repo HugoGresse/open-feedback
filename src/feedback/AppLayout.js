@@ -21,6 +21,7 @@ import { getProject } from './project/projectActions'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { signIn } from './auth/authActions'
 import { getVotes } from './vote/voteActions'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -62,6 +63,7 @@ const AppLayout = ({ children }) => {
     const dispatch = useDispatch()
     const history = useHistory()
     const routerParams = useParams()
+    const { t } = useTranslation()
     const project = useSelector(getProjectSelector)
     const talkDates = useSelector(getTalksDatesSelector)
 
@@ -96,15 +98,12 @@ const AppLayout = ({ children }) => {
 
     if (loginError) {
         return (
-            <Error
-                error="Fail to anonymously login you."
-                errorDetail={loginError}
-            />
+            <Error error={t('auth.errorLogin')} errorDetail={t(loginError)} />
         )
     } else if (projectLoadError) {
         return (
             <Error
-                error="Unable to load the project."
+                error={t('project.errorLoad')}
                 errorDetail={projectLoadError}
             />
         )
@@ -113,7 +112,7 @@ const AppLayout = ({ children }) => {
     } else if (projectVotesError) {
         return (
             <Error
-                error="Unable to load the votes and/or the vote options."
+                error={t('project.errorLoadVotes')}
                 errorDetail={projectVotesError}
             />
         )
