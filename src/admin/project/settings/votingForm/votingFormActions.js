@@ -94,7 +94,7 @@ export const addVoteItem = (optionalName, type) => {
     }
 }
 
-export const saveVoteItems = () => {
+export const saveVoteItems = hideNotification => {
     return (dispatch, getState) => {
         const voteItems = getVoteItemsSelector(getState())
         const selectedProjectId = getSelectedProjectIdSelector(getState())
@@ -138,12 +138,14 @@ export const saveVoteItems = () => {
                 { merge: true }
             )
             .then(() => {
-                dispatch(
-                    addNotification({
-                        type: 'success',
-                        message: 'Voting form saved',
-                    })
-                )
+                if (!hideNotification) {
+                    dispatch(
+                        addNotification({
+                            type: 'success',
+                            i18nkey: 'settingsVotingForm.saveSuccess',
+                        })
+                    )
+                }
 
                 dispatch({
                     type: SAVE_VOTEITEMS_SUCCESS,
@@ -160,7 +162,8 @@ export const saveVoteItems = () => {
                 dispatch(
                     addNotification({
                         type: 'error',
-                        message: 'Saving failed, ' + JSON.stringify(error),
+                        i18nkey: 'settingsVotingForm.saveFail',
+                        message: JSON.stringify(error),
                     })
                 )
             })

@@ -45,7 +45,8 @@ export const getUserDetails = uid => (dispatch, getState) => {
                 dispatch(
                     addNotification({
                         type: 'error',
-                        message: `User ${uid} does not exist`,
+                        i18nkey: 'settingsUser.errorUserNotExist',
+                        message: uid,
                     })
                 )
             }
@@ -56,9 +57,8 @@ export const getUserDetails = uid => (dispatch, getState) => {
             dispatch(
                 addNotification({
                     type: 'error',
-                    message: `Failed to load user ${uid} details, ${JSON.stringify(
-                        error
-                    )}`,
+                    i18nkey: 'settingsUser.errorUserLoadFail',
+                    message: `${uid}, ${JSON.stringify(error)}`,
                 })
             )
         })
@@ -84,7 +84,7 @@ export const inviteUser = userEmail => (dispatch, getState) => {
         dispatch(
             addNotification({
                 type: 'error',
-                message: 'The user is already invited to the event.',
+                i18nkey: 'settingsUser.errorUserAlreadyInvited',
             })
         )
         return Promise.resolve(false)
@@ -114,7 +114,7 @@ export const inviteUser = userEmail => (dispatch, getState) => {
             dispatch(
                 addNotification({
                     type: 'success',
-                    message: `The user has been invited to the project and should receive an email very soon.`,
+                    i18nkey: 'settingsUser.successInvite',
                 })
             )
 
@@ -134,9 +134,8 @@ export const inviteUser = userEmail => (dispatch, getState) => {
             dispatch(
                 addNotification({
                     type: 'error',
-                    message: `Failed to invite user ${userEmail}, ${JSON.stringify(
-                        error
-                    )}`,
+                    i18nkey: 'settingsUser.errorInvite',
+                    message: `${userEmail}, ${JSON.stringify(error)}`,
                 })
             )
             return false
@@ -168,7 +167,7 @@ export const listenForInvite = inviteId => dispatch => {
                     dispatch(
                         addNotification({
                             type: 'error',
-                            message: `Unable to get your invitation, ask for another one please.`,
+                            i18nkey: 'settingsUser.invitationGetFail',
                         })
                     )
                 }
@@ -179,7 +178,7 @@ export const listenForInvite = inviteId => dispatch => {
                 dispatch(
                     addNotification({
                         type: 'error',
-                        message: `Unable to get your invitation, ask for another one please.`,
+                        i18nkey: 'settingsUser.invitationGetFail',
                     })
                 )
                 return false
@@ -217,9 +216,8 @@ export const getPendingInvites = () => (dispatch, getState) => {
             dispatch(
                 addNotification({
                     type: 'error',
-                    message: `Failed to load pending invites, ${JSON.stringify(
-                        error
-                    )}`,
+                    i18nkey: 'settingsUser.errorPendingInvitesFailed',
+                    message: `${JSON.stringify(error)}`,
                 })
             )
             return false
@@ -243,9 +241,8 @@ export const cancelInvite = inviteId => dispatch => {
             dispatch(
                 addNotification({
                     type: 'error',
-                    message: `Failed to cancel invite, ${JSON.stringify(
-                        error
-                    )}`,
+                    i18nkey: 'settingsUser.cancelInviteFail',
+                    message: `${JSON.stringify(error)}`,
                 })
             )
             return false

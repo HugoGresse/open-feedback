@@ -61,6 +61,12 @@ export const getProjects = () => {
                     type: GET_PROJECTS_ERROR,
                     payload: err.toString(),
                 })
+                dispatch(
+                    addNotification({
+                        type: 'error',
+                        i18nkey: 'project.errorProjectsLoad',
+                    })
+                )
             })
     }
 }
@@ -87,6 +93,12 @@ export const getProject = (selectedProjectId = null) => (
                 type: GET_PROJECT_ERROR,
                 payload: err.toString(),
             })
+            dispatch(
+                addNotification({
+                    type: 'error',
+                    i18nkey: 'project.errorLoad',
+                })
+            )
         })
 }
 
@@ -145,7 +157,7 @@ export const editProject = projectData => (dispatch, getState) => {
             dispatch(
                 addNotification({
                     type: 'success',
-                    message: 'Event saved',
+                    i18nkey: 'project.saveSuccess',
                 })
             )
 
@@ -158,7 +170,7 @@ export const editProject = projectData => (dispatch, getState) => {
             dispatch(
                 addNotification({
                     type: 'error',
-                    message: 'Failed to save the event',
+                    i18nkey: 'project.saveFail',
                 })
             )
 
@@ -193,7 +205,7 @@ export const newProject = (projectId, projectData) => (dispatch, getState) => {
             dispatch(
                 addNotification({
                     type: 'success',
-                    message: 'New event created! Redirecting you now...',
+                    i18nkey: 'project.newSuccess',
                 })
             )
             dispatch({
@@ -206,7 +218,8 @@ export const newProject = (projectId, projectData) => (dispatch, getState) => {
             dispatch(
                 addNotification({
                     type: 'error',
-                    message: 'Fail to create a new event, ' + err.toString(),
+                    i18nkey: 'project.newFail',
+                    message: err.toString(),
                 })
             )
             dispatch({
