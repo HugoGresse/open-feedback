@@ -145,7 +145,7 @@ const ProjectSettingsForm = ({ project }) => {
                             />
 
                             <OFFormControlInputFormiked
-                                name={t('settingsEvent.fieldLogoUrl')}
+                                name={t('settingsEvent.fieldFaviconUrl')}
                                 fieldName="faviconUrl"
                                 type="text"
                                 isSubmitting={isSubmitting}

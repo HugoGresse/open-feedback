@@ -240,7 +240,8 @@
         "submit": "Add talk",
         "submitContinue": "Add talk & continue",
         "titleAdd": "Add a new talk to the event",
-        "titleEdit": "Edit a talk"
+        "titleEdit": "Edit a talk",
+        "addNewSpeaker": "Add a speaker to the talk"
     },
     "moderation": {
         "open": "Open talk",
