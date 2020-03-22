@@ -240,7 +240,8 @@
         "submit": "Ajouter une présentation",
         "submitContinue": "Ajouter une présentation et continuer",
         "titleAdd": "Ajouter une nouvelle présentation à l'événement",
-        "titleEdit": "Modifier une présentation"
+        "titleEdit": "Modifier une présentation",
+        "addNewSpeaker": "Ajouter un·e orateur·rice à la présentation"
     },
     "moderation": {
         "open": "Ouvrir la présentation",
