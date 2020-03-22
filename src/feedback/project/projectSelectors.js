@@ -39,7 +39,6 @@ export const getProjectVoteItemsOrderedSelector = createSelector(
             return []
         }
         return voteItems.sort((a, b) => {
-            if (a.type === VOTE_TYPE_TEXT) return 1
             return a.position > b.position ? 1 : -1
         })
     }

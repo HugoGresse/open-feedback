@@ -15,7 +15,6 @@ export const getSortedVoteItemsSelector = createSelector(
     getVoteItemsSelector,
     voteItems =>
         voteItems.sort((a, b) => {
-            if (a.type === VOTE_TYPE_TEXT) return 1
             return a.position > b.position ? 1 : -1
         })
 )
