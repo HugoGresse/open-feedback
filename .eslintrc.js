@@ -1,0 +1,70 @@
+const path = require('path')
+
+module.exports = {
+    parserOptions: {
+        ecmaVersion: 2018,
+        sourceType: 'module',
+        ecmaFeatures: {
+            jsx: true,
+        },
+    },
+    parser: 'babel-eslint',
+    plugins: ['react', 'cypress'],
+    env: {
+        browser: true,
+        es6: true,
+        'cypress/globals': true,
+        node: true,
+    },
+    extends: [
+        'eslint:recommended',
+        'plugin:react/recommended',
+        'plugin:i18n-json/recommended',
+    ],
+    rules: {
+        'comma-dangle': 0,
+        'react/jsx-uses-vars': 1,
+        'react/display-name': 1,
+        'react/prop-types': 0,
+        'no-unused-vars': 'warn',
+        'no-console': 1,
+        'no-unexpected-multiline': 'warn',
+        'cypress/no-assigning-return-values': 'error',
+        'cypress/no-unnecessary-waiting': 'error',
+        'i18n-json/identical-keys': [
+            2,
+            {
+                filePath: {
+                    'admin.json': path.resolve(
+                        './src/admin/translations/languages/en.admin.json'
+                    ),
+                    'feedback.json': path.resolve(
+                        './src/feedback/translations/languages/en.feedback.json'
+                    ),
+                    'root.json': path.resolve(
+                        './src/root/translations/languages/en.root.json'
+                    ),
+                },
+            },
+        ],
+        'i18n-json/valid-message-syntax': [
+            2,
+            {
+                syntax: 'non-empty-string',
+            },
+        ],
+        'i18n-json/sorted-keys': [0],
+    },
+    settings: {
+        react: {
+            pragma: 'React',
+            version: '16.6.3',
+        },
+    },
+    overrides: [
+        {
+            files: ['src/*.*'],
+            excludedFiles: '*.spec.ts',
+        },
+    ],
+}

@@ -19,7 +19,8 @@
         "test:cy": "npm run start:dist & wait-on http://localhost:3000 && npm run cy:run",
         "test:cy:stop": "kill -9 $(lsof -i :3000 | grep 'node' | awk '{print $2}')",
         "storybook": "start-storybook -p 9009 -s public",
-        "build-storybook": "build-storybook -s public"
+        "build-storybook": "build-storybook -s public",
+        "lint:i18n": "eslint src/**/languages/*.json"
     },
     "devDependencies": {
         "@storybook/addon-docs": "^5.3.17",
@@ -29,6 +30,7 @@
         "babel-loader": "^8.0.6",
         "cypress": "^4.2.0",
         "eslint-plugin-cypress": "^2.10.3",
+        "eslint-plugin-i18n-json": "^2.4.4",
         "firebase-tools": "^7.15.1",
         "husky": "^4.2.3",
         "lint-staged": "^10.0.8",
