@@ -24,7 +24,7 @@
     "devDependencies": {
         "@storybook/addon-docs": "^5.3.17",
         "@storybook/addons": "^5.3.17",
-        "@storybook/preset-create-react-app": "^2.0.0",
+        "@storybook/preset-create-react-app": "^2.1.1",
         "@storybook/react": "5.3.17",
         "babel-loader": "^8.0.6",
         "cypress": "^4.2.0",
