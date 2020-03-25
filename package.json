@@ -16,8 +16,6 @@
         "cy:open": "env-cmd -f .env.test.local cypress open",
         "cy:run": "cypress run",
         "cy:start": "env-cmd -f .env.test.local react-scripts start",
-        "test:cy": "npm run start:dist & wait-on http://localhost:3000 && npm run cy:run",
-        "test:cy:stop": "kill -9 $(lsof -i :3000 | grep 'node' | awk '{print $2}')",
         "storybook": "start-storybook -p 9009 -s public",
         "build-storybook": "build-storybook -s public"
     },
