@@ -41,6 +41,7 @@ import { SPACING } from '../../constants/constants'
 import { DateTime } from 'luxon'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../core/contants'
 import Box from '@material-ui/core/Box'
+import { withTranslation } from 'react-i18next'
 
 class Talk extends Component {
     componentDidMount() {
@@ -68,19 +69,26 @@ class Talk extends Component {
                     if (data && data.length > 0) {
                         this.props.updateVote(
                             this.props.userVotes[voteItem.id],
-                            data
+                            data,
+                            this.props.t
                         )
                     } else {
-                        this.props.removeVote(this.props.userVotes[voteItem.id])
+                        this.props.removeVote(
+                            this.props.userVotes[voteItem.id],
+                            this.props.t
+                        )
                     }
                     break
                 default:
                 case VOTE_TYPE_BOOLEAN:
-                    this.props.removeVote(this.props.userVotes[voteItem.id])
+                    this.props.removeVote(
+                        this.props.userVotes[voteItem.id],
+                        this.props.t
+                    )
                     break
             }
         } else {
-            this.props.voteFor(this.props.talk.id, voteItem, data)
+            this.props.voteFor(this.props.talk.id, voteItem, data, this.props.t)
         }
     }
 
@@ -227,4 +235,7 @@ const mapDispatchToProps = Object.assign(
     }
 )
 
-export default connect(mapStateToProps, mapDispatchToProps)(Talk)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withTranslation()(Talk))
