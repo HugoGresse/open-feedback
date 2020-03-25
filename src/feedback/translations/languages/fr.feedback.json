@@ -6,6 +6,11 @@
         "save": "Sauvegarder",
         "hidden": "Votre vote a été caché par les organisateurs de l'évènement. Contactez les si vous voulez plus d'informations."
     },
+    "vote": {
+        "adminNotAnonymous": "Vous êtes connecté à l'admin, le vote ne sera pas anonyme.",
+        "rangePassed": "La date de fin de vote est passé, impossible de sauvegarder le vote.",
+        "rangeNotReached": "Vous ne pouvez pas voter avant le  "
+    },
     "searchPlaceholder": "Recherche",
     "searchNoMatch": "Aucune présentation ne correspond à vos critères le",
     "searchExtendedMatch": "Présentation(s) les autres jours correspondant à votre recherche:",
