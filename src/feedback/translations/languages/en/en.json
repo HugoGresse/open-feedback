@@ -6,6 +6,11 @@
         "save": "Save",
         "hidden": "Your vote has been hidden by the event organizer. Contact them for more information"
     },
+    "vote": {
+        "adminNotAnonymous": "You are logged in to the admin, your vote will not be anonymous.",
+        "rangePassed": "Unable to save the vote, the vote period has passed.",
+        "rangeNotReached": "You cannot vote before the "
+    },
     "searchPlaceholder": "Search",
     "searchNoMatchAtAll": "No talk matched your criteria.",
     "searchNoMatch": "No talk matched your criteria on ",

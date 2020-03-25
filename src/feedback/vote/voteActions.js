@@ -26,9 +26,9 @@ import {
     VOTE_TYPE_TEXT,
 } from '../../core/contants'
 
-export const voteFor = (talkId, voteItem, data) => {
+export const voteFor = (talkId, voteItem, data, translate) => {
     return (dispatch, getState) => {
-        if (checkDateBeforeVote(dispatch, getState())) {
+        if (checkDateBeforeVote(dispatch, getState(), translate)) {
             return
         }
 
@@ -36,8 +36,7 @@ export const voteFor = (talkId, voteItem, data) => {
             dispatch({
                 type: ADD_VOTE_ERROR,
                 payload: {
-                    error:
-                        'You are logged in to the admin, your vote will not be anonymous.',
+                    error: translate('vote.adminNotAnonymous'),
                 },
             })
         }
@@ -139,7 +138,7 @@ export const voteFor = (talkId, voteItem, data) => {
     }
 }
 
-export const removeVote = voteToDelete => {
+export const removeVote = (voteToDelete, translate) => {
     return (dispatch, getState) => {
         if (getCurrentUserVotesSelector(getState())[voteToDelete.id].pending) {
             // eslint-disable-next-line no-console
@@ -149,7 +148,7 @@ export const removeVote = voteToDelete => {
             return
         }
 
-        if (checkDateBeforeVote(dispatch, getState())) {
+        if (checkDateBeforeVote(dispatch, getState(), translate)) {
             return
         }
 
@@ -204,8 +203,11 @@ export const removeVote = voteToDelete => {
     }
 }
 
-export const updateVote = (vote, data) => (dispatch, getState) => {
-    if (checkDateBeforeVote(dispatch, getState()) || data.trim().length === 0) {
+export const updateVote = (vote, data, translate) => (dispatch, getState) => {
+    if (
+        checkDateBeforeVote(dispatch, getState(), translate) ||
+        data.trim().length === 0
+    ) {
         return
     }
 
