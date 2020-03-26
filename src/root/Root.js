@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { setFavicon } from '../utils/dom'
+import { addScript, setFavicon } from '../utils/dom'
 import Header from './Header'
 import Footer from './Footer'
 import HowItWorks from './HowItWorks'
@@ -24,6 +24,9 @@ const theme = createMuiTheme({
 const Root = () => {
     useEffect(() => {
         setFavicon('/favicon-root.ico')
+        if (process.env.REACT_APP_SMALL_CHAT) {
+            addScript(process.env.REACT_APP_SMALL_CHAT)
+        }
     }, [])
 
     return (
