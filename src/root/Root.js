@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { setFavicon } from '../feedback/layout/utils'
+import { setFavicon } from '../utils/dom'
 import Header from './Header'
 import Footer from './Footer'
 import HowItWorks from './HowItWorks'
