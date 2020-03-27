@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import i18n from './translations/i18n'
-import { setFavicon } from '../feedback/layout/utils'
+import { addScript, setFavicon } from '../utils/dom'
 import Login from './auth/Login'
 import { Route, Switch, useParams } from 'react-router-dom'
 import AdminRoot from './root/AdminRoot'
@@ -31,6 +31,9 @@ const innerTheme = createMuiTheme({
 const AdminApp = () => {
     useEffect(() => {
         setFavicon('/favicon-root.ico')
+        if (process.env.REACT_APP_SMALL_CHAT) {
+            addScript(process.env.REACT_APP_SMALL_CHAT)
+        }
     }, [])
 
     const { projectId } = useParams()

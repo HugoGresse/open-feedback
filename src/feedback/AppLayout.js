@@ -4,7 +4,7 @@ import Header from './layout/Header'
 import '../App.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
-import { setFavicon } from './layout/utils'
+import { setFavicon } from '../utils/dom'
 import {
     getProjectLoadErrorSelector,
     getProjectSelector,
