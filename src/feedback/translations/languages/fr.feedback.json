@@ -12,6 +12,7 @@
         "rangeNotReached": "Vous ne pouvez pas voter avant le  "
     },
     "searchPlaceholder": "Recherche",
+    "searchNoMatchAtAll": "Aucune présentation ne correspond à vos critères.",
     "searchNoMatch": "Aucune présentation ne correspond à vos critères le",
     "searchExtendedMatch": "Présentation(s) les autres jours correspondant à votre recherche:",
     "footer": {
