@@ -21,6 +21,7 @@ jobs:
       run: |
         npm install
         npm run build --if-present
+        npm run lint:i18n
     - name: move to function, init & run test
       run: |
         cd functions

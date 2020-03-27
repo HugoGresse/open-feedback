@@ -27,9 +27,9 @@
         "cypress/no-unnecessary-waiting": "error",
         "i18n-json/identical-keys": [2, {
             "filePath": {
-                "admin.json": "./src/admin/translations/languages/en.admin.json",
-                "feedback.json": "./src/feedback/translations/languages/en.feedback.json",
-                "root.json": "./src/root/translations/languages/en.root.json"
+                "admin.json": "../../../../src/admin/translations/languages/en.admin.json",
+                "feedback.json": "../../../../src/feedback/translations/languages/en.feedback.json",
+                "root.json": "../../../../src/root/translations/languages/en.root.json"
             }
         }],
         "i18n-json/valid-message-syntax": [2, {
