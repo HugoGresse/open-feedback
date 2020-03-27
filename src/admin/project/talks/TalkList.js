@@ -55,6 +55,7 @@ const TalkList = () => {
 
     const onAddTalkClicked = () => {
         if (talkNotReadableCheck()) return
+        setEditTalk(null)
         setSidePanelOpen(true)
     }
 
@@ -81,7 +82,6 @@ const TalkList = () => {
             return
         }
         setSidePanelOpen(false)
-        setEditTalk(null)
     }
 
     const reformatTalk = talk => ({

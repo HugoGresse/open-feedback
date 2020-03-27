@@ -8,6 +8,7 @@ import {
     SELECT_PROJECT,
 } from './projectActionTypes'
 import { LOGOUT } from '../../auth/authActionTypes'
+import { SAVE_VOTEITEMS_SUCCESS } from '../settings/votingForm/votingFormActionTypes'
 
 const initState = {
     data: {
@@ -81,6 +82,23 @@ const projectReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 projectApiInit: true,
+            }
+        }
+        case SAVE_VOTEITEMS_SUCCESS: {
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    projects: state.data.projects.map(project => {
+                        if (project.id === state.selectedProjectId) {
+                            return {
+                                ...project,
+                                voteItems: payload,
+                            }
+                        }
+                        return project
+                    }),
+                },
             }
         }
         case GET_PROJECTS_ERROR:
