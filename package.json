@@ -28,7 +28,7 @@
         "eslint-plugin-cypress": "^2.10.3",
         "firebase-tools": "^7.15.1",
         "husky": "^4.2.3",
-        "lint-staged": "^10.0.8",
+        "lint-staged": "^10.0.10",
         "prettier": "^1.19.1"
     },
     "dependencies": {
