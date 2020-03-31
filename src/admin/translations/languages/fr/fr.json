@@ -6,7 +6,8 @@
         "errorAnonymous": "Vous ne pouvez pas utiliser l'admin en mode anonyme"
     },
     "baseComponents": {
-        "search": "Recherche"
+        "search": "Recherche",
+        "imageUrl": "URL de l'image"
     },
     "common": {
         "back": "Retour",
@@ -15,7 +16,16 @@
         "save": "Sauvegarder",
         "download": "Télécharger",
         "close": "Fermer",
-        "saved": "Sauvegarder"
+        "saved": "Sauvegarder",
+        "preview": "Aperçu",
+        "or": "OU",
+        "dropzone": {
+            "image": {
+                "button": "Charger une image",
+                "indication": "Déposer une image ici",
+                "confirm": "Relacher l'image pour charger l'image"
+            }
+        }
     },
     "project": {
         "errorProjectsLoad": "Erreur lors du chargement des projets.",
@@ -117,10 +127,12 @@
         "delete": "Supprimer",
         "error": "Vous avez une erreur, cela vous dérangerait-il de la corriger avant de l'enregistrer ? Merci beaucoup.",
         "fieldChipColors": "Couleurs des pastilles",
-        "fieldFaviconUrl": "URL du favicon (.png ou .ico)",
+        "fieldFaviconUrl": "Favicon",
+        "fieldFaviconHelp": "Le favicon doit être une image .png qui fait moins de 1Mo",
         "fieldFaviconUrlNotValid": "Le favicon n'est pas une URL valide",
         "fieldFaviconUrlRequired": "Le favicon est obligatoire",
-        "fieldLogoUrl": "URL du logo (environ 100 * 100 px)",
+        "fieldLogoUrl": "Logo",
+        "fieldLogoHelp": "Le logo doit être une image .png qui fait moins de 1Mo",
         "fieldLogoUrlNotValid": "Le logo n'est pas une URL valide",
         "fieldLogoUrlRequired": "Le logo est obligatoire",
         "fieldName": "Nom",

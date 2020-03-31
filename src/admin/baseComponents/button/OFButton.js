@@ -13,7 +13,11 @@ const useStyles = makeStyles(theme => ({
                 ? props.customBg
                 : COLORS.RED_ORANGE,
         color: props =>
-            props.design === 'text' ? theme.primaryText : COLORS.WHITE,
+            props.customText
+                ? props.customText
+                : props.design === 'text'
+                ? theme.primaryText
+                : COLORS.WHITE,
         padding: props =>
             props.type === 'big'
                 ? '12px 32px'

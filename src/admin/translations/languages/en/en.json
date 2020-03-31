@@ -6,7 +6,8 @@
         "errorAnonymous": "You cannot use the admin in anonymous mode"
     },
     "baseComponents": {
-        "search": "Search"
+        "search": "Search",
+        "imageUrl": "Image URL"
     },
     "common": {
         "back": "Back",
@@ -15,7 +16,16 @@
         "save": "Save",
         "saved": "Saved",
         "download": "Download",
-        "close": "Close"
+        "close": "Close",
+        "preview": "Aperçu",
+        "or": "OR",
+        "dropzone": {
+            "image": {
+                "button": "Upload image",
+                "indication": "Drag & drop image here",
+                "confirm": "Drop the image here to upload it instantly"
+            }
+        }
     },
     "project": {
         "errorProjectsLoad": "Unable to load all projects.",
@@ -117,10 +127,12 @@
         "delete": "Delete",
         "error": "You have some error, would you mind fixing it before saving? Much appreciated.",
         "fieldChipColors": "Chip Colors",
-        "fieldFaviconUrl": "Favicon url (.png or .ico)",
+        "fieldFaviconUrl": "Favicon",
+        "fieldFaviconHelp": "Favicon image must be a .png image, less than 1MB",
         "fieldFaviconUrlNotValid": "The favicon is not a valid url",
         "fieldFaviconUrlRequired": "The favicon is required",
-        "fieldLogoUrl": "Logo url (around 100*100px)",
+        "fieldLogoUrl": "Logo",
+        "fieldLogoHelp": "Logo image must be a .png image, less than 1mB",
         "fieldLogoUrlNotValid": "The logo is not a valid url",
         "fieldLogoUrlRequired": "The logo is required",
         "fieldName": "Name",

@@ -17,6 +17,7 @@ import Collapse from '@material-ui/core/Collapse'
 import { useTranslation } from 'react-i18next'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
 import { DateTime } from 'luxon'
+import SidePanelUploadLayout from '../../../baseComponents/layouts/sidepanel/upload/SidePanelUploadLayout'
 
 const useStyles = makeStyles(theme => ({
     buttonContainer: {
@@ -137,19 +138,35 @@ const ProjectSettingsForm = ({ project }) => {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography variant="h5">Theme</Typography>
-                            <OFFormControlInputFormiked
-                                name={t('settingsEvent.fieldLogoUrl')}
-                                fieldName="logoUrl"
-                                type="text"
-                                isSubmitting={isSubmitting}
-                            />
 
-                            <OFFormControlInputFormiked
-                                name={t('settingsEvent.fieldFaviconUrl')}
-                                fieldName="faviconUrl"
-                                type="text"
-                                isSubmitting={isSubmitting}
-                            />
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <SidePanelUploadLayout
+                                        name={t('settingsEvent.fieldLogoUrl')}
+                                        fieldName="logoUrl"
+                                        isSubmitting={isSubmitting}
+                                        title={t('settingsEvent.fieldLogoUrl')}
+                                        helpText={t(
+                                            'settingsEvent.fieldLogoHelp'
+                                        )}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <SidePanelUploadLayout
+                                        name={t(
+                                            'settingsEvent.fieldFaviconUrl'
+                                        )}
+                                        fieldName="faviconUrl"
+                                        isSubmitting={isSubmitting}
+                                        title={t(
+                                            'settingsEvent.fieldFaviconUrl'
+                                        )}
+                                        helpText={t(
+                                            'settingsEvent.fieldFaviconHelp'
+                                        )}
+                                    />
+                                </Grid>
+                            </Grid>
 
                             <OFFormControl
                                 name={t('settingsEvent.fieldChipColors')}

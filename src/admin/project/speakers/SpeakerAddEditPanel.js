@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Form, Formik } from 'formik'
 import { object, string } from 'yup'
-import SidePanelLayout from '../../baseComponents/layouts/SidePanelLayout'
+import SidePanelLayout from '../../baseComponents/layouts/sidepanel/SidePanelLayout'
 import OFButton from '../../baseComponents/button/OFButton'
 import OFFormControlInputFormiked from '../../baseComponents/form/formControl/OFFormControlInputFormiked'
 import { useTranslation } from 'react-i18next'

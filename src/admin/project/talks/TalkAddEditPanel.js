@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Field, Form, Formik } from 'formik'
 import { object, string, array } from 'yup'
-import SidePanelLayout from '../../baseComponents/layouts/SidePanelLayout'
+import SidePanelLayout from '../../baseComponents/layouts/sidepanel/SidePanelLayout'
 import OFButton from '../../baseComponents/button/OFButton'
 import OFFormControl from '../../baseComponents/form/formControl/OFFormControl'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'

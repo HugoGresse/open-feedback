@@ -19,7 +19,13 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const SidePanelLayout = ({ title, isOpen, onClose, children }) => {
+const SidePanelLayout = ({
+    title,
+    isOpen,
+    onClose,
+    children,
+    containerProps,
+}) => {
     const classes = useStyles()
 
     return (
@@ -29,7 +35,8 @@ const SidePanelLayout = ({ title, isOpen, onClose, children }) => {
                 paper: classes.paper,
             }}
             open={isOpen}
-            onClose={onClose}>
+            onClose={onClose}
+            {...containerProps}>
             <Box margin={1}>
                 <Box textAlign="right" marginBottom={2}>
                     <IconButton
