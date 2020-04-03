@@ -7,7 +7,8 @@
     },
     "baseComponents": {
         "search": "Recherche",
-        "imageUrl": "URL de l'image"
+        "imageUrl": "URL de l'image",
+        "uploadImage": "Charger l'image"
     },
     "common": {
         "back": "Retour",

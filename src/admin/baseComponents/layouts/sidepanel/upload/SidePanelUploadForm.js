@@ -6,7 +6,6 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import COLORS from '../../../../../constants/colors'
 import { useTranslation } from 'react-i18next'
 import OFFormControlInputFormiked from '../../../form/formControl/OFFormControlInputFormiked'
-import Divider from '@material-ui/core/Divider'
 
 const useStyles = makeStyles(() => ({
     dropZone: {
@@ -56,6 +55,7 @@ const useStyles = makeStyles(() => ({
         backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px',
     },
 }))
+
 const SidePanelUploadForm = ({
     fieldName,
     fieldValue,
@@ -64,14 +64,13 @@ const SidePanelUploadForm = ({
     isDragActive,
     onInputClick,
     getInputProps,
-    files,
+    file,
+    onSaveClick,
 }) => {
     const { t } = useTranslation()
     const classes = useStyles({
         isDragActive: isDragActive,
     })
-
-    console.log(files)
 
     return (
         <>
@@ -117,13 +116,12 @@ const SidePanelUploadForm = ({
             <div className={classes.preview}>
                 <TranslatedTypography i18nKey="common.preview" />
                 <div className={classes.checkerboard}>
-                    <img src={(files[0] && files[0].preview) || fieldValue} />
+                    <img src={(file && file.preview) || fieldValue} />
                 </div>
             </div>
 
-            <OFButton>
-                Upload File
-                <input type="file" style={{ display: 'none' }} />
+            <OFButton onClick={onSaveClick}>
+                {t('baseComponents.uploadImage')}
             </OFButton>
         </>
     )

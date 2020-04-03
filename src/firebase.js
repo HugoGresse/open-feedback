@@ -15,6 +15,11 @@ const config = {
 
 const firebaseMain = firebase.initializeApp(config)
 
+// TO Remove
+if (process.env.NODE_ENV === 'development') {
+    firebase.functions().useFunctionsEmulator('http://localhost:5000')
+}
+
 export const auth = firebase.auth
 export const authProvider = firebaseMain.auth()
 export const fireStoreMainInstance = firebaseMain.firestore()
@@ -24,6 +29,9 @@ export const deleteField = firebase.firestore.FieldValue.delete
 export const functions = {
     alert: firebase.functions().httpsCallable('alert'),
     deleteProject: firebase.functions().httpsCallable('deleteProject'),
+    resizeAndMoveImage: firebase
+        .functions()
+        .httpsCallable('resizeAndMoveImage'),
 }
 
 if (process.env.NODE_ENV === 'production') {

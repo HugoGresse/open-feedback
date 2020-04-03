@@ -1,15 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import SidePanelLayout from '../SidePanelLayout'
-import OFButton from '../../../button/OFButton'
 import { useField } from 'formik'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import OFFormControl from '../../../form/formControl/OFFormControl'
-import Typography from '@material-ui/core/Typography'
 import { useDropzone } from 'react-dropzone'
-import { useTranslation } from 'react-i18next'
 import COLORS from '../../../../../constants/colors'
-import TranslatedTypography from '../../../TranslatedTypography'
 import SidePanelUploadForm from './SidePanelUploadForm'
+import { uploadImage } from '../../../../project/utils/storage/uploadImage'
+import { useDispatch } from 'react-redux'
 
 const useStyles = makeStyles(() => ({
     imageButton: {
@@ -57,34 +55,48 @@ const SidePanelUploadLayout = ({
     title,
 }) => {
     const classes = useStyles()
+    const dispatch = useDispatch()
     const [isOpen, setOpen] = useState(true)
-    const [field] = useField(fieldName)
-    const [files, setFiles] = useState([])
+    // eslint-disable-next-line
+    const [field, meta, helpers] = useField(fieldName)
+    const [upload, setUpload] = useState(null)
+
+    const uploadAndSave = async () => {
+        if (upload) {
+            const imageUrl = await dispatch(uploadImage(upload.file))
+            if (!imageUrl) {
+                return
+            }
+            helpers.setValue(imageUrl)
+            setUpload(null)
+        }
+
+        setOpen(false)
+    }
 
     const onDrop = useCallback(acceptedFiles => {
-        setFiles(
-            acceptedFiles.map(file =>
-                Object.assign(file, {
-                    preview: URL.createObjectURL(file),
-                })
-            )
-        )
-        console.log('aa', acceptedFiles)
+        if (acceptedFiles.length > 0) {
+            setUpload({
+                file: acceptedFiles[0],
+                preview: URL.createObjectURL(acceptedFiles[0]),
+            })
+        }
     }, [])
 
     useEffect(
         () => () => {
-            // Make sure to revoke the data uris to avoid memory leaks
-            files.forEach(file => URL.revokeObjectURL(file.preview))
+            // Avoid memory leaks
+            if (upload && upload.preview) URL.revokeObjectURL(upload.preview)
         },
-        [files]
+        [upload]
     )
 
     const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
         onDrop,
+        multiple: false,
         noClick: true,
         noKeyboard: true,
-        accept: 'image/png',
+        accept: 'image/jpeg, image/png',
         maxSize: 1024 * 1024,
     })
 
@@ -96,17 +108,20 @@ const SidePanelUploadLayout = ({
                     className={classes.imageButton}
                     onClick={() => setOpen(true)}
                     disabled={isSubmitting}>
-                    <img
-                        src={field.value}
-                        alt={name}
-                        className={classes.previewImage}
-                    />
+                    {field.value && (
+                        <img
+                            src={field.value}
+                            alt=""
+                            className={classes.previewImage}
+                        />
+                    )}
                 </button>
             </OFFormControl>
 
             <SidePanelLayout
                 isOpen={isOpen}
                 onClose={() => {
+                    setUpload(null)
                     setOpen(false)
                 }}
                 title={title}
@@ -117,8 +132,9 @@ const SidePanelUploadLayout = ({
                     helpText={helpText}
                     isDragActive={isDragActive}
                     onInputClick={open}
-                    files={files}
+                    file={upload}
                     getInputProps={getInputProps}
+                    onSaveClick={uploadAndSave}
                 />
             </SidePanelLayout>
         </>

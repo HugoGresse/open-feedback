@@ -24,12 +24,17 @@
         "firebase-functions-test": "^0.2.0",
         "firebase-tools": "^7.16.1",
         "form-data": "^3.0.0",
+        "imagemin": "^7.0.1",
+        "imagemin-jpegtran": "^6.0.0",
+        "imagemin-pngquant": "^8.0.0",
         "lodash": "^4.17.15",
         "node-fetch": "^2.6.0",
         "sharp": "latest",
         "ts-jest": "^25.2.1"
     },
     "devDependencies": {
+        "@types/gulp-imagemin": "^7.0.0",
+        "@types/imagemin-jpegtran": "^5.0.0",
         "@types/node-fetch": "^2.5.5",
         "@types/sharp": "^0.24.0",
         "jest": "^25.1.0",

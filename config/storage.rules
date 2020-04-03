@@ -1,10 +1,19 @@
+rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    match /{allPaths=**} {
+
+    match /users/{userId}/{imageId} {
       allow read: if true;
       allow write: if request.auth != null
-                   && request.resource.size < 800 * 1024
+                   && request.auth.uid == userId
+                   && request.resource.size < 1024 * 1024
                    && request.resource.contentType.matches('image/.*');
     }
+
+    match /projects/{projectId}/{imageId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
   }
 }

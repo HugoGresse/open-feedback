@@ -10,7 +10,6 @@ export {
 export { userInviteCreated } from './triggers/userInvite'
 export { userCreate } from './triggers/userCreate'
 
-export { resizeImages } from './triggers/storage/resizeImages'
-
 export { alert } from './callable/alert'
 export { deleteProject } from './callable/deleteProject'
+export { resizeAndMoveImage } from './callable/resizeAndMoveImage'
