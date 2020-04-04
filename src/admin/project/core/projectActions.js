@@ -26,6 +26,7 @@ import { CLEAR_TALK_VOTES } from '../dashboard/dashboardActionTypes'
 import { initProjectApi } from '../../../core/setupType/projectApi'
 import { newRandomHexColor } from '../../../utils/colorsUtils'
 import { addNotification } from '../../notification/notifcationActions'
+import { trackNewProject } from '../../utils/track'
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -212,6 +213,7 @@ export const newProject = (projectId, projectData) => (dispatch, getState) => {
                 type: ADD_PROJECT_SUCCESS,
                 payload: projectId,
             })
+            trackNewProject(projectData.name, projectData.setupType)
             return projectId
         })
         .catch(err => {

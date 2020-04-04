@@ -7,6 +7,11 @@ import {
 } from '../../firebase'
 import { history } from '../../App'
 import { isEmpty } from 'lodash'
+import {
+    trackLogin,
+    trackSignIn,
+    trackUserId,
+} from '../../utils/analytics/track'
 
 export const didSignIn = (user, error) => {
     return async (dispatch, getState) => {
@@ -79,9 +84,12 @@ export const didSignIn = (user, error) => {
                             phone
                         )
                     }
+                    trackLogin(false)
                 } else {
                     await createUser(user, displayName, photoURL, phone)
+                    trackSignIn(false)
                 }
+                trackUserId(user.uid)
             }
         } else {
             dispatch({
