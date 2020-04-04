@@ -26,12 +26,9 @@ Create a firebase project with the [firebase console](https://console.firebase.g
   * `REACT_APP_DATABASE_URL=<DATABASE_URL>`
   * `REACT_APP_PROJECT_ID=<PROJECT_ID>`
   * `REACT_APP_STORAGE_BUCKET=<STORAGE_BUCKET>`
-  * `REACT_APP_GOOGLE_ANALYTICS=<GOOGLE_ANALYTICS>`
+  * `REACT_APP_MEASUREMENT_ID=<MEASUREMENT_ID>` (replace Google Analytics specific configuration)
 
 5. In package.json, change `homepage` to your instance url.
-
-### Configure Google Analytics (optional)
-You can add a Google Analytics by adding your Analytics ID to the environment variable in `REACT_APP_GOOGLE_ANALYTICS` in `.env.loval`.
 
 ### Configure Mailgun (optional)
 The application sends emails through the Mailgun API
@@ -73,6 +70,18 @@ To test alerting on your local machine (with cloud function shell), you will nee
     firebase functions:config:get > .runtimeconfig.json
 
 > Important Note: OpsGenie is an external service from Firebase and Google, so to be able use it with you will need to activate Firebase pricing.
+
+### Configure SmallChat (optional)
+Smallchat provide a live support interface for your web app. It's the "Send a message" at the bottom right that allow users to communicate directly with the you.
+SmallChat has a free tier and you can answer from Slack directly.
+
+1. Create your account on [small.chat](https://small.chat/)
+2. Add the js url to the desired env file (ex: `.env.local`):
+    ```
+    # Small Chat (custom live support)
+    REACT_APP_SMALL_CHAT=https://embed.small.chat/T<someNumbers>.js
+    ```
+
 
 ## Run
 
