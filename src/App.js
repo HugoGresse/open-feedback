@@ -1,7 +1,6 @@
 import React from 'react'
 import { Redirect, Route, Router, Switch } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
-import initAndTrackWithGoogleAnalytics from './utils/google-analytics/GoogleAnalytics'
 import './App.css'
 
 import Page404 from './Page404'
@@ -10,8 +9,6 @@ import FeedbackApp from './feedback/FeedbackApp'
 import SuspendedRootApp from './root/SuspendedRootApp'
 
 export const history = createBrowserHistory()
-
-initAndTrackWithGoogleAnalytics(history, process.env.REACT_APP_GOOGLE_ANALYTICS)
 
 const App = () => {
     return (

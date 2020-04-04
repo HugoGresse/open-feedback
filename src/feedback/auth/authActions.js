@@ -1,9 +1,9 @@
 import { authProvider } from '../../firebase'
 import { LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT } from './authActionTypes'
 import { isLoggedSelector } from './authSelectors'
-import { setGAUser } from '../../utils/google-analytics/GoogleAnalytics'
 import createAlert from '../../utils/alerting/createAlert'
 import { ALERT_FIREBASE_QUOTA_REACHED } from '../../utils/alerting/alerts'
+import { trackLogin } from '../../utils/analytics/track'
 
 export const signIn = () => {
     return (dispatch, getState) => {
@@ -16,8 +16,7 @@ export const signIn = () => {
                     type: LOGIN_SUCCESS,
                     payload: user,
                 })
-
-                setGAUser(user.uid)
+                trackLogin(true)
             } else {
                 dispatch({
                     type: LOGOUT,
