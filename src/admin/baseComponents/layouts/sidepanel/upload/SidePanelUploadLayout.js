@@ -60,10 +60,14 @@ const SidePanelUploadLayout = ({
     // eslint-disable-next-line
     const [field, meta, helpers] = useField(fieldName)
     const [upload, setUpload] = useState(null)
+    const [uploading, setUploading] = useState(false)
 
     const uploadAndSave = async () => {
         if (upload) {
+            console.log('uplaod')
+            setUploading(true)
             const imageUrl = await dispatch(uploadImage(upload.file))
+            setUploading(false)
             if (!imageUrl) {
                 return
             }
@@ -135,6 +139,7 @@ const SidePanelUploadLayout = ({
                     file={upload}
                     getInputProps={getInputProps}
                     onSaveClick={uploadAndSave}
+                    uploading={uploading}
                 />
             </SidePanelLayout>
         </>

@@ -3,6 +3,7 @@ import { COLORS } from '../../../constants/colors'
 import Button from '@material-ui/core/Button'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { darken, fade, lighten } from '@material-ui/core/styles'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -36,18 +37,26 @@ const useStyles = makeStyles(theme => ({
             color: COLORS.DARK_RED_ORANGE,
         },
     },
+    loading: {
+        color: 'white',
+        marginLeft: 10,
+    },
 }))
 
-const OFButton = props => {
-    const classes = useStyles(props.style)
+const OFButton = ({ children, loading, style, ...otherProps }) => {
+    const classes = useStyles(style)
 
     return (
         <Button
-            {...props}
+            {...otherProps}
             classes={{
                 root: classes.root,
-            }}
-        />
+            }}>
+            {children}
+            {loading && (
+                <CircularProgress className={classes.loading} size={20} />
+            )}
+        </Button>
     )
 }
 

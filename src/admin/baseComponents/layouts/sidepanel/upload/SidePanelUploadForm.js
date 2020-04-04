@@ -59,13 +59,13 @@ const useStyles = makeStyles(() => ({
 const SidePanelUploadForm = ({
     fieldName,
     fieldValue,
-    isSubmitting,
     helpText,
     isDragActive,
     onInputClick,
     getInputProps,
     file,
     onSaveClick,
+    uploading,
 }) => {
     const { t } = useTranslation()
     const classes = useStyles({
@@ -110,7 +110,7 @@ const SidePanelUploadForm = ({
                 name={t('baseComponents.imageUrl')}
                 fieldName={fieldName}
                 type="text"
-                isSubmitting={isSubmitting}
+                isSubmitting={!!file}
             />
 
             <div className={classes.preview}>
@@ -120,7 +120,10 @@ const SidePanelUploadForm = ({
                 </div>
             </div>
 
-            <OFButton onClick={onSaveClick}>
+            <OFButton
+                onClick={onSaveClick}
+                disabled={uploading}
+                loading={uploading}>
                 {t('baseComponents.uploadImage')}
             </OFButton>
         </>
