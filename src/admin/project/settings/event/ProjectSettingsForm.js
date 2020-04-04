@@ -164,6 +164,8 @@ const ProjectSettingsForm = ({ project }) => {
                                         helpText={t(
                                             'settingsEvent.fieldFaviconHelp'
                                         )}
+                                        finalImageWidth={200}
+                                        finalImageHeight={200}
                                     />
                                 </Grid>
                             </Grid>

@@ -6,7 +6,10 @@ import { getUserSelector } from '../../../auth/authSelectors'
 import { getSelectedProjectIdSelector } from '../../core/projectSelectors'
 import { addNotification } from '../../../notification/notifcationActions'
 
-export const uploadImage = file => async (dispatch, getState) => {
+export const uploadImage = (file, width = 500, height = 500) => async (
+    dispatch,
+    getState
+) => {
     const userId = getUserSelector(getState()).uid
     const projectId = getSelectedProjectIdSelector(getState())
 
@@ -27,8 +30,8 @@ export const uploadImage = file => async (dispatch, getState) => {
         const result = await functions.resizeAndMoveImage({
             projectId,
             storageFullPath,
-            width: 500,
-            height: 500,
+            width,
+            height,
         })
 
         return result.data

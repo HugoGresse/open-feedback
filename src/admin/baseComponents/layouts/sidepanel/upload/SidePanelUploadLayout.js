@@ -53,6 +53,8 @@ const SidePanelUploadLayout = ({
     helpText,
     isSubmitting,
     title,
+    finalImageWidth = 500,
+    finalImageHeight = 500,
 }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -65,7 +67,9 @@ const SidePanelUploadLayout = ({
     const uploadAndSave = async () => {
         if (upload) {
             setUploading(true)
-            const imageUrl = await dispatch(uploadImage(upload.file))
+            const imageUrl = await dispatch(
+                uploadImage(upload.file, finalImageWidth, finalImageHeight)
+            )
             setUploading(false)
             if (!imageUrl) {
                 return
