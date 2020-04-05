@@ -1,5 +1,4 @@
 import * as functions from 'firebase-functions'
-// @ts-ignore
 import * as admin from 'firebase-admin'
 import path from 'path'
 import sharp from 'sharp'

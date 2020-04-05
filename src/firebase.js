@@ -30,6 +30,9 @@ export const functions = {
     resizeAndMoveImage: firebase
         .functions()
         .httpsCallable('resizeAndMoveImage'),
+    removeFileFromStorage: firebase
+        .functions()
+        .httpsCallable('removeFileFromStorage'),
 }
 
 if (process.env.NODE_ENV === 'production') {
