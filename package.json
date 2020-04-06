@@ -50,7 +50,7 @@
         "i18next-scanner": "^2.11.0",
         "langmap": "0.0.16",
         "lodash": "4.17.15",
-        "luxon": "^1.22.2",
+        "luxon": "^1.23.0",
         "polished": "^3.5.1",
         "prop-types": "latest",
         "qrcode.react": "^1.0.0",
