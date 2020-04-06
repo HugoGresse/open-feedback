@@ -62,13 +62,35 @@ export const deleteProject = functions
             `User ${context.auth.uid} has requested to delete projectId ${projectDoc.id} and was granted`
         )
 
-        return firebaseTools.firestore
-            .delete(`/projects/${projectDoc.id}`, {
-                project: process.env.GCLOUD_PROJECT,
-                recursive: true,
-                yes: true,
+        return deleteProjectStorage(projectDoc.id)
+            .then(() => {
+                return deleteProjectFirestore(projectDoc.id)
             })
             .then(() => {
                 return 'Delete successful'
             })
     })
+
+const deleteProjectStorage = async (projectId: string) => {
+    await admin
+        .storage()
+        .bucket()
+        .deleteFiles({
+            prefix: `uploads/${projectId}`,
+        })
+        .then(() => {
+            console.log(`Storage deleted for project ${projectId}`)
+        })
+}
+
+const deleteProjectFirestore = async (projectId: string) => {
+    return firebaseTools.firestore
+        .delete(`/projects/${projectId}`, {
+            project: process.env.GCLOUD_PROJECT,
+            recursive: true,
+            yes: true,
+        })
+        .then(() => {
+            console.log(`Firestore deleted for project ${projectId}`)
+        })
+}
