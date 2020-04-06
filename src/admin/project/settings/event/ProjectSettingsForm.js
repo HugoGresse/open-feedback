@@ -146,9 +146,7 @@ const ProjectSettingsForm = ({ project }) => {
                                         fieldName="logoUrl"
                                         isSubmitting={isSubmitting}
                                         title={t('settingsEvent.fieldLogoUrl')}
-                                        helpText={t(
-                                            'settingsEvent.fieldLogoHelp'
-                                        )}
+                                        helpText={t('baseComponents.imageHelp')}
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
@@ -161,9 +159,7 @@ const ProjectSettingsForm = ({ project }) => {
                                         title={t(
                                             'settingsEvent.fieldFaviconUrl'
                                         )}
-                                        helpText={t(
-                                            'settingsEvent.fieldFaviconHelp'
-                                        )}
+                                        helpText={t('baseComponents.imageHelp')}
                                         finalImageWidth={200}
                                         finalImageHeight={200}
                                     />

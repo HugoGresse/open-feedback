@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import SidePanelLayout from '../SidePanelLayout'
 import { useField } from 'formik'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
 import OFFormControl from '../../../form/formControl/OFFormControl'
 import { useDropzone } from 'react-dropzone'
 import COLORS from '../../../../../constants/colors'
@@ -16,7 +17,8 @@ const useStyles = makeStyles(() => ({
         minHeight: 50,
         background: 'none',
         padding: 0,
-        textAlign: 'left',
+        textAlign: 'center',
+        color: '#CCC',
         borderRadius: 4,
         border: '1px solid #EEE',
         outline: 'none',
@@ -122,6 +124,7 @@ const SidePanelUploadLayout = ({
                             className={classes.previewImage}
                         />
                     )}
+                    {!field.value && <AddAPhotoIcon />}
                 </button>
             </OFFormControl>
 

@@ -41,7 +41,7 @@ const useStyles = makeStyles(() => ({
         border: '4px solid #EEE',
         textAlign: 'center',
         textTransform: 'uppercase',
-        margin: '16px 0',
+        marginTop: 16,
         width: 'fit-content',
         '& img': {
             maxWidth: '100%',
@@ -53,6 +53,9 @@ const useStyles = makeStyles(() => ({
             'linear-gradient(45deg, #BBB 25%, transparent 25%), linear-gradient(-45deg, #BBB 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #BBB 75%), linear-gradient(-45deg, transparent 75%, #BBB 75%)',
         backgroundSize: '20px 20px',
         backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px',
+    },
+    saveButton: {
+        marginTop: 32,
     },
 }))
 
@@ -71,6 +74,8 @@ const SidePanelUploadForm = ({
     const classes = useStyles({
         isDragActive: isDragActive,
     })
+
+    const previewImage = (file && file.preview) || fieldValue
 
     return (
         <>
@@ -113,17 +118,20 @@ const SidePanelUploadForm = ({
                 isSubmitting={!!file}
             />
 
-            <div className={classes.preview}>
-                <TranslatedTypography i18nKey="common.preview" />
-                <div className={classes.checkerboard}>
-                    <img src={(file && file.preview) || fieldValue} alt="" />
+            {previewImage && (
+                <div className={classes.preview}>
+                    <TranslatedTypography i18nKey="common.preview" />
+                    <div className={classes.checkerboard}>
+                        <img src={previewImage} alt="" />
+                    </div>
                 </div>
-            </div>
+            )}
 
             <OFButton
                 onClick={onSaveClick}
                 disabled={uploading}
-                loading={uploading}>
+                loading={uploading}
+                className={classes.saveButton}>
                 {t('baseComponents.uploadImage')}
             </OFButton>
         </>

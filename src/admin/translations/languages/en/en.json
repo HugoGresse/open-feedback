@@ -8,7 +8,8 @@
     "baseComponents": {
         "search": "Search",
         "imageUrl": "Image URL",
-        "uploadImage": "Upload image"
+        "uploadImage": "Upload image",
+        "imageHelp": "Image must be a jpeg or png image, less than 1MB"
     },
     "common": {
         "back": "Back",
@@ -129,11 +130,9 @@
         "error": "You have some error, would you mind fixing it before saving? Much appreciated.",
         "fieldChipColors": "Chip Colors",
         "fieldFaviconUrl": "Favicon*",
-        "fieldFaviconHelp": "Favicon image must be a .png image, less than 1MB",
         "fieldFaviconUrlNotValid": "The favicon is not a valid url",
         "fieldFaviconUrlRequired": "The favicon is required",
         "fieldLogoUrl": "Logo*",
-        "fieldLogoHelp": "Logo image must be a .png image, less than 1mB",
         "fieldLogoUrlNotValid": "The logo is not a valid url",
         "fieldLogoUrlRequired": "The logo is required",
         "fieldName": "Name*",
@@ -226,8 +225,7 @@
         "cannotChange": "Speakers cannot be changed from OpenFeedback itself for this project. Refer to your external services configuration to do so.",
         "name": "Name*",
         "nameRequired": "The speaker name is required.",
-        "photoRequired": "The speaker photo url is required.",
-        "photoUrl": "Photo url",
+        "photoUrl": "Photo",
         "photoValid": "The photo url is not a valid url.",
         "social": "Social profil page",
         "socialValid": "The social url is not a valid url.",

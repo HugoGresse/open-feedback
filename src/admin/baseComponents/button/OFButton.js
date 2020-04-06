@@ -48,6 +48,7 @@ const OFButton = ({ children, loading, style, ...otherProps }) => {
 
     return (
         <Button
+            style={style}
             {...otherProps}
             classes={{
                 root: classes.root,

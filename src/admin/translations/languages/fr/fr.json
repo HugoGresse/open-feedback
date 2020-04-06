@@ -8,7 +8,8 @@
     "baseComponents": {
         "search": "Recherche",
         "imageUrl": "URL de l'image",
-        "uploadImage": "Charger l'image"
+        "uploadImage": "Charger l'image",
+        "imageHelp": "L'image doit être au format png or jpeg et faire moins de 1Mo"
     },
     "common": {
         "back": "Retour",
@@ -129,11 +130,9 @@
         "error": "Vous avez une erreur, cela vous dérangerait-il de la corriger avant de l'enregistrer ? Merci beaucoup.",
         "fieldChipColors": "Couleurs des pastilles",
         "fieldFaviconUrl": "Favicon*",
-        "fieldFaviconHelp": "Le favicon doit être une image .png qui fait moins de 1Mo",
         "fieldFaviconUrlNotValid": "Le favicon n'est pas une URL valide",
         "fieldFaviconUrlRequired": "Le favicon est obligatoire",
         "fieldLogoUrl": "Logo*",
-        "fieldLogoHelp": "Le logo doit être une image .png qui fait moins de 1Mo",
         "fieldLogoUrlNotValid": "Le logo n'est pas une URL valide",
         "fieldLogoUrlRequired": "Le logo est obligatoire",
         "fieldName": "Nom*",
@@ -226,8 +225,7 @@
         "cannotChange": "Les orat·eurs·rices ne peuvent pas être modifié·e·s depuis OpenFeedback pour ce projet. Reportez-vous à la configuration de vos services externes pour le faire.",
         "name": "Prénom/nom*",
         "nameRequired": "Le prénom du orateur·rice est obligatoire.",
-        "photoRequired": "L'URL de la photo de l'orateur·rice est requise.",
-        "photoUrl": "URL de la photo",
+        "photoUrl": "Photo",
         "photoValid": "L'URL de la photo n'est pas une URL valide.",
         "social": "Page de profil sur un réseau social",
         "socialValid": "L'URL du réseau social n'est pas une URL valide.",
