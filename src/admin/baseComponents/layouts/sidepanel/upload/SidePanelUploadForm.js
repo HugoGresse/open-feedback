@@ -128,6 +128,7 @@ const SidePanelUploadForm = ({
             )}
 
             <OFButton
+                id="uploadImage"
                 onClick={onSaveClick}
                 disabled={uploading}
                 loading={uploading}
