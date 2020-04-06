@@ -10,7 +10,6 @@ import { grey } from '@material-ui/core/colors'
 
 const useStyles = makeStyles(theme => ({
     container: {
-        marginTop: 10,
         backgroundColor:
             theme.palette.type === 'dark'
                 ? theme.palette.background.paper

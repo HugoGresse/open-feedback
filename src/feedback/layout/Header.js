@@ -11,6 +11,8 @@ import { grey } from '@material-ui/core/colors'
 const useStyles = makeStyles(theme => ({
     logo: {
         marginRight: 20,
+        maxHeight: 60,
+        maxWidth: 200,
     },
     iconLeft: {
         minWidth: 28,
@@ -87,8 +89,6 @@ const Header = ({ project }) => {
                     <img
                         className={classes.logo}
                         src={project.logoSmall}
-                        width={60}
-                        height={60}
                         alt="logo"
                     />
                     <Hidden smDown>

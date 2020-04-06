@@ -6,7 +6,10 @@
         "errorAnonymous": "You cannot use the admin in anonymous mode"
     },
     "baseComponents": {
-        "search": "Search"
+        "search": "Search",
+        "imageUrl": "Image URL",
+        "uploadImage": "Upload image",
+        "imageHelp": "Image must be a jpeg or png image, less than 1MB"
     },
     "common": {
         "back": "Back",
@@ -15,7 +18,16 @@
         "save": "Save",
         "saved": "Saved",
         "download": "Download",
-        "close": "Close"
+        "close": "Close",
+        "preview": "Preview",
+        "or": "OR",
+        "dropzone": {
+            "image": {
+                "button": "Upload image",
+                "indication": "Drag & drop image here",
+                "confirm": "Drop the image here to upload it instantly"
+            }
+        }
     },
     "project": {
         "errorProjectsLoad": "Unable to load all projects.",
@@ -108,7 +120,7 @@
         "moderation": "Moderation",
         "settingEvent": "Event & Theme",
         "settingVotingform": "Voting Form",
-        "settingSetup": "Setup",
+        "settingSetup": "Settings",
         "settingUsers": "Users"
     },
     "settingsEvent": {
@@ -117,13 +129,13 @@
         "delete": "Delete",
         "error": "You have some error, would you mind fixing it before saving? Much appreciated.",
         "fieldChipColors": "Chip Colors",
-        "fieldFaviconUrl": "Favicon url (.png or .ico)",
+        "fieldFaviconUrl": "Favicon*",
         "fieldFaviconUrlNotValid": "The favicon is not a valid url",
         "fieldFaviconUrlRequired": "The favicon is required",
-        "fieldLogoUrl": "Logo url (around 100*100px)",
+        "fieldLogoUrl": "Logo*",
         "fieldLogoUrlNotValid": "The logo is not a valid url",
         "fieldLogoUrlRequired": "The logo is required",
-        "fieldName": "Name",
+        "fieldName": "Name*",
         "fieldNameRequired": "The project name is required",
         "fieldSchedule": "Schedule link",
         "fieldScheduleNotValid": "The schedule link is not a valid url",
@@ -213,8 +225,7 @@
         "cannotChange": "Speakers cannot be changed from OpenFeedback itself for this project. Refer to your external services configuration to do so.",
         "name": "Name*",
         "nameRequired": "The speaker name is required.",
-        "photoRequired": "The speaker photo url is required.",
-        "photoUrl": "Photo url",
+        "photoUrl": "Photo",
         "photoValid": "The photo url is not a valid url.",
         "social": "Social profil page",
         "socialValid": "The social url is not a valid url.",

@@ -27,6 +27,7 @@ import { initProjectApi } from '../../../core/setupType/projectApi'
 import { newRandomHexColor } from '../../../utils/colorsUtils'
 import { addNotification } from '../../notification/notifcationActions'
 import { trackNewProject } from '../../utils/track'
+import { deleteOldFilesIfNewValueDiffer } from '../utils/storage/deleteImageIfPossible'
 
 export const getProjects = () => {
     return (dispatch, getState) => {
@@ -141,6 +142,7 @@ export const selectProject = projectId => (dispatch, getState) => {
 }
 
 export const editProject = projectData => (dispatch, getState) => {
+    const currentProject = getSelectedProjectSelector(getState())
     if (
         !projectData.restrictVoteRange &&
         projectData.restrictVoteRange !== undefined
@@ -166,6 +168,12 @@ export const editProject = projectData => (dispatch, getState) => {
                 type: EDIT_PROJECT_SUCCESS,
                 payload: projectData,
             })
+            dispatch(
+                deleteOldFilesIfNewValueDiffer(currentProject, projectData, [
+                    'favicon',
+                    'logoSmall',
+                ])
+            )
         })
         .catch(err => {
             dispatch(
