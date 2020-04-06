@@ -9,7 +9,7 @@
         "search": "Recherche",
         "imageUrl": "URL de l'image",
         "uploadImage": "Charger l'image",
-        "imageHelp": "L'image doit être au format png or jpeg et faire moins de 1Mo"
+        "imageHelp": "L'image doit être au format png ou jpeg et faire moins de 1Mo"
     },
     "common": {
         "back": "Retour",
@@ -25,7 +25,7 @@
             "image": {
                 "button": "Charger une image",
                 "indication": "Déposer une image ici",
-                "confirm": "Relacher l'image pour charger l'image"
+                "confirm": "Relacher l'image pour la charger"
             }
         }
     },

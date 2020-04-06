@@ -26,23 +26,25 @@ export const uploadImage = (file, width = 500, height = 500) => async (
         .put(file, metadata)
         .then(async snapshot => snapshot.ref.fullPath)
 
-    try {
-        const result = await functions.resizeAndMoveImage({
+    const result = await functions
+        .resizeAndMoveImage({
             projectId,
             storageFullPath,
             width,
             height,
         })
+        .catch(error => {
+            // eslint-disable-next-line no-console
+            console.error(error)
+            dispatch(
+                addNotification({
+                    type: 'error',
+                    message: error.message,
+                })
+            )
+        })
 
+    if (result) {
         return result.data
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error)
-        dispatch(
-            addNotification({
-                type: 'error',
-                message: error.message,
-            })
-        )
     }
 }

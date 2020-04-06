@@ -48,7 +48,7 @@ export const checkWriteToProjectAllowed = async (
     ) {
         throw new functions.https.HttpsError(
             'permission-denied',
-            'Only the project members can upload image on a project.'
+            'Only the project members can edit a project.'
         )
     }
 }
