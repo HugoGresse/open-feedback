@@ -4,7 +4,8 @@ import { COLORS } from '../constants/colors'
 import InnerWrapper from './component/InnerWrapper'
 import { Trans, useTranslation } from 'react-i18next'
 import Box from '@material-ui/core/Box'
-import BlockTitle from './component/BlockTitle'
+import ScrollableAnchor from 'react-scrollable-anchor'
+import Typography from '@material-ui/core/Typography'
 
 const List = styled.ul`
     padding-inline-start: 0;
@@ -57,9 +58,13 @@ const FAQ = () => {
                 alignItems="center"
                 flexGrow="1"
                 textAlign="center">
-                <BlockTitle id="faq" style={{ marginTop: 16 }}>
-                    FAQ
-                </BlockTitle>
+                <ScrollableAnchor id={'faq'}>
+                    <Typography
+                        variant="h2"
+                        style={{ marginTop: 16, marginBottom: 32 }}>
+                        FAQ
+                    </Typography>
+                </ScrollableAnchor>
 
                 <List>
                     <li>

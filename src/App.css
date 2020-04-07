@@ -11,3 +11,7 @@ body {
 a {
     text-decoration: none;
 }
+
+#Smallchat {
+    visibility: hidden;
+}
