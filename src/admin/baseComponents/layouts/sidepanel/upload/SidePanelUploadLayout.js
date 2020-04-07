@@ -114,8 +114,7 @@ const SidePanelUploadLayout = ({
             <OFFormControl name={name} fieldName={fieldName}>
                 <button
                     type="button"
-                    id="addImage"
-                    className={classes.imageButton}
+                    className={`addImage ${classes.imageButton}`}
                     onClick={() => setOpen(true)}
                     disabled={isSubmitting}>
                     {field.value && (
