@@ -29,6 +29,7 @@ import QRCodeDialog from './QRCodeDialog'
 import { redirectToProject } from '../utils/redirectToProject'
 import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 import Translate from './Translate'
+import Help from './Help'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -165,6 +166,12 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                             xs={12}
                                             sm={5}
                                             className={classes.topRight}>
+                                            <Help
+                                                buttonClass={
+                                                    classes.topRightButtonLight
+                                                }
+                                            />
+
                                             {selectedProject && (
                                                 <Button
                                                     className={

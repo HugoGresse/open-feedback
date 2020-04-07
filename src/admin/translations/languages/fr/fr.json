@@ -68,7 +68,10 @@
         "sidebar": {
             "data": "DONNÉES",
             "settings": "RÉGLAGES"
-        }
+        },
+        "faq": "FAQ",
+        "support": "Support",
+        "closeSupport": "Fermer le support"
     },
     "newEvent": {
         "step1": {
