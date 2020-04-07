@@ -4,50 +4,31 @@ import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { useTranslation } from 'react-i18next'
+import { hideSmallChat, openSmallChat } from '../utils/smallchat'
 
 const Help = ({ buttonClass }) => {
     const { t } = useTranslation()
     const [anchorEl, setAnchorEl] = useState(null)
     const [isSupportOpen, setSupportOpen] = useState(false)
 
-    const getSmallChatTopButton = () => {
-        const topButton = document.querySelector('#Smallchat')
-        if (topButton) return [topButton]
-        return []
-    }
-
-    const getSmallChatInnerButton = () => {
-        try {
-            const button = getSmallChatTopButton()
-                .map(node =>
-                    node.children[0].contentDocument.querySelector('.Launcher')
-                )
-                .filter(item => !!item)
-            if (button.length > 0) return button
-        } catch (error) {
-            // ignored
-        }
-        return []
-    }
-
     useEffect(() => {
-        closeSupport()
-    }, [])
+        if (isSupportOpen) {
+            openSmallChat()
+        } else {
+            hideSmallChat()
+        }
+        return () => {
+            hideSmallChat()
+        }
+    }, [isSupportOpen])
 
     const openSupport = () => {
-        getSmallChatTopButton().forEach(node => (node.style.display = 'block'))
-        getSmallChatInnerButton().forEach(button => button.click())
         setAnchorEl(null)
         setSupportOpen(true)
     }
 
-    const closeSupport = () => {
-        getSmallChatTopButton().forEach(node => (node.style.display = 'none'))
-        setSupportOpen(false)
-    }
-
     const closeSupportClick = () => {
-        closeSupport()
+        setSupportOpen(false)
         setAnchorEl(null)
     }
 
