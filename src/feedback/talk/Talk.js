@@ -52,16 +52,6 @@ class Talk extends Component {
         this.props.getVoteResult(id)
     }
 
-    getSpeakersString(talk, speakers) {
-        if (speakers.length === 0) {
-            return ''
-        }
-
-        return speakers.reduce((acc, speaker) => {
-            return acc + ' ' + speaker.name
-        }, '')
-    }
-
     onVoteItemChange = (voteItem, data) => {
         if (this.props.userVotes[voteItem.id]) {
             switch (voteItem.type) {
@@ -207,7 +197,7 @@ class Talk extends Component {
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     talk: getSelectedTalkSelector(state),
     speakers: getSpeakersForSelectedTalkSelector(state),
     voteItems: getProjectVoteItemsOrderedSelector(state),

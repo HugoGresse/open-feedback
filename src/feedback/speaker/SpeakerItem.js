@@ -1,12 +1,25 @@
-import React, { Component } from 'react'
-import { Avatar, withStyles } from '@material-ui/core'
+import React from 'react'
+import { Avatar } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
+import Link from '@material-ui/core/Link'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import Box from '@material-ui/core/Box'
 
-const styles = () => ({
+const useStyles = makeStyles((theme) => ({
     speaker: {
         display: 'flex',
         alignItems: 'center',
         marginRight: '18px',
+        paddingRight: 12,
+        transition: 'all 200ms',
+        '&:hover': {
+            textDecoration: 'none',
+            boxShadow: (props) =>
+                props.isLinkable
+                    ? `0 0 3px ${theme.palette.headerShadow}`
+                    : 'none',
+            borderRadius: '20px 4px 4px 20px',
+        },
     },
     avatar: {
         marginRight: '13px',
@@ -27,27 +40,38 @@ const styles = () => ({
         fontSize: '15px',
         opacity: 0.7,
     },
-})
+}))
 
-class SpeakerItem extends Component {
-    render() {
-        const { name, photoUrl, classes, size } = this.props
+const SpeakerItem = ({ name, photoUrl, socialProfil, size }) => {
+    const isLinkable = size !== 'small' && socialProfil
 
-        return (
-            <div className={classes.speaker}>
-                <Avatar
-                    src={photoUrl}
-                    alt={name}
-                    className={classes.avatar + ' ' + classes[size + 'Avatar']}
-                />
-                <Typography
-                    color="textPrimary"
-                    className={classes[size + 'Text']}>
-                    {name}
-                </Typography>
-            </div>
-        )
-    }
+    const classes = useStyles({
+        isLinkable,
+    })
+
+    const linkProps = isLinkable
+        ? {
+              component: Link,
+              href: socialProfil,
+              target: '_blank',
+              title: socialProfil,
+          }
+        : {
+              component: 'div',
+          }
+
+    return (
+        <Box className={classes.speaker} {...linkProps}>
+            <Avatar
+                src={photoUrl}
+                alt={name}
+                className={classes.avatar + ' ' + classes[size + 'Avatar']}
+            />
+            <Typography color="textPrimary" className={classes[size + 'Text']}>
+                {name}
+            </Typography>
+        </Box>
+    )
 }
 
-export default withStyles(styles)(SpeakerItem)
+export default SpeakerItem
