@@ -10,7 +10,7 @@ import Chip from '@material-ui/core/Chip'
 import EditIcon from '@material-ui/icons/Edit'
 import ErrorIcon from '@material-ui/icons/Error'
 import ProjectIdChange from './Step1.projectIdChange'
-import { doesProjectExist } from '../core/projectActions'
+import { doesProjectExist } from '../core/projectUtils'
 
 const Step1 = ({ onCancel, onSubmit, initialValues }) => {
     const { t } = useTranslation()
@@ -20,7 +20,7 @@ const Step1 = ({ onCancel, onSubmit, initialValues }) => {
         initialValues.id
     )
 
-    const handleProjectIdClick = event => {
+    const handleProjectIdClick = (event) => {
         setProjectIdOpen(!projectIdEditOpen)
         setAnchorEl(projectIdAnchor ? null : event.currentTarget)
     }
@@ -44,10 +44,10 @@ const Step1 = ({ onCancel, onSubmit, initialValues }) => {
                         .test(
                             'alreadyExist',
                             t('newEvent.step1.eventIdExist'),
-                            value => {
+                            (value) => {
                                 if (value) {
                                     return doesProjectExist(value).then(
-                                        exist => !exist
+                                        (exist) => !exist
                                     )
                                 }
                                 return Promise.resolve(false)
@@ -55,7 +55,7 @@ const Step1 = ({ onCancel, onSubmit, initialValues }) => {
                         ),
                 })}
                 initialValues={initialValues}
-                onSubmit={values =>
+                onSubmit={(values) =>
                     onSubmit(values.name.trim(), values.id.trim())
                 }>
                 {({ isSubmitting, values, setFieldValue, errors }) => (
@@ -74,7 +74,7 @@ const Step1 = ({ onCancel, onSubmit, initialValues }) => {
                             <Chip
                                 avatar={<EditIcon />}
                                 label={values.id}
-                                onClick={event => handleProjectIdClick(event)}
+                                onClick={(event) => handleProjectIdClick(event)}
                                 variant="outlined"
                                 disabled={values.name.length === 0}
                             />

@@ -7,7 +7,6 @@ import Grid from '@material-ui/core/Grid'
 import OFButton from '../../../baseComponents/button/OFButton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { useDispatch } from 'react-redux'
-import { editProject } from '../../core/projectActions'
 import ChipColorsEditor from './ChipColorsEditor'
 import OFFormControlInputFormiked from '../../../baseComponents/form/formControl/OFFormControlInputFormiked'
 import OFDateTimePicker from '../../../baseComponents/form/dateTimePicker/OFDateTimePicker'
@@ -18,8 +17,9 @@ import { useTranslation } from 'react-i18next'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
 import { DateTime } from 'luxon'
 import SidePanelUploadLayout from '../../../baseComponents/layouts/sidepanel/upload/SidePanelUploadLayout'
+import { editProject } from '../../core/actions/editProject'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     buttonContainer: {
         textAlign: 'right',
     },
@@ -63,7 +63,7 @@ const ProjectSettingsForm = ({ project }) => {
                 voteEndTime: string(),
             })}
             initialValues={initialValues}
-            onSubmit={values =>
+            onSubmit={(values) =>
                 dispatch(
                     editProject({
                         chipColors: values.chipColors,
@@ -204,7 +204,7 @@ const ProjectSettingsForm = ({ project }) => {
     )
 }
 
-const errorArrayContainError = errorArray =>
-    Object.values(errorArray).filter(el => !!el).length > 0
+const errorArrayContainError = (errorArray) =>
+    Object.values(errorArray).filter((el) => !!el).length > 0
 
 export default ProjectSettingsForm

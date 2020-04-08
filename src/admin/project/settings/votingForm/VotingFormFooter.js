@@ -4,7 +4,6 @@ import BottomActionLayout from '../../layout/BottomActionLayout'
 import OFButton from '../../../baseComponents/button/OFButton'
 import { useTranslation } from 'react-i18next'
 import CachedIcon from '@material-ui/icons/Cached'
-import { getProject } from '../../core/projectActions'
 import {
     fillDefaultVotingForm,
     getVoteItems,
@@ -13,6 +12,7 @@ import {
 import SimpleDialog from '../../../baseComponents/layouts/SimpleDialog'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
 import { sleep } from '../../../../utils/sleep'
+import { getProject } from '../../core/actions/getProject'
 
 const VotingForm = () => {
     const { t } = useTranslation()

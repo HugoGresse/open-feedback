@@ -11,9 +11,9 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import ProjectSettings from './settings/event/ProjectSettings'
 import ProjectLayout from './layout/ProjectLayout'
 import { useDispatch } from 'react-redux'
-import { getProjects } from './core/projectActions'
 import Layout404 from './layout/Layout404'
 import Moderation from './moderation/Moderation'
+import { getProjects } from './core/actions/getProjects'
 
 const ProjectApp = ({ match }) => {
     const dispatch = useDispatch()
@@ -35,46 +35,46 @@ const ProjectApp = ({ match }) => {
                     <Route
                         exact
                         path={`${match.url}${RoutingMap.dashboard.url}`}
-                        render={props => <ProjectDashboard {...props} />}
+                        render={(props) => <ProjectDashboard {...props} />}
                     />
                     <Route
                         exact
                         path={`${match.url}${RoutingMap.talks.url}`}
-                        render={props => <Talks {...props} />}
+                        render={(props) => <Talks {...props} />}
                     />
                     <Route
                         exact
                         path={`${match.url}${RoutingMap.speakers.url}`}
-                        render={props => <Speakers {...props} />}
+                        render={(props) => <Speakers {...props} />}
                     />
                     <Route
                         exact
                         path={`${match.url}${RoutingMap.moderation.url}`}
-                        render={props => <Moderation {...props} />}
+                        render={(props) => <Moderation {...props} />}
                     />
 
                     <Route
                         exact
                         path={`${match.url}${RoutingMap.settingEvent.url}`}
-                        render={props => <ProjectSettings {...props} />}
+                        render={(props) => <ProjectSettings {...props} />}
                     />
 
                     <Route
                         exact
                         path={`${match.url}${RoutingMap.settingVotingform.url}`}
-                        render={props => <VotingForm {...props} />}
+                        render={(props) => <VotingForm {...props} />}
                     />
 
                     <Route
                         exact
                         path={`${match.url}${RoutingMap.settingSetup.url}`}
-                        render={props => <Setup {...props} />}
+                        render={(props) => <Setup {...props} />}
                     />
 
                     <Route
                         exact
                         path={`${match.url}${RoutingMap.settingUsers.url}`}
-                        render={props => <Users {...props} />}
+                        render={(props) => <Users {...props} />}
                     />
 
                     <Route component={Layout404} />
