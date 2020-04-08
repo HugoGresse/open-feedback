@@ -49,14 +49,14 @@ const NewProject = ({ onCancel }) => {
     const [currentStep, setCurrentStep] = useState(1)
     const [projectName, setProjectName] = useState('')
     const [projectId, setProjectId] = useState(projectIdDefaultValue)
-    const [projectType, setProjectType] = useState('')
+    const [projectType, setProjectType] = useState(PROJECT_TYPE_OPENFEEDBACK)
     const [step3Data, setStep3Data] = useState()
     const [isCreatingEvent, setCreatingEvent] = useState(false)
 
     const createEvent = (id, data) => {
         setCreatingEvent(true)
         return dispatch(newProject(id, data))
-            .then(projectId => {
+            .then((projectId) => {
                 return Promise.all([
                     dispatch(getProject(projectId)),
                     dispatch(selectProject(projectId)),
@@ -97,7 +97,7 @@ const NewProject = ({ onCancel }) => {
                     <Step2
                         onCancel={onCancel}
                         onBack={() => setCurrentStep(1)}
-                        onSubmit={newProjectType => {
+                        onSubmit={(newProjectType) => {
                             if (newProjectType === PROJECT_TYPE_OPENFEEDBACK) {
                                 return createEvent(projectId, {
                                     name: projectName,
@@ -117,13 +117,13 @@ const NewProject = ({ onCancel }) => {
                 {currentStep === 3 && (
                     <Step3
                         onCancel={onCancel}
-                        onBack={data => {
+                        onBack={(data) => {
                             setStep3Data(data)
                             setCurrentStep(2)
                         }}
                         initialValues={step3Data}
                         projectType={projectType}
-                        onSubmit={config =>
+                        onSubmit={(config) =>
                             createEvent(projectId, {
                                 name: projectName,
                                 setupType: projectType,
