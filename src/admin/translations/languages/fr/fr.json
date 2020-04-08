@@ -92,7 +92,7 @@
             "create": "Créer un évènement",
             "projectTypeHoverboard": "Hoverboard v2 Firestore",
             "projectTypeHoverboardDetail": "Les présentations / orateurs / calendrier seront récupérés directement au chargement de la page à partir de votre propre base de données Firestore en suivant le modèle de Hoverboard v2.",
-            "projectTypeJsonurl": "JSON link (ex: votre API)",
+            "projectTypeJsonurl": "JSON API URL",
             "projectTypeJsonurlDetail": "Vous fournissez une URL vers un .json que vous hébergerez (sur gist.github.com ou un autre serveur statique) ou une API pour votre propre base de donnée. Le modèle du .json devra correspondre à celui d'OpenFeedback, vous pourrez le vérifier sur l'écran suivant. ",
             "projectTypeOpenfeedback": "Base de donnée OpenFeedback (par défaut)",
             "projectTypeOpenfeedbackDetail": "Vous pouvez saisir manuellement les présentations / orateurs / calendrier sur OpenFeedback. Ils ne seront pas synchronisés avec un autre service. Aucune configuration supplémentaire n'est requise.",
@@ -103,7 +103,7 @@
         "step3": {
             "back": "Retour",
             "firebaseCredentials": "Entrez vos informations d'identification Firebase",
-            "jsonurl": "Quelle est l'URL du json ?",
+            "jsonurl": "Quelle est l'URL de votre API ou du JSON ?",
             "notManaged": "Ce type de projet n'est pas géré, cela ne devrait pas se produire, soit vous n'êtes pas un bon développeur, soit ¯ \\ _ (ツ) _ / ¯",
             "stepTitle": "Créer un nouvel événement (étape 3/3)",
             "submit": "Créer l'événement",
@@ -158,9 +158,9 @@
             "projectIdRequired": "L'ID de projet Firebase est obligatoire"
         },
         "json": {
-            "fieldJsonUrl": "URL JSON",
-            "jsonUrlRequired": "L'URL JSON est obligatoire",
-            "jsonUrlValid": "L'URL JSON doit être une URL valide",
+            "fieldJsonUrl": "JSON API URL",
+            "jsonUrlRequired": "L'URL de l'API est obligatoire",
+            "jsonUrlValid": "L'URL de l'API doit être une URL valide",
             "showJsonModel": "Afficher le modèle JSON"
         },
         "setupMode": "Mode de configuration",
