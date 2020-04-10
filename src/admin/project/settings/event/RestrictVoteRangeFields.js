@@ -12,14 +12,22 @@ const RestrictVoteRangeFields = ({ isOpen }) => {
     const { t } = useTranslation()
 
     const [startField, startMeta] = useField(fieldNameVoteStartTime)
-    // eslint-disable-next-line no-unused-vars
     const [endField, endMeta, endHelpers] = useField(fieldNameVoteEndTime)
 
     useEffect(() => {
-        if (startField.value !== startMeta.initialValue && !endMeta.touched) {
+        if (
+            startField.value !== startMeta.initialValue &&
+            !endMeta.touched &&
+            startField.value !== endField.value
+        ) {
             endHelpers.setValue(startField.value)
         }
-    }, [startField.value, endHelpers, endMeta.touched, startMeta.initialValue])
+    }, [
+        startField.value,
+        endHelpers.setValue,
+        endMeta.touched,
+        startMeta.initialValue,
+    ])
 
     return (
         <Collapse in={isOpen}>

@@ -12,7 +12,11 @@ const TalkStartEndTimeFields = () => {
     const [endField, endMeta, endHelpers] = useField(endTimeFieldName)
 
     useEffect(() => {
-        if (startField.value !== startMeta.initialValue && !endMeta.touched) {
+        if (
+            startField.value !== startMeta.initialValue &&
+            !endMeta.touched &&
+            startField.value !== endField.value
+        ) {
             endHelpers.setValue(startField.value)
         }
     }, [startField.value, endHelpers, startMeta.initialValue, endMeta])
