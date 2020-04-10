@@ -10,7 +10,7 @@ export const signIn = () => {
         if (isLoggedSelector(getState())) {
             return
         }
-        authProvider.onAuthStateChanged(user => {
+        authProvider.onAuthStateChanged((user) => {
             if (user) {
                 dispatch({
                     type: LOGIN_SUCCESS,
@@ -30,7 +30,7 @@ export const signIn = () => {
                 payload: authProvider.currentUser,
             })
         } else {
-            authProvider.signInAnonymously().catch(error => {
+            authProvider.signInAnonymously().catch((error) => {
                 if (error.code === 'auth/too-many-requests') {
                     createAlert(ALERT_FIREBASE_QUOTA_REACHED)
                 }

@@ -5,28 +5,28 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { darken, fade, lighten } from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
-        background: props =>
+        background: (props) =>
             props.design === 'text'
                 ? 'none'
                 : props.customBg
                 ? props.customBg
                 : COLORS.RED_ORANGE,
-        color: props =>
+        color: (props) =>
             props.customText
                 ? props.customText
                 : props.design === 'text'
                 ? theme.primaryText
                 : COLORS.WHITE,
-        padding: props =>
+        padding: (props) =>
             props.type === 'big'
                 ? '12px 32px'
                 : props.type === 'small'
                 ? '3px 4px'
                 : '6px 8px',
         '&:hover': {
-            background: props =>
+            background: (props) =>
                 props.design === 'text'
                     ? lighten(fade(COLORS.DARK_RED_ORANGE, 1), 0.8)
                     : props.customBg

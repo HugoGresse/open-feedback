@@ -17,7 +17,8 @@
         "cy:run": "cypress run",
         "cy:start": "env-cmd -f .env.test.local react-scripts start",
         "storybook": "start-storybook -p 9009 -s public",
-        "build-storybook": "build-storybook -s public"
+        "build-storybook": "build-storybook -s public",
+        "lint:i18n": "eslint src/**/languages/*.json"
     },
     "devDependencies": {
         "@storybook/addon-docs": "^5.3.18",
@@ -26,6 +27,7 @@
         "@storybook/react": "5.3.18",
         "cypress": "^4.2.0",
         "eslint-plugin-cypress": "^2.10.3",
+        "eslint-plugin-i18n-json": "^2.4.4",
         "firebase-tools": "^8.0.2",
         "husky": "^4.2.5",
         "lint-staged": "^10.1.3",

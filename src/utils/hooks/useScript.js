@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 
 let cachedScripts = []
-export const useScript = src => {
+export const useScript = (src) => {
     // Keeping track of script loaded and error state
     const [state, setState] = useState({
         loaded: false,

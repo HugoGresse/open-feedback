@@ -9,7 +9,7 @@ import OFFormControlInputFormiked from '../../../form/formControl/OFFormControlI
 
 const useStyles = makeStyles(() => ({
     dropZone: {
-        border: props =>
+        border: (props) =>
             `2px dashed ${
                 props.isDragActive ? COLORS.RED_ORANGE : COLORS.LIGHT_GRAY
             }`,

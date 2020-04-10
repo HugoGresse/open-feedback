@@ -23,7 +23,7 @@ import { signIn } from './auth/authActions'
 import { getVotes } from './vote/voteActions'
 import { useTranslation } from 'react-i18next'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     container: {
         backgroundColor: theme.palette.pageBackground,
         minHeight: '100vh',

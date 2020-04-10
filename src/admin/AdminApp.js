@@ -50,7 +50,7 @@ const AdminApp = () => {
 
                         <Route
                             path="/admin/:projectId"
-                            render={props => (
+                            render={(props) => (
                                 <ProjectApp
                                     match={props.match}
                                     key={projectId}

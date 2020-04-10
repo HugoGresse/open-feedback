@@ -1,7 +1,7 @@
 import i18n from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
-import enTranslation from './languages/en/en'
-import frTranslation from './languages/fr/fr'
+import enTranslation from './languages/en.feedback'
+import frTranslation from './languages/fr.feedback'
 
 i18n.use(LanguageDetector).init({
     // we init with resources

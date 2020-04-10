@@ -17,11 +17,7 @@ export const removeFileFromStorage = functions.https.onCall(
             )
         }
 
-        await admin
-            .storage()
-            .bucket()
-            .file(path)
-            .delete()
+        await admin.storage().bucket().file(path).delete()
 
         return Promise.resolve()
     }

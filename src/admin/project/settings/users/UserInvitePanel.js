@@ -22,7 +22,7 @@ const UserInvitePanel = ({ isOpen, onClose, onSubmit }) => {
                 initialValues={{
                     email: '',
                 }}
-                onSubmit={values => onSubmit(values.email)}>
+                onSubmit={(values) => onSubmit(values.email)}>
                 {({ isSubmitting }) => (
                     <Form method="POST">
                         <OFFormControlInputFormiked

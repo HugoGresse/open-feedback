@@ -11,10 +11,10 @@ export const getSmallChatTopButton = () => {
 export const getSmallChatInnerButton = () => {
     try {
         const button = getSmallChatTopButton()
-            .map(node =>
+            .map((node) =>
                 node.children[0].contentDocument.querySelector('.Launcher')
             )
-            .filter(item => !!item)
+            .filter((item) => !!item)
         if (button.length > 0) return button
     } catch (error) {
         // ignored
@@ -23,14 +23,20 @@ export const getSmallChatInnerButton = () => {
 }
 
 export const hideSmallChat = () => {
-    getSmallChatTopButton().forEach(node => (node.style.visibility = 'hidden'))
+    getSmallChatTopButton().forEach(
+        (node) => (node.style.visibility = 'hidden')
+    )
 }
 
 export const showSmallChat = () => {
-    getSmallChatTopButton().forEach(node => (node.style.visibility = 'visible'))
+    getSmallChatTopButton().forEach(
+        (node) => (node.style.visibility = 'visible')
+    )
 }
 
 export const openSmallChat = () => {
-    getSmallChatTopButton().forEach(node => (node.style.visibility = 'visible'))
-    getSmallChatInnerButton().forEach(button => button.click())
+    getSmallChatTopButton().forEach(
+        (node) => (node.style.visibility = 'visible')
+    )
+    getSmallChatInnerButton().forEach((button) => button.click())
 }

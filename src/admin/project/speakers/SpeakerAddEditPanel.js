@@ -18,9 +18,7 @@ const SpeakerAddEditPanel = ({ isOpen, speaker, onClose, onSubmit }) => {
             title={t('speakers.addTitle')}>
             <Formik
                 validationSchema={object().shape({
-                    name: string()
-                        .trim()
-                        .required(t('speakers.addTitle')),
+                    name: string().trim().required(t('speakers.addTitle')),
                     photoUrl: string()
                         .notRequired()
                         .url(t('speakers.photoValid'))

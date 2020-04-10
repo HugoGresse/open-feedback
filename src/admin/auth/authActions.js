@@ -100,7 +100,7 @@ export const didSignIn = (user, error) => {
     }
 }
 
-export const signOut = () => dispatch => {
+export const signOut = () => (dispatch) => {
     authProvider.signOut().then(() => {
         dispatch({
             type: LOGOUT,
@@ -113,11 +113,8 @@ export const signOut = () => dispatch => {
     })
 }
 
-const getUserFromDB = async uid =>
-    await fireStoreMainInstance
-        .collection('users')
-        .doc(uid)
-        .get()
+const getUserFromDB = async (uid) =>
+    await fireStoreMainInstance.collection('users').doc(uid).get()
 
 const createUser = async (user, displayName, photoURL, phone) => {
     const userField = {
@@ -161,7 +158,7 @@ export const getDataFromProviderDataOrUser = (user, keyToGet) => {
     if (isEmpty(user.providerData)) {
         return ''
     }
-    const providerData = user.providerData.filter(data => data[keyToGet])
+    const providerData = user.providerData.filter((data) => data[keyToGet])
     if (providerData.length > 0) {
         return providerData[0][keyToGet]
     }

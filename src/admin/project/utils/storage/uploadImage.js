@@ -24,7 +24,7 @@ export const uploadImage = (file, width = 500, height = 500) => async (
     const storageFullPath = await pathRef
         .child(`${newId()}_${file.name}`)
         .put(file, metadata)
-        .then(async snapshot => snapshot.ref.fullPath)
+        .then(async (snapshot) => snapshot.ref.fullPath)
 
     const result = await functions
         .resizeAndMoveImage({
@@ -33,7 +33,7 @@ export const uploadImage = (file, width = 500, height = 500) => async (
             width,
             height,
         })
-        .catch(error => {
+        .catch((error) => {
             // eslint-disable-next-line no-console
             console.error(error)
             dispatch(

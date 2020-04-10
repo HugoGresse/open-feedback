@@ -36,7 +36,7 @@ const useStyles = makeStyles(() => ({
         width: '100%',
     },
     dropZone: {
-        border: props =>
+        border: (props) =>
             `3px dashed ${
                 props.isDragActive ? 'royalblue' : COLORS.RED_ORANGE
             }`,
@@ -83,7 +83,7 @@ const SidePanelUploadLayout = ({
         setOpen(false)
     }
 
-    const onDrop = useCallback(acceptedFiles => {
+    const onDrop = useCallback((acceptedFiles) => {
         if (acceptedFiles.length > 0) {
             setUpload({
                 file: acceptedFiles[0],

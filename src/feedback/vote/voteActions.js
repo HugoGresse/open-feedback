@@ -121,7 +121,7 @@ export const voteFor = (talkId, voteItem, data, translate) => {
                 })
                 trackVote(project.name, projectId, voteItem.type)
             })
-            .catch(error => {
+            .catch((error) => {
                 dispatch({
                     type: ADD_VOTE_ERROR,
                     payload: {
@@ -189,7 +189,7 @@ export const removeVote = (voteToDelete, translate) => {
                 })
                 trackUnvote(project.name, project.id)
             })
-            .catch(error => {
+            .catch((error) => {
                 dispatch({
                     type: ADD_VOTE_ERROR,
                     payload: {
@@ -249,7 +249,7 @@ export const updateVote = (vote, data, translate) => (dispatch, getState) => {
                 },
             })
         })
-        .catch(error => {
+        .catch((error) => {
             dispatch({
                 type: UPDATE_VOTE_ERROR,
                 payload: {
@@ -268,9 +268,9 @@ export const getVotes = () => {
             .collection('userVotes')
             .where('userId', '==', getUserSelector(getState()).uid)
             .get()
-            .then(voteSnapshot => {
+            .then((voteSnapshot) => {
                 const votes = {}
-                voteSnapshot.forEach(doc => {
+                voteSnapshot.forEach((doc) => {
                     votes[doc.id] = doc.data()
                     votes[doc.id].id = doc.id
                 })
@@ -279,7 +279,7 @@ export const getVotes = () => {
                     payload: votes,
                 })
             })
-            .catch(error => {
+            .catch((error) => {
                 dispatch({
                     type: GET_USER_VOTES_ERROR,
                     payload: error,

@@ -40,7 +40,7 @@ const innerTheme = createMuiTheme({
 const useStyles = makeStyles({
     appbar: {
         background: COLORS.RED_ORANGE,
-        boxShadow: props => (props.shadow ? null : 'none'),
+        boxShadow: (props) => (props.shadow ? null : 'none'),
     },
     topHeader: {
         marginTop: 20,
@@ -94,12 +94,12 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
     })
     const classes = useStyles({ shadow: triggerScrollShadow })
 
-    const onProjectSelectedChange = projectId => {
+    const onProjectSelectedChange = (projectId) => {
         redirectToProject(selectedProjectId, projectId)
         setAnchorEventSelect(null)
     }
 
-    const handleChangeEventMenuOpen = event => {
+    const handleChangeEventMenuOpen = (event) => {
         setAnchorEventSelect(event.target)
     }
 
@@ -107,12 +107,12 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
         setAnchorEventSelect(null)
     }
 
-    const getTitle = location => {
+    const getTitle = (location) => {
         return Object.keys(RoutingMap)
-            .filter(key => {
+            .filter((key) => {
                 return location.pathname.includes(RoutingMap[key].url)
             })
-            .map(key => t(RoutingMap[key].i18key))
+            .map((key) => t(RoutingMap[key].i18key))
     }
 
     const menuId = 'primary-project-selection-menu'
@@ -132,7 +132,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                         <Grid item xs={12} sm={7}>
                                             <Hidden mdUp>
                                                 <IconButton
-                                                    onClick={event =>
+                                                    onClick={(event) =>
                                                         toggleDrawer(event)
                                                     }>
                                                     <MenuIcon />
@@ -147,7 +147,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                                     className={
                                                         classes.changeEventButton
                                                     }
-                                                    onClick={event =>
+                                                    onClick={(event) =>
                                                         handleChangeEventMenuOpen(
                                                             event
                                                         )
@@ -228,7 +228,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                     transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                     open={!!anchorEventSelect}
                     onClose={() => handleMenuClose()}>
-                    {projects.map(project => (
+                    {projects.map((project) => (
                         <MenuItem
                             key={project.id}
                             onClick={() => onProjectSelectedChange(project.id)}>

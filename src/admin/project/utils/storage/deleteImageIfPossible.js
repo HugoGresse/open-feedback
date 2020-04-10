@@ -8,7 +8,7 @@ export const deleteImageIfPossible = (storageFullPath, projectId) => {
             storageFullPath,
             projectId,
         })
-        .catch(error => {
+        .catch((error) => {
             // eslint-disable-next-line no-console
             console.log(error, error.message)
         })
@@ -31,7 +31,7 @@ export const deleteOldFilesIfNewValueDiffer = (
 
     const projectId = getSelectedProjectIdSelector(getState())
 
-    keyArray.forEach(key => {
+    keyArray.forEach((key) => {
         const oldValue = oldObject[key]
         const newValue = newObject[key]
 

@@ -36,7 +36,7 @@ const Help = ({ buttonClass }) => {
         <>
             <Button
                 className={buttonClass}
-                onClick={event => setAnchorEl(event.currentTarget)}>
+                onClick={(event) => setAnchorEl(event.currentTarget)}>
                 <HelpIcon />
             </Button>
             <Menu

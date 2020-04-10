@@ -77,17 +77,14 @@ const resize = async (
 
     const bufferData: any[] = []
     const tempWritableStream = new stream.Writable()
-    tempWritableStream._write = function(chunk, encoding, done) {
+    tempWritableStream._write = function (chunk, encoding, done) {
         bufferData.push(chunk)
         done()
     }
 
     const pipeline = sharp()
 
-    bucket
-        .file(filePath)
-        .createReadStream()
-        .pipe(pipeline)
+    bucket.file(filePath).createReadStream().pipe(pipeline)
 
     pipeline
         .resize(width, height, { fit: 'inside' })

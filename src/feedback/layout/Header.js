@@ -8,7 +8,7 @@ import { Hidden } from '@material-ui/core/es'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { grey } from '@material-ui/core/colors'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     logo: {
         marginRight: 20,
         maxHeight: 60,
