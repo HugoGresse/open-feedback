@@ -9,15 +9,14 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { useDispatch } from 'react-redux'
 import ChipColorsEditor from './ChipColorsEditor'
 import OFFormControlInputFormiked from '../../../baseComponents/form/formControl/OFFormControlInputFormiked'
-import OFDateTimePicker from '../../../baseComponents/form/dateTimePicker/OFDateTimePicker'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { OFSwitch } from '../../../baseComponents/form/switch/OFSwitch'
-import Collapse from '@material-ui/core/Collapse'
 import { useTranslation } from 'react-i18next'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
 import { DateTime } from 'luxon'
 import SidePanelUploadLayout from '../../../baseComponents/layouts/sidepanel/upload/SidePanelUploadLayout'
 import { editProject } from '../../core/actions/editProject'
+import RestrictVoteRangeFields from './RestrictVoteRangeFields'
 
 const useStyles = makeStyles((theme) => ({
     buttonContainer: {
@@ -112,29 +111,9 @@ const ProjectSettingsForm = ({ project }) => {
                                 />
                             </OFFormControl>
 
-                            <Collapse in={values.restrictVoteRange}>
-                                <div>
-                                    <OFFormControl
-                                        name={t('settingsEvent.fieldVoteOpen')}
-                                        fieldName="voteStartTime">
-                                        <Field
-                                            name="voteStartTime"
-                                            format="FFF"
-                                            component={OFDateTimePicker}
-                                        />
-                                    </OFFormControl>
-
-                                    <OFFormControl
-                                        name={t('settingsEvent.fieldVoteClose')}
-                                        fieldName="voteEndTime">
-                                        <Field
-                                            name="voteEndTime"
-                                            format="FFF"
-                                            component={OFDateTimePicker}
-                                        />
-                                    </OFFormControl>
-                                </div>
-                            </Collapse>
+                            <RestrictVoteRangeFields
+                                isOpen={!!values.restrictVoteRange}
+                            />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography variant="h5">Theme</Typography>
