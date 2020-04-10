@@ -27,7 +27,7 @@
         "cypress": "^4.2.0",
         "eslint-plugin-cypress": "^2.10.3",
         "firebase-tools": "^8.0.2",
-        "husky": "^4.2.3",
+        "husky": "^4.2.5",
         "lint-staged": "^10.1.3",
         "prettier": "^2.0.4"
     },
