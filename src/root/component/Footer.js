@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../constants/colors'
-import logoColorWhite from '../assets/logo-openfeedback-color&white.png'
+import { COLORS } from '../../constants/colors'
+import logoColorWhite from '../../assets/logo-openfeedback-color&white.png'
 import SvgIcon from '@material-ui/core/SvgIcon'
 
 const Wrapper = styled.div`

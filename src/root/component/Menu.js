@@ -1,7 +1,7 @@
-import logoWhite from '../assets/logo-openfeedback-white.png'
+import logoWhite from '../../assets/logo-openfeedback-white.png'
 import React from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../constants/colors'
+import { COLORS } from '../../constants/colors'
 import { useTranslation } from 'react-i18next'
 import Box from '@material-ui/core/Box'
 

@@ -3,7 +3,7 @@ import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchPare
 import ErrorBoundary from '../baseComponents/customComponent/ErrorBoundary'
 import { ALERT_REACT_CATCHED_ERROR_LANDING } from '../utils/alerting/alerts'
 // noinspection JSCheckFunctionSignatures
-const Root = lazy(() => import('./Root'))
+const Root = lazy(() => import('./RootApp'))
 
 const SuspendedAdminApp = () => {
     return (

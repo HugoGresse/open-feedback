@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../constants/colors'
+import { COLORS } from '../../../constants/colors'
 
-import BackgroundHeader from './images/background-header.png'
-import MokckupBG from './images/mockup-phone-bg.png'
-import MokckupOverlay from './images/mockup-phone-overlay.png'
-import DemoOF from './images/of-demo.webp'
-import Menu from './Menu'
-import InnerWrapper from './component/InnerWrapper'
+import BackgroundHeader from '../../images/background-header.png'
+import MokckupBG from '../../images/mockup-phone-bg.png'
+import MokckupOverlay from '../../images/mockup-phone-overlay.png'
+import DemoOF from '../../images/of-demo.webp'
+import Menu from '../../component/Menu'
+import InnerWrapper from '../../component/InnerWrapper'
 import { useTranslation } from 'react-i18next'
 import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
@@ -73,11 +73,11 @@ const Wrapper = styled(Box)`
 `
 
 const LinkButton = styled.a`
-    ${props =>
+    ${(props) =>
         props.variant === 'outline'
             ? `color: ${COLORS.WHITE}`
             : `color: ${COLORS.RED_ORANGE}`};
-    ${props =>
+    ${(props) =>
         props.variant === 'outline'
             ? `background : none`
             : `background:  ${COLORS.WHITE}`};
