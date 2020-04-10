@@ -4,7 +4,6 @@ import {
     isProjectsLoadedSelector,
 } from '../project/core/projectSelectors'
 import { useDispatch, useSelector } from 'react-redux'
-import { getProjects } from '../project/core/projectActions'
 import RootHeader from './RootHeader'
 import { Box, Slide } from '@material-ui/core'
 import COLORS from '../../constants/colors'
@@ -19,6 +18,7 @@ import EmailNotVerified from '../auth/EmailNotVerified'
 import { authProvider } from '../../firebase'
 import { useTranslation } from 'react-i18next'
 import { redirectToProject } from '../project/utils/redirectToProject'
+import { getProjects } from '../project/core/actions/getProjects'
 
 const useStyles = makeStyles({
     container: {
@@ -69,7 +69,7 @@ const AdminRoot = () => {
                             projects={projects}
                             isProjectsLoaded={isProjectsLoaded}
                             onNewEventClick={() => setNewProjectOpen(true)}
-                            onProjectSelected={projectId =>
+                            onProjectSelected={(projectId) =>
                                 redirectToProject(null, projectId)
                             }
                         />

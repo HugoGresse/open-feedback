@@ -9,13 +9,13 @@ import { fireStoreMainInstance } from '../../firebase'
 import { getProjectSelector } from './projectSelectors'
 import { initProjectApi } from '../../core/setupType/projectApi'
 
-export const getProject = projectId => {
+export const getProject = (projectId) => {
     return (dispatch, getState) => {
         return fireStoreMainInstance
             .collection('projects')
             .doc(projectId)
             .get()
-            .then(projectSnapshot => {
+            .then((projectSnapshot) => {
                 if (projectSnapshot.exists) {
                     const project = projectSnapshot.data()
                     project.id = projectId
@@ -39,7 +39,7 @@ export const getProject = projectId => {
                     })
                 }
             })
-            .catch(err => {
+            .catch((err) => {
                 dispatch({
                     type: GET_PROJECT_ERROR,
                     payload: err.toString(),
@@ -48,21 +48,21 @@ export const getProject = projectId => {
     }
 }
 
-export const setSelectedDate = date => ({
+export const setSelectedDate = (date) => ({
     type: SET_SELECTED_DATE,
     payload: {
         date: date,
     },
 })
 
-export const getVoteResult = talkId => (dispatch, getState) => {
+export const getVoteResult = (talkId) => (dispatch, getState) => {
     return fireStoreMainInstance
         .collection('projects')
         .doc(getProjectSelector(getState()).id)
         .collection('sessionVotes')
         .doc(talkId)
         .get()
-        .then(talkSnapshot => {
+        .then((talkSnapshot) => {
             const talk = {
                 id: talkSnapshot.id,
                 ...talkSnapshot.data(),
@@ -73,7 +73,7 @@ export const getVoteResult = talkId => (dispatch, getState) => {
                 payload: talk,
             })
         })
-        .catch(err => {
+        .catch((err) => {
             dispatch({
                 type: GET_PROJECT_VOTE_RESULT_ERROR,
                 payload: err,
@@ -92,18 +92,38 @@ const getVoteLabelInClosestLanguage = (voteItems, navigatorLang) => {
     const firstPick = navigatorLang
     const secondPick = navigatorLang.split('-')[0]
 
-    return voteItems.map(item => {
+    return voteItems.map((item) => {
         if (!item.languages || item.languages.length === 0) {
             return item
         }
 
+        if (item.languages[firstPick]) {
+            return {
+                ...item,
+                name: item.languages[firstPick],
+            }
+        }
+
+        const matchingSecondPicks = Object.keys(item.languages).filter(
+            (lang) => {
+                const language = lang.split('-')[0]
+                return language && language === secondPick
+            }
+        )
+
+        if (
+            matchingSecondPicks.length > 0 &&
+            item.languages[matchingSecondPicks[0]]
+        ) {
+            return {
+                ...item,
+                name: item.languages[matchingSecondPicks[0]],
+            }
+        }
+
         return {
             ...item,
-            name:
-                item.languages[firstPick] ||
-                item.languages[secondPick] ||
-                item.name ||
-                '',
+            name: item.name || '',
         }
     })
 }

@@ -7,12 +7,7 @@ import Step1 from './Step1'
 import Step2 from './Step2'
 import Step3 from './Step3'
 import { useDispatch } from 'react-redux'
-import {
-    getNewProjectId,
-    getProject,
-    newProject,
-    selectProject,
-} from '../core/projectActions'
+import { getNewProjectId } from '../core/projectUtils'
 import { PROJECT_TYPE_OPENFEEDBACK } from '../../../core/setupType/projectApi'
 import { useTranslation } from 'react-i18next'
 import { sleep } from '../../../utils/sleep'
@@ -26,6 +21,9 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { DialogContent } from '@material-ui/core'
 import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent'
+import { newProject } from '../core/actions/newProject'
+import { selectProject } from '../core/actions/selectUnselectProject'
+import { getProject } from '../core/actions/getProject'
 
 const useStyles = makeStyles({
     container: {

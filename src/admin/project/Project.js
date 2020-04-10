@@ -5,9 +5,12 @@ import {
     getSelectedProjectSelector,
     isProjectsLoadedSelector,
 } from './core/projectSelectors'
-import { selectProject, unselectProject } from './core/projectActions'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 import Layout404 from './layout/Layout404'
+import {
+    selectProject,
+    unselectProject,
+} from './core/actions/selectUnselectProject'
 
 const Project = ({ children, match }) => {
     const dispatch = useDispatch()
