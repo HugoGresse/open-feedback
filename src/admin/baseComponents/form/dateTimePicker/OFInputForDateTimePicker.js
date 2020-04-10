@@ -7,6 +7,7 @@ const OFInputForDateTimePicker = ({
     value,
     onClick,
     onError,
+    onBlur,
     onKeyDown,
     inputRef,
     disabled,
@@ -18,6 +19,7 @@ const OFInputForDateTimePicker = ({
             value={value}
             onClick={onClick}
             onError={onError}
+            onBlur={onBlur}
             onKeyDown={onKeyDown}
             inputRef={inputRef}
             disabled={disabled}

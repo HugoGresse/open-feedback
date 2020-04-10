@@ -7,6 +7,11 @@ import {
 } from '../../firebase'
 import { history } from '../../App'
 import { isEmpty } from 'lodash'
+import {
+    trackLogin,
+    trackSignIn,
+    trackUserId,
+} from '../../utils/analytics/track'
 
 export const didSignIn = (user, error) => {
     return async (dispatch, getState) => {
@@ -79,9 +84,12 @@ export const didSignIn = (user, error) => {
                             phone
                         )
                     }
+                    trackLogin(false)
                 } else {
                     await createUser(user, displayName, photoURL, phone)
+                    trackSignIn(false)
                 }
+                trackUserId(user.uid)
             }
         } else {
             dispatch({
@@ -92,7 +100,7 @@ export const didSignIn = (user, error) => {
     }
 }
 
-export const signOut = () => dispatch => {
+export const signOut = () => (dispatch) => {
     authProvider.signOut().then(() => {
         dispatch({
             type: LOGOUT,
@@ -105,11 +113,8 @@ export const signOut = () => dispatch => {
     })
 }
 
-const getUserFromDB = async uid =>
-    await fireStoreMainInstance
-        .collection('users')
-        .doc(uid)
-        .get()
+const getUserFromDB = async (uid) =>
+    await fireStoreMainInstance.collection('users').doc(uid).get()
 
 const createUser = async (user, displayName, photoURL, phone) => {
     const userField = {
@@ -153,7 +158,7 @@ export const getDataFromProviderDataOrUser = (user, keyToGet) => {
     if (isEmpty(user.providerData)) {
         return ''
     }
-    const providerData = user.providerData.filter(data => data[keyToGet])
+    const providerData = user.providerData.filter((data) => data[keyToGet])
     if (providerData.length > 0) {
         return providerData[0][keyToGet]
     }

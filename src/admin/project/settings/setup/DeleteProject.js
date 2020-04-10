@@ -8,11 +8,11 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteProject } from '../../core/projectActions'
 import { getSelectedProjectIdSelector } from '../../core/projectSelectors'
 import BottomActionLayout from '../../layout/BottomActionLayout'
 import { history } from '../../../../App'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { deleteProject } from '../../core/actions/deleteProject'
 
 const DeleteProject = () => {
     const dispatch = useDispatch()

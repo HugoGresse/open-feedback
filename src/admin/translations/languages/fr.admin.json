@@ -6,7 +6,10 @@
         "errorAnonymous": "Vous ne pouvez pas utiliser l'admin en mode anonyme"
     },
     "baseComponents": {
-        "search": "Recherche"
+        "search": "Recherche",
+        "imageUrl": "URL de l'image",
+        "uploadImage": "Charger l'image",
+        "imageHelp": "L'image doit être au format png ou jpeg et faire moins de 1Mo"
     },
     "common": {
         "back": "Retour",
@@ -15,7 +18,16 @@
         "save": "Sauvegarder",
         "download": "Télécharger",
         "close": "Fermer",
-        "saved": "Sauvegarder"
+        "saved": "Sauvegarder",
+        "preview": "Aperçu",
+        "or": "OU",
+        "dropzone": {
+            "image": {
+                "button": "Charger une image",
+                "indication": "Déposer une image ici",
+                "confirm": "Relacher l'image pour la charger"
+            }
+        }
     },
     "project": {
         "errorProjectsLoad": "Erreur lors du chargement des projets.",
@@ -56,7 +68,10 @@
         "sidebar": {
             "data": "DONNÉES",
             "settings": "RÉGLAGES"
-        }
+        },
+        "faq": "FAQ",
+        "support": "Support",
+        "closeSupport": "Fermer le support"
     },
     "newEvent": {
         "step1": {
@@ -77,7 +92,7 @@
             "create": "Créer un évènement",
             "projectTypeHoverboard": "Hoverboard v2 Firestore",
             "projectTypeHoverboardDetail": "Les présentations / orateurs / calendrier seront récupérés directement au chargement de la page à partir de votre propre base de données Firestore en suivant le modèle de Hoverboard v2.",
-            "projectTypeJsonurl": "JSON link (ex: votre API)",
+            "projectTypeJsonurl": "JSON API URL",
             "projectTypeJsonurlDetail": "Vous fournissez une URL vers un .json que vous hébergerez (sur gist.github.com ou un autre serveur statique) ou une API pour votre propre base de donnée. Le modèle du .json devra correspondre à celui d'OpenFeedback, vous pourrez le vérifier sur l'écran suivant. ",
             "projectTypeOpenfeedback": "Base de donnée OpenFeedback (par défaut)",
             "projectTypeOpenfeedbackDetail": "Vous pouvez saisir manuellement les présentations / orateurs / calendrier sur OpenFeedback. Ils ne seront pas synchronisés avec un autre service. Aucune configuration supplémentaire n'est requise.",
@@ -88,7 +103,7 @@
         "step3": {
             "back": "Retour",
             "firebaseCredentials": "Entrez vos informations d'identification Firebase",
-            "jsonurl": "Quelle est l'URL du json ?",
+            "jsonurl": "Quelle est l'URL de votre API ou du JSON ?",
             "notManaged": "Ce type de projet n'est pas géré, cela ne devrait pas se produire, soit vous n'êtes pas un bon développeur, soit ¯ \\ _ (ツ) _ / ¯",
             "stepTitle": "Créer un nouvel événement (étape 3/3)",
             "submit": "Créer l'événement",
@@ -117,13 +132,13 @@
         "delete": "Supprimer",
         "error": "Vous avez une erreur, cela vous dérangerait-il de la corriger avant de l'enregistrer ? Merci beaucoup.",
         "fieldChipColors": "Couleurs des pastilles",
-        "fieldFaviconUrl": "URL du favicon (.png ou .ico)",
+        "fieldFaviconUrl": "Favicon*",
         "fieldFaviconUrlNotValid": "Le favicon n'est pas une URL valide",
         "fieldFaviconUrlRequired": "Le favicon est obligatoire",
-        "fieldLogoUrl": "URL du logo (environ 100 * 100 px)",
+        "fieldLogoUrl": "Logo*",
         "fieldLogoUrlNotValid": "Le logo n'est pas une URL valide",
         "fieldLogoUrlRequired": "Le logo est obligatoire",
-        "fieldName": "Nom",
+        "fieldName": "Nom*",
         "fieldNameRequired": "Le nom du projet est obligatoire",
         "fieldSchedule": "Lien du calendrier",
         "fieldScheduleNotValid": "Le lien du calendrier n'est pas une URL valide",
@@ -143,9 +158,9 @@
             "projectIdRequired": "L'ID de projet Firebase est obligatoire"
         },
         "json": {
-            "fieldJsonUrl": "URL JSON",
-            "jsonUrlRequired": "L'URL JSON est obligatoire",
-            "jsonUrlValid": "L'URL JSON doit être une URL valide",
+            "fieldJsonUrl": "JSON API URL",
+            "jsonUrlRequired": "L'URL de l'API est obligatoire",
+            "jsonUrlValid": "L'URL de l'API doit être une URL valide",
             "showJsonModel": "Afficher le modèle JSON"
         },
         "setupMode": "Mode de configuration",
@@ -213,8 +228,7 @@
         "cannotChange": "Les orat·eurs·rices ne peuvent pas être modifié·e·s depuis OpenFeedback pour ce projet. Reportez-vous à la configuration de vos services externes pour le faire.",
         "name": "Prénom/nom*",
         "nameRequired": "Le prénom du orateur·rice est obligatoire.",
-        "photoRequired": "L'URL de la photo de l'orateur·rice est requise.",
-        "photoUrl": "URL de la photo",
+        "photoUrl": "Photo",
         "photoValid": "L'URL de la photo n'est pas une URL valide.",
         "social": "Page de profil sur un réseau social",
         "socialValid": "L'URL du réseau social n'est pas une URL valide.",

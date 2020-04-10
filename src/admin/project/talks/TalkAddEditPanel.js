@@ -1,21 +1,22 @@
 import React, { useState } from 'react'
 import { Field, Form, Formik } from 'formik'
 import { object, string, array } from 'yup'
-import SidePanelLayout from '../../baseComponents/layouts/SidePanelLayout'
+import SidePanelLayout from '../../baseComponents/layouts/sidepanel/SidePanelLayout'
 import OFButton from '../../baseComponents/button/OFButton'
 import OFFormControl from '../../baseComponents/form/formControl/OFFormControl'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import LuxonUtils from '@date-io/luxon'
 import OFAutoComplete from '../../baseComponents/form/autoComplete/OFAutoComplete'
 import OFFormControlInputFormiked from '../../baseComponents/form/formControl/OFFormControlInputFormiked'
-import OFDateTimePicker from '../../baseComponents/form/dateTimePicker/OFDateTimePicker'
 import SpeakerAddEditPanel from '../speakers/SpeakerAddEditPanel'
 import { useTranslation } from 'react-i18next'
 import { DateTime } from 'luxon'
+import TalkStartEndTimeFields from './TalkStartEndTimeFields'
 
 const TalkAddEditPanel = ({
     isOpen,
     talk,
+    projectVoteStartTime,
     existingSpeakers,
     existingTags,
     existingTracks,
@@ -56,8 +57,12 @@ const TalkAddEditPanel = ({
                                 title: '',
                                 trackTitle: '',
                                 tags: [],
-                                startTime: DateTime.local().toISO(),
-                                endTime: DateTime.local().toISO(),
+                                startTime:
+                                    projectVoteStartTime ||
+                                    DateTime.local().toISO(),
+                                endTime:
+                                    projectVoteStartTime ||
+                                    DateTime.local().toISO(),
                                 speakers: [],
                             }
                         }
@@ -80,25 +85,7 @@ const TalkAddEditPanel = ({
                                     isSubmitting={isSubmitting}
                                 />
 
-                                <OFFormControl
-                                    name={t('talks.fieldStartTime')}
-                                    fieldName="startTime">
-                                    <Field
-                                        name="startTime"
-                                        format="FFF"
-                                        component={OFDateTimePicker}
-                                    />
-                                </OFFormControl>
-
-                                <OFFormControl
-                                    name={t('talks.fieldEndTime')}
-                                    fieldName="endTime">
-                                    <Field
-                                        name="endTime"
-                                        format="FFF"
-                                        component={OFDateTimePicker}
-                                    />
-                                </OFFormControl>
+                                <TalkStartEndTimeFields />
 
                                 <OFFormControl
                                     name={t('talks.fieldTrack')}
@@ -187,7 +174,7 @@ const TalkAddEditPanel = ({
                                         shouldContinueAfterSubmit
                                     ) => {
                                         return onSpeakerAdd(speaker).then(
-                                            speaker => {
+                                            (speaker) => {
                                                 if (
                                                     !shouldContinueAfterSubmit
                                                 ) {

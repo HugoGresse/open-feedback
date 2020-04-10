@@ -19,3 +19,5 @@ export const customBackground = () => (
 export const big = () => <OFButton style={{ type: 'big' }}>Cancel</OFButton>
 
 export const small = () => <OFButton style={{ type: 'small' }}>Cancel</OFButton>
+
+export const loading = () => <OFButton loading>Submitting...</OFButton>

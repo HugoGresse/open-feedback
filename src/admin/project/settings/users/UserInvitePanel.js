@@ -1,4 +1,4 @@
-import SidePanelLayout from '../../../baseComponents/layouts/SidePanelLayout'
+import SidePanelLayout from '../../../baseComponents/layouts/sidepanel/SidePanelLayout'
 import { Form, Formik } from 'formik'
 import OFFormControlInputFormiked from '../../../baseComponents/form/formControl/OFFormControlInputFormiked'
 import OFButton from '../../../baseComponents/button/OFButton'
@@ -22,7 +22,7 @@ const UserInvitePanel = ({ isOpen, onClose, onSubmit }) => {
                 initialValues={{
                     email: '',
                 }}
-                onSubmit={values => onSubmit(values.email)}>
+                onSubmit={(values) => onSubmit(values.email)}>
                 {({ isSubmitting }) => (
                     <Form method="POST">
                         <OFFormControlInputFormiked

@@ -12,9 +12,9 @@ import { getLanguagesSelector } from '../../core/projectSelectors'
 import { CircularProgress } from '@material-ui/core'
 import FormikAutoSave from '../../../baseComponents/form/autoSave/FormikAutoSave'
 import AutoSaveNotice from '../../../baseComponents/layouts/AutoSaveNotice'
-import { editProject } from '../../core/projectActions'
 import Box from '@material-ui/core/Box'
 import langMapArray from '../../utils/convertLangMapArray'
+import { editProject } from '../../core/actions/editProject'
 
 const SettingsForm = () => {
     const dispatch = useDispatch()
@@ -28,7 +28,7 @@ const SettingsForm = () => {
                 languages: array().of(string()),
             })}
             initialValues={{
-                languages: initialLanguages.map(tag => ({
+                languages: initialLanguages.map((tag) => ({
                     ...LangMap[tag],
                     tag,
                 })),
@@ -49,7 +49,11 @@ const SettingsForm = () => {
                                     name="languages"
                                     value={values.languages}
                                     dataArray={langMapArray}
-                                    keyToDisplay="englishName"
+                                    keysToDisplay={[
+                                        'nativeName',
+                                        'englishName',
+                                        'tag',
+                                    ]}
                                     multiple={true}
                                     component={OFAutoComplete}
                                 />
@@ -58,9 +62,9 @@ const SettingsForm = () => {
                     </Grid>
 
                     <FormikAutoSave
-                        onSave={values => {
+                        onSave={(values) => {
                             const languages = values.languages.map(
-                                value => value.tag
+                                (value) => value.tag
                             )
                             return dispatch(editProject({ languages }))
                         }}

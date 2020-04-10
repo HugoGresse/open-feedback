@@ -1,26 +1,23 @@
-import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core'
+import React from 'react'
 import SpeakerItem from './SpeakerItem'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
-const styles = () => ({
+const useStyles = makeStyles(() => ({
     speakers: {
         display: 'flex',
-        alignItems: 'center'
-    }
-})
+        alignItems: 'center',
+    },
+}))
 
-class SpeakerList extends Component {
-    render() {
-        const { speakers, classes, size = 'medium' } = this.props
-
-        return (
-            <div className={classes.speakers}>
-                {speakers.map((speaker, key) => (
-                    <SpeakerItem key={key} {...speaker} size={size} />
-                ))}
-            </div>
-        )
-    }
+const SpeakerList = ({ speakers, size = 'medium' }) => {
+    const classes = useStyles()
+    return (
+        <div className={classes.speakers}>
+            {speakers.map((speaker, key) => (
+                <SpeakerItem key={key} {...speaker} size={size} />
+            ))}
+        </div>
+    )
 }
 
-export default withStyles(styles)(SpeakerList)
+export default SpeakerList

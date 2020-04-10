@@ -25,6 +25,7 @@ import {
     VOTE_STATUS_DELETED,
     VOTE_TYPE_TEXT,
 } from '../../core/contants'
+import { trackUnvote, trackVote } from '../utils/track'
 
 export const voteFor = (talkId, voteItem, data, translate) => {
     return (dispatch, getState) => {
@@ -41,7 +42,8 @@ export const voteFor = (talkId, voteItem, data, translate) => {
             })
         }
 
-        const projectId = getProjectSelector(getState()).id
+        const project = getProjectSelector(getState())
+        const projectId = project.id
 
         const existingVote = getUserVotesByTalkAndVoteItemSelector(getState())[
             voteItem.id
@@ -117,8 +119,9 @@ export const voteFor = (talkId, voteItem, data, translate) => {
                         voteId: id,
                     },
                 })
+                trackVote(project.name, projectId, voteItem.type)
             })
-            .catch(error => {
+            .catch((error) => {
                 dispatch({
                     type: ADD_VOTE_ERROR,
                     payload: {
@@ -152,6 +155,8 @@ export const removeVote = (voteToDelete, translate) => {
             return
         }
 
+        const project = getProjectSelector(getState())
+
         dispatch({
             type: REMOVE_VOTE_BEFORE_SUCCESS,
             payload: voteToDelete,
@@ -182,8 +187,9 @@ export const removeVote = (voteToDelete, translate) => {
                     type: REMOVE_VOTE_SUCCESS,
                     payload: voteToDelete,
                 })
+                trackUnvote(project.name, project.id)
             })
-            .catch(error => {
+            .catch((error) => {
                 dispatch({
                     type: ADD_VOTE_ERROR,
                     payload: {
@@ -243,7 +249,7 @@ export const updateVote = (vote, data, translate) => (dispatch, getState) => {
                 },
             })
         })
-        .catch(error => {
+        .catch((error) => {
             dispatch({
                 type: UPDATE_VOTE_ERROR,
                 payload: {
@@ -262,9 +268,9 @@ export const getVotes = () => {
             .collection('userVotes')
             .where('userId', '==', getUserSelector(getState()).uid)
             .get()
-            .then(voteSnapshot => {
+            .then((voteSnapshot) => {
                 const votes = {}
-                voteSnapshot.forEach(doc => {
+                voteSnapshot.forEach((doc) => {
                     votes[doc.id] = doc.data()
                     votes[doc.id].id = doc.id
                 })
@@ -273,7 +279,7 @@ export const getVotes = () => {
                     payload: votes,
                 })
             })
-            .catch(error => {
+            .catch((error) => {
                 dispatch({
                     type: GET_USER_VOTES_ERROR,
                     payload: error,

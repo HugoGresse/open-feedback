@@ -16,14 +16,15 @@ const OFDateTimePicker = ({ field, form, ...other }) => {
             ampm={false}
             helperText={currentError}
             error={Boolean(currentError)}
-            onError={error => {
+            onError={(error) => {
                 // handle as a side effect
                 if (error !== currentError) {
                     form.setFieldError(field.name, error)
                 }
             }}
+            onBlur={field.onBlur}
             TextFieldComponent={OFInputForDateTimePicker}
-            onChange={date => form.setFieldValue(field.name, date, false)}
+            onChange={(date) => form.setFieldValue(field.name, date, false)}
             {...other}
         />
     )

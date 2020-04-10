@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import i18n from './translations/i18n'
-import { setFavicon } from '../feedback/layout/utils'
+import { setFavicon } from '../utils/dom'
 import Login from './auth/Login'
 import { Route, Switch, useParams } from 'react-router-dom'
 import AdminRoot from './root/AdminRoot'
@@ -9,6 +9,7 @@ import Notifications from './notification/Notifications'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
 import ProjectApp from './project/ProjectApp'
 import Helmet from 'react-helmet/es/Helmet'
+import { useSmallchat } from './project/utils/smallchat'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -29,6 +30,8 @@ const innerTheme = createMuiTheme({
 })
 
 const AdminApp = () => {
+    useSmallchat()
+
     useEffect(() => {
         setFavicon('/favicon-root.ico')
     }, [])
@@ -47,7 +50,7 @@ const AdminApp = () => {
 
                         <Route
                             path="/admin/:projectId"
-                            render={props => (
+                            render={(props) => (
                                 <ProjectApp
                                     match={props.match}
                                     key={projectId}

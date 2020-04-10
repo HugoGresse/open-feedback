@@ -10,7 +10,8 @@ import bulleImage from './images/bulle.png'
 import hoverboard from './images/hoverboard.png'
 import { useTranslation } from 'react-i18next'
 import Box from '@material-ui/core/Box'
-import BlockTitle from './component/BlockTitle'
+import ScrollableAnchor from 'react-scrollable-anchor'
+import Typography from '@material-ui/core/Typography'
 
 const InnerWrapperResponsive = styled(InnerWrapper)`
     display: flex;
@@ -77,36 +78,44 @@ const Header = () => {
 
     return (
         <Box bgcolor="#eee" padding={4}>
-            <InnerWrapperResponsive id="howitworks">
-                <Box>
-                    <DemoContainer>
-                        <img src={adminImage} alt="Demo admin" />
-                    </DemoContainer>
-                </Box>
-                <BoxRight>
-                    <BlockTitle>{t('home.howItWorks')}</BlockTitle>
+            <ScrollableAnchor id="howitworks">
+                <InnerWrapperResponsive>
+                    <Box>
+                        <DemoContainer>
+                            <img src={adminImage} alt="Demo admin" />
+                        </DemoContainer>
+                    </Box>
+                    <BoxRight>
+                        <Typography variant="h2" style={{ marginBottom: 32 }}>
+                            {t('home.howItWorks')}
+                        </Typography>
 
-                    <List>
-                        <li>
-                            <img src={newImage} alt="" />
-                            {t('home.3clicks')}
-                        </li>
-                        <li>
-                            <img src={qrcodeImage} alt="" />
-                            {t('home.scan')}
-                        </li>
-                        <li>
-                            <img src={bulleImage} alt="" />
-                            {t('home.vote')}
-                        </li>
-                    </List>
+                        <List>
+                            <li>
+                                <img src={newImage} alt="" />
+                                {t('home.3clicks')}
+                            </li>
+                            <li>
+                                <img src={qrcodeImage} alt="" />
+                                {t('home.scan')}
+                            </li>
+                            <li>
+                                <img src={bulleImage} alt="" />
+                                {t('home.vote')}
+                            </li>
+                        </List>
 
-                    <CompatibilityText display="flex" alignItems="center">
-                        {t('home.compatibleHoverboard')}
-                        <img height="40" src={hoverboard} alt="hoverboard" />
-                    </CompatibilityText>
-                </BoxRight>
-            </InnerWrapperResponsive>
+                        <CompatibilityText display="flex" alignItems="center">
+                            {t('home.compatibleHoverboard')}
+                            <img
+                                height="40"
+                                src={hoverboard}
+                                alt="hoverboard"
+                            />
+                        </CompatibilityText>
+                    </BoxRight>
+                </InnerWrapperResponsive>
+            </ScrollableAnchor>
         </Box>
     )
 }

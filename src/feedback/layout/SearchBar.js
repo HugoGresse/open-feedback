@@ -8,9 +8,8 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import InputBase from '@material-ui/core/InputBase'
 import { grey } from '@material-ui/core/colors'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     container: {
-        marginTop: 10,
         backgroundColor:
             theme.palette.type === 'dark'
                 ? theme.palette.background.paper
@@ -48,7 +47,7 @@ const SearchBar = () => {
                     className={classes.input}
                     placeholder={t('searchPlaceholder')}
                     fullWidth
-                    onChange={event =>
+                    onChange={(event) =>
                         dispatch(setTalksFilter(event.target.value))
                     }
                     startAdornment={

@@ -12,7 +12,6 @@ import {
     USERS_SET_FILTER,
 } from './usersActionTypes'
 import { getPendingInvitesSelector, getUsersSelector } from './usersSelectors'
-import { editProject } from '../../core/projectActions'
 import {
     getMemberIds,
     getSelectedProjectIdSelector,
@@ -22,8 +21,9 @@ import { getUserSelector } from '../../../auth/authSelectors'
 import { getDataFromProviderDataOrUser } from '../../../auth/authActions'
 import { history } from '../../../../App'
 import { addNotification } from '../../../notification/notifcationActions'
+import { editProject } from '../../core/actions/editProject'
 
-export const getUserDetails = uid => (dispatch, getState) => {
+export const getUserDetails = (uid) => (dispatch, getState) => {
     const usersDetails = getUsersSelector(getState())
 
     if (usersDetails && usersDetails[uid]) {
@@ -35,7 +35,7 @@ export const getUserDetails = uid => (dispatch, getState) => {
         .collection('users')
         .doc(uid)
         .get()
-        .then(snapshot => {
+        .then((snapshot) => {
             if (snapshot.exists) {
                 dispatch({
                     type: GET_USER_DETAILS_SUCCESS,
@@ -51,7 +51,7 @@ export const getUserDetails = uid => (dispatch, getState) => {
                 )
             }
         })
-        .catch(error => {
+        .catch((error) => {
             // eslint-disable-next-line no-console
             console.error(error)
             dispatch(
@@ -64,21 +64,21 @@ export const getUserDetails = uid => (dispatch, getState) => {
         })
 }
 
-export const removeUserFromProject = userId => (dispatch, getState) => {
+export const removeUserFromProject = (userId) => (dispatch, getState) => {
     const currentMembers = getMemberIds(getState())
 
     return dispatch(
         editProject({
-            members: currentMembers.filter(memberId => memberId !== userId),
+            members: currentMembers.filter((memberId) => memberId !== userId),
         })
     )
 }
 
-export const inviteUser = userEmail => (dispatch, getState) => {
+export const inviteUser = (userEmail) => (dispatch, getState) => {
     const pendingInvites = getPendingInvitesSelector(getState())
     if (
         pendingInvites.filter(
-            invite => invite.destinationUserInfo === userEmail
+            (invite) => invite.destinationUserInfo === userEmail
         ).length > 0
     ) {
         dispatch(
@@ -110,7 +110,7 @@ export const inviteUser = userEmail => (dispatch, getState) => {
     return fireStoreMainInstance
         .collection('projects-invites')
         .add(invite)
-        .then(docRef => {
+        .then((docRef) => {
             dispatch(
                 addNotification({
                     type: 'success',
@@ -128,7 +128,7 @@ export const inviteUser = userEmail => (dispatch, getState) => {
                 },
             })
         })
-        .catch(error => {
+        .catch((error) => {
             // eslint-disable-next-line no-console
             console.error(error)
             dispatch(
@@ -142,18 +142,18 @@ export const inviteUser = userEmail => (dispatch, getState) => {
         })
 }
 
-export const setUsersFilter = filterValue => ({
+export const setUsersFilter = (filterValue) => ({
     type: USERS_SET_FILTER,
     payload: filterValue.trim(),
 })
 
 let stopListenForInvite
-export const listenForInvite = inviteId => dispatch => {
+export const listenForInvite = (inviteId) => (dispatch) => {
     stopListenForInvite = fireStoreMainInstance
         .collection('projects-invites')
         .doc(inviteId)
         .onSnapshot(
-            snapshot => {
+            (snapshot) => {
                 if (snapshot.exists) {
                     const data = snapshot.data()
                     dispatch({
@@ -172,7 +172,7 @@ export const listenForInvite = inviteId => dispatch => {
                     )
                 }
             },
-            error => {
+            (error) => {
                 // eslint-disable-next-line no-console
                 console.error(error)
                 dispatch(
@@ -197,9 +197,9 @@ export const getPendingInvites = () => (dispatch, getState) => {
         .where('projectId', '==', projectId)
         .where('status', 'in', ['new', 'emailSent', 'error'])
         .get()
-        .then(querySnapshot => {
+        .then((querySnapshot) => {
             const pendingInvite = []
-            querySnapshot.forEach(snapshot => {
+            querySnapshot.forEach((snapshot) => {
                 pendingInvite.push({
                     id: snapshot.id,
                     ...snapshot.data(),
@@ -210,7 +210,7 @@ export const getPendingInvites = () => (dispatch, getState) => {
                 payload: pendingInvite,
             })
         })
-        .catch(error => {
+        .catch((error) => {
             // eslint-disable-next-line no-console
             console.error(error)
             dispatch(
@@ -224,7 +224,7 @@ export const getPendingInvites = () => (dispatch, getState) => {
         })
 }
 
-export const cancelInvite = inviteId => dispatch => {
+export const cancelInvite = (inviteId) => (dispatch) => {
     fireStoreMainInstance
         .collection('projects-invites')
         .doc(inviteId)
@@ -235,7 +235,7 @@ export const cancelInvite = inviteId => dispatch => {
                 payload: inviteId,
             })
         )
-        .catch(error => {
+        .catch((error) => {
             // eslint-disable-next-line no-console
             console.error(error)
             dispatch(

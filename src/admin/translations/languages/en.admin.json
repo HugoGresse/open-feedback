@@ -6,7 +6,10 @@
         "errorAnonymous": "You cannot use the admin in anonymous mode"
     },
     "baseComponents": {
-        "search": "Search"
+        "search": "Search",
+        "imageUrl": "Image URL",
+        "uploadImage": "Upload image",
+        "imageHelp": "Image must be a jpeg or png image, less than 1MB"
     },
     "common": {
         "back": "Back",
@@ -15,7 +18,16 @@
         "save": "Save",
         "saved": "Saved",
         "download": "Download",
-        "close": "Close"
+        "close": "Close",
+        "preview": "Preview",
+        "or": "OR",
+        "dropzone": {
+            "image": {
+                "button": "Upload image",
+                "indication": "Drag & drop image here",
+                "confirm": "Drop the image here to upload it instantly"
+            }
+        }
     },
     "project": {
         "errorProjectsLoad": "Unable to load all projects.",
@@ -56,7 +68,10 @@
         "sidebar": {
             "data": "DATA",
             "settings": "SETTINGS"
-        }
+        },
+        "faq": "FAQ",
+        "support": "Support",
+        "closeSupport": "Close support"
     },
     "newEvent": {
         "step1": {
@@ -77,7 +92,7 @@
             "create": "Create event",
             "projectTypeHoverboard": "Hoverboard v2 Firestore",
             "projectTypeHoverboardDetail": "The talks/speakers/schedule will be retrieved directly on page load from your own Firestore database that follow Hoverboard v2 model.",
-            "projectTypeJsonurl": "JSON link (ex: your API)",
+            "projectTypeJsonurl": "JSON API URL",
             "projectTypeJsonurlDetail": "Provide an url to a .json that you’ll either host (on gist.github.com or another static server) or a dynamic answer from your own database/api. The json model will need to match OpenFeedback one, you’ll be able to check it on the next screen.",
             "projectTypeOpenfeedback": "OpenFeedback Database (default)",
             "projectTypeOpenfeedbackDetail": "You can manually enter the talks/speakers/schedule on OpenFeedback. It will not be in sync with another service if you are using one. No additional configuration is required.",
@@ -88,7 +103,7 @@
         "step3": {
             "back": "Back",
             "firebaseCredentials": "Enter your Firebase credentials",
-            "jsonurl": "What's the url of the json?",
+            "jsonurl": "What's the URL of the API or JSON file?",
             "notManaged": "This project type is not managed, this should not happen, either your not a good dev, or ¯\\_(ツ)_/¯",
             "stepTitle": "Create a new event (step 3/3)",
             "submit": "Create event",
@@ -108,7 +123,7 @@
         "moderation": "Moderation",
         "settingEvent": "Event & Theme",
         "settingVotingform": "Voting Form",
-        "settingSetup": "Setup",
+        "settingSetup": "Settings",
         "settingUsers": "Users"
     },
     "settingsEvent": {
@@ -117,13 +132,13 @@
         "delete": "Delete",
         "error": "You have some error, would you mind fixing it before saving? Much appreciated.",
         "fieldChipColors": "Chip Colors",
-        "fieldFaviconUrl": "Favicon url (.png or .ico)",
+        "fieldFaviconUrl": "Favicon*",
         "fieldFaviconUrlNotValid": "The favicon is not a valid url",
         "fieldFaviconUrlRequired": "The favicon is required",
-        "fieldLogoUrl": "Logo url (around 100*100px)",
+        "fieldLogoUrl": "Logo*",
         "fieldLogoUrlNotValid": "The logo is not a valid url",
         "fieldLogoUrlRequired": "The logo is required",
-        "fieldName": "Name",
+        "fieldName": "Name*",
         "fieldNameRequired": "The project name is required",
         "fieldSchedule": "Schedule link",
         "fieldScheduleNotValid": "The schedule link is not a valid url",
@@ -143,9 +158,9 @@
             "projectIdRequired": "The Firebase project ID is required"
         },
         "json": {
-            "fieldJsonUrl": "JSON URL",
-            "jsonUrlRequired": "The JSON URL is required",
-            "jsonUrlValid": "The JSON URL must be a valid url",
+            "fieldJsonUrl": "JSON API URL",
+            "jsonUrlRequired": "The API URL is required",
+            "jsonUrlValid": "The API URL must be a valid url",
             "showJsonModel": "Show JSON model"
         },
         "setupMode": "Setup Mode",
@@ -213,8 +228,7 @@
         "cannotChange": "Speakers cannot be changed from OpenFeedback itself for this project. Refer to your external services configuration to do so.",
         "name": "Name*",
         "nameRequired": "The speaker name is required.",
-        "photoRequired": "The speaker photo url is required.",
-        "photoUrl": "Photo url",
+        "photoUrl": "Photo",
         "photoValid": "The photo url is not a valid url.",
         "social": "Social profil page",
         "socialValid": "The social url is not a valid url.",

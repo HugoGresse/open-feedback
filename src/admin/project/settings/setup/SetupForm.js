@@ -10,9 +10,9 @@ import {
     PROJECT_TYPE_OPENFEEDBACK,
 } from '../../../../core/setupType/projectApi'
 import SetupHoverboardv2 from '../../setupTypeForms/SetupHoverboardv2'
-import { editProject } from '../../core/projectActions'
 import { useTranslation } from 'react-i18next'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
+import { editProject } from '../../core/actions/editProject'
 
 const SetupForm = () => {
     const dispatch = useDispatch()
@@ -36,7 +36,7 @@ const SetupForm = () => {
                         apiKey: project.config.apiKey,
                         databaseURL: project.config.databaseURL,
                     }}
-                    onSubmit={values =>
+                    onSubmit={(values) =>
                         dispatch(
                             editProject({
                                 config: values,
@@ -55,7 +55,7 @@ const SetupForm = () => {
                     initialValues={{
                         jsonUrl: project.config.jsonUrl,
                     }}
-                    onSubmit={values =>
+                    onSubmit={(values) =>
                         dispatch(
                             editProject({
                                 config: values,
