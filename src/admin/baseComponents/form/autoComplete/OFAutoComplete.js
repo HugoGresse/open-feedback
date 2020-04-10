@@ -12,8 +12,24 @@ const AutoCompleteInput = styled(({ forwardedRef2, ...props }) => (
     padding-left: 4px;
 `
 
-const OFAutoComplete = ({ field, form, dataArray, keyToDisplay, ...other }) => {
-    const getLabel = option => (keyToDisplay ? option[keyToDisplay] : option)
+const OFAutoComplete = ({
+    field,
+    form,
+    dataArray,
+    keyToDisplay,
+    keysToDisplay,
+    ...other
+}) => {
+    const getLabel = (option) => {
+        if (keyToDisplay) {
+            return option[keyToDisplay]
+        }
+
+        if (keysToDisplay) {
+            return keysToDisplay.map((key) => option[key]).join(' - ')
+        }
+        return option
+    }
     let inputChangeValue = null
 
     return (
@@ -21,12 +37,8 @@ const OFAutoComplete = ({ field, form, dataArray, keyToDisplay, ...other }) => {
             {...other}
             options={dataArray}
             value={field.value}
-            getOptionLabel={option => getLabel(option)}
-            getOptionSelected={(a, b) => {
-                return keyToDisplay
-                    ? a[keyToDisplay] === b[keyToDisplay]
-                    : a === b
-            }}
+            getOptionLabel={(option) => getLabel(option)}
+            getOptionSelected={(a, b) => getLabel(a) === getLabel(b)}
             id={field.name}
             disabled={!!form.isSubmitting}
             defaultValue={form.initialValues[field.name]}
@@ -66,7 +78,7 @@ const OFAutoComplete = ({ field, form, dataArray, keyToDisplay, ...other }) => {
                     />
                 ))
             }
-            renderInput={params => {
+            renderInput={(params) => {
                 // eslint-disable-next-line no-unused-vars
                 const {
                     InputProps,
@@ -82,7 +94,7 @@ const OFAutoComplete = ({ field, form, dataArray, keyToDisplay, ...other }) => {
                         {...otherInputProps}
                         inputProps={inputProps}
                         forwardedRef2={ref}
-                        onKeyPress={ev => {
+                        onKeyPress={(ev) => {
                             if (ev.key === 'Enter') {
                                 ev.preventDefault()
                             }

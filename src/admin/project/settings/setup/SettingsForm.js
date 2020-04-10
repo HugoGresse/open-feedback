@@ -49,7 +49,11 @@ const SettingsForm = () => {
                                     name="languages"
                                     value={values.languages}
                                     dataArray={langMapArray}
-                                    keyToDisplay="englishName"
+                                    keysToDisplay={[
+                                        'nativeName',
+                                        'englishName',
+                                        'tag',
+                                    ]}
                                     multiple={true}
                                     component={OFAutoComplete}
                                 />
