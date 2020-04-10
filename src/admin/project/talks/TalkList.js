@@ -21,9 +21,11 @@ import { addNotification } from '../../notification/notifcationActions'
 import TalkAddEditPanel from './TalkAddEditPanel'
 import { addSpeaker } from '../../../core/speakers/speakerActions'
 import { useTranslation } from 'react-i18next'
+import { getStartTimeSelector } from '../core/projectSelectors'
 
 const TalkList = () => {
     const dispatch = useDispatch()
+    const projectVoteStartTime = useSelector(getStartTimeSelector)
     const talks = useSelector(getFilteredTalksSelector)
     const speakersMap = useSelector(getSpeakersListSelector)
     const speakersArray = useSelector(getSpeakersAsArraySelector)
@@ -59,12 +61,12 @@ const TalkList = () => {
         setSidePanelOpen(true)
     }
 
-    const onEditTalkClicked = talk => {
+    const onEditTalkClicked = (talk) => {
         if (talkNotReadableCheck()) return
         setEditTalk({
             ...talk,
             speakers: talk
-                ? talk.speakers.map(id =>
+                ? talk.speakers.map((id) =>
                       speakersMap[id] ? speakersMap[id] : { id: id, name: id }
                   )
                 : [],
@@ -72,30 +74,30 @@ const TalkList = () => {
         setSidePanelOpen(true)
     }
 
-    const onRemoveTalkClicked = talk => {
+    const onRemoveTalkClicked = (talk) => {
         if (talkNotReadableCheck()) return
         dispatch(removeTalk(talk))
     }
 
-    const maybeCloseSidePanel = shouldContinueAfterSubmit => {
+    const maybeCloseSidePanel = (shouldContinueAfterSubmit) => {
         if (shouldContinueAfterSubmit) {
             return
         }
         setSidePanelOpen(false)
     }
 
-    const reformatTalk = talk => ({
+    const reformatTalk = (talk) => ({
         ...talk,
         startTime: DateTime.fromISO(talk.startTime).toISO(),
         endTime: DateTime.fromISO(talk.endTime).toISO(),
-        speakers: talk.speakers.map(speaker => speaker.id),
+        speakers: talk.speakers.map((speaker) => speaker.id),
     })
 
     return (
         <Grid container>
             <OFListHeader
                 filterValue={filter}
-                filterChange={value => dispatch(setTalksFilter(value))}
+                filterChange={(value) => dispatch(setTalksFilter(value))}
                 buttonProcessing={false}
                 buttonClick={() => onAddTalkClicked()}
                 buttonText={t('talks.addTalks')}
@@ -103,12 +105,13 @@ const TalkList = () => {
 
             <TalkAddEditPanel
                 isOpen={sidePanelOpen}
+                projectVoteStartTime={projectVoteStartTime}
                 talk={editingTalk}
                 existingTags={tags}
                 existingTracks={tracks}
                 existingSpeakers={speakersArray}
                 onClose={() => maybeCloseSidePanel()}
-                onSpeakerAdd={speaker => dispatch(addSpeaker(speaker))}
+                onSpeakerAdd={(speaker) => dispatch(addSpeaker(speaker))}
                 onSubmit={(talk, shouldContinueAfterSubmit) => {
                     const fixedTalk = reformatTalk(talk)
                     if (editingTalk) {
@@ -122,14 +125,14 @@ const TalkList = () => {
                 }}
             />
 
-            {talks.map(talk => (
+            {talks.map((talk) => (
                 <TalkListItem
                     item={talk}
                     key={talk.id}
                     speakers={speakersMap}
                     onEdit={onEditTalkClicked}
                     onRemove={onRemoveTalkClicked}
-                    onSpeakerClicked={speakerName =>
+                    onSpeakerClicked={(speakerName) =>
                         dispatch(setTalksFilter(speakerName))
                     }
                 />
