@@ -70,7 +70,7 @@
         "reselect": "^4.0.0",
         "styled-components": "^5.1.0",
         "styled-system": "^5.1.5",
-        "wait-on": "^4.0.1",
+        "wait-on": "^4.0.2",
         "yup": "^0.28.3"
     },
     "eslintConfig": {
