@@ -24,9 +24,10 @@ const RestrictVoteRangeFields = ({ isOpen }) => {
         }
     }, [
         startField.value,
-        endHelpers.setValue,
-        endMeta.touched,
         startMeta.initialValue,
+        endHelpers,
+        endMeta.touched,
+        endField.value,
     ])
 
     return (

@@ -19,7 +19,13 @@ const TalkStartEndTimeFields = () => {
         ) {
             endHelpers.setValue(startField.value)
         }
-    }, [startField.value, endHelpers, startMeta.initialValue, endMeta])
+    }, [
+        startField.value,
+        endHelpers,
+        startMeta.initialValue,
+        endMeta,
+        endField.value,
+    ])
 
     const { t } = useTranslation()
 

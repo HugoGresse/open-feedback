@@ -35,10 +35,10 @@ export const editProject = (projectData) => (dispatch, getState) => {
 
             dispatch({
                 type: EDIT_PROJECT_SUCCESS,
-                payload: projectData,
+                payload: fixedProject,
             })
             dispatch(
-                deleteOldFilesIfNewValueDiffer(currentProject, projectData, [
+                deleteOldFilesIfNewValueDiffer(currentProject, fixedProject, [
                     'favicon',
                     'logoSmall',
                 ])
