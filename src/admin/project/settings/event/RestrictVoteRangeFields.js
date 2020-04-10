@@ -19,7 +19,7 @@ const RestrictVoteRangeFields = ({ isOpen }) => {
         if (startField.value !== startMeta.initialValue && !endMeta.touched) {
             endHelpers.setValue(startField.value)
         }
-    }, [startField.value])
+    }, [startField.value, endHelpers, endMeta.touched, startMeta.initialValue])
 
     return (
         <Collapse in={isOpen}>
