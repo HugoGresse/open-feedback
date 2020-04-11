@@ -15,6 +15,7 @@ const App = () => {
         <Router history={history}>
             <Switch>
                 <Route exact path="/" component={SuspendedRootApp} />
+                <Route exact path="/l/:page" component={SuspendedRootApp} />
                 <Redirect strict exact from="/admin" to="/admin/" />
                 <Route path="/admin/" component={SuspendedAdminApp} />
                 <Route path="/:projectId" component={FeedbackApp} />
