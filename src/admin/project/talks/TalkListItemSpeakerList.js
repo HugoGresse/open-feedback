@@ -21,7 +21,11 @@ const TalkListItemSpeakerList = ({
     const classes = useStyles()
     const { t } = useTranslation()
 
-    return speakersIds.map(speakerId => {
+    if (!speakersIds) {
+        return ''
+    }
+
+    return speakersIds.map((speakerId) => {
         if (speakers[speakerId]) {
             return (
                 <Chip
