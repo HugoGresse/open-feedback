@@ -53,7 +53,7 @@
         "langmap": "0.0.16",
         "lodash": "4.17.15",
         "luxon": "^1.23.0",
-        "polished": "^3.6.0",
+        "polished": "^3.6.2",
         "prop-types": "latest",
         "qrcode.react": "^1.0.0",
         "react": "^16.13.1",
