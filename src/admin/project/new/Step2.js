@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import NewProjectLayout from './NewProjectLayout'
 import { object, string } from 'yup'
 import { Field, Form, Formik } from 'formik'
