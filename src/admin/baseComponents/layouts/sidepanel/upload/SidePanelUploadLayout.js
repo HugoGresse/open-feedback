@@ -9,6 +9,7 @@ import COLORS from '../../../../../constants/colors'
 import SidePanelUploadForm from './SidePanelUploadForm'
 import { uploadImage } from '../../../../project/utils/storage/uploadImage'
 import { useDispatch } from 'react-redux'
+import { addNotification } from '../../../../notification/notifcationActions'
 
 const useStyles = makeStyles(() => ({
     imageButton: {
@@ -67,20 +68,32 @@ const SidePanelUploadLayout = ({
     const [uploading, setUploading] = useState(false)
 
     const uploadAndSave = async () => {
-        if (upload) {
-            setUploading(true)
-            const imageUrl = await dispatch(
-                uploadImage(upload.file, finalImageWidth, finalImageHeight)
+        try {
+            if (upload) {
+                setUploading(true)
+                const imageUrl = await dispatch(
+                    uploadImage(upload.file, finalImageWidth, finalImageHeight)
+                )
+
+                setUploading(false)
+                if (!imageUrl) {
+                    return
+                }
+                helpers.setValue(imageUrl)
+                setUpload(null)
+            }
+
+            setOpen(false)
+        } catch (error) {
+            dispatch(
+                addNotification({
+                    type: 'error',
+                    i18nkey: 'common.dropzone.image.failUpload',
+                    message: error.message,
+                })
             )
             setUploading(false)
-            if (!imageUrl) {
-                return
-            }
-            helpers.setValue(imageUrl)
-            setUpload(null)
         }
-
-        setOpen(false)
     }
 
     const onDrop = useCallback((acceptedFiles) => {

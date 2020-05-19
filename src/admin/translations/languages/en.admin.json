@@ -25,7 +25,8 @@
             "image": {
                 "button": "Upload image",
                 "indication": "Drag & drop image here",
-                "confirm": "Drop the image here to upload it instantly"
+                "confirm": "Drop the image here to upload it instantly",
+                "failUpload": "Failed to upload the image: "
             }
         }
     },
