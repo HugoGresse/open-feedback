@@ -2,7 +2,7 @@ import * as functions from 'firebase-functions'
 import fetch from 'node-fetch'
 import { isEmpty } from 'lodash'
 
-export const alert = functions.https.onCall(data => {
+export const alert = functions.https.onCall((data) => {
     const { opsgenie } = functions.config()
 
     if (isEmpty(data)) {
@@ -42,10 +42,15 @@ export const alert = functions.https.onCall(data => {
             Authorization: `GenieKey ${key}`,
         },
         body: JSON.stringify(data),
-    }).then(response => {
+    }).then((response) => {
         if (response.ok) {
             return response.text()
         } else {
+            console.error(
+                'failed to send alert',
+                response.status,
+                response.statusText
+            )
             return `${response.status}: ${response.statusText}`
         }
     })
