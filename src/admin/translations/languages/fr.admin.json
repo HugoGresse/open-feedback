@@ -25,7 +25,8 @@
             "image": {
                 "button": "Charger une image",
                 "indication": "Déposer une image ici",
-                "confirm": "Relacher l'image pour la charger"
+                "confirm": "Relacher l'image pour la charger",
+                "failUpload": "Erreur lors du chargement de l'image: "
             }
         }
     },
