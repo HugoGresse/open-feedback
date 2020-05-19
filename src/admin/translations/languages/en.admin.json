@@ -233,7 +233,7 @@
         "social": "Social profil page",
         "socialValid": "The social url is not a valid url.",
         "submit": "Add speaker",
-        "submitContinue": "Add speaker & continue",
+        "submitContinue": "Add speaker & add another one",
         "removeConfirmTitle": "Speaker linked to existing talk(s)",
         "removeConfirmDesc": "This speaker is linked to at least one talk, are you sure you want to remove him?",
         "removeConfirmButton": "Remove speaker"
@@ -252,7 +252,7 @@
         "fieldTrack": "Track title",
         "speakerMissing": "This speaker is missing from the data, probably deleted",
         "submit": "Add talk",
-        "submitContinue": "Add talk & continue",
+        "submitContinue": "Add talk & add another one",
         "titleAdd": "Add a new talk to the event",
         "titleEdit": "Edit a talk",
         "addNewSpeaker": "Add a speaker to the talk"
