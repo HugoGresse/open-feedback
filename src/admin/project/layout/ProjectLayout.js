@@ -7,7 +7,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
 import useTheme from '@material-ui/core/styles/useTheme'
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import Helmet from 'react-helmet/es/Helmet'
+import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { getSelectedProjectSelector } from '../core/projectSelectors'
 import Box from '@material-ui/core/Box'
@@ -43,7 +43,7 @@ const ProjectLayout = ({ baseUrl, children }) => {
     const project = useSelector(getSelectedProjectSelector)
     const [scrollTargetRef, setRef] = useState(undefined)
 
-    const scrollRef = useCallback(node => {
+    const scrollRef = useCallback((node) => {
         if (node !== null) {
             setRef(node)
         }
@@ -55,7 +55,7 @@ const ProjectLayout = ({ baseUrl, children }) => {
         drawerOpen: !isMobile,
     })
 
-    const toggleDrawer = open => event => {
+    const toggleDrawer = (open) => (event) => {
         if (
             event.type === 'keydown' &&
             (event.key === 'Tab' || event.key === 'Shift')

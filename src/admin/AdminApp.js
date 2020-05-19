@@ -8,7 +8,7 @@ import AdminRoot from './root/AdminRoot'
 import Notifications from './notification/Notifications'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
 import ProjectApp from './project/ProjectApp'
-import Helmet from 'react-helmet/es/Helmet'
+import { Helmet } from 'react-helmet'
 import { useSmallchat } from './project/utils/smallchat'
 
 const innerTheme = createMuiTheme({
