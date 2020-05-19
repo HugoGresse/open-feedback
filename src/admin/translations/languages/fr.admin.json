@@ -233,7 +233,7 @@
         "social": "Page de profil sur un réseau social",
         "socialValid": "L'URL du réseau social n'est pas une URL valide.",
         "submit": "Ajouter un·e orateur·rice",
-        "submitContinue": "Ajouter un·e orateur·rice et continuer",
+        "submitContinue": "Ajouter un·e orateur·rice et en ajouter un·e autre",
         "removeConfirmTitle": "Orateur·rice lié à des présentations",
         "removeConfirmDesc": "Cet·te  orateur·rice est lié·e à au moins une présentation, êtes vous sûr de vouloir l'ôter ?",
         "removeConfirmButton": "Ôter l'orateur·rice"
@@ -252,7 +252,7 @@
         "fieldTrack": "Titre de la salle",
         "speakerMissing": "Cet·te orateur·rice est absent·e des données, il·elle a probablement été supprimé·e",
         "submit": "Ajouter une présentation",
-        "submitContinue": "Ajouter une présentation et continuer",
+        "submitContinue": "Ajouter une présentation et une autre",
         "titleAdd": "Ajouter une nouvelle présentation à l'événement",
         "titleEdit": "Modifier une présentation",
         "addNewSpeaker": "Ajouter un·e orateur·rice à la présentation"
