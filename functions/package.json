@@ -15,7 +15,7 @@
     },
     "main": "lib/index.js",
     "dependencies": {
-        "@google-cloud/storage": "^4.7.0",
+        "@google-cloud/storage": "^5.0.0",
         "@types/jest": "^25.2.3",
         "@types/jest-expect-message": "^1.0.2",
         "firebase": "^7.14.4",

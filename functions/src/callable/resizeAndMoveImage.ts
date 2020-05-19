@@ -29,12 +29,14 @@ export const resizeAndMoveImage = functions.https.onCall(
         const bucket = admin.storage().bucket()
 
         const [file, fileName] = await resize(
+            // @ts-ignore
             bucket,
             tempStoragePath,
             data.width,
             data.height
         )
         const [newFile] = await moveToFinalDir(
+            // @ts-ignore
             bucket,
             file,
             fileName,
@@ -52,6 +54,7 @@ export const resizeAndMoveImage = functions.https.onCall(
  * 4. Save it to GCP back
  * 5. Delete original image
  *
+ * @param bucket
  * @param filePath
  * @param width
  * @param height
