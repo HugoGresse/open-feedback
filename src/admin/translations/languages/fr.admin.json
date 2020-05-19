@@ -98,6 +98,7 @@
             "projectTypeOpenfeedbackDetail": "Vous pouvez saisir manuellement les présentations / orateurs / calendrier sur OpenFeedback. Ils ne seront pas synchronisés avec un autre service. Aucune configuration supplémentaire n'est requise.",
             "projectTypeRequired": "Vous devez choisir la façon dont vous souhaitez configurer l'évènement",
             "stepTitle": "Créer un nouvel évènement (étape 2/3)",
+            "stepTitleDone": "Créer un nouvel évènement (étape 2/2)",
             "title": "Comment voulez-vous charger vos données ?"
         },
         "step3": {

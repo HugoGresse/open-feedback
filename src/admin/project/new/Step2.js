@@ -17,20 +17,27 @@ import TranslatedTypography from '../../baseComponents/TranslatedTypography'
 const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
     const { t } = useTranslation()
 
+    const isLastStep = (projectType) =>
+        projectType === PROJECT_TYPE_OPENFEEDBACK
+
     return (
-        <NewProjectLayout
-            stepTitle={t('newEvent.step2.stepTitle')}
-            title={t('newEvent.step2.title')}
-            onCancel={onCancel}>
-            <Formik
-                validationSchema={object().shape({
-                    projectType: string().required(
-                        t('newEvent.step2.projectTypeRequired')
-                    ),
-                })}
-                initialValues={initialValues}
-                onSubmit={values => onSubmit(values.projectType)}>
-                {({ isSubmitting, values }) => (
+        <Formik
+            validationSchema={object().shape({
+                projectType: string().required(
+                    t('newEvent.step2.projectTypeRequired')
+                ),
+            })}
+            initialValues={initialValues}
+            onSubmit={(values) => onSubmit(values.projectType)}>
+            {({ isSubmitting, values }) => (
+                <NewProjectLayout
+                    stepTitle={t(
+                        isLastStep(values.projectType)
+                            ? 'newEvent.step2.stepTitleDone'
+                            : 'newEvent.step2.stepTitle'
+                    )}
+                    title={t('newEvent.step2.title')}
+                    onCancel={onCancel}>
                     <Form method="POST">
                         <RadioButtonGroup fieldName="projectType">
                             <Field
@@ -109,17 +116,15 @@ const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
                                 disabled={isSubmitting}
                                 type="submit"
                                 style={{ type: 'big', marginTop: 64 }}>
-                                {values.projectType ===
-                                PROJECT_TYPE_OPENFEEDBACK
+                                {isLastStep(values.projectType)
                                     ? t('newEvent.step2.create')
                                     : t('newEvent.step2.continue')}
                             </OFButton>
                         </Box>
                     </Form>
-                )}
-            </Formik>
-        </NewProjectLayout>
+                </NewProjectLayout>
+            )}
+        </Formik>
     )
 }
-
 export default Step2
