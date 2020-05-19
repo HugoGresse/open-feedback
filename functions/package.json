@@ -17,7 +17,7 @@
     "dependencies": {
         "@google-cloud/storage": "^4.7.0",
         "@types/jest": "^25.2.3",
-        "@types/jest-expect-message": "^1.0.1",
+        "@types/jest-expect-message": "^1.0.2",
         "firebase": "^7.14.4",
         "firebase-admin": "^8.12.1",
         "firebase-functions": "^3.6.1",
