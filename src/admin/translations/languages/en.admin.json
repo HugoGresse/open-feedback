@@ -98,6 +98,7 @@
             "projectTypeOpenfeedbackDetail": "You can manually enter the talks/speakers/schedule on OpenFeedback. It will not be in sync with another service if you are using one. No additional configuration is required.",
             "projectTypeRequired": "You need to choose how you want to setup the event.",
             "stepTitle": "Create a new event (step 2/3)",
+            "stepTitleDone": "Create a new event (step 2/2)",
             "title": "How do you want to load your data?"
         },
         "step3": {
