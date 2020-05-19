@@ -73,7 +73,7 @@
         "styled-components": "^5.1.0",
         "styled-system": "^5.1.5",
         "wait-on": "^5.0.0",
-        "yup": "^0.28.3"
+        "yup": "^0.28.5"
     },
     "eslintConfig": {
         "extends": "react-app"
