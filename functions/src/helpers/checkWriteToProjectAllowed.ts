@@ -43,7 +43,7 @@ export const checkWriteToProjectAllowed = async (
     }
 
     if (
-        project.owner !== context.auth.uid ||
+        project.owner !== context.auth.uid &&
         !project.members.includes(context.auth.uid)
     ) {
         throw new functions.https.HttpsError(
