@@ -23,7 +23,7 @@
     "devDependencies": {
         "@storybook/addon-docs": "^5.3.18",
         "@storybook/addons": "^5.3.18",
-        "@storybook/preset-create-react-app": "^2.1.1",
+        "@storybook/preset-create-react-app": "^2.1.2",
         "@storybook/react": "5.3.18",
         "cypress": "^4.2.0",
         "eslint-plugin-cypress": "^2.10.3",
