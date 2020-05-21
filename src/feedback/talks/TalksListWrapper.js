@@ -19,6 +19,7 @@ import { useParams } from 'react-router-dom'
 import SearchNoMatch from './SearchNoMatch'
 import SearchExtendedMatch from './SearchExtendedMatch'
 import { getVotesByTalkSelector } from '../vote/voteSelectors'
+import { TALK_NO_DATE } from '../../core/talks/talksUtils'
 
 const TalksListWrapper = () => {
     const dispatch = useDispatch()
@@ -37,7 +38,7 @@ const TalksListWrapper = () => {
     }, [dispatch])
 
     useEffect(() => {
-        dispatch(setSelectedDate(routerParams.date))
+        dispatch(setSelectedDate(routerParams.date || TALK_NO_DATE))
     }, [routerParams.date, dispatch])
 
     if (errorTalksLoad) {

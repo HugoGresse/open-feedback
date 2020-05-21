@@ -3,10 +3,10 @@ import { DateTime } from 'luxon'
 export const formatTalksWithScheduledForHoverboardv2 = (talks, schedule) => {
     const formatedTalks = {}
 
-    schedule.forEach(day => {
+    schedule.forEach((day) => {
         const tracks = day.tracks
 
-        day.timeslots.forEach(timeslot => {
+        day.timeslots.forEach((timeslot) => {
             const startTime = DateTime.fromISO(
                 day.date + 'T' + timeslot.startTime
             ).toISO()
@@ -14,7 +14,7 @@ export const formatTalksWithScheduledForHoverboardv2 = (talks, schedule) => {
                 day.date + 'T' + timeslot.endTime
             ).toISO()
             timeslot.sessions.forEach((talk, index) => {
-                talk.items.forEach(id => {
+                talk.items.forEach((id) => {
                     if (!talks[id]) return
                     formatedTalks[id] = {
                         ...talks[id],
@@ -30,6 +30,12 @@ export const formatTalksWithScheduledForHoverboardv2 = (talks, schedule) => {
     return formatedTalks
 }
 
-export const getDateFromStartTime = startTime => {
-    return DateTime.fromISO(startTime).toFormat('yyyy-MM-dd')
+export const getDateFromStartTime = (startTime) => {
+    const dateTime = DateTime.fromISO(startTime)
+    if (dateTime.isValid) {
+        return dateTime.toFormat('yyyy-MM-dd')
+    }
+    return TALK_NO_DATE
 }
+
+export const TALK_NO_DATE = '0-no-date'
