@@ -31,17 +31,13 @@ import {
 
 import Grid from '@material-ui/core/Grid'
 import TalkVote from './TalkVote'
-import SpeakerList from '../speaker/SpeakerList'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 import Error from '../../baseComponents/customComponent/Error'
 import Snackbar from '../../baseComponents/customComponent/Snackbar'
-import Title from '../layout/Title'
-import { COLORS } from '../../constants/colors'
 import { SPACING } from '../../constants/constants'
-import { DateTime } from 'luxon'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../core/contants'
-import Box from '@material-ui/core/Box'
 import { withTranslation } from 'react-i18next'
+import TalkHeader from './TalkHeader'
 
 class Talk extends Component {
     componentDidMount() {
@@ -146,39 +142,7 @@ class Talk extends Component {
         }
         return (
             <div>
-                <Box marginBottom={4}>
-                    <Title variant="h2" color="textPrimary">
-                        {talk.title}
-                        <Box
-                            color={COLORS.GRAY}
-                            fontSize={20}
-                            marginLeft={1}
-                            component="span">
-                            {talk.tags &&
-                                talk.tags.map((tag, key) => (
-                                    <span key={key}>#{tag} </span>
-                                ))}
-                        </Box>
-                    </Title>
-                    <Box fontSize={16} color={COLORS.GRAY} marginBottom={2}>
-                        {DateTime.fromISO(talk.startTime, {
-                            setZone: true,
-                        }).toLocaleString({
-                            weekday: 'long',
-                            month: 'long',
-                            day: 'numeric',
-                        })}
-                        {' / '}
-                        {DateTime.fromISO(talk.startTime, { setZone: true })
-                            .setZone('local', { keepLocalTime: true })
-                            .toLocaleString(DateTime.TIME_SIMPLE)}
-                        {' - '}
-                        {DateTime.fromISO(talk.endTime, {
-                            setZone: true,
-                        }).toLocaleString(DateTime.TIME_SIMPLE)}
-                    </Box>
-                    <SpeakerList speakers={speakers} />
-                </Box>
+                <TalkHeader talk={talk} speakers={speakers} />
                 <Grid container spacing={SPACING.LAYOUT}>
                     {voteItems.map((voteItem, key) => (
                         <TalkVote

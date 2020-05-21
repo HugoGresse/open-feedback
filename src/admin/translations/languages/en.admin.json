@@ -20,7 +20,9 @@
         "download": "Download",
         "close": "Close",
         "preview": "Preview",
+        "pick": "Pick",
         "or": "OR",
+        "clear": "Clear",
         "dropzone": {
             "image": {
                 "button": "Upload image",
@@ -243,11 +245,9 @@
     "talks": {
         "addTalks": "Add talks",
         "cannotChange": "Talks cannot be changed from OpenFeedback itself for this project. Refer to your external services configuration to do so.",
-        "fieldEndTime": "End time*",
-        "fieldEndTimeRequired": "The end time is required.",
+        "fieldEndTime": "End time",
         "fieldSpeakers": "Speaker(s)",
-        "fieldStartTime": "Start time*",
-        "fieldStartTimeRequired": "The start time is required.",
+        "fieldStartTime": "Start time",
         "fieldTags": "Tags",
         "fieldTitle": "Title*",
         "fieldTitleRequired": "The talk title is required.",

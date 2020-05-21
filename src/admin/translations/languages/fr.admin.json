@@ -20,7 +20,9 @@
         "close": "Fermer",
         "saved": "Sauvegarder",
         "preview": "Aperçu",
+        "pick": "Sélectionner",
         "or": "OU",
+        "clear": "Enlever",
         "dropzone": {
             "image": {
                 "button": "Charger une image",
@@ -243,11 +245,9 @@
     "talks": {
         "addTalks": "Ajouter des présentations",
         "cannotChange": "Les présentations ne peuvent pas être modifiées depuis OpenFeedback pour ce projet. Reportez-vous à la configuration de vos services externes pour le faire.",
-        "fieldEndTime": "Heure de fin*",
-        "fieldEndTimeRequired": "L'heure de fin est requise.",
+        "fieldEndTime": "Heure de fin",
         "fieldSpeakers": "Orateur·rice·s",
-        "fieldStartTime": "Heure de début*",
-        "fieldStartTimeRequired": "L'heure de début est requise.",
+        "fieldStartTime": "Heure de début",
         "fieldTags": "Mots clés",
         "fieldTitle": "Titre*",
         "fieldTitleRequired": "Le titre de la présentation est obligatoire.",

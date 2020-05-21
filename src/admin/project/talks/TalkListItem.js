@@ -11,7 +11,7 @@ import TalkListItemSpeakerList from './TalkListItemSpeakerList'
 import Chip from '@material-ui/core/Chip'
 import { DateTime } from 'luxon'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     cell: {
         paddingRight: 12,
         [theme.breakpoints.down('sm')]: {
@@ -57,13 +57,17 @@ const TalkListItem = ({
                         variant="outlined"
                     />
                 )}
-                <Chip
-                    icon={<CalendarIcon />}
-                    size="small"
-                    label={DateTime.fromISO(item.startTime).toLocaleString()}
-                    style={{ marginBottom: item.startTime ? 5 : 0 }}
-                    variant="outlined"
-                />
+                {item.startTime && (
+                    <Chip
+                        icon={<CalendarIcon />}
+                        size="small"
+                        label={DateTime.fromISO(
+                            item.startTime
+                        ).toLocaleString()}
+                        style={{ marginBottom: item.startTime ? 5 : 0 }}
+                        variant="outlined"
+                    />
+                )}
             </Grid>
             <Grid item xs={12} sm={2} lg={2} className={classes.buttonCell}>
                 <IconButton aria-label="edit" onClick={() => onEdit(item)}>

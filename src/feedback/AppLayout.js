@@ -22,6 +22,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { signIn } from './auth/authActions'
 import { getVotes } from './vote/voteActions'
 import { useTranslation } from 'react-i18next'
+import { TALK_NO_DATE } from '../core/talks/talksUtils'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -91,7 +92,11 @@ const AppLayout = ({ children }) => {
 
     useEffect(() => {
         const { date, projectId } = routerParams
-        if (!date && talkDates.length > 0) {
+        if (
+            !date &&
+            talkDates.length > 0 &&
+            !talkDates.includes(TALK_NO_DATE)
+        ) {
             history.replace(`/${projectId}/${talkDates[0]}`)
         }
     }, [routerParams, talkDates, history])

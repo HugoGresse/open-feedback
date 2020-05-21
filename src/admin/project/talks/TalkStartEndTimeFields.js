@@ -6,12 +6,13 @@ import { useTranslation } from 'react-i18next'
 
 const startTimeFieldName = 'startTime'
 const endTimeFieldName = 'endTime'
-const TalkStartEndTimeFields = () => {
+const TalkStartEndTimeFields = ({ defaultValue }) => {
     const [startField, startMeta] = useField(startTimeFieldName)
     // eslint-disable-next-line no-unused-vars
     const [endField, endMeta, endHelpers] = useField(endTimeFieldName)
 
     useEffect(() => {
+        // Update end time if start time is touched and updated
         if (
             startField.value !== startMeta.initialValue &&
             !endMeta.touched &&
@@ -37,6 +38,7 @@ const TalkStartEndTimeFields = () => {
                 <Field
                     name={startTimeFieldName}
                     format="FFF"
+                    initialFocusedDate={defaultValue}
                     component={OFDateTimePicker}
                 />
             </OFFormControl>

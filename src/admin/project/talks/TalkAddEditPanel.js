@@ -44,12 +44,8 @@ const TalkAddEditPanel = ({
                                 .required(t('talks.fieldTitleRequired')),
                             trackTitle: string().ensure(),
                             tags: array().of(string()),
-                            startTime: string()
-                                .trim()
-                                .required(t('talks.fieldStartTimeRequired')),
-                            endTime: string()
-                                .trim()
-                                .required(t('talks.fieldEndTimeRequired')),
+                            startTime: string().nullable().trim(),
+                            endTime: string().nullable().trim(),
                             speakers: array().of(string()),
                         })}
                         initialValues={
@@ -57,12 +53,8 @@ const TalkAddEditPanel = ({
                                 title: '',
                                 trackTitle: '',
                                 tags: [],
-                                startTime:
-                                    projectVoteStartTime ||
-                                    DateTime.local().toISO(),
-                                endTime:
-                                    projectVoteStartTime ||
-                                    DateTime.local().toISO(),
+                                startTime: null,
+                                endTime: null,
                                 speakers: [],
                             }
                         }
@@ -85,7 +77,12 @@ const TalkAddEditPanel = ({
                                     isSubmitting={isSubmitting}
                                 />
 
-                                <TalkStartEndTimeFields />
+                                <TalkStartEndTimeFields
+                                    defaultValue={
+                                        projectVoteStartTime ||
+                                        DateTime.local().toISO()
+                                    }
+                                />
 
                                 <OFFormControl
                                     name={t('talks.fieldTrack')}

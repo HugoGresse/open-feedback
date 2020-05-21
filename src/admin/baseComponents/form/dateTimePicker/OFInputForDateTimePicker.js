@@ -11,6 +11,7 @@ const OFInputForDateTimePicker = ({
     onKeyDown,
     inputRef,
     disabled,
+    autoComplete,
 }) => {
     return (
         <OFInput
@@ -23,6 +24,7 @@ const OFInputForDateTimePicker = ({
             onKeyDown={onKeyDown}
             inputRef={inputRef}
             disabled={disabled}
+            autoComplete={autoComplete}
         />
     )
 }
