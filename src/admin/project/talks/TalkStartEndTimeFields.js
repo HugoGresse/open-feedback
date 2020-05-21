@@ -39,7 +39,6 @@ const TalkStartEndTimeFields = ({ defaultValue }) => {
                     name={startTimeFieldName}
                     format="FFF"
                     initialFocusedDate={defaultValue}
-                    autocomplete="off"
                     component={OFDateTimePicker}
                 />
             </OFFormControl>
@@ -50,7 +49,6 @@ const TalkStartEndTimeFields = ({ defaultValue }) => {
                 <Field
                     name={endTimeFieldName}
                     format="FFF"
-                    autocomplete="off"
                     component={OFDateTimePicker}
                 />
             </OFFormControl>
