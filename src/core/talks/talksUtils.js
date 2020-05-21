@@ -38,4 +38,4 @@ export const getDateFromStartTime = (startTime) => {
     return TALK_NO_DATE
 }
 
-export const TALK_NO_DATE = '0-no-date'
+export const TALK_NO_DATE = '0'
