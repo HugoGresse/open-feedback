@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-const validate = async api => {
+const validate = async (api) => {
     let result = {
         dataAvailable: false,
         speakersObjectFound: false,
@@ -70,7 +70,7 @@ const validateTalks = (talks, speakers) => {
             talk: {
                 idValid: false,
                 titleValid: false,
-                startEndTimeValid: false,
+                startEndTimeValid: true,
                 trackTitleValid: false,
                 speakersValid: false,
                 noSpeakers: 0,
@@ -87,7 +87,7 @@ const validateTalks = (talks, speakers) => {
             talk: {
                 idValid: false,
                 titleValid: false,
-                startEndTimeValid: false,
+                startEndTimeValid: true,
                 trackTitleValid: false,
                 speakersValid: false,
                 noSpeakers: 0,
@@ -97,7 +97,7 @@ const validateTalks = (talks, speakers) => {
         }
     } else {
         let tempTalk
-        talkKeys.forEach(key => {
+        talkKeys.forEach((key) => {
             tempTalk = talks[key]
             if (tempTalk || typeof talks === 'object') {
                 result.talk.talkCount++
@@ -108,11 +108,11 @@ const validateTalks = (talks, speakers) => {
                 if (!tempTalk.title) {
                     result.talk.titleValid = false
                 }
-                if (!tempTalk.startTime || !tempTalk.endTime) {
-                    result.talk.startEndTimeValid = false
-                } else if (
-                    !DateTime.fromISO(tempTalk.startTime).isValid ||
-                    !DateTime.fromISO(tempTalk.endTime).isValid
+                if (
+                    (tempTalk.startTime &&
+                        !DateTime.fromISO(tempTalk.startTime).isValid) ||
+                    (tempTalk.endTime &&
+                        !DateTime.fromISO(tempTalk.endTime).isValid)
                 ) {
                     result.talk.startEndTimeValid = false
                 }
@@ -126,7 +126,7 @@ const validateTalks = (talks, speakers) => {
                 ) {
                     result.talk.speakersValid = false
                 } else {
-                    tempTalk.speakers.forEach(speakerId => {
+                    tempTalk.speakers.forEach((speakerId) => {
                         if (!speakers || !speakers[speakerId]) {
                             result.talk.speakersMissing++
                         }
@@ -142,7 +142,7 @@ const validateTalks = (talks, speakers) => {
     return result
 }
 
-const validateSpeakers = speakers => {
+const validateSpeakers = (speakers) => {
     const result = {
         speakersObjectFound: true,
         speaker: {
@@ -177,7 +177,7 @@ const validateSpeakers = speakers => {
         }
     } else {
         let speaker
-        speakerKeys.forEach(key => {
+        speakerKeys.forEach((key) => {
             speaker = speakers[key]
             result.speaker.speakerCount++
             if (key !== speaker.id) {
