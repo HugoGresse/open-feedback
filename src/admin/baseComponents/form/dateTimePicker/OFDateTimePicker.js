@@ -1,8 +1,16 @@
 import React from 'react'
 import { DateTimePicker } from '@material-ui/pickers'
 import OFInputForDateTimePicker from './OFInputForDateTimePicker'
+import { useTranslation } from 'react-i18next'
 
-const OFDateTimePicker = ({ field, form, ...other }) => {
+const OFDateTimePicker = ({
+    field,
+    form,
+    format,
+    initialFocusedDate,
+    ...other
+}) => {
+    const { t } = useTranslation()
     const currentError = form.errors[field.name]
 
     return (
@@ -11,8 +19,10 @@ const OFDateTimePicker = ({ field, form, ...other }) => {
             disabled={!!form.isSubmitting}
             name={field.name}
             value={field.value}
-            variant="inline"
-            format={field.format}
+            initialFocusedDate={initialFocusedDate}
+            clearable
+            format={format}
+            minutesStep={5}
             ampm={false}
             helperText={currentError}
             error={Boolean(currentError)}
@@ -25,6 +35,10 @@ const OFDateTimePicker = ({ field, form, ...other }) => {
             onBlur={field.onBlur}
             TextFieldComponent={OFInputForDateTimePicker}
             onChange={(date) => form.setFieldValue(field.name, date, false)}
+            autoComplete="off"
+            okLabel={t('common.pick')}
+            cancelLabel={t('common.cancel')}
+            clearLabel={t('common.clear')}
             {...other}
         />
     )
