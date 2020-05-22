@@ -9,7 +9,7 @@ import {
     getExtendedSearchTalksSelector,
     getTalksLoadError,
     isTalksLoadingSelector,
-    getFilteredTalksSelector,
+    getTalksAsArraySelector,
 } from '../../core/talks/talksSelectors'
 import Error from '../../baseComponents/customComponent/Error'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
@@ -33,7 +33,7 @@ const TalksListWrapper = () => {
 
     const project = useSelector(getProjectSelector)
     const errorTalksLoad = useSelector(getTalksLoadError)
-    const talks = useSelector(getFilteredTalksSelector)
+    const talks = useSelector(getTalksAsArraySelector)
     const currentTalksByTrack = useSelector(getCurrentTalksGroupByTrackSelector)
     const talkIsLoading = useSelector(isTalksLoadingSelector)
     const filter = useSelector(getTalksFilterSelector)
