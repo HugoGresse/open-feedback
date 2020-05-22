@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getTalks } from '../../core/talks/talksActions'
-import { setSelectedDate } from './../project/projectActions'
+import { setSelectedDate } from '../project/projectActions'
 
 import {
     getCurrentTalksGroupByTrackSelector,

@@ -18,7 +18,7 @@
         "save": "Sauvegarder",
         "download": "Télécharger",
         "close": "Fermer",
-        "saved": "Sauvegarder",
+        "saved": "Sauvegardé",
         "preview": "Aperçu",
         "pick": "Sélectionner",
         "or": "OU",
@@ -181,7 +181,8 @@
             }
         },
         "settings": "Paramètres",
-        "languages": "Langues additionnelles (pour le bulletin de votes)"
+        "languages": "Langues additionnelles (pour le bulletin de votes)",
+        "disableSoloTalkRedirect": "Forcer la redirection à la présentation si il n'y en a qu'une listé"
     },
     "settingsUser": {
         "add": "Ajouter un nouveau membre à l'événement",
