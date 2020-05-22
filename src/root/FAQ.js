@@ -103,7 +103,6 @@ const FAQ = () => {
                         </FAQTitle>
                         <Trans i18nKey="faq.privateAnswser" />
                     </li>
-
                     <li>
                         <FAQTitle>
                             <Trans i18nKey="faq.newFeature" />
@@ -126,6 +125,18 @@ const FAQ = () => {
                             {t('faq.newFeatureAnwserBisHere')}
                         </a>
                         .
+                    </li>
+                    <li>
+                        <FAQTitle>
+                            <Trans i18nKey="faq.custom" />
+                        </FAQTitle>
+                        <Trans i18nKey="faq.customAnswer" />
+                        <a
+                            href="https://github.com/HugoGresse/open-feedback#community-sdk"
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            {t('faq.customAnswerSDKLink')}
+                        </a>
                     </li>
                 </List>
 

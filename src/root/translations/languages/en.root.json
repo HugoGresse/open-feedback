@@ -30,6 +30,9 @@
         "newFeatureAnwser": "Send an email to {{adminEmail}} or open a new issue on ",
         "newFeatureAnwserBis": "You can find the pending features to be added ",
         "newFeatureAnwserBisHere": "here",
-        "additionalSupport": "Need additional support? Contact {{adminEmail}}"
+        "additionalSupport": "Need additional support? Contact {{adminEmail}}",
+        "custom": "Custom integration into your apps? (API access)",
+        "customAnswer": "Everyone can plug OpenFeedback into their own apps. You can create your own OpenFeedback Firebase instance and use Firestore SDK for android/ios/web to integrate it into your app directly. <br/><br/> Upon request a documentation can be sent with the implementation details. OpenFeedback team should validate the integration to ensure everything will go smoothly the D day. <br/> <br/> You can find Open Source Community SDKs on the ",
+        "customAnswerSDKLink": "GitHub page."
     }
 }
