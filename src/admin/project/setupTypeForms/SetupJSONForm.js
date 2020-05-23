@@ -99,14 +99,14 @@ const SetupJSONForm = ({
                             <pre className={classes.jsonExamplePre}>
                                 {JSON.stringify(jsonModel, undefined, 4)}
                                 <br />
-                                // Required fields:
+                                Required fields:
                                 <br />
                                 - session.title
                                 <br />
                                 - session.id
                                 <br />- speakers: {'{}'}
                                 <br />
-                                // Optional fields: all others
+                                Optional fields: all others
                             </pre>
                         </Collapse>
                     </div>
