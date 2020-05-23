@@ -10,7 +10,8 @@
             "trackTitle": "Amphi D"
         },
         "30": {
-            "...": ""
+            "...": "",
+            "hideInFeedback": true
         }
     },
     "speakers": {

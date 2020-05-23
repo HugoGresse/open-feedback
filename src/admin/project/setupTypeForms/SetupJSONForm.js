@@ -55,7 +55,7 @@ const SetupJSONForm = ({
                     .required(t('settingsSetup.json.jsonUrlRequired')),
             })}
             initialValues={initialValues}
-            onSubmit={values =>
+            onSubmit={(values) =>
                 onSubmit({
                     jsonUrl: values.jsonUrl,
                 })
@@ -65,7 +65,7 @@ const SetupJSONForm = ({
                     {onFormChange && (
                         <FormikObserver
                             value={values}
-                            onChange={values => onFormChange(values)}
+                            onChange={(values) => onFormChange(values)}
                         />
                     )}
                     <OFFormControlInputFormiked
@@ -98,6 +98,15 @@ const SetupJSONForm = ({
                             </OFButton>
                             <pre className={classes.jsonExamplePre}>
                                 {JSON.stringify(jsonModel, undefined, 4)}
+                                <br />
+                                // Required fields:
+                                <br />
+                                - session.title
+                                <br />
+                                - session.id
+                                <br />- speakers: {'{}'}
+                                <br />
+                                // Optional fields: all others
                             </pre>
                         </Collapse>
                     </div>

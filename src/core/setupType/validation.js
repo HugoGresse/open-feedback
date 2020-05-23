@@ -11,6 +11,7 @@ const validate = async (api) => {
             startEndTimeValid: false,
             trackTitleValid: false,
             speakersValid: false,
+            tagsValid: false,
             noSpeakers: 0,
             speakersMissing: 0,
             talkCount: 0,
@@ -59,6 +60,7 @@ const validateTalks = (talks, speakers) => {
             startEndTimeValid: true,
             trackTitleValid: true,
             speakersValid: true,
+            tagsValid: true,
             noSpeakers: 0,
             speakersMissing: 0,
             talkCount: 0,
@@ -73,6 +75,7 @@ const validateTalks = (talks, speakers) => {
                 startEndTimeValid: true,
                 trackTitleValid: false,
                 speakersValid: false,
+                tagsValid: false,
                 noSpeakers: 0,
                 speakersMissing: 0,
                 talkCount: 0,
@@ -90,6 +93,7 @@ const validateTalks = (talks, speakers) => {
                 startEndTimeValid: true,
                 trackTitleValid: false,
                 speakersValid: false,
+                tagsValid: false,
                 noSpeakers: 0,
                 speakersMissing: 0,
                 talkCount: 0,
@@ -117,22 +121,22 @@ const validateTalks = (talks, speakers) => {
                     result.talk.startEndTimeValid = false
                 }
 
-                if (!tempTalk.trackTitle) {
-                    result.talk.trackTitleValid = false
-                }
                 if (
-                    !tempTalk.speakers ||
-                    tempTalk.speakers.constructor !== Array
+                    (tempTalk.tags || tempTalk.tags === '') &&
+                    !Array.isArray(tempTalk.tags)
                 ) {
-                    result.talk.speakersValid = false
-                } else {
-                    tempTalk.speakers.forEach((speakerId) => {
-                        if (!speakers || !speakers[speakerId]) {
-                            result.talk.speakersMissing++
-                        }
-                    })
-                    if (tempTalk.speakers.length <= 0) {
-                        result.talk.noSpeakers++
+                    result.talk.tagsValid = false
+                }
+
+                if (tempTalk.speakers) {
+                    if (tempTalk.speakers.constructor !== Array) {
+                        result.talk.speakersValid = false
+                    } else {
+                        tempTalk.speakers.forEach((speakerId) => {
+                            if (!speakers || !speakers[speakerId]) {
+                                result.talk.speakersMissing++
+                            }
+                        })
                     }
                 }
             }
@@ -167,11 +171,11 @@ const validateSpeakers = (speakers) => {
     const speakerKeys = Object.keys(speakers)
     if (speakerKeys.length <= 0) {
         return {
-            speakersObjectFound: false,
+            speakersObjectFound: true,
             speaker: {
-                idValid: false,
-                nameValid: false,
-                photoUrlValid: false,
+                idValid: true,
+                nameValid: true,
+                photoUrlValid: true,
                 speakerCount: 0,
             },
         }

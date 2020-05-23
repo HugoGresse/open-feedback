@@ -95,13 +95,14 @@ const SetupValidationContainer = ({ api, setupType }) => {
                     'startEndTimeValid',
                     'trackTitleValid',
                     'speakersValid',
-                ].forEach(el => {
+                    'tagsValid',
+                ].forEach((el) => {
                     if (!resultTalk[el]) {
                         modelSubtitleText +=
                             '\n' + validationText.model[setupType].talk[el]
                     }
                 })
-                ;['idValid', 'nameValid', 'photoUrlValid'].forEach(el => {
+                ;['idValid', 'nameValid', 'photoUrlValid'].forEach((el) => {
                     if (!resultSpeaker[el]) {
                         modelSubtitleText +=
                             '\n' + validationText.model[setupType].speaker[el]
@@ -118,7 +119,7 @@ const SetupValidationContainer = ({ api, setupType }) => {
             modelState={modelState}
             onValidateClick={() => {
                 onValidationChange(true)
-                validate(api).then(result => {
+                validate(api).then((result) => {
                     setValidationResult(result)
                     onValidationChange(false)
                 })
