@@ -9,6 +9,8 @@ const talkTitleValid =
 const talkStartEndValid = 'Some talk start or end times are not valid.'
 const talkTrackTitleValid =
     'Some track titles are not valid (empty string or no data).'
+const talkTagsValid =
+    'Some talk tags are not valid (tags key is optional, but if present should be an array).'
 const talkSpeakersValid =
     'Some talk speakers are not valid. It should be an array of string ids.'
 const noSpeaker = 'There is %s talk(s) without speaker(s).'
@@ -54,6 +56,7 @@ const validationText = {
                 noSpeakers: noSpeaker,
                 speakersMissing: speakersMissing,
                 talkCount: talkPlusSpeakerCount,
+                tagsValid: talkTagsValid,
             },
             speaker: {
                 idValid: speakerIdValid,
@@ -75,6 +78,7 @@ const validationText = {
                 noSpeakers: noSpeaker,
                 speakersMissing: speakersMissing,
                 talkCount: talkPlusSpeakerCount,
+                tagsValid: talkTagsValid,
             },
             speaker: {
                 idValid: speakerIdValid,
