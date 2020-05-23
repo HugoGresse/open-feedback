@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getTalks } from '../../core/talks/talksActions'
-import { setSelectedDate } from './../project/projectActions'
+import { setSelectedDate } from '../project/projectActions'
 
 import {
     getCurrentTalksGroupByTrackSelector,
@@ -9,28 +9,37 @@ import {
     getExtendedSearchTalksSelector,
     getTalksLoadError,
     isTalksLoadingSelector,
+    getTalksAsArraySelector,
 } from '../../core/talks/talksSelectors'
 import Error from '../../baseComponents/customComponent/Error'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 import TalksDateMenu from './TalksDateMenu'
 import TalksList from './TalksList'
 import { getSpeakers } from '../../core/speakers/speakerActions'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import SearchNoMatch from './SearchNoMatch'
 import SearchExtendedMatch from './SearchExtendedMatch'
 import { getVotesByTalkSelector } from '../vote/voteSelectors'
 import { TALK_NO_DATE } from '../../core/talks/talksUtils'
+import {
+    getProjectSelectedDateSelector,
+    getProjectSelector,
+} from '../project/projectSelectors'
 
 const TalksListWrapper = () => {
     const dispatch = useDispatch()
     const routerParams = useParams()
+    const history = useHistory()
 
+    const project = useSelector(getProjectSelector)
     const errorTalksLoad = useSelector(getTalksLoadError)
+    const talks = useSelector(getTalksAsArraySelector)
     const currentTalksByTrack = useSelector(getCurrentTalksGroupByTrackSelector)
     const talkIsLoading = useSelector(isTalksLoadingSelector)
     const filter = useSelector(getTalksFilterSelector)
     const userTalkVote = useSelector(getVotesByTalkSelector)
     const extendedSearchTalks = useSelector(getExtendedSearchTalksSelector)
+    const selectedDate = useSelector(getProjectSelectedDateSelector)
 
     useEffect(() => {
         dispatch(getTalks())
@@ -40,6 +49,18 @@ const TalksListWrapper = () => {
     useEffect(() => {
         dispatch(setSelectedDate(routerParams.date || TALK_NO_DATE))
     }, [routerParams.date, dispatch])
+
+    useEffect(() => {
+        if (
+            talks &&
+            talks.length === 1 &&
+            project &&
+            !project.disableSoloTalkRedirect &&
+            selectedDate
+        ) {
+            history.push(`/${project.id}/${selectedDate}/${talks[0].id}`)
+        }
+    }, [talks, project, history, selectedDate])
 
     if (errorTalksLoad) {
         return (

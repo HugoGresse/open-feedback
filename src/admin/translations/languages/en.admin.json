@@ -181,7 +181,8 @@
             }
         },
         "settings": "Settings",
-        "languages": "Additional languages (for the voting form)"
+        "languages": "Additional languages (for the voting form)",
+        "disableSoloTalkRedirect": "Force redirect to the talk if only one talk listed"
     },
     "settingsUser": {
         "add": "Add a new member to the event",
