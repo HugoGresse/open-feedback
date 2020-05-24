@@ -5,10 +5,10 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { ErrorMessage, useField } from 'formik'
 import { Typography } from '@material-ui/core'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     formControl: {
         width: '100%',
-        marginTop: theme.spacing(3),
+        marginTop: (props) => !props.noTopMargin && theme.spacing(3),
     },
     label: {
         fontSize: theme.typography.fontSize * 1.2,
@@ -25,10 +25,12 @@ const OFFormControl = ({
     fieldName,
     displayErrorMessageDirectly,
     children,
+    noTopMargin,
 }) => {
-    const classes = useStyles()
-    // eslint-disable-next-line no-unused-vars
-    const [field, meta, helpers] = useField(fieldName)
+    const classes = useStyles({
+        noTopMargin,
+    })
+    const [, meta] = useField(fieldName)
 
     return (
         <FormControl className={classes.formControl}>
@@ -44,7 +46,7 @@ const OFFormControl = ({
             {!displayErrorMessageDirectly && (
                 <ErrorMessage
                     name={fieldName}
-                    render={msg => (
+                    render={(msg) => (
                         <Typography className={classes.errorMessage}>
                             {msg}
                         </Typography>
