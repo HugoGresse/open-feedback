@@ -54,6 +54,7 @@ const TalksListWrapper = () => {
         if (
             talks &&
             talks.length === 1 &&
+            !talkIsLoading &&
             project &&
             !project.disableSoloTalkRedirect &&
             selectedDate
