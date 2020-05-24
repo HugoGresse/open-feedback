@@ -10,7 +10,7 @@ import Chip from '@material-ui/core/Chip'
 import EditIcon from '@material-ui/icons/Edit'
 import ErrorIcon from '@material-ui/icons/Error'
 import ProjectIdChange from './Step1.projectIdChange'
-import { doesProjectExist } from '../core/projectUtils'
+import { doesProjectIdExistOrIsAllowed } from '../core/projectUtils'
 
 const Step1 = ({ onCancel, onSubmit, initialValues }) => {
     const { t } = useTranslation()
@@ -36,6 +36,7 @@ const Step1 = ({ onCancel, onSubmit, initialValues }) => {
                     id: string()
                         .lowercase()
                         .trim()
+                        .min(3, t('newEvent.step1.eventIdTooShort'))
                         .matches(
                             /^[a-z0-9-]+$/,
                             t('newEvent.step1.eventIdNotValid')
@@ -46,9 +47,9 @@ const Step1 = ({ onCancel, onSubmit, initialValues }) => {
                             t('newEvent.step1.eventIdExist'),
                             (value) => {
                                 if (value) {
-                                    return doesProjectExist(value).then(
-                                        (exist) => !exist
-                                    )
+                                    return doesProjectIdExistOrIsAllowed(
+                                        value
+                                    ).then((exist) => !exist)
                                 }
                                 return Promise.resolve(false)
                             }

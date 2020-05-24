@@ -4,8 +4,14 @@ export const getNewProjectId = () => {
     return fireStoreMainInstance.collection('projects').doc().id
 }
 
+const reservedProjectIds = ['admin', 'l', 'contact', 'help', 'legal']
+
 // Not using Thunks (dispatch, etc)
-export const doesProjectExist = (projectId) => {
+export const doesProjectIdExistOrIsAllowed = (projectId) => {
+    if (reservedProjectIds.includes(projectId)) {
+        return Promise.resolve(true)
+    }
+
     return fireStoreMainInstance
         .collection('projects')
         .doc(projectId)
