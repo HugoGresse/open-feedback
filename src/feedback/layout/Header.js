@@ -93,7 +93,7 @@ const Header = ({ project }) => {
                     />
                     <Hidden smDown>
                         <Title component="h1" color="textPrimary">
-                            {project.name}
+                            {!project.hideEventName && project.name}
                         </Title>
                     </Hidden>
                 </div>

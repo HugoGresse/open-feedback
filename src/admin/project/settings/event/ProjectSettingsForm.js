@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
     chipLabel: {
         marginTop: theme.spacing(3),
     },
+    reducedLabelFontSize: {
+        fontSize: theme.typography.fontSize * 0.9,
+    },
 }))
 
 const ProjectSettingsForm = ({ project }) => {
@@ -42,6 +45,7 @@ const ProjectSettingsForm = ({ project }) => {
         restrictVoteRange: !!project.voteStartTime,
         voteStartTime: project.voteStartTime || DateTime.local().toISO(),
         voteEndTime: project.voteEndTime || DateTime.local().toISO(),
+        hideEventName: project.hideEventName || false,
     }
 
     return (
@@ -60,6 +64,7 @@ const ProjectSettingsForm = ({ project }) => {
                 restrictVoteRange: boolean(),
                 voteStartTime: string(),
                 voteEndTime: string(),
+                hideEventName: boolean().required(),
             })}
             initialValues={initialValues}
             onSubmit={(values) =>
@@ -77,6 +82,7 @@ const ProjectSettingsForm = ({ project }) => {
                         voteEndTime: DateTime.fromISO(
                             values.voteEndTime
                         ).toISO(),
+                        hideEventName: values.hideEventName,
                     })
                 )
             }>
@@ -91,6 +97,22 @@ const ProjectSettingsForm = ({ project }) => {
                                 type="text"
                                 isSubmitting={isSubmitting}
                             />
+                            <OFFormControl
+                                fieldName="hideEventName"
+                                noTopMargin>
+                                <FormControlLabel
+                                    label={t('settingsEvent.hideEventName')}
+                                    classes={{
+                                        label: classes.reducedLabelFontSize,
+                                    }}
+                                    control={
+                                        <Field
+                                            name="hideEventName"
+                                            component={OFSwitch}
+                                        />
+                                    }
+                                />
+                            </OFFormControl>
 
                             <OFFormControlInputFormiked
                                 name={t('settingsEvent.fieldSchedule')}

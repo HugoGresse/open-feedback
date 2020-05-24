@@ -151,7 +151,8 @@
         "fieldVoteOpen": "Vote open time (in your local timezone)",
         "fieldVoteRange": "Restrict voting open/close date",
         "pick": "Pick",
-        "save": "Save"
+        "save": "Save",
+        "hideEventName": "Do not display the event name in the feedback, only the logo"
     },
     "settingsSetup": {
         "cannotChange": "You cannot change the setup mode after creating the event.",

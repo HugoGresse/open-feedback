@@ -9,6 +9,7 @@ const fieldToSwitch = ({
 }) => {
     return {
         disabled: disabled !== undefined ? disabled : isSubmitting,
+        color: 'primary',
         ...props,
         ...field,
         value: Boolean(field.name),
@@ -16,4 +17,4 @@ const fieldToSwitch = ({
     }
 }
 
-export const OFSwitch = props => <MuiSwitch {...fieldToSwitch(props)} />
+export const OFSwitch = (props) => <MuiSwitch {...fieldToSwitch(props)} />

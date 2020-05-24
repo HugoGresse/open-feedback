@@ -151,7 +151,8 @@
         "fieldVoteOpen": "Heure du début des votes (dans votre fuseau horaire)",
         "fieldVoteRange": "Restreindre la date de début/fin des votes",
         "pick": "Choisir",
-        "save": "Sauvegarder"
+        "save": "Sauvegarder",
+        "hideEventName": "Ne pas afficher le nom de l'évènement dans les feedbacks (uniquement le logo)"
     },
     "settingsSetup": {
         "cannotChange": "Vous ne pouvez pas changer le mode de configuration après avoir créé l'évènement.",

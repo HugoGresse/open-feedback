@@ -54,13 +54,14 @@ const TalksListWrapper = () => {
         if (
             talks &&
             talks.length === 1 &&
+            !talkIsLoading &&
             project &&
             !project.disableSoloTalkRedirect &&
             selectedDate
         ) {
             history.push(`/${project.id}/${selectedDate}/${talks[0].id}`)
         }
-    }, [talks, project, history, selectedDate])
+    }, [talks, project, history, selectedDate, talkIsLoading])
 
     if (errorTalksLoad) {
         return (
