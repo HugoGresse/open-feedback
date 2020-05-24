@@ -61,7 +61,7 @@ const TalksListWrapper = () => {
         ) {
             history.push(`/${project.id}/${selectedDate}/${talks[0].id}`)
         }
-    }, [talks, project, history, selectedDate])
+    }, [talks, project, history, selectedDate, talkIsLoading])
 
     if (errorTalksLoad) {
         return (
