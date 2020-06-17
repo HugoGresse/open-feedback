@@ -63,7 +63,7 @@
         "react-dropzone": "^11.0.1",
         "react-firebaseui": "^4.1.0",
         "react-helmet": "^6.0.0",
-        "react-i18next": "^11.4.0",
+        "react-i18next": "^11.6.0",
         "react-redux": "^7.2.0",
         "react-router-dom": "^5.2.0",
         "react-scripts": "3.4.1",
