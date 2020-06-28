@@ -63,6 +63,7 @@ const useStyles = makeStyles({
             filter: 'brightness(150%)',
         },
         minWidth: 0,
+        lineHeight: 1,
     },
     topRightIcon: {
         marginRight: 10,
