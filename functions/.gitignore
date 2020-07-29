@@ -10,5 +10,6 @@ node_modules/
 
 serviceAccountKey.production.json
 serviceAccountKey.development.json
+serviceAccountKey.test.json
 
 .runtimeconfig.json
