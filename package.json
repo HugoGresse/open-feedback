@@ -28,7 +28,7 @@
         "cypress": "^4.6.0",
         "eslint-plugin-cypress": "^2.11.1",
         "eslint-plugin-i18n-json": "^2.4.4",
-        "firebase-tools": "^8.4.0",
+        "firebase-tools": "^8.9.1",
         "husky": "^4.2.5",
         "jest-fetch-mock": "^3.0.3",
         "lint-staged": "^10.2.11",
