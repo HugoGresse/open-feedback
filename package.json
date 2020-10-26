@@ -48,7 +48,7 @@
         "firebase": "^7.14.5",
         "formik": "^2.1.4",
         "history": "^4.10.1",
-        "i18next": "^19.4.5",
+        "i18next": "^19.8.3",
         "i18next-browser-languagedetector": "^4.2.0",
         "i18next-scanner": "^2.11.0",
         "langmap": "0.0.16",
