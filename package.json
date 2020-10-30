@@ -71,7 +71,7 @@
         "redux": "^4.0.5",
         "redux-thunk": "^2.3.0",
         "reselect": "^4.0.0",
-        "styled-components": "^5.1.0",
+        "styled-components": "^5.2.1",
         "styled-system": "^5.1.5",
         "wait-on": "^5.0.0",
         "yup": "^0.29.1"
