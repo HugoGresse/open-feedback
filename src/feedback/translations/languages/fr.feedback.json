@@ -20,5 +20,12 @@
     },
     "footer": {
         "madeBy": "Propulsé par"
+    },
+    "project": {
+        "errorLoad": "Impossible de charger l'évènement",
+        "errorLoadVotes": "Erreur lors du chargement des votes"
+    },
+    "auth": {
+        "errorLogin": "Erreur lors de l'identification en invité"
     }
 }

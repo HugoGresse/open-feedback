@@ -4,11 +4,11 @@ import { getSpeakersListSelector } from '../../../core/speakers/speakerSelectors
 import { getTalksListSelector } from '../../../core/talks/talksSelectors'
 import { getProjectVoteResultsSelector } from '../../project/projectSelectors'
 
-export const getTalkSelector = state => state.talk
+export const getTalkSelector = (state) => state.talk
 
-export const getSelectedTalkIdSelector = state =>
+export const getSelectedTalkIdSelector = (state) =>
     getTalkSelector(state).selected
-export const getTalkLoadErrorSelector = state =>
+export const getTalkLoadErrorSelector = (state) =>
     getTalkSelector(state).errorTalkLoad
 
 export const getSelectedTalkSelector = createSelector(
@@ -24,7 +24,7 @@ export const getSpeakersForSelectedTalkSelector = createSelector(
     getSpeakersListSelector,
     (talk, speakers) => {
         if (!talk || !talk.speakers) return []
-        return Object.values(speakers).filter(speaker => {
+        return Object.values(speakers).filter((speaker) => {
             return talk.speakers.includes(speaker.id)
         })
     }
@@ -43,7 +43,7 @@ export const getVoteResultSelectorSelector = createSelector(
         Object.entries(results).forEach(([key, value]) => {
             if (typeof value === 'object') {
                 transformResult[key] = []
-                Object.entries(value).forEach(([key2, value2]) => {
+                Object.entries(value).forEach(([, value2]) => {
                     if (Object.keys(value2).length === 0) {
                         // Empty object due to deletion
                         return

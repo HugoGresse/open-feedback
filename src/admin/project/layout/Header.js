@@ -17,7 +17,7 @@ import {
 import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
 import RoutingMap from '../../RoutingMap'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useHistory } from 'react-router-dom'
 import Hidden from '@material-ui/core/Hidden'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
@@ -85,6 +85,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
     const selectedProject = useSelector(getSelectedProjectSelector)
     const projects = useSelector(getSortedProjectsSelector)
     const { t } = useTranslation()
+    const history = useHistory()
 
     const [anchorEventSelect, setAnchorEventSelect] = useState(null)
     const [qrCodeDialogOpen, setQRCodeDialogOpen] = useState(false)
@@ -96,7 +97,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
     const classes = useStyles({ shadow: triggerScrollShadow })
 
     const onProjectSelectedChange = (projectId) => {
-        redirectToProject(selectedProjectId, projectId)
+        redirectToProject(selectedProjectId, projectId, history)
         setAnchorEventSelect(null)
     }
 

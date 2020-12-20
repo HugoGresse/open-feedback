@@ -20,5 +20,12 @@
     },
     "footer": {
         "madeBy": "Powered by"
+    },
+    "project": {
+        "errorLoad": "Unable to load the event",
+        "errorLoadVotes": "Unable to load event votes"
+    },
+    "auth": {
+        "errorLogin": "Unable to identify you as guest"
     }
 }

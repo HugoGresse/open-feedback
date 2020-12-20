@@ -41,7 +41,7 @@ const projectReducer = (state = initState, { payload, type }) => {
             }
         case GET_PROJECT_SUCCESS: {
             const newProjectsArray = Array.from(state.data.projects).filter(
-                project => project.id !== payload.id
+                (project) => project.id !== payload.id
             )
 
             newProjectsArray.push(payload)
@@ -60,7 +60,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                 selectedProjectId: payload,
             }
         case EDIT_PROJECT_SUCCESS: {
-            const projects = state.data.projects.map(project => {
+            const projects = state.data.projects.map((project) => {
                 if (project.id === state.selectedProjectId) {
                     return {
                         ...project,
@@ -89,7 +89,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                 ...state,
                 data: {
                     ...state.data,
-                    projects: state.data.projects.map(project => {
+                    projects: state.data.projects.map((project) => {
                         if (project.id === state.selectedProjectId) {
                             return {
                                 ...project,
@@ -102,6 +102,7 @@ const projectReducer = (state = initState, { payload, type }) => {
             }
         }
         case GET_PROJECTS_ERROR:
+            // eslint-disable-next-line no-console
             console.error(payload)
             return {
                 ...state,

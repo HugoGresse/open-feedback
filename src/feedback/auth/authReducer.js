@@ -3,7 +3,7 @@ import { LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT } from './authActionTypes'
 const initState = {
     user: null,
     isLogin: false,
-    error: null
+    error: null,
 }
 
 const authReducer = (state = initState, { payload, type }) => {
@@ -12,19 +12,20 @@ const authReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 isLogin: true,
-                user: payload
+                user: payload,
             }
         case LOGOUT:
             return {
                 ...state,
                 isLogin: false,
-                user: null
+                user: null,
             }
         case LOGIN_ERROR:
+            // eslint-disable-next-line no-console
             console.error(payload)
             return {
                 ...state,
-                error: payload
+                error: payload,
             }
         default:
             return state

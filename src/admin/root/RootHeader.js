@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import logo from '../../assets/logo-openfeedback-white.png'
 import COLORS from '../../constants/colors'
 import Avatar from '@material-ui/core/Avatar'
@@ -11,7 +12,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     container: {
         background: COLORS.RED_ORANGE,
         padding: 32,
@@ -48,6 +49,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const RootHeader = () => {
+    const history = useHistory()
     const dispatch = useDispatch()
     const classes = useStyles()
 
@@ -72,7 +74,7 @@ const RootHeader = () => {
                         edge="end"
                         className={classes.logout}
                         aria-label="signout"
-                        onClick={() => dispatch(signOut())}>
+                        onClick={() => dispatch(signOut(history))}>
                         <PowerSettingsIcon />
                     </IconButton>
                 </Grid>

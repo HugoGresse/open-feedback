@@ -4,22 +4,13 @@ import { Provider } from 'react-redux'
 import App from './App'
 import configureStore from './configureStore'
 
-
 const store = configureStore({})
 
-const render = AppComponent => {
-    return ReactDOM.render(
+ReactDOM.render(
+    <React.StrictMode>
         <Provider store={store}>
-            <AppComponent />
-        </Provider>,
-        document.getElementById('root')
-    )
-}
-render(App)
-
-if (module.hot) {
-    module.hot.accept('./App', () => {
-        const NextApp = require('./App').default
-        render(NextApp)
-    })
-}
+            <App />
+        </Provider>
+    </React.StrictMode>,
+    document.getElementById('root')
+)

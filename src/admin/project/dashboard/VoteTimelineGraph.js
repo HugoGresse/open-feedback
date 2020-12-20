@@ -43,7 +43,7 @@ const VoteTimelineGraph = ({ votes }) => {
     )
 }
 
-const VerticalTick = tick => {
+const VerticalTick = (tick) => {
     const theme = useTheme()
 
     // Hide first tick at 0, 0
@@ -69,33 +69,36 @@ const VerticalTick = tick => {
     )
 }
 
-const HorizontalTick = pointToDisplay => tick => {
-    // Hide first tick at 0, 0
-    if (tick.tickIndex === 0) {
-        return null
-    }
+function HorizontalTick(pointToDisplay) {
+    const tickFunction = (tick) => {
+        // Hide first tick at 0, 0
+        if (tick.tickIndex === 0) {
+            return null
+        }
 
-    let opacity = tick.opacity
-    if (parseInt(tick.value) % pointToDisplay === 0) {
-        opacity = 0
-    }
+        let opacity = tick.opacity
+        if (parseInt(tick.value) % pointToDisplay === 0) {
+            opacity = 0
+        }
 
-    return (
-        <g opacity={opacity} transform={`translate(${tick.x},${tick.y})`}>
-            <line stroke="#ccc" strokeWidth={1} y1={0} y2={7} />
-            <g transform={`translate(0,${tick.y + 16})`}>
-                <text
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    style={{
-                        fill: '#888',
-                        fontSize: 12,
-                    }}>
-                    {tick.value}
-                </text>
+        return (
+            <g opacity={opacity} transform={`translate(${tick.x},${tick.y})`}>
+                <line stroke="#ccc" strokeWidth={1} y1={0} y2={7} />
+                <g transform={`translate(0,${tick.y + 16})`}>
+                    <text
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        style={{
+                            fill: '#888',
+                            fontSize: 12,
+                        }}>
+                        {tick.value}
+                    </text>
+                </g>
             </g>
-        </g>
-    )
+        )
+    }
+    return tickFunction
 }
 
 const Tooltip = ({ slice }) => {
@@ -108,7 +111,7 @@ const Tooltip = ({ slice }) => {
                 backgroundColor: '#FFF',
                 maxWidth: '40vw',
             }}>
-            {slice.points.map(point => (
+            {slice.points.map((point) => (
                 <div
                     key={point.id}
                     style={{

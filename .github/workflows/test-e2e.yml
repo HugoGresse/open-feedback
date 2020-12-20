@@ -10,7 +10,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
     - name: Cypress run
-      uses: cypress-io/github-action@v1
+      uses: cypress-io/github-action@v2
       with:
         build: npm run build
         start: npx firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}

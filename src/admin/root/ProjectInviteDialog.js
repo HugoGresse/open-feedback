@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -15,21 +16,21 @@ import {
     getInviteSelector,
     getUsersSelector,
 } from '../project/settings/users/usersSelectors'
-import { history } from '../../App'
 import { useTranslation } from 'react-i18next'
 
 const ProjectInviteDialog = ({ inviteId }) => {
     const dispatch = useDispatch()
+    const history = useHistory()
     const invite = useSelector(getInviteSelector)
     const currentUser = useSelector(getUsersSelector)
     const { t } = useTranslation()
 
     useEffect(() => {
-        dispatch(listenForInvite(inviteId))
+        dispatch(listenForInvite(inviteId, history))
         return () => {
             dispatch(unsubscribeRealtimeInviteListener())
         }
-    }, [dispatch, inviteId])
+    }, [dispatch, inviteId, history])
 
     const closeDialog = () => {
         history.push(history.location.pathname)

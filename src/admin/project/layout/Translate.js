@@ -1,11 +1,36 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import useTheme from '@material-ui/core/styles/useTheme'
 import { useForkRef } from '@material-ui/core/utils'
 import { debounce } from 'lodash'
 import Transition from 'react-transition-group/Transition'
+import PropTypes from 'prop-types'
+import { elementAcceptingRef } from '@material-ui/utils'
 
-const reflow = node => node.scrollTop
+function ownerDocument(node) {
+    return (node && node.ownerDocument) || document
+}
+function ownerWindow(node) {
+    const doc = ownerDocument(node)
+    return doc.defaultView || window
+}
+
+// Follow https://material.io/guidelines/motion/duration-easing.html#duration-easing-common-durations
+// to learn when use what timing
+const duration = {
+    shortest: 150,
+    shorter: 200,
+    short: 250,
+    // most basic recommended timing
+    standard: 300,
+    // this is to be used in complex animations
+    complex: 375,
+    // recommended when something is entering screen
+    enteringScreen: 225,
+    // recommended when something is leaving screen
+    leavingScreen: 195,
+}
+
+const reflow = (node) => node.scrollTop
 
 function getTransitionProps(props, options) {
     const { timeout, style = {} } = props
@@ -19,19 +44,27 @@ function getTransitionProps(props, options) {
     }
 }
 
-// Translate the node so he can't be seen on the screen.
-// Later, we gonna translate back the node to his original location
-// with `none`.`
+// Translate the node so it can't be seen on the screen.
+// Later, we're going to translate the node back to its original location with `none`.
 function getTranslateValue(direction, node) {
     const rect = node.getBoundingClientRect()
+    const containerWindow = ownerWindow(node)
 
     let offsetX = 0
+    // OF Change
+    let offsetY = 70
 
-    const offsetY = 70
+    // OF Change
+    // if (transform && transform !== 'none' && typeof transform === 'string') {
+    //     const transformValues = transform.split('(')[1].split(')')[0].split(',')
+    //     offsetX = parseInt(transformValues[4], 10)
+    //     offsetY = parseInt(transformValues[5], 10)
+    // }
 
     if (direction === 'left') {
-        return `translateX(${window.innerWidth}px) translateX(-${rect.left -
-            offsetX}px)`
+        return `translateX(${containerWindow.innerWidth}px) translateX(${
+            offsetX - rect.left
+        }px)`
     }
 
     if (direction === 'right') {
@@ -39,15 +72,16 @@ function getTranslateValue(direction, node) {
     }
 
     if (direction === 'up') {
-        return `translateY(${window.innerHeight}px) translateY(-${rect.top -
-            offsetY}px)`
+        return `translateY(${containerWindow.innerHeight}px) translateY(${
+            offsetY - rect.top
+        }px)`
     }
 
     // direction === 'down'
     return `translateY(-${rect.top + rect.height - offsetY}px)`
 }
 
-export function setTranslateValue(direction, node) {
+function setTranslateValue(direction, node) {
     const transform = getTranslateValue(direction, node)
 
     if (transform) {
@@ -57,58 +91,66 @@ export function setTranslateValue(direction, node) {
 }
 
 const defaultTimeout = {
-    enter: 200,
-    exit: 200,
+    enter: duration.enteringScreen,
+    exit: duration.leavingScreen,
 }
 
 /**
- * Fork of the Slide transition from MUI but only translate, without changing visibility
- * From : https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Slide/Slide.js
+ * The Slide transition is used by the [Drawer](/components/drawers/) component.
+ * It uses [react-transition-group](https://github.com/reactjs/react-transition-group) internally.
  */
-const Translate = React.forwardRef(function Translate(props, ref) {
+const Slide = React.forwardRef(function Slide(props, ref) {
     const {
+        appear = true,
         children,
         direction = 'down',
         in: inProp,
         onEnter,
+        onEntered,
         onEntering,
         onExit,
         onExited,
+        onExiting,
         style,
         timeout = defaultTimeout,
+        // eslint-disable-next-line react/prop-types
+        TransitionComponent = Transition,
         ...other
     } = props
 
     const theme = useTheme()
     const childrenRef = React.useRef(null)
-    /**
-     * used in cloneElement(children, { ref: handleRef })
-     */
-    const handleOwnRef = React.useCallback(instance => {
-        // #StrictMode ready
-        childrenRef.current = ReactDOM.findDOMNode(instance)
-    }, [])
-    const handleRefIntermediary = useForkRef(children.ref, handleOwnRef)
+    const handleRefIntermediary = useForkRef(children.ref, childrenRef)
     const handleRef = useForkRef(handleRefIntermediary, ref)
 
-    const handleEnter = () => {
-        const node = childrenRef.current
+    const normalizedTransitionCallback = (callback) => (isAppearing) => {
+        if (callback) {
+            // onEnterXxx and onExitXxx callbacks have a different arguments.length value.
+            if (isAppearing === undefined) {
+                callback(childrenRef.current)
+            } else {
+                callback(childrenRef.current, isAppearing)
+            }
+        }
+    }
+
+    const handleEnter = normalizedTransitionCallback((node, isAppearing) => {
         setTranslateValue(direction, node)
         reflow(node)
 
         if (onEnter) {
-            onEnter(node)
+            onEnter(node, isAppearing)
         }
-    }
+    })
 
-    const handleEntering = () => {
-        const node = childrenRef.current
+    const handleEntering = normalizedTransitionCallback((node, isAppearing) => {
         const transitionProps = getTransitionProps(
             { timeout, style },
             {
                 mode: 'enter',
             }
         )
+
         node.style.webkitTransition = theme.transitions.create(
             '-webkit-transform',
             {
@@ -116,25 +158,30 @@ const Translate = React.forwardRef(function Translate(props, ref) {
                 easing: theme.transitions.easing.easeOut,
             }
         )
+
         node.style.transition = theme.transitions.create('transform', {
             ...transitionProps,
             easing: theme.transitions.easing.easeOut,
         })
+
         node.style.webkitTransform = 'none'
         node.style.transform = 'none'
         if (onEntering) {
-            onEntering(node)
+            onEntering(node, isAppearing)
         }
-    }
+    })
 
-    const handleExit = () => {
-        const node = childrenRef.current
+    const handleEntered = normalizedTransitionCallback(onEntered)
+    const handleExiting = normalizedTransitionCallback(onExiting)
+
+    const handleExit = normalizedTransitionCallback((node) => {
         const transitionProps = getTransitionProps(
             { timeout, style },
             {
                 mode: 'exit',
             }
         )
+
         node.style.webkitTransition = theme.transitions.create(
             '-webkit-transform',
             {
@@ -142,22 +189,28 @@ const Translate = React.forwardRef(function Translate(props, ref) {
                 easing: theme.transitions.easing.sharp,
             }
         )
+
         node.style.transition = theme.transitions.create('transform', {
             ...transitionProps,
             easing: theme.transitions.easing.sharp,
         })
+
         setTranslateValue(direction, node)
 
         if (onExit) {
             onExit(node)
         }
-    }
+    })
 
-    const handleExited = () => {
+    const handleExited = normalizedTransitionCallback((node) => {
+        // No need for transitions when the component is hidden
+        // node.style.webkitTransition = ''
+        // node.style.transition = ''
+
         if (onExited) {
-            onExited(childrenRef.current)
+            onExited(node)
         }
-    }
+    })
 
     const updatePosition = React.useCallback(() => {
         if (childrenRef.current) {
@@ -167,22 +220,22 @@ const Translate = React.forwardRef(function Translate(props, ref) {
 
     React.useEffect(() => {
         // Skip configuration where the position is screen size invariant.
-        if (!inProp && direction !== 'down' && direction !== 'right') {
-            const handleResize = debounce(() => {
-                if (childrenRef.current) {
-                    setTranslateValue(direction, childrenRef.current)
-                }
-            })
-
-            window.addEventListener('resize', handleResize)
-
-            return () => {
-                handleResize.clear()
-                window.removeEventListener('resize', handleResize)
-            }
+        if (inProp || direction === 'down' || direction === 'right') {
+            return undefined
         }
 
-        return undefined
+        const handleResize = debounce(() => {
+            if (childrenRef.current) {
+                setTranslateValue(direction, childrenRef.current)
+            }
+        })
+
+        const containerWindow = ownerWindow(childrenRef.current)
+        containerWindow.addEventListener('resize', handleResize)
+        return () => {
+            handleResize.clear()
+            containerWindow.removeEventListener('resize', handleResize)
+        }
     }, [direction, inProp])
 
     React.useEffect(() => {
@@ -194,16 +247,20 @@ const Translate = React.forwardRef(function Translate(props, ref) {
     }, [inProp, updatePosition])
 
     return (
-        <Transition
+        <TransitionComponent
+            nodeRef={childrenRef}
             onEnter={handleEnter}
+            onEntered={handleEntered}
             onEntering={handleEntering}
             onExit={handleExit}
             onExited={handleExited}
-            appear
+            onExiting={handleExiting}
+            appear={appear}
             in={inProp}
             timeout={timeout}
             {...other}>
             {(state, childProps) => {
+                // OF Change
                 return React.cloneElement(children, {
                     ref: handleRef,
                     style: {
@@ -213,8 +270,78 @@ const Translate = React.forwardRef(function Translate(props, ref) {
                     ...childProps,
                 })
             }}
-        </Transition>
+        </TransitionComponent>
     )
 })
 
-export default Translate
+Slide.propTypes = {
+    // ----------------------------- Warning --------------------------------
+    // | These PropTypes are generated from the TypeScript type definitions |
+    // |     To update them edit the d.ts file and run "yarn proptypes"     |
+    // ----------------------------------------------------------------------
+    /**
+     * Perform the enter transition when it first mounts if `in` is also `true`.
+     * Set this to `false` to disable this behavior.
+     * @default true
+     */
+    appear: PropTypes.bool,
+    /**
+     * A single child content element.
+     */
+    children: elementAcceptingRef,
+    /**
+     * Direction the child node will enter from.
+     * @default 'down'
+     */
+    direction: PropTypes.oneOf(['down', 'left', 'right', 'up']),
+    /**
+     * If `true`, show the component; triggers the enter or exit animation.
+     */
+    in: PropTypes.bool,
+    /**
+     * @ignore
+     */
+    onEnter: PropTypes.func,
+    /**
+     * @ignore
+     */
+    onEntered: PropTypes.func,
+    /**
+     * @ignore
+     */
+    onEntering: PropTypes.func,
+    /**
+     * @ignore
+     */
+    onExit: PropTypes.func,
+    /**
+     * @ignore
+     */
+    onExited: PropTypes.func,
+    /**
+     * @ignore
+     */
+    onExiting: PropTypes.func,
+    /**
+     * @ignore
+     */
+    style: PropTypes.object,
+    /**
+     * The duration for the transition, in milliseconds.
+     * You may specify a single timeout for all transitions, or individually with an object.
+     * @default {
+     *   enter: duration.enteringScreen,
+     *   exit: duration.leavingScreen,
+     * }
+     */
+    timeout: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.shape({
+            appear: PropTypes.number,
+            enter: PropTypes.number,
+            exit: PropTypes.number,
+        }),
+    ]),
+}
+
+export default Slide

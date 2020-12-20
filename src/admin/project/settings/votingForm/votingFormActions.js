@@ -30,9 +30,9 @@ export const getVoteItems = () => (dispatch, getState) =>
             : [],
     })
 
-export const onVoteItemChange = voteItem => (dispatch, getState) => {
+export const onVoteItemChange = (voteItem) => (dispatch, getState) => {
     const savedVoteItem = getVoteItemsSelector(getState()).filter(
-        item => voteItem.id === item.id
+        (item) => voteItem.id === item.id
     )[0]
 
     const editedVoteItem = {
@@ -50,17 +50,17 @@ export const onVoteItemChange = voteItem => (dispatch, getState) => {
     })
 }
 
-export const onVoteItemMoveUp = voteItem => ({
+export const onVoteItemMoveUp = (voteItem) => ({
     type: MOVE_UP_VOTEITEM,
     payload: voteItem,
 })
 
-export const onVoteItemMoveDown = voteItem => ({
+export const onVoteItemMoveDown = (voteItem) => ({
     type: MOVE_DOWN_VOTEITEM,
     payload: voteItem,
 })
 
-export const onVoteItemDelete = voteItem => ({
+export const onVoteItemDelete = (voteItem) => ({
     type: DELETE_VOTEITEM,
     payload: voteItem,
 })
@@ -94,22 +94,22 @@ export const addVoteItem = (optionalName, type) => {
     }
 }
 
-export const saveVoteItems = hideNotification => {
+export const saveVoteItems = (hideNotification) => {
     return (dispatch, getState) => {
         const voteItems = getVoteItemsSelector(getState())
         const selectedProjectId = getSelectedProjectIdSelector(getState())
 
         let tempLanguages = {}
         const cleanedVoteItems = voteItems
-            .filter(item => item.name)
-            .map(item => {
+            .filter((item) => item.name)
+            .map((item) => {
                 delete item.local
 
                 if (!item.languages) return item
 
                 tempLanguages = filterMap(
                     item.languages,
-                    translatedName => translatedName
+                    (translatedName) => translatedName
                 )
 
                 if (Object.keys(tempLanguages).length === 0) {
@@ -152,7 +152,8 @@ export const saveVoteItems = hideNotification => {
                     payload: cleanedVoteItems,
                 })
             })
-            .catch(error => {
+            .catch((error) => {
+                // eslint-disable-next-line no-console
                 console.error(error)
                 dispatch({
                     type: SAVE_VOTEITEMS_ERROR,
@@ -170,13 +171,13 @@ export const saveVoteItems = hideNotification => {
     }
 }
 
-export const deleteAllVoteItems = () => async dispatch => {
+export const deleteAllVoteItems = () => async (dispatch) => {
     dispatch({
         type: DELETE_ALL_VOTEITEMS,
     })
 }
 
-export const fillDefaultVotingForm = (t, replace) => async dispatch => {
+export const fillDefaultVotingForm = (t, replace) => async (dispatch) => {
     if (replace) {
         await dispatch(deleteAllVoteItems())
     }

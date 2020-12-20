@@ -46,7 +46,7 @@ const TalkAddEditPanel = ({
                             tags: array().of(string()),
                             startTime: string().nullable().trim(),
                             endTime: string().nullable().trim(),
-                            speakers: array().of(string()),
+                            speakers: array().of(object()),
                         })}
                         initialValues={
                             talk || {

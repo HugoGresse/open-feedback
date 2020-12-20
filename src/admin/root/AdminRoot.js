@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import {
     getSortedProjectsSelector,
     isProjectsLoadedSelector,
@@ -35,6 +36,7 @@ const useStyles = makeStyles({
 })
 
 const AdminRoot = () => {
+    const history = useHistory()
     const classes = useStyles()
     const inviteId = useQuery().get('inviteId')
     const dispatch = useDispatch()
@@ -70,7 +72,7 @@ const AdminRoot = () => {
                             isProjectsLoaded={isProjectsLoaded}
                             onNewEventClick={() => setNewProjectOpen(true)}
                             onProjectSelected={(projectId) =>
-                                redirectToProject(null, projectId)
+                                redirectToProject(null, projectId, history)
                             }
                         />
                     )}
