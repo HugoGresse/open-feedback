@@ -79,13 +79,14 @@ const OFAutoComplete = ({
                 ))
             }
             renderInput={(params) => {
-                // eslint-disable-next-line no-unused-vars
+                /* eslint-disable no-unused-vars */
                 const {
                     InputProps,
                     InputLabelProps,
                     inputProps,
                     ...other
                 } = params
+                /* eslint-disable no-unused-vars */
                 const { ref, ...otherInputProps } = InputProps
 
                 return (

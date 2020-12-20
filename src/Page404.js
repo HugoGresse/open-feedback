@@ -1,7 +1,4 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core'
-
-const styles = theme => ({})
 
 class Page404 extends Component {
     render() {
@@ -9,4 +6,4 @@ class Page404 extends Component {
     }
 }
 
-export default withStyles(styles)(Page404)
+export default Page404

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import logoWhite from '../../assets/logo-openfeedback-white.png'
 import { StyledFirebaseAuth } from 'react-firebaseui'
 import { auth, authProvider } from '../../firebase'
@@ -6,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getLoginErrorSelector, isLoggedSelector } from './authSelectors'
 import { didSignIn, signOut } from './authActions'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
-import { useHistory } from 'react-router-dom'
 import Box from '@material-ui/core/Box'
 import COLORS from '../../constants/colors'
 

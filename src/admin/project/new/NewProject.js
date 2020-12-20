@@ -42,6 +42,7 @@ const useStyles = makeStyles({
 const NewProject = ({ onCancel }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
+    // eslint-disable-next-line no-undef
     const history = useHistory()
     const { t } = useTranslation()
 

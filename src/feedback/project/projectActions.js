@@ -9,43 +9,41 @@ import { fireStoreMainInstance } from '../../firebase'
 import { getProjectSelector } from './projectSelectors'
 import { initProjectApi } from '../../core/setupType/projectApi'
 
-export const getProject = (projectId) => {
-    return (dispatch, getState) => {
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(projectId)
-            .get()
-            .then((projectSnapshot) => {
-                if (projectSnapshot.exists) {
-                    const project = projectSnapshot.data()
-                    project.id = projectId
-                    // noinspection JSDeprecatedSymbols
-                    project.voteItems = getVoteLabelInClosestLanguage(
-                        project.voteItems,
-                        navigator.language || navigator.userLanguage
-                    )
+export const getProject = (projectId) => (dispatch) => {
+    return fireStoreMainInstance
+        .collection('projects')
+        .doc(projectId)
+        .get()
+        .then((projectSnapshot) => {
+            if (projectSnapshot.exists) {
+                const project = projectSnapshot.data()
+                project.id = projectId
+                // noinspection JSDeprecatedSymbols
+                project.voteItems = getVoteLabelInClosestLanguage(
+                    project.voteItems,
+                    navigator.language || navigator.userLanguage
+                )
 
-                    initProjectApi(project.setupType, project)
+                initProjectApi(project.setupType, project)
 
-                    dispatch({
-                        type: GET_PROJECT_SUCCESS,
-                        payload: project,
-                    })
-                } else {
-                    dispatch({
-                        type: GET_PROJECT_ERROR,
-                        payload:
-                            'Unknown project id, probably some copy-past issue?',
-                    })
-                }
-            })
-            .catch((err) => {
+                dispatch({
+                    type: GET_PROJECT_SUCCESS,
+                    payload: project,
+                })
+            } else {
                 dispatch({
                     type: GET_PROJECT_ERROR,
-                    payload: err.toString(),
+                    payload:
+                        'Unknown project id, probably some copy-past issue?',
                 })
+            }
+        })
+        .catch((err) => {
+            dispatch({
+                type: GET_PROJECT_ERROR,
+                payload: err.toString(),
             })
-    }
+        })
 }
 
 export const setSelectedDate = (date) => ({

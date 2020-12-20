@@ -14,7 +14,7 @@ import { VOTE_STATUS_HIDDEN } from '../../core/contants'
 import COLORS from '../../constants/colors'
 import Typography from '@material-ui/core/Typography'
 
-const styles = theme => ({
+const styles = (theme) => ({
     itemContainer: {
         margin: -1,
     },
@@ -93,7 +93,7 @@ class TalkVoteText extends Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps) {
         if (
             (this.props.currentUserVote && !prevProps.currentUserVote) ||
             (this.props.currentUserVote &&
@@ -109,13 +109,13 @@ class TalkVoteText extends Component {
         }
     }
 
-    onTextChange = event => {
+    onTextChange = (event) => {
         this.setState({
             comment: event.target.value,
         })
     }
 
-    onVoteDelete = event => {
+    onVoteDelete = () => {
         if (this.props.currentUserVote) {
             this.props.onVoteChange(this.props.voteItem, null)
         }

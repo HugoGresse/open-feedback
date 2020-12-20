@@ -49,16 +49,6 @@ function getTransitionProps(props, options) {
 function getTranslateValue(direction, node) {
     const rect = node.getBoundingClientRect()
     const containerWindow = ownerWindow(node)
-    let transform
-
-    if (node.fakeTransform) {
-        transform = node.fakeTransform
-    } else {
-        const computedStyle = containerWindow.getComputedStyle(node)
-        transform =
-            computedStyle.getPropertyValue('-webkit-transform') ||
-            computedStyle.getPropertyValue('transform')
-    }
 
     let offsetX = 0
     // OF Change

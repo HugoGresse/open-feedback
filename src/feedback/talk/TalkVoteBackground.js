@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { getRandomArbitrary } from '../utils/Random'
 
-const styles = theme => ({
+const styles = () => ({
     canvas: {
         position: 'absolute',
     },
@@ -37,7 +37,7 @@ class TalkItemVoteBackground extends Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps) {
         if (this.props.count && this.canvasRef.current) {
             if (this.props.count !== prevProps.count) {
                 this.canvasState = {
