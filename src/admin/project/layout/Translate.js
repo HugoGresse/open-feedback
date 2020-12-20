@@ -61,13 +61,15 @@ function getTranslateValue(direction, node) {
     }
 
     let offsetX = 0
-    let offsetY = 0
+    // OF Change
+    let offsetY = 70
 
-    if (transform && transform !== 'none' && typeof transform === 'string') {
-        const transformValues = transform.split('(')[1].split(')')[0].split(',')
-        offsetX = parseInt(transformValues[4], 10)
-        offsetY = parseInt(transformValues[5], 10)
-    }
+    // OF Change
+    // if (transform && transform !== 'none' && typeof transform === 'string') {
+    //     const transformValues = transform.split('(')[1].split(')')[0].split(',')
+    //     offsetX = parseInt(transformValues[4], 10)
+    //     offsetY = parseInt(transformValues[5], 10)
+    // }
 
     if (direction === 'left') {
         return `translateX(${containerWindow.innerWidth}px) translateX(${
@@ -212,8 +214,8 @@ const Slide = React.forwardRef(function Slide(props, ref) {
 
     const handleExited = normalizedTransitionCallback((node) => {
         // No need for transitions when the component is hidden
-        node.style.webkitTransition = ''
-        node.style.transition = ''
+        // node.style.webkitTransition = ''
+        // node.style.transition = ''
 
         if (onExited) {
             onExited(node)
@@ -268,13 +270,10 @@ const Slide = React.forwardRef(function Slide(props, ref) {
             timeout={timeout}
             {...other}>
             {(state, childProps) => {
+                // OF Change
                 return React.cloneElement(children, {
                     ref: handleRef,
                     style: {
-                        visibility:
-                            state === 'exited' && !inProp
-                                ? 'hidden'
-                                : undefined,
                         ...style,
                         ...children.props.style,
                     },
