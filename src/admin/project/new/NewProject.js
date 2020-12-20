@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { COLORS } from '../../../constants/colors'
@@ -41,6 +42,7 @@ const useStyles = makeStyles({
 const NewProject = ({ onCancel }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
+    const history = useHistory()
     const { t } = useTranslation()
 
     const projectIdDefaultValue = getNewProjectId()
@@ -69,7 +71,7 @@ const NewProject = ({ onCancel }) => {
                 await dispatch(getVoteItems())
 
                 setCreatingEvent(false)
-                redirectToProject(null, projectId)
+                redirectToProject(null, projectId, history)
             })
     }
 

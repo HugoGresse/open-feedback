@@ -19,7 +19,6 @@ import {
 } from '../../core/projectSelectors'
 import { getUserSelector } from '../../../auth/authSelectors'
 import { getDataFromProviderDataOrUser } from '../../../auth/authActions'
-import { history } from '../../../../App'
 import { addNotification } from '../../../notification/notifcationActions'
 import { editProject } from '../../core/actions/editProject'
 
@@ -148,7 +147,7 @@ export const setUsersFilter = (filterValue) => ({
 })
 
 let stopListenForInvite
-export const listenForInvite = (inviteId) => (dispatch) => {
+export const listenForInvite = (inviteId, history) => (dispatch) => {
     stopListenForInvite = fireStoreMainInstance
         .collection('projects-invites')
         .doc(inviteId)

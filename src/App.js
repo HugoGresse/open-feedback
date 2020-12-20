@@ -1,6 +1,10 @@
 import React from 'react'
-import { Redirect, Route, Router, Switch } from 'react-router-dom'
-import { createBrowserHistory } from 'history'
+import {
+    Redirect,
+    Route,
+    BrowserRouter as Router,
+    Switch,
+} from 'react-router-dom'
 import './App.css'
 
 import Page404 from './Page404'
@@ -8,11 +12,9 @@ import SuspendedAdminApp from './admin/SuspendedAdminApp'
 import FeedbackApp from './feedback/FeedbackApp'
 import SuspendedRootApp from './root/SuspendedRootApp'
 
-export const history = createBrowserHistory()
-
 const App = () => {
     return (
-        <Router history={history}>
+        <Router>
             <Switch>
                 <Route exact path="/" component={SuspendedRootApp} />
                 <Redirect strict exact from="/admin" to="/admin/" />

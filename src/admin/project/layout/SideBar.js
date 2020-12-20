@@ -1,5 +1,6 @@
 import React from 'react'
 import { COLORS } from '../../../constants/colors'
+import { useHistory } from 'react-router-dom'
 import logo from '../../../assets/logo-openfeedback-color&white.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserSelector } from '../../auth/authSelectors'
@@ -78,6 +79,7 @@ const useStyles = makeStyles({
 
 const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
     const dispatch = useDispatch()
+    const history = useHistory()
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -89,7 +91,7 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
             <Drawer
                 variant={isMobile ? 'temporary' : 'persistent'}
                 open={drawerOpen}
-                onClose={event => toggleDrawer(event)}
+                onClose={(event) => toggleDrawer(event)}
                 anchor="left"
                 classes={{
                     paper: classes.drawer,
@@ -112,7 +114,7 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                         component="nav"
                         aria-label="Main menu"
                         className={classes.list}
-                        onClick={event => toggleDrawer(event)}
+                        onClick={(event) => toggleDrawer(event)}
                         subheader={
                             <ListSubheader component="div">
                                 {t('layout.sidebar.data')}
@@ -149,7 +151,7 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                         component="nav"
                         aria-label="Settings menu"
                         className={classes.list}
-                        onClick={event => toggleDrawer(event)}
+                        onClick={(event) => toggleDrawer(event)}
                         subheader={
                             <ListSubheader component="div">
                                 {t('layout.sidebar.settings')}
@@ -202,7 +204,7 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                                 <IconButton
                                     edge="end"
                                     aria-label="signout"
-                                    onClick={() => dispatch(signOut())}>
+                                    onClick={() => dispatch(signOut(history))}>
                                     <PowerSettingsIcon />
                                 </IconButton>
                             </ListItemSecondaryAction>

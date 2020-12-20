@@ -5,7 +5,6 @@ import {
     fireStoreMainInstance,
     serverTimestamp,
 } from '../../firebase'
-import { history } from '../../App'
 import { isEmpty } from 'lodash'
 import {
     trackLogin,
@@ -100,7 +99,7 @@ export const didSignIn = (user, error) => {
     }
 }
 
-export const signOut = () => (dispatch) => {
+export const signOut = (history) => (dispatch) => {
     authProvider.signOut().then(() => {
         dispatch({
             type: LOGOUT,

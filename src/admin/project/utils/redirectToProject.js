@@ -1,6 +1,4 @@
-import { history } from '../../../App'
-
-export const redirectToProject = (currentProjectId, newProjectId) => {
+export const redirectToProject = (currentProjectId, newProjectId, history) => {
     if (newProjectId === currentProjectId) {
         return
     }

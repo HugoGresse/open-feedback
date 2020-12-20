@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import OFButton from '../../../baseComponents/button/OFButton'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { useTranslation } from 'react-i18next'
@@ -10,11 +11,11 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSelectedProjectIdSelector } from '../../core/projectSelectors'
 import BottomActionLayout from '../../layout/BottomActionLayout'
-import { history } from '../../../../App'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { deleteProject } from '../../core/actions/deleteProject'
 
 const DeleteProject = () => {
+    const history = useHistory()
     const dispatch = useDispatch()
     const projectId = useSelector(getSelectedProjectIdSelector)
     const { t } = useTranslation()
