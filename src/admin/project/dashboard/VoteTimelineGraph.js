@@ -4,6 +4,7 @@ import { useTheme } from '@nivo/core'
 import COLORS from '../../../constants/colors'
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import useThemeMui from '@material-ui/core/styles/useTheme'
+import { animated } from 'react-spring'
 
 const VoteTimelineGraph = ({ votes }) => {
     const theme = useThemeMui()
@@ -13,11 +14,11 @@ const VoteTimelineGraph = ({ votes }) => {
         <ResponsiveLine
             data={[
                 {
-                    id: '',
+                    id: '1',
                     data: votes,
                 },
             ]}
-            margin={{ top: 10, right: 10, bottom: 20, left: 0 }}
+            margin={{ top: 10, right: 10, bottom: 20, left: 20 }}
             lineWidth={4}
             xScale={{ type: 'point' }}
             yScale={{ type: 'linear' }}
@@ -47,14 +48,14 @@ const VerticalTick = (tick) => {
     const theme = useTheme()
 
     // Hide first tick at 0, 0
-    if (tick.tickIndex === 0) {
+    if (tick.tickIndex === 0 || tick.value === 0) {
         return null
     }
 
     return (
-        <g
+        <animated.g
             transform={`translate(${tick.x},${tick.y + 8})`}
-            opacity={tick.opacity}>
+            style={{ opacity: tick.animatedProps.opacity }}>
             <text
                 textAnchor="left"
                 dominantBaseline="middle"
@@ -65,7 +66,7 @@ const VerticalTick = (tick) => {
                 }}>
                 {tick.value}
             </text>
-        </g>
+        </animated.g>
     )
 }
 
@@ -76,13 +77,15 @@ function HorizontalTick(pointToDisplay) {
             return null
         }
 
-        let opacity = tick.opacity
+        let opacity = tick.animatedProps.opacity
         if (parseInt(tick.value) % pointToDisplay === 0) {
             opacity = 0
         }
 
         return (
-            <g opacity={opacity} transform={`translate(${tick.x},${tick.y})`}>
+            <animated.g
+                style={{ opacity: opacity }}
+                transform={`translate(${tick.x},${tick.y})`}>
                 <line stroke="#ccc" strokeWidth={1} y1={0} y2={7} />
                 <g transform={`translate(0,${tick.y + 16})`}>
                     <text
@@ -95,7 +98,7 @@ function HorizontalTick(pointToDisplay) {
                         {tick.value}
                     </text>
                 </g>
-            </g>
+            </animated.g>
         )
     }
     return tickFunction
