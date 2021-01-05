@@ -10,7 +10,7 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "deploy": "npm run build && firebase deploy",
-        "deploy:dev": "env-cmd -f .env.development.local npm run build && firebase deploy --only hosting",
+        "deploy:dev": "env-cmd -f .env.development.local npm run build && firebase deploy",
         "release": "npm version minor && npm run deploy && git push && git push --tags",
         "doc": "start-storybook -p 6006 --docs",
         "doc:build": "build-storybook --docs",
