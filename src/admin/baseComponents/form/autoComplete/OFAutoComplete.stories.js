@@ -37,6 +37,9 @@ export const defaultUsage = () => {
             }}
             form={{
                 isSubmitting: false,
+                initialValues: {
+                    myField: '',
+                },
                 setFieldValue: (name, value) => {
                     setFieldValue(value)
                 },
@@ -57,6 +60,9 @@ export const submitting = () => (
         }}
         form={{
             isSubmitting: true,
+            initialValues: {
+                myField: '',
+            },
             setFieldValue: () => {},
         }}
     />
@@ -78,6 +84,9 @@ export const freesolo = () => {
             }}
             form={{
                 isSubmitting: false,
+                initialValues: {
+                    myField: '',
+                },
                 setFieldValue: (name, value) => {
                     setFieldValue(value)
                 },
@@ -100,6 +109,9 @@ export const onlyOneValue = () => {
             }}
             form={{
                 isSubmitting: false,
+                initialValues: {
+                    myField: '',
+                },
                 setFieldValue: (name, value) => {
                     setFieldValue(value)
                 },
@@ -123,6 +135,9 @@ export const fromAnArrayOfObject = () => {
             }}
             form={{
                 isSubmitting: false,
+                initialValues: {
+                    myField: '',
+                },
                 setFieldValue: (name, value) => {
                     setFieldValue(value)
                 },
@@ -140,12 +155,15 @@ export const manyKeysFromAnArrayOfObject = () => {
             label="Field label"
             placeholder="Placeholder"
             dataArray={objectData}
-            keyToDisplay={['nativeName', 'tag']}
+            keysToDisplay={['nativeName', 'tag']}
             field={{
                 value: value,
             }}
             form={{
                 isSubmitting: false,
+                initialValues: {
+                    myField: '',
+                },
                 setFieldValue: (name, value) => {
                     setFieldValue(value)
                 },

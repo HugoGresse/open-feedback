@@ -30,7 +30,6 @@ export const defaultUsage = () => (
 
                 <FormikAutoSave
                     onSave={(values) => {
-                        console.log('Should save: ', values)
                         return Promise.resolve()
                     }}
                     render={({ isSaving, lastSaved, saveError }) => (
