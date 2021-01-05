@@ -137,7 +137,11 @@ const minimizeImageFromBufferArray = (
     })
 }
 
-const saveImage = (inputBuffer: Buffer, file: File, metadata: {}) => {
+const saveImage = (
+    inputBuffer: Buffer,
+    file: File,
+    metadata: {}
+): Promise<void> => {
     return new Promise((resolve, reject) => {
         file.save(
             inputBuffer,
