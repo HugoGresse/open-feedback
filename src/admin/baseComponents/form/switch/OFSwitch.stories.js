@@ -6,7 +6,7 @@ import { OFSwitch } from './OFSwitch'
 
 export default {
     component: OFSwitch,
-    title: 'Admin|Switch',
+    title: 'Admin/Switch',
 }
 
 export const defaultUsage = () => (

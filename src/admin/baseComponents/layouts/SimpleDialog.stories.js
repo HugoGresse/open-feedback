@@ -4,7 +4,7 @@ import OFButton from '../button/OFButton'
 
 export default {
     component: SimpleDialog,
-    title: 'Admin|Dialog',
+    title: 'Admin/Dialog',
 }
 
 export const defaultUsage = () => {

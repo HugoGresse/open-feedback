@@ -3,7 +3,7 @@ import React from 'react'
 
 export default {
     component: OFButton,
-    title: 'Admin|Button',
+    title: 'Admin/Button',
 }
 
 export const defaultUsage = () => <OFButton>Click me</OFButton>

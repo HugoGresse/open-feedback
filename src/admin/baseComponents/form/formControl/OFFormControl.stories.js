@@ -8,7 +8,7 @@ import OFAutoComplete from '../autoComplete/OFAutoComplete'
 
 export default {
     component: OFFormControl,
-    title: 'Admin|FormControl',
+    title: 'Admin/FormControl',
 }
 
 export const defaultUsage = () => (

@@ -8,7 +8,7 @@ import OFFormControlInputFormiked from '../formControl/OFFormControlInputFormike
 
 export default {
     component: OFInput,
-    title: 'Admin|Input',
+    title: 'Admin/Input',
 }
 
 export const defaultUsage = () => (

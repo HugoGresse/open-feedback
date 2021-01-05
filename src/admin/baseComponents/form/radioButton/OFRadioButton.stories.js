@@ -6,7 +6,7 @@ import { Field, Formik } from 'formik'
 
 export default {
     component: OFRadioButton,
-    title: 'Admin|RadioButton',
+    title: 'Admin/RadioButton',
 }
 
 const name = 'picker'
