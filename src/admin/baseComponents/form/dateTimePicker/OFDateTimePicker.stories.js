@@ -7,7 +7,7 @@ import OFFormControl from '../formControl/OFFormControl'
 
 export default {
     component: OFDateTimePicker,
-    title: 'Admin|DateTimePicker',
+    title: 'Admin/DateTimePicker',
 }
 
 export const defaultUsage = () => (

@@ -3,7 +3,7 @@ import CollapsePanel from './CollapsePanel'
 
 export default {
     component: CollapsePanel,
-    title: 'Admin|CollapsePanel',
+    title: 'Admin/CollapsePanel',
 }
 
 export const defaultUsage = () => (

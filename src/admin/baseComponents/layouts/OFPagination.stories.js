@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 
 export default {
     component: OFPagination,
-    title: 'Admin|Pagination',
+    title: 'Admin/Pagination',
 }
 
 export const defaultUsage = () => {

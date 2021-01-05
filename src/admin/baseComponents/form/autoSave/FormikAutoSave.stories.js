@@ -7,7 +7,7 @@ import OFFormControlInputFormiked from '../formControl/OFFormControlInputFormike
 
 export default {
     component: FormikAutoSave,
-    title: 'Admin|AutoSave',
+    title: 'Admin/AutoSave',
 }
 
 export const defaultUsage = () => (
@@ -18,7 +18,7 @@ export const defaultUsage = () => (
         initialValues={{
             title: '',
         }}
-        onSubmit={values => console.log('TODO', values)}>
+        onSubmit={(values) => console.log('TODO', values)}>
         {({ isSubmitting }) => (
             <Form method="POST">
                 <OFFormControlInputFormiked
@@ -29,7 +29,7 @@ export const defaultUsage = () => (
                 />
 
                 <FormikAutoSave
-                    onSave={values => {
+                    onSave={(values) => {
                         console.log('Should save: ', values)
                         return Promise.resolve()
                     }}

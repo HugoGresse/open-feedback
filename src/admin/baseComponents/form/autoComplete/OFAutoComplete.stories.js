@@ -19,7 +19,7 @@ const objectData = [
 
 export default {
     component: OFAutoComplete,
-    title: 'Admin|AutoComplete',
+    title: 'Admin/AutoComplete',
 }
 
 export const defaultUsage = () => {
