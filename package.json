@@ -47,7 +47,7 @@
         "clipboard-copy": "^4.0.1",
         "env-cmd": "^10.1.0",
         "file-saver": "^2.0.5",
-        "firebase": "^7.14.5",
+        "firebase": "^7.24.0",
         "formik": "^2.2.6",
         "history": "^5.0.0",
         "i18next": "^19.8.4",
