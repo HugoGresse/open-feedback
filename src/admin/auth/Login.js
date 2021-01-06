@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import logoWhite from '../../assets/logo-openfeedback-white.png'
 import { StyledFirebaseAuth } from 'react-firebaseui'
@@ -10,23 +10,29 @@ import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchP
 import Box from '@material-ui/core/Box'
 import COLORS from '../../constants/colors'
 
-const Login = ({ children }) => {
+const Login = memo(({ children }) => {
     const history = useHistory()
     const dispatch = useDispatch()
     const isLoggedIn = useSelector(isLoggedSelector)
     const loginError = useSelector(getLoginErrorSelector)
     const [tempUser, setTempUser] = useState(authProvider.currentUser)
-    const [loaderDisplayed, setLoaderDisplay] = useState(false)
+    const [loaderDisplayed, setLoaderDisplay] = useState(true)
+
+    const setTempUserIfNeeded = (user) => {
+        if (JSON.stringify(user) !== JSON.stringify(tempUser)) {
+            setTempUser(user)
+        }
+    }
 
     useEffect(() => {
         const unregisterAuthObserver = authProvider.onAuthStateChanged(
             (user) => {
                 if (user) {
                     if (user.isAnonymous) {
-                        setTempUser(null)
+                        setTempUserIfNeeded(null)
                         dispatch(signOut(history))
                     } else {
-                        setTempUser(user)
+                        setTempUserIfNeeded(user)
                         dispatch(didSignIn(user))
                     }
                     if (!user.emailVerified && !user.phoneNumber) {
@@ -76,57 +82,61 @@ const Login = ({ children }) => {
                 {loaderDisplayed && (
                     <LoaderMatchParent style={{ color: 'white' }} height={40} />
                 )}
-                <StyledFirebaseAuth
-                    firebaseAuth={authProvider}
-                    uiCallback={(firebaseUI) => {
-                        if (firebaseUI.isPendingRedirect()) {
-                            setLoaderDisplay(true)
-                        }
-                    }}
-                    uiConfig={{
-                        signInFlow: 'redirect',
-                        signInSuccessUrl: '/admin/',
-                        signInOptions: [
-                            auth.GoogleAuthProvider.PROVIDER_ID,
-                            auth.GithubAuthProvider.PROVIDER_ID,
-                            auth.EmailAuthProvider.PROVIDER_ID,
-                            auth.PhoneAuthProvider.PROVIDER_ID,
-                        ],
-                        callbacks: {
-                            // Avoid redirects after sign-in.
-                            signInSuccessWithAuthResult: () => false,
-                            signInFailure: (error) => {
-                                if (
-                                    error.code !==
-                                    'firebaseui/anonymous-upgrade-merge-conflict'
-                                ) {
-                                    return Promise.resolve()
-                                }
+                <Box display={loaderDisplayed ? 'none' : 'block'}>
+                    <StyledFirebaseAuth
+                        firebaseAuth={authProvider}
+                        uiCallback={(firebaseUI) => {
+                            if (firebaseUI.isPendingRedirect()) {
+                                setLoaderDisplay(true)
+                            }
+                        }}
+                        uiConfig={{
+                            signInFlow: 'redirect',
+                            signInSuccessUrl: '/admin/',
+                            signInOptions: [
+                                auth.GoogleAuthProvider.PROVIDER_ID,
+                                auth.GithubAuthProvider.PROVIDER_ID,
+                                auth.EmailAuthProvider.PROVIDER_ID,
+                                auth.PhoneAuthProvider.PROVIDER_ID,
+                            ],
+                            callbacks: {
+                                // Avoid redirects after sign-in.
+                                signInSuccessWithAuthResult: () => false,
+                                signInFailure: (error) => {
+                                    if (
+                                        error.code !==
+                                        'firebaseui/anonymous-upgrade-merge-conflict'
+                                    ) {
+                                        return Promise.resolve()
+                                    }
 
-                                const currentUser = authProvider.currentUser
+                                    const currentUser = authProvider.currentUser
 
-                                authProvider
-                                    .signInWithCredential(error.credential)
-                                    .then(() => {
-                                        if (currentUser.isAnonymous) {
-                                            return currentUser.delete()
-                                        }
-                                    })
+                                    authProvider
+                                        .signInWithCredential(error.credential)
+                                        .then(() => {
+                                            if (currentUser.isAnonymous) {
+                                                return currentUser.delete()
+                                            }
+                                        })
+                                },
+                                uiShown: () => {
+                                    // Add additional time because for third party sign in (google) the uisown is called but
+                                    // nothing is displayed...
+                                    setTimeout(
+                                        () => setLoaderDisplay(false),
+                                        2000
+                                    )
+                                },
                             },
-                            uiShown: () => {
-                                // Add additional time because for third party sign in (google) the uisown is called but
-                                // nothing is displayed...
-                                setTimeout(() => setLoaderDisplay(false), 2000)
-                            },
-                        },
-                        autoUpgradeAnonymousUsers: true,
-                    }}
-                />
-
+                            autoUpgradeAnonymousUsers: true,
+                        }}
+                    />
+                </Box>
                 {loginError && <div>{loginError}</div>}
             </Box>
         </Box>
     )
-}
+})
 
 export default Login
