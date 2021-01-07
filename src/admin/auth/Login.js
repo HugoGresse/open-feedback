@@ -2,13 +2,14 @@ import React, { memo, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import logoWhite from '../../assets/logo-openfeedback-white.png'
 import { StyledFirebaseAuth } from 'react-firebaseui'
-import { auth, authProvider } from '../../firebase'
+import { auth, authProvider, isUsingEmulators } from '../../firebase'
 import { useDispatch, useSelector } from 'react-redux'
 import { getLoginErrorSelector, isLoggedSelector } from './authSelectors'
 import { didSignIn, signOut } from './authActions'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 import Box from '@material-ui/core/Box'
 import COLORS from '../../constants/colors'
+import { EmulatorLogin } from './EmulatorLogin'
 
 const Login = memo(({ children }) => {
     const history = useHistory()
@@ -79,6 +80,7 @@ const Login = memo(({ children }) => {
                     alt="open feedback"
                     style={{ marginBottom: '40px' }}
                 />
+                {isUsingEmulators && <EmulatorLogin />}
                 {loaderDisplayed && (
                     <LoaderMatchParent style={{ color: 'white' }} height={40} />
                 )}

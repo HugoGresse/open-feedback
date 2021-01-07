@@ -5,9 +5,13 @@ import 'firebase/performance'
 import 'firebase/functions'
 import 'firebase/analytics'
 
+export const isUsingEmulators = process.env.REACT_APP_EMULATORS === 'true'
+
 const config = {
     apiKey: process.env.REACT_APP_API_KEY,
-    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    authDomain: isUsingEmulators
+        ? 'localhost:9099'
+        : process.env.REACT_APP_AUTH_DOMAIN,
     databaseURL: process.env.REACT_APP_DATABASE_URL,
     projectId: process.env.REACT_APP_PROJECT_ID,
     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
@@ -34,9 +38,17 @@ export const functions = {
         .functions()
         .httpsCallable('removeFileFromStorage'),
 }
+authProvider.useDeviceLanguage()
 
 if (process.env.NODE_ENV === 'production') {
     firebase.performance()
 }
-
-authProvider.useDeviceLanguage()
+if (isUsingEmulators) {
+    console.log('App is using Firebase Emulators')
+    authProvider.useEmulator('http://localhost:9099')
+    firebase.functions().useEmulator('localhost', 5001)
+    fireStoreMainInstance.settings({
+        host: 'localhost:8080',
+        ssl: false,
+    })
+}
