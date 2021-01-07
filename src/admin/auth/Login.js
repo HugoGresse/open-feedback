@@ -141,4 +141,5 @@ const Login = memo(({ children }) => {
     )
 })
 
+Login.displayName = 'Login'
 export default Login

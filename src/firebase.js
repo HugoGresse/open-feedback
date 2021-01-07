@@ -44,7 +44,8 @@ if (process.env.NODE_ENV === 'production') {
     firebase.performance()
 }
 if (isUsingEmulators) {
-    console.log('App is using Firebase Emulators')
+    // eslint-disable-next-line no-console
+    console.log('ℹ️ App is using Firebase Emulators')
     authProvider.useEmulator('http://localhost:9099')
     firebase.functions().useEmulator('localhost', 5001)
     fireStoreMainInstance.settings({

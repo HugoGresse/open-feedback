@@ -39,10 +39,12 @@ const login = async (email, password) => {
                     password
                 )
             } catch (error) {
+                // eslint-disable-next-line no-console
                 console.log('Login error:', error)
             }
         }
         const { code, message } = error
+        // eslint-disable-next-line no-console
         console.log(`Error email auth: ${code}, message: ${message}`)
     }
 }
@@ -59,6 +61,7 @@ const verifyEmail = async (user = null) => {
 
     for (const oobCodeObject of responseJson.oobCodes) {
         await fetch(oobCodeObject.oobLink.split('&continueUrl')[0])
+        // eslint-disable-next-line no-console
         console.log(`Email ${oobCodeObject.email} verified!`)
     }
 }
