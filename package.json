@@ -42,7 +42,7 @@
         "@material-ui/lab": "^4.0.0-alpha.57",
         "@material-ui/pickers": "^3.2.10",
         "@material-ui/utils": "^4.11.2",
-        "@nivo/core": "^0.64.0",
+        "@nivo/core": "^0.65.0",
         "@nivo/line": "^0.64.0",
         "clipboard-copy": "^4.0.1",
         "env-cmd": "^10.1.0",
