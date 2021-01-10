@@ -41,11 +41,11 @@ describe('Test creating a new project', function () {
     beforeEach(function () {
         const email = Cypress.env('adminUserEmail')
         const pwd = Cypress.env('adminUserPassword')
-        firebase.auth().signInWithEmailAndPassword(email, pwd)
     })
 
     it('New OpenFeedback project', function () {
         cy.visit('/admin')
+        cy.clickOnFakeLoginButton()
 
         cy.contains('Create a new event').click()
         cy.get('input[name=name]').type(data.projectName)

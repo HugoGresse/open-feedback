@@ -48,7 +48,9 @@ if (isUsingEmulators) {
     console.log('ℹ️ App is using Firebase Emulators')
     authProvider.useEmulator('http://localhost:9099')
     firebase.functions().useEmulator('localhost', 5001)
+    // Fix issue with Cypress, see https://github.com/cypress-io/cypress/issues/6350#issuecomment-697122434
     fireStoreMainInstance.settings({
+        experimentalForceLongPolling: true,
         host: 'localhost:8080',
         ssl: false,
     })

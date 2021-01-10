@@ -17,7 +17,7 @@
         "doc:build": "build-storybook --docs",
         "cy:open": "env-cmd -f .env.test.local cypress open",
         "cy:run": "cypress run",
-        "cy:start": "env-cmd -f .env.test.local react-scripts start",
+        "cy:start": "env-cmd -f .env.test.local npm run start:local",
         "storybook": "start-storybook -p 9009 -s public",
         "build-storybook": "build-storybook -s public",
         "lint:i18n": "eslint src/**/languages/*.json"
@@ -63,7 +63,7 @@
         "react-dom": "^17.0.1",
         "react-dropzone": "^11.2.4",
         "react-firebaseui": "^5.0.0-canary1",
-        "react-helmet": "^6.1.0",
+        "react-helmet-async": "^1.0.7",
         "react-i18next": "^11.8.5",
         "react-redux": "^7.2.2",
         "react-router-dom": "^5.2.0",
