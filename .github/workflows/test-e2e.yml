@@ -13,7 +13,7 @@ jobs:
       uses: cypress-io/github-action@v2
       with:
         build: npm run build
-        start: npx firebase emulators:start --import=./cypress/fixtures/firebase-emulators-data --only "firestore,auth,functions" --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} --project open-feedback-cypress, npx firebase serve --only hosting -p 3000 --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}
+        start: npx firebase emulators:start --import=./cypress/fixtures/firebase-emulators-data --only ${{EMULATORS_NAMES}} --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} --project open-feedback-cypress, npx firebase serve --only hosting -p 3000 --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}
         wait-on: http://localhost:3000
         record: true
       env:
@@ -29,3 +29,4 @@ jobs:
         CYPRESS_REACT_APP_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
         CYPRESS_REACT_APP_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
         REACT_APP_EMULATORS: true
+        EMULATORS_NAMES: "firestore,auth,functions"
