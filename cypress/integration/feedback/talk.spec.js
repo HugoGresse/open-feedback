@@ -35,7 +35,6 @@ describe('Single talk', function () {
 
         // to test if this help fixing this random test
         // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(3000)
         const voteButtonText = 'Trop de code'
 
         cy.getVoteCountData(voteButtonText).then((originalVoteCount) => {
@@ -48,7 +47,7 @@ describe('Single talk', function () {
             })
 
             // eslint-disable-next-line cypress/no-unnecessary-waiting
-            cy.wait(3000)
+            cy.wait(1000) // serverless functions runing time wait
             cy.getVoteCountData(voteButtonText).should((voteCount) => {
                 expect(voteCount, 'Vote count still incremented').to.equal(
                     originalVoteCount + 1
