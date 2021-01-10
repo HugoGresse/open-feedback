@@ -12,7 +12,7 @@ jobs:
     - name: Cypress run
       uses: cypress-io/github-action@v2
       with:
-        install-command: npm ci && cd functions && npm ci
+        install-command: npm ci & cd functions & npm ci
         build: npm run build
         start: npm run cy:start:ci -- --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} --project open-feedback-cypress, npx firebase serve --only hosting -p 3000 --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}
         wait-on: 'http://localhost:3000, http://localhost:5001, http://localhost:8080, http://localhost:9099'
