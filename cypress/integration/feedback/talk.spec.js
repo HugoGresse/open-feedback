@@ -1,8 +1,8 @@
 import { stringGenerator } from '../../utils/generateString'
 
-describe('Single talk', function() {
-    it('Check that detail & vote item are displayed correctly', function() {
-        cy.visitFeedbackProject('2019-06-28/0')
+describe('Single talk', function () {
+    it('Check that detail & vote item are displayed correctly', function () {
+        cy.visitFeedbackProject('2019-06-28/Hv0z6Vqnlk3FsJcx04Hc')
 
         cy.get('h2')
             .parent()
@@ -18,10 +18,7 @@ describe('Single talk', function() {
             'https://randomuser.me/api/portraits/men/32.jpg'
         )
 
-        cy.get('.MuiGrid-root')
-            .first()
-            .children()
-            .should('have.length', 4)
+        cy.get('.MuiGrid-root').first().children().should('have.length', 4)
 
         cy.get('.MuiGrid-root')
             .first()
@@ -31,8 +28,8 @@ describe('Single talk', function() {
             .should('contain', 'Une petite pépite')
     })
 
-    it('Check that boolean vote does work (increment/decrement count)', function() {
-        cy.visitFeedbackProject('2019-06-28/0', {
+    it('Check that boolean vote does work (increment/decrement count)', function () {
+        cy.visitFeedbackProject('2019-06-28/Hv0z6Vqnlk3FsJcx04Hc', {
             clearUserSession: true,
         })
 
@@ -41,12 +38,10 @@ describe('Single talk', function() {
         cy.wait(3000)
         const voteButtonText = 'Trop de code'
 
-        cy.getVoteCountData(voteButtonText).then(originalVoteCount => {
-            cy.contains(voteButtonText)
-                .parent()
-                .click()
+        cy.getVoteCountData(voteButtonText).then((originalVoteCount) => {
+            cy.contains(voteButtonText).parent().click()
 
-            cy.getVoteCountData(voteButtonText).should(voteCount => {
+            cy.getVoteCountData(voteButtonText).should((voteCount) => {
                 expect(voteCount, 'Vote count incremented').to.equal(
                     originalVoteCount + 1
                 )
@@ -54,11 +49,14 @@ describe('Single talk', function() {
 
             // eslint-disable-next-line cypress/no-unnecessary-waiting
             cy.wait(3000)
-            cy.contains(voteButtonText)
-                .parent()
-                .click()
+            cy.getVoteCountData(voteButtonText).should((voteCount) => {
+                expect(voteCount, 'Vote count still incremented').to.equal(
+                    originalVoteCount + 1
+                )
+            })
+            cy.contains(voteButtonText).parent().click()
 
-            cy.getVoteCountData(voteButtonText).should(voteCount => {
+            cy.getVoteCountData(voteButtonText).should((voteCount) => {
                 expect(voteCount, 'Vote count decremented').to.equal(
                     originalVoteCount
                 )
@@ -66,8 +64,8 @@ describe('Single talk', function() {
         })
     })
 
-    it('Check that text vote does work (post, edit and delete)', function() {
-        cy.visitFeedbackProject('2019-06-28/0', {
+    it('Check that text vote does work (post, edit and delete)', function () {
+        cy.visitFeedbackProject('2019-06-28/Hv0z6Vqnlk3FsJcx04Hc', {
             clearUserSession: true,
         })
 
