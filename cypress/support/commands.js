@@ -37,16 +37,17 @@ Cypress.Commands.add('getVoteCountData', (baseEl) => {
 })
 
 Cypress.on('uncaught:exception', (err, runnable) => {
-    expect(err.message).to.include('something about the error')
+    console.log(err)
+    // expect(err.message).to.include('something about the error')
 
     // using mocha's async done callback to finish
     // this test so we prove that an uncaught exception
     // was thrown
-    done()
+    // done()
 
     // return false to prevent the error from
     // failing this test
-    return false
+    return true
 })
 
 /**
