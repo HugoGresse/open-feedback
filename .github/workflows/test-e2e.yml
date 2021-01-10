@@ -13,6 +13,7 @@ jobs:
       run: |
             cd functions
             npm ci
+            npm run build
     - name: Cypress run
       uses: cypress-io/github-action@v2
       with:
