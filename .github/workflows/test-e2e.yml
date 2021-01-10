@@ -15,10 +15,15 @@ jobs:
             npm ci
             npm run build
     - name: "Create .runtimeconfig.json"
-      run: 'echo "$RUNTIME_CONFIG" > functions/.runtimeconfig.json'
+      run: 'echo "$RUNTIME_CONFIG_CYPRESS" > functions/.runtimeconfig.json'
       shell: bash
       env:
-        RUNTIME_CONFIG: ${{secrets.RUNTIME_CONFIG}}
+        RUNTIME_CONFIG_CYPRESS: ${{secrets.RUNTIME_CONFIG_CYPRESS}}
+    - name: "Create serviceAccountKey.development.json"
+      run: 'echo "$SERVICE_ACCOUNT_KEY_CYPRESS" > functions/serviceAccountKey.development.json'
+      shell: bash
+      env:
+        SERVICE_ACCOUNT_KEY_CYPRESS: ${{secrets.SERVICE_ACCOUNT_KEY_CYPRESS}}
     - name: Run Cypress E2E test
       uses: cypress-io/github-action@v2
       with:
