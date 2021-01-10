@@ -14,7 +14,12 @@ jobs:
             cd functions
             npm ci
             npm run build
-    - name: Cypress run
+    - name: "Create .runtimeconfig.json"
+      run: 'echo "$RUNTIME_CONFIG" > functions/.runtimeconfig.json'
+      shell: bash
+      env:
+        RUNTIME_CONFIG: ${{secrets.RUNTIME_CONFIG}}
+    - name: Run Cypress E2E test
       uses: cypress-io/github-action@v2
       with:
         build: npm run build
