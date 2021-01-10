@@ -13,7 +13,7 @@ jobs:
       uses: cypress-io/github-action@v2
       with:
         build: npm run build
-        start: npm run cy:start:ci, npx firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}
+        start: npx firebase emulators:start --import=./cypress/fixtures/firebase-emulators-data --only firestore,auth,functions --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} --project open-feedback-cypress, npx firebase serve --only hosting -p 3000 --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}
         wait-on: http://localhost:3000
         record: true
       env:
