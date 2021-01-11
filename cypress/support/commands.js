@@ -17,11 +17,11 @@ Cypress.Commands.add('visitFeedbackProject', (talkId, option) => {
 /**
  * Return the vote number of the cell containing the text passed in parameters
  */
-Cypress.Commands.add('getVoteCountData', baseEl => {
+Cypress.Commands.add('getVoteCountData', (baseEl) => {
     cy.contains(baseEl)
         .parent()
         .children()
-        .then(childrens => {
+        .then((childrens) => {
             if (childrens.length === 1) {
                 return Promise.resolve(0)
             } else {
@@ -29,15 +29,36 @@ Cypress.Commands.add('getVoteCountData', baseEl => {
                     .contains(baseEl)
                     .next()
                     .invoke('text')
-                    .then(text => {
+                    .then((text) => {
                         return parseInt(text.split(' ')[0])
                     })
             }
         })
 })
 
+Cypress.on('uncaught:exception', (err, runnable) => {
+    console.log(err)
+    // expect(err.message).to.include('something about the error')
+
+    // using mocha's async done callback to finish
+    // this test so we prove that an uncaught exception
+    // was thrown
+    // done()
+
+    // return false to prevent the error from
+    // failing this test
+    return true
+})
+
+/**
+ * Click to an email pwd account
+ */
+Cypress.Commands.add('clickOnFakeLoginButton', (baseEl) => {
+    cy.contains('Fake login with EMAIL').click()
+})
+
 let spyConsoleError
-Cypress.on('window:before:load', win => {
+Cypress.on('window:before:load', (win) => {
     spyConsoleError = cy.spy(win.console, 'error').as('consoleError')
 })
 
@@ -45,7 +66,7 @@ Cypress.Commands.add('getConsoleError', () => {
     return spyConsoleError
 })
 
-afterEach(function() {
+afterEach(function () {
     if (spyConsoleError) {
         expect(spyConsoleError).to.be.callCount(0)
     }

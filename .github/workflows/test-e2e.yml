@@ -9,12 +9,27 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v1
-    - name: Cypress run
+    - name: Install functions dependencies
+      run: |
+            cd functions
+            npm ci
+            npm run build
+    - name: "Create .runtimeconfig.json"
+      run: 'echo "$RUNTIME_CONFIG_CYPRESS" > functions/.runtimeconfig.json'
+      shell: bash
+      env:
+        RUNTIME_CONFIG_CYPRESS: ${{secrets.RUNTIME_CONFIG_CYPRESS}}
+    - name: "Create serviceAccountKey.development.json"
+      run: 'echo "$SERVICE_ACCOUNT_KEY_CYPRESS" > functions/serviceAccountKey.development.json'
+      shell: bash
+      env:
+        SERVICE_ACCOUNT_KEY_CYPRESS: ${{secrets.SERVICE_ACCOUNT_KEY_CYPRESS}}
+    - name: Run Cypress E2E test
       uses: cypress-io/github-action@v2
       with:
         build: npm run build
-        start: npx firebase serve --only hosting -p 3000  --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}
-        wait-on: http://localhost:3000
+        start: npm run cy:start:ci -- --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} --project open-feedback-cypress, npx firebase serve --only hosting -p 3000 --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}
+        wait-on: 'http://localhost:3000, http://localhost:8080, http://localhost:9099'
         record: true
       env:
         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_DASHBOARD_KEY }}
@@ -28,3 +43,5 @@ jobs:
         CYPRESS_REACT_APP_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
         CYPRESS_REACT_APP_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
         CYPRESS_REACT_APP_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
+        REACT_APP_EMULATORS: true
+        EMULATORS_NAMES: "firestore,auth,functions"

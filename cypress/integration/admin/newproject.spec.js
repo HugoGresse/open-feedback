@@ -41,11 +41,11 @@ describe('Test creating a new project', function () {
     beforeEach(function () {
         const email = Cypress.env('adminUserEmail')
         const pwd = Cypress.env('adminUserPassword')
-        firebase.auth().signInWithEmailAndPassword(email, pwd)
     })
 
     it('New OpenFeedback project', function () {
         cy.visit('/admin')
+        cy.clickOnFakeLoginButton()
 
         cy.contains('Create a new event').click()
         cy.get('input[name=name]').type(data.projectName)
@@ -73,14 +73,18 @@ describe('Test creating a new project', function () {
         cy.contains('Add a speaker').click()
         cy.get('input[name=name]').type(data.speaker1.name)
         cy.get('.addImage').click()
-        cy.get('input[name=photoUrl]').type(data.speaker1.photoUrl)
+        cy.get('input[name=photoUrl]').type(data.speaker1.photoUrl, {
+            force: true,
+        })
         cy.get('#uploadImage').click()
         cy.get('button[type=submit]').eq(2).click()
         // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(200)
         cy.get('input[name=name]').type(data.speaker2.name)
         cy.get('.addImage').click()
-        cy.get('input[name=photoUrl]').type(data.speaker2.photoUrl)
+        cy.get('input[name=photoUrl]').type(data.speaker2.photoUrl, {
+            force: true,
+        })
         cy.get('#uploadImage').click()
         cy.contains('Add speaker').click()
         cy.contains('Save').click()
