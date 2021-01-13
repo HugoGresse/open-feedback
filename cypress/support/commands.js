@@ -59,9 +59,9 @@ Cypress.on('uncaught:exception', (err, runnable) => {
  * Click to an email pwd account
  */
 Cypress.Commands.add('clickOnFakeLoginButtonIfVisible', () => {
-    if (window.localStorage.isLoggedIn === false) {
-        cy.contains('Fake login with EMAIL').click()
-    }
+    // if (window.localStorage.isLoggedIn === false) {
+    cy.contains('Fake login with EMAIL').click()
+    // }
 })
 
 let spyConsoleError
