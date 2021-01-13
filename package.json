@@ -24,7 +24,7 @@
         "lint:i18n": "eslint src/**/languages/*.json"
     },
     "devDependencies": {
-        "@storybook/addon-docs": "^6.1.12",
+        "@storybook/addon-docs": "^6.1.14",
         "@storybook/addons": "^6.1.14",
         "@storybook/preset-create-react-app": "^3.1.5",
         "@storybook/react": "6.1.11",
