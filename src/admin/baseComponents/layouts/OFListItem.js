@@ -3,7 +3,7 @@ import React from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { darken, fade, lighten } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     container: {
         padding: '12px 30px',
         borderBottom: `1px solid ${
@@ -15,11 +15,11 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const OFListItem = ({ children, style }) => {
+const OFListItem = ({ children, style, ...props }) => {
     const classes = useStyles()
 
     return (
-        <Grid container className={classes.container} style={style}>
+        <Grid container className={classes.container} style={style} {...props}>
             {children}
         </Grid>
     )

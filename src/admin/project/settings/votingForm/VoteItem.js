@@ -14,7 +14,7 @@ import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../../../core/contants'
 import langMap from 'langmap'
 import InputLangAdornment from './InputLangAdornment'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     cell: {
         paddingRight: 12,
         [theme.breakpoints.down('sm')]: {
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const getTypes = t => [
+const getTypes = (t) => [
     {
         type: VOTE_TYPE_BOOLEAN,
         name: t('settingsVotingForm.typeBoolean'),
@@ -71,18 +71,20 @@ const VoteItem = ({
     }, [focusId, setFocusLangIndex, focusedLangIndex, item.id])
 
     return (
-        <OFListItem style={{ paddingLeft: 20, paddingRight: 20 }}>
+        <OFListItem
+            style={{ paddingLeft: 20, paddingRight: 20 }}
+            data-testid="VoteItem">
             <Grid item xs={12} sm={6} className={classes.cell}>
                 <OFInput
                     value={item.name}
-                    inputRef={input =>
+                    inputRef={(input) =>
                         input &&
                         focusId === item.id &&
                         focusedLangIndex === -1 &&
                         input.focus()
                     }
                     autoFocus={!item.name}
-                    onChange={event => onChange(event.target.value)}
+                    onChange={(event) => onChange(event.target.value)}
                     onFocus={({ target }) => {
                         onFocus && onFocus(item)
                         if (focusedLangIndex >= 0) {
@@ -90,7 +92,7 @@ const VoteItem = ({
                         }
                         target.setSelectionRange(0, target.value.length)
                     }}
-                    onKeyPress={ev => {
+                    onKeyPress={(ev) => {
                         if (ev.key === 'Enter') {
                             if (languages.length > 0) {
                                 setFocusLangIndex(0)
@@ -105,7 +107,7 @@ const VoteItem = ({
                     <OFInput
                         key={langTag}
                         value={item.languages ? item.languages[langTag] : ''}
-                        inputRef={input => {
+                        inputRef={(input) => {
                             return (
                                 input &&
                                 focusId === item.id &&
@@ -114,7 +116,7 @@ const VoteItem = ({
                             )
                         }}
                         className={classes.inputLang}
-                        onChange={event =>
+                        onChange={(event) =>
                             onLanguagesChange(langTag, event.target.value)
                         }
                         onFocus={({ target }) => {
@@ -122,7 +124,7 @@ const VoteItem = ({
                             setFocusLangIndex(index)
                             target.setSelectionRange(0, target.value.length)
                         }}
-                        onKeyPress={ev => {
+                        onKeyPress={(ev) => {
                             if (ev.key === 'Enter') {
                                 if (focusedLangIndex >= languages.length - 1) {
                                     setFocusLangIndex(-1)
@@ -154,9 +156,9 @@ const VoteItem = ({
                 <Select
                     id="vote-item-type"
                     value={item.type}
-                    onChange={event => onTypeChange(event.target.value)}
+                    onChange={(event) => onTypeChange(event.target.value)}
                     input={<OFInput />}>
-                    {types.map(type => (
+                    {types.map((type) => (
                         <MenuItem key={type.type} value={type.type}>
                             {type.name}
                         </MenuItem>

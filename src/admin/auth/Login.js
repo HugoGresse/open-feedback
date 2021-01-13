@@ -28,6 +28,7 @@ const Login = memo(({ children }) => {
     useEffect(() => {
         const unregisterAuthObserver = authProvider.onAuthStateChanged(
             (user) => {
+                window.localStorage.isLoggedIn = !!user
                 if (user) {
                     if (user.isAnonymous) {
                         setTempUserIfNeeded(null)
