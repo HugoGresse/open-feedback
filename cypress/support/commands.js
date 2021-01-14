@@ -59,7 +59,7 @@ Cypress.on('uncaught:exception', (err, runnable) => {
  * Click to an email pwd account
  */
 Cypress.Commands.add('clickOnFakeLoginButtonIfVisible', () => {
-    cy.getCookie('showWizard').then((isLoggedIn) => {
+    cy.getCookie('isLoggedIn').then((isLoggedIn) => {
         // console.log("cookie", isLoggedIn)
         if (!isLoggedIn) {
             cy.contains('Fake login with EMAIL').click()
