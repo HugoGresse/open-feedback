@@ -12,7 +12,7 @@ describe('Test voting form edition', function () {
     const app = new AdminApp()
     const feedback = new FeedbackApp()
 
-    before(() => {
+    beforeEach(() => {
         app.open()
         app.loginIfNeeded()
     })
