@@ -65,3 +65,7 @@ const verifyEmail = async (user = null) => {
         console.log(`Email ${oobCodeObject.email} verified!`)
     }
 }
+
+export const setLoginCookie = (isLoggedIn) => {
+    document.cookie = isLoggedIn + '=' + !!isLoggedIn + '' + '; path=/'
+}
