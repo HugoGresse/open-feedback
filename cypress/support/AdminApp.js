@@ -1,4 +1,5 @@
 import { VotingForm } from './AdminApp.VotingForm'
+import { Settings } from './AdminApp.Settings'
 
 export const VOTE_ITEM_TYPES = {
     chip: 'Chip',
@@ -6,6 +7,7 @@ export const VOTE_ITEM_TYPES = {
 }
 export class AdminApp {
     votingForm = new VotingForm()
+    settings = new Settings()
 
     open() {
         cy.visit('/admin')

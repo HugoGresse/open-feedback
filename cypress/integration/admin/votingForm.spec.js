@@ -22,7 +22,7 @@ describe('Test voting form edition', function () {
         app.openTalks()
         app.addTalk(data.talk1Name)
 
-        app.votingForm.openVotingForm()
+        app.votingForm.open()
 
         app.votingForm.assertVoteItemLength(9)
         app.votingForm.addVoteItem(data.voteItem1)
@@ -42,7 +42,7 @@ describe('Test voting form edition', function () {
         )
         app.votingForm.removeVoteItem(5)
 
-        app.votingForm.saveVotingForm(true)
+        app.votingForm.save(true)
 
         app.openFeedback()
 
@@ -61,7 +61,7 @@ describe('Test voting form edition', function () {
         app.openTalks()
         app.addTalk(data.talk1Name)
 
-        app.votingForm.openVotingForm()
+        app.votingForm.open()
 
         app.votingForm.assertVoteItemLength(9)
         app.votingForm.removeVoteItem(0)
@@ -71,7 +71,7 @@ describe('Test voting form edition', function () {
         app.votingForm.removeVoteItem(0)
         app.votingForm.assertVoteItemLength(4)
 
-        app.votingForm.saveVotingForm(true)
+        app.votingForm.save(true)
         app.votingForm.reset()
 
         app.votingForm.assertVoteItem(0, 'Fun 😃', VOTE_ITEM_TYPES.chip)
@@ -89,6 +89,35 @@ describe('Test voting form edition', function () {
             1,
             "I've learned a lot 🤓",
             VOTE_ITEM_TYPES.chip
+        )
+    })
+
+    it('Additional voting form languages', function () {
+        app.create(data.projectName)
+        app.openTalks()
+        app.addTalk(data.talk1Name)
+
+        app.settings.open()
+        app.settings.addLanguage('Deutsch - German - de')
+
+        const langLabel =
+            'Deutsch (de) - You can edit the languages from the Event & Theme page'
+
+        app.votingForm.open()
+        app.votingForm.assertVoteItemLength(18, langLabel)
+        app.votingForm.addVoteItemWithLang(
+            'English name',
+            'Test deutsch',
+            langLabel
+        )
+        app.votingForm.save()
+        cy.get('#content').scrollTo(0, 500)
+        app.votingForm.assertVoteItem(9, 'English name', VOTE_ITEM_TYPES.chip)
+        app.votingForm.assertVoteItem(
+            9,
+            'Test deutsch',
+            VOTE_ITEM_TYPES.chip,
+            1
         )
     })
 })

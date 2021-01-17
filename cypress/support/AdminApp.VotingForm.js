@@ -2,12 +2,13 @@ export const VOTE_ITEM_TYPES = {
     chip: 'Chip',
     text: 'Text',
 }
+
 export class VotingForm {
-    openVotingForm() {
+    open() {
         cy.contains('Voting Form').click()
     }
 
-    saveVotingForm(doubleConfirm) {
+    save(doubleConfirm) {
         cy.contains('Save').click()
         if (doubleConfirm) {
             cy.get('body').should('contain', 'Vote type changed')
@@ -16,24 +17,48 @@ export class VotingForm {
         cy.get('body').should('contain', 'Voting form saved')
     }
 
-    assertVoteItemLength(requiredLength) {
+    assertVoteItemLength(requiredLength, additionalLang) {
         cy.get('input[type=text]').should('have.length', requiredLength)
+        if (additionalLang) {
+            cy.get(`div[title="${additionalLang}"`).should(
+                'have.length',
+                requiredLength / 2
+            )
+        }
     }
 
-    assertVoteItem(position, name, type) {
+    assertVoteItem(position, name, type, inputPos = 0) {
         cy.get('div[data-testid=VoteItem]')
             .eq(position)
             .then(($element) => {
                 cy.wrap($element).should('contain', type)
-                cy.wrap($element).within(() =>
-                    cy.get('input[type=text]').should('have.value', name)
-                )
+                cy.wrap($element).within(() => {
+                    cy.get('input[type=text]')
+                        .eq(inputPos)
+                        .should('have.value', name)
+                })
             })
     }
 
     addVoteItem(name) {
         cy.contains('New item').click()
         cy.get('input[type=text]').last().type(name)
+    }
+
+    addVoteItemWithLang(nameDefault, nameInLang, lang) {
+        cy.contains('New item').click()
+        cy.get(`div[aria-label="${lang}"]`)
+            .parent()
+            .within(() => {
+                cy.get('input[type=text]').last().type(nameInLang)
+                cy.get('input[type=text]')
+                    .last()
+                    .parent()
+                    .prev()
+                    .within(() => {
+                        cy.get('input').type(nameDefault)
+                    })
+            })
     }
 
     removeVoteItem(position) {
