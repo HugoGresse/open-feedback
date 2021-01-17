@@ -31,7 +31,7 @@ const useStyles = makeStyles(() => ({
     containerWrapped: {
         position: 'relative',
     },
-    sidebar: {
+    content: {
         overflow: 'auto',
         flexGrow: 1,
     },
@@ -93,7 +93,7 @@ const ProjectLayout = ({ baseUrl, children }) => {
                 toggleDrawer={toggleDrawer(false)}
             />
 
-            <div className={classes.sidebar} ref={scrollRef}>
+            <div className={classes.content} ref={scrollRef} id="content">
                 <Header
                     refTarget={scrollTargetRef}
                     toggleDrawer={toggleDrawer(true)}

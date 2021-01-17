@@ -1,8 +1,3 @@
-export const stringGenerator = () =>
-    Math.random()
-        .toString(36)
-        .substring(2, 15) +
-    ' ' +
-    Math.random()
-        .toString(36)
-        .substring(2, 15)
+export const stringGenerator = (long = false) =>
+    Math.random().toString(36).substring(2, 15) +
+    (long ? ' ' + stringGenerator() : '')

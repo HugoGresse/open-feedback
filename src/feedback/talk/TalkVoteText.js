@@ -138,7 +138,8 @@ class TalkVoteText extends Component {
                 xs={12}
                 sm={12}
                 md={12}
-                className={classes.itemContainer}>
+                className={classes.itemContainer}
+                data-testid="VoteItem">
                 <Typography variant="h6" color="textPrimary">
                     {voteItem.name}
                 </Typography>

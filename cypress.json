@@ -3,6 +3,11 @@
     "env": {
         "firestoreTestProjectId": "testprojectid"
     },
+    "viewportWidth": 1000,
+    "viewportHeight": 1000,
     "projectId": "3nv53o",
-    "retries": 2
+    "retries": {
+        "runMode": 2,
+        "openMode": 0
+    }
 }

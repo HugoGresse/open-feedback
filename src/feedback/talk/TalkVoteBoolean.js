@@ -7,7 +7,7 @@ import TalkVoteBackground from './TalkVoteBackground'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { emphasize } from '@material-ui/core'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     itemContainer: {
         margin: -1,
     },
@@ -70,7 +70,8 @@ const TalkVoteBoolean = ({
             sm={4}
             md={3}
             className={classes.itemContainer}
-            onClick={() => onVoteChange(voteItem)}>
+            onClick={() => onVoteChange(voteItem)}
+            data-testid="VoteItem">
             <Paper elevation={1} className={paperClasses}>
                 <span className={classes.voteTitle}>{voteItem.name}</span>
                 {voteResult > 0 && (

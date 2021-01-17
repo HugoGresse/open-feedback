@@ -1,15 +1,4 @@
 import { stringGenerator } from '../../utils/generateString'
-import firebase from 'firebase/app'
-import 'firebase/auth'
-
-firebase.initializeApp({
-    apiKey: Cypress.env('REACT_APP_API_KEY'),
-    authDomain: Cypress.env('REACT_APP_AUTH_DOMAIN'),
-    databaseURL: Cypress.env('REACT_APP_DATABASE_URL'),
-    projectId: Cypress.env('REACT_APP_PROJECT_ID'),
-    storageBucket: Cypress.env('REACT_APP_STORAGE_BUCKET'),
-    appId: Cypress.env('REACT_APP_APPID'),
-})
 
 describe('Test creating a new project', function () {
     const data = {
@@ -38,14 +27,9 @@ describe('Test creating a new project', function () {
         voteItem1: 'This is just a simple boring test',
     }
 
-    beforeEach(function () {
-        const email = Cypress.env('adminUserEmail')
-        const pwd = Cypress.env('adminUserPassword')
-    })
-
     it('New OpenFeedback project', function () {
         cy.visit('/admin')
-        cy.clickOnFakeLoginButton()
+        cy.clickOnFakeLoginButtonIfVisible()
 
         cy.contains('Create a new event').click()
         cy.get('input[name=name]').type(data.projectName)

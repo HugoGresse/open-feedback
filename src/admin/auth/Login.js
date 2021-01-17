@@ -9,7 +9,7 @@ import { didSignIn, signOut } from './authActions'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 import Box from '@material-ui/core/Box'
 import COLORS from '../../constants/colors'
-import { EmulatorLogin } from './EmulatorLogin'
+import { EmulatorLogin, setLoginCookie } from './EmulatorLogin'
 
 const Login = memo(({ children }) => {
     const history = useHistory()
@@ -28,6 +28,9 @@ const Login = memo(({ children }) => {
     useEffect(() => {
         const unregisterAuthObserver = authProvider.onAuthStateChanged(
             (user) => {
+                if (isUsingEmulators) {
+                    setLoginCookie(!!user)
+                }
                 if (user) {
                     if (user.isAnonymous) {
                         setTempUserIfNeeded(null)
