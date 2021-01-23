@@ -1,5 +1,6 @@
 import { VotingForm } from './AdminApp.VotingForm'
 import { Settings } from './AdminApp.Settings'
+import { EventTheme } from './AdminApp.EventTheme'
 
 export const VOTE_ITEM_TYPES = {
     chip: 'Chip',
@@ -8,6 +9,7 @@ export const VOTE_ITEM_TYPES = {
 export class AdminApp {
     votingForm = new VotingForm()
     settings = new Settings()
+    eventTheme = new EventTheme()
 
     open() {
         cy.visit('/admin')
@@ -19,7 +21,7 @@ export class AdminApp {
 
     create(projectName) {
         cy.contains('Create a new event').click()
-        cy.get('input[name=name]').type(projectName)
+        cy.get('input[name=name]').fill(projectName)
         cy.contains('Continue').click()
         cy.get('input[value=openfeedbackv1]').check()
         cy.contains('Create event').click()
