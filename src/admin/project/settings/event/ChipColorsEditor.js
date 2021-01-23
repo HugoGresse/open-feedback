@@ -21,7 +21,7 @@ const ChipColorsEditor = ({ field, form }) => {
     const onColorChanges = (oldColor, newColor) => {
         form.setFieldValue(
             field.name,
-            field.value.map(color => {
+            field.value.map((color) => {
                 if (color === oldColor) {
                     return newColor
                 }
@@ -36,15 +36,15 @@ const ChipColorsEditor = ({ field, form }) => {
         form.setFieldValue(field.name, values)
     }
 
-    const onColorDeleted = color => {
+    const onColorDeleted = (color) => {
         form.setFieldValue(
             field.name,
-            field.value.filter(item => item !== color)
+            field.value.filter((item) => item !== color)
         )
     }
 
     return (
-        <div>
+        <div id="chipColors">
             {field.value &&
                 field.value.map((color, index) => {
                     return (
@@ -53,10 +53,10 @@ const ChipColorsEditor = ({ field, form }) => {
                             color={color}
                             className={classes.colorBlock}
                             disabled={form.isSubmitting}
-                            onColorChanged={newColor =>
+                            onColorChanged={(newColor) =>
                                 onColorChanges(color, newColor)
                             }
-                            onColorDeleted={color => onColorDeleted(color)}
+                            onColorDeleted={(color) => onColorDeleted(color)}
                         />
                     )
                 })}

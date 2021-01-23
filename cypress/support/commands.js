@@ -36,6 +36,35 @@ Cypress.Commands.add('getVoteCountData', (baseEl) => {
         })
 })
 
+// Fill an input at once, usage: cy.get(...).fill("text")
+// From https://github.com/cypress-io/cypress/issues/566#issuecomment-605355300
+Cypress.Commands.add(
+    'fill',
+    {
+        prevSubject: 'element',
+    },
+    ($subject, value) => {
+        const el = $subject[0]
+        el.value = value
+        return cy.wrap($subject).type('t{backspace}')
+    }
+)
+
+Cypress.Commands.add('uploadImage', (image, imagePath, el) => {
+    // convert the logo base64 string to a blob
+    const blob = Cypress.Blob.base64StringToBlob(image, 'image/png')
+
+    const file = new File([blob], imagePath, { type: 'image/png' })
+    const list = new DataTransfer()
+
+    list.items.add(file)
+    const myFileList = list.files
+
+    el[0].files = myFileList
+    el[0].dispatchEvent(new Event('change', { bubbles: true }))
+    console.log('Image upload set!')
+})
+
 Cypress.on('uncaught:exception', (err, runnable) => {
     if (
         err.message.includes(
@@ -60,8 +89,8 @@ Cypress.on('uncaught:exception', (err, runnable) => {
  */
 Cypress.Commands.add('clickOnFakeLoginButtonIfVisible', () => {
     cy.getCookie('isLoggedIn').then((isLoggedIn) => {
-        // console.log("cookie", isLoggedIn)
-        if (!isLoggedIn) {
+        console.log('cookie', isLoggedIn)
+        if (!isLoggedIn || isLoggedIn.value !== 'true') {
             cy.contains('Fake login with EMAIL').click()
         }
     })
