@@ -4,6 +4,7 @@ import VoteItemList from './VoteItemList'
 import { getVoteItems } from './votingFormActions'
 import OFPaper from '../../../baseComponents/OFPaper'
 import VotingFormFooter from './VotingFormFooter'
+import { VotingFormTranslationTip } from './VotingFormTranslationTip'
 
 const VotingForm = () => {
     const dispatch = useDispatch()
@@ -14,6 +15,7 @@ const VotingForm = () => {
 
     return (
         <>
+            <VotingFormTranslationTip />
             <OFPaper>
                 <VoteItemList />
             </OFPaper>
