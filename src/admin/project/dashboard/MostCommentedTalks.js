@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import TalkVotesList from './utils/TalkVotesList'
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDownOutlined'
 
-const MostVotedTalks = ({ dinoStartDelay }) => {
+const MostCommentedTalks = ({ dinoStartDelay }) => {
     const talk = useSelector(getMostCommentedTalkSelector)
     const projectId = useSelector(getSelectedProjectIdSelector)
     const { t } = useTranslation()
@@ -29,4 +29,4 @@ const MostVotedTalks = ({ dinoStartDelay }) => {
     )
 }
 
-export default MostVotedTalks
+export default MostCommentedTalks
