@@ -89,4 +89,8 @@ export class VotingForm {
         cy.get('body').should('contain', 'Are you sure to reset')
         cy.get('div[role=presentation]').contains('Reset').click()
     }
+
+    clickOnAdditionalLangTip() {
+        cy.contains('p a', 'Settings').click()
+    }
 }
