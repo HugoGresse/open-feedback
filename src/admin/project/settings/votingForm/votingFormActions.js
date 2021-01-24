@@ -16,10 +16,7 @@ import {
     getSelectedProjectIdSelector,
     getSelectedProjectSelector,
 } from '../../core/projectSelectors'
-import {
-    getVoteItemsSelector,
-    isSavingVotingFormSelector,
-} from './votingFormSelectors'
+import { getVoteItemsSelector } from './votingFormSelectors'
 import { newId } from '../../../../utils/stringUtils'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../../../core/contants'
 import { filterMap } from '../../../../utils/mapUtils'
@@ -97,85 +94,81 @@ export const addVoteItem = (optionalName, type) => {
     }
 }
 
-export const saveVoteItems = (hideNotification) => (dispatch, getState) => {
-    const state = getState()
-    const isSaving = isSavingVotingFormSelector(state)
-    const voteItems = getVoteItemsSelector(state)
-    const selectedProjectId = getSelectedProjectIdSelector(state)
+export const saveVoteItems = (hideNotification) => {
+    return (dispatch, getState) => {
+        const voteItems = getVoteItemsSelector(getState())
+        const selectedProjectId = getSelectedProjectIdSelector(getState())
 
-    if (isSaving) {
-        return
-    }
+        let tempLanguages = {}
+        const cleanedVoteItems = voteItems
+            .filter((item) => item.name)
+            .map((item) => {
+                delete item.local
 
-    let tempLanguages = {}
-    const cleanedVoteItems = voteItems
-        .filter((item) => item.name)
-        .map((item) => {
-            delete item.local
+                if (!item.languages) return item
 
-            if (!item.languages) return item
+                tempLanguages = filterMap(
+                    item.languages,
+                    (translatedName) => translatedName
+                )
 
-            tempLanguages = filterMap(
-                item.languages,
-                (translatedName) => translatedName
-            )
+                if (Object.keys(tempLanguages).length === 0) {
+                    delete item.languages
+                    return item
+                }
 
-            if (Object.keys(tempLanguages).length === 0) {
-                delete item.languages
-                return item
-            }
+                return {
+                    ...item,
+                    languages: tempLanguages,
+                }
+            })
 
-            return {
-                ...item,
-                languages: tempLanguages,
-            }
+        dispatch({
+            type: SAVE_VOTEITEMS_ONGOING,
         })
 
-    dispatch({
-        type: SAVE_VOTEITEMS_ONGOING,
-    })
+        return fireStoreMainInstance
+            .collection('projects')
+            .doc(selectedProjectId)
+            .set(
+                {
+                    voteItems: cleanedVoteItems,
+                    updatedAt: serverTimestamp(),
+                },
+                { merge: true }
+            )
+            .then(() => {
+                if (!hideNotification) {
+                    dispatch(
+                        addNotification({
+                            type: 'success',
+                            i18nkey: 'settingsVotingForm.saveSuccess',
+                        })
+                    )
+                }
 
-    return fireStoreMainInstance
-        .collection('projects')
-        .doc(selectedProjectId)
-        .set(
-            {
-                voteItems: cleanedVoteItems,
-                updatedAt: serverTimestamp(),
-            },
-            { merge: true }
-        )
-        .then(() => {
-            if (!hideNotification) {
+                dispatch({
+                    type: SAVE_VOTEITEMS_SUCCESS,
+                    payload: cleanedVoteItems,
+                })
+            })
+            .catch((error) => {
+                // eslint-disable-next-line no-console
+                console.error(error)
+                dispatch({
+                    type: SAVE_VOTEITEMS_ERROR,
+                    payload: error,
+                })
+
                 dispatch(
                     addNotification({
-                        type: 'success',
-                        i18nkey: 'settingsVotingForm.saveSuccess',
+                        type: 'error',
+                        i18nkey: 'settingsVotingForm.saveFail',
+                        message: JSON.stringify(error),
                     })
                 )
-            }
-
-            dispatch({
-                type: SAVE_VOTEITEMS_SUCCESS,
-                payload: cleanedVoteItems,
             })
-        })
-        .catch((error) => {
-            // eslint-disable-next-line no-console
-            console.error(error)
-            dispatch({
-                type: SAVE_VOTEITEMS_ERROR,
-                payload: error,
-            })
-
-            dispatch(
-                addNotification({
-                    type: 'error',
-                    i18nkey: 'settingsVotingForm.saveFail',
-                    message: JSON.stringify(error),
-                })
-            )
-        })
+    }
 }
 
 export const deleteAllVoteItems = () => async (dispatch) => {
