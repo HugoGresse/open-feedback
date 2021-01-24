@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
     getSortedVoteItemsSelector,
     shouldConfirmSaveSelector,
-    isSavingSelector,
+    isSavingVotingFormSelector,
 } from './votingFormSelectors'
 import {
     addVoteItem,
@@ -25,18 +25,23 @@ import { VOTE_TYPE_BOOLEAN } from '../../../../core/contants'
 import { getLanguagesSelector } from '../../core/projectSelectors'
 import SimpleDialog from '../../../baseComponents/layouts/SimpleDialog'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 const VoteItemList = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const voteItems = useSelector(getSortedVoteItemsSelector)
-    const isSaving = useSelector(isSavingSelector)
+    const isSaving = useSelector(isSavingVotingFormSelector)
     const languages = useSelector(getLanguagesSelector)
     const shouldConfirmSave = useSelector(shouldConfirmSaveSelector)
     const [focusId, setFocusId] = useState()
     const [isTypeChangeDialogOpen, setTypeChangedDialog] = useState(false)
+    useHotkeys('ctrl+s, command+s', (event) => {
+        event.preventDefault()
+        save()
+    })
 
-    const save = bypassConfirm => {
+    const save = (bypassConfirm) => {
         if (shouldConfirmSave && !bypassConfirm) {
             setTypeChangedDialog(true)
             return
@@ -59,7 +64,7 @@ const VoteItemList = () => {
                     key={item.id}
                     item={item}
                     languages={languages}
-                    onChange={newValue =>
+                    onChange={(newValue) =>
                         dispatch(
                             onVoteItemChange({
                                 ...item,
@@ -78,7 +83,7 @@ const VoteItemList = () => {
                             })
                         )
                     }}
-                    onTypeChange={type =>
+                    onTypeChange={(type) =>
                         dispatch(
                             onVoteItemChange({
                                 ...item,
