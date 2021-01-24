@@ -227,8 +227,7 @@
         "typeChangeDialogDesc": "A vote type has changed or a vote item has been deleted. If there are already votes linked to this vote item, they will not be visible.",
         "typeChangeDialogConfirm": "Save",
         "saveSuccess": "Voting form saved",
-        "saveFail": "Saving failed, ",
-        "tipLanguagesContent": "Translate the voting form in many languages by adding them in the "
+        "saveFail": "Saving failed, "
     },
     "speakers": {
         "addButton": "Add speaker",

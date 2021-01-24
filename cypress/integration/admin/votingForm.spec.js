@@ -119,9 +119,5 @@ describe('Test voting form edition', function () {
             VOTE_ITEM_TYPES.chip,
             1
         )
-
-        cy.get('#content').scrollTo(0, -500)
-        app.votingForm.clickOnAdditionalLangTip()
-        app.settings.assertSettingsDisplayed()
     })
 })

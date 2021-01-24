@@ -227,8 +227,7 @@
         "typeChangeDialogDesc": "Le type d'un choix de vote a changé ou un choix de vote a été supprimé. Si il y a déjà des votes liés à ce choix, ils ne seront plus visible.",
         "typeChangeDialogConfirm": "Sauvegarder",
         "saveSuccess": "Bulletin de vote sauvegardé",
-        "saveFail": "Sauvegarde échoué, ",
-        "tipLanguagesContent": "Traduisez le bulletin de vote dans plusieurs langues en les ajoutant dans les "
+        "saveFail": "Sauvegarde échoué, "
     },
     "speakers": {
         "addButton": "Ajouter un orateur·rice",
