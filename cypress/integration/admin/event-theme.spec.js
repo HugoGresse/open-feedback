@@ -2,6 +2,7 @@ import { stringGenerator } from '../../utils/generateString'
 import { AdminApp } from '../../support/AdminApp'
 import { FeedbackApp } from '../../support/FeedbackApp'
 import { generateUrl } from '../../utils/generateUrl'
+import { DateTime } from 'luxon'
 
 describe('Event and theme options', function () {
     const data = {
@@ -66,5 +67,22 @@ describe('Event and theme options', function () {
         feedback.assertTitle(data.projectName, true)
         feedback.assertScheduleLink(scheduleLink)
         feedback.assertOutsideVoteRange()
+    })
+
+    it('Assert date formatting and save shortcut', function () {
+        app.create(data.projectName)
+        app.eventTheme.open()
+
+        const dateTime = DateTime.local()
+            .minus({ days: 1 })
+            .set({ hours: 13, minutes: 35, seconds: 0 })
+        const currentDay = new Date().getUTCDate()
+        app.eventTheme.assertVoteRangeRestricted(false)
+        app.eventTheme.setVoteRangeRestricted(true)
+        app.eventTheme.editVoteRangeOpenTime(currentDay - 1, 13, 35)
+
+        app.eventTheme.save(true)
+        cy.reload()
+        app.eventTheme.assertVoteRangeStartTime(dateTime.toFormat('FFF'))
     })
 })

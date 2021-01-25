@@ -8,8 +8,13 @@ export class VotingForm {
         cy.contains('Voting Form').click()
     }
 
-    save(doubleConfirm) {
-        cy.contains('Save').click()
+    save(doubleConfirm, useShortcut) {
+        if (useShortcut) {
+            cy.typeSaveButtons()
+        } else {
+            cy.contains('Save').click()
+        }
+
         if (doubleConfirm) {
             cy.get('body').should('contain', 'Vote type changed')
             cy.get('div[role=presentation]').contains('Save').click()
