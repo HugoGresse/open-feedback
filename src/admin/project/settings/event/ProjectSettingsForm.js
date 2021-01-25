@@ -17,6 +17,7 @@ import { DateTime } from 'luxon'
 import SidePanelUploadLayout from '../../../baseComponents/layouts/sidepanel/upload/SidePanelUploadLayout'
 import { editProject } from '../../core/actions/editProject'
 import RestrictVoteRangeFields from './RestrictVoteRangeFields'
+import { SaveShortcut } from '../../../baseComponents/form/saveShortcut/SaveShortcut'
 
 const useStyles = makeStyles((theme) => ({
     buttonContainer: {
@@ -199,6 +200,8 @@ const ProjectSettingsForm = ({ project }) => {
                                 )}
                         </Grid>
                     </Grid>
+
+                    <SaveShortcut />
                 </Form>
             )}
         </Formik>
