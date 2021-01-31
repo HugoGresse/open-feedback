@@ -1,3 +1,4 @@
+const { triggerSaveKeypress } = require('../utils/triggerSaveKeyPress')
 Cypress.Commands.add('visitFeedbackProject', (talkId, option) => {
     const options = option || {}
     const rootUrl = `/${Cypress.env('firestoreTestProjectId')}`
@@ -63,6 +64,12 @@ Cypress.Commands.add('uploadImage', (image, imagePath, el) => {
     el[0].files = myFileList
     el[0].dispatchEvent(new Event('change', { bubbles: true }))
     console.log('Image upload set!')
+})
+
+Cypress.Commands.add('typeSaveButtons', () => {
+    cy.document().then((doc) => {
+        triggerSaveKeypress(doc)
+    })
 })
 
 Cypress.on('uncaught:exception', (err, runnable) => {

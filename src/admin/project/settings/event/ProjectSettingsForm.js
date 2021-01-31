@@ -17,6 +17,8 @@ import { DateTime } from 'luxon'
 import SidePanelUploadLayout from '../../../baseComponents/layouts/sidepanel/upload/SidePanelUploadLayout'
 import { editProject } from '../../core/actions/editProject'
 import RestrictVoteRangeFields from './RestrictVoteRangeFields'
+import { SaveShortcut } from '../../../baseComponents/form/saveShortcut/SaveShortcut'
+import { rURLWithLocalhostSupported } from '../../utils/rURLWithLocalhostSupported'
 
 const useStyles = makeStyles((theme) => ({
     buttonContainer: {
@@ -56,10 +58,16 @@ const ProjectSettingsForm = ({ project }) => {
                     t('settingsEvent.fieldScheduleNotValid')
                 ),
                 logoUrl: string()
-                    .url(t('settingsEvent.fieldLogoUrlNotValid'))
+                    .matches(
+                        rURLWithLocalhostSupported,
+                        t('settingsEvent.fieldLogoUrlNotValid')
+                    )
                     .required(t('settingsEvent.fieldLogoUrlRequired')),
                 faviconUrl: string()
-                    .url(t('settingsEvent.fieldFaviconUrlNotValid'))
+                    .matches(
+                        rURLWithLocalhostSupported,
+                        t('settingsEvent.fieldFaviconUrlNotValid')
+                    )
                     .required(t('settingsEvent.fieldFaviconUrlRequired')),
                 restrictVoteRange: boolean(),
                 voteStartTime: string(),
@@ -199,6 +207,8 @@ const ProjectSettingsForm = ({ project }) => {
                                 )}
                         </Grid>
                     </Grid>
+
+                    <SaveShortcut />
                 </Form>
             )}
         </Formik>

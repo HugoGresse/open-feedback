@@ -110,7 +110,7 @@ describe('Test voting form edition', function () {
             'Test deutsch',
             langLabel
         )
-        app.votingForm.save()
+        app.votingForm.save(false, true)
         cy.get('#content').scrollTo(0, 500)
         app.votingForm.assertVoteItem(9, 'English name', VOTE_ITEM_TYPES.chip)
         app.votingForm.assertVoteItem(
@@ -119,5 +119,9 @@ describe('Test voting form edition', function () {
             VOTE_ITEM_TYPES.chip,
             1
         )
+
+        cy.get('#content').scrollTo(0, -500)
+        app.votingForm.clickOnAdditionalLangTip()
+        app.settings.assertSettingsDisplayed()
     })
 })

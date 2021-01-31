@@ -4,7 +4,8 @@ import { createSelector } from 'reselect'
 const getVotingForm = (state) => getAdminStateSelector(state).adminVotingForm
 
 export const getVoteItemsSelector = (state) => getVotingForm(state).voteItems
-export const isSavingSelector = (state) => getVotingForm(state).ongoingSave
+export const isSavingVotingFormSelector = (state) =>
+    getVotingForm(state).ongoingSave
 export const shouldConfirmSaveSelector = (state) =>
     getVotingForm(state).shouldConfirmSave
 

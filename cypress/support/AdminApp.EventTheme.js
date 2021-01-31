@@ -3,8 +3,12 @@ export class EventTheme {
         cy.contains('Event & Theme').click()
     }
 
-    save() {
-        cy.contains('Save').click()
+    save(useShortcut = false) {
+        if (useShortcut) {
+            cy.typeSaveButtons()
+        } else {
+            cy.contains('Save').click()
+        }
     }
 
     assertEventName(shouldBe) {
@@ -61,7 +65,7 @@ export class EventTheme {
         cy.get(`input[name="${selector}"`).click()
         cy.get('*[class^="MuiPickersCalendar-week-"]')
             .parent()
-            .contains('p', dayToSelect)
+            .contains('button[tabindex=0] p', dayToSelect)
             .click()
 
         cy.get('*[class^="MuiPickersClock-clock-"]')
@@ -77,8 +81,17 @@ export class EventTheme {
                 cy.get('body').click(rect.x + 10, rect.y + 10)
             })
     }
+
     editVoteRangeEndTime(dayToSelect, hour, minute) {
         this.editVoteRangeOpenTime(dayToSelect, hour, minute, 'voteEndTime')
+    }
+
+    assertVoteRangeStartTime(expectedString) {
+        cy.get('input[name=voteStartTime]').should('have.value', expectedString)
+    }
+
+    assertVoteRangeEndTime(expectedString) {
+        cy.get('input[name=voteEndTime]').should('have.value', expectedString)
     }
 
     setLogo(imageUrl) {
