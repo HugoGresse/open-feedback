@@ -65,7 +65,7 @@ export class EventTheme {
         cy.get(`input[name="${selector}"`).click()
         cy.get('*[class^="MuiPickersCalendar-week-"]')
             .parent()
-            .contains('p', dayToSelect)
+            .contains('button[tabindex=0] p', dayToSelect)
             .click()
 
         cy.get('*[class^="MuiPickersClock-clock-"]')
