@@ -26,6 +26,7 @@ import { getLanguagesSelector } from '../../core/projectSelectors'
 import SimpleDialog from '../../../baseComponents/layouts/SimpleDialog'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
 import { useHotkeys } from 'react-hotkeys-hook'
+import OFButton from '../../../baseComponents/button/OFButton'
 
 const VoteItemList = () => {
     const { t } = useTranslation()
@@ -105,7 +106,12 @@ const VoteItemList = () => {
                     }}
                 />
             ))}
-            <OFListItem style={{ paddingLeft: 20, paddingRight: 20 }}>
+            <OFListItem
+                style={{
+                    paddingLeft: 20,
+                    paddingRight: 20,
+                    justifyContent: 'space-between',
+                }}>
                 <Button
                     aria-label="new vote item"
                     onClick={() =>
@@ -114,6 +120,9 @@ const VoteItemList = () => {
                     <AddIcon style={{ marginRight: 6 }} />
                     {t('settingsVotingForm.new')}
                 </Button>
+                <OFButton onClick={save} disabled={isSaving}>
+                    {t('common.save')}
+                </OFButton>
             </OFListItem>
 
             <SimpleDialog
