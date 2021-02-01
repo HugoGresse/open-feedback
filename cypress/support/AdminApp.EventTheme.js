@@ -55,7 +55,7 @@ export class EventTheme {
         }
     }
 
-    // Take care to have unique value, with two numbers. Minutes should be % 5
+    // Select a day in the precedent month. Minutes should be % 5
     editVoteRangeOpenTime(
         dayToSelect,
         hour,
@@ -63,6 +63,12 @@ export class EventTheme {
         selector = 'voteStartTime'
     ) {
         cy.get(`input[name="${selector}"`).click()
+
+        cy.get('*[class*="MuiPickersCalendarHeader-switchHeader"]')
+            .children('button')
+            .first()
+            .click()
+
         cy.get('*[class^="MuiPickersCalendar-week-"]')
             .parent()
             .contains('button[tabindex=0] p', dayToSelect)

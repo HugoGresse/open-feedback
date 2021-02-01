@@ -41,12 +41,11 @@ describe('Event and theme options', function () {
         app.eventTheme.setScheduleLink(scheduleLink)
         app.eventTheme.assertScheduleLink(scheduleLink)
 
-        const currentDay = new Date().getUTCDate()
         app.eventTheme.assertVoteRangeRestricted(false)
         app.eventTheme.setVoteRangeRestricted(true)
         app.eventTheme.assertVoteRangeRestricted(true)
-        app.eventTheme.editVoteRangeOpenTime(currentDay - 1, 13, 35)
-        app.eventTheme.editVoteRangeEndTime(currentDay - 1, 13, 35)
+        app.eventTheme.editVoteRangeOpenTime(15, 13, 35)
+        app.eventTheme.editVoteRangeEndTime(15, 13, 35)
 
         const imageUrl =
             'https://openfeedback.io/static/logos/openfeedback%20black%20orange-1x.png'
@@ -74,12 +73,11 @@ describe('Event and theme options', function () {
         app.eventTheme.open()
 
         const dateTime = DateTime.local()
-            .minus({ days: 1 })
-            .set({ hours: 13, minutes: 35, seconds: 0 })
-        const currentDay = new Date().getUTCDate()
+            .minus({ months: 1 })
+            .set({ days: 15, hours: 13, minutes: 35, seconds: 0 })
         app.eventTheme.assertVoteRangeRestricted(false)
         app.eventTheme.setVoteRangeRestricted(true)
-        app.eventTheme.editVoteRangeOpenTime(currentDay - 1, 13, 35)
+        app.eventTheme.editVoteRangeOpenTime(15, 13, 35)
 
         app.eventTheme.save(true)
         cy.reload()
