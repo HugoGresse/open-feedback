@@ -22,7 +22,7 @@
         "firebase-admin": "^9.4.2",
         "firebase-functions": "^3.13.1",
         "firebase-functions-test": "^0.2.3",
-        "firebase-tools": "^9.2.2",
+        "firebase-tools": "^9.3.0",
         "form-data": "^3.0.0",
         "imagemin": "^7.0.1",
         "imagemin-jpegtran": "^7.0.0",
