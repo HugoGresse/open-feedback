@@ -29,7 +29,7 @@
         "@storybook/addons": "^6.1.15",
         "@storybook/preset-create-react-app": "^3.1.5",
         "@storybook/react": "6.1.15",
-        "cypress": "^6.3.0",
+        "cypress": "^6.4.0",
         "eslint-plugin-cypress": "^2.11.2",
         "eslint-plugin-i18n-json": "^3.1.0",
         "firebase-tools": "^9.2.2",
