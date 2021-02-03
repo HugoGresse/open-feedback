@@ -1,19 +1,21 @@
 # Open Feedback
 
-**Open Feedback** is an opened SaaS platform destined to organisers to gather feedback from users. It connect to many (hoverboard-v2 Firestore, imported data WIP, remote JSON WIP) to retrieve all sessions & speakers & let any user give feedback on them and store everything on Open Feedback Firestore.
+**Open Feedback** is an opened SaaS platform for organisers and speakers to gather users feedback. It connects to one of 3 data source: OpenFeedback database, hoverboard-v2, or your own API, to retrieve all the sessions & speakers. Anonymous users can give constructive feedbacks on sessions, and admins can manage the voting form, comments, languages, sessions and speakers directly within the GUI.
 
 > Demo: https://openfeedback.io/eaJnyMXD3oNfhrrnBYDT
 
 ## Features
 
-_Open Feedback is still in beta_
-
 -   Generate unique & public read url for an event
--   List all sessions from hoverboad-v2 Firestore database
--   User give feedback (not a rate) on any session anonymously (it use Firebase anonymous login)
--   Feedback list is customizable by event
+-   List all sessions, search by tag, speakers, tracks
+-   User give feedback (not a rate) on any sessions anonymously (it use Firebase anonymous login)
+-   Voting form are 100% customizable and can be translated any languages
 -   Display users feedback
--   Dashboard & admin tools (coming soon)
+-   Full dashboard statistics & admin interface
+-   Comments moderation
+-   Admin editors management
+-   TODO: live votes reflected on all clients
+-   TODO: organization
 
 ## You want to contribute ?
 
