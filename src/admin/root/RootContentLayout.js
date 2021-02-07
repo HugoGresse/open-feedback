@@ -1,35 +1,26 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import COLORS from '../../constants/colors'
+import { OrganizationTitle } from './OrganizationTitle'
+import { useTranslation } from 'react-i18next'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     container: {
         paddingBottom: theme.spacing(2),
     },
-    title: {
-        marginTop: 100,
-        marginBottom: 20,
-        color: COLORS.WHITE,
-    },
 }))
 
-const RootContentLayout = ({ title, children }) => {
+const RootContentLayout = ({ isUserValid, children }) => {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     return (
         <Container maxWidth="md" fixed className={classes.container}>
             <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <Typography
-                        className={classes.title}
-                        variant="h4"
-                        gutterBottom>
-                        {title}
-                    </Typography>
-                </Grid>
+                {!isUserValid && (
+                    <OrganizationTitle title={t('root.userNotVerified')} />
+                )}
                 {children}
             </Grid>
         </Container>

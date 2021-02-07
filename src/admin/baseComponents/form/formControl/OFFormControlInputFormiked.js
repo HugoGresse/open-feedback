@@ -11,12 +11,14 @@ const OFFormControlInputFormiked = ({
     isSubmitting,
     displayErrorMessageDirectly = false,
     autoFocus = false,
+    color = 'primary',
 }) => {
     return (
         <OFFormControl
             name={name}
             fieldName={fieldName}
-            displayErrorMessageDirectly={displayErrorMessageDirectly}>
+            displayErrorMessageDirectly={displayErrorMessageDirectly}
+            color={color}>
             <Field type={type} name={fieldName} disabled={isSubmitting}>
                 {({ field, form }) => (
                     <OFInput

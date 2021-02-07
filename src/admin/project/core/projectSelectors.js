@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
 import { getAdminStateSelector } from '../../adminSelector'
+import { NO_ORGANIZATION_FAKE_ID } from '../../organization/core/organizationConstants'
 
 const getProjects = (state) => getAdminStateSelector(state).adminProject
 const getProjectsData = (state) => getProjects(state).data
@@ -37,6 +38,21 @@ export const getSortedProjectsSelector = createSelector(
             }
             return 0
         })
+    }
+)
+
+export const getSortedProjectsByOrganizationIdsSelector = createSelector(
+    getSortedProjectsSelector,
+    (projects) => {
+        return projects.reduce((acc, project) => {
+            const organizationId =
+                project.organizationId || NO_ORGANIZATION_FAKE_ID
+            if (!acc[organizationId]) {
+                acc[organizationId] = []
+            }
+            acc[organizationId].push(project)
+            return acc
+        }, {})
     }
 )
 

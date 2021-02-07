@@ -22,10 +22,12 @@ const innerTheme = createMuiTheme({
             contrastText: '#fff',
         },
         secondary: {
-            light: '#515151',
-            main: '#292929',
-            dark: '#000000',
+            light: '#6ec6ff',
+            main: '#2196f3',
+            dark: '#0069c0',
             contrastText: '#fff',
+            buttonSecondaryBackground: '#fff',
+            buttonSecondaryText: '#111',
         },
     },
 })

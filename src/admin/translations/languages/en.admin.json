@@ -30,7 +30,9 @@
                 "confirm": "Drop the image here to upload it instantly",
                 "failUpload": "Failed to upload the image: "
             }
-        }
+        },
+        "showAll": "Show all",
+        "showLess": "Show less"
     },
     "project": {
         "errorProjectsLoad": "Unable to load all projects.",
@@ -118,8 +120,20 @@
     },
     "root": {
         "create": "Create a new event",
-        "title": "Your OpenFeedback events",
-        "userNotVerified": "User not verified"
+        "userNotVerified": "User not verified",
+        "loading": "Loading your events and organizations...",
+        "organization": {
+            "noOrganizationName": "Your OpenFeedback events"
+        }
+    },
+    "organization": {
+        "errorsLoadOrganizations": "Unable to load your organizations.",
+        "new": "New organization",
+        "newSuccess": "New organization created! Redirecting you now...",
+        "edit": "Edit organization",
+        "create": "Create organization",
+        "name": "Organization name",
+        "nameRequired": "The organization name is required."
     },
     "rooting": {
         "dashboard": "Dashboard",

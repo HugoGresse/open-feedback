@@ -1,25 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import {
-    getSortedProjectsSelector,
-    isProjectsLoadedSelector,
-} from '../project/core/projectSelectors'
 import { useDispatch, useSelector } from 'react-redux'
 import RootHeader from './RootHeader'
 import { Box, Slide } from '@material-ui/core'
 import COLORS from '../../constants/colors'
-import ProjectList from './ProjectList'
 import NewProject from '../project/new/NewProject'
-import useQuery from '../../utils/useQuery'
 import ProjectInviteDialog from './ProjectInviteDialog'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { isUserValidSelector } from '../auth/authSelectors'
 import RootContentLayout from './RootContentLayout'
 import EmailNotVerified from '../auth/EmailNotVerified'
 import { authProvider } from '../../firebase'
-import { useTranslation } from 'react-i18next'
-import { redirectToProject } from '../project/utils/redirectToProject'
 import { getProjects } from '../project/core/actions/getProjects'
+import useQuery from '../../utils/useQuery'
+import { OrganizationList } from './OrganizationList'
+import { getOrganizations } from '../organization/core/actions/getOrganizations'
+import { OrganisationNewDialog } from './OrganizationNewDialog'
 
 const useStyles = makeStyles({
     container: {
@@ -36,20 +31,18 @@ const useStyles = makeStyles({
 })
 
 const AdminRoot = () => {
-    const history = useHistory()
     const classes = useStyles()
     const inviteId = useQuery().get('inviteId')
     const dispatch = useDispatch()
-    const projects = useSelector(getSortedProjectsSelector)
     const isUserValid = useSelector(isUserValidSelector)
-    const isProjectsLoaded = useSelector(isProjectsLoadedSelector)
     const [isNewProjectOpen, setNewProjectOpen] = useState(false)
-    const { t } = useTranslation()
+    const [isNewOrganizationOpen, setNewOrganizationOpen] = useState(false)
 
     useEffect(() => {
-        authProvider.currentUser
-            .getIdToken(true)
-            .then(() => dispatch(getProjects()))
+        authProvider.currentUser.getIdToken(true).then(() => {
+            dispatch(getProjects())
+            dispatch(getOrganizations())
+        })
     }, [dispatch, isUserValid])
 
     return (
@@ -58,21 +51,14 @@ const AdminRoot = () => {
                 className={classes.container}
                 style={{ height: isNewProjectOpen ? '100vh' : 'auto' }}>
                 <RootHeader />
-                <RootContentLayout
-                    title={
-                        isUserValid
-                            ? t('root.title')
-                            : t('root.userNotVerified')
-                    }>
+                <RootContentLayout isUserValid={isUserValid}>
                     {!isUserValid && <EmailNotVerified dispatch={dispatch} />}
 
                     {isUserValid && (
-                        <ProjectList
-                            projects={projects}
-                            isProjectsLoaded={isProjectsLoaded}
+                        <OrganizationList
                             onNewEventClick={() => setNewProjectOpen(true)}
-                            onProjectSelected={(projectId) =>
-                                redirectToProject(null, projectId, history)
+                            onNewOrganizationClick={() =>
+                                setNewOrganizationOpen(true)
                             }
                         />
                     )}
@@ -91,6 +77,11 @@ const AdminRoot = () => {
                     </div>
                 </Slide>
             </div>
+
+            <OrganisationNewDialog
+                open={isNewOrganizationOpen}
+                onClose={() => setNewOrganizationOpen(false)}
+            />
 
             {inviteId && <ProjectInviteDialog inviteId={inviteId} />}
         </div>

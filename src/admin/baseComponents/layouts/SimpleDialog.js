@@ -17,7 +17,7 @@ const SimpleDialog = ({
     confirmLoading,
 }) => {
     return (
-        <Dialog onClose={onClose} open={open}>
+        <Dialog onClose={onClose} open={open} aria-labelledby={title}>
             <DialogTitle>{title}</DialogTitle>
             <DialogContent>{children}</DialogContent>
             <DialogActions>

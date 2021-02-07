@@ -30,7 +30,9 @@
                 "confirm": "Relacher l'image pour la charger",
                 "failUpload": "Erreur lors du chargement de l'image: "
             }
-        }
+        },
+        "showAll": "Voir tout",
+        "showLess": "Voir moins"
     },
     "project": {
         "errorProjectsLoad": "Erreur lors du chargement des projets.",
@@ -118,8 +120,21 @@
     },
     "root": {
         "create": "Créer un nouvel événement",
-        "title": "Vos évènements OpenFeedback",
-        "userNotVerified": "Utilisateur non vérifié"
+        "userNotVerified": "Utilisateur non vérifié",
+        "loading": "Chargement de vos évènements et organisations...",
+        "organization": {
+            "noOrganizationName": "Vos évènements OpenFeedback"
+        }
+    },
+    "organization": {
+        "errorsLoadOrganizations": "Erreur lors du chargement de vos organisations.",
+        "new": "Nouvelle organisation",
+        "newSuccess": "Nouvelle organization créé! Redirection en cours...",
+        "newFail": "Erreur lors de la création de l'organization",
+        "edit": "Modifier l'organisation",
+        "create": "Créer l'organisation",
+        "name": "Nom de l'organisation",
+        "nameRequired": "Le nom de votre petite organisation est obligatoire."
     },
     "rooting": {
         "dashboard": "Statistiques",
