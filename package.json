@@ -10,6 +10,8 @@
         "start:local:back": "firebase emulators:start --import=./cypress/fixtures/firebase-emulators-data --only firestore,auth,functions",
         "build": "react-scripts build",
         "test": "react-scripts test",
+        "test:firestoreRulesStandalone": "npx firebase emulators:exec --only firestore 'jest --roots config --env=./config/firestore.rules.jestEnv.js'",
+        "test:firestoreRules": "jest --roots config --env=./config/firestore.rules.jestEnv.js",
         "eject": "react-scripts eject",
         "deploy": "npm run build && firebase deploy",
         "deploy:dev": "env-cmd -f .env.development.local npm run build && firebase deploy",
@@ -25,6 +27,7 @@
         "lint:i18n": "eslint src/**/languages/*.json"
     },
     "devDependencies": {
+        "@firebase/testing": "^0.20.11",
         "@storybook/addon-docs": "^6.1.16",
         "@storybook/addons": "^6.1.16",
         "@storybook/preset-create-react-app": "^3.1.5",

@@ -37,7 +37,7 @@ service cloud.firestore {
             allow list: if authenticated() && (isAdmin(resource.data) || isAnOrgViewer(getOrganization(resource.data.organizationId))) && (isEmailVerified() || isPhoneNumberAccount());
             allow create: if authenticated() && (!("organizationId" in request.resource.data) || isAnOrgEditor(getOrganization(request.resource.data.organizationId)));
             allow update: if authenticated() && (isAdmin(resource.data) || isAnOrgEditor(getOrganization(resource.data.organizationId))) && (isEmailVerified() || isPhoneNumberAccount());
-            allow delete: if authenticated() && isAdmin(resource.data) && (isEmailVerified() || isPhoneNumberAccount());
+            allow delete: if authenticated() && (isAdmin(resource.data) || isAnOrgAdmin(getOrganization(resource.data.organizationId))) && (isEmailVerified() || isPhoneNumberAccount());
 
             // Deprecated
             match /voteItems/{voteItemsId} {
@@ -91,8 +91,8 @@ service cloud.firestore {
             allow get: if authenticated() && isAnOrgViewer(resource.data);
             allow list: if authenticated() && isAnOrgViewer(resource.data);
             allow create: if authenticated();
-            allow update: if false;
-            allow delete: if false;
+            allow update: if authenticated() && ((isAnOrgAdmin(resource.data) && request.resource.data.ownerUserId == resource.data.ownerUserId) || isOrgOwner(resource.data) );
+            allow delete: if authenticated() && isOrgOwner(resource.data);
         }
     }
 }

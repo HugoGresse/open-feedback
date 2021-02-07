@@ -8,6 +8,8 @@ const projectId = 'openfeedback'
 const UID_VIEWER = 'viewerUserId'
 const UID_EDITOR = 'editorUserId'
 const UID_ADMIN = 'adminUserId'
+const UID_ANOTHER_ADMIN = 'anotherAdminUserId'
+const UID_OWNER = 'ownerUserId'
 
 function createApp(uid = UID_VIEWER) {
     const auth = {
@@ -31,6 +33,7 @@ const createOrg = async (
             viewerUserIds,
             editorUserIds,
             adminUserIds,
+            ownerUserId,
         },
         { merge: true }
     )
@@ -259,6 +262,26 @@ describe('Firestore rules', () => {
             const project = app.collection('projects').doc(projectId).delete()
             await firebase.assertFails(project)
         })
+
+        it('cannot edit the organization or org users with viewer role', async () => {
+            const adminApp = createApp(UID_ADMIN)
+            const app = createApp(UID_VIEWER)
+
+            await createOrg(adminApp, 'FirstOrg', [UID_VIEWER], [UID_ADMIN])
+            const delOrg = app
+                .collection('organizations')
+                .doc('FirstOrg')
+                .delete()
+            await firebase.assertFails(delOrg)
+
+            const updateOrg = app
+                .collection('organizations')
+                .doc('FirstOrg')
+                .update({
+                    name: 'toto',
+                })
+            await firebase.assertFails(updateOrg)
+        })
     })
 
     describe('Organization/editor', () => {
@@ -276,18 +299,18 @@ describe('Firestore rules', () => {
         })
 
         it('can edit a project for an organization with editor role', async () => {
-            const adminApp = createApp(UID_EDITOR)
+            const editorApp = createApp(UID_EDITOR)
 
-            await createOrg(adminApp, 'FirstOrg', [], [UID_EDITOR])
+            await createOrg(editorApp, 'FirstOrg', [], [UID_EDITOR])
             const projectRef = await createProject(
-                adminApp,
+                editorApp,
                 'First project',
-                UID_EDITOR,
+                UID_ADMIN,
                 'FirstOrg'
             )
             const projectId = projectRef.id
 
-            const project = updateProject(adminApp, projectId)
+            const project = updateProject(editorApp, projectId)
             await firebase.assertSucceeds(project)
         })
 
@@ -368,9 +391,167 @@ describe('Firestore rules', () => {
             const project = updateProject(editorApp, projectId, 'SecondOrg')
             await firebase.assertFails(project)
         })
+
+        it('cannot edit the organization or org users with editor role', async () => {
+            const adminApp = createApp(UID_ADMIN)
+            const editorApp = createApp(UID_EDITOR)
+
+            await createOrg(adminApp, 'FirstOrg', [UID_EDITOR], [UID_EDITOR])
+            const delOrg = editorApp
+                .collection('organizations')
+                .doc('FirstOrg')
+                .delete()
+            await firebase.assertFails(delOrg)
+
+            const updateOrg = editorApp
+                .collection('organizations')
+                .doc('FirstOrg')
+                .update({
+                    name: 'toto',
+                })
+            await firebase.assertFails(updateOrg)
+        })
     })
 
-    // TODO : admin & owner rules
+    describe('Organization/admin', () => {
+        it('can delete any project linked to organization with admin role', async () => {
+            const editorApp = createApp(UID_EDITOR)
+            const adminApp = createApp(UID_ADMIN)
+            await createOrg(
+                editorApp,
+                'FirstOrg',
+                [],
+                [UID_EDITOR],
+                [UID_ADMIN]
+            )
+            const project = await createProject(
+                editorApp,
+                'project',
+                UID_EDITOR,
+                'FirstOrg'
+            )
+
+            const delProject = adminApp
+                .collection('projects')
+                .doc(project.id)
+                .delete()
+            await firebase.assertSucceeds(delProject)
+        })
+
+        it('cannot delete/edit a project from another organization with admin role', async () => {
+            const anotherAdminApp = createApp(UID_ANOTHER_ADMIN)
+            const adminApp = createApp(UID_ADMIN)
+            await createOrg(adminApp, 'FirstOrg', [], [UID_EDITOR], [UID_ADMIN])
+            await createOrg(
+                anotherAdminApp,
+                'SecondOrg',
+                [UID_ANOTHER_ADMIN],
+                [UID_ANOTHER_ADMIN],
+                [UID_ANOTHER_ADMIN]
+            )
+            const project = await createProject(
+                anotherAdminApp,
+                'project',
+                UID_ANOTHER_ADMIN,
+                'SecondOrg'
+            )
+
+            const delProject = adminApp
+                .collection('projects')
+                .doc(project.id)
+                .delete()
+            await firebase.assertFails(delProject)
+
+            const editProject = adminApp
+                .collection('projects')
+                .doc(project.id)
+                .update({
+                    name: 'titi',
+                })
+            await firebase.assertFails(editProject)
+        })
+
+        it('can add users to an organization with admin role', async () => {
+            const adminApp = createApp(UID_ADMIN)
+            await createOrg(adminApp, 'FirstOrg', [], [], [UID_ADMIN])
+
+            const addUserToOrg = adminApp
+                .collection('organizations')
+                .doc('FirstOrg')
+                .update({
+                    viewerUserIds: firebase.firestore.FieldValue.arrayUnion(
+                        UID_VIEWER
+                    ),
+                })
+            await firebase.assertSucceeds(addUserToOrg)
+
+            const updateOrg = adminApp
+                .collection('organizations')
+                .doc('FirstOrg')
+                .update({
+                    name: 'NewOrgName',
+                })
+            await firebase.assertSucceeds(updateOrg)
+        })
+
+        it('cannot set the organization owner with admin role', async () => {
+            const adminApp = createApp(UID_ADMIN)
+            await createOrg(adminApp, 'FirstOrg', [], [], [UID_ADMIN])
+
+            const setOrgOwner = adminApp
+                .collection('organizations')
+                .doc('FirstOrg')
+                .update({
+                    ownerUserId: UID_ADMIN,
+                })
+            await firebase.assertFails(setOrgOwner)
+        })
+
+        it('cannot delete an organization with admin role', async () => {
+            const adminApp = createApp(UID_ADMIN)
+            await createOrg(adminApp, 'FirstOrg', [], [], [UID_ADMIN])
+
+            const deleteOrg = adminApp
+                .collection('organizations')
+                .doc('FirstOrg')
+                .delete()
+            await firebase.assertFails(deleteOrg)
+        })
+    })
+
+    describe('Organization/owner', () => {
+        it('can change the organization owner with owner role', async () => {
+            const ownerUserId = createApp(UID_OWNER)
+            await createOrg(ownerUserId, 'FirstOrg', [], [], [], UID_OWNER)
+
+            const setOrgOwner = ownerUserId
+                .collection('organizations')
+                .doc('FirstOrg')
+                .update({
+                    ownerUserId: UID_ADMIN,
+                })
+            await firebase.assertSucceeds(setOrgOwner)
+
+            const setBackOrgOwner = ownerUserId
+                .collection('organizations')
+                .doc('FirstOrg')
+                .update({
+                    ownerUserId: UID_OWNER,
+                })
+            await firebase.assertFails(setBackOrgOwner)
+        })
+
+        it('can delete an organization with owner role', async () => {
+            const ownerApp = createApp(UID_OWNER)
+            await createOrg(ownerApp, 'FirstOrg', [], [], [], UID_OWNER)
+
+            const deleteOrg = ownerApp
+                .collection('organizations')
+                .doc('FirstOrg')
+                .delete()
+            await firebase.assertSucceeds(deleteOrg)
+        })
+    })
 
     describe('Projects rules', () => {
         it('can create a project if logged in', async () => {
