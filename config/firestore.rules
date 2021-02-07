@@ -2,27 +2,27 @@ rules_version = '2';
 service cloud.firestore {
     match /databases/{database}/documents {
 
-        // Verification functions
+        // Common
         function authenticated() { return request.auth.uid != null; }
         function limitOne() { return request.query.limit <= 1; }
-        function userNotExists() { return !exists(/databases/$(database)/documents/users/$(request.auth.uid)); }
         function itsMyDocument(userId) { return request.auth.uid == userId; }
-        function isAdmin(data) { return data.owner == request.auth.uid || request.auth.uid in data.members;}
+
+        // Users
+        function userNotExists() { return !exists(/databases/$(database)/documents/users/$(request.auth.uid)); }
         function isAnonymous() { return request.auth.token.firebase.sign_in_provider == 'anonymous';}
         function isEmailVerified() { return request.auth.token.email_verified == true; }
         function isPhoneNumberAccount() { return request.auth.token.firebase.sign_in_provider == 'phone' ;}
 
+        // Projects
+        function projectData(projectId) { return get(/databases/$(database)/documents/projects/$(projectId)).data; }
+        function isAdmin(data) { return data.owner == request.auth.uid || request.auth.uid in data.members;}
+
         // Org
-        function getOrganization(organizationId) {
-            return get(/databases/$(database)/documents/organizations/$(organizationId)).data;
-        }
+        function getOrganization(organizationId) { return get(/databases/$(database)/documents/organizations/$(organizationId)).data; }
         function isAnOrgViewer(organization) { return request.auth.uid in organization.viewerUserIds; }
         function isAnOrgEditor(organization) { return request.auth.uid in organization.editorUserIds; }
         function isAnOrgAdmin(organization) { return request.auth.uid in organization.adminUserIds; }
         function isOrgOwner(organization) { return request.auth.uid == organization.ownerUserId; }
-
-        // Get functions
-        function projectData(projectId) { return get(/databases/$(database)/documents/projects/$(projectId)).data; }
 
         match /users/{userId} {
             allow get: if authenticated() && !isAnonymous();
