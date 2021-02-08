@@ -20,17 +20,12 @@ export const newOrganization = (name) => async (dispatch, getState) => {
         .collection('organizations')
         .add(orgData)
         .then((documentRef) => {
-            console.log(documentRef.id)
             dispatch(
                 addNotification({
                     type: 'success',
                     i18nkey: 'organization.newSuccess',
                 })
             )
-            // dispatch({
-            //     type: ADD_PROJECT_SUCCESS,
-            //     payload: projectId,
-            // })
             trackNewOrganization(orgData.name)
             return documentRef.id
         })

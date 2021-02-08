@@ -57,12 +57,13 @@ export const OrganizationList = ({
             {organizationIds.map((id) => (
                 <OrganizationListItem
                     key={id}
+                    organizationId={id}
                     organizationName={
                         id === NO_ORGANIZATION_FAKE_ID
                             ? t('root.organization.noOrganizationName')
-                            : 'toto'
+                            : projectsByOrganizations[id].name
                     }
-                    projects={projectsByOrganizations[id]}
+                    projects={projectsByOrganizations[id].projects}
                     onNewEventClick={onNewEventClick}
                     onProjectSelected={(projectId) => {
                         redirectToProject(null, projectId, history)

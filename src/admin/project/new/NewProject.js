@@ -39,7 +39,7 @@ const useStyles = makeStyles({
     },
 })
 
-const NewProject = ({ onCancel }) => {
+const NewProject = ({ organizationId, onCancel }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     // eslint-disable-next-line no-undef
@@ -54,9 +54,9 @@ const NewProject = ({ onCancel }) => {
     const [step3Data, setStep3Data] = useState()
     const [isCreatingEvent, setCreatingEvent] = useState(false)
 
-    const createEvent = (id, data) => {
+    const createEvent = (projectId, data) => {
         setCreatingEvent(true)
-        return dispatch(newProject(id, data))
+        return dispatch(newProject(organizationId, projectId, data))
             .then((projectId) => {
                 return Promise.all([
                     dispatch(getProject(projectId)),

@@ -23,7 +23,6 @@ jobs:
         npm run build --if-present
         npm run lint:i18n
         npm run test
-        npm run test:firestoreRulesStandalone
     - name: npm test firestore rules
       run: |
         npm run test:firestoreRulesStandalone

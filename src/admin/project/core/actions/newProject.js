@@ -8,8 +8,12 @@ import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase'
 import { newRandomHexColor } from '../../../../utils/colorsUtils'
 import { addNotification } from '../../../notification/notifcationActions'
 import { trackNewProject } from '../../../utils/track'
+import { NO_ORGANIZATION_FAKE_ID } from '../../../organization/core/organizationConstants'
 
-export const newProject = (projectId, projectData) => (dispatch, getState) => {
+export const newProject = (organizationId, projectId, projectData) => (
+    dispatch,
+    getState
+) => {
     dispatch({
         type: ADD_PROJECT_ONGOING,
     })
@@ -20,6 +24,9 @@ export const newProject = (projectId, projectData) => (dispatch, getState) => {
     projectData.chipColors = [newRandomHexColor()]
     projectData.favicon = `${window.location.protocol}//${window.location.host}/favicon-32x32.png`
     projectData.logoSmall = `${window.location.protocol}//${window.location.host}/android-chrome-192x192.png`
+    if (organizationId !== NO_ORGANIZATION_FAKE_ID) {
+        projectData.organizationId = organizationId
+    }
 
     return fireStoreMainInstance
         .collection('projects')

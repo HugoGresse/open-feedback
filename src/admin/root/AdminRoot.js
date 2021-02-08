@@ -35,7 +35,7 @@ const AdminRoot = () => {
     const inviteId = useQuery().get('inviteId')
     const dispatch = useDispatch()
     const isUserValid = useSelector(isUserValidSelector)
-    const [isNewProjectOpen, setNewProjectOpen] = useState(false)
+    const [isNewProjectOpenOrgId, setNewProjectOpenOrgId] = useState(false)
     const [isNewOrganizationOpen, setNewOrganizationOpen] = useState(false)
 
     useEffect(() => {
@@ -49,14 +49,14 @@ const AdminRoot = () => {
         <div style={{ position: 'relative' }}>
             <Box
                 className={classes.container}
-                style={{ height: isNewProjectOpen ? '100vh' : 'auto' }}>
+                style={{ height: isNewProjectOpenOrgId ? '100vh' : 'auto' }}>
                 <RootHeader />
                 <RootContentLayout isUserValid={isUserValid}>
                     {!isUserValid && <EmailNotVerified dispatch={dispatch} />}
 
                     {isUserValid && (
                         <OrganizationList
-                            onNewEventClick={() => setNewProjectOpen(true)}
+                            onNewEventClick={setNewProjectOpenOrgId}
                             onNewOrganizationClick={() =>
                                 setNewOrganizationOpen(true)
                             }
@@ -70,10 +70,13 @@ const AdminRoot = () => {
                     direction="left"
                     mountOnEnter={true}
                     unmountOnExit={true}
-                    in={isNewProjectOpen}
+                    in={isNewProjectOpenOrgId}
                     timeout={500}>
                     <div>
-                        <NewProject onCancel={() => setNewProjectOpen(false)} />
+                        <NewProject
+                            organizationId={isNewProjectOpenOrgId}
+                            onCancel={() => setNewProjectOpenOrgId(null)}
+                        />
                     </div>
                 </Slide>
             </div>

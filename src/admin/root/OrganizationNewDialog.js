@@ -32,7 +32,11 @@ export const OrganisationNewDialog = ({ onClose, open }) => {
                     name: string().required(t('organization.nameRequired')),
                 })}
                 onSubmit={(values) => {
-                    dispatch(newOrganization(values.name.trim()))
+                    return dispatch(newOrganization(values.name.trim())).then(
+                        () => {
+                            onClose()
+                        }
+                    )
                 }}>
                 {({ isSubmitting }) => (
                     <Form method="POST">
