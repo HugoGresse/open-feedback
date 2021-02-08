@@ -28,7 +28,7 @@
         "@storybook/addon-docs": "^6.1.16",
         "@storybook/addons": "^6.1.16",
         "@storybook/preset-create-react-app": "^3.1.5",
-        "@storybook/react": "6.1.16",
+        "@storybook/react": "6.1.17",
         "cypress": "^6.4.0",
         "eslint-plugin-cypress": "^2.11.2",
         "eslint-plugin-i18n-json": "^3.1.0",
