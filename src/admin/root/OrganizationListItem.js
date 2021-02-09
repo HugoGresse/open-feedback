@@ -1,6 +1,6 @@
 import React from 'react'
 import ProjectList from './ProjectList'
-import { OrganizationTitle } from './OrganizationTitle'
+import { OrganizationHeader } from './OrganizationHeader'
 import { NO_ORGANIZATION_FAKE_ID } from '../organization/core/organizationConstants'
 
 export const OrganizationListItem = ({
@@ -10,17 +10,17 @@ export const OrganizationListItem = ({
     onNewEventClick,
     onProjectSelected,
 }) => {
-    const invertedColor = organizationId !== NO_ORGANIZATION_FAKE_ID
+    const isOrganization = organizationId !== NO_ORGANIZATION_FAKE_ID
     return (
         <>
-            <OrganizationTitle
+            <OrganizationHeader
                 title={organizationName}
-                invertedColor={invertedColor}
+                isOrganization={isOrganization}
             />
             <ProjectList
                 organizationId={organizationId}
                 projects={projects}
-                invertedColor={invertedColor}
+                invertedColor={isOrganization}
                 onNewEventClick={onNewEventClick}
                 onProjectSelected={onProjectSelected}
             />

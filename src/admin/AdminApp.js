@@ -6,31 +6,42 @@ import Login from './auth/Login'
 import { Route, Switch, useParams } from 'react-router-dom'
 import AdminRoot from './root/AdminRoot'
 import Notifications from './notification/Notifications'
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
+import {
+    createMuiTheme,
+    MuiThemeProvider,
+    responsiveFontSizes,
+} from '@material-ui/core'
 import ProjectApp from './project/ProjectApp'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 
 import { useSmallchat } from './project/utils/smallchat'
 
-const innerTheme = createMuiTheme({
-    palette: {
-        type: 'light',
-        primary: {
-            light: '#ff9c76',
-            main: '#ff6a49',
-            dark: '#c6381e',
-            contrastText: '#fff',
+const innerTheme = responsiveFontSizes(
+    createMuiTheme({
+        palette: {
+            type: 'light',
+            primary: {
+                light: '#ff9c76',
+                main: '#ff6a49',
+                dark: '#c6381e',
+                contrastText: '#fff',
+            },
+            secondary: {
+                light: '#6ec6ff',
+                main: '#2196f3',
+                dark: '#0069c0',
+                contrastText: '#fff',
+                buttonSecondaryBackground: '#fff',
+                buttonSecondaryText: '#111',
+            },
         },
-        secondary: {
-            light: '#6ec6ff',
-            main: '#2196f3',
-            dark: '#0069c0',
-            contrastText: '#fff',
-            buttonSecondaryBackground: '#fff',
-            buttonSecondaryText: '#111',
+        typography: {
+            h2: {
+                fontSize: 40,
+            },
         },
-    },
-})
+    })
+)
 
 const AdminApp = () => {
     useSmallchat()

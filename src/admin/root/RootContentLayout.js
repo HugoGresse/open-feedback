@@ -2,7 +2,7 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { OrganizationTitle } from './OrganizationTitle'
+import { OrganizationHeader } from './OrganizationHeader'
 import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ const RootContentLayout = ({ isUserValid, children }) => {
         <Container maxWidth="md" fixed className={classes.container}>
             <Grid container spacing={3}>
                 {!isUserValid && (
-                    <OrganizationTitle title={t('root.userNotVerified')} />
+                    <OrganizationHeader title={t('root.userNotVerified')} />
                 )}
                 {children}
             </Grid>

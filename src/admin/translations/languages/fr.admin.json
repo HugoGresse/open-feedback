@@ -130,7 +130,7 @@
         "errorsLoadOrganizations": "Erreur lors du chargement de vos organisations.",
         "new": "Nouvelle organisation",
         "newSuccess": "Nouvelle organization créé! Redirection en cours...",
-        "newFail": "Erreur lors de la création de l'organization",
+        "newFail": "Erreur lors de la création de l'organisation",
         "edit": "Modifier l'organisation",
         "create": "Créer l'organisation",
         "name": "Nom de l'organisation",

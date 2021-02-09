@@ -130,6 +130,7 @@
         "errorsLoadOrganizations": "Unable to load your organizations.",
         "new": "New organization",
         "newSuccess": "New organization created! Redirecting you now...",
+        "newFail": "Fail to create a new organization",
         "edit": "Edit organization",
         "create": "Create organization",
         "name": "Organization name",

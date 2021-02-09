@@ -13,15 +13,18 @@ import { redirectToProject } from '../project/utils/redirectToProject'
 import { NO_ORGANIZATION_FAKE_ID } from '../organization/core/organizationConstants'
 import { useTranslation } from 'react-i18next'
 import { isOrganizationsLoadedSelector } from '../organization/core/organizationSelectors'
-import { OrganizationTitle } from './OrganizationTitle'
+import { OrganizationHeader } from './OrganizationHeader'
 import Grid from '@material-ui/core/Grid'
 import OFButton from '../baseComponents/button/OFButton'
 import AddIcon from '@material-ui/icons/Add'
-import { Box, useTheme } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
     loaderContainer: {
         padding: theme.spacing(2, 2),
+    },
+    newOrg: {
+        marginTop: 32,
+        marginBottom: 32,
     },
 }))
 
@@ -36,7 +39,6 @@ export const OrganizationList = ({
     )
     const isProjectsLoaded = useSelector(isProjectsLoadedSelector)
     const isOrganizationsLoaded = useSelector(isOrganizationsLoadedSelector)
-    const theme = useTheme()
     const { t } = useTranslation()
 
     const organizationIds = Object.keys(projectsByOrganizations)
@@ -44,7 +46,7 @@ export const OrganizationList = ({
     if (!isProjectsLoaded || !isOrganizationsLoaded) {
         return (
             <>
-                <OrganizationTitle title={t('root.loading')} />
+                <OrganizationHeader title={t('root.loading')} />
                 <Paper className={classes.loaderContainer}>
                     <LoaderMatchParent height="50" />
                 </Paper>
@@ -71,14 +73,12 @@ export const OrganizationList = ({
                 />
             ))}
 
-            <Grid item xs={12} key="new-org" component={Box}>
+            <Grid item xs={12} key="new-org">
                 <OFButton
                     onClick={onNewOrganizationClick}
-                    style={{
-                        marginTop: 32,
-                        customBg: theme.palette.secondary.main,
-                    }}>
-                    <AddIcon />
+                    color="secondary"
+                    className={classes.newOrg}
+                    startIcon={<AddIcon />}>
                     {t('organization.new')}
                 </OFButton>
             </Grid>
