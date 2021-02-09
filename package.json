@@ -63,7 +63,7 @@
         "react": "^17.0.1",
         "react-color": "^2.19.3",
         "react-dom": "^17.0.1",
-        "react-dropzone": "^11.3.0",
+        "react-dropzone": "^11.3.1",
         "react-firebaseui": "^5.0.0-canary1",
         "react-helmet-async": "^1.0.7",
         "react-hotkeys-hook": "^3.0.3",
