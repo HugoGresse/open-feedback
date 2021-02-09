@@ -6,7 +6,7 @@ import {
     isProjectsLoadedSelector,
 } from './core/projectSelectors'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
-import Layout404 from './layout/Layout404'
+import Layout404 from '../baseComponents/Layout404'
 import {
     selectProject,
     unselectProject,

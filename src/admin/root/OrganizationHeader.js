@@ -19,7 +19,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const OrganizationHeader = ({ title, isOrganization }) => {
+export const OrganizationHeader = ({
+    title,
+    isOrganization,
+    onOrganizationSelected,
+}) => {
     const { t } = useTranslation()
 
     const classes = useStyles({
@@ -41,8 +45,11 @@ export const OrganizationHeader = ({ title, isOrganization }) => {
                             xs={12}
                             md={4}
                             component={Box}
-                            textAlign="end">
+                            display="flex"
+                            alignSelf="center"
+                            justifyContent="flex-end">
                             <OFButton
+                                onClick={onOrganizationSelected}
                                 color="secondary"
                                 startIcon={<EditIcon />}>
                                 {t('organization.edit')}

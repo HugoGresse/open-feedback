@@ -127,14 +127,17 @@
         }
     },
     "organization": {
+        "title": "Organisation",
+        "goBackToProjects": "Revenir à la liste des évènements",
         "errorsLoadOrganizations": "Erreur lors du chargement de vos organisations.",
         "new": "Nouvelle organisation",
-        "newSuccess": "Nouvelle organization créé! Redirection en cours...",
+        "newSuccess": "Nouvelle organisation créé! Redirection en cours...",
         "newFail": "Erreur lors de la création de l'organisation",
         "edit": "Modifier l'organisation",
         "create": "Créer l'organisation",
         "name": "Nom de l'organisation",
-        "nameRequired": "Le nom de votre petite organisation est obligatoire."
+        "nameRequired": "Le nom de votre petite organisation est obligatoire.",
+        "tabTheme": "Thème"
     },
     "rooting": {
         "dashboard": "Statistiques",

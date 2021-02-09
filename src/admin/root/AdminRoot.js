@@ -70,7 +70,7 @@ const AdminRoot = () => {
                     direction="left"
                     mountOnEnter={true}
                     unmountOnExit={true}
-                    in={isNewProjectOpenOrgId}
+                    in={!!isNewProjectOpenOrgId}
                     timeout={500}>
                     <div>
                         <NewProject

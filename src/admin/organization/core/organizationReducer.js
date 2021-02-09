@@ -2,6 +2,7 @@ import { LOGOUT } from '../../auth/authActionTypes'
 import {
     GET_ORGANIZATIONS_ERROR,
     GET_ORGANIZATIONS_SUCCESS,
+    SELECT_ORGANIZATION,
 } from './organizationActionTypes'
 
 const initState = {
@@ -10,6 +11,7 @@ const initState = {
     },
     organizationsLoaded: false,
     organizationsLoadError: null,
+    selectedOrganizationId: null,
 }
 
 export const adminOrganizationReducer = (
@@ -20,6 +22,11 @@ export const adminOrganizationReducer = (
     switch (type) {
         case LOGOUT:
             return initState
+        case SELECT_ORGANIZATION:
+            return {
+                ...state,
+                selectedOrganizationId: payload,
+            }
         case GET_ORGANIZATIONS_SUCCESS:
             return {
                 ...state,

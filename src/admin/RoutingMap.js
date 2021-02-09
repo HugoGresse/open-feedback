@@ -32,3 +32,20 @@ export default {
         url: '/setting/users',
     },
 }
+
+export const ROUTE_EVENT_SEGMENT = 'event'
+export const ROUTE_EVENT_BASE = `/admin/${ROUTE_EVENT_SEGMENT}`
+
+export const ROUTE_ORGANIZATION_SEGMENT = 'org'
+
+export const ORGANIZATION_ROUTES = {
+    users: {
+        url: '/users',
+    },
+    votingForm: {
+        url: '/votingForm',
+    },
+    theme: {
+        url: '/theme',
+    },
+}

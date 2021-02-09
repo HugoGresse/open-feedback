@@ -17,6 +17,7 @@ import { OrganizationHeader } from './OrganizationHeader'
 import Grid from '@material-ui/core/Grid'
 import OFButton from '../baseComponents/button/OFButton'
 import AddIcon from '@material-ui/icons/Add'
+import { redirectToOrganization } from '../project/utils/redirectToOrganization'
 
 const useStyles = makeStyles((theme) => ({
     loaderContainer: {
@@ -69,6 +70,9 @@ export const OrganizationList = ({
                     onNewEventClick={onNewEventClick}
                     onProjectSelected={(projectId) => {
                         redirectToProject(null, projectId, history)
+                    }}
+                    onOrganizationSelected={(organizationId) => {
+                        redirectToOrganization(organizationId, history)
                     }}
                 />
             ))}

@@ -127,6 +127,8 @@
         }
     },
     "organization": {
+        "title": "Organization",
+        "goBackToProjects": "Go back to event list",
         "errorsLoadOrganizations": "Unable to load your organizations.",
         "new": "New organization",
         "newSuccess": "New organization created! Redirecting you now...",
@@ -134,7 +136,8 @@
         "edit": "Edit organization",
         "create": "Create organization",
         "name": "Organization name",
-        "nameRequired": "The organization name is required."
+        "nameRequired": "The organization name is required.",
+        "tabTheme": "Theme"
     },
     "rooting": {
         "dashboard": "Dashboard",

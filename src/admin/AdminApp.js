@@ -3,7 +3,7 @@ import { I18nextProvider } from 'react-i18next'
 import i18n from './translations/i18n'
 import { setFavicon } from '../utils/dom'
 import Login from './auth/Login'
-import { Route, Switch, useParams } from 'react-router-dom'
+import { Redirect, Route, Switch, useParams } from 'react-router-dom'
 import AdminRoot from './root/AdminRoot'
 import Notifications from './notification/Notifications'
 import {
@@ -13,17 +13,18 @@ import {
 } from '@material-ui/core'
 import ProjectApp from './project/ProjectApp'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
-
 import { useSmallchat } from './project/utils/smallchat'
+import { OrganizationApp } from './organization/OrganizationApp'
+import { COLORS } from '../constants/colors'
 
 const innerTheme = responsiveFontSizes(
     createMuiTheme({
         palette: {
             type: 'light',
             primary: {
-                light: '#ff9c76',
-                main: '#ff6a49',
-                dark: '#c6381e',
+                light: COLORS.LIGHT_RED_ORANGE,
+                main: COLORS.RED_ORANGE,
+                dark: COLORS.DARK_RED_ORANGE,
                 contrastText: '#fff',
             },
             secondary: {
@@ -38,6 +39,10 @@ const innerTheme = responsiveFontSizes(
         typography: {
             h2: {
                 fontSize: 40,
+                color: '#2196f3',
+            },
+            h3: {
+                fontSize: 28,
             },
         },
     })
@@ -50,7 +55,7 @@ const AdminApp = () => {
         setFavicon('/favicon-root.ico')
     }, [])
 
-    const { projectId } = useParams()
+    const { projectId, organizationId } = useParams()
 
     return (
         <I18nextProvider i18n={i18n}>
@@ -64,13 +69,28 @@ const AdminApp = () => {
                             <Route exact path="/admin/" component={AdminRoot} />
 
                             <Route
-                                path="/admin/:projectId"
+                                path="/admin/event/:projectId"
                                 render={(props) => (
                                     <ProjectApp
                                         match={props.match}
                                         key={projectId}
                                     />
                                 )}
+                            />
+                            <Route
+                                path="/admin/org/:organizationId"
+                                render={(props) => (
+                                    <OrganizationApp
+                                        match={props.match}
+                                        key={organizationId}
+                                    />
+                                )}
+                            />
+
+                            {/* v0.23 migration when organization is introduced*/}
+                            <Redirect
+                                from="/admin/:projectId"
+                                to="/admin/event/:projectId"
                             />
                         </Switch>
 

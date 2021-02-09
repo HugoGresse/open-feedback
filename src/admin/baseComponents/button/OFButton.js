@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             background: (props) =>
                 props.design === 'text'
-                    ? lighten(fade(COLORS.DARK_RED_ORANGE, 1), 0.8)
+                    ? lighten(fade(theme.palette[props.color].dark, 1), 0.8)
                     : props.customBg
                     ? darken(props.customBg, 0.2)
                     : theme.palette[props.color].dark,

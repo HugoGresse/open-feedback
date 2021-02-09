@@ -1,3 +1,5 @@
+import { ROUTE_EVENT_SEGMENT } from '../../RoutingMap'
+
 export const redirectToProject = (currentProjectId, newProjectId, history) => {
     if (newProjectId === currentProjectId) {
         return
@@ -20,6 +22,8 @@ export const redirectToProject = (currentProjectId, newProjectId, history) => {
     ) {
         // No nothing, hard refresh, id in url but not in states
     } else {
-        history.push(`${history.location.pathname}${newProjectId}`)
+        history.push(
+            `${history.location.pathname}${ROUTE_EVENT_SEGMENT}/${newProjectId}`
+        )
     }
 }

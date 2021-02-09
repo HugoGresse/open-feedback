@@ -9,6 +9,7 @@ export const OrganizationListItem = ({
     projects,
     onNewEventClick,
     onProjectSelected,
+    onOrganizationSelected,
 }) => {
     const isOrganization = organizationId !== NO_ORGANIZATION_FAKE_ID
     return (
@@ -16,6 +17,9 @@ export const OrganizationListItem = ({
             <OrganizationHeader
                 title={organizationName}
                 isOrganization={isOrganization}
+                onOrganizationSelected={() =>
+                    onOrganizationSelected(organizationId)
+                }
             />
             <ProjectList
                 organizationId={organizationId}
