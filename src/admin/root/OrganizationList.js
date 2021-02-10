@@ -17,7 +17,7 @@ import { OrganizationHeader } from './OrganizationHeader'
 import Grid from '@material-ui/core/Grid'
 import OFButton from '../baseComponents/button/OFButton'
 import AddIcon from '@material-ui/icons/Add'
-import { redirectToOrganization } from '../project/utils/redirectToOrganization'
+import { redirectToOrganization } from '../organization/utils/redirectToOrganization'
 
 const useStyles = makeStyles((theme) => ({
     loaderContainer: {

@@ -10,11 +10,14 @@ import Button from '@material-ui/core/Button'
 import { object, string } from 'yup'
 import { useDispatch } from 'react-redux'
 import { newOrganization } from '../organization/core/actions/newOrganization'
+import { redirectToOrganization } from '../organization/utils/redirectToOrganization'
+import { useHistory } from 'react-router-dom'
 
 export const OrganisationNewDialog = ({ onClose, open }) => {
     const dispatch = useDispatch()
     const { t } = useTranslation()
     const title = t('organization.new')
+    const history = useHistory()
 
     return (
         <Dialog
@@ -33,7 +36,10 @@ export const OrganisationNewDialog = ({ onClose, open }) => {
                 })}
                 onSubmit={(values) => {
                     return dispatch(newOrganization(values.name.trim())).then(
-                        () => {
+                        (organizationId) => {
+                            if (organizationId) {
+                                redirectToOrganization(organizationId, history)
+                            }
                             onClose()
                         }
                     )

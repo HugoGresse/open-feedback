@@ -21,7 +21,7 @@ const createOrganizationTheme = (parentTheme) =>
 
 export const OrganizationApp = ({ match }) => {
     const dispatch = useDispatch()
-    const { path, url } = useRouteMatch()
+    const { path } = useRouteMatch()
 
     useEffect(() => {
         dispatch(getOrganizations())
@@ -48,7 +48,7 @@ export const OrganizationApp = ({ match }) => {
                             component={OrganizationVotingForm}
                         />
 
-                        <Redirect from={url} to={`${path}/users`} />
+                        <Redirect from={path} to={`${path}/users`} />
                     </Switch>
                 </OrganizationLayout>
             </Organization>
