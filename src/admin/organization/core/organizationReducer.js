@@ -18,7 +18,6 @@ export const adminOrganizationReducer = (
     state = initState,
     { payload, type }
 ) => {
-    // TODO : display organization in home page + button to "Show more" if more than 6
     switch (type) {
         case LOGOUT:
             return initState
