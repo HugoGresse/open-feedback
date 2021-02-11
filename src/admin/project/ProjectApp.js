@@ -1,4 +1,4 @@
-import RoutingMap from '../RoutingMap'
+import RoutingMap, { ROUTE_EVENT_BASE } from '../RoutingMap'
 import ProjectDashboard from './dashboard/Dashboard'
 import Talks from './talks/Talks'
 import Speakers from './speakers/Speakers'
@@ -11,7 +11,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import ProjectSettings from './settings/event/ProjectSettings'
 import ProjectLayout from './layout/ProjectLayout'
 import { useDispatch } from 'react-redux'
-import Layout404 from './layout/Layout404'
+import Layout404 from '../baseComponents/Layout404'
 import Moderation from './moderation/Moderation'
 import { getProjects } from './core/actions/getProjects'
 
@@ -24,7 +24,7 @@ const ProjectApp = ({ match }) => {
 
     return (
         <Project match={match} key={match.params.projectId}>
-            <ProjectLayout baseUrl="/admin">
+            <ProjectLayout baseUrl={ROUTE_EVENT_BASE}>
                 <Switch>
                     <Redirect
                         exact

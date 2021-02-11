@@ -21,6 +21,7 @@ import { getUserSelector } from '../../../auth/authSelectors'
 import { getDataFromProviderDataOrUser } from '../../../auth/authActions'
 import { addNotification } from '../../../notification/notifcationActions'
 import { editProject } from '../../core/actions/editProject'
+import { redirectToProject } from '../../utils/redirectToProject'
 
 export const getUserDetails = (uid) => (dispatch, getState) => {
     const usersDetails = getUsersSelector(getState())
@@ -160,7 +161,7 @@ export const listenForInvite = (inviteId, history) => (dispatch) => {
                         payload: snapshot.data(),
                     })
                     if (data.status === 'completed') {
-                        history.push(history.location.pathname + data.projectId)
+                        redirectToProject(null, data.projectId, history)
                     }
                 } else {
                     dispatch(

@@ -1,9 +1,8 @@
 import React from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import COLORS from '../../constants/colors'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     container: {
         textAlign: 'center',
         display: 'flex',
@@ -15,11 +14,11 @@ const useStyles = makeStyles(() => ({
         animation: '1s $appearDelayed',
         animationDelay: '500ms',
         animationFillMode: 'forwards',
-        width: props => props.width,
-        height: props => props.height,
-        maxWidth: props => props.maxWidth,
+        width: (props) => props.width,
+        height: (props) => props.height,
+        maxWidth: (props) => props.maxWidth,
         '& > div': {
-            color: COLORS.RED_ORANGE,
+            color: theme.palette.primary.main,
         },
     },
 

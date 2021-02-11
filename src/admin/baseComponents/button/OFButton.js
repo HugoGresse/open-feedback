@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
                 ? 'none'
                 : props.customBg
                 ? props.customBg
-                : COLORS.RED_ORANGE,
+                : theme.palette[props.color].main,
         color: (props) =>
             props.customText
                 ? props.customText
@@ -28,13 +28,13 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             background: (props) =>
                 props.design === 'text'
-                    ? lighten(fade(COLORS.DARK_RED_ORANGE, 1), 0.8)
+                    ? lighten(fade(theme.palette[props.color].dark, 1), 0.8)
                     : props.customBg
                     ? darken(props.customBg, 0.2)
-                    : COLORS.DARK_RED_ORANGE,
+                    : theme.palette[props.color].dark,
         },
         '&:disabled': {
-            color: COLORS.DARK_RED_ORANGE,
+            color: (props) => theme.palette[props.color].dark,
         },
     },
     loading: {
@@ -43,8 +43,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const OFButton = ({ children, loading, style, ...otherProps }) => {
-    const classes = useStyles(style)
+const OFButton = ({ children, loading, color, style, ...otherProps }) => {
+    const classes = useStyles({
+        color: color || 'primary',
+        ...style,
+    })
 
     return (
         <Button

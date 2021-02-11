@@ -6,6 +6,7 @@ import adminDashboardReducer from './project/dashboard/dashboardReducer'
 import votingFormReducer from './project/settings/votingForm/votingFormReducer'
 import adminUsersReducer from './project/settings/users/usersReducer'
 import adminModerationReducer from './project/moderation/moderationReducer'
+import { adminOrganizationReducer } from './organization/core/organizationReducer'
 
 const adminReducer = combineReducers({
     adminAuth: adminAuthReducer,
@@ -15,6 +16,7 @@ const adminReducer = combineReducers({
     adminVotingForm: votingFormReducer,
     adminUsers: adminUsersReducer,
     adminModeration: adminModerationReducer,
+    adminOrganization: adminOrganizationReducer,
 })
 
 export default adminReducer

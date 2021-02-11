@@ -2,18 +2,27 @@ rules_version = '2';
 service cloud.firestore {
     match /databases/{database}/documents {
 
-        // Verification functions
-        function authenticated() { return request.auth.uid != null }
-        function limitOne() { return request.query.limit <= 1 }
-        function userNotExists() { return !exists(/databases/$(database)/documents/users/$(request.auth.uid)) }
-        function itsMyDocument(userId) { return request.auth.uid == userId }
-        function isAdmin(data) { return data.owner == request.auth.uid || request.auth.uid in data.members}
-        function isAnonymous() { return request.auth.token.firebase.sign_in_provider == 'anonymous'}
-        function isEmailVerified() { return request.auth.token.email_verified == true }
-        function isPhoneNumberAccount() { return request.auth.token.firebase.sign_in_provider == 'phone' }
+        // Common
+        function authenticated() { return request.auth.uid != null; }
+        function limitOne() { return request.query.limit <= 1; }
+        function itsMyDocument(userId) { return request.auth.uid == userId; }
 
-        // Get functions
-        function projectData(projectId) { return get(/databases/$(database)/documents/projects/$(projectId)).data }
+        // Users
+        function userNotExists() { return !exists(/databases/$(database)/documents/users/$(request.auth.uid)); }
+        function isAnonymous() { return request.auth.token.firebase.sign_in_provider == 'anonymous';}
+        function isEmailVerified() { return request.auth.token.email_verified == true; }
+        function isPhoneNumberAccount() { return request.auth.token.firebase.sign_in_provider == 'phone' ;}
+
+        // Projects
+        function projectData(projectId) { return get(/databases/$(database)/documents/projects/$(projectId)).data; }
+        function isAdmin(data) { return data.owner == request.auth.uid || request.auth.uid in data.members;}
+
+        // Org
+        function getOrganization(organizationId) { return get(/databases/$(database)/documents/organizations/$(organizationId)).data; }
+        function isAnOrgViewer(organization) { return request.auth.uid in organization.viewerUserIds; }
+        function isAnOrgEditor(organization) { return request.auth.uid in organization.editorUserIds; }
+        function isAnOrgAdmin(organization) { return request.auth.uid in organization.adminUserIds; }
+        function isOrgOwner(organization) { return request.auth.uid == organization.ownerUserId; }
 
         match /users/{userId} {
             allow get: if authenticated() && !isAnonymous();
@@ -25,10 +34,10 @@ service cloud.firestore {
         // PROJECTS
         match /projects/{projectId} {
             allow get: if true;
-            allow list: if authenticated() && isAdmin(resource.data) && (isEmailVerified() || isPhoneNumberAccount());
-            allow create: if authenticated();
-            allow update: if authenticated() && isAdmin(resource.data) && (isEmailVerified() || isPhoneNumberAccount());
-            allow delete: if authenticated() && isAdmin(resource.data) && (isEmailVerified() || isPhoneNumberAccount());
+            allow list: if authenticated() && (isAdmin(resource.data) || isAnOrgViewer(getOrganization(resource.data.organizationId))) && (isEmailVerified() || isPhoneNumberAccount());
+            allow create: if authenticated() && (!("organizationId" in request.resource.data) || isAnOrgEditor(getOrganization(request.resource.data.organizationId)));
+            allow update: if authenticated() && (isAdmin(resource.data) || isAnOrgEditor(getOrganization(resource.data.organizationId))) && (isEmailVerified() || isPhoneNumberAccount());
+            allow delete: if authenticated() && (isAdmin(resource.data) || isAnOrgAdmin(getOrganization(resource.data.organizationId))) && (isEmailVerified() || isPhoneNumberAccount());
 
             // Deprecated
             match /voteItems/{voteItemsId} {
@@ -48,7 +57,7 @@ service cloud.firestore {
             }
 
             match /userVotes/{ref} {
-                allow read: if authenticated() && resource.data.userId == request.auth.uid || isAdmin(projectData(projectId));
+                allow read: if authenticated() && resource.data.userId == request.auth.uid || isAdmin(projectData(projectId)) || isAnOrgViewer(getOrganization(projectData(projectId).organizationId));
                 allow create: if authenticated() && request.resource.data.userId == request.auth.uid;
                 allow update: if authenticated() && resource.data.userId == request.auth.uid || isAdmin(projectData(projectId));
             }
@@ -73,7 +82,17 @@ service cloud.firestore {
             allow create: if authenticated() && isAdmin(projectData(request.resource.data.projectId));
             allow delete: if authenticated() && isAdmin(projectData(resource.data.projectId));
 
-            function isDestinedToMe(data) { return request.auth.token.email == data.destinationUserInfo }
+            function isDestinedToMe(data) { return request.auth.token.email == data.destinationUserInfo; }
+        }
+
+        // ORGANIZATIONS
+
+        match /organizations/{organizationId} {
+            allow get: if authenticated() && isAnOrgViewer(resource.data);
+            allow list: if authenticated() && isAnOrgViewer(resource.data);
+            allow create: if authenticated();
+            allow update: if authenticated() && ((isAnOrgAdmin(resource.data) && request.resource.data.ownerUserId == resource.data.ownerUserId) || isOrgOwner(resource.data) );
+            allow delete: if authenticated() && isOrgOwner(resource.data);
         }
     }
 }

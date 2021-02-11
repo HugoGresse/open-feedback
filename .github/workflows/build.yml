@@ -23,6 +23,9 @@ jobs:
         npm run build --if-present
         npm run lint:i18n
         npm run test
+    - name: npm test firestore rules
+      run: |
+        npm run test:firestoreRulesStandalone
     - name: move to function, init & run test
       run: |
         cd functions

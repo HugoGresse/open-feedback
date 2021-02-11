@@ -26,6 +26,7 @@ const OFFormControl = ({
     displayErrorMessageDirectly,
     children,
     noTopMargin,
+    color,
 }) => {
     const classes = useStyles({
         noTopMargin,
@@ -34,7 +35,11 @@ const OFFormControl = ({
 
     return (
         <FormControl className={classes.formControl}>
-            <InputLabel shrink htmlFor={fieldName} className={classes.label}>
+            <InputLabel
+                shrink
+                htmlFor={fieldName}
+                className={classes.label}
+                color={color}>
                 {name}
             </InputLabel>
             {children}
