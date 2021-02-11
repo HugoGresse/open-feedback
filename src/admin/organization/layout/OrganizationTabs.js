@@ -15,7 +15,7 @@ function a11yProps(index) {
 
 const OFTabs = withStyles((theme) => ({
     root: {
-        borderBottom: '1px solid #e8e8e8',
+        borderBottom: '1px solid #e0e0e0',
     },
     indicator: {
         backgroundColor: theme.palette.primary.main,

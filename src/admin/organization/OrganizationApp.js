@@ -5,7 +5,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { getOrganizations } from './core/actions/getOrganizations'
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom'
-import { OrganizationUsers } from './OrganizationUsers'
+import { OrganizationUsers } from './users/OrganizationUsers'
 import { OrganizationTheme } from './OrganizationTheme'
 import { OrganizationVotingForm } from './OrganizationVotingForm'
 

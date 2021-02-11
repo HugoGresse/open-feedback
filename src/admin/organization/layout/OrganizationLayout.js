@@ -2,7 +2,6 @@ import React from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import COLORS from '../../../constants/colors'
 import Container from '@material-ui/core/Container'
-import Grid from '@material-ui/core/Grid'
 import { useSelector } from 'react-redux'
 import { getSelectedOrganizationSelector } from '../core/organizationSelectors'
 import { OrganizationHeader } from './OrganizationHeader'
@@ -16,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
         minHeight: '100vh',
         overflow: 'hidden',
         paddingTop: theme.spacing(2),
+    },
+    content: {
+        marginTop: theme.spacing(1),
     },
 }))
 
@@ -32,9 +34,7 @@ export const OrganizationLayout = ({ children }) => {
             <Container maxWidth="md" fixed className={classes.container}>
                 <OrganizationHeader organizationName={orgName} />
                 <OrganizationTabs />
-                <Grid container spacing={3}>
-                    {children}
-                </Grid>
+                <div className={classes.content}>{children}</div>
             </Container>
         </Box>
     )
