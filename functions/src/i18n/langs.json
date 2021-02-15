@@ -2,16 +2,16 @@
     "en": {
         "email": {
             "invites": {
-                "project": {
+                "projects": {
                     "subject": "[OpenFeedback] {originUserName} invited you to become member of the event {projectName}",
                     "header": "{originUserName} invited you to become a member of the event \"{projectName}\"",
-                    "body": "Hey ${destinationUserInfo},<br/><br/> You have been invited to be a member of the OpenFeedback event <b>{projectName}</b>. Click on the button below to view the event.",
+                    "body": "Hey {destinationUserInfo},<br/><br/> You have been invited to be a member of the OpenFeedback event <b>{projectName}</b>. Click on the button below to view the event.",
                     "buttonText": "View the event"
                 },
-                "organization": {
+                "organizations": {
                     "subject": "[OpenFeedback] {originUserName} invited you to become member of the organization {organizationName}",
                     "header": "{originUserName} invited you to become a member of the organization \"{organizationName}\"",
-                    "body": "Hey ${destinationUserInfo},<br/><br/> You have been invited to be a member of the organization <b>{organizationName}</b> on OpenFeedback. Click on the button below to view the organization.",
+                    "body": "Hey {destinationUserInfo},<br/><br/> You have been invited to be a member of the organization <b>{organizationName}</b> on OpenFeedback. Click on the button below to view the organization.",
                     "buttonText": "View the organization"
                 }
             }
@@ -20,16 +20,16 @@
     "fr": {
         "email": {
             "invites": {
-                "project": {
+                "projects": {
                     "subject": "[OpenFeedback] {originUserName} vous a invité à devenir membre de l'évènement {projectName}",
                     "header": "{originUserName} vous a invité à devenir membre de l'évènement \"{projectName}\"",
-                    "body": "Coucou ${destinationUserInfo},<br/><br/> Vous avez été invité à devenir membre de l'évènement OpenFeedback <b>{projectName}</b>. Cliquez sur le bouton suivant pour voir l'évènement.",
+                    "body": "Coucou {destinationUserInfo},<br/><br/> Vous avez été invité à devenir membre de l'évènement OpenFeedback <b>{projectName}</b>. Cliquez sur le bouton suivant pour voir l'évènement.",
                     "buttonText": "Voir l'évènement"
                 },
-                "organization": {
+                "organizations": {
                     "subject": "[OpenFeedback] {originUserName} vous a invité à devenir membre de l'organisation {organizationName}",
                     "header": "{originUserName} vous a invité à devenir membre de l'organisation \"{organizationName}\"",
-                    "body": "Coucou ${destinationUserInfo},<br/><br/> Vous avez été invité à devenir membre de l'organisation <b>{organizationName}</b> sur OpenFeedback. Cliquez sur le bouton suivant pour voir l'organisation.",
+                    "body": "Coucou {destinationUserInfo},<br/><br/> Vous avez été invité à devenir membre de l'organisation <b>{organizationName}</b> sur OpenFeedback. Cliquez sur le bouton suivant pour voir l'organisation.",
                     "buttonText": "Voir l'organisation"
                 }
             }

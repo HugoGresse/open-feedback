@@ -12,6 +12,13 @@ export const applyInvites = async (
     projectIdOrOrganizationId: string,
     organizationRole?: string
 ) => {
+    console.log(
+        'applying',
+        invitationType,
+        projectIdOrOrganizationId,
+        formatUpdate(invitationType, invitedUserId, organizationRole)
+    )
+
     return admin
         .firestore()
         .collection(invitationType)
@@ -28,6 +35,7 @@ export const applyInvites = async (
                 })
         })
         .catch((error) => {
+            console.log(error)
             return admin
                 .firestore()
                 .collection('invites')

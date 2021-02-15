@@ -1,4 +1,4 @@
 export enum InvitationType {
-    ProjectInvitationType = 'project',
-    OrganizationInvitationType = 'organization',
+    ProjectInvitationType = 'projects',
+    OrganizationInvitationType = 'organizations',
 }

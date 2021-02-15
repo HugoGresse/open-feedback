@@ -4,15 +4,18 @@ import IconButton from '@material-ui/core/IconButton'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserDetails, removeUserFromProject } from './usersActions'
-import { getFilteredUsersSelector } from './usersSelectors'
+import {
+    getUserDetails,
+    removeUserFromProject,
+} from '../../../users/usersActions'
+import { getFilteredUsersSelector } from '../../../users/usersSelectors'
 import OFListItem from '../../../baseComponents/layouts/OFListItem'
 import Avatar from '@material-ui/core/Avatar'
 import { Box } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import { useTranslation } from 'react-i18next'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     cell: {
         paddingRight: 12,
         [theme.breakpoints.down('sm')]: {

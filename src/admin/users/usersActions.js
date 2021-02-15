@@ -2,7 +2,7 @@ import {
     fireStoreMainInstance,
     nowTimestamp,
     serverTimestamp,
-} from '../../../../firebase'
+} from '../../firebase'
 import {
     GET_USER_DETAILS_SUCCESS,
     USER_INVITE_ADD,
@@ -16,12 +16,12 @@ import {
     getMemberIds,
     getSelectedProjectIdSelector,
     getSelectedProjectSelector,
-} from '../../core/projectSelectors'
-import { getUserSelector } from '../../../auth/authSelectors'
-import { getDataFromProviderDataOrUser } from '../../../auth/authActions'
-import { addNotification } from '../../../notification/notifcationActions'
-import { editProject } from '../../core/actions/editProject'
-import { redirectToProject } from '../../utils/redirectToProject'
+} from '../project/core/projectSelectors'
+import { getUserSelector } from '../auth/authSelectors'
+import { getDataFromProviderDataOrUser } from '../auth/authActions'
+import { addNotification } from '../notification/notifcationActions'
+import { editProject } from '../project/core/actions/editProject'
+import { redirectToProject } from '../project/utils/redirectToProject'
 
 export const getUserDetails = (uid) => (dispatch, getState) => {
     const usersDetails = getUsersSelector(getState())
@@ -108,7 +108,7 @@ export const inviteUser = (userEmail) => (dispatch, getState) => {
     }
 
     return fireStoreMainInstance
-        .collection('projects-invites')
+        .collection('invites')
         .add(invite)
         .then((docRef) => {
             dispatch(
@@ -150,7 +150,7 @@ export const setUsersFilter = (filterValue) => ({
 let stopListenForInvite
 export const listenForInvite = (inviteId, history) => (dispatch) => {
     stopListenForInvite = fireStoreMainInstance
-        .collection('projects-invites')
+        .collection('invites')
         .doc(inviteId)
         .onSnapshot(
             (snapshot) => {
@@ -193,7 +193,7 @@ export const unsubscribeRealtimeInviteListener = () => () => {
 export const getPendingInvites = () => (dispatch, getState) => {
     const projectId = getSelectedProjectIdSelector(getState())
     fireStoreMainInstance
-        .collection('projects-invites')
+        .collection('invites')
         .where('projectId', '==', projectId)
         .where('status', 'in', ['new', 'emailSent', 'error'])
         .get()
@@ -226,7 +226,7 @@ export const getPendingInvites = () => (dispatch, getState) => {
 
 export const cancelInvite = (inviteId) => (dispatch) => {
     fireStoreMainInstance
-        .collection('projects-invites')
+        .collection('invites')
         .doc(inviteId)
         .delete()
         .then(() =>

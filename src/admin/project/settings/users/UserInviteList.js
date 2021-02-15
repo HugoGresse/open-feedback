@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useEffect } from 'react'
 import Box from '@material-ui/core/Box'
-import { cancelInvite, getPendingInvites } from './usersActions'
-import { getPendingInvitesSelector } from './usersSelectors'
+import { cancelInvite, getPendingInvites } from '../../../users/usersActions'
+import { getPendingInvitesSelector } from '../../../users/usersSelectors'
 import UserInviteItem from './UserInviteItem'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
 
@@ -26,11 +26,13 @@ const UserInviteList = () => {
                 i18nKey="settingsUser.invites">
                 PENDING INVITES
             </TranslatedTypography>
-            {pendingInvites.map(invite => (
+            {pendingInvites.map((invite) => (
                 <UserInviteItem
                     key={invite.id}
                     invite={invite}
-                    cancelInvite={inviteId => dispatch(cancelInvite(inviteId))}
+                    cancelInvite={(inviteId) =>
+                        dispatch(cancelInvite(inviteId))
+                    }
                 />
             ))}
         </Box>
