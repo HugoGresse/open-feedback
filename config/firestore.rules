@@ -76,11 +76,11 @@ service cloud.firestore {
         }
 
         // PROJECTS INVITE
-        match /projects-invites/{inviteId} {
-            allow get: if authenticated();
-            allow list: if authenticated() && (isDestinedToMe(resource.data) || isAdmin(projectData(resource.data.projectId)));
-            allow create: if authenticated() && isAdmin(projectData(request.resource.data.projectId));
-            allow delete: if authenticated() && isAdmin(projectData(resource.data.projectId));
+        match /invites/{inviteId} {
+            allow get: if authenticated() && isDestinedToMe(resource.data);
+            allow list: if authenticated() && ( ("projectId" in resource.data && isAdmin(projectData(resource.data.projectId))) || isAnOrgViewer(getOrganization(resource.data.organizationId)));
+            allow create: if authenticated() && ( ("projectId" in request.resource.data && isAdmin(projectData(request.resource.data.projectId))) || isAnOrgAdmin(getOrganization(request.resource.data.organizationId)));
+            allow delete: if authenticated() && ( ("projectId" in resource.data && isAdmin(projectData(resource.data.projectId))) || isAnOrgAdmin(getOrganization(resource.data.organizationId)));
 
             function isDestinedToMe(data) { return request.auth.token.email == data.destinationUserInfo; }
         }
