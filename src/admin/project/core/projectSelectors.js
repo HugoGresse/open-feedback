@@ -53,17 +53,24 @@ export const getSortedProjectsByOrganizationIdsSelector = createSelector(
                 }
                 return 0
             })
-            .reduce((acc, project) => {
-                const organizationId =
-                    project.organizationId || NO_ORGANIZATION_FAKE_ID
-                if (!acc[organizationId]) {
-                    acc[organizationId] = {
-                        projects: [],
+            .reduce(
+                (acc, project) => {
+                    const organizationId =
+                        project.organizationId || NO_ORGANIZATION_FAKE_ID
+                    if (!acc[organizationId]) {
+                        acc[organizationId] = {
+                            projects: [],
+                        }
                     }
+                    acc[organizationId].projects.push(project)
+                    return acc
+                },
+                {
+                    NO_ORGANIZATION_FAKE_ID: {
+                        projects: [],
+                    },
                 }
-                acc[organizationId].projects.push(project)
-                return acc
-            }, {})
+            )
 
         // Add empty projects an hydrate org data
         return organizations.reduce((acc, organization) => {
