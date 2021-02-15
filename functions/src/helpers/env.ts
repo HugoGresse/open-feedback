@@ -7,14 +7,13 @@ export const getAppEnv = (): AppEnv => {
     if (!app) {
         throw new Error('Missing app environment')
     }
-    const { env, url, domain } = app
-    if (!env || !url || !domain) {
-        throw new Error('Missing app env or app url or app domain')
+    const { env, url } = app
+    if (!env || !url) {
+        throw new Error('Missing app env or app url')
     }
     return {
         env,
         url,
-        domain,
     }
 }
 

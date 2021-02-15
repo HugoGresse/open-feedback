@@ -26,7 +26,6 @@ describe('userInviteCreated', () => {
         test.mockConfig({
             app: {
                 url: 'http://localhost',
-                domain: 'http://localhost',
                 env: 'development',
             },
             mailgun: {

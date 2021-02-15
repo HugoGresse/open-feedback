@@ -24,7 +24,8 @@
         "cy:start:ci": "npx firebase emulators:start --import=./cypress/fixtures/firebase-emulators-data --only \"firestore,auth,functions\"",
         "storybook": "start-storybook -p 9009 -s public",
         "build-storybook": "build-storybook -s public",
-        "lint:i18n": "eslint src/**/languages/*.json"
+        "lint:i18n": "eslint src/**/languages/*.json",
+        "preinstall": "npx npm-force-resolutions"
     },
     "devDependencies": {
         "@firebase/testing": "^0.20.11",
@@ -84,6 +85,9 @@
         "styled-system": "^5.1.5",
         "wait-on": "^5.2.1",
         "yup": "^0.32.8"
+    },
+    "resolutions": {
+        "firebaseui": "^4.7.3"
     },
     "eslintConfig": {
         "extends": "react-app"
