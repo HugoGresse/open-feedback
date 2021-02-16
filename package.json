@@ -30,7 +30,7 @@
         "@firebase/testing": "^0.20.11",
         "@storybook/addon-docs": "^6.1.18",
         "@storybook/addons": "^6.1.18",
-        "@storybook/preset-create-react-app": "^3.1.5",
+        "@storybook/preset-create-react-app": "^3.1.6",
         "@storybook/react": "6.1.18",
         "cypress": "^6.4.0",
         "eslint-plugin-cypress": "^2.11.2",
