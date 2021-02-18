@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { getUsersFilterSelector } from '../../../users/usersSelectors'
-import { inviteUser, setUsersFilter } from '../../../users/usersActions'
-import OFListHeader from '../../../baseComponents/layouts/OFListHeader'
+import { useSelector } from 'react-redux'
+import { getUsersFilterSelector } from './core/usersSelectors'
+import OFListHeader from '../baseComponents/layouts/OFListHeader'
 import UserInvitePanel from './UserInvitePanel'
 import { useTranslation } from 'react-i18next'
 
-const UserListHeader = () => {
-    const dispatch = useDispatch()
+const UserListHeader = ({
+    onFilterChange,
+    onUserInvite,
+    userTypes = ['members'],
+}) => {
     const filter = useSelector(getUsersFilterSelector)
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
     const { t } = useTranslation()
@@ -16,16 +18,17 @@ const UserListHeader = () => {
         <>
             <OFListHeader
                 filterValue={filter}
-                filterChange={(value) => dispatch(setUsersFilter(value))}
+                filterChange={onFilterChange}
                 buttonProcessing={false}
                 buttonClick={() => setSidePanelOpen(true)}
-                buttonText={t('settingsUser.addButton')}
+                buttonText={t('users.add')}
             />
             <UserInvitePanel
                 isOpen={sidePanelOpen}
+                userTypes={userTypes}
                 onClose={() => setSidePanelOpen(false)}
-                onSubmit={(email) =>
-                    dispatch(inviteUser(email)).then((success) =>
+                onSubmit={(email, type) =>
+                    onUserInvite(email, type).then((success) =>
                         setSidePanelOpen(!success)
                     )
                 }

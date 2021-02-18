@@ -4,7 +4,7 @@ import projectReducer from './project/core/projectReducer'
 import adminNotificationReducer from './notification/notificationReducer'
 import adminDashboardReducer from './project/dashboard/dashboardReducer'
 import votingFormReducer from './project/settings/votingForm/votingFormReducer'
-import adminUsersReducer from './users/usersReducer'
+import adminUsersReducer from './users/core/usersReducer'
 import adminModerationReducer from './project/moderation/moderationReducer'
 import { adminOrganizationReducer } from './organization/core/organizationReducer'
 

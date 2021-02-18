@@ -1,5 +1,12 @@
 import React from 'react'
-import UserListHeader from '../../project/settings/users/UserListHeader'
+import UserListHeader from '../../users/UserListHeader'
+import { setUsersFilter } from '../../users/core/actions/usersActions'
+import { ORGANIZATION_NEW_USER_TYPES } from '../../users/core/usersActionTypes'
+import { useDispatch } from 'react-redux'
+import {
+    INVITE_TYPE_ORGANIZATION,
+    inviteUser,
+} from '../../users/core/actions/inviteUser'
 
 /**
  * This is a WIP and has been merged to reduce review overflow
@@ -13,6 +20,7 @@ import UserListHeader from '../../project/settings/users/UserListHeader'
  * @constructor
  */
 export const OrganizationUsers = () => {
+    const dispatch = useDispatch()
     return (
         <>
             <div>
@@ -21,7 +29,13 @@ export const OrganizationUsers = () => {
                 working, organizations user roles are available directly within
                 the DB.
             </div>
-            <UserListHeader />
+            <UserListHeader
+                onFilterChange={(value) => dispatch(setUsersFilter(value))}
+                onUserInvite={(email, type) =>
+                    dispatch(inviteUser(email, type, INVITE_TYPE_ORGANIZATION))
+                }
+                userTypes={ORGANIZATION_NEW_USER_TYPES}
+            />
         </>
     )
 }

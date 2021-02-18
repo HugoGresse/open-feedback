@@ -4,14 +4,14 @@ import RemoveButton from '@material-ui/icons/RemoveCircle'
 import IconButton from '@material-ui/core/IconButton'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import OFListItem from '../../../baseComponents/layouts/OFListItem'
+import OFListItem from '../baseComponents/layouts/OFListItem'
 import { Box } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import { useTranslation } from 'react-i18next'
-import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
+import TranslatedTypography from '../baseComponents/TranslatedTypography'
 import { DateTime } from 'luxon'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     icon: {
         width: 40,
         height: 40,
@@ -33,8 +33,8 @@ const UserInviteItem = ({ invite, cancelInvite }) => {
     const { t } = useTranslation()
 
     let inviteStatus = invite.status
-        ? t(`settingsUser.invite.${invite.status}`)
-        : t('settingsUser.invite.default')
+        ? t(`users.invite.${invite.status}`)
+        : t('users.invite.default')
 
     return (
         <OFListItem>
@@ -44,8 +44,8 @@ const UserInviteItem = ({ invite, cancelInvite }) => {
                     <Box>
                         <Typography>{invite.destinationUserInfo}</Typography>
                         <Typography style={{ color: '#999' }}>
-                            {t('settingsUser.invitation')} {inviteStatus}{' '}
-                            {t('settingsUser.on')}{' '}
+                            {t('users.invitation')} {inviteStatus}{' '}
+                            {t('users.on')}{' '}
                             {DateTime.fromJSDate(
                                 invite.updatedAt.toDate()
                             ).toFormat('DDD')}
@@ -54,7 +54,7 @@ const UserInviteItem = ({ invite, cancelInvite }) => {
                 </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.cell}>
-                <TranslatedTypography i18nKey="settingsUser.status">
+                <TranslatedTypography i18nKey="users.member">
                     Invitation to become Member
                 </TranslatedTypography>
             </Grid>

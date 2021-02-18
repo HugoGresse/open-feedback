@@ -6,6 +6,8 @@ import {
     USER_INVITES_GET_SUCCESS,
     USERS_SET_FILTER,
 } from './usersActionTypes'
+import { SELECT_PROJECT } from '../../project/core/projectActionTypes'
+import { SELECT_ORGANIZATION } from '../../organization/core/organizationActionTypes'
 
 const initState = {
     usersData: {},
@@ -50,6 +52,11 @@ const usersReducer = (state = initState, { payload, type }) => {
                 pendingInvites: state.pendingInvites.filter(
                     (invite) => invite.id !== payload
                 ),
+            }
+        case SELECT_ORGANIZATION:
+        case SELECT_PROJECT:
+            return {
+                ...initState,
             }
         default:
             return state

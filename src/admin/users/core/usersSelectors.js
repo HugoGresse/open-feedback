@@ -1,4 +1,4 @@
-import { getAdminStateSelector } from '../adminSelector'
+import { getAdminStateSelector } from '../../adminSelector'
 import { createSelector } from 'reselect'
 
 const getUsersState = (state) => getAdminStateSelector(state).adminUsers

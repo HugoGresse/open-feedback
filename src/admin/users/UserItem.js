@@ -7,9 +7,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
     getUserDetails,
     removeUserFromProject,
-} from '../../../users/usersActions'
-import { getFilteredUsersSelector } from '../../../users/usersSelectors'
-import OFListItem from '../../../baseComponents/layouts/OFListItem'
+} from './core/actions/usersActions'
+import { getFilteredUsersSelector } from './core/usersSelectors'
+import OFListItem from '../baseComponents/layouts/OFListItem'
 import Avatar from '@material-ui/core/Avatar'
 import { Box } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
@@ -64,7 +64,7 @@ const UserItem = ({ userId, ownerId, currentUserId }) => {
                 </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.cell}>
-                {isOwner ? t('settingsUser.owner') : t('settingsUser.member')}
+                {isOwner ? t('users.owner') : t('users.member')}
             </Grid>
             <Grid item xs={12} sm={3} className={classes.buttonCell}>
                 {!isOwner && !isMe && (

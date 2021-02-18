@@ -2,7 +2,7 @@ import {
     fireStoreMainInstance,
     nowTimestamp,
     serverTimestamp,
-} from '../../firebase'
+} from '../../../../firebase'
 import {
     GET_USER_DETAILS_SUCCESS,
     USER_INVITE_ADD,
@@ -10,18 +10,18 @@ import {
     USER_INVITE_REMOVE_SUCCESS,
     USER_INVITES_GET_SUCCESS,
     USERS_SET_FILTER,
-} from './usersActionTypes'
-import { getPendingInvitesSelector, getUsersSelector } from './usersSelectors'
+} from '../usersActionTypes'
+import { getPendingInvitesSelector, getUsersSelector } from '../usersSelectors'
 import {
     getMemberIds,
     getSelectedProjectIdSelector,
     getSelectedProjectSelector,
-} from '../project/core/projectSelectors'
-import { getUserSelector } from '../auth/authSelectors'
-import { getDataFromProviderDataOrUser } from '../auth/authActions'
-import { addNotification } from '../notification/notifcationActions'
-import { editProject } from '../project/core/actions/editProject'
-import { redirectToProject } from '../project/utils/redirectToProject'
+} from '../../../project/core/projectSelectors'
+import { getUserSelector } from '../../../auth/authSelectors'
+import { getDataFromProviderDataOrUser } from '../../../auth/authActions'
+import { addNotification } from '../../../notification/notifcationActions'
+import { editProject } from '../../../project/core/actions/editProject'
+import { redirectToProject } from '../../../project/utils/redirectToProject'
 
 export const getUserDetails = (uid) => (dispatch, getState) => {
     const usersDetails = getUsersSelector(getState())
@@ -45,7 +45,7 @@ export const getUserDetails = (uid) => (dispatch, getState) => {
                 dispatch(
                     addNotification({
                         type: 'error',
-                        i18nkey: 'settingsUser.errorUserNotExist',
+                        i18nkey: 'users.errorUserNotExist',
                         message: uid,
                     })
                 )
@@ -57,7 +57,7 @@ export const getUserDetails = (uid) => (dispatch, getState) => {
             dispatch(
                 addNotification({
                     type: 'error',
-                    i18nkey: 'settingsUser.errorUserLoadFail',
+                    i18nkey: 'users.errorUserLoadFail',
                     message: `${uid}, ${JSON.stringify(error)}`,
                 })
             )
@@ -72,74 +72,6 @@ export const removeUserFromProject = (userId) => (dispatch, getState) => {
             members: currentMembers.filter((memberId) => memberId !== userId),
         })
     )
-}
-
-export const inviteUser = (userEmail) => (dispatch, getState) => {
-    const pendingInvites = getPendingInvitesSelector(getState())
-    if (
-        pendingInvites.filter(
-            (invite) => invite.destinationUserInfo === userEmail
-        ).length > 0
-    ) {
-        dispatch(
-            addNotification({
-                type: 'error',
-                i18nkey: 'settingsUser.errorUserAlreadyInvited',
-            })
-        )
-        return Promise.resolve(false)
-    }
-
-    const currentUser = getUserSelector(getState())
-    const project = getSelectedProjectSelector(getState())
-    const invite = {
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        destinationUserInfo: userEmail,
-        originUserId: currentUser.uid,
-        originUserName: currentUser.displayName,
-        originUserPhotoURL: getDataFromProviderDataOrUser(
-            currentUser,
-            'photoURL'
-        ),
-        projectId: project.id,
-        projectName: project.name,
-        status: 'new',
-    }
-
-    return fireStoreMainInstance
-        .collection('invites')
-        .add(invite)
-        .then((docRef) => {
-            dispatch(
-                addNotification({
-                    type: 'success',
-                    i18nkey: 'settingsUser.successInvite',
-                })
-            )
-
-            return dispatch({
-                type: USER_INVITE_ADD,
-                payload: {
-                    ...invite,
-                    id: docRef.id,
-                    createdAt: nowTimestamp(),
-                    updatedAt: nowTimestamp(),
-                },
-            })
-        })
-        .catch((error) => {
-            // eslint-disable-next-line no-console
-            console.error(error)
-            dispatch(
-                addNotification({
-                    type: 'error',
-                    i18nkey: 'settingsUser.errorInvite',
-                    message: `${userEmail}, ${JSON.stringify(error)}`,
-                })
-            )
-            return false
-        })
 }
 
 export const setUsersFilter = (filterValue) => ({
@@ -167,7 +99,7 @@ export const listenForInvite = (inviteId, history) => (dispatch) => {
                     dispatch(
                         addNotification({
                             type: 'error',
-                            i18nkey: 'settingsUser.invitationGetFail',
+                            i18nkey: 'users.invitationGetFail',
                         })
                     )
                 }
@@ -178,7 +110,7 @@ export const listenForInvite = (inviteId, history) => (dispatch) => {
                 dispatch(
                     addNotification({
                         type: 'error',
-                        i18nkey: 'settingsUser.invitationGetFail',
+                        i18nkey: 'users.invitationGetFail',
                     })
                 )
                 return false
@@ -216,7 +148,7 @@ export const getPendingInvites = () => (dispatch, getState) => {
             dispatch(
                 addNotification({
                     type: 'error',
-                    i18nkey: 'settingsUser.errorPendingInvitesFailed',
+                    i18nkey: 'users.errorPendingInvitesFailed',
                     message: `${JSON.stringify(error)}`,
                 })
             )
@@ -241,7 +173,7 @@ export const cancelInvite = (inviteId) => (dispatch) => {
             dispatch(
                 addNotification({
                     type: 'error',
-                    i18nkey: 'settingsUser.cancelInviteFail',
+                    i18nkey: 'users.cancelInviteFail',
                     message: `${JSON.stringify(error)}`,
                 })
             )

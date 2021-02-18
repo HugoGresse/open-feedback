@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useEffect } from 'react'
 import Box from '@material-ui/core/Box'
-import { cancelInvite, getPendingInvites } from '../../../users/usersActions'
-import { getPendingInvitesSelector } from '../../../users/usersSelectors'
+import { cancelInvite, getPendingInvites } from './core/actions/usersActions'
+import { getPendingInvitesSelector } from './core/usersSelectors'
 import UserInviteItem from './UserInviteItem'
-import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
+import TranslatedTypography from '../baseComponents/TranslatedTypography'
 
 const UserInviteList = () => {
     const dispatch = useDispatch()
@@ -23,7 +23,7 @@ const UserInviteList = () => {
             <TranslatedTypography
                 variant="h6"
                 style={{ marginTop: 20, marginLeft: 32, marginBottom: 10 }}
-                i18nKey="settingsUser.invites">
+                i18nKey="users.invites">
                 PENDING INVITES
             </TranslatedTypography>
             {pendingInvites.map((invite) => (

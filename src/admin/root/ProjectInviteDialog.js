@@ -8,11 +8,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
     listenForInvite,
     unsubscribeRealtimeInviteListener,
-} from '../users/usersActions'
+} from '../users/core/actions/usersActions'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { Box } from '@material-ui/core'
 import { isEmpty } from 'lodash'
-import { getInviteSelector, getUsersSelector } from '../users/usersSelectors'
+import {
+    getInviteSelector,
+    getUsersSelector,
+} from '../users/core/usersSelectors'
 import { useTranslation } from 'react-i18next'
 
 const ProjectInviteDialog = ({ inviteId }) => {

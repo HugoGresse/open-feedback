@@ -1,5 +1,6 @@
 import React from 'react'
 import MuiSwitch from '@material-ui/core/Switch'
+import OFInput from '../input/OFInput'
 
 const fieldToSwitch = ({
     field,
@@ -17,4 +18,6 @@ const fieldToSwitch = ({
     }
 }
 
-export const OFSwitch = (props) => <MuiSwitch {...fieldToSwitch(props)} />
+export const OFSwitch = (props) => (
+    <MuiSwitch input={<OFInput />} {...fieldToSwitch(props)} />
+)
