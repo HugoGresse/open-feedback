@@ -5,10 +5,6 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-    listenForInvite,
-    unsubscribeRealtimeInviteListener,
-} from '../users/core/actions/usersActions'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { Box } from '@material-ui/core'
 import { isEmpty } from 'lodash'
@@ -17,6 +13,10 @@ import {
     getUsersSelector,
 } from '../users/core/usersSelectors'
 import { useTranslation } from 'react-i18next'
+import {
+    listenForInvite,
+    unsubscribeRealtimeInviteListener,
+} from '../users/core/actions/inviteListener'
 
 const ProjectInviteDialog = ({ inviteId }) => {
     const dispatch = useDispatch()
@@ -45,7 +45,7 @@ const ProjectInviteDialog = ({ inviteId }) => {
             history.push(history.location.pathname)
         }
         if (invite.status === 'emailSent') {
-            text = t("You'll be redirected to the event soon")
+            text = t("You'll be redirected to the event or organization soon")
         }
     } else {
         text = t("You've already used this invitation")

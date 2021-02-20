@@ -12,13 +12,6 @@ export const applyInvites = async (
     projectIdOrOrganizationId: string,
     organizationRole?: string
 ) => {
-    console.log(
-        'applying',
-        invitationType,
-        projectIdOrOrganizationId,
-        formatUpdate(invitationType, invitedUserId, organizationRole)
-    )
-
     return admin
         .firestore()
         .collection(invitationType)
@@ -80,16 +73,22 @@ const formatOrganizationUpdate = (
             }
         case OrganizationRole.Editor:
             return {
+                viewerUserIds: arrayUnion(invitedUserId),
                 editorUserIds: arrayUnion(invitedUserId),
                 updatedAt: serverTimestamp(),
             }
         case OrganizationRole.Admin:
             return {
+                viewerUserIds: arrayUnion(invitedUserId),
+                editorUserIds: arrayUnion(invitedUserId),
                 adminUserIds: arrayUnion(invitedUserId),
                 updatedAt: serverTimestamp(),
             }
         case OrganizationRole.Owner:
             return {
+                viewerUserIds: arrayUnion(invitedUserId),
+                editorUserIds: arrayUnion(invitedUserId),
+                adminUserIds: arrayUnion(invitedUserId),
                 ownerUserId: invitedUserId,
                 updatedAt: serverTimestamp(),
             }
