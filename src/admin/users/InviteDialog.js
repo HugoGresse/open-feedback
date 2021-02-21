@@ -8,17 +8,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { Box } from '@material-ui/core'
 import { isEmpty } from 'lodash'
-import {
-    getInviteSelector,
-    getUsersSelector,
-} from '../users/core/usersSelectors'
+import { getInviteSelector, getUsersSelector } from './core/usersSelectors'
 import { useTranslation } from 'react-i18next'
 import {
     listenForInvite,
     unsubscribeRealtimeInviteListener,
-} from '../users/core/actions/inviteListener'
+} from './core/actions/inviteListener'
 
-const ProjectInviteDialog = ({ inviteId }) => {
+const InviteDialog = ({ inviteId }) => {
     const dispatch = useDispatch()
     const history = useHistory()
     const invite = useSelector(getInviteSelector)
@@ -68,4 +65,4 @@ const ProjectInviteDialog = ({ inviteId }) => {
         </Dialog>
     )
 }
-export default ProjectInviteDialog
+export default InviteDialog

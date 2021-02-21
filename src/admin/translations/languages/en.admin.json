@@ -21,6 +21,7 @@
         "close": "Close",
         "preview": "Preview",
         "pick": "Pick",
+        "attention": "Attention",
         "or": "OR",
         "clear": "Clear",
         "dropzone": {
@@ -137,7 +138,11 @@
         "create": "Create organization",
         "name": "Organization name",
         "nameRequired": "The organization name is required.",
-        "tabTheme": "Theme"
+        "tabTheme": "Theme",
+        "saveSuccess": "Organization saved",
+        "saveFail": "Failed to save the organization",
+        "confirmOwner": "You are about the replace the organization owner. This user will be able to use all available actions (even deleting the organization), do you want to continue?",
+        "confirmOwnerButton": "Change owner"
     },
     "rooting": {
         "dashboard": "Dashboard",
@@ -216,16 +221,16 @@
             "new": "created"
         },
         "invites": "PENDING INVITES",
-        "member": "Member",
+        "Member": "Member",
         "memberEmail": "User email",
         "on": "on",
         "userType": "User role",
         "typeRequired": "User type required",
         "typeNotValid": "The user type is not valid...",
-        "owner": "Owner",
-        "admin": "Admin",
-        "editor": "Editor",
-        "viewer": "Viewer",
+        "Owner": "Owner",
+        "Admin": "Admin",
+        "Editor": "Editor",
+        "Viewer": "Viewer",
         "submit": "Add user",
         "errorUserNotExist": "User does not exist",
         "errorUserLoadFail": "Failed to load user details, ",

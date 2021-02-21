@@ -21,6 +21,7 @@
         "saved": "Sauvegardé",
         "preview": "Aperçu",
         "pick": "Sélectionner",
+        "attention": "Attention",
         "or": "OU",
         "clear": "Enlever",
         "dropzone": {
@@ -137,7 +138,11 @@
         "create": "Créer l'organisation",
         "name": "Nom de l'organisation",
         "nameRequired": "Le nom de votre petite organisation est obligatoire.",
-        "tabTheme": "Thème"
+        "tabTheme": "Thème",
+        "saveSuccess": "Organisation sauvergardée",
+        "saveFail": "Erreur lors de la sauvegarde de l'organisation",
+        "confirmOwner": "Vous allez remplacer le propriétaire de l'organisation. Cet utilisateur pourrat donc faire toutes les actions possibles (même la supprimer), voulez vous continuer ?",
+        "confirmOwnerButton": "Changer le propriétaire"
     },
     "rooting": {
         "dashboard": "Statistiques",
@@ -216,16 +221,16 @@
             "new": "créé"
         },
         "invites": "INVITATION(S) EN ATTENTE",
-        "member": "Membre",
+        "Member": "Membre",
         "memberEmail": "Email de l'utilisateur",
         "on": "le",
         "userType": "Role de l'utilisateur",
         "typeRequired": "Type d'utilisateur requis",
         "typeNotValid": "Le type d'utilisateur n'est pas valide...",
-        "owner": "Propriétaire",
-        "admin": "Administrateur",
-        "editor": "Éditeur",
-        "viewer": "Lecteur",
+        "Owner": "Propriétaire",
+        "Admin": "Administrateur",
+        "Editor": "Éditeur",
+        "Viewer": "Lecteur",
         "submit": "Ajouter un membre",
         "errorUserNotExist": "L'utilisateur n'existe pas",
         "errorUserLoadFail": "Erreur lors du chargement des détails de l'utilisateur, ",

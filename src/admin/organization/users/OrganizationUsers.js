@@ -1,12 +1,21 @@
 import React from 'react'
 import UserListHeader from '../../users/UserListHeader'
 import { setUsersFilter } from '../../users/core/actions/usersActions'
-import { ORGANIZATION_NEW_USER_TYPES } from '../../users/core/usersActionTypes'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
     INVITE_TYPE_ORGANIZATION,
     inviteUser,
 } from '../../users/core/actions/inviteUser'
+import UserList from '../../users/UserList'
+import {
+    getOrganizationMembersIdsSelector,
+    getOrganizationOwnerIdSelector,
+} from '../core/organizationSelectors'
+import {
+    ORGANIZATION_EXISTING_USER_ROLES,
+    ORGANIZATION_NEW_USER_ROLES,
+} from '../core/organizationConstants'
+import { getUserSelector } from '../../auth/authSelectors'
 
 /**
  * This is a WIP and has been merged to reduce review overflow
@@ -21,6 +30,9 @@ import {
  */
 export const OrganizationUsers = () => {
     const dispatch = useDispatch()
+    const ownerUserId = useSelector(getOrganizationOwnerIdSelector)
+    const loggedInUserId = useSelector(getUserSelector).id
+    const membersUserIds = useSelector(getOrganizationMembersIdsSelector)
     return (
         <>
             <div>
@@ -34,7 +46,12 @@ export const OrganizationUsers = () => {
                 onUserInvite={(email, type) =>
                     dispatch(inviteUser(email, type, INVITE_TYPE_ORGANIZATION))
                 }
-                userTypes={ORGANIZATION_NEW_USER_TYPES}
+                userTypes={ORGANIZATION_NEW_USER_ROLES}
+            />
+            <UserList
+                ownerId={ownerUserId}
+                userIds={membersUserIds}
+                userTypes={ORGANIZATION_EXISTING_USER_ROLES}
             />
         </>
     )

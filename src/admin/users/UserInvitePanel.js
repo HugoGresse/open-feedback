@@ -40,17 +40,19 @@ const UserInvitePanel = ({ isOpen, onClose, onSubmit, userTypes }) => {
                             autoFocus={true}
                         />
 
-                        <OFFormControl
-                            fieldName="userType"
-                            name={t('users.userType')}>
-                            <Field name="userType" component={OFSelect}>
-                                {userTypes.map((type) => (
-                                    <MenuItem key={type} value={type}>
-                                        {type}
-                                    </MenuItem>
-                                ))}
-                            </Field>
-                        </OFFormControl>
+                        {userTypes.length > 1 && (
+                            <OFFormControl
+                                fieldName="userType"
+                                name={t('users.userType')}>
+                                <Field name="userType" component={OFSelect}>
+                                    {userTypes.map((type) => (
+                                        <MenuItem key={type} value={type}>
+                                            {type}
+                                        </MenuItem>
+                                    ))}
+                                </Field>
+                            </OFFormControl>
+                        )}
 
                         <OFButton
                             disabled={isSubmitting}

@@ -1,18 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import RemoveButton from '@material-ui/icons/RemoveCircle'
 import IconButton from '@material-ui/core/IconButton'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+    changeUserRole,
     getUserDetails,
-    removeUserFromProject,
+    removeUser,
 } from './core/actions/usersActions'
 import { getFilteredUsersSelector } from './core/usersSelectors'
 import OFListItem from '../baseComponents/layouts/OFListItem'
 import Avatar from '@material-ui/core/Avatar'
 import { Box } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
+import { UserRoleSelect } from './components/UserRoleSelect'
+import { ORGANIZATION_USER_ROLE_OWNER } from '../organization/core/organizationConstants'
+import SimpleDialog from '../baseComponents/layouts/SimpleDialog'
+import TranslatedTypography from '../baseComponents/TranslatedTypography'
 import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
@@ -27,11 +32,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const UserItem = ({ userId, ownerId, currentUserId }) => {
+const UserItem = ({ userId, ownerId, currentUserId, role, userTypes }) => {
     const classes = useStyles()
+    const { t } = useTranslation()
     const usersDetails = useSelector(getFilteredUsersSelector)
     const dispatch = useDispatch()
-    const { t } = useTranslation()
+    const [confirmOwnerChange, setConfirmOwnerChange] = useState(false)
 
     const user = usersDetails[userId]
 
@@ -41,6 +47,17 @@ const UserItem = ({ userId, ownerId, currentUserId }) => {
     useEffect(() => {
         dispatch(getUserDetails(userId))
     }, [dispatch, userId])
+
+    const onUserRoleValueChange = (userId, oldRole, newRole) => {
+        if (oldRole === newRole) {
+            return
+        }
+        if (newRole === ORGANIZATION_USER_ROLE_OWNER) {
+            setConfirmOwnerChange(true)
+        } else {
+            dispatch(changeUserRole(userId, role, newRole))
+        }
+    }
 
     if (!user) {
         return ''
@@ -64,17 +81,44 @@ const UserItem = ({ userId, ownerId, currentUserId }) => {
                 </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.cell}>
-                {isOwner ? t('users.owner') : t('users.member')}
+                <UserRoleSelect
+                    disabled={isMe || isOwner}
+                    selectedUserRole={role}
+                    userTypes={userTypes}
+                    onRoleChange={(newRole) =>
+                        onUserRoleValueChange(userId, role, newRole)
+                    }
+                />
             </Grid>
             <Grid item xs={12} sm={3} className={classes.buttonCell}>
                 {!isOwner && !isMe && (
                     <IconButton
                         aria-label="Remove the user from the event"
-                        onClick={() => dispatch(removeUserFromProject(userId))}>
+                        onClick={() => dispatch(removeUser(userId, role))}>
                         <RemoveButton />
                     </IconButton>
                 )}
             </Grid>
+            {confirmOwnerChange && (
+                <SimpleDialog
+                    onClose={() => setConfirmOwnerChange(false)}
+                    onConfirm={() => {
+                        setConfirmOwnerChange(false)
+                        dispatch(
+                            changeUserRole(
+                                userId,
+                                role,
+                                ORGANIZATION_USER_ROLE_OWNER
+                            )
+                        )
+                    }}
+                    title={t('common.attention')}
+                    cancelText={t('common.cancel')}
+                    confirmText={t('organization.confirmOwnerButton')}
+                    open={true}>
+                    <TranslatedTypography i18nKey="organization.confirmOwner" />
+                </SimpleDialog>
+            )}
         </OFListItem>
     )
 }

@@ -1,5 +1,6 @@
 import { LOGOUT } from '../../auth/authActionTypes'
 import {
+    GET_ORGANIZATION_SUCCESS,
     GET_ORGANIZATIONS_ERROR,
     GET_ORGANIZATIONS_SUCCESS,
     SELECT_ORGANIZATION,
@@ -40,7 +41,26 @@ export const adminOrganizationReducer = (
                 ...state,
                 organizationsLoadError: payload,
             }
+        case GET_ORGANIZATION_SUCCESS: {
+            const organizations = state.data.organizations.map(
+                (organization) => {
+                    if (organization.id === state.selectedOrganizationId) {
+                        return {
+                            ...payload,
+                        }
+                    }
+                    return organization
+                }
+            )
 
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    organizations,
+                },
+            }
+        }
         default:
             return state
     }

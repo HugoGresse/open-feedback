@@ -4,7 +4,6 @@ import Talks from './talks/Talks'
 import Speakers from './speakers/Speakers'
 import VotingForm from './settings/votingForm/VotingForm'
 import Setup from './settings/setup/Setup'
-import Users from './settings/users/Users'
 import Project from './Project'
 import React, { useEffect } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
@@ -14,6 +13,7 @@ import { useDispatch } from 'react-redux'
 import Layout404 from '../baseComponents/Layout404'
 import Moderation from './moderation/Moderation'
 import { getProjects } from './core/actions/getProjects'
+import ProjectUsers from './settings/users/ProjectUsers'
 
 const ProjectApp = ({ match }) => {
     const dispatch = useDispatch()
@@ -74,7 +74,7 @@ const ProjectApp = ({ match }) => {
                     <Route
                         exact
                         path={`${match.url}${RoutingMap.settingUsers.url}`}
-                        render={(props) => <Users {...props} />}
+                        render={(props) => <ProjectUsers {...props} />}
                     />
 
                     <Route component={Layout404} />

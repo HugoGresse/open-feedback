@@ -1,4 +1,8 @@
-import { fireStoreMainInstance } from '../../../../firebase'
+import {
+    arrayRemoveField,
+    arrayUnionField,
+    fireStoreMainInstance,
+} from '../../../../firebase'
 import {
     GET_USER_DETAILS_SUCCESS,
     USER_INVITE_REMOVE_SUCCESS,
@@ -12,6 +16,14 @@ import {
 } from '../../../project/core/projectSelectors'
 import { addNotification } from '../../../notification/notifcationActions'
 import { editProject } from '../../../project/core/actions/editProject'
+import { getSelectedOrganizationIdSelector } from '../../../organization/core/organizationSelectors'
+import { editOrganization } from '../../../organization/core/actions/editOrganization'
+import {
+    ORGANIZATION_EXISTING_USER_ROLES,
+    ORGANIZATION_NEW_USER_ROLES,
+    ORGANIZATION_ROLE_ID,
+    ORGANIZATION_USER_ROLE_OWNER,
+} from '../../../organization/core/organizationConstants'
 
 export const getUserDetails = (uid) => (dispatch, getState) => {
     const usersDetails = getUsersSelector(getState())
@@ -54,14 +66,103 @@ export const getUserDetails = (uid) => (dispatch, getState) => {
         })
 }
 
-export const removeUserFromProject = (userId) => (dispatch, getState) => {
-    const currentMembers = getMemberIds(getState())
+export const removeUser = (userIdToRemove, role) => (dispatch, getState) => {
+    const state = getState()
 
-    return dispatch(
-        editProject({
-            members: currentMembers.filter((memberId) => memberId !== userId),
-        })
-    )
+    const selectedProjectId = getSelectedProjectIdSelector(state)
+    const selectedOrganizationId = getSelectedOrganizationIdSelector(state)
+
+    if (selectedProjectId) {
+        const currentUsers = getMemberIds(state)
+        return dispatch(
+            editProject({
+                members: currentUsers
+                    .filter(({ userId }) => userId !== userIdToRemove)
+                    .map(({ userId }) => userId),
+            })
+        )
+    }
+
+    if (selectedOrganizationId) {
+        const roleIndex = ORGANIZATION_EXISTING_USER_ROLES.findIndex(
+            (existingRole) => existingRole === role
+        )
+        return dispatch(
+            editOrganization(
+                ORGANIZATION_EXISTING_USER_ROLES.slice(0, roleIndex + 1).reduce(
+                    (acc, role) => {
+                        acc[ORGANIZATION_ROLE_ID[role]] = arrayRemoveField(
+                            userIdToRemove
+                        )
+                        return acc
+                    },
+                    {}
+                )
+            )
+        )
+    }
+
+    throw new Error('Unknown action to remove user')
+}
+
+export const changeUserRole = (userId, oldRole, newRole) => (
+    dispatch,
+    getState
+) => {
+    if (oldRole === newRole) {
+        throw new Error('Role identical')
+    }
+
+    const state = getState()
+    const selectedOrganizationId = getSelectedOrganizationIdSelector(state)
+    if (selectedOrganizationId) {
+        const users = getUsersSelector(state)
+        console.log(users)
+        if (newRole === ORGANIZATION_USER_ROLE_OWNER) {
+            //
+        }
+
+        const newRoleIndex = ORGANIZATION_EXISTING_USER_ROLES.findIndex(
+            (existingRole) => existingRole === newRole
+        )
+        const oldRoleIndex = ORGANIZATION_EXISTING_USER_ROLES.findIndex(
+            (existingRole) => existingRole === oldRole
+        )
+
+        if (newRoleIndex > oldRoleIndex) {
+            console.log(1)
+            const changes = ORGANIZATION_NEW_USER_ROLES.slice(
+                oldRoleIndex + 1,
+                newRoleIndex + 1
+            ).reduce((acc, role) => {
+                acc[ORGANIZATION_ROLE_ID[role]] = arrayUnionField(userId)
+                return acc
+            }, {})
+            if (newRole === ORGANIZATION_USER_ROLE_OWNER) {
+                changes[ORGANIZATION_ROLE_ID[newRole]] = userId
+            }
+            dispatch(editOrganization(changes))
+        } else {
+            console.log(2)
+            dispatch(
+                editOrganization(
+                    ORGANIZATION_NEW_USER_ROLES.slice(
+                        newRoleIndex + 1,
+                        oldRoleIndex + 1
+                    ).reduce((acc, role) => {
+                        acc[ORGANIZATION_ROLE_ID[role]] = arrayRemoveField(
+                            userId
+                        )
+                        return acc
+                    }, {})
+                )
+            )
+        }
+
+        return
+    }
+
+    throw new Error('Unknown action to change user role')
 }
 
 export const setUsersFilter = (filterValue) => ({

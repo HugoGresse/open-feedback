@@ -26,6 +26,8 @@ export const analytics = config.measurementId ? firebaseMain.analytics() : null
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 export const nowTimestamp = firebase.firestore.Timestamp.now
 export const deleteField = firebase.firestore.FieldValue.delete
+export const arrayRemoveField = firebase.firestore.FieldValue.arrayRemove
+export const arrayUnionField = firebase.firestore.FieldValue.arrayUnion
 export const functions = {
     alert: firebase.functions().httpsCallable('alert'),
     deleteProject: firebase.functions().httpsCallable('deleteProject'),
