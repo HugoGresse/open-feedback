@@ -59,7 +59,7 @@
         "i18next": "^19.8.9",
         "i18next-browser-languagedetector": "^6.0.1",
         "langmap": "0.0.16",
-        "lodash": "4.17.20",
+        "lodash": "4.17.21",
         "luxon": "^1.26.0",
         "prop-types": "latest",
         "qrcode.react": "^1.0.1",
