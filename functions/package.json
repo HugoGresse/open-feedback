@@ -30,7 +30,7 @@
         "lodash": "^4.17.21",
         "node-fetch": "^2.6.1",
         "sharp": "latest",
-        "ts-jest": "^26.5.1"
+        "ts-jest": "^26.5.2"
     },
     "devDependencies": {
         "@types/imagemin-jpegtran": "^5.0.0",
