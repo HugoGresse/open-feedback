@@ -15,6 +15,7 @@ import {
     ORGANIZATION_EXISTING_USER_ROLES,
     ORGANIZATION_NEW_USER_ROLES,
 } from '../core/organizationConstants'
+import UserInviteList from '../../users/UserInviteList'
 
 /**
  * This is a WIP and has been merged to reduce review overflow
@@ -40,6 +41,7 @@ export const OrganizationUsers = () => {
                 userIds={membersUserIds}
                 userTypes={ORGANIZATION_EXISTING_USER_ROLES}
             />
+            <UserInviteList />
         </>
     )
 }

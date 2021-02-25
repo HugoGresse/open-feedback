@@ -81,23 +81,18 @@ const UserItem = ({ userId, ownerId, currentUserId, role, userTypes }) => {
                     </Box>
                 </Box>
             </Grid>
-            <Grid
-                item
-                xs={12}
-                sm={3}
-                className={classes.cell}
-                component={Box}
-                display="flex"
-                alignItems="center">
-                <UserRoleSelect
-                    disabled={isMe || isOwner}
-                    selectedUserRole={role}
-                    userTypes={userTypes}
-                    onRoleChange={(newRole) =>
-                        onUserRoleValueChange(userId, role, newRole)
-                    }
-                />
-                <OrganizationRoleInfo />
+            <Grid item xs={12} sm={3} className={classes.cell}>
+                <Box display="flex" alignItems="center">
+                    <UserRoleSelect
+                        disabled={isMe || isOwner}
+                        selectedUserRole={role}
+                        userTypes={userTypes}
+                        onRoleChange={(newRole) =>
+                            onUserRoleValueChange(userId, role, newRole)
+                        }
+                    />
+                    {userTypes.length > 0 && <OrganizationRoleInfo />}
+                </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.buttonCell}>
                 {!isOwner && !isMe && (

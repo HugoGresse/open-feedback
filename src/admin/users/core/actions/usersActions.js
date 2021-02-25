@@ -163,10 +163,16 @@ export const setUsersFilter = (filterValue) => ({
 })
 
 export const getPendingInvites = () => (dispatch, getState) => {
-    const projectId = getSelectedProjectIdSelector(getState())
+    const state = getState()
+    const projectId = getSelectedProjectIdSelector(state)
+    const organizationId = getSelectedOrganizationIdSelector(state)
+
+    const whereKey = projectId ? 'projectId' : 'organizationId'
+    const orgIdOrProjectId = projectId || organizationId
+
     fireStoreMainInstance
         .collection('invites')
-        .where('projectId', '==', projectId)
+        .where(whereKey, '==', orgIdOrProjectId)
         .where('status', 'in', ['new', 'emailSent', 'error'])
         .get()
         .then((querySnapshot) => {

@@ -20,7 +20,6 @@ export const inviteUser = (userEmail, userType, inviteType) => (
 ) => {
     const state = getState()
 
-    // TODO : check pending for org
     const pendingInvites = getPendingInvitesSelector(state)
     if (
         pendingInvites.filter(

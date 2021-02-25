@@ -32,7 +32,7 @@ const UserInviteItem = ({ invite, cancelInvite }) => {
     const classes = useStyles()
     const { t } = useTranslation()
 
-    let inviteStatus = invite.status
+    const inviteStatus = invite.status
         ? t(`users.invite.${invite.status}`)
         : t('users.invite.default')
 
@@ -44,7 +44,7 @@ const UserInviteItem = ({ invite, cancelInvite }) => {
                     <Box>
                         <Typography>{invite.destinationUserInfo}</Typography>
                         <Typography style={{ color: '#999' }}>
-                            {t('users.invitation')} {inviteStatus}{' '}
+                            {t('users.invitation')} <b>{inviteStatus}</b>{' '}
                             {t('users.on')}{' '}
                             {DateTime.fromJSDate(
                                 invite.updatedAt.toDate()
@@ -54,9 +54,11 @@ const UserInviteItem = ({ invite, cancelInvite }) => {
                 </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.cell}>
-                <TranslatedTypography i18nKey="users.member">
-                    Invitation to become Member
-                </TranslatedTypography>
+                {invite.role ? (
+                    <Typography>{invite.role}</Typography>
+                ) : (
+                    <TranslatedTypography i18nKey="users.Member" />
+                )}
             </Grid>
             <Grid item xs={12} sm={3} className={classes.buttonCell}>
                 <IconButton
