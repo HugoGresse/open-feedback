@@ -8,46 +8,54 @@ import {
 import { addNotification } from '../../../notification/notifcationActions'
 import { initProjectApiIfReady } from './initProjectApi'
 
-export const getProjects = () => {
-    return (dispatch, getState) => {
-        return fireStoreMainInstance
-            .collection('projects')
-            .where(`members`, 'array-contains', getUserSelector(getState()).uid)
-            .orderBy('createdAt', 'desc')
-            .get()
-            .then((projectsSnapshot) => {
-                const projects = []
-                projectsSnapshot.forEach((doc) => {
-                    projects.push({
-                        id: doc.id,
-                        ...doc.data(),
-                    })
-                })
+export const getProjects = (organizationId = null) => (dispatch, getState) => {
+    let baseQuery = fireStoreMainInstance.collection('projects')
 
-                dispatch({
-                    type: GET_PROJECTS_SUCCESS,
-                    payload: projects,
-                })
-            })
-            .then(() => {
-                dispatch(
-                    initProjectApiIfReady(
-                        getSelectedProjectIdSelector(getState()),
-                        getSelectedProjectSelector(getState())
-                    )
-                )
-            })
-            .catch((err) => {
-                dispatch({
-                    type: GET_PROJECTS_ERROR,
-                    payload: err.toString(),
-                })
-                dispatch(
-                    addNotification({
-                        type: 'error',
-                        i18nkey: 'project.errorProjectsLoad',
-                    })
-                )
-            })
+    if (organizationId) {
+        baseQuery = baseQuery.where('organizationId', '==', organizationId)
+    } else {
+        baseQuery = baseQuery.where(
+            `members`,
+            'array-contains',
+            getUserSelector(getState()).uid
+        )
     }
+
+    return baseQuery
+        .orderBy('createdAt', 'desc')
+        .get()
+        .then((projectsSnapshot) => {
+            const projects = []
+            projectsSnapshot.forEach((doc) => {
+                projects.push({
+                    id: doc.id,
+                    ...doc.data(),
+                })
+            })
+
+            dispatch({
+                type: GET_PROJECTS_SUCCESS,
+                payload: projects,
+            })
+        })
+        .then(() => {
+            dispatch(
+                initProjectApiIfReady(
+                    getSelectedProjectIdSelector(getState()),
+                    getSelectedProjectSelector(getState())
+                )
+            )
+        })
+        .catch((err) => {
+            dispatch({
+                type: GET_PROJECTS_ERROR,
+                payload: err.toString(),
+            })
+            dispatch(
+                addNotification({
+                    type: 'error',
+                    i18nkey: 'project.errorProjectsLoad',
+                })
+            )
+        })
 }

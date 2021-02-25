@@ -58,6 +58,9 @@ const NewProject = ({ organizationId, onCancel }) => {
         setCreatingEvent(true)
         return dispatch(newProject(organizationId, projectId, data))
             .then((projectId) => {
+                if (!projectId) {
+                    return Promise.reject('Event not created')
+                }
                 return Promise.all([
                     dispatch(getProject(projectId)),
                     dispatch(selectProject(projectId)),
@@ -73,6 +76,9 @@ const NewProject = ({ organizationId, onCancel }) => {
 
                 setCreatingEvent(false)
                 redirectToProject(null, projectId, history)
+            })
+            .catch(() => {
+                setCreatingEvent(false)
             })
     }
 

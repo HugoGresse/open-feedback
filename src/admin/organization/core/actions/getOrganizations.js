@@ -9,6 +9,7 @@ import {
     ORGANIZATION_ROLE_ID,
     ORGANIZATION_USER_ROLE_VIEWER,
 } from '../organizationConstants'
+import { getProjects } from '../../../project/core/actions/getProjects'
 
 export const getOrganizations = () => (dispatch, getState) => {
     const user = getUserSelector(getState())
@@ -38,6 +39,10 @@ export const getOrganizations = () => (dispatch, getState) => {
             dispatch({
                 type: GET_ORGANIZATIONS_SUCCESS,
                 payload: organizations,
+            })
+
+            organizations.forEach((org) => {
+                dispatch(getProjects(org.id))
             })
         })
         .catch((err) => {

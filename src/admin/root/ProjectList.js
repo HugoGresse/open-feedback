@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import CardContent from '@material-ui/core/CardContent'
@@ -42,12 +42,14 @@ const ProjectList = ({
     const classes = useStyles({ invertedColor })
     const theme = useTheme()
     const { t } = useTranslation()
-    const [displayedProjects, setDisplayedProjects] = useState(
-        projects.slice(0, DEFAULT_PROJECTS_DISPLAY)
-    )
+    const [displayedProjects, setDisplayedProjects] = useState([])
     const showHideAllProject = projects.length > DEFAULT_PROJECTS_DISPLAY
     const allProjectsDisplayed = projects.length === displayedProjects.length
     const hiddenProjectCount = projects.length - displayedProjects.length
+
+    useEffect(() => {
+        setDisplayedProjects(projects.slice(0, DEFAULT_PROJECTS_DISPLAY))
+    }, [projects])
 
     return (
         <>

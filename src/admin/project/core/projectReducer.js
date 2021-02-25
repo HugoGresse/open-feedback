@@ -1,4 +1,5 @@
 import {
+    ADD_PROJECT_ERROR,
     ADD_PROJECT_ONGOING,
     EDIT_PROJECT_SUCCESS,
     GET_PROJECT_SUCCESS,
@@ -31,14 +32,35 @@ const projectReducer = (state = initState, { payload, type }) => {
                 // prevent the Project component to display 404 during a short period
                 projectsLoaded: false,
             }
-        case GET_PROJECTS_SUCCESS:
+        case ADD_PROJECT_ERROR:
+            return {
+                ...state,
+                projectsLoaded: true,
+            }
+        case GET_PROJECTS_SUCCESS: {
+            const projects = payload.reduce(
+                (acc, item) => {
+                    const existingProjectIndex = acc.findIndex(
+                        (p) => p.id === item.id
+                    )
+                    if (existingProjectIndex > -1) {
+                        acc[existingProjectIndex] = item
+                    } else {
+                        acc.push(item)
+                    }
+                    return acc
+                },
+                [...state.data.projects]
+            )
+
             return {
                 ...state,
                 data: {
-                    projects: payload,
+                    projects,
                 },
                 projectsLoaded: true,
             }
+        }
         case GET_PROJECT_SUCCESS: {
             const newProjectsArray = Array.from(state.data.projects).filter(
                 (project) => project.id !== payload.id
