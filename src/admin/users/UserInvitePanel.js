@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { OFSelect } from '../baseComponents/form/select/OFSelect'
 import OFFormControl from '../baseComponents/form/formControl/OFFormControl'
 import MenuItem from '@material-ui/core/MenuItem'
+import { OrganizationRoleInfo } from '../organization/users/OrganizationRoleInfos'
 
 const UserInvitePanel = ({ isOpen, onClose, onSubmit, userTypes }) => {
     const { t } = useTranslation()
@@ -41,17 +42,20 @@ const UserInvitePanel = ({ isOpen, onClose, onSubmit, userTypes }) => {
                         />
 
                         {userTypes.length > 1 && (
-                            <OFFormControl
-                                fieldName="userType"
-                                name={t('users.userType')}>
-                                <Field name="userType" component={OFSelect}>
-                                    {userTypes.map((type) => (
-                                        <MenuItem key={type} value={type}>
-                                            {type}
-                                        </MenuItem>
-                                    ))}
-                                </Field>
-                            </OFFormControl>
+                            <>
+                                <OFFormControl
+                                    fieldName="userType"
+                                    name={t('users.userType')}>
+                                    <Field name="userType" component={OFSelect}>
+                                        {userTypes.map((type) => (
+                                            <MenuItem key={type} value={type}>
+                                                {type}
+                                            </MenuItem>
+                                        ))}
+                                    </Field>
+                                </OFFormControl>
+                                <OrganizationRoleInfo />
+                            </>
                         )}
 
                         <OFButton

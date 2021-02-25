@@ -19,6 +19,7 @@ import { ORGANIZATION_USER_ROLE_OWNER } from '../organization/core/organizationC
 import SimpleDialog from '../baseComponents/layouts/SimpleDialog'
 import TranslatedTypography from '../baseComponents/TranslatedTypography'
 import { useTranslation } from 'react-i18next'
+import { OrganizationRoleInfo } from '../organization/users/OrganizationRoleInfos'
 
 const useStyles = makeStyles((theme) => ({
     cell: {
@@ -80,7 +81,14 @@ const UserItem = ({ userId, ownerId, currentUserId, role, userTypes }) => {
                     </Box>
                 </Box>
             </Grid>
-            <Grid item xs={12} sm={3} className={classes.cell}>
+            <Grid
+                item
+                xs={12}
+                sm={3}
+                className={classes.cell}
+                component={Box}
+                display="flex"
+                alignItems="center">
                 <UserRoleSelect
                     disabled={isMe || isOwner}
                     selectedUserRole={role}
@@ -89,6 +97,7 @@ const UserItem = ({ userId, ownerId, currentUserId, role, userTypes }) => {
                         onUserRoleValueChange(userId, role, newRole)
                     }
                 />
+                <OrganizationRoleInfo />
             </Grid>
             <Grid item xs={12} sm={3} className={classes.buttonCell}>
                 {!isOwner && !isMe && (

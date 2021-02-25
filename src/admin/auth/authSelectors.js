@@ -1,12 +1,13 @@
 import { getAdminStateSelector } from '../adminSelector'
 
-export const getAuthSelector = state => getAdminStateSelector(state).adminAuth
+export const getAuthSelector = (state) => getAdminStateSelector(state).adminAuth
 
-export const isLoggedSelector = state => getAuthSelector(state).isLogin
+export const isLoggedSelector = (state) => getAuthSelector(state).isLogin
 
-export const getUserSelector = state => getAuthSelector(state).user
+export const getUserSelector = (state) => getAuthSelector(state).user
+export const getUserIdSelector = (state) => getUserSelector(state).uid
 
-export const isUserValidSelector = state => {
+export const isUserValidSelector = (state) => {
     const user = getUserSelector(state)
 
     if (!user) {
@@ -19,4 +20,4 @@ export const isUserValidSelector = state => {
     return true
 }
 
-export const getLoginErrorSelector = state => getAuthSelector(state).error
+export const getLoginErrorSelector = (state) => getAuthSelector(state).error

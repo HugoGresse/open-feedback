@@ -116,12 +116,6 @@ export const changeUserRole = (userId, oldRole, newRole) => (
     const state = getState()
     const selectedOrganizationId = getSelectedOrganizationIdSelector(state)
     if (selectedOrganizationId) {
-        const users = getUsersSelector(state)
-        console.log(users)
-        if (newRole === ORGANIZATION_USER_ROLE_OWNER) {
-            //
-        }
-
         const newRoleIndex = ORGANIZATION_EXISTING_USER_ROLES.findIndex(
             (existingRole) => existingRole === newRole
         )
@@ -130,7 +124,6 @@ export const changeUserRole = (userId, oldRole, newRole) => (
         )
 
         if (newRoleIndex > oldRoleIndex) {
-            console.log(1)
             const changes = ORGANIZATION_NEW_USER_ROLES.slice(
                 oldRoleIndex + 1,
                 newRoleIndex + 1
@@ -143,7 +136,6 @@ export const changeUserRole = (userId, oldRole, newRole) => (
             }
             dispatch(editOrganization(changes))
         } else {
-            console.log(2)
             dispatch(
                 editOrganization(
                     ORGANIZATION_NEW_USER_ROLES.slice(

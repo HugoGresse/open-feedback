@@ -1,9 +1,6 @@
 import { createSelector } from 'reselect'
 import { getAdminStateSelector } from '../../adminSelector'
-import {
-    NO_ORGANIZATION_FAKE_ID,
-    ORGANIZATION_USER_ROLE_OWNER,
-} from '../../organization/core/organizationConstants'
+import { NO_ORGANIZATION_FAKE_ID } from '../../organization/core/organizationConstants'
 import { getOrganizationsSelector } from '../../organization/core/organizationSelectors'
 import {
     PROJECT_USER_ROLE_MEMBER,

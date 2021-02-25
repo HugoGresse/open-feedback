@@ -6,6 +6,7 @@ import {
     ORGANIZATION_USER_ROLE_OWNER,
     ORGANIZATION_USER_ROLE_VIEWER,
 } from './organizationConstants'
+import { getUserIdSelector } from '../../auth/authSelectors'
 
 const getOrganizationState = (state) =>
     getAdminStateSelector(state).adminOrganization
@@ -15,11 +16,11 @@ export const isOrganizationsLoadedSelector = (state) =>
     getOrganizationState(state).organizationsLoaded
 export const getOrganizationsSelector = (state) =>
     getOrganizationData(state).organizations
-export const getOrganizationsLoadErrorSelector = (state) =>
-    getOrganizationState(state).organizationsLoadError
 
 export const getSelectedOrganizationIdSelector = (state) =>
     getOrganizationState(state).selectedOrganizationId
+
+// Memoized selectors
 
 export const getSelectedOrganizationSelector = createSelector(
     getSelectedOrganizationIdSelector,
@@ -30,6 +31,17 @@ export const getSelectedOrganizationSelector = createSelector(
         }
         return organizations.find(
             (organization) => organization.id === selectedOrganizationId
+        )
+    }
+)
+
+export const isOrganizationRightAllowed = createSelector(
+    getSelectedOrganizationSelector,
+    getUserIdSelector,
+    (organization, userId) => {
+        return (
+            organization.ownerUserId === userId ||
+            organization.adminUserIds.includes(userId)
         )
     }
 )

@@ -142,7 +142,16 @@
         "saveSuccess": "Organization saved",
         "saveFail": "Failed to save the organization",
         "confirmOwner": "You are about the replace the organization owner. This user will be able to use all available actions (even deleting the organization), do you want to continue?",
-        "confirmOwnerButton": "Change owner"
+        "confirmOwnerButton": "Change owner",
+        "rightDenied": "You don't have the rights to edit the organization. Ask the owner or an admin of the organization.",
+        "rolesTitle": "Description of organization roles",
+        "rolesDescription": "The following describe organization read/write/delete roles. Note that you can set specific role for an event within the event itself. By adding a viewer in an organization, you can quickly add him later on to an event.",
+        "roles": {
+            "viewer": "Can only view the organization details and all the organization events",
+            "editor": "Same as viewer + edit all events and create new one. Can delete owned events within an organization.",
+            "admin": "Same a editor + manage organization settings: members, roles, voting form, themes.",
+            "owner": "Same as admin + manage owner role (only one owner) and delete the organization."
+        }
     },
     "rooting": {
         "dashboard": "Dashboard",
