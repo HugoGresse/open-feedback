@@ -128,6 +128,7 @@ describe('applyInvites', () => {
         expect(update).toHaveBeenCalledTimes(2)
         expect(update).toBeCalledWith({
             updatedAt: serverTimestamp(),
+            viewerUserIds: arrayUnion(USER_ID),
             editorUserIds: arrayUnion(USER_ID),
         })
         expect(update).toBeCalledWith({
@@ -158,6 +159,8 @@ describe('applyInvites', () => {
         expect(update).toHaveBeenCalledTimes(2)
         expect(update).toBeCalledWith({
             updatedAt: serverTimestamp(),
+            viewerUserIds: arrayUnion(USER_ID),
+            editorUserIds: arrayUnion(USER_ID),
             adminUserIds: arrayUnion(USER_ID),
         })
         expect(update).toBeCalledWith({
@@ -188,6 +191,9 @@ describe('applyInvites', () => {
         expect(update).toHaveBeenCalledTimes(2)
         expect(update).toBeCalledWith({
             updatedAt: serverTimestamp(),
+            viewerUserIds: arrayUnion(USER_ID),
+            editorUserIds: arrayUnion(USER_ID),
+            adminUserIds: arrayUnion(USER_ID),
             ownerUserId: USER_ID,
         })
         expect(update).toBeCalledWith({
