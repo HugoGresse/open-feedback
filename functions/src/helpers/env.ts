@@ -20,7 +20,7 @@ export const getAppEnv = (): AppEnv => {
 export const getMailgunEnv = (): MailgunEnv => {
     const { mailgun } = functions.config()
     if (!mailgun) {
-        throw new Error('Missing app environment')
+        throw new Error('Missing mailgun environment')
     }
     const { key, domain, api } = mailgun
     if (!key || !domain || !api) {

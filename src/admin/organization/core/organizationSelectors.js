@@ -20,6 +20,9 @@ export const getOrganizationsSelector = (state) =>
 export const getSelectedOrganizationIdSelector = (state) =>
     getOrganizationState(state).selectedOrganizationId
 
+export const getOrganizationOwnerIdSelector = (state) =>
+    getSelectedOrganizationSelector(state).ownerUserId
+
 // Memoized selectors
 
 export const getSelectedOrganizationSelector = createSelector(
@@ -46,8 +49,6 @@ export const isOrganizationRightAllowed = createSelector(
     }
 )
 
-export const getOrganizationOwnerIdSelector = (state) =>
-    getSelectedOrganizationSelector(state).ownerUserId
 export const getOrganizationMembersIdsSelector = createSelector(
     getSelectedOrganizationSelector,
     (organization) => {

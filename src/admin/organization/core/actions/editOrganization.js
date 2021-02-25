@@ -1,4 +1,4 @@
-import { fireStoreMainInstance } from '../../../../firebase'
+import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase'
 import { addNotification } from '../../../notification/notifcationActions'
 import { getSelectedOrganizationIdSelector } from '../organizationSelectors'
 import { getOrganization } from './getOrganization'
@@ -10,7 +10,13 @@ export const editOrganization = (organizationData) => (dispatch, getState) => {
     return fireStoreMainInstance
         .collection('organizations')
         .doc(organizationId)
-        .set(organizationData, { merge: true })
+        .set(
+            {
+                ...organizationData,
+                updatedAt: serverTimestamp(),
+            },
+            { merge: true }
+        )
         .then(() => {
             dispatch(
                 addNotification({

@@ -8,7 +8,7 @@ import { OrganizationHeader } from './OrganizationHeader'
 import { Helmet } from 'react-helmet-async'
 import { OrganizationTabs } from './OrganizationTabs'
 import { Box } from '@material-ui/core'
-import { OrganizationRightsInfo } from './OrganizationRightsInfo'
+import { OrganizationWriteInfo } from './OrganizationWriteInfo'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -34,7 +34,7 @@ export const OrganizationLayout = ({ children }) => {
             </Helmet>
             <Container maxWidth="md" fixed className={classes.container}>
                 <OrganizationHeader organizationName={orgName} />
-                <OrganizationRightsInfo />
+                <OrganizationWriteInfo />
                 <OrganizationTabs />
                 <div className={classes.content}>{children}</div>
             </Container>

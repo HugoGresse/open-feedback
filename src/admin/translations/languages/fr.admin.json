@@ -141,16 +141,16 @@
         "tabTheme": "Thème",
         "saveSuccess": "Organisation sauvergardée",
         "saveFail": "Erreur lors de la sauvegarde de l'organisation",
-        "confirmOwner": "Vous allez remplacer le propriétaire de l'organisation. Cet utilisateur pourrat donc faire toutes les actions possibles (même la supprimer), voulez vous continuer ?",
+        "confirmOwner": "Vous allez remplacer le propriétaire de l'organisation. Cet utilisateur pourra donc faire toutes les actions possibles (même la supprimer), voulez vous continuer ?",
         "confirmOwnerButton": "Changer le propriétaire",
         "rightDenied": "Vous n'avez pas le droit de modifier l'organisation. Demandez au propriétaire ou à un admin de l'organisation.",
         "rolesTitle": "Description des rôles d'une organisation",
         "rolesDescription": "La liste qui suit décrit les différentes rôles de lecture/édition/suppressions d'une organisation. Vous pouvez également mettre un rôle spécifique dans l'évènement lui même. En ajoutant un lecteur à l'organisation, vous pourrez l'ajouter plus facilement à l'évènement.",
         "roles": {
-            "viewer": "Accès en lecture de l'oganisation et de ses évènements.",
-            "editor": "Comme lecteur + modifier tous les évènements et en créer. L'éditeur peut également supprimer les évènements dont il est propriétaire de l'organisation.",
-            "admin": "Comment éditeur + gérer l'organisation: membres, rôles, bulletin de vote et thèmes.",
-            "owner": "Same as admin + manage owner role (only one owner) and delete the organisation."
+            "viewer": "Accès en lecture à l'oganisation et ses évènements.",
+            "editor": "Comme lecteur + modifier tous les évènements et en créer. L'éditeur peut également supprimer les évènements de l'organisation dont il est propriétaire.",
+            "admin": "Comme éditeur + gérer l'organisation: membres, rôles, bulletin de vote et thème.",
+            "owner": "Comme l'admin +  gérer le role de propriétaire (un seul propriétaire) et supprimer l'organisation."
         }
     },
     "rooting": {
@@ -248,7 +248,9 @@
         "errorInvite": "Erreur lors de l'invitation de l'utilisateur ",
         "invitationGetFail": "Erreur lors du chargement de votre invitation, demandez en une nouvelle svp.",
         "errorPendingInvitesFailed": "Erreur lors du chargement des invitations en attente, ",
-        "cancelInviteFail": "Erreur lors de l'annulation de l'invitation, "
+        "cancelInviteFail": "Erreur lors de l'annulation de l'invitation, ",
+        "inviteAlreadyUsed": "L'invitation a déjà été utilisé",
+        "inviteCompleted": "Invite terminé, vous allez être rediriger vers l'évènement ou l'organisation"
     },
     "settingsVotingForm": {
         "new": "Nouveau choix de vote",

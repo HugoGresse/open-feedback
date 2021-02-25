@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box'
 import InfoIcon from '@material-ui/icons/Info'
 import TranslatedTypography from '../../baseComponents/TranslatedTypography'
 
-export const OrganizationRightsInfo = () => {
+export const OrganizationWriteInfo = () => {
     const isRightAllowed = useSelector(isOrganizationRightAllowed)
     if (isRightAllowed) {
         return null

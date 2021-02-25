@@ -8,6 +8,7 @@ import {
 } from './usersActionTypes'
 import { SELECT_PROJECT } from '../../project/core/projectActionTypes'
 import { SELECT_ORGANIZATION } from '../../organization/core/organizationActionTypes'
+import { LOGOUT } from '../../auth/authActionTypes'
 
 const initState = {
     usersData: {},
@@ -55,6 +56,11 @@ const usersReducer = (state = initState, { payload, type }) => {
             }
         case SELECT_ORGANIZATION:
         case SELECT_PROJECT:
+            return {
+                ...initState,
+                usersData: state.usersData,
+            }
+        case LOGOUT:
             return {
                 ...initState,
             }

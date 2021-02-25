@@ -42,10 +42,10 @@ const InviteDialog = ({ inviteId }) => {
             history.push(history.location.pathname)
         }
         if (invite.status === 'emailSent') {
-            text = t("You'll be redirected to the event or organization soon")
+            text = t('users.inviteCompleted')
         }
     } else {
-        text = t("You've already used this invitation")
+        text = t('users.inviteAlreadyUsed')
     }
 
     return (

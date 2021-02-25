@@ -147,9 +147,9 @@
         "rolesTitle": "Description of organization roles",
         "rolesDescription": "The following describe organization read/write/delete roles. Note that you can set specific role for an event within the event itself. By adding a viewer in an organization, you can quickly add him later on to an event.",
         "roles": {
-            "viewer": "Can only view the organization details and all the organization events",
+            "viewer": "Can view the organization details and all the organization events.",
             "editor": "Same as viewer + edit all events and create new one. Can delete owned events within an organization.",
-            "admin": "Same a editor + manage organization settings: members, roles, voting form, themes.",
+            "admin": "Same as editor + manage organization settings: members, roles, voting form, themes.",
             "owner": "Same as admin + manage owner role (only one owner) and delete the organization."
         }
     },
@@ -248,7 +248,9 @@
         "errorInvite": "Failed to invite user ",
         "invitationGetFail": "Unable to get your invitation, ask for another one please.",
         "errorPendingInvitesFailed": "Failed to load pending invites, ",
-        "cancelInviteFail": "Failed to cancel invite, "
+        "cancelInviteFail": "Failed to cancel invite, ",
+        "inviteAlreadyUsed": "You've already used this invitation",
+        "inviteCompleted": "Invite completed, you'll be redirected to the event or organization soon"
     },
     "settingsVotingForm": {
         "new": "New item",

@@ -17,12 +17,6 @@ import {
 } from '../core/organizationConstants'
 import UserInviteList from '../../users/UserInviteList'
 
-/**
- * This is a WIP and has been merged to reduce review overflow
- *
- * Missing part:
- * 4. Add roles guides/explanation.
- */
 export const OrganizationUsers = () => {
     const dispatch = useDispatch()
     const ownerUserId = useSelector(getOrganizationOwnerIdSelector)
