@@ -283,6 +283,38 @@ describe('Firestore rules', () => {
                 })
             await firebase.assertFails(updateOrg)
         })
+
+        it('cannot edit the project talks and speakers with viewer role', async () => {
+            const adminApp = createApp(UID_ADMIN)
+            const app = createApp(UID_VIEWER)
+
+            await createOrg(adminApp, 'FirstOrg', [UID_VIEWER], [UID_ADMIN])
+            const projectRef = await createProject(
+                adminApp,
+                'First project',
+                UID_ADMIN,
+                'FirstOrg'
+            )
+
+            const projectId = projectRef.id
+
+            const addTalk = app
+                .collection('projects')
+                .doc(projectId)
+                .collection('talks')
+                .add({
+                    name: 'Toto',
+                })
+            await firebase.assertFails(addTalk)
+            const addSpeaker = app
+                .collection('projects')
+                .doc(projectId)
+                .collection('speakers')
+                .add({
+                    name: 'Toto',
+                })
+            await firebase.assertFails(addSpeaker)
+        })
     })
 
     describe('Organization/editor', () => {
@@ -411,6 +443,43 @@ describe('Firestore rules', () => {
                     name: 'toto',
                 })
             await firebase.assertFails(updateOrg)
+        })
+
+        it('can edit the project talks and speakers with editor role', async () => {
+            const adminApp = createApp(UID_ADMIN)
+            const app = createApp(UID_EDITOR)
+
+            await createOrg(
+                adminApp,
+                'FirstOrg',
+                [UID_EDITOR],
+                [UID_EDITOR, UID_ADMIN]
+            )
+            const projectRef = await createProject(
+                adminApp,
+                'First project',
+                UID_ADMIN,
+                'FirstOrg'
+            )
+
+            const projectId = projectRef.id
+
+            const addTalk = app
+                .collection('projects')
+                .doc(projectId)
+                .collection('talks')
+                .add({
+                    name: 'Toto',
+                })
+            await firebase.assertSucceeds(addTalk)
+            const addSpeaker = app
+                .collection('projects')
+                .doc(projectId)
+                .collection('speakers')
+                .add({
+                    name: 'Toto',
+                })
+            await firebase.assertSucceeds(addSpeaker)
         })
     })
 

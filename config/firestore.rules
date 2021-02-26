@@ -65,13 +65,13 @@ service cloud.firestore {
             match /speakers/{speakerId} {
                 allow get: if true;
                 allow list: if true;
-                allow write: if authenticated() && isAdmin(projectData(projectId));
+                allow write: if authenticated() && (isAdmin(projectData(projectId)) ||  isAnOrgEditor(getOrganization(projectData(projectId).organizationId)));
             }
 
             match /talks/{talkId} {
                 allow get: if true;
                 allow list: if true;
-                allow write: if authenticated() && isAdmin(projectData(projectId));
+                allow write: if authenticated() && (isAdmin(projectData(projectId)) ||  isAnOrgEditor(getOrganization(projectData(projectId).organizationId)));
             }
         }
 
