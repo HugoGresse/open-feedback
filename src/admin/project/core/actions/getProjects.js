@@ -7,6 +7,7 @@ import {
 } from '../projectSelectors'
 import { addNotification } from '../../../notification/notifcationActions'
 import { initProjectApiIfReady } from './initProjectApi'
+import { getOrganizationsSelector } from '../../../organization/core/organizationSelectors'
 
 export const getProjects = (organizationId = null) => (dispatch, getState) => {
     let baseQuery = fireStoreMainInstance.collection('projects')
@@ -25,12 +26,22 @@ export const getProjects = (organizationId = null) => (dispatch, getState) => {
         .orderBy('createdAt', 'desc')
         .get()
         .then((projectsSnapshot) => {
+            const organizations = getOrganizationsSelector(getState())
             const projects = []
             projectsSnapshot.forEach((doc) => {
-                projects.push({
+                const project = {
                     id: doc.id,
                     ...doc.data(),
-                })
+                }
+                if (project.organizationId) {
+                    const org = organizations.find(
+                        (org) => org.id === project.organizationId
+                    )
+                    if (org) {
+                        project.organizationName = org.name
+                    }
+                }
+                projects.push(project)
             })
 
             dispatch({

@@ -12,14 +12,14 @@ import ProjectLayout from './layout/ProjectLayout'
 import { useDispatch } from 'react-redux'
 import Layout404 from '../baseComponents/Layout404'
 import Moderation from './moderation/Moderation'
-import { getProjects } from './core/actions/getProjects'
 import ProjectUsers from './settings/users/ProjectUsers'
+import { getProject } from './core/actions/getProject'
 
 const ProjectApp = ({ match }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getProjects())
+        dispatch(getProject(null, true))
     }, [dispatch])
 
     return (
