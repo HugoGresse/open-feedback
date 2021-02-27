@@ -61,14 +61,7 @@ const DeleteProject = () => {
                             setDeleteState(true)
                             dispatch(deleteProject(projectId, t))
                                 .then(() => {
-                                    history.push(
-                                        history.location.pathname.substring(
-                                            0,
-                                            history.location.pathname.indexOf(
-                                                projectId
-                                            )
-                                        )
-                                    )
+                                    history.push('/admin')
                                 })
                                 .catch(() => {
                                     setDeleteState(false)
