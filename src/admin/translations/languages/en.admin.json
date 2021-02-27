@@ -70,6 +70,7 @@
     },
     "layout": {
         "404": "The requested URL {{pathname}} was not found on this server.",
+        "goToAdmin": "Go to admin",
         "seeEvent": "See event",
         "sidebar": {
             "data": "DATA",

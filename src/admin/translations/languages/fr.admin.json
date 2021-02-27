@@ -70,6 +70,7 @@
     },
     "layout": {
         "404": "L'URL demandée {{pathname}} est introuvable sur ce serveur.",
+        "goToAdmin": "Ouvrir l'admin",
         "seeEvent": "Voir l'évènement",
         "sidebar": {
             "data": "DONNÉES",

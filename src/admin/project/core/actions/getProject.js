@@ -16,13 +16,20 @@ export const getProject = (selectedProjectId = null, initAPI) => (
         .doc(selectedProjectId || getSelectedProjectIdSelector(getState()))
         .get()
         .then((doc) => {
-            return dispatch({
-                type: GET_PROJECT_SUCCESS,
-                payload: {
-                    id: doc.id,
-                    ...doc.data(),
-                },
-            })
+            if (doc.exists) {
+                return dispatch({
+                    type: GET_PROJECT_SUCCESS,
+                    payload: {
+                        id: doc.id,
+                        ...doc.data(),
+                    },
+                })
+            } else {
+                dispatch({
+                    type: GET_PROJECT_ERROR,
+                    payload: 'Event does not exist',
+                })
+            }
         })
         .then(() => {
             if (initAPI) {

@@ -1,9 +1,11 @@
 import { Box, makeStyles } from '@material-ui/core'
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
-import { Trans } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
+import NavLinkMui from '../project/layout/NavLinkMui'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     quatrecentquatre: {
         animation: '$rainbow 2s step-start infinite',
     },
@@ -45,11 +47,20 @@ const useStyles = makeStyles(() => ({
             color: 'rgb(255, 0, 127)',
         },
     },
+    link: {
+        display: 'flex',
+        alignItems: 'center',
+        color: '#555',
+        '&:hover': {
+            color: theme.palette.primary.main,
+        },
+    },
 }))
 
 const Layout404 = () => {
     const classes = useStyles()
     const pathname = window.location.pathname
+    const { t } = useTranslation()
 
     return (
         <Box padding={4} bgcolor="#eee">
@@ -65,6 +76,10 @@ const Layout404 = () => {
             </Typography>
 
             <pre> ¯\_(ツ)_/¯</pre>
+
+            <NavLinkMui to={`/admin`} className={classes.link}>
+                <ArrowBackIcon fontSize="small" /> {t('layout.goToAdmin')}
+            </NavLinkMui>
         </Box>
     )
 }

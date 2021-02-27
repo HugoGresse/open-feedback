@@ -2,6 +2,7 @@ import {
     ADD_PROJECT_ERROR,
     ADD_PROJECT_ONGOING,
     EDIT_PROJECT_SUCCESS,
+    GET_PROJECT_ERROR,
     GET_PROJECT_SUCCESS,
     GET_PROJECTS_ERROR,
     GET_PROJECTS_SUCCESS,
@@ -73,6 +74,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                 data: {
                     ...state.data,
                     projects: newProjectsArray,
+                    projectsLoaded: true,
                 },
             }
         }
@@ -129,6 +131,14 @@ const projectReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 projectLoadError: payload,
+            }
+        case GET_PROJECT_ERROR:
+            // eslint-disable-next-line no-console
+            console.error(payload)
+            return {
+                ...state,
+                projectLoadError: payload,
+                projectsLoaded: true,
             }
         default:
             return state

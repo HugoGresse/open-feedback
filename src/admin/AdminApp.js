@@ -67,6 +67,8 @@ const AdminApp = () => {
                         <Switch>
                             <Route exact path="/admin/" component={AdminRoot} />
 
+                            <Redirect exact from="/admin/event/" to="/admin/" />
+
                             <Route
                                 path="/admin/event/:projectId"
                                 render={(props) => (
