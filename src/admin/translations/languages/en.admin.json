@@ -21,6 +21,7 @@
         "close": "Close",
         "preview": "Preview",
         "pick": "Pick",
+        "attention": "Attention",
         "or": "OR",
         "clear": "Clear",
         "dropzone": {
@@ -69,6 +70,7 @@
     },
     "layout": {
         "404": "The requested URL {{pathname}} was not found on this server.",
+        "goToAdmin": "Go to admin",
         "seeEvent": "See event",
         "sidebar": {
             "data": "DATA",
@@ -137,7 +139,20 @@
         "create": "Create organization",
         "name": "Organization name",
         "nameRequired": "The organization name is required.",
-        "tabTheme": "Theme"
+        "tabTheme": "Theme",
+        "saveSuccess": "Organization saved",
+        "saveFail": "Failed to save the organization",
+        "confirmOwner": "You are about the replace the organization owner. This user will be able to use all available actions (even deleting the organization), do you want to continue?",
+        "confirmOwnerButton": "Change owner",
+        "rightDenied": "You don't have the rights to edit the organization. Ask the owner or an admin of the organization.",
+        "rolesTitle": "Description of organization roles",
+        "rolesDescription": "The following describe organization read/write/delete roles. Note that you can set specific role for an event within the event itself. By adding a viewer in an organization, you can quickly add him later on to an event.",
+        "roles": {
+            "viewer": "Can view the organization details and all the organization events.",
+            "editor": "Same as viewer + edit all events and create new one. Can delete owned events within an organization.",
+            "admin": "Same as editor + manage organization settings: members, roles, voting form, themes.",
+            "owner": "Same as admin + manage owner role (only one owner) and delete the organization."
+        }
     },
     "rooting": {
         "dashboard": "Dashboard",
@@ -204,11 +219,10 @@
         "languages": "Additional languages (for the voting form)",
         "disableSoloTalkRedirect": "Force redirect to the talk if only one talk listed"
     },
-    "settingsUser": {
-        "add": "Add a new member to the event",
-        "addButton": "Add a member",
-        "emailNotValid": "The member email must be a valid email, sneaky one!",
-        "emailRequired": "The member email is required. You think you can invite Nobody? Well... no.",
+    "users": {
+        "add": "Add a user",
+        "emailNotValid": "The user email must be a valid email, sneaky one!",
+        "emailRequired": "The user email is required. You think you can invite Nobody? Well... no.",
         "invitation": "Invitation",
         "invite": {
             "default": "has disappeared",
@@ -217,20 +231,27 @@
             "new": "created"
         },
         "invites": "PENDING INVITES",
-        "member": "Member",
-        "memberEmail": "Member email",
+        "Member": "Member",
+        "memberEmail": "User email",
         "on": "on",
-        "owner": "Owner",
-        "status": "Invitation to become Member",
-        "submit": "Add member",
+        "userType": "User role",
+        "typeRequired": "User type required",
+        "typeNotValid": "The user type is not valid...",
+        "Owner": "Owner",
+        "Admin": "Admin",
+        "Editor": "Editor",
+        "Viewer": "Viewer",
+        "submit": "Add user",
         "errorUserNotExist": "User does not exist",
         "errorUserLoadFail": "Failed to load user details, ",
-        "errorUserAlreadyInvited": "The user is already invited to the event.",
-        "successInvite": "The user has been invited to the project and should receive an email very soon.",
+        "errorUserAlreadyInvited": "The user is already invited.",
+        "successInvite": "The user has been invited and should receive an email very soon.",
         "errorInvite": "Failed to invite user ",
         "invitationGetFail": "Unable to get your invitation, ask for another one please.",
         "errorPendingInvitesFailed": "Failed to load pending invites, ",
-        "cancelInviteFail": "Failed to cancel invite, "
+        "cancelInviteFail": "Failed to cancel invite, ",
+        "inviteAlreadyUsed": "You've already used this invitation",
+        "inviteCompleted": "Invite completed, you'll be redirected to the event or organization soon"
     },
     "settingsVotingForm": {
         "new": "New item",

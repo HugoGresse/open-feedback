@@ -1,54 +1,31 @@
 import * as functions from 'firebase-functions'
-import * as admin from 'firebase-admin'
 import { CallableContext } from 'firebase-functions/lib/providers/https'
+import { assertUserAuthenticated } from './assertUserAuthenticated'
+import { getProject } from './getProject'
+import { getOrganization } from './getOrganization'
 
 export const checkWriteToProjectAllowed = async (
     context: CallableContext,
     projectId: string
 ) => {
-    if (!(context.auth && context.auth.token)) {
-        throw new functions.https.HttpsError(
-            'unauthenticated',
-            'User not authentificated.'
-        )
-    }
+    const uid = assertUserAuthenticated(context)
+    const project = await getProject(projectId)
 
-    if (!projectId || projectId.length <= 0) {
-        throw new functions.https.HttpsError(
-            'invalid-argument',
-            'Missing required parameters.'
-        )
-    }
+    if (project.owner !== uid && !project.members.includes(uid)) {
+        if (project.organizationId) {
+            const organization = await getOrganization(project.organizationId)
+            if (
+                organization.ownerUserId === uid ||
+                organization.editorUserIds.includes(uid) ||
+                organization.adminUserIds.includes(uid)
+            ) {
+                return
+            }
+        }
 
-    const projectDoc = await admin
-        .firestore()
-        .collection('projects')
-        .doc(projectId)
-        .get()
-
-    if (!projectDoc.exists) {
-        throw new functions.https.HttpsError(
-            'not-found',
-            'Project has not been found.'
-        )
-    }
-
-    const project = projectDoc.data()
-
-    if (!project) {
-        throw new functions.https.HttpsError(
-            'not-found',
-            'Project has not been found or is empty.'
-        )
-    }
-
-    if (
-        project.owner !== context.auth.uid &&
-        !project.members.includes(context.auth.uid)
-    ) {
         throw new functions.https.HttpsError(
             'permission-denied',
-            'Only the project members can edit a project.'
+            'Only the project members or organizations with correct rights can edit an event.'
         )
     }
 }

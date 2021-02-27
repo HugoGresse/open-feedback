@@ -39,7 +39,6 @@ const innerTheme = responsiveFontSizes(
         typography: {
             h2: {
                 fontSize: 40,
-                color: '#2196f3',
             },
             h3: {
                 fontSize: 28,
@@ -67,6 +66,8 @@ const AdminApp = () => {
                     <MuiThemeProvider theme={innerTheme}>
                         <Switch>
                             <Route exact path="/admin/" component={AdminRoot} />
+
+                            <Redirect exact from="/admin/event/" to="/admin/" />
 
                             <Route
                                 path="/admin/event/:projectId"

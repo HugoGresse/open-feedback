@@ -1,0 +1,6 @@
+export const PROJECT_USER_ROLE_MEMBER = 'Member'
+export const PROJECT_USER_ROLE_OWNER = 'Owner'
+export const PROJECT_USER_ROLES = [
+    PROJECT_USER_ROLE_MEMBER,
+    PROJECT_USER_ROLE_OWNER,
+]

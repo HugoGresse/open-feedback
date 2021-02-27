@@ -2,6 +2,10 @@ import { createSelector } from 'reselect'
 import { getAdminStateSelector } from '../../adminSelector'
 import { NO_ORGANIZATION_FAKE_ID } from '../../organization/core/organizationConstants'
 import { getOrganizationsSelector } from '../../organization/core/organizationSelectors'
+import {
+    PROJECT_USER_ROLE_MEMBER,
+    PROJECT_USER_ROLE_OWNER,
+} from '../settings/users/ProjectUserRoles'
 
 const getProjects = (state) => getAdminStateSelector(state).adminProject
 const getProjectsData = (state) => getProjects(state).data
@@ -15,8 +19,6 @@ export const getSelectedProjectIdSelector = (state) =>
 export const isProjectApiInitSelector = (state) =>
     getProjects(state).projectApiInit
 
-export const getMemberIds = (state) => getSelectedProjectSelector(state).members
-
 export const getOwnerId = (state) => getSelectedProjectSelector(state).owner
 
 export const getLanguagesSelector = (state) =>
@@ -26,6 +28,38 @@ export const getStartTimeSelector = (state) =>
     getSelectedProjectSelector(state).voteStartTime
 
 // MEMOIZED
+
+export const getSelectedProjectSelector = createSelector(
+    getProjectsData,
+    getSelectedProjectIdSelector,
+    (projectsData, selectedProjectId) => {
+        const projects = projectsData.projects
+        if (!projects || projects.length < 1) {
+            return null
+        }
+        return projects.filter((project) => project.id === selectedProjectId)[0]
+    }
+)
+
+export const getMemberIds = createSelector(
+    getSelectedProjectSelector,
+    getOwnerId,
+    (project, ownerUserId) => {
+        const members = project.members.reduce((acc, userId) => {
+            acc[userId] = {
+                userId,
+                role: PROJECT_USER_ROLE_MEMBER,
+            }
+            return acc
+        }, {})
+
+        members[ownerUserId] = {
+            userId: ownerUserId,
+            role: PROJECT_USER_ROLE_OWNER,
+        }
+        return Object.values(members)
+    }
+)
 
 export const getSortedProjectsSelector = createSelector(
     getProjectsData,
@@ -53,17 +87,24 @@ export const getSortedProjectsByOrganizationIdsSelector = createSelector(
                 }
                 return 0
             })
-            .reduce((acc, project) => {
-                const organizationId =
-                    project.organizationId || NO_ORGANIZATION_FAKE_ID
-                if (!acc[organizationId]) {
-                    acc[organizationId] = {
-                        projects: [],
+            .reduce(
+                (acc, project) => {
+                    const organizationId =
+                        project.organizationId || NO_ORGANIZATION_FAKE_ID
+                    if (!acc[organizationId]) {
+                        acc[organizationId] = {
+                            projects: [],
+                        }
                     }
+                    acc[organizationId].projects.push(project)
+                    return acc
+                },
+                {
+                    NO_ORGANIZATION_FAKE_ID: {
+                        projects: [],
+                    },
                 }
-                acc[organizationId].projects.push(project)
-                return acc
-            }, {})
+            )
 
         // Add empty projects an hydrate org data
         return organizations.reduce((acc, organization) => {
@@ -80,17 +121,5 @@ export const getSortedProjectsByOrganizationIdsSelector = createSelector(
             }
             return acc
         }, orgsWithProjects)
-    }
-)
-
-export const getSelectedProjectSelector = createSelector(
-    getProjectsData,
-    getSelectedProjectIdSelector,
-    (projectsData, selectedProjectId) => {
-        const projects = projectsData.projects
-        if (!projects || projects.length < 1) {
-            return null
-        }
-        return projects.filter((project) => project.id === selectedProjectId)[0]
     }
 )

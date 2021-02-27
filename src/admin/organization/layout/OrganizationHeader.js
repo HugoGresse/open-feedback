@@ -20,7 +20,9 @@ export const OrganizationHeader = ({ organizationName }) => {
                 {t('organization.goBackToProjects')}
             </OFButton>
 
-            <Typography variant="h2">{organizationName}</Typography>
+            <Typography variant="h2" color="primary">
+                {organizationName}
+            </Typography>
             <Typography variant="h5">{t('organization.title')}</Typography>
         </>
     )

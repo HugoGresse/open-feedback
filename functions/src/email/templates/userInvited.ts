@@ -1,6 +1,12 @@
-import layout from "./layout/layout";
+import layout from './layout/layout'
 
-const userInvited = (header: string, content: string, buttonText: string, buttonLink:string) => layout(`<tr
+const userInvited = (
+    header: string,
+    content: string,
+    buttonText: string,
+    buttonLink: string
+) =>
+    layout(`<tr
                             style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; font-size: 14px;   border: 1px solid #e9e9e9;">
                             <td class="content-wrap"
                                 style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px; color:#fff; border-radius: 3px; background-color: #F2994A;"
@@ -35,7 +41,7 @@ const userInvited = (header: string, content: string, buttonText: string, button
                                             style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
                                             valign="top">
                                             <a href="${buttonLink}" class="btn-primary" itemprop="url"
-                                                style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #F2994A; margin: 0; border-color: #F2994A; border-style: solid; border-width: 5px 10px;">${buttonText}</a>
+                                                style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; background-color: #F2994A; margin: 0; border-color: #F2994A; border-style: solid; border-width: 5px 10px;">${buttonText}</a>
                                         </td>
                                     </tr>
                                 </table>

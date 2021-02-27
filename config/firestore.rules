@@ -34,7 +34,7 @@ service cloud.firestore {
         // PROJECTS
         match /projects/{projectId} {
             allow get: if true;
-            allow list: if authenticated() && (isAdmin(resource.data) || isAnOrgViewer(getOrganization(resource.data.organizationId))) && (isEmailVerified() || isPhoneNumberAccount());
+            allow list: if authenticated() && (isAdmin(resource.data) || isAnOrgViewer(getOrganization(resource.data.organizationId)));
             allow create: if authenticated() && (!("organizationId" in request.resource.data) || isAnOrgEditor(getOrganization(request.resource.data.organizationId)));
             allow update: if authenticated() && (isAdmin(resource.data) || isAnOrgEditor(getOrganization(resource.data.organizationId))) && (isEmailVerified() || isPhoneNumberAccount());
             allow delete: if authenticated() && (isAdmin(resource.data) || isAnOrgAdmin(getOrganization(resource.data.organizationId))) && (isEmailVerified() || isPhoneNumberAccount());
@@ -65,22 +65,22 @@ service cloud.firestore {
             match /speakers/{speakerId} {
                 allow get: if true;
                 allow list: if true;
-                allow write: if authenticated() && isAdmin(projectData(projectId));
+                allow write: if authenticated() && (isAdmin(projectData(projectId)) ||  isAnOrgEditor(getOrganization(projectData(projectId).organizationId)));
             }
 
             match /talks/{talkId} {
                 allow get: if true;
                 allow list: if true;
-                allow write: if authenticated() && isAdmin(projectData(projectId));
+                allow write: if authenticated() && (isAdmin(projectData(projectId)) ||  isAnOrgEditor(getOrganization(projectData(projectId).organizationId)));
             }
         }
 
         // PROJECTS INVITE
-        match /projects-invites/{inviteId} {
-            allow get: if authenticated();
-            allow list: if authenticated() && (isDestinedToMe(resource.data) || isAdmin(projectData(resource.data.projectId)));
-            allow create: if authenticated() && isAdmin(projectData(request.resource.data.projectId));
-            allow delete: if authenticated() && isAdmin(projectData(resource.data.projectId));
+        match /invites/{inviteId} {
+            allow get: if authenticated() && isDestinedToMe(resource.data);
+            allow list: if authenticated() && ( ("projectId" in resource.data && isAdmin(projectData(resource.data.projectId))) || isAnOrgViewer(getOrganization(resource.data.organizationId)));
+            allow create: if authenticated() && ( ("projectId" in request.resource.data && isAdmin(projectData(request.resource.data.projectId))) || isAnOrgAdmin(getOrganization(request.resource.data.organizationId)));
+            allow delete: if authenticated() && ( ("projectId" in resource.data && isAdmin(projectData(resource.data.projectId))) || isAnOrgAdmin(getOrganization(resource.data.organizationId)));
 
             function isDestinedToMe(data) { return request.auth.token.email == data.destinationUserInfo; }
         }

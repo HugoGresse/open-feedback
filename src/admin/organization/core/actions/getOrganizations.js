@@ -5,13 +5,11 @@ import {
     GET_ORGANIZATIONS_SUCCESS,
 } from '../organizationActionTypes'
 import { addNotification } from '../../../notification/notifcationActions'
-
-const ORGANIZATION_ROLE_ID = {
-    owner: 'owner',
-    admin: 'admin',
-    editor: 'editor',
-    viewer: 'viewerUserIds',
-}
+import {
+    ORGANIZATION_ROLE_ID,
+    ORGANIZATION_USER_ROLE_VIEWER,
+} from '../organizationConstants'
+import { getProjects } from '../../../project/core/actions/getProjects'
 
 export const getOrganizations = () => (dispatch, getState) => {
     const user = getUserSelector(getState())
@@ -22,7 +20,11 @@ export const getOrganizations = () => (dispatch, getState) => {
 
     return fireStoreMainInstance
         .collection('organizations')
-        .where(ORGANIZATION_ROLE_ID.viewer, 'array-contains', user.uid)
+        .where(
+            ORGANIZATION_ROLE_ID[ORGANIZATION_USER_ROLE_VIEWER],
+            'array-contains',
+            user.uid
+        )
         .orderBy('createdAt', 'desc')
         .get()
         .then((querySnapshot) => {
@@ -37,6 +39,10 @@ export const getOrganizations = () => (dispatch, getState) => {
             dispatch({
                 type: GET_ORGANIZATIONS_SUCCESS,
                 payload: organizations,
+            })
+
+            organizations.forEach((org) => {
+                dispatch(getProjects(org.id))
             })
         })
         .catch((err) => {

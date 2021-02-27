@@ -7,7 +7,7 @@ export {
     aggregateVotesCreate,
     aggregateVotesUpdate,
 } from './triggers/aggregateVotes'
-export { userInviteCreated } from './triggers/userInvite'
+export { userInviteCreated } from './triggers/invites/userInvite'
 export { userCreate } from './triggers/userCreate'
 
 export { alert } from './callable/alert'

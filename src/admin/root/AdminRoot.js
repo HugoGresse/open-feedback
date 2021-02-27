@@ -4,7 +4,7 @@ import RootHeader from './RootHeader'
 import { Box, Slide } from '@material-ui/core'
 import COLORS from '../../constants/colors'
 import NewProject from '../project/new/NewProject'
-import ProjectInviteDialog from './ProjectInviteDialog'
+import InviteDialog from '../users/InviteDialog'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { isUserValidSelector } from '../auth/authSelectors'
 import RootContentLayout from './RootContentLayout'
@@ -86,7 +86,7 @@ const AdminRoot = () => {
                 onClose={() => setNewOrganizationOpen(false)}
             />
 
-            {inviteId && <ProjectInviteDialog inviteId={inviteId} />}
+            {inviteId && <InviteDialog inviteId={inviteId} />}
         </div>
     )
 }

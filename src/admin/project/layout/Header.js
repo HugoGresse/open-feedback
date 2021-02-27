@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { COLORS } from '../../../constants/colors'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { createMuiTheme, Grid } from '@material-ui/core'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
@@ -30,6 +30,8 @@ import { redirectToProject } from '../utils/redirectToProject'
 import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 import Translate from './Translate'
 import Help from './Help'
+import { getProjects } from '../core/actions/getProjects'
+import { getOrganizations } from '../../organization/core/actions/getOrganizations'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -81,6 +83,7 @@ const useStyles = makeStyles({
 })
 
 const Header = ({ refTarget, location, toggleDrawer }) => {
+    const dispatch = useDispatch()
     const selectedProjectId = useSelector(getSelectedProjectIdSelector)
     const selectedProject = useSelector(getSelectedProjectSelector)
     const projects = useSelector(getSortedProjectsSelector)
@@ -229,12 +232,20 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                     keepMounted
                     transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                     open={!!anchorEventSelect}
+                    onEnter={() => {
+                        if (projects.length === 1) {
+                            dispatch(getProjects())
+                            dispatch(getOrganizations())
+                        }
+                    }}
                     onClose={() => handleMenuClose()}>
                     {projects.map((project) => (
                         <MenuItem
                             key={project.id}
                             onClick={() => onProjectSelectedChange(project.id)}>
-                            {project.name}
+                            {project.name}{' '}
+                            {project.organizationId &&
+                                `(${project.organizationName})`}
                         </MenuItem>
                     ))}
                 </Menu>

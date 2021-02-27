@@ -2,6 +2,10 @@ import * as functions from 'firebase-functions'
 // @ts-ignore
 import firebaseTools from 'firebase-tools'
 import * as admin from 'firebase-admin'
+import { assertUserAuthenticated } from '../helpers/assertUserAuthenticated'
+import { getProject } from '../helpers/getProject'
+import { Project } from '../types/Project'
+import { getOrganization } from '../helpers/getOrganization'
 
 export const deleteProject = functions
     .runWith({
@@ -9,62 +13,22 @@ export const deleteProject = functions
         memory: '2GB',
     })
     .https.onCall(async (data, context) => {
-        if (!(context.auth && context.auth.token)) {
-            throw new functions.https.HttpsError(
-                'unauthenticated',
-                'User not authentificated.'
-            )
-        }
-
-        const projectId = data.projectId
-
-        if (!projectId || projectId.length <= 0) {
-            throw new functions.https.HttpsError(
-                'invalid-argument',
-                'Missing required parameters.'
-            )
-        }
+        const uid = assertUserAuthenticated(context)
+        const project = await getProject(data.projectId)
 
         console.log(
-            `User ${context.auth.uid} has requested to delete projectId ${projectId}`
+            `User ${uid} has requested to delete projectId ${data.projectId} (${project.name})`
         )
 
-        const projectDoc = await admin
-            .firestore()
-            .collection('projects')
-            .doc(projectId)
-            .get()
-
-        if (!projectDoc.exists) {
-            throw new functions.https.HttpsError(
-                'not-found',
-                'Project has not been found.'
-            )
-        }
-
-        const project = projectDoc.data()
-
-        if (!project) {
-            throw new functions.https.HttpsError(
-                'not-found',
-                'Project has not been found or is empty.'
-            )
-        }
-
-        if (project.owner !== context.auth.uid) {
-            throw new functions.https.HttpsError(
-                'permission-denied',
-                'Only the project owner can delete a project.'
-            )
-        }
+        await assertProjectDeletionGranted(project, uid)
 
         console.log(
-            `User ${context.auth.uid} has requested to delete projectId ${projectDoc.id} and was granted`
+            `User ${uid} has requested to delete projectId ${data.projectId} (${project.name}) and was granted`
         )
 
-        return deleteProjectStorage(projectDoc.id)
+        return deleteProjectStorage(project.id)
             .then(() => {
-                return deleteProjectFirestore(projectDoc.id)
+                return deleteProjectFirestore(project.id)
             })
             .then(() => {
                 return 'Delete successful'
@@ -93,4 +57,29 @@ const deleteProjectFirestore = async (projectId: string) => {
         .then(() => {
             console.log(`Firestore deleted for project ${projectId}`)
         })
+}
+
+const assertProjectDeletionGranted = async (project: Project, uid: string) => {
+    if (project.organizationId) {
+        const organization = await getOrganization(project.organizationId)
+        if (
+            organization.ownerUserId === uid ||
+            organization.editorUserIds.includes(uid) ||
+            organization.adminUserIds.includes(uid)
+        ) {
+            return
+        }
+    }
+
+    if (project.owner === uid) {
+        return
+    }
+
+    let message = 'Only the project owner can delete a project.'
+    if (project.organizationId) {
+        message =
+            'Only the event owner or an organization editor/admin/owner can delete this event.'
+    }
+
+    throw new functions.https.HttpsError('permission-denied', message)
 }

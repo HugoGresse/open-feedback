@@ -6,9 +6,9 @@ import {
 
 import { Response } from 'node-fetch'
 
-jest.mock('../email/send')
-import send from '../email/send'
-import { getFirestoreMocksAndInit } from '../testUtils/firestoreStub'
+jest.mock('../../email/send')
+import send from '../../email/send'
+import { getFirestoreMocksAndInit } from '../../testUtils/firestoreStub'
 import * as admin from 'firebase-admin'
 
 const test = firebaseFunctionsTest()
@@ -26,6 +26,8 @@ describe('userInviteCreated', () => {
         test.mockConfig({
             app: {
                 url: 'http://localhost',
+                domain: 'http://localhost',
+                env: 'development',
             },
             mailgun: {
                 key: 'MAILGUN_KEY',
@@ -72,7 +74,7 @@ describe('userInviteCreated', () => {
             key: 'MAILGUN_KEY',
         })
         expect((send as any).mock.calls[0][1].subject).toEqual(
-            '[OpenFeedback] Hugo G invited you to become member of the event "Project Name"'
+            '[OpenFeedback] Hugo G invited you to become member of the event Project Name'
         )
         expect((send as any).mock.calls[0][1].to).toEqual(['email@example.com'])
         expect((send as any).mock.calls[0][1].html).toContain(
@@ -80,7 +82,7 @@ describe('userInviteCreated', () => {
         )
 
         expect(update).toBeCalledWith({ status: 'emailSent' })
-        expect(collection).toHaveBeenCalledWith('projects-invites')
+        expect(collection).toHaveBeenCalledWith('invites')
         expect(doc).toHaveBeenCalledWith(invite.id)
     })
 
@@ -115,7 +117,7 @@ describe('userInviteCreated', () => {
         )
 
         expect(update).toBeCalledWith({ status: 'emailSent' })
-        expect(collection).toHaveBeenCalledWith('projects-invites')
+        expect(collection).toHaveBeenCalledWith('invites')
         expect(doc).toHaveBeenCalledWith(invite.id)
 
         expect(collection).toHaveBeenCalledWith('users')
@@ -147,7 +149,7 @@ describe('checkPendingInviteAndProcessThem', () => {
             []
         )
 
-        expect(collection).toHaveBeenCalledWith('projects-invites')
+        expect(collection).toHaveBeenCalledWith('invites')
         expect(where).toHaveBeenCalledWith(
             'destinationUserInfo',
             '==',
@@ -177,12 +179,10 @@ describe('checkPendingInviteAndProcessThem', () => {
             'a2',
         ])
 
-        expect(get, 'projects-invites has been queried').toHaveBeenCalledTimes(
-            1
-        )
+        expect(get, 'invites has been queried').toHaveBeenCalledTimes(1)
         expect(
             update,
-            'projects and projects-invites has been updated once each for each invite'
+            'projects and invites has been updated once each for each invite'
         ).toHaveBeenCalledTimes(4)
     })
 })
