@@ -7,26 +7,21 @@ import { useTranslation } from 'react-i18next'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
 import LangMap from 'langmap'
 import Grid from '@material-ui/core/Grid'
-import { useDispatch, useSelector, useStore } from 'react-redux'
-import {
-    getLanguagesSelector,
-    getSelectedProjectSelector,
-} from '../../core/projectSelectors'
 import { CircularProgress } from '@material-ui/core'
 import FormikAutoSave from '../../../baseComponents/form/autoSave/FormikAutoSave'
 import AutoSaveNotice from '../../../baseComponents/layouts/AutoSaveNotice'
 import Box from '@material-ui/core/Box'
 import langMapArray from '../../utils/convertLangMapArray'
-import { editProject } from '../../core/actions/editProject'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { OFSwitch } from '../../../baseComponents/form/switch/OFSwitch'
 
-const SettingsForm = () => {
-    const dispatch = useDispatch()
+const SettingsForm = ({
+    onSave,
+    initialLanguages,
+    disableSoloTalkRedirect,
+    displayTitle = true,
+}) => {
     const { t } = useTranslation()
-    const project = useSelector(getSelectedProjectSelector)
-    // Doing this prevent the selector to be connected to redux directly, thus prevent future update of initialValues
-    const initialLanguages = getLanguagesSelector(useStore().getState())
 
     return (
         <Formik
@@ -39,14 +34,16 @@ const SettingsForm = () => {
                     ...LangMap[tag],
                     tag,
                 })),
-                disableSoloTalkRedirect: !project.disableSoloTalkRedirect,
+                disableSoloTalkRedirect: !disableSoloTalkRedirect,
             }}>
             {({ values }) => (
                 <Form method="POST">
-                    <TranslatedTypography
-                        i18nKey="settingsSetup.settings"
-                        variant="h5"
-                    />
+                    {displayTitle && (
+                        <TranslatedTypography
+                            i18nKey="settingsSetup.settings"
+                            variant="h5"
+                        />
+                    )}
                     <Grid container spacing={4}>
                         <Grid item xs={12} sm={6}>
                             <OFFormControl
@@ -90,13 +87,11 @@ const SettingsForm = () => {
                             const languages = values.languages.map(
                                 (value) => value.tag
                             )
-                            return dispatch(
-                                editProject({
-                                    ...values,
-                                    languages,
-                                    disableSoloTalkRedirect: !values.disableSoloTalkRedirect,
-                                })
-                            )
+                            return onSave({
+                                ...values,
+                                languages,
+                                disableSoloTalkRedirect: !values.disableSoloTalkRedirect,
+                            })
                         }}
                         render={({ isSaving, lastSavedDate, saveError }) => (
                             <div>

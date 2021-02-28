@@ -152,7 +152,8 @@
             "editor": "Comme lecteur + modifier tous les évènements et en créer. L'éditeur peut également supprimer les évènements de l'organisation dont il est propriétaire.",
             "admin": "Comme éditeur + gérer l'organisation: membres, rôles, bulletin de vote et thème.",
             "owner": "Comme l'admin +  gérer le role de propriétaire (un seul propriétaire) et supprimer l'organisation."
-        }
+        },
+        "infoData": "Les paramètres de l'organisation, du bulletin de vote et du thème sont appliqués lors de la création d'évènement, il n'affecte pas les évènements existants."
     },
     "rooting": {
         "dashboard": "Statistiques",

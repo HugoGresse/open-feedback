@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import VoteItemList from './VoteItemList'
 import { getVoteItems } from './votingFormActions'
 import OFPaper from '../../../baseComponents/OFPaper'
 import VotingFormFooter from './VotingFormFooter'
 import { VotingFormTranslationTip } from './VotingFormTranslationTip'
+import { getLanguagesSelector } from '../../core/projectSelectors'
 
 const VotingForm = () => {
     const dispatch = useDispatch()
+    const languages = useSelector(getLanguagesSelector)
 
     useEffect(() => {
         dispatch(getVoteItems())
@@ -17,7 +19,7 @@ const VotingForm = () => {
         <>
             <VotingFormTranslationTip />
             <OFPaper>
-                <VoteItemList />
+                <VoteItemList languages={languages} />
             </OFPaper>
             <VotingFormFooter />
         </>
