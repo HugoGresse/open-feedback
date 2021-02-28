@@ -90,7 +90,6 @@ const VoteItem = ({
                         if (focusedLangIndex >= 0) {
                             setFocusLangIndex(-1)
                         }
-                        target.setSelectionRange(0, target.value.length)
                     }}
                     onKeyPress={(ev) => {
                         if (ev.key === 'Enter') {
@@ -122,7 +121,6 @@ const VoteItem = ({
                         onFocus={({ target }) => {
                             onFocus && onFocus(item)
                             setFocusLangIndex(index)
-                            target.setSelectionRange(0, target.value.length)
                         }}
                         onKeyPress={(ev) => {
                             if (ev.key === 'Enter') {
