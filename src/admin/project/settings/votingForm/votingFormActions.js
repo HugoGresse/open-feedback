@@ -24,8 +24,6 @@ import { newId } from '../../../../utils/stringUtils'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../../../core/contants'
 import { filterMap } from '../../../../utils/mapUtils'
 import { addNotification } from '../../../notification/notifcationActions'
-import { sleep } from '../../../../utils/sleep'
-import { getProject } from '../../core/actions/getProject'
 
 export const getVoteItems = () => (dispatch, getState) =>
     dispatch({
@@ -74,27 +72,29 @@ export const onVoteItemSaveConfirmed = () => ({
     type: SAVE_VOTEITEM_CONFIRM,
 })
 
-export const addVoteItem = (optionalName, type) => (dispatch, getState) => {
-    const voteItems = getVoteItemsSelector(getState())
-    let position = 0
-    if (voteItems.length > 0) {
-        if (voteItems[voteItems.length - 1].position >= 0) {
-            position = voteItems[voteItems.length - 1].position + 1
-        } else {
-            position = voteItems.length
+export const addVoteItem = (optionalName, type) => {
+    return (dispatch, getState) => {
+        const voteItems = getVoteItemsSelector(getState())
+        let position = 0
+        if (voteItems.length > 0) {
+            if (voteItems[voteItems.length - 1].position >= 0) {
+                position = voteItems[voteItems.length - 1].position + 1
+            } else {
+                position = voteItems.length
+            }
         }
-    }
 
-    return dispatch({
-        type: ADD_VOTEITEM,
-        payload: {
-            id: newId(),
-            name: optionalName || '',
-            position: position,
-            type: type,
-            local: true,
-        },
-    })
+        return dispatch({
+            type: ADD_VOTEITEM,
+            payload: {
+                id: newId(),
+                name: optionalName || '',
+                position: position,
+                type: type,
+                local: true,
+            },
+        })
+    }
 }
 
 export const saveVoteItems = (hideNotification) => (dispatch, getState) => {
@@ -211,14 +211,4 @@ export const fillDefaultVotingForm = (t, replace) => async (dispatch) => {
         addVoteItem(t('defaultVotingForm.complex'), VOTE_TYPE_BOOLEAN)
     )
     await dispatch(addVoteItem(t('defaultVotingForm.comment'), VOTE_TYPE_TEXT))
-}
-
-export const resetVotingForm = (t) => (dispatch) => {
-    return dispatch(fillDefaultVotingForm(t, true)).then(async () => {
-        await dispatch(saveVoteItems())
-        await sleep(1000) // delay on firestore...
-        await dispatch(getProject())
-        await dispatch(getVoteItems())
-        return Promise.resolve()
-    })
 }
