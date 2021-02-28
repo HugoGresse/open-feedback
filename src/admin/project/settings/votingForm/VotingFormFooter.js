@@ -1,22 +1,13 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
 import BottomActionLayout from '../../layout/BottomActionLayout'
 import OFButton from '../../../baseComponents/button/OFButton'
 import { useTranslation } from 'react-i18next'
 import CachedIcon from '@material-ui/icons/Cached'
-import {
-    fillDefaultVotingForm,
-    getVoteItems,
-    saveVoteItems,
-} from './votingFormActions'
 import SimpleDialog from '../../../baseComponents/layouts/SimpleDialog'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
-import { sleep } from '../../../../utils/sleep'
-import { getProject } from '../../core/actions/getProject'
 
-const VotingForm = () => {
+const VotingFormFooter = ({ onResetPress }) => {
     const { t } = useTranslation()
-    const dispatch = useDispatch()
     const [isDialogOpen, setDialogOpen] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
 
@@ -33,11 +24,7 @@ const VotingForm = () => {
                 onClose={() => setDialogOpen(false)}
                 onConfirm={() => {
                     setIsSaving(true)
-                    dispatch(fillDefaultVotingForm(t, true)).then(async () => {
-                        await dispatch(saveVoteItems())
-                        await sleep(1000) // delay on firestore...
-                        await dispatch(getProject())
-                        await dispatch(getVoteItems())
+                    onResetPress().then(() => {
                         setDialogOpen(false)
                         setIsSaving(false)
                     })
@@ -53,4 +40,4 @@ const VotingForm = () => {
     )
 }
 
-export default VotingForm
+export default VotingFormFooter

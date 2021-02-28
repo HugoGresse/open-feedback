@@ -85,12 +85,11 @@ const VoteItem = ({
                     }
                     autoFocus={!item.name}
                     onChange={(event) => onChange(event.target.value)}
-                    onFocus={({ target }) => {
+                    onFocus={() => {
                         onFocus && onFocus(item)
                         if (focusedLangIndex >= 0) {
                             setFocusLangIndex(-1)
                         }
-                        target.setSelectionRange(0, target.value.length)
                     }}
                     onKeyPress={(ev) => {
                         if (ev.key === 'Enter') {
@@ -119,10 +118,9 @@ const VoteItem = ({
                         onChange={(event) =>
                             onLanguagesChange(langTag, event.target.value)
                         }
-                        onFocus={({ target }) => {
+                        onFocus={() => {
                             onFocus && onFocus(item)
                             setFocusLangIndex(index)
-                            target.setSelectionRange(0, target.value.length)
                         }}
                         onKeyPress={(ev) => {
                             if (ev.key === 'Enter') {
