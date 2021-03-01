@@ -14,7 +14,7 @@ import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
 import { sleep } from '../../../../utils/sleep'
 import { getProject } from '../../core/actions/getProject'
 
-const VotingForm = () => {
+const VotingFormFooter = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const [isDialogOpen, setDialogOpen] = useState(false)
@@ -53,4 +53,4 @@ const VotingForm = () => {
     )
 }
 
-export default VotingForm
+export default VotingFormFooter

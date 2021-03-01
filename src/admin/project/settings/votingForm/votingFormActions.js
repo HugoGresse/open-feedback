@@ -24,14 +24,28 @@ import { newId } from '../../../../utils/stringUtils'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../../../core/contants'
 import { filterMap } from '../../../../utils/mapUtils'
 import { addNotification } from '../../../notification/notifcationActions'
+import {
+    getSelectedOrganizationIdSelector,
+    getSelectedOrganizationSelector,
+} from '../../../organization/core/organizationSelectors'
 
-export const getVoteItems = () => (dispatch, getState) =>
+export const getVoteItems = () => (dispatch, getState) => {
+    const state = getState()
+
+    const selectedProjectId = getSelectedProjectIdSelector(state)
+    const selectedOrganizationId = getSelectedOrganizationIdSelector(state)
+
+    let voteItems = selectedProjectId
+        ? getSelectedProjectSelector(state).voteItems
+        : selectedOrganizationId
+        ? getSelectedOrganizationSelector(state).voteItems
+        : []
+
     dispatch({
         type: GET_VOTEITEMS_SUCCESS,
-        payload: getSelectedProjectSelector(getState())
-            ? getSelectedProjectSelector(getState()).voteItems
-            : [],
+        payload: voteItems,
     })
+}
 
 export const onVoteItemChange = (voteItem) => (dispatch, getState) => {
     const savedVoteItem = getVoteItemsSelector(getState()).filter(
@@ -102,6 +116,10 @@ export const saveVoteItems = (hideNotification) => (dispatch, getState) => {
     const isSaving = isSavingVotingFormSelector(state)
     const voteItems = getVoteItemsSelector(state)
     const selectedProjectId = getSelectedProjectIdSelector(state)
+    const selectedOrganizationId = getSelectedOrganizationIdSelector(state)
+
+    const collectionName = selectedProjectId ? 'projects' : 'organizations'
+    const documentId = selectedProjectId || selectedOrganizationId
 
     if (isSaving) {
         return
@@ -136,8 +154,8 @@ export const saveVoteItems = (hideNotification) => (dispatch, getState) => {
     })
 
     return fireStoreMainInstance
-        .collection('projects')
-        .doc(selectedProjectId)
+        .collection(collectionName)
+        .doc(documentId)
         .set(
             {
                 voteItems: cleanedVoteItems,

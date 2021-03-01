@@ -27,7 +27,7 @@ import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
 import { useHotkeys } from 'react-hotkeys-hook'
 import OFButton from '../../../baseComponents/button/OFButton'
 
-const VoteItemList = ({ languages }) => {
+const VoteItemList = ({ languages, selectedProjectOrOrganizationId }) => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const voteItems = useSelector(getSortedVoteItemsSelector)
@@ -45,7 +45,7 @@ const VoteItemList = ({ languages }) => {
             setTypeChangedDialog(true)
             return
         }
-        dispatch(saveVoteItems())
+        dispatch(saveVoteItems(selectedProjectOrOrganizationId))
         setFocusId()
     }
 

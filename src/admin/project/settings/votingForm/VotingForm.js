@@ -5,11 +5,15 @@ import { getVoteItems } from './votingFormActions'
 import OFPaper from '../../../baseComponents/OFPaper'
 import VotingFormFooter from './VotingFormFooter'
 import { VotingFormTranslationTip } from './VotingFormTranslationTip'
-import { getLanguagesSelector } from '../../core/projectSelectors'
+import {
+    getLanguagesSelector,
+    getSelectedProjectIdSelector,
+} from '../../core/projectSelectors'
 
 const VotingForm = () => {
     const dispatch = useDispatch()
     const languages = useSelector(getLanguagesSelector)
+    const selectedProjectId = useSelector(getSelectedProjectIdSelector)
 
     useEffect(() => {
         dispatch(getVoteItems())
@@ -21,7 +25,7 @@ const VotingForm = () => {
             <OFPaper>
                 <VoteItemList languages={languages} />
             </OFPaper>
-            <VotingFormFooter />
+            <VotingFormFooter selectedProjectId={selectedProjectId} />
         </>
     )
 }
