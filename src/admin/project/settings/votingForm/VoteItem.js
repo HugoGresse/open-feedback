@@ -85,7 +85,7 @@ const VoteItem = ({
                     }
                     autoFocus={!item.name}
                     onChange={(event) => onChange(event.target.value)}
-                    onFocus={({ target }) => {
+                    onFocus={() => {
                         onFocus && onFocus(item)
                         if (focusedLangIndex >= 0) {
                             setFocusLangIndex(-1)
@@ -118,7 +118,7 @@ const VoteItem = ({
                         onChange={(event) =>
                             onLanguagesChange(langTag, event.target.value)
                         }
-                        onFocus={({ target }) => {
+                        onFocus={() => {
                             onFocus && onFocus(item)
                             setFocusLangIndex(index)
                         }}
