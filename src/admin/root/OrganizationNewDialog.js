@@ -12,6 +12,12 @@ import { useDispatch } from 'react-redux'
 import { newOrganization } from '../organization/core/actions/newOrganization'
 import { redirectToOrganization } from '../organization/utils/redirectToOrganization'
 import { useHistory } from 'react-router-dom'
+import {
+    fillDefaultVotingForm,
+    saveVoteItems,
+} from '../project/settings/votingForm/votingFormActions'
+import { sleep } from '../../utils/sleep'
+import { selectOrganization } from '../organization/core/actions/selectUnselectActions'
 
 export const OrganisationNewDialog = ({ onClose, open }) => {
     const dispatch = useDispatch()
@@ -36,8 +42,12 @@ export const OrganisationNewDialog = ({ onClose, open }) => {
                 })}
                 onSubmit={(values) => {
                     return dispatch(newOrganization(values.name.trim())).then(
-                        (organizationId) => {
+                        async (organizationId) => {
                             if (organizationId) {
+                                dispatch(selectOrganization(organizationId))
+                                await dispatch(fillDefaultVotingForm(t))
+                                await dispatch(saveVoteItems(true))
+                                await sleep(1000)
                                 redirectToOrganization(organizationId, history)
                             }
                             onClose()
