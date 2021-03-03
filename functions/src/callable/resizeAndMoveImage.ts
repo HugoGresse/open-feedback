@@ -9,14 +9,22 @@ import imageminPngquant from 'imagemin-pngquant'
 import imageminJpegtran from 'imagemin-jpegtran'
 import { HttpsError } from 'firebase-functions/lib/providers/https'
 import { Bucket, File } from '@google-cloud/storage'
+import { checkWriteToOrganizationAllowed } from '../helpers/checkWriteToOrganizationAllowed'
 
 /**
- * Upon calling this function with a given file path on GCP Storage, it will resize and move the image to project dir
- * while ensuring permission is ok, resize the image, minifing/compressing the image, deleting original image.
+ * Upon calling this function with a given file path on GCP Storage, it will resize and move the image to
+ * project/organization dir while ensuring permission is ok, resize the image, minifing/compressing the image, deleting
+ * original image.
  */
 export const resizeAndMoveImage = functions.https.onCall(
     async (data, context) => {
-        await checkWriteToProjectAllowed(context, data.projectId)
+        console.log(data)
+        if (data.projectId) {
+            await checkWriteToProjectAllowed(context, data.projectId)
+        } else {
+            await checkWriteToOrganizationAllowed(context, data.organizationId)
+        }
+        const docId: string = data.projectId || data.organizationId
 
         const tempStoragePath = data.storageFullPath
         if (!tempStoragePath || tempStoragePath.length <= 0) {
@@ -40,7 +48,7 @@ export const resizeAndMoveImage = functions.https.onCall(
             bucket,
             file,
             fileName,
-            data.projectId
+            docId
         )
         return encodeURI(await makePublicAndGetUrl(newFile))
     }
@@ -113,9 +121,9 @@ const moveToFinalDir = (
     bucket: Bucket,
     file: File,
     fileName: string,
-    projectId: string
+    docId: string
 ) => {
-    const newFile = bucket.file(`uploads/${projectId}/${fileName}`)
+    const newFile = bucket.file(`uploads/${docId}/${fileName}`)
     return file.move(newFile)
 }
 

@@ -3,6 +3,7 @@ import { CallableContext } from 'firebase-functions/lib/providers/https'
 import { assertUserAuthenticated } from './assertUserAuthenticated'
 import { getProject } from './getProject'
 import { getOrganization } from './getOrganization'
+import { isOrganizationWriteAllowed } from './isOrganizationWriteAllowed'
 
 export const checkWriteToProjectAllowed = async (
     context: CallableContext,
@@ -14,11 +15,7 @@ export const checkWriteToProjectAllowed = async (
     if (project.owner !== uid && !project.members.includes(uid)) {
         if (project.organizationId) {
             const organization = await getOrganization(project.organizationId)
-            if (
-                organization.ownerUserId === uid ||
-                organization.editorUserIds.includes(uid) ||
-                organization.adminUserIds.includes(uid)
-            ) {
+            if (isOrganizationWriteAllowed(uid, organization)) {
                 return
             }
         }
