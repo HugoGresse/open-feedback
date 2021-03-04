@@ -107,7 +107,8 @@
             "projectTypeRequired": "Vous devez choisir la façon dont vous souhaitez configurer l'évènement",
             "stepTitle": "Créer un nouvel évènement (étape 2/3)",
             "stepTitleDone": "Créer un nouvel évènement (étape 2/2)",
-            "title": "Comment voulez-vous charger vos données ?"
+            "title": "Comment voulez-vous charger vos données ?",
+            "useOrganizationData": "Utiliser les paramètres de l'organisation"
         },
         "step3": {
             "back": "Retour",

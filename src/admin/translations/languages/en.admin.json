@@ -107,7 +107,8 @@
             "projectTypeRequired": "You need to choose how you want to setup the event.",
             "stepTitle": "Create a new event (step 2/3)",
             "stepTitleDone": "Create a new event (step 2/2)",
-            "title": "How do you want to load your data?"
+            "title": "How do you want to load your data?",
+            "useOrganizationData": "Use organization settings"
         },
         "step3": {
             "back": "Back",

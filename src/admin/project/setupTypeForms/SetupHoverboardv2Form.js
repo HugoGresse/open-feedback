@@ -20,15 +20,17 @@ const SetupHoverboardv2Form = ({
         <Formik
             validationSchema={object().shape({
                 projectId: string().required(
-                    t('settingsSetup.projectIdRequired')
+                    t('settingsSetup.hoverboard.projectIdRequired')
                 ),
-                apiKey: string().required(t('settingsSetup.apiKeyRequired')),
+                apiKey: string().required(
+                    t('settingsSetup.hoverboard.apiKeyRequired')
+                ),
                 databaseURL: string()
-                    .url(t('settingsSetup.dbUrlValid'))
-                    .required(t('settingsSetup.dbUrlRequired')),
+                    .url(t('settingsSetup.hoverboard.dbUrlValid'))
+                    .required(t('settingsSetup.hoverboard.dbUrlRequired')),
             })}
             initialValues={initialValues}
-            onSubmit={values =>
+            onSubmit={(values) =>
                 onSubmit({
                     apiKey: values.apiKey,
                     projectId: values.projectId,
@@ -40,7 +42,7 @@ const SetupHoverboardv2Form = ({
                     {onFormChange && (
                         <FormikObserver
                             value={values}
-                            onChange={values => onFormChange(values)}
+                            onChange={(values) => onFormChange(values)}
                         />
                     )}
                     <OFFormControlInputFormiked

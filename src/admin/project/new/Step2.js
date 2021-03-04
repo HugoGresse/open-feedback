@@ -13,8 +13,17 @@ import {
 import Box from '@material-ui/core/Box'
 import { useTranslation } from 'react-i18next'
 import TranslatedTypography from '../../baseComponents/TranslatedTypography'
+import OFFormControl from '../../baseComponents/form/formControl/OFFormControl'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import { OFSwitch } from '../../baseComponents/form/switch/OFSwitch'
 
-const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
+const Step2 = ({
+    onCancel,
+    onBack,
+    onSubmit,
+    initialValues,
+    displayOrganizationSettings,
+}) => {
     const { t } = useTranslation()
 
     const isLastStep = (projectType) =>
@@ -28,7 +37,9 @@ const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
                 ),
             })}
             initialValues={initialValues}
-            onSubmit={(values) => onSubmit(values.projectType)}>
+            onSubmit={(values) =>
+                onSubmit(values.projectType, values.useOrganizationSettings)
+            }>
             {({ isSubmitting, values }) => (
                 <NewProjectLayout
                     stepTitle={t(
@@ -99,6 +110,22 @@ const Step2 = ({ onCancel, onBack, onSubmit, initialValues }) => {
                                 }
                             />
                         </RadioButtonGroup>
+
+                        {displayOrganizationSettings && (
+                            <OFFormControl fieldName="useOrganizationSettings">
+                                <FormControlLabel
+                                    label={t(
+                                        'newEvent.step2.useOrganizationData'
+                                    )}
+                                    control={
+                                        <Field
+                                            name="useOrganizationSettings"
+                                            component={OFSwitch}
+                                        />
+                                    }
+                                />
+                            </OFFormControl>
+                        )}
 
                         <Box justifyContent="space-between" display="flex">
                             <OFButton

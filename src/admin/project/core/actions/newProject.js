@@ -9,11 +9,14 @@ import { newRandomHexColor } from '../../../../utils/colorsUtils'
 import { addNotification } from '../../../notification/notifcationActions'
 import { trackNewProject } from '../../../utils/track'
 import { NO_ORGANIZATION_FAKE_ID } from '../../../organization/core/organizationConstants'
+import { getOrganization } from '../../../organization/core/actions/getOrganization'
 
-export const newProject = (organizationId, projectId, projectData) => (
-    dispatch,
-    getState
-) => {
+export const newProject = (
+    organizationId,
+    projectId,
+    projectData,
+    useOrganizationSettings = true
+) => async (dispatch, getState) => {
     dispatch({
         type: ADD_PROJECT_ONGOING,
     })
@@ -24,8 +27,20 @@ export const newProject = (organizationId, projectId, projectData) => (
     projectData.chipColors = [newRandomHexColor()]
     projectData.favicon = `${window.location.protocol}//${window.location.host}/favicon-32x32.png`
     projectData.logoSmall = `${window.location.protocol}//${window.location.host}/android-chrome-192x192.png`
-    if (organizationId !== NO_ORGANIZATION_FAKE_ID) {
-        projectData.organizationId = organizationId
+
+    if (organizationId !== NO_ORGANIZATION_FAKE_ID && useOrganizationSettings) {
+        const organization = await dispatch(getOrganization(organizationId))
+        if (organization) {
+            projectData.organizationId = organizationId
+            projectData.chipColors = organization.chipColors
+            projectData.favicon = organization.favicon
+            projectData.logoSmall = organization.logoSmall
+            projectData.logoSmall = organization.logoSmall
+            projectData.voteItems = organization.voteItems
+            projectData.languages = organization.languages
+            projectData.disableSoloTalkRedirect =
+                organization.disableSoloTalkRedirect
+        }
     }
 
     return fireStoreMainInstance

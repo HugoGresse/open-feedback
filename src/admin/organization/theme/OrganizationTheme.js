@@ -21,13 +21,10 @@ export const OrganizationTheme = () => {
     const { t } = useTranslation()
 
     const initialValues = {
-        logoUrl: organization.logoUrl || '',
-        faviconUrl: organization.faviconUrl || '',
+        logoSmall: organization.logoSmall || '',
+        favicon: organization.favicon || '',
         chipColors: organization.chipColors,
     }
-
-    // TODO :
-    // use theme/voting form on event creation (maybe a check box to use org settings)
 
     return (
         <Box padding={2} paddingTop={0}>
@@ -37,13 +34,13 @@ export const OrganizationTheme = () => {
                     scheduleLink: string().url(
                         t('settingsEvent.fieldScheduleNotValid')
                     ),
-                    logoUrl: string()
+                    logoSmall: string()
                         .matches(
                             rURLWithLocalhostSupported,
                             t('settingsEvent.fieldLogoUrlNotValid')
                         )
                         .required(t('settingsEvent.fieldLogoUrlRequired')),
-                    faviconUrl: string()
+                    favicon: string()
                         .matches(
                             rURLWithLocalhostSupported,
                             t('settingsEvent.fieldFaviconUrlNotValid')
@@ -58,7 +55,7 @@ export const OrganizationTheme = () => {
                             <Grid item xs={6} sm={4}>
                                 <SidePanelUploadLayout
                                     name={t('settingsEvent.fieldLogoUrl')}
-                                    fieldName="logoUrl"
+                                    fieldName="logoSmall"
                                     isSubmitting={isSubmitting}
                                     title={t('settingsEvent.fieldLogoUrl')}
                                     helpText={t('baseComponents.imageHelp')}
@@ -67,7 +64,7 @@ export const OrganizationTheme = () => {
                             <Grid item xs={6} sm={4}>
                                 <SidePanelUploadLayout
                                     name={t('settingsEvent.fieldFaviconUrl')}
-                                    fieldName="faviconUrl"
+                                    fieldName="favicon"
                                     isSubmitting={isSubmitting}
                                     title={t('settingsEvent.fieldFaviconUrl')}
                                     helpText={t('baseComponents.imageHelp')}

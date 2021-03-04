@@ -25,6 +25,7 @@ import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMat
 import { newProject } from '../core/actions/newProject'
 import { selectProject } from '../core/actions/selectUnselectProject'
 import { getProject } from '../core/actions/getProject'
+import { NO_ORGANIZATION_FAKE_ID } from '../../organization/core/organizationConstants'
 
 const useStyles = makeStyles({
     container: {
@@ -51,12 +52,17 @@ const NewProject = ({ organizationId, onCancel }) => {
     const [projectName, setProjectName] = useState('')
     const [projectId, setProjectId] = useState(projectIdDefaultValue)
     const [projectType, setProjectType] = useState(PROJECT_TYPE_OPENFEEDBACK)
+    const [useOrganizationSettings, setUseOrganizationSettings] = useState(
+        organizationId !== NO_ORGANIZATION_FAKE_ID
+    )
     const [step3Data, setStep3Data] = useState()
     const [isCreatingEvent, setCreatingEvent] = useState(false)
 
-    const createEvent = (projectId, data) => {
+    const createEvent = (projectId, useOrganizationSettings, data) => {
         setCreatingEvent(true)
-        return dispatch(newProject(organizationId, projectId, data))
+        return dispatch(
+            newProject(organizationId, projectId, data, useOrganizationSettings)
+        )
             .then((projectId) => {
                 if (!projectId) {
                     return Promise.reject('Event not created')
@@ -67,10 +73,12 @@ const NewProject = ({ organizationId, onCancel }) => {
                 ])
             })
             .then(async () => {
-                await dispatch(fillDefaultVotingForm(t))
-                await dispatch(saveVoteItems(true))
-                // The votes was saved in db but the query to retrieve does not returns them if queried directly after (sometimes)
-                await sleep(1000)
+                if (!useOrganizationSettings) {
+                    await dispatch(fillDefaultVotingForm(t))
+                    await dispatch(saveVoteItems(true))
+                    // The votes was saved in db but the query to retrieve does not returns them if queried directly after (sometimes)
+                    await sleep(1000)
+                }
                 await dispatch(getProject())
                 await dispatch(getVoteItems())
 
@@ -104,20 +112,31 @@ const NewProject = ({ organizationId, onCancel }) => {
                     <Step2
                         onCancel={onCancel}
                         onBack={() => setCurrentStep(1)}
-                        onSubmit={(newProjectType) => {
+                        onSubmit={(newProjectType, useOrganizationSettings) => {
                             if (newProjectType === PROJECT_TYPE_OPENFEEDBACK) {
-                                return createEvent(projectId, {
-                                    name: projectName,
-                                    setupType: newProjectType,
-                                })
+                                return createEvent(
+                                    projectId,
+                                    useOrganizationSettings,
+                                    {
+                                        name: projectName,
+                                        setupType: newProjectType,
+                                    }
+                                )
                             }
                             setProjectType(newProjectType)
+                            setUseOrganizationSettings(useOrganizationSettings)
                             if (projectType !== newProjectType) {
                                 setStep3Data()
                             }
                             setCurrentStep(3)
                         }}
-                        initialValues={{ projectType: projectType }}
+                        displayOrganizationSettings={
+                            organizationId !== NO_ORGANIZATION_FAKE_ID
+                        }
+                        initialValues={{
+                            projectType: projectType,
+                            useOrganizationSettings: useOrganizationSettings,
+                        }}
                     />
                 )}
 
@@ -131,7 +150,7 @@ const NewProject = ({ organizationId, onCancel }) => {
                         initialValues={step3Data}
                         projectType={projectType}
                         onSubmit={(config) =>
-                            createEvent(projectId, {
+                            createEvent(projectId, useOrganizationSettings, {
                                 name: projectName,
                                 setupType: projectType,
                                 config: config,
