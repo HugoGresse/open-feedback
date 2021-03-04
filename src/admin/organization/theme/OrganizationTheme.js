@@ -9,24 +9,29 @@ import { object, string } from 'yup'
 import { rURLWithLocalhostSupported } from '../../project/utils/rURLWithLocalhostSupported'
 import { useTranslation } from 'react-i18next'
 import { getSelectedOrganizationSelector } from '../core/organizationSelectors'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import OFButton from '../../baseComponents/button/OFButton'
+import Divider from '@material-ui/core/Divider'
+import { editOrganization } from '../core/actions/editOrganization'
+import Box from '@material-ui/core/Box'
 
 export const OrganizationTheme = () => {
+    const dispatch = useDispatch()
+    const organization = useSelector(getSelectedOrganizationSelector)
     const { t } = useTranslation()
 
-    const organization = useSelector(getSelectedOrganizationSelector)
-
     const initialValues = {
-        logoUrl: organization.logoSmall || '',
-        faviconUrl: organization.favicon || '',
+        logoUrl: organization.logoUrl || '',
+        faviconUrl: organization.faviconUrl || '',
         chipColors: organization.chipColors,
     }
 
     // TODO :
-    // editOrg save fav/logo/chips
+    // Add loader on org creation
+    // use theme/voting form on event creation (maybe a check box to use org settings)
 
     return (
-        <>
+        <Box padding={2} paddingTop={0}>
             <OrgDataInfo />
             <Formik
                 validationSchema={object().shape({
@@ -47,7 +52,7 @@ export const OrganizationTheme = () => {
                         .required(t('settingsEvent.fieldFaviconUrlRequired')),
                 })}
                 initialValues={initialValues}
-                onSubmit={(values) => console.log(values)}>
+                onSubmit={(values) => dispatch(editOrganization(values))}>
                 {({ isSubmitting }) => (
                     <Form method="POST">
                         <Grid container spacing={2}>
@@ -71,19 +76,30 @@ export const OrganizationTheme = () => {
                                     finalImageHeight={200}
                                 />
                             </Grid>
+                            <Grid item xs={6} sm={4}>
+                                <OFFormControl
+                                    name={t('settingsEvent.fieldChipColors')}
+                                    fieldName="chipColors">
+                                    <Field
+                                        name="chipColors"
+                                        component={ChipColorsEditor}
+                                    />
+                                </OFFormControl>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Divider />
+                                <br />
+                                <OFButton
+                                    disabled={isSubmitting}
+                                    loading={isSubmitting}
+                                    type="submit">
+                                    {t('common.save')}
+                                </OFButton>
+                            </Grid>
                         </Grid>
-
-                        <OFFormControl
-                            name={t('settingsEvent.fieldChipColors')}
-                            fieldName="chipColors">
-                            <Field
-                                name="chipColors"
-                                component={ChipColorsEditor}
-                            />
-                        </OFFormControl>
                     </Form>
                 )}
             </Formik>
-        </>
+        </Box>
     )
 }
