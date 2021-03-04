@@ -27,7 +27,6 @@ export const OrganizationTheme = () => {
     }
 
     // TODO :
-    // Add loader on org creation
     // use theme/voting form on event creation (maybe a check box to use org settings)
 
     return (
