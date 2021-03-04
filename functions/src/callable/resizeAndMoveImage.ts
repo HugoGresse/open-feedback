@@ -18,7 +18,6 @@ import { checkWriteToOrganizationAllowed } from '../helpers/checkWriteToOrganiza
  */
 export const resizeAndMoveImage = functions.https.onCall(
     async (data, context) => {
-        console.log(data)
         if (data.projectId) {
             await checkWriteToProjectAllowed(context, data.projectId)
         } else {
