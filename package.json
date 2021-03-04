@@ -29,7 +29,7 @@
     "devDependencies": {
         "@firebase/testing": "^0.20.11",
         "@storybook/addon-docs": "^6.1.21",
-        "@storybook/addons": "^6.1.20",
+        "@storybook/addons": "^6.1.21",
         "@storybook/preset-create-react-app": "^3.1.6",
         "@storybook/react": "6.1.21",
         "cypress": "^6.5.0",
