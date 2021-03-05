@@ -31,9 +31,6 @@ export const OrganizationTheme = () => {
             <OrgDataInfo />
             <Formik
                 validationSchema={object().shape({
-                    scheduleLink: string().url(
-                        t('settingsEvent.fieldScheduleNotValid')
-                    ),
                     logoSmall: string()
                         .matches(
                             rURLWithLocalhostSupported,

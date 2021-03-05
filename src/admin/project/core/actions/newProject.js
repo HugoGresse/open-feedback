@@ -35,7 +35,6 @@ export const newProject = (
             projectData.chipColors = organization.chipColors
             projectData.favicon = organization.favicon
             projectData.logoSmall = organization.logoSmall
-            projectData.logoSmall = organization.logoSmall
             projectData.voteItems = organization.voteItems
             projectData.languages = organization.languages
             projectData.disableSoloTalkRedirect =

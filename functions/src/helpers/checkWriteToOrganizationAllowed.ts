@@ -17,6 +17,6 @@ export const checkWriteToOrganizationAllowed = async (
 
     throw new functions.https.HttpsError(
         'permission-denied',
-        'Only the organizations members with write rights can edit upload an image.'
+        'Only the organizations members with write rights can edit an organization.'
     )
 }
