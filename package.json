@@ -24,7 +24,8 @@
         "cy:start:ci": "npx firebase emulators:start --import=./cypress/fixtures/firebase-emulators-data --only \"firestore,auth,functions\"",
         "storybook": "start-storybook -p 9009 -s public",
         "build-storybook": "build-storybook -s public",
-        "lint:i18n": "eslint src/**/languages/*.json"
+        "lint:i18n": "eslint src/**/languages/*.json",
+        "prepare": "husky install"
     },
     "devDependencies": {
         "@firebase/testing": "^0.20.11",
