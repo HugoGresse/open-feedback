@@ -56,10 +56,6 @@ const NewProject = ({ organizationId, onCancel }) => {
 
     const createEvent = (projectId, data) => {
         setCreatingEvent(true)
-        console.log('toto')
-        console.log('titi', () => {
-            console.log('toto')
-        })
         return dispatch(newProject(organizationId, projectId, data))
             .then((projectId) => {
                 if (!projectId) {
