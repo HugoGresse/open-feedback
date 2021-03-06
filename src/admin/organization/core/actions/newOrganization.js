@@ -3,6 +3,7 @@ import { addNotification } from '../../../notification/notifcationActions'
 import { trackNewOrganization } from '../../../utils/track'
 import { getUserSelector } from '../../../auth/authSelectors'
 import { getOrganizations } from './getOrganizations'
+import { newRandomHexColor } from '../../../../utils/colorsUtils'
 
 export const newOrganization = (name) => async (dispatch, getState) => {
     const userId = getUserSelector(getState()).uid
@@ -13,6 +14,9 @@ export const newOrganization = (name) => async (dispatch, getState) => {
         adminUserIds: [userId],
         editorUserIds: [userId],
         viewerUserIds: [userId],
+        favicon: `${window.location.protocol}//${window.location.host}/favicon-32x32.png`,
+        logoSmall: `${window.location.protocol}//${window.location.host}/android-chrome-192x192.png`,
+        chipColors: [newRandomHexColor()],
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
     }

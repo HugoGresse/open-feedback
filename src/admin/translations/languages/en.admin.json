@@ -107,7 +107,8 @@
             "projectTypeRequired": "You need to choose how you want to setup the event.",
             "stepTitle": "Create a new event (step 2/3)",
             "stepTitleDone": "Create a new event (step 2/2)",
-            "title": "How do you want to load your data?"
+            "title": "How do you want to load your data?",
+            "useOrganizationData": "Use organization settings"
         },
         "step3": {
             "back": "Back",
@@ -152,7 +153,8 @@
             "editor": "Same as viewer + edit all events and create new one. Can delete owned events within an organization.",
             "admin": "Same as editor + manage organization settings: members, roles, voting form, themes.",
             "owner": "Same as admin + manage owner role (only one owner) and delete the organization."
-        }
+        },
+        "infoData": "Organization settings, voting form & theme are applied on new event creation only, they do not affect existing events."
     },
     "rooting": {
         "dashboard": "Dashboard",

@@ -21,6 +21,7 @@ import { redirectToOrganization } from '../organization/utils/redirectToOrganiza
 
 const useStyles = makeStyles((theme) => ({
     loaderContainer: {
+        margin: theme.spacing(2),
         padding: theme.spacing(2, 2),
     },
     newOrg: {

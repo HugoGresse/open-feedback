@@ -107,7 +107,8 @@
             "projectTypeRequired": "Vous devez choisir la façon dont vous souhaitez configurer l'évènement",
             "stepTitle": "Créer un nouvel évènement (étape 2/3)",
             "stepTitleDone": "Créer un nouvel évènement (étape 2/2)",
-            "title": "Comment voulez-vous charger vos données ?"
+            "title": "Comment voulez-vous charger vos données ?",
+            "useOrganizationData": "Utiliser les paramètres de l'organisation"
         },
         "step3": {
             "back": "Retour",
@@ -152,7 +153,8 @@
             "editor": "Comme lecteur + modifier tous les évènements et en créer. L'éditeur peut également supprimer les évènements de l'organisation dont il est propriétaire.",
             "admin": "Comme éditeur + gérer l'organisation: membres, rôles, bulletin de vote et thème.",
             "owner": "Comme l'admin +  gérer le role de propriétaire (un seul propriétaire) et supprimer l'organisation."
-        }
+        },
+        "infoData": "Les paramètres de l'organisation, du bulletin de vote et du thème sont appliqués lors de la création d'évènement, ils n'affectent pas les évènements existants."
     },
     "rooting": {
         "dashboard": "Statistiques",

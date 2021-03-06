@@ -6,8 +6,8 @@ import { useDispatch } from 'react-redux'
 import { getOrganizations } from './core/actions/getOrganizations'
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom'
 import { OrganizationUsers } from './users/OrganizationUsers'
-import { OrganizationTheme } from './OrganizationTheme'
-import { OrganizationVotingForm } from './OrganizationVotingForm'
+import { OrganizationTheme } from './theme/OrganizationTheme'
+import { OrganizationVotingForm } from './votingForm/OrganizationVotingForm'
 
 const createOrganizationTheme = (parentTheme) =>
     createMuiTheme({

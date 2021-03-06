@@ -22,18 +22,16 @@ import OFListHeader from '../../../baseComponents/layouts/OFListHeader'
 import OFListItem from '../../../baseComponents/layouts/OFListItem'
 import { useTranslation } from 'react-i18next'
 import { VOTE_TYPE_BOOLEAN } from '../../../../core/contants'
-import { getLanguagesSelector } from '../../core/projectSelectors'
 import SimpleDialog from '../../../baseComponents/layouts/SimpleDialog'
 import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
 import { useHotkeys } from 'react-hotkeys-hook'
 import OFButton from '../../../baseComponents/button/OFButton'
 
-const VoteItemList = () => {
+const VoteItemList = ({ languages, selectedProjectOrOrganizationId }) => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const voteItems = useSelector(getSortedVoteItemsSelector)
     const isSaving = useSelector(isSavingVotingFormSelector)
-    const languages = useSelector(getLanguagesSelector)
     const shouldConfirmSave = useSelector(shouldConfirmSaveSelector)
     const [focusId, setFocusId] = useState()
     const [isTypeChangeDialogOpen, setTypeChangedDialog] = useState(false)
@@ -47,7 +45,7 @@ const VoteItemList = () => {
             setTypeChangedDialog(true)
             return
         }
-        dispatch(saveVoteItems())
+        dispatch(saveVoteItems(selectedProjectOrOrganizationId))
         setFocusId()
     }
 

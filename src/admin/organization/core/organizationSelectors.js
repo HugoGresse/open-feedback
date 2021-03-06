@@ -19,9 +19,12 @@ export const getOrganizationsSelector = (state) =>
 
 export const getSelectedOrganizationIdSelector = (state) =>
     getOrganizationState(state).selectedOrganizationId
-
 export const getOrganizationOwnerIdSelector = (state) =>
     getSelectedOrganizationSelector(state).ownerUserId
+export const getOrganizationLanguagesSelector = (state) =>
+    getSelectedOrganizationSelector(state).languages || []
+export const disableSoloTalkRedirectSelector = (state) =>
+    getSelectedOrganizationSelector(state).disableSoloTalkRedirect || false
 
 // Memoized selectors
 

@@ -12,13 +12,15 @@ export const getOrganization = (organizationId) => (dispatch) => {
         .get()
         .then((docSnapshot) => {
             if (docSnapshot.exists) {
+                const data = {
+                    id: organizationId,
+                    ...docSnapshot.data(),
+                }
                 dispatch({
                     type: GET_ORGANIZATION_SUCCESS,
-                    payload: {
-                        id: organizationId,
-                        ...docSnapshot.data(),
-                    },
+                    payload: data,
                 })
+                return data
             } else {
                 dispatch(
                     addNotification({

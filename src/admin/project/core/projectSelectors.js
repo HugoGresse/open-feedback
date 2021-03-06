@@ -81,6 +81,16 @@ export const getSortedProjectsByOrganizationIdsSelector = createSelector(
     getOrganizationsSelector,
     (projects, organizations) => {
         const orgsWithProjects = projects
+            .sort((a, b) => {
+                // Re-do the sort to avoid weird flicker due to object key not keeping it's order
+                if (a.createdAt < b.createdAt) {
+                    return 1
+                }
+                if (a.createdAt > b.createdAt) {
+                    return -1
+                }
+                return 0
+            })
             .sort((a) => {
                 if (!a.organizationId) {
                     return -1

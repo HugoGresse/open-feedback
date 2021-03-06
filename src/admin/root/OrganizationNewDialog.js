@@ -6,12 +6,18 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
-import Button from '@material-ui/core/Button'
 import { object, string } from 'yup'
 import { useDispatch } from 'react-redux'
 import { newOrganization } from '../organization/core/actions/newOrganization'
 import { redirectToOrganization } from '../organization/utils/redirectToOrganization'
 import { useHistory } from 'react-router-dom'
+import {
+    fillDefaultVotingForm,
+    saveVoteItems,
+} from '../project/settings/votingForm/votingFormActions'
+import { sleep } from '../../utils/sleep'
+import { selectOrganization } from '../organization/core/actions/selectUnselectActions'
+import OFButton from '../baseComponents/button/OFButton'
 
 export const OrganisationNewDialog = ({ onClose, open }) => {
     const dispatch = useDispatch()
@@ -36,8 +42,12 @@ export const OrganisationNewDialog = ({ onClose, open }) => {
                 })}
                 onSubmit={(values) => {
                     return dispatch(newOrganization(values.name.trim())).then(
-                        (organizationId) => {
+                        async (organizationId) => {
                             if (organizationId) {
+                                dispatch(selectOrganization(organizationId))
+                                await dispatch(fillDefaultVotingForm(t))
+                                await dispatch(saveVoteItems(true))
+                                await sleep(1000)
                                 redirectToOrganization(organizationId, history)
                             }
                             onClose()
@@ -59,19 +69,21 @@ export const OrganisationNewDialog = ({ onClose, open }) => {
                             <br />
                         </DialogContent>
                         <DialogActions>
-                            <Button
+                            <OFButton
                                 onClick={onClose}
                                 disabled={isSubmitting}
+                                style={{ design: 'text' }}
                                 color="secondary">
                                 {t('common.cancel')}
-                            </Button>
-                            <Button
+                            </OFButton>
+                            <OFButton
                                 color="secondary"
                                 type="submit"
                                 disabled={isSubmitting}
+                                loading={isSubmitting}
                                 variant="contained">
                                 {t('organization.create')}
-                            </Button>
+                            </OFButton>
                         </DialogActions>
                     </Form>
                 )}
