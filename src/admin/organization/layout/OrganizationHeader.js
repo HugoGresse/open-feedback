@@ -2,17 +2,15 @@ import React from 'react'
 import OFButton from '../../baseComponents/button/OFButton'
 import { useTranslation } from 'react-i18next'
 import Typography from '@material-ui/core/Typography'
-import { Link as RouterLink } from 'react-router-dom'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
-export const OrganizationHeader = ({ organizationName }) => {
+export const OrganizationHeader = ({ organizationName, onClose }) => {
     const { t } = useTranslation()
 
     return (
         <>
             <OFButton
-                to="/admin"
-                component={RouterLink}
+                onClick={onClose}
                 startIcon={<ArrowBackIcon />}
                 style={{
                     design: 'text',

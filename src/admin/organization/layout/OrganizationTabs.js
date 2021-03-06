@@ -22,13 +22,12 @@ const OFTabs = withStyles((theme) => ({
     },
 }))(Tabs)
 
-export const OrganizationTabs = () => {
+export const OrganizationTabs = ({ baseUrl }) => {
     const { t } = useTranslation()
-    const { url } = useRouteMatch()
 
-    const userPath = `${url}${ORGANIZATION_ROUTES.users.url}`
-    const votingFormPath = `${url}${ORGANIZATION_ROUTES.votingForm.url}`
-    const themePath = `${url}${ORGANIZATION_ROUTES.theme.url}`
+    const userPath = `${baseUrl}${ORGANIZATION_ROUTES.users.url}`
+    const votingFormPath = `${baseUrl}${ORGANIZATION_ROUTES.votingForm.url}`
+    const themePath = `${baseUrl}${ORGANIZATION_ROUTES.theme.url}`
 
     const matchUsers = useRouteMatch({
         path: userPath,

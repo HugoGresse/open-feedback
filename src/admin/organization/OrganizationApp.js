@@ -4,7 +4,7 @@ import { OrganizationLayout } from './layout/OrganizationLayout'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { getOrganizations } from './core/actions/getOrganizations'
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import { OrganizationUsers } from './users/OrganizationUsers'
 import { OrganizationTheme } from './theme/OrganizationTheme'
 import { OrganizationVotingForm } from './votingForm/OrganizationVotingForm'
@@ -19,9 +19,9 @@ const createOrganizationTheme = (parentTheme) =>
         },
     })
 
-export const OrganizationApp = ({ match }) => {
+export const OrganizationApp = ({ match, onClose }) => {
     const dispatch = useDispatch()
-    const { path } = useRouteMatch()
+    const { path, url } = match
 
     useEffect(() => {
         dispatch(getOrganizations())
@@ -30,7 +30,7 @@ export const OrganizationApp = ({ match }) => {
     return (
         <ThemeProvider theme={createOrganizationTheme}>
             <Organization match={match} key={match.params.organizationId}>
-                <OrganizationLayout>
+                <OrganizationLayout onClose={onClose} baseUrl={url}>
                     <Switch>
                         <Route
                             exacte

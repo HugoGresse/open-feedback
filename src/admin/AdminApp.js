@@ -14,8 +14,8 @@ import {
 import ProjectApp from './project/ProjectApp'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { useSmallchat } from './project/utils/smallchat'
-import { OrganizationApp } from './organization/OrganizationApp'
 import { COLORS } from '../constants/colors'
+import { SlidingOrganizationApp } from './organization/SlidingOrganizationApp'
 
 const innerTheme = responsiveFontSizes(
     createMuiTheme({
@@ -54,7 +54,7 @@ const AdminApp = () => {
         setFavicon('/favicon-root.ico')
     }, [])
 
-    const { projectId, organizationId } = useParams()
+    const { projectId } = useParams()
 
     return (
         <I18nextProvider i18n={i18n}>
@@ -65,8 +65,6 @@ const AdminApp = () => {
                 <Login>
                     <MuiThemeProvider theme={innerTheme}>
                         <Switch>
-                            <Route exact path="/admin/" component={AdminRoot} />
-
                             <Redirect exact from="/admin/event/" to="/admin/" />
 
                             <Route
@@ -78,22 +76,16 @@ const AdminApp = () => {
                                     />
                                 )}
                             />
-                            <Route
-                                path="/admin/org/:organizationId"
-                                render={(props) => (
-                                    <OrganizationApp
-                                        match={props.match}
-                                        key={organizationId}
-                                    />
-                                )}
-                            />
-
                             {/* v0.23 migration when organization is introduced*/}
                             <Redirect
+                                exact
                                 from="/admin/:projectId"
                                 to="/admin/event/:projectId"
                             />
+
+                            <Route path="/admin/" component={AdminRoot} />
                         </Switch>
+                        <SlidingOrganizationApp />
 
                         <Notifications />
                     </MuiThemeProvider>
