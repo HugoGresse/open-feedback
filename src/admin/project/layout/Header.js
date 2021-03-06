@@ -32,6 +32,7 @@ import Translate from './Translate'
 import Help from './Help'
 import { getProjects } from '../core/actions/getProjects'
 import { getOrganizations } from '../../organization/core/actions/getOrganizations'
+import { getSelectedOrganizationSelector } from '../../organization/core/organizationSelectors'
 
 const innerTheme = createMuiTheme({
     palette: {
@@ -87,6 +88,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
     const selectedProjectId = useSelector(getSelectedProjectIdSelector)
     const selectedProject = useSelector(getSelectedProjectSelector)
     const projects = useSelector(getSortedProjectsSelector)
+    const selectedOrganization = useSelector(getSelectedOrganizationSelector)
     const { t } = useTranslation()
     const history = useHistory()
 
@@ -158,6 +160,8 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                                         )
                                                     }>
                                                     {selectedProject.name}
+                                                    {selectedOrganization &&
+                                                        ` (${selectedOrganization.name})`}
                                                     <ArrowDownIcon
                                                         className={
                                                             classes.selectIcon

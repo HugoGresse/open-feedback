@@ -26,7 +26,6 @@ const ProjectUsers = () => {
     const usersDetails = useSelector(getFilteredUsersWithoutCurrentOneSelector)
 
     useEffect(() => {
-        console.log('getUserDetails', organizationUserIds)
         organizationUserIds.forEach((userId) => {
             dispatch(getUserDetails(userId))
         })

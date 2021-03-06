@@ -6,6 +6,9 @@ import {
 import { GET_PROJECT_ERROR, GET_PROJECT_SUCCESS } from '../projectActionTypes'
 import { addNotification } from '../../../notification/notifcationActions'
 import { initProjectApiIfReady } from './initProjectApi'
+import { getSelectedOrganizationSelector } from '../../../organization/core/organizationSelectors'
+import { getOrganization } from '../../../organization/core/actions/getOrganization'
+import { selectOrganization } from '../../../organization/core/actions/selectUnselectActions'
 
 export const getProject = (selectedProjectId = null, initAPI) => (
     dispatch,
@@ -17,12 +20,21 @@ export const getProject = (selectedProjectId = null, initAPI) => (
         .get()
         .then((doc) => {
             if (doc.exists) {
+                const project = {
+                    id: doc.id,
+                    ...doc.data(),
+                }
+                if (
+                    project.organizationId &&
+                    !getSelectedOrganizationSelector(getState())
+                ) {
+                    dispatch(selectOrganization(project.organizationId))
+                    dispatch(getOrganization(project.organizationId))
+                }
+
                 return dispatch({
                     type: GET_PROJECT_SUCCESS,
-                    payload: {
-                        id: doc.id,
-                        ...doc.data(),
-                    },
+                    payload: project,
                 })
             } else {
                 dispatch({
@@ -33,10 +45,11 @@ export const getProject = (selectedProjectId = null, initAPI) => (
         })
         .then(() => {
             if (initAPI) {
+                const state = getState()
                 dispatch(
                     initProjectApiIfReady(
-                        getSelectedProjectIdSelector(getState()),
-                        getSelectedProjectSelector(getState())
+                        getSelectedProjectIdSelector(state),
+                        getSelectedProjectSelector(state)
                     )
                 )
             }
