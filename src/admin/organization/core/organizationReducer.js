@@ -42,16 +42,19 @@ export const adminOrganizationReducer = (
                 organizationsLoadError: payload,
             }
         case GET_ORGANIZATION_SUCCESS: {
-            const organizations = state.data.organizations.map(
-                (organization) => {
-                    if (organization.id === state.selectedOrganizationId) {
+            let organizations = []
+            if (state.data.organizations.length > 0) {
+                organizations = state.data.organizations.map((organization) => {
+                    if (organization.id === payload.id) {
                         return {
                             ...payload,
                         }
                     }
                     return organization
-                }
-            )
+                })
+            } else {
+                organizations.push(payload)
+            }
 
             return {
                 ...state,

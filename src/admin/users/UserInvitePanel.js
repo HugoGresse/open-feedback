@@ -1,6 +1,5 @@
 import SidePanelLayout from '../baseComponents/layouts/sidepanel/SidePanelLayout'
 import { Field, Form, Formik } from 'formik'
-import OFFormControlInputFormiked from '../baseComponents/form/formControl/OFFormControlInputFormiked'
 import OFButton from '../baseComponents/button/OFButton'
 import React from 'react'
 import { object, string } from 'yup'
@@ -9,8 +8,16 @@ import { OFSelect } from '../baseComponents/form/select/OFSelect'
 import OFFormControl from '../baseComponents/form/formControl/OFFormControl'
 import MenuItem from '@material-ui/core/MenuItem'
 import { OrganizationRoleInfo } from '../organization/users/OrganizationRoleInfos'
+import OFAutoComplete from '../baseComponents/form/autoComplete/OFAutoComplete'
+import { renderUserAutoCompleteOption } from './components/UserAutocompleteOption'
 
-const UserInvitePanel = ({ isOpen, onClose, onSubmit, userTypes }) => {
+const UserInvitePanel = ({
+    isOpen,
+    onClose,
+    onSubmit,
+    userTypes,
+    usersDetails,
+}) => {
     const { t } = useTranslation()
     return (
         <SidePanelLayout
@@ -20,6 +27,12 @@ const UserInvitePanel = ({ isOpen, onClose, onSubmit, userTypes }) => {
             <Formik
                 validationSchema={object().shape({
                     email: string()
+                        .transform(function (value) {
+                            if (value instanceof Object) {
+                                return value.email
+                            }
+                            return value
+                        })
                         .email(t('users.emailNotValid'))
                         .required(t('users.emailRequired')),
                     userType: string(t('users.typeNotValid')).required(
@@ -27,19 +40,31 @@ const UserInvitePanel = ({ isOpen, onClose, onSubmit, userTypes }) => {
                     ),
                 })}
                 initialValues={{
-                    email: '',
+                    email: null,
                     userType: userTypes[0],
                 }}
-                onSubmit={(values) => onSubmit(values.email, values.userType)}>
+                onSubmit={(values) => {
+                    const email =
+                        values.email instanceof Object
+                            ? values.email.email
+                            : values.email
+                    onSubmit(email, values.userType)
+                }}>
                 {({ isSubmitting }) => (
                     <Form method="POST">
-                        <OFFormControlInputFormiked
+                        <OFFormControl
                             name={t('users.memberEmail')}
                             fieldName="email"
-                            type="text"
-                            isSubmitting={isSubmitting}
-                            autoFocus={true}
-                        />
+                            type="text">
+                            <Field
+                                name="email"
+                                dataArray={Object.values(usersDetails)}
+                                keyToDisplay={['email']}
+                                freeSolo={true}
+                                renderOption={renderUserAutoCompleteOption}
+                                component={OFAutoComplete}
+                            />
+                        </OFFormControl>
 
                         {userTypes.length > 1 && (
                             <>

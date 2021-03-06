@@ -8,7 +8,7 @@ import {
 } from '../../users/core/actions/inviteUser'
 import UserList from '../../users/UserList'
 import {
-    getOrganizationMembersIdsSelector,
+    getOrganizationMembersSelector,
     getOrganizationOwnerIdSelector,
 } from '../core/organizationSelectors'
 import {
@@ -20,7 +20,7 @@ import UserInviteList from '../../users/UserInviteList'
 export const OrganizationUsers = () => {
     const dispatch = useDispatch()
     const ownerUserId = useSelector(getOrganizationOwnerIdSelector)
-    const membersUserIds = useSelector(getOrganizationMembersIdsSelector)
+    const membersUserIds = useSelector(getOrganizationMembersSelector)
     return (
         <>
             <UserListHeader

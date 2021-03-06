@@ -21,7 +21,7 @@ const OFAutoComplete = ({
     ...other
 }) => {
     const getLabel = (option) => {
-        if (keyToDisplay) {
+        if (keyToDisplay && option[keyToDisplay]) {
             return option[keyToDisplay]
         }
 

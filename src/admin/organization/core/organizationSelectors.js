@@ -52,7 +52,7 @@ export const isOrganizationRightAllowed = createSelector(
     }
 )
 
-export const getOrganizationMembersIdsSelector = createSelector(
+export const getOrganizationMembersSelector = createSelector(
     getSelectedOrganizationSelector,
     (organization) => {
         if (!organization) {
@@ -103,4 +103,9 @@ export const getOrganizationMembersIdsSelector = createSelector(
 
         return Object.values(allRolesUser)
     }
+)
+
+export const getOrganizationMembersIdsSelector = createSelector(
+    getOrganizationMembersSelector,
+    (members) => members.map((member) => member.userId)
 )
