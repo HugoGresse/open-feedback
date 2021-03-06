@@ -54,7 +54,7 @@ const AdminApp = () => {
         setFavicon('/favicon-root.ico')
     }, [])
 
-    const { projectId, organizationId } = useParams()
+    const { projectId } = useParams()
 
     return (
         <I18nextProvider i18n={i18n}>
