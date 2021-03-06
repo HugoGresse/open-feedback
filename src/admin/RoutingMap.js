@@ -34,7 +34,8 @@ export default {
 }
 
 export const ROUTE_EVENT_SEGMENT = 'event'
-export const ROUTE_EVENT_BASE = `/admin/${ROUTE_EVENT_SEGMENT}`
+export const ROUTE_ADMIN = '/admin/'
+export const ROUTE_EVENT_BASE = `${ROUTE_ADMIN}${ROUTE_EVENT_SEGMENT}`
 
 export const ROUTE_ORGANIZATION_SEGMENT = 'org'
 
