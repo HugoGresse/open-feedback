@@ -14,6 +14,7 @@ import OFButton from '../../baseComponents/button/OFButton'
 import Divider from '@material-ui/core/Divider'
 import { editOrganization } from '../core/actions/editOrganization'
 import Box from '@material-ui/core/Box'
+import { SaveShortcut } from '../../baseComponents/form/saveShortcut/SaveShortcut'
 
 export const OrganizationTheme = () => {
     const dispatch = useDispatch()
@@ -90,6 +91,8 @@ export const OrganizationTheme = () => {
                                 </OFButton>
                             </Grid>
                         </Grid>
+
+                        <SaveShortcut />
                     </Form>
                 )}
             </Formik>

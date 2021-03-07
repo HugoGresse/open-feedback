@@ -41,14 +41,12 @@ export const newProject = (
                 organization.disableSoloTalkRedirect
         }
     }
-    console.log('create project', projectId, projectData)
 
     return await fireStoreMainInstance
         .collection('projects')
         .doc(projectId)
         .set(projectData)
         .then(() => {
-            console.log('new project ok')
             dispatch(
                 addNotification({
                     type: 'success',
@@ -63,7 +61,6 @@ export const newProject = (
             return projectId
         })
         .catch((err) => {
-            console.log(err)
             dispatch(
                 addNotification({
                     type: 'error',

@@ -16,7 +16,7 @@ const UserInvitePanel = ({
     onClose,
     onSubmit,
     userTypes,
-    usersDetails,
+    usersDetails = {},
 }) => {
     const { t } = useTranslation()
     return (
