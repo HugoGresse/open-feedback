@@ -42,7 +42,7 @@ export const newProject = (
         }
     }
 
-    return fireStoreMainInstance
+    return await fireStoreMainInstance
         .collection('projects')
         .doc(projectId)
         .set(projectData)

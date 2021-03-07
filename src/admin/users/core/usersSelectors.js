@@ -1,5 +1,6 @@
 import { getAdminStateSelector } from '../../adminSelector'
 import { createSelector } from 'reselect'
+import { getUserIdSelector } from '../../auth/authSelectors'
 
 const getUsersState = (state) => getAdminStateSelector(state).adminUsers
 
@@ -29,6 +30,19 @@ export const getFilteredUsersSelector = createSelector(
         })
         return result
     }
+)
+
+export const getFilteredUsersWithoutCurrentOneSelector = createSelector(
+    getFilteredUsersSelector,
+    getUserIdSelector,
+    (users, currentUserId) =>
+        Object.keys(users).reduce((acc, userId) => {
+            if (userId === currentUserId) {
+                return acc
+            }
+            acc[userId] = users[userId]
+            return acc
+        }, {})
 )
 
 export const getInviteSelector = (state) => getUsersState(state).invite

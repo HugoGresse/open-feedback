@@ -9,6 +9,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 const useStyles = makeStyles((theme) => ({
     paper: {
         maxWidth: 300,
+        minWidth: 300,
         padding: 36,
         height: 'auto',
         bottom: 0,

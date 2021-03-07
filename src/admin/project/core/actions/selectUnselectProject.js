@@ -5,6 +5,10 @@ import {
 import { CLEAR_TALK_VOTES } from '../../dashboard/dashboardActionTypes'
 import { SELECT_PROJECT } from '../projectActionTypes'
 import { initProjectApiIfReady } from './initProjectApi'
+import {
+    selectOrganization,
+    unselectOrganization,
+} from '../../../organization/core/actions/selectUnselectActions'
 
 export const unselectProject = () => (dispatch, getState) => {
     const projectId = getSelectedProjectIdSelector(getState())
@@ -21,6 +25,8 @@ export const unselectProject = () => (dispatch, getState) => {
         type: SELECT_PROJECT,
         payload: null,
     })
+    dispatch(unselectOrganization())
+
     return Promise.resolve()
 }
 export const selectProject = (projectId) => (dispatch, getState) => {
@@ -35,9 +41,13 @@ export const selectProject = (projectId) => (dispatch, getState) => {
         payload: projectId,
     })
 
-    dispatch(
-        initProjectApiIfReady(projectId, getSelectedProjectSelector(getState()))
-    )
+    const selectedProject = getSelectedProjectSelector(getState())
+
+    if (selectedProject && selectedProject.organizationId) {
+        dispatch(selectOrganization(selectedProject.organizationId))
+    }
+
+    dispatch(initProjectApiIfReady(projectId, selectedProject))
 
     return Promise.resolve(false)
 }

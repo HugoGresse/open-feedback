@@ -8,11 +8,18 @@ import { useTranslation } from 'react-i18next'
 const UserListHeader = ({
     onFilterChange,
     onUserInvite,
+    onSidePanelOpen,
+    usersDetails,
     userTypes = ['members'],
 }) => {
     const filter = useSelector(getUsersFilterSelector)
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
     const { t } = useTranslation()
+
+    const openSidePanel = () => {
+        setSidePanelOpen(true)
+        onSidePanelOpen && onSidePanelOpen()
+    }
 
     return (
         <>
@@ -20,12 +27,13 @@ const UserListHeader = ({
                 filterValue={filter}
                 filterChange={onFilterChange}
                 buttonProcessing={false}
-                buttonClick={() => setSidePanelOpen(true)}
+                buttonClick={openSidePanel}
                 buttonText={t('users.add')}
             />
             <UserInvitePanel
                 isOpen={sidePanelOpen}
                 userTypes={userTypes}
+                usersDetails={usersDetails}
                 onClose={() => setSidePanelOpen(false)}
                 onSubmit={(email, type) =>
                     onUserInvite(email, type).then((success) =>

@@ -124,7 +124,6 @@ const TalkAddEditPanel = ({
                                             </OFButton>
                                         }
                                         dataArray={existingSpeakers}
-                                        value={values.speakers}
                                         keyToDisplay="name"
                                         multiple={true}
                                         component={OFAutoComplete}
