@@ -1,10 +1,6 @@
 import { VOTE_ITEM_TYPES } from './AdminApp'
 
 export class FeedbackApp {
-    openTalk(name) {
-        cy.contains(name).click()
-    }
-
     assertLogo(expectedLogoUrl) {
         cy.get('img[alt=logo]').should('have.attr', 'src', expectedLogoUrl)
     }
@@ -21,6 +17,25 @@ export class FeedbackApp {
 
     assertScheduleLink(expectedLink) {
         cy.get('a[target=_blank]').should('have.attr', 'href', expectedLink)
+    }
+
+    openTalk(name) {
+        cy.contains(name).click()
+    }
+
+    assertTalkInList(name) {
+        cy.get('#root').should('contain', name)
+    }
+
+    assertSpeakerInList(name) {
+        cy.get('#root').should('contain', name)
+    }
+
+    assertInTalk(talkName, voteItems = []) {
+        cy.get('h2').should('contain', talkName)
+        for (const voteItemName of voteItems) {
+            cy.get('#root').should('contain', voteItemName)
+        }
     }
 
     assertOutsideVoteRange() {

@@ -1,10 +1,12 @@
 import { stringGenerator } from '../../utils/generateString'
+import { AdminApp } from '../../support/AdminApp'
+import { FeedbackApp } from '../../support/FeedbackApp'
 
 describe('Test creating a new project', function () {
     const data = {
         projectName: stringGenerator(),
-        talk1Name: 'Talk title 1',
-        talk2Name: 'Talk title 2',
+        talk1Name: 'TalkTitle1',
+        talk2Name: 'TalkTitle2',
         speaker1: {
             name: 'hugo',
             photoUrl: 'https://api.adorable.io/avatars/100/1.png',
@@ -24,93 +26,66 @@ describe('Test creating a new project', function () {
         tag2: 'Back',
         tag3: 'Infra',
         tag4: 'Design',
-        voteItem1: 'This is just a simple boring test',
+        voteItem1: 'ANewVoteItem',
     }
 
-    it('New OpenFeedback project', function () {
-        cy.visit('/admin')
-        cy.clickOnFakeLoginButtonIfVisible()
+    const app = new AdminApp()
+    const feedback = new FeedbackApp()
 
-        cy.contains('Create a new event').click()
-        cy.get('input[name=name]').type(data.projectName)
-        cy.contains('Continue').click()
-        cy.get('input[value=openfeedbackv1]').check()
-        cy.contains('Create event').click()
-        // After redirect
+    beforeEach(() => {
+        app.open()
+        app.loginIfNeeded()
+    })
+
+    it('New OpenFeedback project', function () {
+        app.create(data.projectName)
         cy.contains(data.projectName)
 
-        // -- Add a talk without speaker
-        cy.contains('Talks').click()
-        cy.contains('Add talks').click()
-        cy.get('input[name=title]').type(data.talk1Name)
-        cy.get('input[id=trackTitle]').type(data.track1)
-        cy.get('input[id=tags]').type(data.tag1)
-        cy.get('button[type=submit]').first().click()
+        app.openTalks()
+        app.addTalk(data.talk1Name, data.track1, data.tag1)
 
-        // -- Edit the added talk to add 2 speaker
-        cy.contains(data.talk1Name)
-            .parent()
-            .parent()
-            .get('button[aria-label="edit"]')
-            .click()
-        cy.get('input[id=speakers]').type(data.speaker1.name)
-        cy.contains('Add a speaker').click()
-        cy.get('input[name=name]').type(data.speaker1.name)
-        cy.get('.addImage').click()
-        cy.get('input[name=photoUrl]').type(data.speaker1.photoUrl, {
-            force: true,
-        })
-        cy.get('#uploadImage').click()
-        cy.get('button[type=submit]').eq(2).click()
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(200)
-        cy.get('input[name=name]').type(data.speaker2.name)
-        cy.get('.addImage').click()
-        cy.get('input[name=photoUrl]').type(data.speaker2.photoUrl, {
-            force: true,
-        })
-        cy.get('#uploadImage').click()
-        cy.contains('Add speaker').click()
-        cy.contains('Save').click()
+        // -- Edit the added talk to add 2 speakers
+        app.editTalk(data.talk1Name, [data.speaker1, data.speaker2])
         // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(500)
-        cy.contains(data.talk1Name).should('be.visible')
-        cy.contains(data.speaker1.name).should('be.visible')
-        cy.contains(data.speaker2.name).should('be.visible')
+        app.assertTalk(data.talk1Name, [data.speaker1.name, data.speaker2.name])
 
         // -- Add a new talk with existing stuff
-        cy.contains('Add talks').click()
-        cy.get('input[name=title]').type(data.talk2Name)
-        cy.get('input[id=trackTitle]').focus().click()
-        cy.get('#trackTitle-popup').children().first().click()
-        cy.get('input[id=trackTitle]').should('have.value', data.track1)
-        cy.get('input[id=tags]').focus().click()
-        cy.contains(data.tag1).click()
-        cy.get('input[id=speakers]').type(data.speaker2.name, { delay: 70 })
-        cy.get('#speakers-popup').children().first().click()
-        cy.get('button[type=submit]').first().click()
-        cy.contains(data.talk2Name).should('be.visible')
+        app.addTalk(
+            data.talk2Name,
+            null,
+            null,
+            {
+                addFirstAvailableTrack: true,
+                assertTrackTitle: data.track1,
+            },
+            {
+                addTagFromAutoComplete: data.tag1,
+            },
+            [
+                {
+                    typeForAutoComplete: data.speaker2.name,
+                    useFirstFromAutoComplete: true,
+                },
+            ]
+        )
+
+        app.assertTalk(data.talk2Name)
         cy.get(`span:contains(${data.speaker2.name})`).should('have.length', 2)
 
-        // -- Add a vote item
-        cy.contains('Voting Form').click()
-        cy.get('input[type=text]').should('have.length', 9)
-        cy.contains('New item').click()
-        cy.get('input[type=text]').last().type(data.voteItem1)
-        cy.contains('Save').click()
-        cy.get('input[type=text]').should('have.length', 10)
+        app.votingForm.open()
+        app.votingForm.assertVoteItemLength(9, 0)
+        app.votingForm.addVoteItem(data.voteItem1)
+        app.votingForm.save()
+        app.votingForm.assertVoteItemLength(10, 0)
 
-        // Go to the event and to the first added talk
-        cy.contains('See event').invoke('removeAttr', 'target').click()
+        app.openFeedback()
+        feedback.assertTalkInList(data.talk1Name)
+        feedback.assertTalkInList(data.talk2Name)
+        feedback.assertSpeakerInList(data.speaker1.name)
+        feedback.assertSpeakerInList(data.speaker2.name)
 
-        cy.get('#root').should('contain', data.talk1Name)
-        cy.get('#root').should('contain', data.speaker1.name)
-        cy.get('#root').should('contain', data.talk2Name)
-        cy.get('#root').should('contain', data.speaker2.name)
-
-        cy.contains(data.talk1Name).click()
-
-        cy.get('h2').should('contain', data.talk1Name)
-        cy.get('#root').should('contain', data.voteItem1)
+        feedback.openTalk(data.talk1Name)
+        feedback.assertInTalk(data.talk1Name, [data.voteItem1])
     })
 })
