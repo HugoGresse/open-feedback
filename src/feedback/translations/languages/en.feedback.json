@@ -18,7 +18,8 @@
     "talks": {
         "menuNoDate": "Without date",
         "list": "Go to talks list",
-        "vote": "Vote for the talk "
+        "vote": "Vote for the talk ",
+        "date": "Display talks for the "
     },
     "footer": {
         "madeBy": "Powered by"

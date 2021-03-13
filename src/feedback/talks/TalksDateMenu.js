@@ -68,6 +68,7 @@ const useStylesItem = makeStyles((theme) => ({
 }))
 
 const Item = ({ date, url, isSelected, noDateLabel }) => {
+    const { t } = useTranslation()
     const classes = useStylesItem({
         isSelected,
     })
@@ -82,10 +83,15 @@ const Item = ({ date, url, isSelected, noDateLabel }) => {
         return noDateLabel
     }
 
+    const label = getDateLabel(date)
+
     return (
         <div className={classes.item}>
-            <Link to={`${url}`} className={classes.a}>
-                {getDateLabel(date)}
+            <Link
+                to={`${url}`}
+                className={classes.a}
+                title={t('talks.date') + label}>
+                {label}
             </Link>
         </div>
     )
