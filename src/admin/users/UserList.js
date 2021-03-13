@@ -6,18 +6,22 @@ import { getUserSelector } from '../auth/authSelectors'
 const UserList = ({ userIds, ownerId, userTypes }) => {
     const loggedInUserId = useSelector(getUserSelector).uid
 
-    return userIds.map(({ userId, role }) => {
-        return (
-            <UserItem
-                userId={userId}
-                key={userId}
-                ownerId={ownerId}
-                currentUserId={loggedInUserId}
-                role={role}
-                userTypes={userTypes}
-            />
-        )
-    })
+    return (
+        <ul>
+            {userIds.map(({ userId, role }) => {
+                return (
+                    <UserItem
+                        userId={userId}
+                        key={userId}
+                        ownerId={ownerId}
+                        currentUserId={loggedInUserId}
+                        role={role}
+                        userTypes={userTypes}
+                    />
+                )
+            })}
+        </ul>
+    )
 }
 
 export default UserList

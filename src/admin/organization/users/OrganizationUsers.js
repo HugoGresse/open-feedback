@@ -22,7 +22,7 @@ export const OrganizationUsers = () => {
     const ownerUserId = useSelector(getOrganizationOwnerIdSelector)
     const membersUserIds = useSelector(getOrganizationMembersSelector)
     return (
-        <>
+        <div id="orgUsers">
             <UserListHeader
                 onFilterChange={(value) => dispatch(setUsersFilter(value))}
                 onUserInvite={(email, type) =>
@@ -36,6 +36,6 @@ export const OrganizationUsers = () => {
                 userTypes={ORGANIZATION_EXISTING_USER_ROLES}
             />
             <UserInviteList />
-        </>
+        </div>
     )
 }

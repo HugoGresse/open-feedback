@@ -22,18 +22,22 @@ export class VotingForm {
         cy.get('body').should('contain', 'Voting form saved')
     }
 
-    assertVoteItemLength(requiredLength, additionalLang) {
-        cy.get('input[type=text]').should('have.length', requiredLength)
+    assertVoteItemLength(requiredLength, additionalLang, langCountHalf = true) {
+        // For some reason, the length of the div for the lang is not the same between organization and event voting form
+        cy.get('li[data-testid=VoteItem] input[type=text]').should(
+            'have.length',
+            requiredLength
+        )
         if (additionalLang) {
             cy.get(`div[title="${additionalLang}"`).should(
                 'have.length',
-                requiredLength / 2
+                langCountHalf ? requiredLength / 2 : requiredLength
             )
         }
     }
 
     assertVoteItem(position, name, type, inputPos = 0) {
-        cy.get('div[data-testid=VoteItem]')
+        cy.get('li[data-testid=VoteItem]')
             .eq(position)
             .then(($element) => {
                 cy.wrap($element).should('contain', type)

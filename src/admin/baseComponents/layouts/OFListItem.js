@@ -19,7 +19,12 @@ const OFListItem = ({ children, style, ...props }) => {
     const classes = useStyles()
 
     return (
-        <Grid container className={classes.container} style={style} {...props}>
+        <Grid
+            container
+            component={'li'}
+            className={classes.container}
+            style={style}
+            {...props}>
             {children}
         </Grid>
     )
