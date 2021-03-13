@@ -81,7 +81,7 @@ const Header = ({ project }) => {
                 <div className={classes.iconLeft}>
                     {matchParams.talkId && (
                         <Link
-                            aria-label={t('talks.list')}
+                            title={t('talks.list')}
                             to={`/${matchParams.projectId}/${matchParams.date}`}>
                             <ArrowBack />
                         </Link>
@@ -101,7 +101,7 @@ const Header = ({ project }) => {
                     <img
                         className={classes.logo}
                         src={project.logoSmall}
-                        alt="logo"
+                        alt={`logo ${project.name}`}
                     />
                     <Hidden smDown>
                         <Title component="h1" color="textPrimary">

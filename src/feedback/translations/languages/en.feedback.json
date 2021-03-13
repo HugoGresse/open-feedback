@@ -17,7 +17,8 @@
     "searchExtendedMatch": "Talk(s) on the other day matching your search:",
     "talks": {
         "menuNoDate": "Without date",
-        "list": "Talks list"
+        "list": "Go to talks list",
+        "vote": "Vote for the talk "
     },
     "footer": {
         "madeBy": "Powered by"
