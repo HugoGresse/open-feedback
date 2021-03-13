@@ -75,6 +75,7 @@ const TalkAddEditPanel = ({
                                     fieldName="title"
                                     type="text"
                                     isSubmitting={isSubmitting}
+                                    autoFocus={true}
                                 />
 
                                 <TalkStartEndTimeFields

@@ -48,6 +48,7 @@ const SpeakerAddEditPanel = ({ isOpen, speaker, onClose, onSubmit }) => {
                             fieldName="name"
                             type="text"
                             isSubmitting={isSubmitting}
+                            autoFocus={true}
                         />
 
                         <SidePanelUploadLayout
