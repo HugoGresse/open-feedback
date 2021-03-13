@@ -7,7 +7,7 @@ describe('Test organization as owner role', function () {
         orgName: `organizationOwner ${stringGenerator()}`,
         projectName: stringGenerator(),
         talk1Name: 'Talk-title-1',
-        voteItem: 'Suis-je-une-carotte?',
+        voteItem: 'Suis-carotte?',
     }
 
     const app = new AdminApp()
@@ -45,8 +45,16 @@ describe('Test organization as owner role', function () {
         cy.wait(1000)
         app.votingForm.save(false, true)
 
+        app.organization.openTheme()
+        app.eventTheme.addChipColors()
+        const imageUrl =
+            'https://openfeedback.io/static/logos/openfeedback%20black%20orange-1x.png'
+        app.eventTheme.setFavicon(imageUrl)
+        app.eventTheme.setLogo(imageUrl)
+        app.eventTheme.save()
         app.organization.close()
 
+        // New event
         app.create(data.projectName, data.orgName)
 
         cy.contains(data.orgName)
@@ -59,6 +67,7 @@ describe('Test organization as owner role', function () {
         app.votingForm.assertVoteItemLength(20, langLabel)
 
         app.openFeedback()
+        feedback.assertLogo(imageUrl)
         feedback.assertTalkInList(data.talk1Name)
 
         feedback.openTalk(data.talk1Name)

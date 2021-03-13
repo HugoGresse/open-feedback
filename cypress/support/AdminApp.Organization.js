@@ -14,6 +14,10 @@ export class Organization {
         cy.get('#tab-1').click()
     }
 
+    openTheme() {
+        cy.get('#tab-2').click()
+    }
+
     assertNewOrgScreen(orgName, users = []) {
         cy.get('h2').should('contain', orgName)
         cy.get('#orgUsers ul').should('have.length', users.length)

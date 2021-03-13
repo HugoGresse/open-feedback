@@ -5,8 +5,8 @@ import { FeedbackApp } from '../../support/FeedbackApp'
 describe('Test creating a new project', function () {
     const data = {
         projectName: stringGenerator(),
-        talk1Name: 'TalkTitle1',
-        talk2Name: 'TalkTitle2',
+        talk1Name: 'Ttit1',
+        talk2Name: 'Ttit2',
         speaker1: {
             name: 'hugo',
             photoUrl: 'https://api.adorable.io/avatars/100/1.png',
