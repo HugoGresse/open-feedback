@@ -129,7 +129,7 @@ const AppLayout = ({ children }) => {
                 <div className={classes.content}>
                     <Header project={project} />
 
-                    <div className={classes.layout}> {children}</div>
+                    <main className={classes.layout}> {children}</main>
                 </div>
                 <Footer />
             </div>

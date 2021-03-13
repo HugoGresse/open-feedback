@@ -65,7 +65,7 @@ const Header = ({ project }) => {
     const matchParams = useParams()
 
     return (
-        <div className={classes.container}>
+        <header className={classes.container}>
             <div className={classes.header}>
                 <div className={classes.iconLeft}>
                     {matchParams.talkId && (
@@ -99,7 +99,7 @@ const Header = ({ project }) => {
                 </div>
             </div>
             {!matchParams.talkId && <SearchBar />}
-        </div>
+        </header>
     )
 }
 
