@@ -22,8 +22,8 @@ export const OrganizationTheme = () => {
     const { t } = useTranslation()
 
     const initialValues = {
-        logoSmall: organization.logoSmall || '',
-        favicon: organization.favicon || '',
+        logoUrl: organization.logoSmall || '',
+        faviconUrl: organization.favicon || '',
         chipColors: organization.chipColors,
     }
 
@@ -32,13 +32,13 @@ export const OrganizationTheme = () => {
             <OrgDataInfo />
             <Formik
                 validationSchema={object().shape({
-                    logoSmall: string()
+                    logoUrl: string()
                         .matches(
                             rURLWithLocalhostSupported,
                             t('settingsEvent.fieldLogoUrlNotValid')
                         )
                         .required(t('settingsEvent.fieldLogoUrlRequired')),
-                    favicon: string()
+                    faviconUrl: string()
                         .matches(
                             rURLWithLocalhostSupported,
                             t('settingsEvent.fieldFaviconUrlNotValid')
@@ -46,14 +46,22 @@ export const OrganizationTheme = () => {
                         .required(t('settingsEvent.fieldFaviconUrlRequired')),
                 })}
                 initialValues={initialValues}
-                onSubmit={(values) => dispatch(editOrganization(values))}>
+                onSubmit={(values) =>
+                    dispatch(
+                        editOrganization({
+                            logoSmall: values.logoUrl,
+                            favicon: values.faviconUrl,
+                            chipColors: values.chipColors,
+                        })
+                    )
+                }>
                 {({ isSubmitting }) => (
                     <Form method="POST">
                         <Grid container spacing={2}>
                             <Grid item xs={6} sm={4}>
                                 <SidePanelUploadLayout
                                     name={t('settingsEvent.fieldLogoUrl')}
-                                    fieldName="logoSmall"
+                                    fieldName="logoUrl"
                                     isSubmitting={isSubmitting}
                                     title={t('settingsEvent.fieldLogoUrl')}
                                     helpText={t('baseComponents.imageHelp')}
@@ -62,7 +70,7 @@ export const OrganizationTheme = () => {
                             <Grid item xs={6} sm={4}>
                                 <SidePanelUploadLayout
                                     name={t('settingsEvent.fieldFaviconUrl')}
-                                    fieldName="favicon"
+                                    fieldName="faviconUrl"
                                     isSubmitting={isSubmitting}
                                     title={t('settingsEvent.fieldFaviconUrl')}
                                     helpText={t('baseComponents.imageHelp')}

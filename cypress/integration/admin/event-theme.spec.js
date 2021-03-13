@@ -7,7 +7,7 @@ import { DateTime } from 'luxon'
 describe('Event and theme options', function () {
     const data = {
         projectName: `event-theme ${stringGenerator()}`,
-        talk1Name: 'Talk title 1',
+        talk1Name: 'Ttit1',
         voteItem1: stringGenerator(),
     }
 

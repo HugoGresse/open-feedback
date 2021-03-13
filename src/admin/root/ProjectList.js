@@ -53,7 +53,7 @@ const ProjectList = ({
 
     return (
         <>
-            <Grid item xs={6} sm={6} md={4} key="new-event">
+            <Grid item xs={6} sm={6} md={4} key="new-event" component="li">
                 <Card className={`${classes.newEventCard}`}>
                     <CardActionArea
                         onClick={() => onNewEventClick(organizationId)}>
@@ -66,7 +66,7 @@ const ProjectList = ({
             </Grid>
 
             {displayedProjects.map((project) => (
-                <Grid item xs={6} sm={6} md={4} key={project.id}>
+                <Grid item xs={6} sm={6} md={4} key={project.id} component="li">
                     <Card>
                         <CardActionArea
                             onClick={() => onProjectSelected(project.id)}>

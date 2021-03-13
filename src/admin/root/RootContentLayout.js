@@ -17,10 +17,10 @@ const RootContentLayout = ({ isUserValid, children }) => {
 
     return (
         <Container maxWidth="md" fixed className={classes.container}>
-            <Grid container spacing={3}>
-                {!isUserValid && (
-                    <OrganizationHeader title={t('root.userNotVerified')} />
-                )}
+            {!isUserValid && (
+                <OrganizationHeader title={t('root.userNotVerified')} />
+            )}
+            <Grid container spacing={3} component="ul">
                 {children}
             </Grid>
         </Container>

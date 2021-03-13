@@ -32,7 +32,7 @@ export const OrganizationHeader = ({
 
     return (
         <>
-            <Grid item xs={12} className={classes.container}>
+            <Grid item xs={12} className={classes.container} component="li">
                 <Grid container>
                     <Grid item xs={12} md={isOrganization ? 8 : 12}>
                         <Typography className={classes.title} variant="h2">

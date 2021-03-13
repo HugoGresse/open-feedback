@@ -5,7 +5,7 @@ import { FeedbackApp } from '../../support/FeedbackApp'
 describe('Test voting form edition', function () {
     const data = {
         projectName: `votingform ${stringGenerator()}`,
-        talk1Name: 'Talk title 1',
+        talk1Name: 'Ttitle1',
         voteItem1: stringGenerator(),
     }
 

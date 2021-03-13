@@ -22,18 +22,22 @@ export class VotingForm {
         cy.get('body').should('contain', 'Voting form saved')
     }
 
-    assertVoteItemLength(requiredLength, additionalLang) {
-        cy.get('input[type=text]').should('have.length', requiredLength)
+    assertVoteItemLength(requiredLength, additionalLang, langCountHalf = true) {
+        // For some reason, the length of the div for the lang is not the same between organization and event voting form
+        cy.get('li[data-testid=VoteItem] input[type=text]').should(
+            'have.length',
+            requiredLength
+        )
         if (additionalLang) {
             cy.get(`div[title="${additionalLang}"`).should(
                 'have.length',
-                requiredLength / 2
+                langCountHalf ? requiredLength / 2 : requiredLength
             )
         }
     }
 
     assertVoteItem(position, name, type, inputPos = 0) {
-        cy.get('div[data-testid=VoteItem]')
+        cy.get('li[data-testid=VoteItem]')
             .eq(position)
             .then(($element) => {
                 cy.wrap($element).should('contain', type)
@@ -67,7 +71,7 @@ export class VotingForm {
     }
 
     removeVoteItem(position) {
-        cy.get('div[data-testid=VoteItem]')
+        cy.get('li[data-testid=VoteItem]')
             .eq(position)
             .within(() => {
                 cy.get(`button[aria-label=delete]`).click()
@@ -76,7 +80,7 @@ export class VotingForm {
 
     moveVoteItem(itemToMove, toBelow) {
         const label = toBelow ? 'move down' : 'move up'
-        cy.get('div[data-testid=VoteItem]')
+        cy.get('li[data-testid=VoteItem]')
             .eq(itemToMove)
             .within(() => {
                 cy.get(`button[aria-label="${label}"]`).click()
@@ -84,7 +88,7 @@ export class VotingForm {
     }
 
     changeVoteItemType(position, from, to) {
-        cy.get('div[data-testid=VoteItem]').eq(position).contains(from).click()
+        cy.get('li[data-testid=VoteItem]').eq(position).contains(from).click()
 
         cy.contains('ul li', to).click()
     }
