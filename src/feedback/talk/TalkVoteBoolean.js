@@ -84,8 +84,7 @@ const TalkVoteBoolean = ({
                 {voteResult > 0 && (
                     <>
                         <span className={classes.voteResult}>
-                            {voteResult}{' '}
-                            <span>{voteResult > 1 ? 'votes' : 'vote'}</span>
+                            {voteResult} {voteResult > 1 ? 'votes' : 'vote'}
                         </span>
                         <TalkVoteBackground
                             colors={chipColors}
