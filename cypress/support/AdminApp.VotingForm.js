@@ -71,7 +71,7 @@ export class VotingForm {
     }
 
     removeVoteItem(position) {
-        cy.get('div[data-testid=VoteItem]')
+        cy.get('li[data-testid=VoteItem]')
             .eq(position)
             .within(() => {
                 cy.get(`button[aria-label=delete]`).click()
@@ -80,7 +80,7 @@ export class VotingForm {
 
     moveVoteItem(itemToMove, toBelow) {
         const label = toBelow ? 'move down' : 'move up'
-        cy.get('div[data-testid=VoteItem]')
+        cy.get('li[data-testid=VoteItem]')
             .eq(itemToMove)
             .within(() => {
                 cy.get(`button[aria-label="${label}"]`).click()
@@ -88,7 +88,7 @@ export class VotingForm {
     }
 
     changeVoteItemType(position, from, to) {
-        cy.get('div[data-testid=VoteItem]').eq(position).contains(from).click()
+        cy.get('li[data-testid=VoteItem]').eq(position).contains(from).click()
 
         cy.contains('ul li', to).click()
     }
