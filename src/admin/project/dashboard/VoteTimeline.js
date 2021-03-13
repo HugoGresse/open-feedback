@@ -21,7 +21,7 @@ const VoteTimeline = ({ dinoStartDelay }) => {
 
     const voteByDayKeys = Object.keys(voteByDay)
 
-    const changeDate = newIndex => {
+    const changeDate = (newIndex) => {
         if (voteByDayKeys[newIndex] !== undefined) {
             setSelectedIndex(newIndex)
         }
@@ -41,7 +41,7 @@ const VoteTimeline = ({ dinoStartDelay }) => {
             title={t('dashboard.votesPerHour')}
             titleIcon={<InsertChartOutlined />}
             rightChildren={
-                <Typography component="h2">
+                <Typography variant="body1">
                     <OFButton
                         style={{
                             design: 'text',

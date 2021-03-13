@@ -40,7 +40,7 @@ const innerTheme = createMuiTheme({
     },
 })
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
     appbar: {
         background: COLORS.RED_ORANGE,
         boxShadow: (props) => (props.shadow ? null : 'none'),
@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 20,
         marginBottom: 20,
     },
-}))
+})
 
 const Header = ({ refTarget, location, toggleDrawer }) => {
     const dispatch = useDispatch()

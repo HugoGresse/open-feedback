@@ -4,7 +4,6 @@ import {
     getSortedProjectsByOrganizationIdsSelector,
     isProjectsLoadedSelector,
 } from '../project/core/projectSelectors'
-import { useHistory } from 'react-router-dom'
 import Paper from '@material-ui/core/Paper'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 import makeStyles from '@material-ui/core/styles/makeStyles'
@@ -33,7 +32,6 @@ export const OrganizationList = ({
     onNewOrganizationClick,
 }) => {
     const classes = useStyles()
-    const history = useHistory()
     const projectsByOrganizations = useSelector(
         getSortedProjectsByOrganizationIdsSelector
     )
