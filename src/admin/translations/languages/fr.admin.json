@@ -127,7 +127,8 @@
         "loading": "Chargement de vos évènements et organisations...",
         "organization": {
             "noOrganizationName": "Vos évènements OpenFeedback"
-        }
+        },
+        "selectEvent": "Sélectionner l'évènement "
     },
     "organization": {
         "title": "Organisation",

@@ -9,7 +9,6 @@ import Paper from '@material-ui/core/Paper'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { OrganizationListItem } from './OrganizationListItem'
-import { redirectToProject } from '../project/utils/redirectToProject'
 import { NO_ORGANIZATION_FAKE_ID } from '../organization/core/organizationConstants'
 import { useTranslation } from 'react-i18next'
 import { isOrganizationsLoadedSelector } from '../organization/core/organizationSelectors'
@@ -17,7 +16,6 @@ import { OrganizationHeader } from './OrganizationHeader'
 import Grid from '@material-ui/core/Grid'
 import OFButton from '../baseComponents/button/OFButton'
 import AddIcon from '@material-ui/icons/Add'
-import { redirectToOrganization } from '../organization/utils/redirectToOrganization'
 
 const useStyles = makeStyles((theme) => ({
     loaderContainer: {
@@ -69,12 +67,6 @@ export const OrganizationList = ({
                     }
                     projects={projectsByOrganizations[id].projects}
                     onNewEventClick={onNewEventClick}
-                    onProjectSelected={(projectId) => {
-                        redirectToProject(null, projectId, history)
-                    }}
-                    onOrganizationSelected={(organizationId) => {
-                        redirectToOrganization(organizationId, history)
-                    }}
                 />
             ))}
 
