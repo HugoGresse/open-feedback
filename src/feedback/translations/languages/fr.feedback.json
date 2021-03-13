@@ -16,7 +16,8 @@
     "searchNoMatch": "Aucune présentation ne correspond à vos critères le",
     "searchExtendedMatch": "Présentation(s) les autres jours correspondant à votre recherche:",
     "talks": {
-        "menuNoDate": "Sans date"
+        "menuNoDate": "Sans date",
+        "list": "Liste des présentations"
     },
     "footer": {
         "madeBy": "Propulsé par"

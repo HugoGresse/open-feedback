@@ -7,6 +7,8 @@ import CalendarToday from '@material-ui/icons/CalendarToday'
 import { Hidden } from '@material-ui/core/es'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { grey } from '@material-ui/core/colors'
+import { darken } from '@material-ui/core/styles'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
     logo: {
@@ -17,7 +19,15 @@ const useStyles = makeStyles((theme) => ({
     iconLeft: {
         minWidth: 28,
         position: 'absolute',
-        left: 20,
+        top: 0,
+        '& a': {
+            padding: 18,
+            display: 'block',
+            transition: 'background-color 200ms',
+            '&:hover': {
+                backgroundColor: darken(theme.palette.pageBackground, 0.2),
+            },
+        },
         '& svg': {
             color: grey[600],
         },
@@ -62,6 +72,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = ({ project }) => {
     const classes = useStyles()
+    const { t } = useTranslation()
     const matchParams = useParams()
 
     return (
@@ -70,6 +81,7 @@ const Header = ({ project }) => {
                 <div className={classes.iconLeft}>
                     {matchParams.talkId && (
                         <Link
+                            aria-label={t('talks.list')}
                             to={`/${matchParams.projectId}/${matchParams.date}`}>
                             <ArrowBack />
                         </Link>

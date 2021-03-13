@@ -16,7 +16,8 @@
     "searchNoMatch": "No talk matched your criteria on ",
     "searchExtendedMatch": "Talk(s) on the other day matching your search:",
     "talks": {
-        "menuNoDate": "Without date"
+        "menuNoDate": "Without date",
+        "list": "Talks list"
     },
     "footer": {
         "madeBy": "Powered by"
