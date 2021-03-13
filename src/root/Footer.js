@@ -4,7 +4,7 @@ import { COLORS } from '../constants/colors'
 import logoColorWhite from '../assets/logo-openfeedback-color&white.png'
 import SvgIcon from '@material-ui/core/SvgIcon'
 
-const Wrapper = styled.div`
+const Wrapper = styled.footer`
     background-color: ${COLORS.DARK_GRAY};
     color: ${COLORS.WHITE};
     text-align: center;

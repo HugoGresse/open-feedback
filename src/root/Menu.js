@@ -44,7 +44,8 @@ const Menu = () => {
         <Box
             className="wrapperLogoMenu"
             display="flex"
-            justifyContent="space-between">
+            justifyContent="space-between"
+            component="nav">
             <img height="40" src={logoWhite} alt="open feedback" />
             <MenuList>
                 <li>
