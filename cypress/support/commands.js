@@ -97,6 +97,7 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 Cypress.Commands.add('clickOnFakeLoginButtonIfVisible', () => {
     cy.getCookie('isLoggedIn').then((isLoggedIn) => {
         console.log('cookie', isLoggedIn)
+        cy.log('isLoggedIn? ' + JSON.stringify(isLoggedIn))
         if (!isLoggedIn || isLoggedIn.value !== 'true') {
             cy.contains('Fake login with EMAIL').click()
         }
