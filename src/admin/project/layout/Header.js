@@ -40,7 +40,7 @@ const innerTheme = createMuiTheme({
     },
 })
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     appbar: {
         background: COLORS.RED_ORANGE,
         boxShadow: (props) => (props.shadow ? null : 'none'),
@@ -81,7 +81,7 @@ const useStyles = makeStyles({
         marginTop: 20,
         marginBottom: 20,
     },
-})
+}))
 
 const Header = ({ refTarget, location, toggleDrawer }) => {
     const dispatch = useDispatch()
@@ -221,6 +221,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                 <Grid item xs={12}>
                                     <Typography
                                         variant="h5"
+                                        component="h2"
                                         className={classes.title}>
                                         {getTitle(location)}
                                     </Typography>
