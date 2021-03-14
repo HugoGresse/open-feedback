@@ -173,6 +173,7 @@
         "chooseColor": "Choose the color",
         "delete": "Delete",
         "error": "You have some error, would you mind fixing it before saving? Much appreciated.",
+        "newChipColors": "Add a new chip color",
         "fieldChipColors": "Chip Colors",
         "fieldFaviconUrl": "Favicon*",
         "fieldFaviconUrlNotValid": "The favicon is not a valid url",

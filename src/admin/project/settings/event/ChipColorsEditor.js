@@ -4,6 +4,7 @@ import AddIcon from '@material-ui/icons/AddCircleOutline'
 import ColorBlock from './ColorBlock'
 import IconButton from '@material-ui/core/IconButton'
 import { newRandomHexColor } from '../../../../utils/colorsUtils'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(() => ({
     colorBlock: {
@@ -16,6 +17,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const ChipColorsEditor = ({ field, form }) => {
+    const { t } = useTranslation()
     const classes = useStyles()
 
     const onColorChanges = (oldColor, newColor) => {
@@ -62,8 +64,7 @@ const ChipColorsEditor = ({ field, form }) => {
                 })}
             <IconButton
                 className={classes.addButton}
-                component="div"
-                aria-label="new chip color"
+                aria-label={t('settingsEvent.newChipColors')}
                 disabled={form.isSubmitting}
                 onClick={() => addColor()}>
                 <AddIcon />

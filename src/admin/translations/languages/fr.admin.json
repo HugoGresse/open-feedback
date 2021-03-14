@@ -173,6 +173,7 @@
         "chooseColor": "Choisissez la couleur",
         "delete": "Supprimer",
         "error": "Vous avez une erreur, cela vous dérangerait-il de la corriger avant de l'enregistrer ? Merci beaucoup.",
+        "newChipColors": "Ajouter une pastille de couleur",
         "fieldChipColors": "Couleurs des pastilles",
         "fieldFaviconUrl": "Favicon*",
         "fieldFaviconUrlNotValid": "Le favicon n'est pas une URL valide",
