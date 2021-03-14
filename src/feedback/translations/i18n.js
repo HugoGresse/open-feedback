@@ -4,7 +4,6 @@ import enTranslation from './languages/en.feedback'
 import frTranslation from './languages/fr.feedback'
 
 const i18n = i18next.createInstance()
-
 i18n.use(LanguageDetector).init({
     // we init with resources
     resources: {
@@ -31,4 +30,5 @@ i18n.use(LanguageDetector).init({
     },
 })
 
+document.documentElement.lang = i18n.language
 export default i18n
