@@ -24,6 +24,7 @@
         "attention": "Attention",
         "or": "OR",
         "clear": "Clear",
+        "edit": "Edit",
         "dropzone": {
             "image": {
                 "button": "Upload image",

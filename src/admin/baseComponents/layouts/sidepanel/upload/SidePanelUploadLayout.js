@@ -10,6 +10,7 @@ import SidePanelUploadForm from './SidePanelUploadForm'
 import { uploadImage } from '../../../../project/utils/storage/uploadImage'
 import { useDispatch } from 'react-redux'
 import { addNotification } from '../../../../notification/notifcationActions'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(() => ({
     imageButton: {
@@ -59,6 +60,7 @@ const SidePanelUploadLayout = ({
     finalImageWidth = 500,
     finalImageHeight = 500,
 }) => {
+    const { t } = useTranslation()
     const classes = useStyles()
     const dispatch = useDispatch()
     const [isOpen, setOpen] = useState(false)
@@ -133,7 +135,7 @@ const SidePanelUploadLayout = ({
                     {field.value && (
                         <img
                             src={field.value}
-                            alt=""
+                            alt={`${t('common.edit')} ${name}`}
                             className={classes.previewImage}
                         />
                     )}
