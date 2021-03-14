@@ -206,6 +206,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                                         classes.topRightButton
                                                     }
                                                     target="_blank"
+                                                    title={t('layout.seeEvent')}
                                                     href={`/${selectedProjectId}`}>
                                                     <EyeIcon
                                                         className={
