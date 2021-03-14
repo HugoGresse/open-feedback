@@ -46,7 +46,7 @@ const TalkList = () => {
     const isChangingVoteHide =
         changingVote && changingVote.status === VOTE_STATUS_ACTIVE
 
-    const movePage = newPage => {
+    const movePage = (newPage) => {
         setPage(newPage)
     }
 
@@ -61,37 +61,41 @@ const TalkList = () => {
     }
 
     return (
-        <Grid container>
+        <>
             <OFListHeader
                 filterValue={filter}
-                filterChange={value => dispatch(setTalksFilter(value))}
+                filterChange={(value) => dispatch(setTalksFilter(value))}
             />
 
-            {selectedKeys.map(talkId => {
-                if (!talks[talkId]) {
-                    return ''
-                }
+            <Grid container component="ul">
+                {selectedKeys.map((talkId) => {
+                    if (!talks[talkId]) {
+                        return ''
+                    }
 
-                return (
-                    <TalkListItem
-                        talk={talks[talkId]}
-                        key={talkId}
-                        speakers={speakersMap}
-                        votes={votesWithTalkId[talkId]}
-                        onSpeakerClicked={value =>
-                            dispatch(setTalksFilter(value))
-                        }
-                        onVoteExpandClick={setSelectedVote}
-                        onVoteHideClick={setChangingVote}
-                    />
-                )
-            })}
+                    return (
+                        <TalkListItem
+                            talk={talks[talkId]}
+                            key={talkId}
+                            speakers={speakersMap}
+                            votes={votesWithTalkId[talkId]}
+                            onSpeakerClicked={(value) =>
+                                dispatch(setTalksFilter(value))
+                            }
+                            onVoteExpandClick={setSelectedVote}
+                            onVoteHideClick={setChangingVote}
+                        />
+                    )
+                })}
 
-            <OFPagination
-                count={talkKeys ? Math.ceil(talkKeys.length / itemPerPage) : 0}
-                current={currentPage}
-                onChange={(event, page) => movePage(page)}
-            />
+                <OFPagination
+                    count={
+                        talkKeys ? Math.ceil(talkKeys.length / itemPerPage) : 0
+                    }
+                    current={currentPage}
+                    onChange={(event, page) => movePage(page)}
+                />
+            </Grid>
 
             <SimpleDialog
                 onClose={() => setSelectedVote(null)}
@@ -138,7 +142,7 @@ const TalkList = () => {
                     }
                 />
             </SimpleDialog>
-        </Grid>
+        </>
     )
 }
 

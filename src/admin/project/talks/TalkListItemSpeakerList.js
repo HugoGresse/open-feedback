@@ -25,42 +25,51 @@ const TalkListItemSpeakerList = ({
         return ''
     }
 
-    return speakersIds.map((speakerId) => {
-        if (speakers[speakerId]) {
-            return (
-                <Chip
-                    classes={{
-                        root: classes.chip,
-                    }}
-                    key={speakerId}
-                    label={speakers[speakerId].name}
-                    variant="outlined"
-                    onClick={() => onSpeakerClicked(speakers[speakerId].name)}
-                    avatar={
-                        <Avatar
-                            alt={speakers[speakerId].name}
-                            src={speakers[speakerId].photoUrl}
+    return (
+        <ul>
+            {speakersIds.map((speakerId) => {
+                if (speakers[speakerId]) {
+                    return (
+                        <Chip
+                            classes={{
+                                root: classes.chip,
+                            }}
+                            key={speakerId}
+                            label={speakers[speakerId].name}
+                            variant="outlined"
+                            onClick={() =>
+                                onSpeakerClicked(speakers[speakerId].name)
+                            }
+                            component="li"
+                            avatar={
+                                <Avatar
+                                    alt={speakers[speakerId].name}
+                                    src={speakers[speakerId].photoUrl}
+                                />
+                            }
                         />
-                    }
-                />
-            )
-        } else {
-            return (
-                <Tooltip title={t('talks.speakerMissing')} key={speakerId}>
-                    <Chip
-                        label={speakerId}
-                        className={classes.chip}
-                        variant="outlined"
-                        icon={<WarningIcon style={{ width: 20 }} />}
-                        classes={{
-                            root: classes.chip,
-                            label: classes.label,
-                        }}
-                    />
-                </Tooltip>
-            )
-        }
-    })
+                    )
+                } else {
+                    return (
+                        <Tooltip
+                            title={t('talks.speakerMissing')}
+                            key={speakerId}>
+                            <Chip
+                                label={speakerId}
+                                className={classes.chip}
+                                variant="outlined"
+                                icon={<WarningIcon style={{ width: 20 }} />}
+                                classes={{
+                                    root: classes.chip,
+                                    label: classes.label,
+                                }}
+                            />
+                        </Tooltip>
+                    )
+                }
+            })}{' '}
+        </ul>
+    )
 }
 
 export default TalkListItemSpeakerList
