@@ -44,7 +44,7 @@ const OFFormControl = ({
             </InputLabel>
             {children}
             {displayErrorMessageDirectly && meta.error && (
-                <Typography className={classes.errorMessage}>
+                <Typography className={classes.errorMessage} role="alert">
                     {meta.error}
                 </Typography>
             )}
@@ -52,7 +52,9 @@ const OFFormControl = ({
                 <ErrorMessage
                     name={fieldName}
                     render={(msg) => (
-                        <Typography className={classes.errorMessage}>
+                        <Typography
+                            className={classes.errorMessage}
+                            role="alert">
                             {msg}
                         </Typography>
                     )}
