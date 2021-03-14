@@ -34,7 +34,8 @@
             }
         },
         "showAll": "Voir tout",
-        "showLess": "Voir moins"
+        "showLess": "Voir moins",
+        "loading": "Chargement"
     },
     "project": {
         "errorProjectsLoad": "Erreur lors du chargement des projets.",

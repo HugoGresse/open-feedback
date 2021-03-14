@@ -1,6 +1,7 @@
 import React from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -34,6 +35,7 @@ const LoaderMatchParent = ({
     style = {},
     maxWidth = undefined,
 }) => {
+    const { t } = useTranslation()
     const classes = useStyles({
         height,
         width,
@@ -41,7 +43,7 @@ const LoaderMatchParent = ({
     })
     return (
         <div className={classes.container}>
-            <CircularProgress style={style} />
+            <CircularProgress style={style} aria-label={t('common.loading')} />
         </div>
     )
 }

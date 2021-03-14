@@ -34,7 +34,8 @@
             }
         },
         "showAll": "Show all",
-        "showLess": "Show less"
+        "showLess": "Show less",
+        "loading": "Loading"
     },
     "project": {
         "errorProjectsLoad": "Unable to load all projects.",

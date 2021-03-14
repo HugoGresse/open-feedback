@@ -1,4 +1,7 @@
 {
+    "common": {
+        "loading": "Chargement"
+    },
     "comment": {
         "placeholder": "Votre réponse",
         "delete": "Supprimer",

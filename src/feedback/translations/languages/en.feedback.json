@@ -1,4 +1,7 @@
 {
+    "common": {
+        "loading": "Loading"
+    },
     "comment": {
         "placeholder": "Your answer",
         "delete": "Delete",
