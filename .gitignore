@@ -19,6 +19,8 @@
 .env.production.local
 .env.development.local
 .env.test.local
+.env.local
+
 
 # IDE specific
 .idea
