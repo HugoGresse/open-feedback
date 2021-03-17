@@ -67,7 +67,7 @@ describe('Test organization as owner role', function () {
         app.votingForm.assertVoteItemLength(20, langLabel)
 
         app.openFeedback()
-        feedback.assertLogo(imageUrl)
+        feedback.assertLogo(imageUrl, data.projectName)
         feedback.assertTalkInList(data.talk1Name)
 
         feedback.openTalk(data.talk1Name)

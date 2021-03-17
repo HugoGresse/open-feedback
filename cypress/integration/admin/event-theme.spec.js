@@ -62,8 +62,8 @@ describe('Event and theme options', function () {
         app.openFeedback()
 
         feedback.openTalk(data.talk1Name)
-        feedback.assertLogo(imageUrl)
-        feedback.assertTitle(data.projectName, true)
+        feedback.assertLogo(imageUrl, newEventName)
+        feedback.assertTitle(newEventName, true)
         feedback.assertScheduleLink(scheduleLink)
         feedback.assertOutsideVoteRange()
     })
