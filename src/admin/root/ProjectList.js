@@ -12,6 +12,8 @@ import Box from '@material-ui/core/Box'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import { useTheme } from '@material-ui/core'
+import { Link } from 'react-router-dom'
+import RoutingMap, { ROUTE_EVENT_BASE } from '../RoutingMap'
 
 const useStyles = makeStyles((theme) => ({
     newEventCard: {
@@ -25,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
             marginBottom: 16,
         },
     },
+    cardActionArea: {
+        color: theme.palette.text.primary,
+    },
     cardContent: {
         minHeight: 140,
     },
@@ -36,7 +41,6 @@ const ProjectList = ({
     projects,
     organizationId,
     onNewEventClick,
-    onProjectSelected,
     invertedColor,
 }) => {
     const classes = useStyles({ invertedColor })
@@ -68,19 +72,22 @@ const ProjectList = ({
             {displayedProjects.map((project) => (
                 <Grid item xs={6} sm={6} md={4} key={project.id} component="li">
                     <Card>
-                        <CardActionArea
-                            onClick={() => onProjectSelected(project.id)}>
-                            <CardContent className={classes.cardContent}>
-                                <Typography variant="h6">
-                                    {project.name}
-                                </Typography>
-                                <Typography
-                                    variant="caption"
-                                    color="textSecondary">
-                                    {project.id}
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea>
+                        <Link
+                            to={`${ROUTE_EVENT_BASE}/${project.id}${RoutingMap.dashboard.url}`}
+                            title={`${t('root.selectEvent')}${project.name}`}>
+                            <CardActionArea className={classes.cardActionArea}>
+                                <CardContent className={classes.cardContent}>
+                                    <Typography variant="h6">
+                                        {project.name}
+                                    </Typography>
+                                    <Typography
+                                        variant="caption"
+                                        color="textSecondary">
+                                        {project.id}
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
+                        </Link>
                     </Card>
                 </Grid>
             ))}

@@ -100,7 +100,10 @@ const ProjectLayout = ({ baseUrl, children }) => {
                 />
 
                 <div className={classes.containerWrapped}>
-                    <Container maxWidth="lg" className={classes.container}>
+                    <Container
+                        maxWidth="lg"
+                        className={classes.container}
+                        component="main">
                         <MuiThemeProvider theme={innerTheme}>
                             {children}
                         </MuiThemeProvider>

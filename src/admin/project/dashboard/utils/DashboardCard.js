@@ -7,7 +7,7 @@ import withStyles from '@material-ui/core/styles/withStyles'
 import { Box } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 
-const styles = theme => ({
+const styles = (theme) => ({
     container: {
         marginBottom: 0,
         position: 'relative',
@@ -44,7 +44,7 @@ function DashboardCard({ title, titleIcon, rightChildren, children, classes }) {
                     justify="space-between"
                     className={classes.header}>
                     <Grid item xs={12} sm={6}>
-                        <Typography component="h1" gutterBottom>
+                        <Typography component="h3" gutterBottom>
                             <span className={classes.icon}>{titleIcon}</span>
                             {title}
                         </Typography>

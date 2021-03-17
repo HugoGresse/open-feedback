@@ -18,10 +18,16 @@ const TextVoteList = ({ textVotes, onVoteHideClick, onVoteExpandClick }) => {
     const classes = useStyles()
 
     return (
-        <Grid container spacing={2}>
+        <Grid container spacing={2} component="ul">
             {textVotes &&
-                textVotes.map(vote => (
-                    <Grid item key={vote.voteId} xs={12} sm={6} md={4}>
+                textVotes.map((vote) => (
+                    <Grid
+                        item
+                        key={vote.voteId}
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        component="li">
                         <div className={classes.container}>
                             <TextVoteItem
                                 vote={vote}

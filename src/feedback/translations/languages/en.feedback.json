@@ -1,4 +1,7 @@
 {
+    "common": {
+        "loading": "Loading"
+    },
     "comment": {
         "placeholder": "Your answer",
         "delete": "Delete",
@@ -16,7 +19,10 @@
     "searchNoMatch": "No talk matched your criteria on ",
     "searchExtendedMatch": "Talk(s) on the other day matching your search:",
     "talks": {
-        "menuNoDate": "Without date"
+        "menuNoDate": "Without date",
+        "list": "Go to talks list",
+        "vote": "Vote for the talk ",
+        "date": "Display talks for the "
     },
     "footer": {
         "madeBy": "Powered by"

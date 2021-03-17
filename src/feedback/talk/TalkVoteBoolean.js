@@ -19,7 +19,10 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
         boxShadow: 'inset 0 0 0 1px ' + theme.palette.paperVoteBorder,
         height: '100px',
+        width: '100%',
         boxSizing: 'border-box',
+        border: 0,
+        backgroundColor: 'transparent',
         '&:hover': {
             backgroundColor: emphasize(theme.palette.background.paper, 0.07),
             cursor: 'pointer',
@@ -70,15 +73,18 @@ const TalkVoteBoolean = ({
             sm={4}
             md={3}
             className={classes.itemContainer}
-            onClick={() => onVoteChange(voteItem)}
+            aria-label={voteItem.name}
             data-testid="VoteItem">
-            <Paper elevation={1} className={paperClasses}>
+            <Paper
+                elevation={1}
+                className={paperClasses}
+                onClick={() => onVoteChange(voteItem)}
+                component="button">
                 <span className={classes.voteTitle}>{voteItem.name}</span>
                 {voteResult > 0 && (
                     <>
                         <span className={classes.voteResult}>
-                            {voteResult}{' '}
-                            <span>{voteResult > 1 ? 'votes' : 'vote'}</span>
+                            {voteResult} {voteResult > 1 ? 'votes' : 'vote'}
                         </span>
                         <TalkVoteBackground
                             colors={chipColors}

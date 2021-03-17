@@ -19,16 +19,14 @@ Cypress.Commands.add('visitFeedbackProject', (talkId, option) => {
  * Return the vote number of the cell containing the text passed in parameters
  */
 Cypress.Commands.add('getVoteCountData', (baseEl) => {
-    cy.contains(baseEl)
-        .parent()
+    cy.get(`div[aria-label="${baseEl}"] button`)
         .children()
         .then((childrens) => {
             if (childrens.length === 1) {
                 return Promise.resolve(0)
             } else {
                 return cy
-                    .contains(baseEl)
-                    .next()
+                    .get(`div[aria-label="${baseEl}"] span:nth-child(2)`)
                     .invoke('text')
                     .then((text) => {
                         return parseInt(text.split(' ')[0])
@@ -97,6 +95,7 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 Cypress.Commands.add('clickOnFakeLoginButtonIfVisible', () => {
     cy.getCookie('isLoggedIn').then((isLoggedIn) => {
         console.log('cookie', isLoggedIn)
+        cy.log('isLoggedIn? ' + JSON.stringify(isLoggedIn))
         if (!isLoggedIn || isLoggedIn.value !== 'true') {
             cy.contains('Fake login with EMAIL').click()
         }

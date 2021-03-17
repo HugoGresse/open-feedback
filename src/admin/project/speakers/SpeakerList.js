@@ -50,19 +50,19 @@ const SpeakerList = () => {
         setSidePanelOpen(true)
     }
 
-    const onEditSpeakerClicked = speaker => {
+    const onEditSpeakerClicked = (speaker) => {
         if (speakerNotReadableCheck()) return
         setEditSpeaker(speaker)
         setSidePanelOpen(true)
     }
 
-    const onRemoveSpeakerClicked = async speaker => {
+    const onRemoveSpeakerClicked = async (speaker) => {
         if (speakerNotReadableCheck()) return
 
         const talks = await dispatch(getTalks())
         const linkedTalks = filterMap(
             talks,
-            talk => talk.speakers && talk.speakers.includes(speaker.id)
+            (talk) => talk.speakers && talk.speakers.includes(speaker.id)
         )
         const isUsed = !isEmptyMap(linkedTalks)
 
@@ -76,7 +76,7 @@ const SpeakerList = () => {
         })
     }
 
-    const maybeCloseSidePanel = shouldContinueAfterSubmit => {
+    const maybeCloseSidePanel = (shouldContinueAfterSubmit) => {
         if (shouldContinueAfterSubmit) {
             return
         }
@@ -85,10 +85,10 @@ const SpeakerList = () => {
     }
 
     return (
-        <Grid container>
+        <>
             <OFListHeader
                 filterValue={filter}
-                filterChange={value => dispatch(filterSpeakers(value))}
+                filterChange={(value) => dispatch(filterSpeakers(value))}
                 buttonClick={onAddSpeakerClicked}
                 buttonText={t('speakers.addButton')}
             />
@@ -109,15 +109,6 @@ const SpeakerList = () => {
                 }}
             />
 
-            {speakers.map(speaker => (
-                <SpeakerListItem
-                    speaker={speaker}
-                    key={speaker.id}
-                    onEdit={onEditSpeakerClicked}
-                    onRemove={onRemoveSpeakerClicked}
-                />
-            ))}
-
             <SimpleDialog
                 onClose={() => setSpeakerToRemoveData(null)}
                 onConfirm={() => {
@@ -135,15 +126,31 @@ const SpeakerList = () => {
                 open={!!speakerToRemoveData}>
                 <TranslatedTypography i18nKey="speakers.removeConfirmDesc" />
                 {speakerToRemoveData &&
-                    Object.keys(speakerToRemoveData.linkedTalks).map(talkId => {
-                        return (
-                            <li key={talkId}>
-                                {speakerToRemoveData.linkedTalks[talkId].title}
-                            </li>
-                        )
-                    })}
+                    Object.keys(speakerToRemoveData.linkedTalks).map(
+                        (talkId) => {
+                            return (
+                                <li key={talkId}>
+                                    {
+                                        speakerToRemoveData.linkedTalks[talkId]
+                                            .title
+                                    }
+                                </li>
+                            )
+                        }
+                    )}
             </SimpleDialog>
-        </Grid>
+
+            <Grid container component="ul">
+                {speakers.map((speaker) => (
+                    <SpeakerListItem
+                        speaker={speaker}
+                        key={speaker.id}
+                        onEdit={onEditSpeakerClicked}
+                        onRemove={onRemoveSpeakerClicked}
+                    />
+                ))}
+            </Grid>
+        </>
     )
 }
 

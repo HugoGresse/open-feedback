@@ -140,7 +140,7 @@ class TalkVoteText extends Component {
                 md={12}
                 className={classes.itemContainer}
                 data-testid="VoteItem">
-                <Typography variant="h6" color="textPrimary">
+                <Typography variant="h6" color="textPrimary" component="h3">
                     {voteItem.name}
                 </Typography>
                 <Paper elevation={1} className={classes.item}>

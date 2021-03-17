@@ -1,4 +1,7 @@
 {
+    "common": {
+        "loading": "Chargement"
+    },
     "comment": {
         "placeholder": "Votre réponse",
         "delete": "Supprimer",
@@ -16,7 +19,10 @@
     "searchNoMatch": "Aucune présentation ne correspond à vos critères le",
     "searchExtendedMatch": "Présentation(s) les autres jours correspondant à votre recherche:",
     "talks": {
-        "menuNoDate": "Sans date"
+        "menuNoDate": "Sans date",
+        "list": "Afficher la liste des présentations",
+        "vote": "Voter pour la présentation ",
+        "date": "Afficher les présentations du "
     },
     "footer": {
         "madeBy": "Propulsé par"

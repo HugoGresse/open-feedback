@@ -24,6 +24,7 @@
         "attention": "Attention",
         "or": "OR",
         "clear": "Clear",
+        "edit": "Edit",
         "dropzone": {
             "image": {
                 "button": "Upload image",
@@ -33,7 +34,8 @@
             }
         },
         "showAll": "Show all",
-        "showLess": "Show less"
+        "showLess": "Show less",
+        "loading": "Loading"
     },
     "project": {
         "errorProjectsLoad": "Unable to load all projects.",
@@ -127,7 +129,8 @@
         "loading": "Loading your events and organizations...",
         "organization": {
             "noOrganizationName": "Your OpenFeedback events"
-        }
+        },
+        "selectEvent": "Select the event "
     },
     "organization": {
         "title": "Organization",
@@ -171,6 +174,7 @@
         "chooseColor": "Choose the color",
         "delete": "Delete",
         "error": "You have some error, would you mind fixing it before saving? Much appreciated.",
+        "newChipColors": "Add a new chip color",
         "fieldChipColors": "Chip Colors",
         "fieldFaviconUrl": "Favicon*",
         "fieldFaviconUrlNotValid": "The favicon is not a valid url",

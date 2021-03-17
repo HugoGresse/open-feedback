@@ -1,13 +1,17 @@
 import { VOTE_ITEM_TYPES } from './AdminApp'
 
 export class FeedbackApp {
-    assertLogo(expectedLogoUrl) {
-        cy.get('img[alt=logo]').should('have.attr', 'src', expectedLogoUrl)
+    assertLogo(expectedLogoUrl, eventName) {
+        cy.get(`img[alt="logo ${eventName}"]`).should(
+            'have.attr',
+            'src',
+            expectedLogoUrl
+        )
     }
 
     assertTitle(expectedTitle, shouldBeHidden) {
         if (shouldBeHidden) {
-            cy.get('img[alt=logo]')
+            cy.get(`img[alt="logo ${expectedTitle}"]`)
                 .next()
                 .should('not.have.text', expectedTitle)
         } else {
@@ -53,7 +57,7 @@ export class FeedbackApp {
             .within(() => {
                 switch (type) {
                     case VOTE_ITEM_TYPES.text:
-                        cy.contains('h6', name)
+                        cy.contains('h3', name)
                         break
                     case VOTE_ITEM_TYPES.chip:
                         cy.contains('span', name)

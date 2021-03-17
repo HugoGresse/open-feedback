@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
 
-const Wrapper = styled(Box)`
+const Wrapper = styled.header`
     background: ${COLORS.RED_ORANGE};
     background-image: url(${BackgroundHeader});
     background-size: contain;
@@ -73,11 +73,11 @@ const Wrapper = styled(Box)`
 `
 
 const LinkButton = styled.a`
-    ${props =>
+    ${(props) =>
         props.variant === 'outline'
             ? `color: ${COLORS.WHITE}`
             : `color: ${COLORS.RED_ORANGE}`};
-    ${props =>
+    ${(props) =>
         props.variant === 'outline'
             ? `background : none`
             : `background:  ${COLORS.WHITE}`};

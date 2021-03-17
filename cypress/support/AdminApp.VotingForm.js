@@ -90,7 +90,7 @@ export class VotingForm {
     changeVoteItemType(position, from, to) {
         cy.get('li[data-testid=VoteItem]').eq(position).contains(from).click()
 
-        cy.contains('ul li', to).click()
+        cy.contains('ul[role=listbox] li', to).click()
     }
 
     reset() {

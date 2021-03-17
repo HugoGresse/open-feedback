@@ -50,7 +50,7 @@ const VoteItemList = ({ languages, selectedProjectOrOrganizationId }) => {
     }
 
     return (
-        <Grid container>
+        <>
             <OFListHeader
                 title={t('settingsVotingForm.title')}
                 disableFilter={true}
@@ -58,70 +58,75 @@ const VoteItemList = ({ languages, selectedProjectOrOrganizationId }) => {
                 buttonClick={save}
                 buttonText={t('common.save')}
             />
-            {voteItems.map((item, index) => (
-                <VoteItem
-                    key={item.id}
-                    item={item}
-                    languages={languages}
-                    onChange={(newValue) =>
-                        dispatch(
-                            onVoteItemChange({
-                                ...item,
-                                name: newValue,
-                            })
-                        )
-                    }
-                    onLanguagesChange={(langTag, value) => {
-                        dispatch(
-                            onVoteItemChange({
-                                ...item,
-                                languages: {
-                                    ...item.languages,
-                                    [langTag]: value,
-                                },
-                            })
-                        )
-                    }}
-                    onTypeChange={(type) =>
-                        dispatch(
-                            onVoteItemChange({
-                                ...item,
-                                type,
-                            })
-                        )
-                    }
-                    onMoveUp={() => dispatch(onVoteItemMoveUp(item))}
-                    onMoveDown={() => dispatch(onVoteItemMoveDown(item))}
-                    onDelete={() => dispatch(onVoteItemDelete(item))}
-                    onFocus={() => setFocusId(item.id)}
-                    focusId={focusId}
-                    onEnterPressed={() => {
-                        if (index >= voteItems.length - 1) {
-                            dispatch(addVoteItem(undefined, VOTE_TYPE_BOOLEAN))
-                        } else {
-                            setFocusId(voteItems[index + 1].id)
+
+            <Grid container component="ul">
+                {voteItems.map((item, index) => (
+                    <VoteItem
+                        key={item.id}
+                        item={item}
+                        languages={languages}
+                        onChange={(newValue) =>
+                            dispatch(
+                                onVoteItemChange({
+                                    ...item,
+                                    name: newValue,
+                                })
+                            )
                         }
-                    }}
-                />
-            ))}
-            <OFListItem
-                style={{
-                    paddingLeft: 20,
-                    paddingRight: 20,
-                    justifyContent: 'space-between',
-                }}>
-                <Button
-                    aria-label="new vote item"
-                    onClick={() =>
-                        dispatch(addVoteItem(undefined, VOTE_TYPE_BOOLEAN))
-                    }>
-                    <AddIcon style={{ marginRight: 6 }} />
-                    {t('settingsVotingForm.new')}
-                </Button>
-                <OFButton onClick={save} disabled={isSaving}>
-                    {t('common.save')}
-                </OFButton>
-            </OFListItem>
+                        onLanguagesChange={(langTag, value) => {
+                            dispatch(
+                                onVoteItemChange({
+                                    ...item,
+                                    languages: {
+                                        ...item.languages,
+                                        [langTag]: value,
+                                    },
+                                })
+                            )
+                        }}
+                        onTypeChange={(type) =>
+                            dispatch(
+                                onVoteItemChange({
+                                    ...item,
+                                    type,
+                                })
+                            )
+                        }
+                        onMoveUp={() => dispatch(onVoteItemMoveUp(item))}
+                        onMoveDown={() => dispatch(onVoteItemMoveDown(item))}
+                        onDelete={() => dispatch(onVoteItemDelete(item))}
+                        onFocus={() => setFocusId(item.id)}
+                        focusId={focusId}
+                        onEnterPressed={() => {
+                            if (index >= voteItems.length - 1) {
+                                dispatch(
+                                    addVoteItem(undefined, VOTE_TYPE_BOOLEAN)
+                                )
+                            } else {
+                                setFocusId(voteItems[index + 1].id)
+                            }
+                        }}
+                    />
+                ))}
+                <OFListItem
+                    style={{
+                        paddingLeft: 20,
+                        paddingRight: 20,
+                        justifyContent: 'space-between',
+                    }}>
+                    <Button
+                        aria-label="new vote item"
+                        onClick={() =>
+                            dispatch(addVoteItem(undefined, VOTE_TYPE_BOOLEAN))
+                        }>
+                        <AddIcon style={{ marginRight: 6 }} />
+                        {t('settingsVotingForm.new')}
+                    </Button>
+                    <OFButton onClick={save} disabled={isSaving}>
+                        {t('common.save')}
+                    </OFButton>
+                </OFListItem>
+            </Grid>
 
             <SimpleDialog
                 onClose={() => setTypeChangedDialog(false)}
@@ -136,7 +141,7 @@ const VoteItemList = ({ languages, selectedProjectOrOrganizationId }) => {
                 open={isTypeChangeDialogOpen}>
                 <TranslatedTypography i18nKey="settingsVotingForm.typeChangeDialogDesc" />
             </SimpleDialog>
-        </Grid>
+        </>
     )
 }
 

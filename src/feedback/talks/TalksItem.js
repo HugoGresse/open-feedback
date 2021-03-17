@@ -10,8 +10,9 @@ import { getProjectIdSelector } from '../project/projectSelectors'
 import { darken, lighten } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import { useTranslation } from 'react-i18next'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     itemContainer: {
         margin: -1,
     },
@@ -48,6 +49,7 @@ const useStyles = makeStyles(theme => ({
 
 export const TalksItem = ({ talk, userVote }) => {
     const classes = useStyles()
+    const { t } = useTranslation()
     const speakersEntities = useSelector(getSpeakersListSelector)
     const currentProjectId = useSelector(getProjectIdSelector)
     const itemClasses = `${classes.paper} ${
@@ -56,7 +58,7 @@ export const TalksItem = ({ talk, userVote }) => {
 
     const speakers =
         talk.speakers &&
-        talk.speakers.map(speakerId => speakersEntities[speakerId])
+        talk.speakers.map((speakerId) => speakersEntities[speakerId])
     const date = getDateFromStartTime(talk.startTime)
     return (
         <Grid
@@ -67,6 +69,7 @@ export const TalksItem = ({ talk, userVote }) => {
             className={`${classes.itemContainer} talk`}>
             <Link
                 to={`/${currentProjectId}/${date}/${talk.id}`}
+                title={t('talks.vote') + talk.title}
                 className={classes.a}>
                 <Paper className={itemClasses}>
                     {talk.title}

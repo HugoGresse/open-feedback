@@ -17,7 +17,8 @@ const Footer = () => {
             justifyContent="center"
             padding={1}
             marginTop={2}
-            color={COLORS.LIGHT_GRAY}>
+            color={COLORS.LIGHT_GRAY}
+            component="footer">
             <span style={{ marginRight: 6, marginTop: -2 }}>
                 {t('footer.madeBy')}
             </span>

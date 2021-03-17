@@ -118,15 +118,15 @@ export class EventTheme {
     }
 
     addChipColors() {
-        cy.get("div[aria-label='new chip color']").click()
+        cy.get("button[aria-label='Add a new chip color']").click()
     }
 
     editChipColors(index) {
-        cy.get('#chipColors div').eq(index).click()
+        cy.get('#chipColors button').eq(index).click()
         cy.get('.hue-horizontal').click(0, 0)
         cy.get('.chrome-picker').click(200, 5)
         cy.contains('Pick').click()
-        cy.get('#chipColors div')
+        cy.get('#chipColors button')
             .eq(index)
             .should('have.attr', 'color')
             .and('match', /^f6/)
@@ -134,6 +134,6 @@ export class EventTheme {
 
     assertChipColorsCounts(desiredLength = 0) {
         // the "+" button count for one div
-        cy.get('#chipColors div').should('have.length', desiredLength + 1)
+        cy.get('#chipColors button').should('have.length', desiredLength + 1)
     }
 }

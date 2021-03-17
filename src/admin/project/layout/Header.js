@@ -206,6 +206,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                                         classes.topRightButton
                                                     }
                                                     target="_blank"
+                                                    title={t('layout.seeEvent')}
                                                     href={`/${selectedProjectId}`}>
                                                     <EyeIcon
                                                         className={
@@ -221,6 +222,7 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                 <Grid item xs={12}>
                                     <Typography
                                         variant="h5"
+                                        component="h2"
                                         className={classes.title}>
                                         {getTitle(location)}
                                     </Typography>

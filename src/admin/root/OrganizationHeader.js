@@ -7,6 +7,8 @@ import OFButton from '../baseComponents/button/OFButton'
 import { useTranslation } from 'react-i18next'
 import { Box } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
+import { Link } from 'react-router-dom'
+import { ROUTE_ADMIN, ROUTE_ORGANIZATION_SEGMENT } from '../RoutingMap'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -22,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 export const OrganizationHeader = ({
     title,
     isOrganization,
-    onOrganizationSelected,
+    organizationId,
 }) => {
     const { t } = useTranslation()
 
@@ -48,12 +50,15 @@ export const OrganizationHeader = ({
                             display="flex"
                             alignSelf="center"
                             justifyContent="flex-end">
-                            <OFButton
-                                onClick={onOrganizationSelected}
-                                color="secondary"
-                                startIcon={<EditIcon />}>
-                                {t('organization.edit')}
-                            </OFButton>
+                            <Link
+                                to={`${ROUTE_ADMIN}${ROUTE_ORGANIZATION_SEGMENT}/${organizationId}`}
+                                title={`${t('organization.edit')} ${title}`}>
+                                <OFButton
+                                    color="secondary"
+                                    startIcon={<EditIcon />}>
+                                    {t('organization.edit')}
+                                </OFButton>
+                            </Link>
                         </Grid>
                     )}
                 </Grid>

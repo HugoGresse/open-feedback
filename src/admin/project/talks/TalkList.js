@@ -94,7 +94,7 @@ const TalkList = () => {
     })
 
     return (
-        <Grid container>
+        <>
             <OFListHeader
                 filterValue={filter}
                 filterChange={(value) => dispatch(setTalksFilter(value))}
@@ -103,41 +103,43 @@ const TalkList = () => {
                 buttonText={t('talks.addTalks')}
             />
 
-            <TalkAddEditPanel
-                isOpen={sidePanelOpen}
-                projectVoteStartTime={projectVoteStartTime}
-                talk={editingTalk}
-                existingTags={tags}
-                existingTracks={tracks}
-                existingSpeakers={speakersArray}
-                onClose={() => maybeCloseSidePanel()}
-                onSpeakerAdd={(speaker) => dispatch(addSpeaker(speaker))}
-                onSubmit={(talk, shouldContinueAfterSubmit) => {
-                    const fixedTalk = reformatTalk(talk)
-                    if (editingTalk) {
-                        return dispatch(editTalk(fixedTalk)).then(() =>
+            <Grid container component="ul">
+                <TalkAddEditPanel
+                    isOpen={sidePanelOpen}
+                    projectVoteStartTime={projectVoteStartTime}
+                    talk={editingTalk}
+                    existingTags={tags}
+                    existingTracks={tracks}
+                    existingSpeakers={speakersArray}
+                    onClose={() => maybeCloseSidePanel()}
+                    onSpeakerAdd={(speaker) => dispatch(addSpeaker(speaker))}
+                    onSubmit={(talk, shouldContinueAfterSubmit) => {
+                        const fixedTalk = reformatTalk(talk)
+                        if (editingTalk) {
+                            return dispatch(editTalk(fixedTalk)).then(() =>
+                                maybeCloseSidePanel(shouldContinueAfterSubmit)
+                            )
+                        }
+                        return dispatch(addTalk(fixedTalk)).then(() =>
                             maybeCloseSidePanel(shouldContinueAfterSubmit)
                         )
-                    }
-                    return dispatch(addTalk(fixedTalk)).then(() =>
-                        maybeCloseSidePanel(shouldContinueAfterSubmit)
-                    )
-                }}
-            />
-
-            {talks.map((talk) => (
-                <TalkListItem
-                    item={talk}
-                    key={talk.id}
-                    speakers={speakersMap}
-                    onEdit={onEditTalkClicked}
-                    onRemove={onRemoveTalkClicked}
-                    onSpeakerClicked={(speakerName) =>
-                        dispatch(setTalksFilter(speakerName))
-                    }
+                    }}
                 />
-            ))}
-        </Grid>
+
+                {talks.map((talk) => (
+                    <TalkListItem
+                        item={talk}
+                        key={talk.id}
+                        speakers={speakersMap}
+                        onEdit={onEditTalkClicked}
+                        onRemove={onRemoveTalkClicked}
+                        onSpeakerClicked={(speakerName) =>
+                            dispatch(setTalksFilter(speakerName))
+                        }
+                    />
+                ))}
+            </Grid>
+        </>
     )
 }
 

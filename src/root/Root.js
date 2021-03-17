@@ -43,8 +43,10 @@ const Root = () => {
         <I18nextProvider i18n={i18n}>
             <ThemeProvider theme={theme}>
                 <Header />
-                <HowItWorks />
-                <FAQ />
+                <main>
+                    <HowItWorks />
+                    <FAQ />
+                </main>
                 <Footer />
             </ThemeProvider>
         </I18nextProvider>

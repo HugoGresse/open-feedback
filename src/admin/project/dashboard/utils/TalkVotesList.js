@@ -65,7 +65,7 @@ const TalkVotesList = ({
             title={title}
             titleIcon={titleIcon}
             rightChildren={
-                <Typography component="h2">
+                <Typography variant="body1">
                     <OFButton
                         style={{
                             design: 'text',
@@ -95,8 +95,8 @@ const TalkVotesList = ({
                 </Typography>
             }>
             <NoData datas={dataArray} dinoStartDelay={dinoStartDelay}>
-                <Grid container spacing={2}>
-                    {items.map(row =>
+                <Grid container spacing={2} component="ul">
+                    {items.map((row) =>
                         getItem(row, projectId, classes, countKey)
                     )}
                 </Grid>
@@ -107,32 +107,34 @@ const TalkVotesList = ({
 
 const getItem = (voteWithTalk, projectId, classes, countKey) => {
     return (
-        <React.Fragment key={voteWithTalk.talkId}>
-            <Grid
-                item
-                xs={10}
-                className={classes.title}
-                component="a"
-                target="_blank"
-                href={`/${projectId}/${voteWithTalk.date}/${voteWithTalk.talkId}`}>
-                {voteWithTalk.title}
-                <div className={classes.speakers}>
-                    {voteWithTalk.speakers
-                        .map(speaker => speaker && speaker.name)
-                        .join(', ')}
-                </div>
+        <Grid item xs={12} component="li" key={voteWithTalk.talkId}>
+            <Grid container>
+                <Grid
+                    item
+                    xs={10}
+                    className={classes.title}
+                    component="a"
+                    target="_blank"
+                    href={`/${projectId}/${voteWithTalk.date}/${voteWithTalk.talkId}`}>
+                    {voteWithTalk.title}
+                    <div className={classes.speakers}>
+                        {voteWithTalk.speakers
+                            .map((speaker) => speaker && speaker.name)
+                            .join(', ')}
+                    </div>
+                </Grid>
+                <Grid
+                    item
+                    xs={2}
+                    component="a"
+                    target="_blank"
+                    align="right"
+                    href={`/${projectId}/${voteWithTalk.date}/${voteWithTalk.talkId}`}
+                    className={classes.count}>
+                    {voteWithTalk[countKey]}
+                </Grid>
             </Grid>
-            <Grid
-                item
-                xs={2}
-                component="a"
-                target="_blank"
-                align="right"
-                href={`/${projectId}/${voteWithTalk.date}/${voteWithTalk.talkId}`}
-                className={classes.count}>
-                {voteWithTalk[countKey]}
-            </Grid>
-        </React.Fragment>
+        </Grid>
     )
 }
 
