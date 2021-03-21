@@ -12,7 +12,7 @@ const SettingsForm = lazy(() =>
     import('../../project/settings/setup/SettingsForm')
 )
 
-export const OrganizationSettings = () => {
+export const OrganizationVotingFormSettings = () => {
     const dispatch = useDispatch()
     const disableSoloTalkRedirect = useSelector(disableSoloTalkRedirectSelector)
     // Doing this prevent the selector to be connected to redux directly, thus prevent future update of initialValues

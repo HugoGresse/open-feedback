@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import VoteItemList from '../../project/settings/votingForm/VoteItemList'
 import VotingFormFooter from '../../project/settings/votingForm/VotingFormFooter'
-import { OrganizationSettings } from './OrganizationSettings'
+import { OrganizationVotingFormSettings } from './OrganizationVotingFormSettings'
 import { useDispatch, useSelector } from 'react-redux'
 import {
     getOrganizationLanguagesSelector,
@@ -30,7 +30,7 @@ export const OrganizationVotingForm = () => {
 
     return (
         <>
-            <OrganizationSettings />
+            <OrganizationVotingFormSettings />
             <VoteItemList languages={languages} />
             <VotingFormFooter
                 reset={() => {

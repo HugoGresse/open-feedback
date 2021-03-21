@@ -26,6 +26,12 @@ describe('Test organization as owner role', function () {
         app.organization.assertUserRoleInfo()
         app.organization.closeUserRoleInfo()
 
+        const newOrgName = stringGenerator()
+        app.organization.openSettings(newOrgName)
+        app.organization.setOrganizationName(newOrgName)
+        app.organization.saveSettings()
+        app.organization.assertNewOrgScreen(data.orgName, [''])
+
         app.organization.openVotingForm()
 
         app.settings.addLanguage('Deutsch')
@@ -55,9 +61,9 @@ describe('Test organization as owner role', function () {
         app.organization.close()
 
         // New event
-        app.create(data.projectName, data.orgName)
+        app.create(data.projectName, newOrgName)
 
-        cy.contains(data.orgName)
+        cy.contains(newOrgName)
         cy.contains(data.projectName)
 
         app.openTalks()

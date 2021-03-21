@@ -157,7 +157,8 @@
             "admin": "Same as editor + manage organization settings: members, roles, voting form, themes.",
             "owner": "Same as admin + manage owner role (only one owner) and delete the organization."
         },
-        "infoData": "Organization settings, voting form & theme are applied on new event creation only, they do not affect existing events."
+        "infoData": "Organization settings, voting form & theme are applied on new event creation only, they do not affect existing events.",
+        "settings": "Settings"
     },
     "rooting": {
         "dashboard": "Dashboard",
