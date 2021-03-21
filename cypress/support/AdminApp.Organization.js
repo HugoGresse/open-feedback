@@ -56,4 +56,16 @@ export class Organization {
     addLanguage(lang) {
         cy.get('#languages').type(lang).type('{downarrow}').type('{enter}')
     }
+
+    openSettings() {
+        cy.contains('Settings').click()
+    }
+
+    saveSettings() {
+        cy.contains('Save').click()
+    }
+
+    setOrganizationName(name) {
+        cy.get('input[name=name]').clear().type(name)
+    }
 }

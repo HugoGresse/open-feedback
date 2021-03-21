@@ -1,7 +1,6 @@
 import React from 'react'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogActions from '@material-ui/core/DialogActions'
 import Dialog from '@material-ui/core/Dialog'
 import { useTranslation } from 'react-i18next'
 import OFButton from '../../baseComponents/button/OFButton'
@@ -38,7 +37,6 @@ export const OrganizationSettings = ({ onClose }) => {
                         name: organization.name,
                     }}
                     onSubmit={(values) => {
-                        console.log(values)
                         return dispatch(
                             editOrganization({
                                 name: values.name,
