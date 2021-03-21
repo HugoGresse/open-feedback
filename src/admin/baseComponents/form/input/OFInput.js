@@ -14,9 +14,9 @@ const IconWrapper = styled.div`
 const OFInputStyled = styled(InputBase)`
     height: 40px;
     font-size: 16px;
-    ${props =>
+    ${(props) =>
         props.error ? `border: 1px solid #F00;` : `border: 1px solid #EEE;`}
-    ${props =>
+    ${(props) =>
         props.error ? `box-shadow: 0px 1px 3px rgba(255,0,0, 0.3);` : ``}
     width: 100%;
     background: ${COLORS.WHITE};
@@ -33,12 +33,12 @@ const OFInputStyled = styled(InputBase)`
     &::selected {
         background-color: 'transparent';
     }
+    &:focus-within {
+        border: 1px solid ${COLORS.RED_ORANGE};
+    }
 `
 
 const useStyles = makeStyles({
-    focusedInput: {
-        borderColor: COLORS.RED_ORANGE,
-    },
     selectedInput: {
         paddingLeft: 12,
         '&:-internal-autofill-selected': {
@@ -57,7 +57,6 @@ function OFInput(props) {
             {otherProps.icon && <IconWrapper>{otherProps.icon}</IconWrapper>}
             <OFInputStyled
                 classes={{
-                    focused: classes.focusedInput,
                     input: classes.selectedInput,
                 }}
                 ref={forwardedRef}
