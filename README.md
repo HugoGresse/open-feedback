@@ -1,6 +1,21 @@
-# Open Feedback
+<p align="center">
+  <img src="/public/static/logos/openfeedback%20black%20orange-3x.png" alt="OpenFeedback logo" />
+</p>
+<p align="center">
+  <strong>Collectez des feedbacks facilement</strong>
+</p>
 
-**Open Feedback** is an opened SaaS platform for organisers and speakers to gather users feedback. It connects to one of 3 data source: OpenFeedback database, hoverboard-v2, or your own API, to retrieve all the sessions & speakers. Anonymous users can give constructive feedbacks on sessions, and admins can manage the voting form, comments, languages, sessions and speakers directly within the GUI.
+<h3 align="center">
+  <a href="https://gitter.im/open-feedback/community">Community</a>
+  <span> · </span>
+  <a href="https://contribute-open-feedback.netlify.com/">Documentation</a>
+</h3>
+
+<p align="center"><b>https://openfeedback.io/</b></p>
+
+---
+
+**Open Feedback** is an opened SaaS platform for organisers and speakers to gather users feedback. It connects to one of 3 data source: OpenFeedback database, hoverboard-v2, or your own API, to retrieve all the sessions & speakers. Anonymous users can give constructive feedbacks on sessions, and admins can manage the voting form, comments, languages, sessions and speakers directly within the GUI. Organization also have a centralized users management and common voting form.
 
 > Demo: https://openfeedback.io/eaJnyMXD3oNfhrrnBYDT
 
@@ -9,13 +24,13 @@
 -   Generate unique & public read url for an event
 -   List all sessions, search by tag, speakers, tracks
 -   User give feedback (not a rate) on any sessions anonymously (it use Firebase anonymous login)
--   Voting form are 100% customizable and can be translated any languages
+-   Voting form are 100% customizable and can be translated to any languages
 -   Display users feedback
 -   Full dashboard statistics & admin interface
 -   Comments moderation
 -   Admin editors management
+-   Organization: manage users, voting form and logos
 -   TODO: live votes reflected on all clients
--   TODO: organization
 
 ## You want to contribute ?
 
