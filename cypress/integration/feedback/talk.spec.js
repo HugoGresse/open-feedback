@@ -26,6 +26,7 @@ describe('Single talk', function () {
             .should('contain', 'Friday, June 28')
             .should('contain', '9:00')
             .should('contain', '9:50')
+        cy.checkA11yWithoutFirebaseEmulatorsWarning()
     })
 
     it('Check that boolean vote does work (increment/decrement count)', function () {
@@ -36,6 +37,7 @@ describe('Single talk', function () {
         const voteButtonText = 'Trop de code'
 
         cy.getVoteCountData(voteButtonText).then((originalVoteCount) => {
+            cy.checkA11yWithoutFirebaseEmulatorsWarning()
             cy.contains(voteButtonText).parent().click()
 
             cy.getVoteCountData(voteButtonText).should((voteCount) => {
@@ -58,12 +60,14 @@ describe('Single talk', function () {
                     originalVoteCount
                 )
             })
+            cy.checkA11yWithoutFirebaseEmulatorsWarning()
         })
     })
 
     it('Check that text vote does work (post, edit and delete)', function () {
         feedback.clearUserSession()
 
+        cy.checkA11yWithoutFirebaseEmulatorsWarning()
         const inputText = stringGenerator()
         const textEdited = stringGenerator()
         const voteTextAreaSelector = 'textarea[placeholder="Your answer"]'
@@ -78,6 +82,7 @@ describe('Single talk', function () {
 
         // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(500)
+        cy.checkA11yWithoutFirebaseEmulatorsWarning()
         cy.contains('Delete').click()
         cy.get('.comments').should('not.contain', inputText + textEdited)
     })

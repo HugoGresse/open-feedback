@@ -18,14 +18,14 @@ const TalkVoteTextResult = ({ result }) => {
     )
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     date: {
-        color: '#888',
+        color: theme.palette.textDimmed,
         fontSize: 14,
         marginBottom: 0,
     },
     comment: {
-        borderBottom: props =>
+        borderBottom: (props) =>
             props.isLast ? '' : `1px solid ${theme.palette.paperBorder}`,
         paddingBottom: 15,
         marginTop: 10,

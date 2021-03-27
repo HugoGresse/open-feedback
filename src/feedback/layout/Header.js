@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
             },
         },
         '& svg': {
-            color: grey[600],
+            color: theme.palette.textDimmed,
         },
     },
     iconRight: {
@@ -83,7 +83,7 @@ const Header = ({ project }) => {
                         <Link
                             title={t('talks.list')}
                             to={`/${matchParams.projectId}/${matchParams.date}`}>
-                            <ArrowBack />
+                            <ArrowBack color="primary" />
                         </Link>
                     )}
                 </div>

@@ -44,7 +44,7 @@ const FeedbackApp = () => {
                         textVoteTitleShadow: prefersDarkMode
                             ? grey[800]
                             : grey[50],
-                        textDimmed: prefersDarkMode ? grey[50] : grey[600],
+                        textDimmed: prefersDarkMode ? grey[400] : grey[600],
                     },
                 })
             ),

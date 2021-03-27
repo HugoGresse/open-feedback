@@ -97,7 +97,11 @@ export class FeedbackApp {
     assertSpeakerInList(name, avatarUrl = null) {
         cy.get('#root').should('contain', name)
         if (avatarUrl) {
-            cy.get(`img[alt="${name}"]`).should('have.attr', 'src', avatarUrl)
+            cy.get(`img[alt="Avatar of ${name}"]`).should(
+                'have.attr',
+                'src',
+                avatarUrl
+            )
         }
     }
 
@@ -123,7 +127,7 @@ export class FeedbackApp {
             .within(() => {
                 switch (type) {
                     case VOTE_ITEM_TYPES.text:
-                        cy.contains('h2', name)
+                        cy.contains('h3', name)
                         break
                     case VOTE_ITEM_TYPES.chip:
                         cy.contains('span', name)
