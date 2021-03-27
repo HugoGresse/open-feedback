@@ -46,7 +46,7 @@ describe('Test voting form edition', function () {
 
         app.openFeedback()
 
-        feedback.openTalk(data.talk1Name)
+        feedback.openTalkByClick(data.talk1Name)
         feedback.assertVoteItem(
             0,
             "I've learned a lot 🤓",
@@ -83,7 +83,7 @@ describe('Test voting form edition', function () {
 
         app.openFeedback()
 
-        feedback.openTalk(data.talk1Name)
+        feedback.openTalkByClick(data.talk1Name)
         feedback.assertVoteItem(0, 'Fun 😃', VOTE_ITEM_TYPES.chip)
         feedback.assertVoteItem(
             1,

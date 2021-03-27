@@ -15,6 +15,7 @@ export class AdminApp {
 
     open() {
         cy.visit('/admin')
+        cy.injectAxe()
     }
 
     loginIfNeeded() {

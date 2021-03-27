@@ -76,7 +76,7 @@ describe('Test organization as owner role', function () {
         feedback.assertLogo(imageUrl, data.projectName)
         feedback.assertTalkInList(data.talk1Name)
 
-        feedback.openTalk(data.talk1Name)
+        feedback.openTalkByClick(data.talk1Name)
         feedback.assertInTalk(data.talk1Name, [data.voteItem])
     })
 })

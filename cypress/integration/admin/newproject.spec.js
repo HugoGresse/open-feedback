@@ -85,7 +85,7 @@ describe('Test creating a new project', function () {
         feedback.assertSpeakerInList(data.speaker1.name)
         feedback.assertSpeakerInList(data.speaker2.name)
 
-        feedback.openTalk(data.talk1Name)
+        feedback.openTalkByClick(data.talk1Name)
         feedback.assertInTalk(data.talk1Name, [data.voteItem1])
     })
 })
