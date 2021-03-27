@@ -37,7 +37,10 @@ export const OrganizationHeader = ({
             <Grid item xs={12} className={classes.container} component="li">
                 <Grid container>
                     <Grid item xs={12} md={isOrganization ? 8 : 12}>
-                        <Typography className={classes.title} variant="h2">
+                        <Typography
+                            className={classes.title}
+                            variant="h2"
+                            component="h1">
                             {title}
                         </Typography>
                     </Grid>

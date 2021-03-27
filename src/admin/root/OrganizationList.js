@@ -68,7 +68,7 @@ export const OrganizationList = ({
                 />
             ))}
 
-            <Grid item xs={12} key="new-org">
+            <Grid item xs={12} key="new-org" component="li">
                 <OFButton
                     onClick={onNewOrganizationClick}
                     color="secondary"

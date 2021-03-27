@@ -46,7 +46,7 @@ const AdminRoot = () => {
     }, [dispatch, isUserValid])
 
     return (
-        <div style={{ position: 'relative' }}>
+        <main style={{ position: 'relative' }}>
             <Box
                 className={classes.container}
                 style={{ height: isNewProjectOpenOrgId ? '100vh' : 'auto' }}>
@@ -64,7 +64,6 @@ const AdminRoot = () => {
                     )}
                 </RootContentLayout>
             </Box>
-
             <div className={classes.newProjectContainer}>
                 <Slide
                     direction="left"
@@ -87,7 +86,7 @@ const AdminRoot = () => {
             />
 
             {inviteId && <InviteDialog inviteId={inviteId} />}
-        </div>
+        </main>
     )
 }
 

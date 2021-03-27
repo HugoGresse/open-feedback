@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
         marginBottom: theme.spacing(1),
     },
+    focusedLabel: {
+        color: `${theme.palette.primary.inputLabel} !important`,
+    },
     errorMessage: {
         color: 'red',
     },
@@ -39,6 +42,9 @@ const OFFormControl = ({
                 shrink
                 htmlFor={fieldName}
                 className={classes.label}
+                classes={{
+                    focused: classes.focusedLabel,
+                }}
                 color={color}>
                 {name}
             </InputLabel>

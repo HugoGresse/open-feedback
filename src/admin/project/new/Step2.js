@@ -59,11 +59,13 @@ const Step2 = ({
                                     <div>
                                         <TranslatedTypography
                                             i18nKey="newEvent.step2.projectTypeOpenfeedback"
+                                            component="h4"
                                             variant="h6">
                                             title
                                         </TranslatedTypography>
                                         <TranslatedTypography
                                             i18nKey="newEvent.step2.projectTypeOpenfeedbackDetail"
+                                            component="p"
                                             variant="subtitle1">
                                             detail
                                         </TranslatedTypography>
@@ -78,11 +80,13 @@ const Step2 = ({
                                     <div>
                                         <TranslatedTypography
                                             i18nKey="newEvent.step2.projectTypeHoverboard"
+                                            component="h4"
                                             variant="h6">
                                             title
                                         </TranslatedTypography>
                                         <TranslatedTypography
                                             i18nKey="newEvent.step2.projectTypeHoverboardDetail"
+                                            component="p"
                                             variant="subtitle1">
                                             detail
                                         </TranslatedTypography>
@@ -98,11 +102,13 @@ const Step2 = ({
                                     <div>
                                         <TranslatedTypography
                                             i18nKey="newEvent.step2.projectTypeJsonurl"
+                                            component="h4"
                                             variant="h6">
                                             title
                                         </TranslatedTypography>
                                         <TranslatedTypography
                                             i18nKey="newEvent.step2.projectTypeJsonurlDetail"
+                                            component="p"
                                             variant="subtitle1">
                                             detail
                                         </TranslatedTypography>

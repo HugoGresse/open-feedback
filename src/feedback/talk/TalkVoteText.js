@@ -69,7 +69,7 @@ const styles = (theme) => ({
     },
     saveButton: {
         marginLeft: 16,
-        backgroundColor: '#2559e0',
+        backgroundColor: '#3673ff',
     },
     voteHidden: {
         padding: 10,

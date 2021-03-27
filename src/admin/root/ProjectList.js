@@ -30,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
     cardActionArea: {
         color: theme.palette.text.primary,
     },
+    newProjectCard: {
+        color: theme.palette.primary.dark,
+        minHeight: 140,
+    },
     cardContent: {
         minHeight: 140,
     },
@@ -61,7 +65,7 @@ const ProjectList = ({
                 <Card className={`${classes.newEventCard}`}>
                     <CardActionArea
                         onClick={() => onNewEventClick(organizationId)}>
-                        <CardContent className={classes.cardContent}>
+                        <CardContent className={classes.newProjectCard}>
                             <AddIcon />
                             <Typography>{t('root.create')}</Typography>
                         </CardContent>
@@ -93,39 +97,38 @@ const ProjectList = ({
             ))}
 
             {showHideAllProject && (
-                <Grid
-                    item
-                    xs={12}
-                    key="show-all"
-                    component={Box}
-                    textAlign="end">
-                    <OFButton
-                        onClick={() => {
-                            setDisplayedProjects(
-                                allProjectsDisplayed
-                                    ? projects.slice(
-                                          0,
-                                          DEFAULT_PROJECTS_DISPLAY
-                                      )
-                                    : projects
-                            )
-                        }}
-                        style={{
-                            customBg:
-                                theme.palette.secondary
-                                    .buttonSecondaryBackground,
-                            customText:
-                                theme.palette.secondary.buttonSecondaryText,
-                        }}>
-                        {allProjectsDisplayed ? (
-                            <ExpandLessIcon />
-                        ) : (
-                            <ExpandMoreIcon />
-                        )}
-                        {allProjectsDisplayed
-                            ? t('common.showLess')
-                            : `${t('common.showAll')} (${hiddenProjectCount})`}
-                    </OFButton>
+                <Grid item xs={12} key="show-all" component="li">
+                    <Box textAlign="end">
+                        <OFButton
+                            onClick={() => {
+                                setDisplayedProjects(
+                                    allProjectsDisplayed
+                                        ? projects.slice(
+                                              0,
+                                              DEFAULT_PROJECTS_DISPLAY
+                                          )
+                                        : projects
+                                )
+                            }}
+                            style={{
+                                customBg:
+                                    theme.palette.secondary
+                                        .buttonSecondaryBackground,
+                                customText:
+                                    theme.palette.secondary.buttonSecondaryText,
+                            }}>
+                            {allProjectsDisplayed ? (
+                                <ExpandLessIcon />
+                            ) : (
+                                <ExpandMoreIcon />
+                            )}
+                            {allProjectsDisplayed
+                                ? t('common.showLess')
+                                : `${t(
+                                      'common.showAll'
+                                  )} (${hiddenProjectCount})`}
+                        </OFButton>
+                    </Box>
                 </Grid>
             )}
         </>

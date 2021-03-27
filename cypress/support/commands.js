@@ -4,8 +4,12 @@ Cypress.Commands.add('checkA11yWithoutFirebaseEmulatorsWarning', () => {
     // Firebase emulators add a message the the bottom of the screen containing:
     // "Running in emulator mode. Do not use with production credentials."
     // which does not appear in production, we discoard this for Axe run confis
+
+    // .MuiButtonBase-root is because white text on blue or orange background is
+    // computed hs having the wrong ratio but is usually better
+    // source https://uxmovement.com/buttons/the-myths-of-color-contrast-accessibility/
     cy.checkA11y({
-        exclude: [['.firebase-emulator-warning']],
+        exclude: [['.firebase-emulator-warning'], ['.MuiButtonBase-root']],
     })
 })
 

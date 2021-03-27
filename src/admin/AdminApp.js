@@ -26,10 +26,11 @@ const innerTheme = responsiveFontSizes(
                 main: COLORS.RED_ORANGE,
                 dark: COLORS.DARK_RED_ORANGE,
                 contrastText: '#fff',
+                inputLabel: '#da2600',
             },
             secondary: {
                 light: '#6ec6ff',
-                main: '#2196f3',
+                main: '#2091eb',
                 dark: '#0069c0',
                 contrastText: '#fff',
                 buttonSecondaryBackground: '#fff',
