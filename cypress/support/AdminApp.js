@@ -50,8 +50,6 @@ export class AdminApp {
 
     openFeedback() {
         cy.contains('See event').invoke('removeAttr', 'target').click()
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(200)
         cy.injectAxe()
     }
 

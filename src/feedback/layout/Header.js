@@ -92,6 +92,7 @@ const Header = ({ project }) => {
                         <a
                             href={project.scheduleLink}
                             target="_blank"
+                            title={`${project.name} website`}
                             rel="noopener noreferrer">
                             <CalendarToday />
                         </a>
@@ -104,7 +105,10 @@ const Header = ({ project }) => {
                         alt={`logo ${project.name}`}
                     />
                     <Hidden smDown>
-                        <Typography variant="h1" color="textPrimary">
+                        <Typography
+                            variant="h1"
+                            color="textPrimary"
+                            aria-label={project.hideEventName && project.name}>
                             {!project.hideEventName && project.name}
                         </Typography>
                     </Hidden>
