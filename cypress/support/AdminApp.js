@@ -50,6 +50,7 @@ export class AdminApp {
 
     openFeedback() {
         cy.contains('See event').invoke('removeAttr', 'target').click()
+        cy.injectAxe()
     }
 
     addTalk(
