@@ -1,13 +1,10 @@
 import React from 'react'
-import { COLORS } from '../../constants/colors'
-
 import { useTranslation } from 'react-i18next'
 import { Box, useTheme } from '@material-ui/core'
 
 const Footer = () => {
     const { t } = useTranslation()
     const theme = useTheme()
-
     const logoColor = theme.palette.type === 'dark' ? 'white' : 'black'
 
     return (
@@ -17,7 +14,7 @@ const Footer = () => {
             justifyContent="center"
             padding={1}
             marginTop={2}
-            color={COLORS.LIGHT_GRAY}
+            color={theme.palette.textDimmed}
             component="footer">
             <span style={{ marginRight: 6, marginTop: -2 }}>
                 {t('footer.madeBy')}

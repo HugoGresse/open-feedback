@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link, useParams } from 'react-router-dom'
-import Title from './Title'
 import SearchBar from './SearchBar'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import CalendarToday from '@material-ui/icons/CalendarToday'
@@ -9,6 +8,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { grey } from '@material-ui/core/colors'
 import { darken } from '@material-ui/core/styles'
 import { useTranslation } from 'react-i18next'
+import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
     logo: {
@@ -104,9 +104,9 @@ const Header = ({ project }) => {
                         alt={`logo ${project.name}`}
                     />
                     <Hidden smDown>
-                        <Title component="h1" color="textPrimary">
+                        <Typography variant="h1" color="textPrimary">
                             {!project.hideEventName && project.name}
-                        </Title>
+                        </Typography>
                     </Hidden>
                 </div>
             </div>

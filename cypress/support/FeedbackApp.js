@@ -9,6 +9,8 @@ export class FeedbackApp {
             cy.visit(rootUrl)
         }
 
+        cy.injectAxe()
+
         if (options.clearUserSession) {
             this.clearUserSession()
         }
@@ -16,6 +18,7 @@ export class FeedbackApp {
 
     openTalkByClick(name) {
         cy.contains(name).click()
+        cy.checkA11yWithoutFirebaseEmulatorsWarning()
     }
 
     clearUserSession() {
@@ -48,16 +51,16 @@ export class FeedbackApp {
     }
 
     assertTracks(expectedCount, names = []) {
-        cy.get('h3').should('have.length', expectedCount)
+        cy.get('h2').should('have.length', expectedCount)
         for (const name of names) {
-            cy.get('h3').should('contain', name)
+            cy.get('h2').should('contain', name)
         }
     }
 
     assertTalks(expectedCount, names = []) {
         cy.get('.talk').should('have.length', expectedCount)
         for (const name of names) {
-            cy.get('h3').should('contain', name)
+            cy.get('.talk').should('contain', name)
         }
     }
 
@@ -77,7 +80,7 @@ export class FeedbackApp {
     }
 
     assertFirstTalkInTrack(trackName, talkUrl, talkTitle, talkSpeaker) {
-        cy.get('h3')
+        cy.get('h2')
             .first()
             .contains(trackName)
             .next()
@@ -120,7 +123,7 @@ export class FeedbackApp {
             .within(() => {
                 switch (type) {
                     case VOTE_ITEM_TYPES.text:
-                        cy.contains('h3', name)
+                        cy.contains('h2', name)
                         break
                     case VOTE_ITEM_TYPES.chip:
                         cy.contains('span', name)

@@ -1,18 +1,12 @@
 const { triggerSaveKeypress } = require('../utils/triggerSaveKeyPress')
-Cypress.Commands.add('visitFeedbackProject', (talkId, option) => {
-    const options = option || {}
-    const rootUrl = `/${Cypress.env('firestoreTestProjectId')}`
-    if (talkId) {
-        cy.visit(`${rootUrl}/${talkId}`)
-    } else {
-        cy.visit(rootUrl)
-    }
 
-    if (options.clearUserSession) {
-        indexedDB.deleteDatabase('firebaseLocalStorageDb')
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(2000)
-    }
+Cypress.Commands.add('checkA11yWithoutFirebaseEmulatorsWarning', () => {
+    // Firebase emulators add a message the the bottom of the screen containing:
+    // "Running in emulator mode. Do not use with production credentials."
+    // which does not appear in production, we discoard this for Axe run confis
+    cy.checkA11y({
+        exclude: [['.firebase-emulator-warning']],
+    })
 })
 
 /**

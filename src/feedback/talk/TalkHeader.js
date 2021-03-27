@@ -1,9 +1,9 @@
 import React from 'react'
 import Box from '@material-ui/core/Box'
-import Title from '../layout/Title'
-import { COLORS } from '../../constants/colors'
 import { DateTime } from 'luxon'
 import SpeakerList from '../speaker/SpeakerList'
+import { useTheme } from '@material-ui/core'
+import Typography from '@material-ui/core/Typography'
 
 const formatTalkDateTime = (talk) => {
     const startDate = DateTime.fromISO(talk.startTime, {
@@ -26,12 +26,14 @@ const formatTalkDateTime = (talk) => {
 }
 
 const TalkHeader = ({ talk, speakers }) => {
+    const theme = useTheme()
+
     return (
         <Box marginBottom={4}>
-            <Title variant="h2" color="textPrimary">
+            <Typography variant="h2" color="textPrimary">
                 {talk.title}
                 <Box
-                    color={COLORS.GRAY}
+                    color={theme.palette.textDimmed}
                     fontSize={20}
                     marginLeft={1}
                     component="span">
@@ -40,8 +42,11 @@ const TalkHeader = ({ talk, speakers }) => {
                             <span key={key}>#{tag} </span>
                         ))}
                 </Box>
-            </Title>
-            <Box fontSize={16} color={COLORS.GRAY} marginBottom={2}>
+            </Typography>
+            <Box
+                fontSize={16}
+                color={theme.palette.textDimmed}
+                marginBottom={2}>
                 {talk.startTime && formatTalkDateTime(talk)}
             </Box>
             <SpeakerList speakers={speakers} />

@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux'
 import { setSelectedTalk } from '../talk/core/talkActions'
 import TalksItem from './TalksItem'
 import Grid from '@material-ui/core/Grid'
-import Title from '../layout/Title'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles(() => ({
     track: {
@@ -19,9 +19,13 @@ const TalksList = ({ talks, userTalkVote }) => {
 
     return talks.map((track, key) => (
         <div key={key}>
-            <Title color="textPrimary" component="h3" className={classes.track}>
+            <Typography
+                color="textPrimary"
+                component="h2"
+                variant="h3"
+                className={classes.track}>
                 {track.track}
-            </Title>
+            </Typography>
 
             <Grid container spacing={2}>
                 {track.talks.map((talk, key) => (
@@ -29,7 +33,7 @@ const TalksList = ({ talks, userTalkVote }) => {
                         key={key}
                         talk={talk}
                         userVote={userTalkVote[talk.id]}
-                        onClick={talk => dispatch(setSelectedTalk(talk.id))}
+                        onClick={(talk) => dispatch(setSelectedTalk(talk.id))}
                     />
                 ))}
             </Grid>

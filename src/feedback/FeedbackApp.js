@@ -44,6 +44,7 @@ const FeedbackApp = () => {
                         textVoteTitleShadow: prefersDarkMode
                             ? grey[800]
                             : grey[50],
+                        textDimmed: prefersDarkMode ? grey[50] : grey[600],
                     },
                 })
             ),
@@ -58,7 +59,7 @@ const FeedbackApp = () => {
                         <Route
                             exact
                             path="/:projectId"
-                            render={props => (
+                            render={(props) => (
                                 <AppLayout>
                                     <TalksListWrapper {...props} />
                                 </AppLayout>
@@ -67,7 +68,7 @@ const FeedbackApp = () => {
                         <Route
                             exact
                             path="/:projectId/:date"
-                            render={props => (
+                            render={(props) => (
                                 <AppLayout>
                                     <TalksListWrapper {...props} />
                                 </AppLayout>
@@ -75,7 +76,7 @@ const FeedbackApp = () => {
                         />
                         <Route
                             path="/:projectId/:date/:talkId"
-                            render={props => (
+                            render={(props) => (
                                 <AppLayout>
                                     <Talk {...props} />
                                 </AppLayout>
