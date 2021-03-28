@@ -9,6 +9,7 @@ import { grey } from '@material-ui/core/colors'
 import { darken } from '@material-ui/core/styles'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '@material-ui/core'
+import { isInIFrame } from '../utils/isInIFrame'
 
 const useStyles = makeStyles((theme) => ({
     logo: {
@@ -58,9 +59,12 @@ const useStyles = makeStyles((theme) => ({
         top: 0,
         left: 'auto',
         right: 0,
-        position: 'sticky',
+        position: (props) => (props.inIFrame ? 'relative' : 'sticky'),
         zIndex: 3,
-        boxShadow: `0px 1px 15px ${theme.palette.headerShadow}`,
+        boxShadow: (props) =>
+            props.inIFrame
+                ? 'none'
+                : `0px 1px 15px ${theme.palette.headerShadow}`,
         marginBottom: 20,
     },
     header: {
@@ -71,7 +75,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Header = ({ project }) => {
-    const classes = useStyles()
+    const classes = useStyles({
+        inIFrame: isInIFrame(),
+    })
     const { t } = useTranslation()
     const matchParams = useParams()
 
