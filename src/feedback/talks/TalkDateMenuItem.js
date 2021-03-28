@@ -5,15 +5,21 @@ import { TALK_NO_DATE } from '../../core/talks/talksUtils'
 import { DateTime } from 'luxon'
 import { Link } from 'react-router-dom'
 import React from 'react'
+import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles((theme) => ({
     item: {
+        transition: 'all 120ms ease-in-out',
         color: (props) =>
             props.isSelected
                 ? theme.palette.text.primary
                 : theme.palette.text.secondary,
         borderBottom: (props) =>
-            props.isSelected ? `2px ${COLORS.RED_ORANGE} solid` : 'none',
+            `2px ${
+                props.isSelected
+                    ? COLORS.RED_ORANGE
+                    : theme.palette.pageBackground
+            } solid`,
         '&:hover': {
             color: COLORS.RED_ORANGE,
         },
@@ -22,6 +28,11 @@ const useStyles = makeStyles((theme) => ({
         padding: 10,
         color: 'inherit',
         display: 'block',
+    },
+    blank: {
+        padding: 10,
+        fontSize: 25,
+        lineHeight: '0.6em',
     },
 }))
 
@@ -55,4 +66,10 @@ export const TalkDateMenuItem = ({ date, url, isSelected, noDateLabel }) => {
             </Link>
         </div>
     )
+}
+
+export const TalkDateMenuItemBlank = ({ children }) => {
+    const classes = useStyles()
+
+    return <Typography className={classes.blank}>{children}</Typography>
 }
