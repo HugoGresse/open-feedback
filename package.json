@@ -14,7 +14,7 @@
         "test:firestoreRulesStandalone": "npx firebase emulators:exec --only firestore 'jest --roots config --env=./config/firestore.rules.jestEnv.js'",
         "test:firestoreRules": "jest --roots config --env=./config/firestore.rules.jestEnv.js",
         "eject": "react-scripts eject",
-        "deploy": "npm run build && firebase deploy",
+        "deploy": "npm run build:prod && firebase deploy",
         "deploy:dev": "env-cmd -f .env.development.local npm run build && firebase deploy",
         "release": "npm version minor && npm run deploy && git push && git push --tags",
         "doc": "start-storybook -p 6006 --docs",
