@@ -41,7 +41,7 @@ const TalksDateMenu = () => {
     return (
         <>
             <ul className={classes.menu}>
-                {items.map(({ page, type, selected, ...item }, index) => {
+                {items.map(({ page, type, selected }, index) => {
                     let children = null
                     const pageFixed = page - 1
 
