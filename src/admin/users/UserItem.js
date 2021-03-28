@@ -66,7 +66,7 @@ const UserItem = ({ userId, ownerId, currentUserId, role, userTypes }) => {
 
     return (
         <OFListItem>
-            <Grid item xs={12} sm={6} className={classes.cell}>
+            <Grid item xs={12} sm={7} className={classes.cell}>
                 <Box display="flex">
                     <Avatar
                         alt={user.displayName}
@@ -94,7 +94,7 @@ const UserItem = ({ userId, ownerId, currentUserId, role, userTypes }) => {
                     {userTypes.length > 0 && <OrganizationRoleInfo />}
                 </Box>
             </Grid>
-            <Grid item xs={12} sm={3} className={classes.buttonCell}>
+            <Grid item xs={12} sm={2} className={classes.buttonCell}>
                 {!isOwner && !isMe && (
                     <IconButton
                         aria-label="Remove the user from the event"
