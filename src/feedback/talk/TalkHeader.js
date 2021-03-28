@@ -4,6 +4,7 @@ import { DateTime } from 'luxon'
 import SpeakerList from '../speaker/SpeakerList'
 import { useTheme } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
 const formatTalkDateTime = (talk) => {
     const startDate = DateTime.fromISO(talk.startTime, {
@@ -25,12 +26,22 @@ const formatTalkDateTime = (talk) => {
     return `${startDate} / ${startTime} - ${endTime}`
 }
 
+const useStyles = makeStyles(() => ({
+    title: {
+        wordBreak: 'break-word',
+    },
+}))
+
 const TalkHeader = ({ talk, speakers }) => {
+    const classes = useStyles()
     const theme = useTheme()
 
     return (
         <Box marginBottom={4}>
-            <Typography variant="h2" color="textPrimary">
+            <Typography
+                variant="h2"
+                color="textPrimary"
+                className={classes.title}>
                 {talk.title}
                 <Box
                     color={theme.palette.textDimmed}

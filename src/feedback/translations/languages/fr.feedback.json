@@ -19,6 +19,8 @@
     "searchNoMatch": "Aucune présentation ne correspond à vos critères le",
     "searchExtendedMatch": "Présentation(s) les autres jours correspondant à votre recherche:",
     "speakerAvatar": "Avatar de",
+    "speaker": "orateur·rice",
+    "speakerPlural": "orateurs·rices",
     "talks": {
         "menuNoDate": "Sans date",
         "list": "Afficher la liste des présentations",

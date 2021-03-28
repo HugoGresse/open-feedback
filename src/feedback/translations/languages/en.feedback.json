@@ -19,6 +19,8 @@
     "searchNoMatch": "No talk matched your criteria on ",
     "searchExtendedMatch": "Talk(s) on the other day matching your search:",
     "speakerAvatar": "Avatar of",
+    "speaker": "speaker",
+    "speakers": "speakers",
     "talks": {
         "menuNoDate": "Without date",
         "list": "Go to talks list",

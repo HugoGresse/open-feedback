@@ -7,7 +7,7 @@ import { getSpeakersListSelector } from '../../core/speakers/speakerSelectors'
 import SpeakerList from '../speaker/SpeakerList'
 import { getDateFromStartTime } from '../../core/talks/talksUtils'
 import { getProjectIdSelector } from '../project/projectSelectors'
-import { darken, lighten } from '@material-ui/core'
+import { darken, lighten, Typography } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { useTranslation } from 'react-i18next'
@@ -42,6 +42,14 @@ const useStyles = makeStyles((theme) => ({
     paperSelected: {
         opacity: 0.5,
     },
+    talkTitle: {
+        wordBreak: 'break-word',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        '-webkit-line-clamp': 2,
+        '-webkit-box-orient': 'vertical',
+    },
     a: {
         display: 'block',
     },
@@ -72,7 +80,9 @@ export const TalksItem = ({ talk, userVote }) => {
                 title={t('talks.vote') + talk.title}
                 className={classes.a}>
                 <Paper className={itemClasses}>
-                    {talk.title}
+                    <Typography className={classes.talkTitle}>
+                        {talk.title}
+                    </Typography>
                     {speakers && (
                         <SpeakerList speakers={speakers} size="small" />
                     )}
