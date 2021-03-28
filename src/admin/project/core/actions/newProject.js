@@ -57,7 +57,11 @@ export const newProject = (
                 type: ADD_PROJECT_SUCCESS,
                 payload: projectId,
             })
-            trackNewProject(projectData.name, projectData.setupType)
+            trackNewProject(
+                projectData.name,
+                projectData.setupType,
+                organizationId
+            )
             return projectId
         })
         .catch((err) => {
