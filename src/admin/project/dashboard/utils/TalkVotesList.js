@@ -17,6 +17,13 @@ const useStyles = makeStyles({
         '&:hover': {
             color: COLORS.DARK_RED_ORANGE,
         },
+        '& span': {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            '-webkit-line-clamp': 4,
+            '-webkit-box-orient': 'vertical',
+        },
     },
     count: {
         color: COLORS.RED_ORANGE,
@@ -116,7 +123,7 @@ const getItem = (voteWithTalk, projectId, classes, countKey) => {
                     component="a"
                     target="_blank"
                     href={`/${projectId}/${voteWithTalk.date}/${voteWithTalk.talkId}`}>
-                    {voteWithTalk.title}
+                    <span>{voteWithTalk.title}</span>
                     <div className={classes.speakers}>
                         {voteWithTalk.speakers
                             .map((speaker) => speaker && speaker.name)

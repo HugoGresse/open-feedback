@@ -1,21 +1,47 @@
 import React from 'react'
 import SpeakerItem from './SpeakerItem'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import { Typography } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(() => ({
     speakers: {
         display: 'flex',
         alignItems: 'center',
+        flexWrap: 'wrap',
+        maxHeight: (props) => (props.isSmall ? 58 : 'none'),
+    },
+    exceeding: {
+        fontSize: '12px',
     },
 }))
 
-const SpeakerList = ({ speakers, size = 'medium' }) => {
-    const classes = useStyles()
+const MAX_DISPLAYED_SPEAKERS = 3
+export const SIZE_SMALL = 'small'
+export const SIZE_MEDIUM = 'medium'
+const SpeakerList = ({ speakers, size = SIZE_MEDIUM }) => {
+    const isSmall = size === SIZE_SMALL
+    const classes = useStyles({
+        isSmall: isSmall,
+    })
+    const { t } = useTranslation()
+    const displayedSpeakers = isSmall
+        ? speakers.slice(0, MAX_DISPLAYED_SPEAKERS)
+        : speakers
+    const exceedingSpeakersCount = speakers.length - displayedSpeakers.length
+    const exceedingMessage =
+        exceedingSpeakersCount > 1 ? t('speakers') : t('speaker')
+
     return (
         <div className={classes.speakers}>
-            {speakers.map((speaker, key) => (
+            {displayedSpeakers.map((speaker, key) => (
                 <SpeakerItem key={key} {...speaker} size={size} />
             ))}
+            {exceedingSpeakersCount > 0 && (
+                <Typography className={classes.exceeding}>
+                    + {exceedingSpeakersCount} {exceedingMessage}
+                </Typography>
+            )}
         </div>
     )
 }

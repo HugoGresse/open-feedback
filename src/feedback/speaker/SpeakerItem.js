@@ -5,6 +5,7 @@ import Link from '@material-ui/core/Link'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Box from '@material-ui/core/Box'
 import { useTranslation } from 'react-i18next'
+import { SIZE_SMALL } from './SpeakerList'
 
 const useStyles = makeStyles((theme) => ({
     speaker: {
@@ -13,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: '18px',
         paddingRight: 12,
         transition: 'all 200ms',
+        marginTop: (props) => (props.isSmall ? -4 : 1),
         '&:hover': {
             textDecoration: 'none',
             boxShadow: (props) =>
@@ -34,8 +36,13 @@ const useStyles = makeStyles((theme) => ({
         width: '40px',
     },
     smallText: {
-        fontSize: '11px',
+        fontSize: '12px',
         opacity: 0.7,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        '-webkit-line-clamp': 2,
+        '-webkit-box-orient': 'vertical',
     },
     mediumText: {
         fontSize: '15px',
@@ -45,10 +52,12 @@ const useStyles = makeStyles((theme) => ({
 
 const SpeakerItem = ({ name, photoUrl, socialProfil, size }) => {
     const { t } = useTranslation()
-    const isLinkable = size !== 'small' && socialProfil
+    const isSmall = size === SIZE_SMALL
+    const isLinkable = !isSmall && socialProfil
 
     const classes = useStyles({
         isLinkable,
+        isSmall,
     })
 
     const linkProps = isLinkable

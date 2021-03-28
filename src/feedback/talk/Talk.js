@@ -22,7 +22,7 @@ import {
     getProjectChipColorsSelector,
     getProjectVoteItemsOrderedSelector,
 } from '../project/projectSelectors'
-import { getVoteResultSelectorSelector } from '../talk/core/talkSelectors'
+import { getVoteResultSelectorSelector } from './core/talkSelectors'
 import {
     getActiveUserVotesByTalkAndVoteItemSelector,
     getErrorVotePostSelector,
