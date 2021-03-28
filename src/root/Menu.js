@@ -54,6 +54,11 @@ const Menu = () => {
                 <li>
                     <a href="#faq">{t('menu.faq')}</a>
                 </li>
+                <li>
+                    <a href="https://github.com/HugoGresse/open-feedback">
+                        GitHub
+                    </a>
+                </li>
                 <li className="outline">
                     <a href="/admin/">{t('menu.login')}</a>
                 </li>
