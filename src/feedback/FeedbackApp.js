@@ -10,6 +10,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import { grey } from '@material-ui/core/colors'
 import ErrorBoundary from '../baseComponents/customComponent/ErrorBoundary'
 import { ALERT_REACT_CATCHED_ERROR_FEEDBACK } from '../utils/alerting/alerts'
+import { COLORS } from '../constants/colors'
 
 const FeedbackApp = () => {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
@@ -33,6 +34,15 @@ const FeedbackApp = () => {
                         },
                     },
                     palette: {
+                        primary: {
+                            main: COLORS.RED_ORANGE,
+                            dark: COLORS.DARK_RED_ORANGE,
+                            contrastText: 'rgba(255,255,255, 0.87)',
+                        },
+                        secondary: {
+                            main: '#3673ff',
+                            contrastText: 'rgba(255,255,255, 0.87)',
+                        },
                         type: prefersDarkMode ? 'dark' : 'light',
                         pageBackground: prefersDarkMode ? '#303030' : '#fff',
                         headerShadow: prefersDarkMode ? '#000' : '#B3B3B3',

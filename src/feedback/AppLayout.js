@@ -121,16 +121,18 @@ const AppLayout = ({ children }) => {
                 errorDetail={projectVotesError}
             />
         )
-    } else if (!project) {
-        return <LoaderMatchParent />
     } else {
         return (
             <div className={classes.container}>
-                <div className={classes.content}>
-                    <Header project={project} />
+                {project ? (
+                    <div className={classes.content}>
+                        <Header project={project} />
 
-                    <main className={classes.layout}> {children}</main>
-                </div>
+                        <main className={classes.layout}> {children}</main>
+                    </div>
+                ) : (
+                    <LoaderMatchParent height="90vh" />
+                )}
                 <Footer />
             </div>
         )
