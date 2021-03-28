@@ -11,6 +11,7 @@ import InnerWrapper from './component/InnerWrapper'
 import { useTranslation } from 'react-i18next'
 import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
+import { isUsingEmulators } from '../firebase'
 
 const Wrapper = styled.header`
     background: ${COLORS.RED_ORANGE};
@@ -161,7 +162,11 @@ const Header = () => {
                             {t('home.headerAction')}
                         </LinkButton>
                         <LinkButton
-                            href="/eaJnyMXD3oNfhrrnBYDT/"
+                            href={
+                                isUsingEmulators
+                                    ? '/testprojectid/'
+                                    : '/eaJnyMXD3oNfhrrnBYDT/'
+                            }
                             variant="outline">
                             {t('home.headerActionDemo')}
                         </LinkButton>
