@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography'
 import Link from '@material-ui/core/Link'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Box from '@material-ui/core/Box'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
     speaker: {
@@ -43,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const SpeakerItem = ({ name, photoUrl, socialProfil, size }) => {
+    const { t } = useTranslation()
     const isLinkable = size !== 'small' && socialProfil
 
     const classes = useStyles({
@@ -64,7 +66,7 @@ const SpeakerItem = ({ name, photoUrl, socialProfil, size }) => {
         <Box className={classes.speaker} {...linkProps}>
             <Avatar
                 src={photoUrl}
-                alt={name}
+                alt={`${t('speakerAvatar')} ${name}`}
                 className={classes.avatar + ' ' + classes[size + 'Avatar']}
             />
             <Typography color="textPrimary" className={classes[size + 'Text']}>

@@ -35,7 +35,7 @@ const OFInputStyled = styled(InputBase)`
         background-color: 'transparent';
     }
     &:focus-within {
-        ${(props) => `border: 1px solid ${props.primaryColor};`}
+        ${(props) => `border: 1px solid ${props.$primaryColor};`}
     }
 `
 
@@ -62,7 +62,8 @@ function OFInput(props) {
                     input: classes.selectedInput,
                 }}
                 ref={forwardedRef}
-                primaryColor={theme.palette.primary.main}
+                $primaryColor={theme.palette.primary.main}
+                id={otherProps.name}
                 {...otherProps}
             />
         </>

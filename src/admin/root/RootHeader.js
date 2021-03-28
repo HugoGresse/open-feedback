@@ -56,7 +56,7 @@ const RootHeader = () => {
     const user = useSelector(getUserSelector)
 
     return (
-        <div className={classes.container}>
+        <header className={classes.container}>
             <Grid container>
                 <Grid item xs={12} sm={6} className={classes.left}>
                     <img
@@ -79,7 +79,7 @@ const RootHeader = () => {
                     </IconButton>
                 </Grid>
             </Grid>
-        </div>
+        </header>
     )
 }
 

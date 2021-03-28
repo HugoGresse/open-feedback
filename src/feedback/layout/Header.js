@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link, useParams } from 'react-router-dom'
-import Title from './Title'
 import SearchBar from './SearchBar'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import CalendarToday from '@material-ui/icons/CalendarToday'
@@ -9,6 +8,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { grey } from '@material-ui/core/colors'
 import { darken } from '@material-ui/core/styles'
 import { useTranslation } from 'react-i18next'
+import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
     logo: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
             },
         },
         '& svg': {
-            color: grey[600],
+            color: theme.palette.textDimmed,
         },
     },
     iconRight: {
@@ -83,7 +83,7 @@ const Header = ({ project }) => {
                         <Link
                             title={t('talks.list')}
                             to={`/${matchParams.projectId}/${matchParams.date}`}>
-                            <ArrowBack />
+                            <ArrowBack color="primary" />
                         </Link>
                     )}
                 </div>
@@ -92,6 +92,7 @@ const Header = ({ project }) => {
                         <a
                             href={project.scheduleLink}
                             target="_blank"
+                            title={`${project.name} website`}
                             rel="noopener noreferrer">
                             <CalendarToday />
                         </a>
@@ -104,9 +105,12 @@ const Header = ({ project }) => {
                         alt={`logo ${project.name}`}
                     />
                     <Hidden smDown>
-                        <Title component="h1" color="textPrimary">
+                        <Typography
+                            variant="h1"
+                            color="textPrimary"
+                            aria-label={project.hideEventName && project.name}>
                             {!project.hideEventName && project.name}
-                        </Title>
+                        </Typography>
                     </Hidden>
                 </div>
             </div>

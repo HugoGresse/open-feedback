@@ -38,7 +38,10 @@ describe('Test creating a new project', function () {
     })
 
     it('New OpenFeedback project', function () {
-        app.create(data.projectName)
+        cy.contains('Create a new event') // prevent axe to fail on unloaded document
+        cy.checkA11yWithoutFirebaseEmulatorsWarning()
+
+        app.create(data.projectName, null, true)
         cy.contains(data.projectName)
 
         app.openTalks()
@@ -85,7 +88,7 @@ describe('Test creating a new project', function () {
         feedback.assertSpeakerInList(data.speaker1.name)
         feedback.assertSpeakerInList(data.speaker2.name)
 
-        feedback.openTalk(data.talk1Name)
+        feedback.openTalkByClick(data.talk1Name)
         feedback.assertInTalk(data.talk1Name, [data.voteItem1])
     })
 })

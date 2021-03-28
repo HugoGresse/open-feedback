@@ -61,7 +61,7 @@ describe('Event and theme options', function () {
 
         app.openFeedback()
 
-        feedback.openTalk(data.talk1Name)
+        feedback.openTalkByClick(data.talk1Name)
         feedback.assertLogo(imageUrl, newEventName)
         feedback.assertTitle(newEventName, true)
         feedback.assertScheduleLink(scheduleLink)

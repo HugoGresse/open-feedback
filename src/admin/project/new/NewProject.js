@@ -165,6 +165,7 @@ const NewProject = ({ organizationId, onCancel }) => {
             </Hidden>
             <Dialog
                 aria-labelledby="creating-event-waiting"
+                TransitionProps={{ role: 'presentation' }}
                 open={isCreatingEvent}>
                 <DialogTitle id="creating-event-waiting">
                     {t('newEvent.dialogCreating')}

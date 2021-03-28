@@ -15,13 +15,14 @@ export class AdminApp {
 
     open() {
         cy.visit('/admin')
+        cy.injectAxe()
     }
 
     loginIfNeeded() {
         cy.clickOnFakeLoginButtonIfVisible()
     }
 
-    create(projectName, organizationName) {
+    create(projectName, organizationName, checkA11y = false) {
         if (organizationName) {
             cy.contains(organizationName)
                 .parents('li')
@@ -32,8 +33,14 @@ export class AdminApp {
             cy.contains('Create a new event').click()
         }
         cy.get('input[name=name]').fill(projectName)
+        if (checkA11y) {
+            cy.checkA11yWithoutFirebaseEmulatorsWarning()
+        }
         cy.contains('Continue').click()
         cy.get('input[value=openfeedbackv1]').check()
+        if (checkA11y) {
+            cy.checkA11yWithoutFirebaseEmulatorsWarning()
+        }
         cy.contains('Create event').click()
     }
 
@@ -43,6 +50,7 @@ export class AdminApp {
 
     openFeedback() {
         cy.contains('See event').invoke('removeAttr', 'target').click()
+        cy.injectAxe()
     }
 
     addTalk(

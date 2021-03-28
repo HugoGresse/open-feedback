@@ -1,6 +1,33 @@
 import { VOTE_ITEM_TYPES } from './AdminApp'
 
 export class FeedbackApp {
+    open(talkId, options = {}) {
+        const rootUrl = `/${Cypress.env('firestoreTestProjectId')}`
+        if (talkId) {
+            cy.visit(`${rootUrl}/${talkId}`)
+        } else {
+            cy.visit(rootUrl)
+        }
+
+        cy.injectAxe()
+
+        if (options.clearUserSession) {
+            this.clearUserSession()
+        }
+    }
+
+    openTalkByClick(name) {
+        cy.contains(name).click()
+        cy.checkA11yWithoutFirebaseEmulatorsWarning()
+    }
+
+    clearUserSession() {
+        // New user account without any voted stuffs
+        indexedDB.deleteDatabase('firebaseLocalStorageDb')
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(2000)
+    }
+
     assertLogo(expectedLogoUrl, eventName) {
         cy.get(`img[alt="logo ${eventName}"]`).should(
             'have.attr',
@@ -23,16 +50,59 @@ export class FeedbackApp {
         cy.get('a[target=_blank]').should('have.attr', 'href', expectedLink)
     }
 
-    openTalk(name) {
-        cy.contains(name).click()
+    assertTracks(expectedCount, names = []) {
+        cy.get('h2').should('have.length', expectedCount)
+        for (const name of names) {
+            cy.get('h2').should('contain', name)
+        }
+    }
+
+    assertTalks(expectedCount, names = []) {
+        cy.get('.talk').should('have.length', expectedCount)
+        for (const name of names) {
+            cy.get('.talk').should('contain', name)
+        }
+    }
+
+    assertTalksSearchSuggestions(expectedCount, names = []) {
+        cy.get('.talk').should('have.length', expectedCount)
+        for (const name of names) {
+            cy.get('.talk').should('contain', name)
+        }
     }
 
     assertTalkInList(name) {
         cy.get('#root').should('contain', name)
     }
 
-    assertSpeakerInList(name) {
+    search(term) {
+        cy.get('input[placeholder=Search]').clear().type(term)
+    }
+
+    assertFirstTalkInTrack(trackName, talkUrl, talkTitle, talkSpeaker) {
+        cy.get('h2')
+            .first()
+            .contains(trackName)
+            .next()
+            .within(() => {
+                cy.get('a')
+                    .should('have.attr', 'href', talkUrl)
+                    .should('contain', talkTitle)
+                    .should('contain', talkSpeaker)
+            })
+    }
+
+    // Within a singular talk
+
+    assertSpeakerInList(name, avatarUrl = null) {
         cy.get('#root').should('contain', name)
+        if (avatarUrl) {
+            cy.get(`img[alt="Avatar of ${name}"]`).should(
+                'have.attr',
+                'src',
+                avatarUrl
+            )
+        }
     }
 
     assertInTalk(talkName, voteItems = []) {
