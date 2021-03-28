@@ -1,10 +1,11 @@
 import { analytics } from '../../firebase'
 
-export const trackNewProject = (projectName, setupType) => {
+export const trackNewProject = (projectName, setupType, organizationId) => {
     if (!analytics) return
     analytics.logEvent('admin_new_project', {
         name: projectName,
         setup: setupType,
+        organizationId: organizationId,
     })
 }
 
