@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import OFListItem from '../baseComponents/layouts/OFListItem'
-import { Box } from '@material-ui/core'
+import { Box, MenuItem } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import { useTranslation } from 'react-i18next'
 import TranslatedTypography from '../baseComponents/TranslatedTypography'
@@ -28,6 +28,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+const dateFormat = Object.assign(DateTime.DATE_SHORT, {
+    weekday: 'long',
+    hour: 'numeric',
+    minute: '2-digit',
+})
+
 const UserInviteItem = ({ invite, cancelInvite }) => {
     const classes = useStyles()
     const { t } = useTranslation()
@@ -38,7 +44,7 @@ const UserInviteItem = ({ invite, cancelInvite }) => {
 
     return (
         <OFListItem>
-            <Grid item xs={12} sm={6} className={classes.cell}>
+            <Grid item xs={12} sm={7} className={classes.cell}>
                 <Box display="flex">
                     <ScheduleIcon className={classes.icon} />
                     <Box>
@@ -48,19 +54,19 @@ const UserInviteItem = ({ invite, cancelInvite }) => {
                             {t('users.on')}{' '}
                             {DateTime.fromJSDate(
                                 invite.updatedAt.toDate()
-                            ).toFormat('DDD')}
+                            ).toLocaleString(dateFormat)}
                         </Typography>
                     </Box>
                 </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.cell}>
                 {invite.role ? (
-                    <Typography>{invite.role}</Typography>
+                    <Typography>{t(`users.${invite.role}`)}</Typography>
                 ) : (
                     <TranslatedTypography i18nKey="users.Member" />
                 )}
             </Grid>
-            <Grid item xs={12} sm={3} className={classes.buttonCell}>
+            <Grid item xs={12} sm={2} className={classes.buttonCell}>
                 <IconButton
                     aria-label="Cancel the invitation"
                     onClick={() => cancelInvite(invite.id)}>

@@ -74,7 +74,7 @@ const UserInvitePanel = ({
                                     <Field name="userType" component={OFSelect}>
                                         {userTypes.map((type) => (
                                             <MenuItem key={type} value={type}>
-                                                {type}
+                                                {t(`users.${type}`)}
                                             </MenuItem>
                                         ))}
                                     </Field>
