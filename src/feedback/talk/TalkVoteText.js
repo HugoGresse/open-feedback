@@ -175,7 +175,7 @@ class TalkVoteText extends Component {
 
                         <Button
                             variant="contained"
-                            color="primary"
+                            color="secondary"
                             className={classes.saveButton}
                             onClick={() =>
                                 this.props.onVoteChange(
