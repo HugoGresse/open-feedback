@@ -10,6 +10,7 @@ import OFListItem from '../../baseComponents/layouts/OFListItem'
 import TalkListItemSpeakerList from './TalkListItemSpeakerList'
 import Chip from '@material-ui/core/Chip'
 import { DateTime } from 'luxon'
+import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles((theme) => ({
     cell: {
@@ -20,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
     },
     buttonCell: {
         textAlign: 'right',
+    },
+    title: {
+        fontWeight: 'bold',
+        wordBreak: 'break-word',
     },
 }))
 
@@ -35,7 +40,7 @@ const TalkListItem = ({
     return (
         <OFListItem>
             <Grid item xs={12} sm={4} lg={6} className={classes.cell}>
-                <b>{item.title}</b>
+                <Typography className={classes.title}>{item.title}</Typography>
             </Grid>
             <Grid item xs={12} sm={4} lg={2} className={classes.cell}>
                 <TalkListItemSpeakerList

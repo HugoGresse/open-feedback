@@ -13,6 +13,11 @@ const useStyles = makeStyles(() => ({
     headerCell: {
         paddingBottom: 16,
     },
+    title: {
+        wordBreak: 'break-word',
+        fontWeight: 'bold',
+        lineHeight: '40px',
+    },
 }))
 
 const TalkListItem = ({
@@ -26,15 +31,17 @@ const TalkListItem = ({
     const classes = useStyles()
     const { t } = useTranslation()
 
-    const activeVotes = votes.filter(vote => vote.status === VOTE_STATUS_ACTIVE)
-    const hiddenVotes = votes.filter(vote => vote.status === VOTE_STATUS_HIDDEN)
+    const activeVotes = votes.filter(
+        (vote) => vote.status === VOTE_STATUS_ACTIVE
+    )
+    const hiddenVotes = votes.filter(
+        (vote) => vote.status === VOTE_STATUS_HIDDEN
+    )
 
     return (
         <OFListItem>
             <Grid item xs={12} sm={8} className={classes.headerCell}>
-                <Typography
-                    style={{ fontWeight: 600, lineHeight: '40px' }}
-                    variant="h6">
+                <Typography className={classes.title} variant="h6">
                     {talk.title}
                 </Typography>
             </Grid>
