@@ -5,16 +5,16 @@ import {
     getProjectIdSelector,
     getProjectSelectedDateSelector,
 } from '../project/projectSelectors'
-import { COLORS } from '../../constants/colors'
-import { Link } from 'react-router-dom'
-import { DateTime } from 'luxon'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { useTranslation } from 'react-i18next'
 import { TALK_NO_DATE } from '../../core/talks/talksUtils'
+import { TalkDateMenuItem, TalkDateMenuItemBlank } from './TalkDateMenuItem'
+import { usePagination } from '@material-ui/lab'
 
 const useStyles = makeStyles({
     menu: {
         display: 'flex',
+        flexWrap: 'wrap',
         justifyContent: 'center',
         marginBottom: 16,
     },
@@ -25,6 +25,13 @@ const TalksDateMenu = () => {
     const talksDates = useSelector(getTalksDatesSelector)
     const selectedDate = useSelector(getProjectSelectedDateSelector)
     const currentProjectId = useSelector(getProjectIdSelector)
+    const { items } = usePagination({
+        count: talksDates.length,
+        page: talksDates.indexOf(selectedDate) + 1,
+        boundaryCount: 2,
+        hideNextButton: true,
+        hidePrevButton: true,
+    })
     const classes = useStyles()
 
     if (talksDates.length === 1 && talksDates.includes(TALK_NO_DATE)) {
@@ -32,68 +39,37 @@ const TalksDateMenu = () => {
     }
 
     return (
-        <div className={classes.menu}>
-            {talksDates.map((date) => (
-                <Item
-                    key={date}
-                    date={date}
-                    url={`/${currentProjectId}/${
-                        date === TALK_NO_DATE ? '' : date
-                    }`}
-                    noDateLabel={t('talks.menuNoDate')}
-                    isSelected={selectedDate === date}
-                />
-            ))}
-        </div>
-    )
-}
+        <>
+            <ul className={classes.menu}>
+                {items.map(({ page, type, selected }, index) => {
+                    let children = null
+                    const pageFixed = page - 1
 
-const useStylesItem = makeStyles((theme) => ({
-    item: {
-        color: (props) =>
-            props.isSelected
-                ? theme.palette.text.primary
-                : theme.palette.text.secondary,
-        borderBottom: (props) =>
-            props.isSelected ? `2px ${COLORS.RED_ORANGE} solid` : 'none',
-        '&:hover': {
-            color: COLORS.RED_ORANGE,
-        },
-    },
-    a: {
-        padding: 10,
-        color: 'inherit',
-        display: 'block',
-    },
-}))
+                    if (type === 'start-ellipsis' || type === 'end-ellipsis') {
+                        children = (
+                            <TalkDateMenuItemBlank key="..." isSelected={false}>
+                                …
+                            </TalkDateMenuItemBlank>
+                        )
+                    } else if (type === 'page') {
+                        const date = talksDates[pageFixed]
+                        children = (
+                            <TalkDateMenuItem
+                                key={date}
+                                date={date}
+                                url={`/${currentProjectId}/${
+                                    date === TALK_NO_DATE ? '' : date
+                                }`}
+                                noDateLabel={t('talks.menuNoDate')}
+                                isSelected={selected}
+                            />
+                        )
+                    }
 
-const Item = ({ date, url, isSelected, noDateLabel }) => {
-    const { t } = useTranslation()
-    const classes = useStylesItem({
-        isSelected,
-    })
-
-    const getDateLabel = (date) => {
-        if (date !== TALK_NO_DATE) {
-            return DateTime.fromISO(date).toLocaleString({
-                weekday: 'long',
-                day: 'numeric',
-            })
-        }
-        return noDateLabel
-    }
-
-    const label = getDateLabel(date)
-
-    return (
-        <div className={classes.item}>
-            <Link
-                to={`${url}`}
-                className={classes.a}
-                title={t('talks.date') + label}>
-                {label}
-            </Link>
-        </div>
+                    return <li key={index}>{children}</li>
+                })}
+            </ul>
+        </>
     )
 }
 
