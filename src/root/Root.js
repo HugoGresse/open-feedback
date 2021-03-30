@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { setFavicon } from '../utils/dom'
 import Header from './Header'
-import Footer from './Footer'
 import HowItWorks from './HowItWorks'
 import FAQ from './FAQ'
 import { I18nextProvider } from 'react-i18next'
@@ -9,6 +8,7 @@ import i18n from './translations/i18n'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import { showSmallChat, useSmallchat } from '../admin/project/utils/smallchat'
 import { configureAnchors } from 'react-scrollable-anchor'
+import { Footer } from './Footer'
 
 configureAnchors({ offset: -60, scrollDuration: 300 })
 
