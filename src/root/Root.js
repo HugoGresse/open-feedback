@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { setFavicon } from '../utils/dom'
 import Header from './Header'
-import Footer from './Footer'
 import HowItWorks from './HowItWorks'
 import FAQ from './FAQ'
 import { I18nextProvider } from 'react-i18next'
@@ -9,6 +8,9 @@ import i18n from './translations/i18n'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import { showSmallChat, useSmallchat } from '../admin/project/utils/smallchat'
 import { configureAnchors } from 'react-scrollable-anchor'
+import { Footer } from './Footer'
+import { Contact } from './Contact'
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 
 configureAnchors({ offset: -60, scrollDuration: 300 })
 
@@ -21,6 +23,15 @@ const theme = createMuiTheme({
         h2: {
             fontSize: 24,
             fontWeight: 400,
+        },
+    },
+    palette: {
+        type: 'light',
+        primary: {
+            light: '#ff9c76',
+            main: '#ff6a49',
+            dark: '#c6381e',
+            contrastText: '#fff',
         },
     },
 })
@@ -42,12 +53,16 @@ const Root = () => {
     return (
         <I18nextProvider i18n={i18n}>
             <ThemeProvider theme={theme}>
-                <Header />
-                <main>
-                    <HowItWorks />
-                    <FAQ />
-                </main>
-                <Footer />
+                <GoogleReCaptchaProvider
+                    reCaptchaKey={process.env.REACT_APP_RECAPTCHAV3_SITE_KEY}>
+                    <Header />
+                    <main>
+                        <HowItWorks />
+                        <FAQ />
+                        <Contact />
+                    </main>
+                    <Footer />
+                </GoogleReCaptchaProvider>
             </ThemeProvider>
         </I18nextProvider>
     )
