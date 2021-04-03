@@ -38,6 +38,11 @@ export const functions = {
         .functions()
         .httpsCallable('removeFileFromStorage'),
 }
+export const HttpsFunctionsUrl = {
+    sendContactEmail: isUsingEmulators
+        ? `http://localhost:5001/${config.projectId}/us-central1/sendContactEmail`
+        : `https://us-central1-${config.projectId}.cloudfunctions.net/sendContactEmail`,
+}
 authProvider.useDeviceLanguage()
 
 if (process.env.NODE_ENV === 'production') {

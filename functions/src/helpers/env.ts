@@ -7,13 +7,15 @@ export const getAppEnv = (): AppEnv => {
     if (!app) {
         throw new Error('Missing app environment')
     }
-    const { env, url } = app
+    const { env, url, contactemail, recaptchav3secret } = app
     if (!env || !url) {
         throw new Error('Missing app env or app url')
     }
     return {
         env,
         url,
+        contactEmail: contactemail,
+        recaptchaV3Secret: recaptchav3secret,
     }
 }
 

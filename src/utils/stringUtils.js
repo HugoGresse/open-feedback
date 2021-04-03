@@ -1,4 +1,4 @@
-export const normalizeAndRemoveDiacritics = value => {
+export const normalizeAndRemoveDiacritics = (value) => {
     if (!value) {
         return value
     }
@@ -43,7 +43,7 @@ export const sprintf = (template, ...values) =>
  * @param value
  * @returns {number}
  */
-export const hashString = value => {
+export const hashString = (value) => {
     if (!value) {
         return 0
     }
@@ -88,4 +88,9 @@ export const textEllipsis = (
         }
     }
     return [str, false]
+}
+
+export const isValidEmail = (email) => {
+    const re = /^\S+@\S+$/
+    return re.test(String(email).toLowerCase())
 }

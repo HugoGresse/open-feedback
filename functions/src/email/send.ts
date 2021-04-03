@@ -7,6 +7,7 @@ export interface EmailData {
     to?: string[]
     cc?: string[]
     bcc?: string[]
+    replyTo?: string
     subject: string
     html: string
 }
@@ -22,7 +23,7 @@ const send = (
             )
         )
     }
-    const { to, cc, bcc, subject, html } = data
+    const { to, cc, bcc, replyTo, subject, html } = data
 
     if (isEmpty(to) && isEmpty(cc) && isEmpty(bcc)) {
         return Promise.reject(new Error('No recipients given.'))
@@ -37,6 +38,7 @@ const send = (
     form.append('from', from)
     form.append('subject', subject)
     form.append('html', html)
+    replyTo && form.append('h:Reply-To', replyTo)
     to &&
         to.forEach((dest) => {
             if (dest) form.append('to', dest)

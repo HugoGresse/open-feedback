@@ -35,6 +35,15 @@
         "customAnswer": "N'importe qui peut ajouter OpenFeedback dans ses applications. Vous pouvez créer votre propre instance d'OpenFeedback sur Firebase et utiliser Firestore SDK (android/ios/web) pour faire l'intégration. <br/><br/> Sur demande, une documentation pour l'intégration peut être envoyé. L'équipe d'OpenFeedback devrait valider l'intégration pour s'assurer que tout marchera comme prévut le jour J. <br/> <br/> Vous pouvez trouver des SDK Open Source réalisé par la communauté sur ",
         "customAnswerSDKLink": "la page GitHub."
     },
+    "contact": {
+        "title": "Contact",
+        "email": "Email",
+        "message": "Message",
+        "emailError": "Email invalid",
+        "error": "Erreur lors de l'envoi du message: ",
+        "success": "Message envoyé 🚀",
+        "submit": "Envoyer"
+    },
     "footer": {
         "about": "À propos",
         "contact": "Contact"
