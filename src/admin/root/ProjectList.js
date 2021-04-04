@@ -31,7 +31,10 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.primary,
     },
     newProjectCard: {
-        color: theme.palette.primary.dark,
+        color: (props) =>
+            props.invertedColor
+                ? theme.palette.secondary.dark
+                : theme.palette.primary.dark,
         minHeight: 140,
     },
     cardContent: {
