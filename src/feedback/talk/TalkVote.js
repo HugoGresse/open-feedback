@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import TalkVoteText from './TalkVoteText'
-import TalkVoteBoolean from './TalkVoteBoolean'
+import TalkVoteText from './text/TalkVoteText'
+import TalkVoteBoolean from './boolean/TalkVoteBoolean'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../core/contants'
 
 class TalkItemVote extends Component {

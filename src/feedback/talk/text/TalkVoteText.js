@@ -10,8 +10,8 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import TalkVoteTextResult from './TalkVoteTextResult'
 import { Trans, withTranslation } from 'react-i18next'
-import { VOTE_STATUS_HIDDEN } from '../../core/contants'
-import COLORS from '../../constants/colors'
+import { VOTE_STATUS_HIDDEN } from '../../../core/contants'
+import COLORS from '../../../constants/colors'
 import Typography from '@material-ui/core/Typography'
 
 const styles = (theme) => ({
