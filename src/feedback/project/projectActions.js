@@ -61,9 +61,29 @@ export const getVoteResult = (talkId) => (dispatch, getState) => {
         .doc(talkId)
         .get()
         .then((talkSnapshot) => {
+            const inputVotes = talkSnapshot.data()
+
+            // Add the vote id inside the actual vote to be re-used on other parts
+            const votesWithIds = Object.keys(inputVotes).reduce((acc, key) => {
+                if (Object.keys(inputVotes[key]).length === 0) {
+                    acc[key] = inputVotes[key]
+                } else {
+                    acc[key] = {
+                        ...Object.keys(inputVotes[key]).reduce((acc2, key2) => {
+                            acc2[key2] = {
+                                ...inputVotes[key][key2],
+                                id: key2,
+                            }
+                            return acc2
+                        }, {}),
+                    }
+                }
+                return acc
+            }, {})
+
             const talk = {
                 id: talkSnapshot.id,
-                ...talkSnapshot.data(),
+                ...votesWithIds,
             }
 
             dispatch({
