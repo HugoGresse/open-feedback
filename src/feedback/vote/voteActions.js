@@ -26,6 +26,7 @@ import {
     VOTE_TYPE_TEXT,
 } from '../../core/contants'
 import { trackUnvote, trackVote } from '../utils/track'
+import { getVoteId } from './getVoteId'
 
 export const voteFor = (talkId, voteItem, data, translate) => {
     return (dispatch, getState) => {
@@ -49,24 +50,7 @@ export const voteFor = (talkId, voteItem, data, translate) => {
             voteItem.id
         ]
 
-        let id = ''
-        if (existingVote) {
-            if (existingVote.pending) {
-                // eslint-disable-next-line no-console
-                console.info(
-                    'Unable to modify a vote that has not been writed on the database'
-                )
-                return
-            }
-
-            id = existingVote.id
-        } else {
-            id = fireStoreMainInstance
-                .collection('projects')
-                .doc(projectId)
-                .collection('userVotes')
-                .doc().id
-        }
+        const id = getVoteId(voteItem, projectId, getState)
 
         const voteContent = {
             projectId: projectId,
