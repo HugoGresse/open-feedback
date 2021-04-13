@@ -38,11 +38,12 @@ export const VoteButton = ({
     onClick,
     count,
     children,
+    className,
 }) => {
     const classes = useStyles()
     const paperClasses = `${classes.item} ${
         isSelected ? classes.selectedItem : ''
-    }`
+    } ${className}`
     return (
         <Paper
             elevation={1}

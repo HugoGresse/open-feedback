@@ -19,7 +19,6 @@ import {
     getUserVotesByTalkAndVoteItemSelector,
 } from './voteSelectors'
 import { INCREMENT_VOTE_LOCALLY } from '../project/projectActionTypes'
-import { checkDateBeforeVote } from './checkDataBeforeVote'
 import {
     VOTE_STATUS_ACTIVE,
     VOTE_STATUS_DELETED,
@@ -27,20 +26,12 @@ import {
 } from '../../core/contants'
 import { trackUnvote, trackVote } from '../utils/track'
 import { getVoteId } from './getVoteId'
+import { isVoteAllowed } from './actions/isVoteAllowed'
 
 export const voteFor = (talkId, voteItem, data, translate) => {
     return (dispatch, getState) => {
-        if (checkDateBeforeVote(dispatch, getState(), translate)) {
+        if (!isVoteAllowed(dispatch, getState, translate)) {
             return
-        }
-
-        if (!getUserSelector(getState()).isAnonymous) {
-            dispatch({
-                type: ADD_VOTE_ERROR,
-                payload: {
-                    error: translate('vote.adminNotAnonymous'),
-                },
-            })
         }
 
         const project = getProjectSelector(getState())
@@ -50,7 +41,7 @@ export const voteFor = (talkId, voteItem, data, translate) => {
             voteItem.id
         ]
 
-        const id = getVoteId(voteItem, projectId, getState)
+        const [id] = getVoteId(voteItem, projectId, getState)
 
         const voteContent = {
             projectId: projectId,
@@ -135,7 +126,7 @@ export const removeVote = (voteToDelete, translate) => {
             return
         }
 
-        if (checkDateBeforeVote(dispatch, getState(), translate)) {
+        if (!isVoteAllowed(dispatch, getState, translate)) {
             return
         }
 
@@ -195,7 +186,7 @@ export const removeVote = (voteToDelete, translate) => {
 
 export const updateVote = (vote, data, translate) => (dispatch, getState) => {
     if (
-        checkDateBeforeVote(dispatch, getState(), translate) ||
+        !isVoteAllowed(dispatch, getState(), translate) ||
         data.trim().length === 0
     ) {
         return

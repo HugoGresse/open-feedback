@@ -1,0 +1,84 @@
+import { isVoteAllowed } from './isVoteAllowed'
+import { fireStoreMainInstance, serverTimestamp } from '../../../firebase'
+import { trackVote } from '../../utils/track'
+import { getProjectSelector } from '../../project/projectSelectors'
+import { getUserSelector } from '../../auth/authSelectors'
+import { VOTE_STATUS_ACTIVE, VOTE_TYPE_TEXT_PLUS } from '../../../core/contants'
+import { getSelectedTalkIdSelector } from '../../talk/core/talkSelectors'
+
+/**
+ The user want to "up" a message within a "text" vote items. Vote Items are the element in the form, the message is only
+ one answers among others t othis given voteItem. The message is thus considered as the vote below.
+ */
+export const upVoteOnTextVoteItemVote = (voteItem, voteId, translate) => (
+    dispatch,
+    getState
+) => {
+    if (!isVoteAllowed(dispatch, getState, translate)) {
+        return
+    }
+
+    const state = getState()
+    const talkId = getSelectedTalkIdSelector(state)
+    console.log(talkId, voteItem, voteId)
+
+    const project = getProjectSelector(state)
+    const projectId = project.id
+
+    // TODO
+    // const id = getVoteId(voteItem, projectId, getState)
+    const id = fireStoreMainInstance
+        .collection('projects')
+        .doc(projectId)
+        .collection('userVotes')
+        .doc().id
+
+    // TODO list:
+    // 2. Detect if already voted to remove plus
+    // 3. Optimisic UI
+
+    const voteContent = {
+        projectId: projectId,
+        talkId: talkId,
+        voteItemId: voteItem.id,
+        id: id,
+        voteId,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        voteType: VOTE_TYPE_TEXT_PLUS,
+        userId: getUserSelector(state).uid,
+        status: VOTE_STATUS_ACTIVE,
+    }
+
+    fireStoreMainInstance
+        .collection('projects')
+        .doc(projectId)
+        .collection('userVotes')
+        .doc(id)
+        .set(voteContent, { merge: true })
+        .then(() => {
+            // dispatch({
+            //     type: ADD_VOTE_SUCCESS,
+            //     payload: {
+            //         voteId: id,
+            //     },
+            // })
+            trackVote(project.name, projectId, voteItem.type)
+        })
+        .catch((error) => {
+            // dispatch({
+            //     type: ADD_VOTE_ERROR,
+            //     payload: {
+            //         error: `Unable to save the vote, ${error}`,
+            //         voteId: voteContent.id,
+            //     },
+            // })
+            // dispatch({
+            //     type: INCREMENT_VOTE_LOCALLY,
+            //     payload: {
+            //         vote: voteContent,
+            //         amount: -1,
+            //     },
+            // })
+        })
+}

@@ -10,7 +10,7 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import TalkVoteTextResult from './TalkVoteTextResult'
 import { Trans, withTranslation } from 'react-i18next'
-import { VOTE_STATUS_HIDDEN } from '../../../core/contants'
+import { VOTE_STATUS_HIDDEN, VOTE_TYPE_TEXT_PLUS } from '../../../core/contants'
 import COLORS from '../../../constants/colors'
 import Typography from '@material-ui/core/Typography'
 
@@ -126,7 +126,7 @@ class TalkVoteText extends Component {
     }
 
     render() {
-        const { classes, voteItem, voteResult, t } = this.props
+        const { classes, voteItem, voteResult, chipColors, t } = this.props
 
         const saveUpdateKey = this.props.currentUserVote
             ? 'comment.update'
@@ -189,7 +189,13 @@ class TalkVoteText extends Component {
                     </div>
                 )}
 
-                {voteResult && <TalkVoteTextResult result={voteResult} />}
+                {voteResult && (
+                    <TalkVoteTextResult
+                        result={voteResult}
+                        voteItem={voteItem}
+                        chipColors={chipColors}
+                    />
+                )}
             </Grid>
         )
     }
