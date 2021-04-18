@@ -1,20 +1,20 @@
-import React, { Component } from 'react'
-import { emphasize, withStyles } from '@material-ui/core'
+import React, { useEffect, useState } from 'react'
+import { emphasize } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import SaveIcon from '@material-ui/icons/Save'
 import DeleteIcon from '@material-ui/icons/Delete'
 import InfoIcon from '@material-ui/icons/Info'
 import Paper from '@material-ui/core/Paper'
-import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import TalkVoteTextResult from './TalkVoteTextResult'
-import { Trans, withTranslation } from 'react-i18next'
-import { VOTE_STATUS_HIDDEN, VOTE_TYPE_TEXT_PLUS } from '../../../core/contants'
+import { Trans, useTranslation } from 'react-i18next'
+import { VOTE_STATUS_HIDDEN } from '../../../core/contants'
 import COLORS from '../../../constants/colors'
 import Typography from '@material-ui/core/Typography'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
     itemContainer: {
         margin: -1,
     },
@@ -35,23 +35,6 @@ const styles = (theme) => ({
         justifyContent: 'center',
         position: 'relative',
         transition: 'all 200ms ease-out',
-    },
-    selectedItem: {
-        boxShadow: 'inset 0 0 0 5px ' + theme.palette.paperBorder,
-    },
-    voteTitle: {
-        color: theme.palette.grey[800],
-        zIndex: 2,
-    },
-    voteResult: {
-        position: 'absolute',
-        bottom: '5px',
-        fontSize: '14px',
-        transition: 'all 200ms ease-in-out',
-        zIndex: 2,
-    },
-    backgroundCanvas: {
-        width: '100%',
     },
     textArea: {
         width: '100%',
@@ -81,130 +64,115 @@ const styles = (theme) => ({
     voteHiddenIcon: {
         verticalAlign: 'text-bottom',
     },
-})
+}))
 
-class TalkVoteText extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            comment: '',
-            status: null,
-            dataLoaded: false,
+export const TalkVoteText = ({
+    currentUserVotes,
+    onVoteChange,
+    voteItem,
+    voteResult,
+    chipColors,
+}) => {
+    const { t } = useTranslation()
+    const classes = useStyles()
+    const [data, setData] = useState({
+        comment: '',
+        status: null,
+        dataLoaded: false,
+    })
+
+    useEffect(() => {
+        if (currentUserVotes && !data.dataLoaded) {
+            const foundTextVote = currentUserVotes.find((vote) => !!vote.text)
+            if (foundTextVote) {
+                setData({
+                    dataLoaded: true,
+                    comment: foundTextVote.text,
+                    status: foundTextVote.status,
+                    vote: foundTextVote,
+                })
+            }
         }
-    }
+    }, [currentUserVotes])
 
-    componentDidUpdate(prevProps) {
-        if (
-            (this.props.currentUserVote && !prevProps.currentUserVote) ||
-            (this.props.currentUserVote &&
-                this.state.comment !== this.props.currentUserVote.text &&
-                !this.state.dataLoaded)
-        ) {
-            this.setState({
-                ...this.state,
-                dataLoaded: true,
-                comment: this.props.currentUserVote.text,
-                status: this.props.currentUserVote.status,
-            })
-        }
-    }
-
-    onTextChange = (event) => {
-        this.setState({
+    const onTextChange = (event) => {
+        setData({
+            ...data,
             comment: event.target.value,
         })
     }
 
-    onVoteDelete = () => {
-        if (this.props.currentUserVote) {
-            this.props.onVoteChange(this.props.voteItem, null)
-        }
-        this.setState({
+    const onVoteDelete = () => {
+        onVoteChange(voteItem, null, data.vote)
+
+        setData({
+            ...data,
             comment: '',
             status: null,
+            vote: null,
         })
     }
 
-    render() {
-        const { classes, voteItem, voteResult, chipColors, t } = this.props
+    const saveUpdateKey = currentUserVotes ? 'comment.update' : 'comment.save'
 
-        const saveUpdateKey = this.props.currentUserVote
-            ? 'comment.update'
-            : 'comment.save'
+    return (
+        <Grid
+            item
+            xs={12}
+            sm={12}
+            md={12}
+            className={classes.itemContainer}
+            data-testid="VoteItem">
+            <Typography variant="h6" color="textPrimary" component="h3">
+                {voteItem.name}
+            </Typography>
+            <Paper elevation={1} className={classes.item}>
+                <TextField
+                    multiline
+                    fullWidth
+                    margin="none"
+                    InputProps={{
+                        disableUnderline: true,
+                    }}
+                    className={classes.textArea}
+                    placeholder={t('comment.placeholder')}
+                    onChange={onTextChange}
+                    value={data.comment}
+                />
+            </Paper>
+            {data.status && data.status === VOTE_STATUS_HIDDEN && (
+                <div className={classes.voteHidden}>
+                    <InfoIcon className={classes.voteHiddenIcon} />
+                    <Trans i18nKey="comment.hidden" />
+                </div>
+            )}
 
-        return (
-            <Grid
-                item
-                xs={12}
-                sm={12}
-                md={12}
-                className={classes.itemContainer}
-                data-testid="VoteItem">
-                <Typography variant="h6" color="textPrimary" component="h3">
-                    {voteItem.name}
-                </Typography>
-                <Paper elevation={1} className={classes.item}>
-                    <TextField
-                        multiline
-                        fullWidth
-                        margin="none"
-                        InputProps={{
-                            disableUnderline: true,
-                        }}
-                        className={classes.textArea}
-                        placeholder={t('comment.placeholder')}
-                        onChange={this.onTextChange}
-                        value={this.state.comment}
-                    />
-                </Paper>
-                {this.state.status && this.state.status === VOTE_STATUS_HIDDEN && (
-                    <div className={classes.voteHidden}>
-                        <InfoIcon className={classes.voteHiddenIcon} />
-                        <Trans i18nKey="comment.hidden" />
-                    </div>
-                )}
+            {data.comment && (
+                <div className={classes.buttonContainer}>
+                    <Button onClick={onVoteDelete}>
+                        <DeleteIcon className={classes.leftIcon} />
+                        <Trans i18nKey="comment.delete">Delete comment</Trans>
+                    </Button>
 
-                {this.state.comment && (
-                    <div className={classes.buttonContainer}>
-                        <Button onClick={() => this.onVoteDelete()}>
-                            <DeleteIcon className={classes.leftIcon} />
-                            <Trans i18nKey="comment.delete">
-                                Delete comment
-                            </Trans>
-                        </Button>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.saveButton}
+                        onClick={() => onVoteChange(voteItem, data.comment)}>
+                        <SaveIcon className={classes.leftIcon} />
+                        <Trans i18nKey={saveUpdateKey} />
+                    </Button>
+                </div>
+            )}
 
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            className={classes.saveButton}
-                            onClick={() =>
-                                this.props.onVoteChange(
-                                    voteItem,
-                                    this.state.comment
-                                )
-                            }>
-                            <SaveIcon className={classes.leftIcon} />
-                            <Trans i18nKey={saveUpdateKey} />
-                        </Button>
-                    </div>
-                )}
-
-                {voteResult && (
-                    <TalkVoteTextResult
-                        result={voteResult}
-                        voteItem={voteItem}
-                        chipColors={chipColors}
-                    />
-                )}
-            </Grid>
-        )
-    }
+            {voteResult && (
+                <TalkVoteTextResult
+                    result={voteResult}
+                    voteItem={voteItem}
+                    chipColors={chipColors}
+                    currentUserVotes={currentUserVotes}
+                />
+            )}
+        </Grid>
+    )
 }
-
-TalkVoteText.propTypes = {
-    classes: PropTypes.object.isRequired,
-    voteItem: PropTypes.object.isRequired,
-    chipColors: PropTypes.array,
-}
-
-export default withStyles(styles)(withTranslation()(TalkVoteText))

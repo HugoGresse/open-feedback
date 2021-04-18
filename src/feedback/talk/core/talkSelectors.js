@@ -44,7 +44,12 @@ export const getVoteResultSelectorSelector = createSelector(
             if (typeof value === 'object') {
                 transformResult[key] = []
                 Object.entries(value).forEach(([, value2]) => {
-                    if (Object.keys(value2).length === 0) {
+                    const keys = Object.keys(value2)
+                    if (
+                        !value2 ||
+                        keys.length === 0 ||
+                        (keys.length === 1 && keys[0] === 'id')
+                    ) {
                         // Empty object due to deletion
                         return
                     }

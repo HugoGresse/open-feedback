@@ -5,10 +5,19 @@ import Typography from '@material-ui/core/Typography'
 import { VoteButton } from '../components/VoteButton'
 
 const useStyles = makeStyles((theme) => ({
+    container: {
+        display: 'flex',
+        marginTop: theme.spacing(2),
+    },
     button: {
-        width: 100,
+        width: 80,
+        height: 80,
         float: 'left',
-        marginRight: 18,
+        marginRight: theme.spacing(2),
+    },
+    right: {
+        flexDirection: 'row',
+        flex: 1,
     },
     date: {
         color: theme.palette.textDimmed,
@@ -28,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 export const VoteTextResultItem = ({
     vote,
     isLast,
+    isSelected,
     chipColors,
     onVoteChange,
 }) => {
@@ -36,23 +46,25 @@ export const VoteTextResultItem = ({
     })
 
     return (
-        <div>
+        <li className={classes.container}>
             <VoteButton
                 className={classes.button}
                 count={1}
-                isSelected={false}
+                isSelected={isSelected}
                 chipColors={chipColors}
                 onClick={onVoteChange}>
                 {vote.plus} {vote.plus > 1 ? 'votes' : 'vote'}
             </VoteButton>
-            <p className={classes.date}>
-                {DateTime.fromJSDate(vote.updatedAt)
-                    .minus({ seconds: 1 })
-                    .toRelative()}
-            </p>
-            <Typography className={classes.comment} color="textPrimary">
-                {vote.text}
-            </Typography>
-        </div>
+            <div className={classes.right}>
+                <p className={classes.date}>
+                    {DateTime.fromJSDate(vote.updatedAt)
+                        .minus({ seconds: 1 })
+                        .toRelative()}
+                </p>
+                <Typography className={classes.comment} color="textPrimary">
+                    {vote.text}
+                </Typography>
+            </div>
+        </li>
     )
 }

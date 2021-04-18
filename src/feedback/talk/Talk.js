@@ -48,29 +48,20 @@ class Talk extends Component {
         this.props.getVoteResult(id)
     }
 
-    onVoteItemChange = (voteItem, data) => {
-        if (this.props.userVotes[voteItem.id]) {
+    onVoteItemChange = (voteItem, data, vote) => {
+        // TODO : finish managing this new third params
+        if (vote) {
             switch (voteItem.type) {
                 case VOTE_TYPE_TEXT:
                     if (data && data.length > 0) {
-                        this.props.updateVote(
-                            this.props.userVotes[voteItem.id],
-                            data,
-                            this.props.t
-                        )
+                        this.props.updateVote(vote, data, this.props.t)
                     } else {
-                        this.props.removeVote(
-                            this.props.userVotes[voteItem.id],
-                            this.props.t
-                        )
+                        this.props.removeVote(vote, this.props.t)
                     }
                     break
                 default:
                 case VOTE_TYPE_BOOLEAN:
-                    this.props.removeVote(
-                        this.props.userVotes[voteItem.id],
-                        this.props.t
-                    )
+                    this.props.removeVote(vote, this.props.t)
                     break
             }
         } else {
@@ -148,7 +139,7 @@ class Talk extends Component {
                         <TalkVote
                             key={key}
                             voteItem={voteItem}
-                            userVote={userVotes[voteItem.id]}
+                            userVotes={userVotes[voteItem.id]}
                             voteResult={voteResults[voteItem.id]}
                             chipColors={chipColors}
                             onVoteChange={this.onVoteItemChange}

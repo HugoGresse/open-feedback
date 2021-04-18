@@ -1,14 +1,21 @@
 import { isVoteAllowed } from './isVoteAllowed'
 import { fireStoreMainInstance, serverTimestamp } from '../../../firebase'
-import { trackVote } from '../../utils/track'
+import { trackUnvote, trackVote } from '../../utils/track'
 import { getProjectSelector } from '../../project/projectSelectors'
 import { getUserSelector } from '../../auth/authSelectors'
-import { VOTE_STATUS_ACTIVE, VOTE_TYPE_TEXT_PLUS } from '../../../core/contants'
+import {
+    VOTE_STATUS_ACTIVE,
+    VOTE_STATUS_DELETED,
+    VOTE_TYPE_TEXT_PLUS,
+} from '../../../core/contants'
 import { getSelectedTalkIdSelector } from '../../talk/core/talkSelectors'
+import { getCurrentUserVotesSelector } from '../voteSelectors'
+import { ADD_VOTE_ERROR, REMOVE_VOTE_SUCCESS } from '../voteActionTypes'
+import { INCREMENT_VOTE_LOCALLY } from '../../project/projectActionTypes'
 
 /**
  The user want to "up" a message within a "text" vote items. Vote Items are the element in the form, the message is only
- one answers among others t othis given voteItem. The message is thus considered as the vote below.
+ one answers among others to this given voteItem. The message is thus considered as the vote below.
  */
 export const upVoteOnTextVoteItemVote = (voteItem, voteId, translate) => (
     dispatch,
@@ -78,6 +85,64 @@ export const upVoteOnTextVoteItemVote = (voteItem, voteId, translate) => (
             //     payload: {
             //         vote: voteContent,
             //         amount: -1,
+            //     },
+            // })
+        })
+}
+
+export const removeUpVoteOnTextVoteItemVote = (voteToDelete, translate) => (
+    dispatch,
+    getState
+) => {
+    if (!isVoteAllowed(dispatch, getState, translate) || !voteToDelete) {
+        // no voteToDelete if the user has written the initial text, the user need to delete it, not remove the up vote
+        return
+    }
+    if (getCurrentUserVotesSelector(getState())[voteToDelete.id].pending) {
+        // eslint-disable-next-line no-console
+        console.info(
+            'Unable to delete vote as it has not been written on the database'
+        )
+        return
+    }
+
+    const project = getProjectSelector(getState())
+
+    // TODO : optimistic UI
+    fireStoreMainInstance
+        .collection('projects')
+        .doc(project.id)
+        .collection('userVotes')
+        .doc(voteToDelete.id)
+        .set(
+            {
+                status: VOTE_STATUS_DELETED,
+                updatedAt: serverTimestamp(),
+            },
+            { merge: true }
+        )
+        .then(() => {
+            // TODO : optimistic UI
+            // dispatch({
+            //     type: REMOVE_VOTE_SUCCESS,
+            //     payload: voteToDelete,
+            // })
+            trackUnvote(project.name, project.id)
+        })
+        .catch((error) => {
+            dispatch({
+                type: ADD_VOTE_ERROR,
+                payload: {
+                    error: `Unable to save the vote, ${error}`,
+                    voteWhichShouldHaveBeenDeleted: voteToDelete,
+                },
+            })
+
+            // dispatch({
+            //     type: INCREMENT_VOTE_LOCALLY,
+            //     payload: {
+            //         vote: voteToDelete,
+            //         amount: 1,
             //     },
             // })
         })

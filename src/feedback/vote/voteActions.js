@@ -186,7 +186,7 @@ export const removeVote = (voteToDelete, translate) => {
 
 export const updateVote = (vote, data, translate) => (dispatch, getState) => {
     if (
-        !isVoteAllowed(dispatch, getState(), translate) ||
+        !isVoteAllowed(dispatch, getState, translate) ||
         data.trim().length === 0
     ) {
         return

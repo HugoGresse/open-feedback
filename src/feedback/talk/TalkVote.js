@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import TalkVoteText from './text/TalkVoteText'
 import TalkVoteBoolean from './boolean/TalkVoteBoolean'
+import { TalkVoteText } from './text/TalkVoteText'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../core/contants'
 
 class TalkItemVote extends Component {
     render() {
         const {
             voteItem,
-            userVote,
+            userVotes,
             voteResult,
             chipColors,
             onVoteChange,
@@ -19,9 +19,15 @@ class TalkItemVote extends Component {
             case VOTE_TYPE_BOOLEAN:
                 return (
                     <TalkVoteBoolean
-                        onVoteChange={onVoteChange}
+                        onVoteChange={(voteItem) => {
+                            onVoteChange(
+                                voteItem,
+                                null,
+                                userVotes && userVotes[0]
+                            )
+                        }}
                         voteItem={voteItem}
-                        isSelected={!!userVote}
+                        isSelected={!!userVotes}
                         voteResult={voteResult}
                         chipColors={chipColors}
                     />
@@ -31,7 +37,7 @@ class TalkItemVote extends Component {
                     <TalkVoteText
                         onVoteChange={onVoteChange}
                         voteItem={voteItem}
-                        currentUserVote={userVote}
+                        currentUserVotes={userVotes}
                         voteResult={voteResult}
                         chipColors={chipColors}
                     />
