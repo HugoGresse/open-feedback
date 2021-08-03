@@ -19,6 +19,9 @@ jobs:
       shell: bash
       env:
         RUNTIME_CONFIG_TEST: ${{secrets.RUNTIME_CONFIG_TEST}}
+    - name: "test"
+      run: 'cat functions/.runtimeconfig.json'
+      shell: bash
     - name: Run Cypress E2E test
       uses: cypress-io/github-action@v2
       with:
