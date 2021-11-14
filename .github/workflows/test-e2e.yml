@@ -5,7 +5,7 @@ on: [push]
 jobs:
   cypress-run:
     name: Run End to end test using Cypress
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v1
