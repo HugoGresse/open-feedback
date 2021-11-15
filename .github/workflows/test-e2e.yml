@@ -13,24 +13,19 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '14'
-    - name: "Test"
-      run: "echo $CYPRESS_FIREBASE_TOKEN | openssl base64 | openssl base64"
+    - name: "Create .runtimeconfig.json"
+      run: 'echo "$RUNTIME_CONFIG_TEST" > functions/.runtimeconfig.json'
       shell: bash
       env:
-        CYPRESS_FIREBASE_TOKEN: ${{secrets.CYPRESS_FIREBASE_TOKEN}}
+          RUNTIME_CONFIG_TEST: ${{secrets.RUNTIME_CONFIG_TEST}}
+    - name: "test"
+      run: 'cat functions/.runtimeconfig.json'
+      shell: bash
     - name: Install functions dependencies
       run: |
             cd functions
             npm ci
             npm run build
-    - name: "Create .runtimeconfig.json"
-      run: 'echo "$RUNTIME_CONFIG_TEST" > functions/.runtimeconfig.json'
-      shell: bash
-      env:
-        RUNTIME_CONFIG_TEST: ${{secrets.RUNTIME_CONFIG_TEST}}
-    - name: "test"
-      run: 'cat functions/.runtimeconfig.json'
-      shell: bash
     - name: Run Cypress E2E test
       uses: cypress-io/github-action@v2
       with:
