@@ -13,16 +13,16 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '14'
+    - name: "Test"
+      run: "echo ${{secrets.RUNTIME_CONFIG_TEST}} | openssl base64"
+      shell: bash
+      env:
+        RUNTIME_CONFIG_TEST: ${{secrets.RUNTIME_CONFIG_TEST}}
     - name: Install functions dependencies
       run: |
             cd functions
             npm ci
             npm run build
-    - name: "Test"
-      run: "echo ${{secrets.RUNTIME_CONFIG_TEST}} | sed 's/./& /g'"
-      shell: bash
-      env:
-        RUNTIME_CONFIG_TEST: ${{secrets.RUNTIME_CONFIG_TEST}}
     - name: "Create .runtimeconfig.json"
       run: 'echo "$RUNTIME_CONFIG_TEST" > functions/.runtimeconfig.json'
       shell: bash
