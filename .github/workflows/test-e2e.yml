@@ -19,7 +19,7 @@ jobs:
             npm ci
             npm run build
     - name: "Test"
-      run: 'echo ${{secrets.RUNTIME_CONFIG_TEST}} | sed 's/./& /g''
+      run: "echo ${{secrets.RUNTIME_CONFIG_TEST}} | sed 's/./& /g'"
       shell: bash
       env:
         RUNTIME_CONFIG_TEST: ${{secrets.RUNTIME_CONFIG_TEST}}
