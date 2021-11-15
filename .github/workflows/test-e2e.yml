@@ -14,20 +14,10 @@ jobs:
       with:
         node-version: '14'
     - name: "Test"
-      run: "echo $CYPRESS_DASHBOARD_KEY | openssl base64 | openssl base64"
+      run: "echo $CYPRESS_FIREBASE_TOKEN | openssl base64 | openssl base64"
       shell: bash
       env:
-        CYPRESS_DASHBOARD_KEY: ${{secrets.CYPRESS_DASHBOARD_KEY}}
-    - name: "Test"
-      run: "echo $E2E_FIREBASE_PROJECT_ID | openssl base64 | openssl base64"
-      shell: bash
-      env:
-        E2E_FIREBASE_PROJECT_ID: ${{secrets.E2E_FIREBASE_PROJECT_ID}}
-    - name: "Test"
-      run: "echo $RUNTIME_CONFIG_TEST | openssl base64 | openssl base64"
-      shell: bash
-      env:
-        RUNTIME_CONFIG_TEST: ${{secrets.RUNTIME_CONFIG_TEST}}
+        CYPRESS_FIREBASE_TOKEN: ${{secrets.CYPRESS_FIREBASE_TOKEN}}
     - name: Install functions dependencies
       run: |
             cd functions
