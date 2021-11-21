@@ -23,7 +23,7 @@ jobs:
     - name: Checkout
       if: github.event_name != 'pull_request_target'
       uses: actions/checkout@v2.4.0
-   -  name: Checkout for Dependabot
+    - name: Checkout for Dependabot
       if: github.event_name == 'pull_request_target'
       uses: actions/checkout@v2.4.0
       with:
