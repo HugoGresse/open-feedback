@@ -20,17 +20,17 @@ jobs:
         SECRETS_AVAILABLE: ${{ secrets.SECRETS_AVAILABLE }}
         shell: pwsh
         run: exit $(If ($env:SECRETS_AVAILABLE -eq 'true') { 0 } Else { 1 })
-    -  name: Checkout
-       if: github.event_name != 'pull_request_target'
-       uses: actions/checkout@v2.4.0
-       with:
-         fetch-depth: 0
-   -   name: Checkout for Dependabot
-       if: github.event_name == 'pull_request_target'
-       uses: actions/checkout@v2.4.0
-       with:
-         ref: 'refs/pull/${{ github.event.number }}/merge'
-         fetch-depth: 0
+    - name: Checkout
+      if: github.event_name != 'pull_request_target'
+      uses: actions/checkout@v2.4.0
+      with:
+        fetch-depth: 0
+   -  name: Checkout for Dependabot
+      if: github.event_name == 'pull_request_target'
+      uses: actions/checkout@v2.4.0
+      with:
+        ref: 'refs/pull/${{ github.event.number }}/merge'
+        fetch-depth: 0
     - name: Setup Node 14
       uses: actions/setup-node@v2
       with:
