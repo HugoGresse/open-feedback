@@ -81,7 +81,7 @@
         "react-router-dom": "^5.2.0",
         "react-scripts": "4.0.3",
         "react-scrollable-anchor": "^0.6.1",
-        "react-spring": "^8.0.27",
+        "react-spring": "^9.3.3",
         "react-transition-group": "^4.4.2",
         "redux": "^4.1.0",
         "redux-thunk": "^2.3.0",
