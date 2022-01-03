@@ -74,7 +74,7 @@
         "react-dropzone": "^11.3.2",
         "react-firebaseui": "^5.0.2",
         "react-google-recaptcha-v3": "^1.8.0",
-        "react-helmet-async": "^1.0.9",
+        "react-helmet-async": "^1.2.2",
         "react-hotkeys-hook": "^3.3.1",
         "react-i18next": "^11.14.2",
         "react-redux": "^7.2.4",
