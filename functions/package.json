@@ -28,7 +28,7 @@
         "imagemin-jpegtran": "^7.0.0",
         "imagemin-pngquant": "^9.0.2",
         "lodash": "^4.17.21",
-        "node-fetch": "^2.6.1",
+        "node-fetch": "^3.2.3",
         "sharp": "latest",
         "ts-jest": "^26.5.6"
     },
