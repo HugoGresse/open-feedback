@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Organization } from './Organization'
 import { OrganizationLayout } from './layout/OrganizationLayout'
-import { createMuiTheme, ThemeProvider } from '@material-ui/core'
+import { createTheme, ThemeProvider } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { getOrganizations } from './core/actions/getOrganizations'
 import { Redirect, Route, Switch } from 'react-router-dom'
@@ -10,7 +10,7 @@ import { OrganizationTheme } from './theme/OrganizationTheme'
 import { OrganizationVotingForm } from './votingForm/OrganizationVotingForm'
 
 const createOrganizationTheme = (parentTheme) =>
-    createMuiTheme({
+    createTheme({
         ...parentTheme,
         palette: {
             primary: {

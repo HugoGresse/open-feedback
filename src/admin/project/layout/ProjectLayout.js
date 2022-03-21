@@ -3,7 +3,7 @@ import SideBar from './SideBar'
 import Header from './Header'
 import COLORS from '../../../constants/colors'
 import Container from '@material-ui/core/Container'
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
+import { createTheme, MuiThemeProvider } from '@material-ui/core'
 import useTheme from '@material-ui/core/styles/useTheme'
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import makeStyles from '@material-ui/core/styles/makeStyles'
@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 import { getSelectedProjectSelector } from '../core/projectSelectors'
 import Box from '@material-ui/core/Box'
 
-const innerTheme = createMuiTheme({
+const innerTheme = createTheme({
     palette: {
         type: 'light',
         primary: {
@@ -78,7 +78,8 @@ const ProjectLayout = ({ baseUrl, children }) => {
             justifyContent="flex-start"
             flexGrow="1"
             height="100vh"
-            bgcolor={COLORS.ADMIN_BACKGROUND_LIGHT}>
+            bgcolor={COLORS.ADMIN_BACKGROUND_LIGHT}
+        >
             {project && (
                 <Helmet>
                     <title>{project.name} - Admin</title>
@@ -103,7 +104,8 @@ const ProjectLayout = ({ baseUrl, children }) => {
                     <Container
                         maxWidth="lg"
                         className={classes.container}
-                        component="main">
+                        component="main"
+                    >
                         <MuiThemeProvider theme={innerTheme}>
                             {children}
                         </MuiThemeProvider>

@@ -29,7 +29,7 @@ const ProjectUsers = () => {
         organizationUserIds.forEach((userId) => {
             dispatch(getUserDetails(userId))
         })
-    }, [organizationUserIds])
+    }, [organizationUserIds, dispatch])
 
     return (
         <OFCard>

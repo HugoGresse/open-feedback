@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { COLORS } from '../../../constants/colors'
 import { useDispatch, useSelector } from 'react-redux'
-import { createMuiTheme, Grid } from '@material-ui/core'
+import { createTheme, Grid } from '@material-ui/core'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -34,7 +34,7 @@ import { getProjects } from '../core/actions/getProjects'
 import { getOrganizations } from '../../organization/core/actions/getOrganizations'
 import { getSelectedOrganizationSelector } from '../../organization/core/organizationSelectors'
 
-const innerTheme = createMuiTheme({
+const innerTheme = createTheme({
     palette: {
         type: 'dark',
     },
@@ -134,14 +134,16 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                 <Grid
                                     item
                                     xs={12}
-                                    className={classes.topHeader}>
+                                    className={classes.topHeader}
+                                >
                                     <Grid container justify="space-between">
                                         <Grid item xs={12} sm={7}>
                                             <Hidden mdUp>
                                                 <IconButton
                                                     onClick={(event) =>
                                                         toggleDrawer(event)
-                                                    }>
+                                                    }
+                                                >
                                                     <MenuIcon />
                                                 </IconButton>
                                             </Hidden>
@@ -158,7 +160,8 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                                         handleChangeEventMenuOpen(
                                                             event
                                                         )
-                                                    }>
+                                                    }
+                                                >
                                                     {selectedProject.name}
                                                     {selectedOrganization &&
                                                         ` (${selectedOrganization.name})`}
@@ -174,7 +177,8 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                             item
                                             xs={12}
                                             sm={5}
-                                            className={classes.topRight}>
+                                            className={classes.topRight}
+                                        >
                                             <Help
                                                 buttonClass={
                                                     classes.topRightButtonLight
@@ -190,7 +194,8 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                                         setQRCodeDialogOpen(
                                                             true
                                                         )
-                                                    }>
+                                                    }
+                                                >
                                                     <Icon>
                                                         <img
                                                             src={QRCode}
@@ -207,7 +212,8 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                                     }
                                                     target="_blank"
                                                     title={t('layout.seeEvent')}
-                                                    href={`/${selectedProjectId}`}>
+                                                    href={`/${selectedProjectId}`}
+                                                >
                                                     <EyeIcon
                                                         className={
                                                             classes.topRightIcon
@@ -223,7 +229,8 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                     <Typography
                                         variant="h5"
                                         component="h2"
-                                        className={classes.title}>
+                                        className={classes.title}
+                                    >
                                         {getTitle(location)}
                                     </Typography>
                                 </Grid>
@@ -244,11 +251,13 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                             dispatch(getOrganizations())
                         }
                     }}
-                    onClose={() => handleMenuClose()}>
+                    onClose={() => handleMenuClose()}
+                >
                     {projects.map((project) => (
                         <MenuItem
                             key={project.id}
-                            onClick={() => onProjectSelectedChange(project.id)}>
+                            onClick={() => onProjectSelectedChange(project.id)}
+                        >
                             {project.name}{' '}
                             {project.organizationId &&
                                 `(${project.organizationName})`}

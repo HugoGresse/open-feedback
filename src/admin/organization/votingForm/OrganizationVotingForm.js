@@ -26,7 +26,7 @@ export const OrganizationVotingForm = () => {
 
     useEffect(() => {
         dispatch(getVoteItems())
-    }, [dispatch, getVoteItems])
+    }, [dispatch])
 
     return (
         <>

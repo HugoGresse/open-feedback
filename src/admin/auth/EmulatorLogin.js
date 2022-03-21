@@ -67,5 +67,5 @@ const verifyEmail = async (user = null) => {
 }
 
 export const setLoginCookie = (isLoggedIn) => {
-    document.cookie = 'isLoggedIn=' + !!isLoggedIn + '' + '; path=/'
+    document.cookie = 'isLoggedIn=' + !!isLoggedIn + '; path=/'
 }
