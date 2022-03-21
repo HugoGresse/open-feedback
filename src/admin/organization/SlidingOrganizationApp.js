@@ -44,7 +44,7 @@ export const SlidingOrganizationApp = React.forwardRef(function (props, ref) {
         if (match && !isClosing) {
             setOpen(true)
         }
-    }, [match, setOpen])
+    }, [match, setOpen, isClosing])
 
     const close = () => {
         setClosing(true)
@@ -59,7 +59,8 @@ export const SlidingOrganizationApp = React.forwardRef(function (props, ref) {
             BackdropProps={{
                 timeout: 500,
             }}
-            onClose={close}>
+            onClose={close}
+        >
             <Slide
                 in={open}
                 direction="up"
@@ -68,12 +69,14 @@ export const SlidingOrganizationApp = React.forwardRef(function (props, ref) {
                 onExited={() => {
                     history.push(ROUTE_ADMIN)
                     setClosing(false)
-                }}>
+                }}
+            >
                 <Container
                     maxWidth="md"
                     fixed
                     disableGutters
-                    className={classes.container}>
+                    className={classes.container}
+                >
                     {open && (
                         <OrganizationApp
                             key={match ? match.params.organizationId : null}
@@ -86,3 +89,4 @@ export const SlidingOrganizationApp = React.forwardRef(function (props, ref) {
         </Modal>
     )
 })
+SlidingOrganizationApp.displayName = 'SlidingOrganizationApp'

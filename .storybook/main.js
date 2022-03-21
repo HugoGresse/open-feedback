@@ -10,4 +10,5 @@ module.exports = {
             name: '@storybook/addon-docs',
         },
     ],
+    staticDirs: ['../public'],
 }

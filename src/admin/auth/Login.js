@@ -57,6 +57,7 @@ const Login = memo(({ children }) => {
         return () => {
             unregisterAuthObserver()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, tempUser])
 
     if (isLoggedIn) {
@@ -69,14 +70,16 @@ const Login = memo(({ children }) => {
             bgcolor={COLORS.RED_ORANGE}
             padding={1}
             display="flex"
-            boxSizing="border-box">
+            boxSizing="border-box"
+        >
             <Box
                 display="flex"
                 flexDirection="column"
                 justifyContent="center"
                 alignItems="center"
                 flexGrow="1"
-                textAlign="center">
+                textAlign="center"
+            >
                 <img
                     height="40"
                     src={logoWhite}
