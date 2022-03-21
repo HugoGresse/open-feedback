@@ -5,7 +5,7 @@ import logo from '../../../assets/logo-openfeedback-color&white.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserSelector } from '../../auth/authSelectors'
 import { signOut } from '../../auth/authActions'
-import { createMuiTheme } from '@material-ui/core'
+import { createTheme } from '@material-ui/core'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -33,7 +33,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-const innerTheme = createMuiTheme({
+const innerTheme = createTheme({
     palette: {
         type: 'dark',
     },
@@ -95,7 +95,8 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                 anchor="left"
                 classes={{
                     paper: classes.drawer,
-                }}>
+                }}
+            >
                 <div className={classes.container}>
                     <List component="nav">
                         <ListItem className={classes.logoContainer}>
@@ -119,7 +120,8 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                             <ListSubheader component="div">
                                 {t('layout.sidebar.data')}
                             </ListSubheader>
-                        }>
+                        }
+                    >
                         <OFMenuItem
                             to={`${baseUrl}/${selectedProjectId}${RoutingMap.dashboard.url}`}
                             icon={<ExploreIcon />}
@@ -156,7 +158,8 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                             <ListSubheader component="div">
                                 {t('layout.sidebar.settings')}
                             </ListSubheader>
-                        }>
+                        }
+                    >
                         <OFMenuItem
                             text={t(RoutingMap.settingEvent.i18key)}
                             iconClassName={classes.listItemIcon}
@@ -187,7 +190,8 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                     <List
                         component="nav"
                         aria-label="user/logout"
-                        className={classes.userBox}>
+                        className={classes.userBox}
+                    >
                         <ListItem>
                             {user.photoURL && (
                                 <ListItemAvatar>
@@ -204,7 +208,8 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                                 <IconButton
                                     edge="end"
                                     aria-label="signout"
-                                    onClick={() => dispatch(signOut(history))}>
+                                    onClick={() => dispatch(signOut(history))}
+                                >
                                     <PowerSettingsIcon />
                                 </IconButton>
                             </ListItemSecondaryAction>

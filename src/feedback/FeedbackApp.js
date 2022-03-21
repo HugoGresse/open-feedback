@@ -6,7 +6,7 @@ import Talk from './talk/Talk'
 import { I18nextProvider } from 'react-i18next'
 import i18n from './translations/i18n'
 import { responsiveFontSizes, useMediaQuery } from '@material-ui/core'
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+import { createTheme, ThemeProvider } from '@material-ui/core/styles'
 import { grey } from '@material-ui/core/colors'
 import ErrorBoundary from '../baseComponents/customComponent/ErrorBoundary'
 import { ALERT_REACT_CATCHED_ERROR_FEEDBACK } from '../utils/alerting/alerts'
@@ -18,7 +18,7 @@ const FeedbackApp = () => {
     const theme = React.useMemo(
         () =>
             responsiveFontSizes(
-                createMuiTheme({
+                createTheme({
                     typography: {
                         h1: {
                             fontSize: 24,

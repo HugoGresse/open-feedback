@@ -7,7 +7,7 @@ import { Redirect, Route, Switch, useParams } from 'react-router-dom'
 import AdminRoot from './root/AdminRoot'
 import Notifications from './notification/Notifications'
 import {
-    createMuiTheme,
+    createTheme,
     MuiThemeProvider,
     responsiveFontSizes,
 } from '@material-ui/core'
@@ -18,7 +18,7 @@ import { COLORS } from '../constants/colors'
 import { SlidingOrganizationApp } from './organization/SlidingOrganizationApp'
 
 const innerTheme = responsiveFontSizes(
-    createMuiTheme({
+    createTheme({
         palette: {
             type: 'light',
             primary: {
