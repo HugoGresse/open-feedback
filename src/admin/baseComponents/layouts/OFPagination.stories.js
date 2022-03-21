@@ -7,7 +7,7 @@ export default {
     title: 'Admin/Pagination',
 }
 
-export const defaultUsage = () => {
+export const DefaultUsage = () => {
     const [currentPage, setPage] = useState(1)
 
     return (

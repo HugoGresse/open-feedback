@@ -7,7 +7,7 @@ export default {
     title: 'Admin/Dialog',
 }
 
-export const defaultUsage = () => {
+export const DefaultUsage = () => {
     const [isOpen, setDialogOpen] = useState(false)
 
     return (
@@ -19,7 +19,8 @@ export const defaultUsage = () => {
                 title="Dialog title"
                 cancelText="Cancel"
                 confirmText="Confirm button"
-                open={isOpen}>
+                open={isOpen}
+            >
                 <ul>
                     <li>Some content</li>
                     <li>Some content</li>

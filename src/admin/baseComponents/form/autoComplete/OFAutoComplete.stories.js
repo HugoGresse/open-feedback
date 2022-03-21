@@ -22,7 +22,7 @@ export default {
     title: 'Admin/AutoComplete',
 }
 
-export const defaultUsage = () => {
+export const DefaultUsage = () => {
     const [value, setFieldValue] = useState([])
 
     return (
@@ -68,7 +68,7 @@ export const submitting = () => (
     />
 )
 
-export const freesolo = () => {
+export const FreeSolo = () => {
     const [value, setFieldValue] = useState([])
 
     return (
@@ -95,7 +95,7 @@ export const freesolo = () => {
     )
 }
 
-export const onlyOneValue = () => {
+export const OnlyOneValue = () => {
     const [value, setFieldValue] = useState([])
 
     return (
@@ -120,7 +120,7 @@ export const onlyOneValue = () => {
     )
 }
 
-export const fromAnArrayOfObject = () => {
+export const FromAnArrayOfObject = () => {
     const [value, setFieldValue] = useState([])
 
     return (
@@ -146,7 +146,7 @@ export const fromAnArrayOfObject = () => {
     )
 }
 
-export const manyKeysFromAnArrayOfObject = () => {
+export const ManyKeysFromAnArrayOfObject = () => {
     const [value, setFieldValue] = useState([])
 
     return (
