@@ -18,7 +18,8 @@ export const defaultUsage = () => (
         initialValues={{
             title: '',
         }}
-        onSubmit={(values) => console.log('TODO', values)}>
+        onSubmit={() => null}
+    >
         {({ isSubmitting }) => (
             <Form method="POST">
                 <OFFormControlInputFormiked
@@ -30,7 +31,7 @@ export const defaultUsage = () => (
 
                 <FormikAutoSave
                     onSave={(values) => {
-                        return Promise.resolve()
+                        return Promise.resolve(values)
                     }}
                     render={({ isSaving, lastSaved, saveError }) => (
                         <div>
