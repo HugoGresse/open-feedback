@@ -78,7 +78,7 @@
         "react-google-recaptcha-v3": "^1.8.0",
         "react-helmet-async": "^1.2.2",
         "react-hotkeys-hook": "^3.3.1",
-        "react-i18next": "^11.14.2",
+        "react-i18next": "^11.16.2",
         "react-redux": "^7.2.4",
         "react-router-dom": "^5.2.0",
         "react-scripts": "5.0.0",
