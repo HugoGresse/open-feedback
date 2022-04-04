@@ -6,7 +6,7 @@ import { Meta } from '@storybook/addon-docs';
 
 ## Pre-requisites
 
-- node@10.16.0
+- node (a recent version, I'm using 17.8.0)
 - npm
 
 ## Setup
@@ -17,7 +17,7 @@ Create a firebase project with the [firebase console](https://console.firebase.g
 1. Create a "Cloud Firestore" Database. It's okay to start in 'locked' mode. The rules will be overriden when you deploy.
 2. Activate "Anonymous" as a sign-in provider for Authentication of voters
 3. Activate "Google" as a sign-in provider for Admin Authentication. (You may want to add Email/Pwd", "Phone", "Google", "GitHub" later on)
-4. Create a `.env.local` file by copying `.env` file at root folder and set firebase environment variables. You can get all these variables from the Firebase Console homepage by clicking "Add an application" and selecting the web icon.
+4. Create a `.env.production.local` file by copying `.env` file at root folder and set firebase environment variables. You can get all these variables from the Firebase Console homepage by clicking "Add an application" and selecting the web icon.
 
   * `REACT_APP_ADMIN_EMAIL=<ADMIN_EMAIL>`
   * `REACT_APP_APPID=<APP_ID>`
@@ -87,33 +87,21 @@ SmallChat has a free tier and you can answer from Slack directly.
 
 ## Run
 
-### Run the app in dev mode
-
-
-1. Clone the Open Feedback app and install dependencies
-    ```
-    git clone git@github.com:HugoGresse/open-feedback.git
-    npm i
-    ```
-2. Configure the app with [Firebase](#configure-firebase)
-3. Start the app
-    ```
-    npm start
-    ```
-
-    >Before using the app, you'll need to deploy the firestore security rules at least once (see below for how to deploy with firebase)
-
-4. Open [http://localhost:3000](http://localhost:3000) to view the app in the browser.
-
 ## Cloud functions
 
 The project uses cloud functions for vote aggregations. Before deploying the application, you need to resolve cloud functions dependencies.
 
-All commands must be done in `/functions` folder with **node@8**.
 
-Cloud functions uses its own `package.json`, first install dependencies:
+Cloud functions uses its own `package.json`, first install dependencies. From the `/functions` folder:
+
 ```
 npm i
+```
+
+And then from the root of the project:
+
+```
+firebase functions:config:set 'app.contactemail=<ADMIN_EMAIL>'
 ```
 
 The next deploy will also deploy Firebase Cloud Functions
@@ -142,3 +130,23 @@ npm run deploy
 Install dependencies for the app and cloud functions.
 
 The first time your run the app, it may fail to do firestore queries due to missing indexes. If that happens, you'll see an error message in the console with a link that you can follow to create the indices.
+
+### Run the app in dev mode
+
+
+1. Clone the Open Feedback app and install dependencies
+    ```
+    git clone git@github.com:HugoGresse/open-feedback.git
+    npm i
+    ```
+2. Configure the app with [Firebase](#configure-firebase)
+3. Start the app
+    ```
+    npm start
+    ```
+
+    >Before using the app, you'll need to deploy the firestore security rules at least once (see below for how to deploy with firebase)
+
+4. Open [http://localhost:3000](http://localhost:3000) to view the app in the browser.
+
+
