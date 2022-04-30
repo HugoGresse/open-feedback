@@ -10,4 +10,8 @@ module.exports = {
             name: '@storybook/addon-docs',
         },
     ],
+    staticDirs: ['../public'],
+    core: {
+        builder: 'webpack5',
+    },
 }

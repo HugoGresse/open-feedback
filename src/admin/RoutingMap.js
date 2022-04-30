@@ -1,4 +1,4 @@
-export default {
+const RoutingMap = {
     dashboard: {
         i18key: 'rooting.dashboard',
         url: '/dashboard',
@@ -32,6 +32,7 @@ export default {
         url: '/setting/users',
     },
 }
+export default RoutingMap
 
 export const ROUTE_EVENT_SEGMENT = 'event'
 export const ROUTE_ADMIN = '/admin/'

@@ -4,7 +4,6 @@ import path from 'path'
 import sharp from 'sharp'
 import { checkWriteToProjectAllowed } from '../helpers/checkWriteToProjectAllowed'
 import stream from 'stream'
-import imagemin from 'imagemin'
 import imageminPngquant from 'imagemin-pngquant'
 import imageminJpegtran from 'imagemin-jpegtran'
 import { HttpsError } from 'firebase-functions/lib/providers/https'
@@ -131,9 +130,11 @@ const makePublicAndGetUrl = async (file: File): Promise<string> => {
     return `https://${file.bucket.name}.storage.googleapis.com/${file.name}`
 }
 
-const minimizeImageFromBufferArray = (
+const minimizeImageFromBufferArray = async (
     bufferArray: Buffer[]
 ): Promise<Buffer> => {
+    const imagemin = (await import('imagemin')).default
+
     return imagemin.buffer(Buffer.concat(bufferArray), {
         plugins: [
             imageminJpegtran(),

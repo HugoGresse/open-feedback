@@ -5,20 +5,27 @@ on: [push]
 jobs:
   cypress-run:
     name: Run End to end test using Cypress
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
+    - name: Setup Node 14
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: "Create .runtimeconfig.json"
+      run: 'echo "$RUNTIME_CONFIG_TEST" > functions/.runtimeconfig.json'
+      shell: bash
+      env:
+          RUNTIME_CONFIG_TEST: ${{secrets.RUNTIME_CONFIG_TEST}}
+    - name: "test"
+      run: 'cat functions/.runtimeconfig.json'
+      shell: bash
     - name: Install functions dependencies
       run: |
             cd functions
             npm ci
             npm run build
-    - name: "Create .runtimeconfig.json"
-      run: 'echo "$RUNTIME_CONFIG_CYPRESS" > functions/.runtimeconfig.json'
-      shell: bash
-      env:
-        RUNTIME_CONFIG_CYPRESS: ${{secrets.RUNTIME_CONFIG_CYPRESS}}
     - name: Run Cypress E2E test
       uses: cypress-io/github-action@v2
       with:
