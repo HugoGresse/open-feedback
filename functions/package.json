@@ -35,7 +35,7 @@
     "devDependencies": {
         "@types/imagemin-jpegtran": "^5.0.1",
         "@types/node-fetch": "^2.5.12",
-        "@types/sharp": "^0.29.5",
+        "@types/sharp": "^0.30.2",
         "jest": "^26.6.3",
         "jest-expect-message": "^1.0.2",
         "tslint": "^6.1.3",
