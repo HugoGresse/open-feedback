@@ -33,7 +33,7 @@
         "@storybook/addon-docs": "^6.4.19",
         "@storybook/addons": "^6.4.19",
         "@storybook/builder-webpack5": "^6.4.19",
-        "@storybook/manager-webpack5": "^6.4.19",
+        "@storybook/manager-webpack5": "^6.4.22",
         "@storybook/preset-create-react-app": "^4.0.2",
         "@storybook/react": "6.4.19",
         "axe-core": "^4.3.2",
