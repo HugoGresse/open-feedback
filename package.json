@@ -64,7 +64,7 @@
         "formik": "^2.2.6",
         "history": "^5.0.0",
         "i18next": "^19.9.2",
-        "i18next-browser-languagedetector": "^6.1.1",
+        "i18next-browser-languagedetector": "^6.1.4",
         "langmap": "0.0.16",
         "lodash": "4.17.21",
         "luxon": "^1.26.0",
