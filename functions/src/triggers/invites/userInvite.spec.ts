@@ -3,16 +3,15 @@ import {
     checkPendingInviteAndProcessThem,
     userInviteCreated,
 } from './userInvite'
-
-import { Response } from 'node-fetch'
-
-jest.mock('../../email/send')
-import send from '../../email/send'
 import {
     getFirestoreMocksAndInit,
     makeDocumentSnapshot,
 } from '../../testUtils/firestoreStub'
 import * as admin from 'firebase-admin'
+import { Response } from 'node-fetch'
+
+jest.mock('../../email/send')
+import send from '../../email/send'
 
 const test = firebaseFunctionsTest()
 

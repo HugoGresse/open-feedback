@@ -93,7 +93,7 @@ export const TalkVoteText = ({
                 })
             }
         }
-    }, [currentUserVotes])
+    }, [currentUserVotes, data.dataLoaded])
 
     const onTextChange = (event) => {
         setData({
@@ -122,7 +122,8 @@ export const TalkVoteText = ({
             sm={12}
             md={12}
             className={classes.itemContainer}
-            data-testid="VoteItem">
+            data-testid="VoteItem"
+        >
             <Typography variant="h6" color="textPrimary" component="h3">
                 {voteItem.name}
             </Typography>
@@ -158,7 +159,8 @@ export const TalkVoteText = ({
                         variant="contained"
                         color="secondary"
                         className={classes.saveButton}
-                        onClick={() => onVoteChange(voteItem, data.comment)}>
+                        onClick={() => onVoteChange(voteItem, data.comment)}
+                    >
                         <SaveIcon className={classes.leftIcon} />
                         <Trans i18nKey={saveUpdateKey} />
                     </Button>
