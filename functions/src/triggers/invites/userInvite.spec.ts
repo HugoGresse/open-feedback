@@ -10,6 +10,7 @@ jest.mock('../../email/send')
 import send from '../../email/send'
 import { getFirestoreMocksAndInit } from '../../testUtils/firestoreStub'
 import * as admin from 'firebase-admin'
+import { makeDocumentSnapshot } from 'firebase-functions-test/lib/providers/firestore'
 
 const test = firebaseFunctionsTest()
 
@@ -40,12 +41,15 @@ describe('userInviteCreated', () => {
     it('should reject when a user is invited to a project while no data is received from firestore', async () => {
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
-        const snapshot = {
-            id: 'ee',
-            data: () => {
-                // Empty
+        const snapshot = makeDocumentSnapshot(
+            {
+                id: 'ee',
+                data: () => {
+                    // Empty
+                },
             },
-        }
+            `invites/${invite.id}`
+        )
         await expect(userInviteCreatedWrapped(snapshot)).rejects.toEqual(
             new Error('Empty data')
         )
@@ -60,10 +64,13 @@ describe('userInviteCreated', () => {
 
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
-        const snapshot = {
-            id: invite.id,
-            data: () => invite,
-        }
+        const snapshot = makeDocumentSnapshot(
+            {
+                id: invite.id,
+                data: () => invite,
+            },
+            `invites/${invite.id}`
+        )
         await expect(userInviteCreatedWrapped(snapshot)).rejects.toEqual(
             'firestore update failed'
         )
@@ -87,13 +94,8 @@ describe('userInviteCreated', () => {
     })
 
     it('should resolve when a user is invited to a project, thus an email is sent', async () => {
-        const {
-            update,
-            get,
-            collection,
-            doc,
-            where,
-        } = getFirestoreMocksAndInit()
+        const { update, get, collection, doc, where } =
+            getFirestoreMocksAndInit()
 
         update.mockImplementation(() => Promise.resolve('firestoreCompleted'))
         get.mockImplementationOnce(() =>
@@ -108,10 +110,13 @@ describe('userInviteCreated', () => {
 
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
-        const snapshot = {
-            id: invite.id,
-            data: () => invite,
-        }
+        const snapshot = makeDocumentSnapshot(
+            {
+                id: invite.id,
+                data: () => invite,
+            },
+            `invites/${invite.id}`
+        )
         await expect(userInviteCreatedWrapped(snapshot)).resolves.toEqual(
             'forEach not implemented or firebase issue'
         )

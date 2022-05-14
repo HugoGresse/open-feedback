@@ -7,6 +7,7 @@ export const getAppEnv = (): AppEnv => {
     const appUrl = process.env.APP_URL
     const contactEmail = process.env.APP_CONTACTEMAIL
     const recaptchaSecret = process.env.APP_RECAPTCHAV3SECRET
+
     if (!appEnv) {
         throw new Error('APP_ENV is not defined in environment variables')
     }

@@ -1,8 +1,6 @@
-import * as functions from 'firebase-functions'
 import { initFirebase } from './helpers/firebaseInit'
-import { getAppEnv } from './helpers/env'
 
-initFirebase(getAppEnv().env)
+initFirebase()
 
 export {
     aggregateVotesCreate,

@@ -1,5 +1,6 @@
 import firebaseFunctionsTest from 'firebase-functions-test'
 import { userInviteCreated } from './userInvite'
+import { makeDocumentSnapshot } from 'firebase-functions-test/lib/providers/firestore'
 
 const test = firebaseFunctionsTest()
 
@@ -18,10 +19,13 @@ describe('userInviteCreated', () => {
         test.mockConfig({})
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
-        const snapshot = {
-            id: invite.id,
-            data: () => invite,
-        }
+        const snapshot = makeDocumentSnapshot(
+            {
+                id: invite.id,
+                data: () => invite,
+            },
+            `invites/${invite.id}`
+        )
         await expect(userInviteCreatedWrapped(snapshot)).rejects.toEqual(
             new Error('Missing app environment')
         )
