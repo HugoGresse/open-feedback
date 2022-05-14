@@ -26,7 +26,8 @@ module.exports = {
         semi: [2, 'never'],
         'object-curly-spacing': ['error', 'always'],
         quotes: ['error', 'single'],
-        'max-len': ['error', { code: 120 }],
+        'max-len': ['warn', { code: 120 }],
         'import/no-unresolved': 0,
+        'require-jsdoc': ['off'],
     },
 }

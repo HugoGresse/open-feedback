@@ -40,11 +40,7 @@ const TalkVoteTextResult = ({
                                 )
                             } else {
                                 dispatch(
-                                    upVoteOnTextVoteItemVote(
-                                        voteItem,
-                                        item.id,
-                                        t
-                                    )
+                                    upVoteOnTextVoteItemVote(voteItem, item, t)
                                 )
                             }
                         }}
