@@ -8,5 +8,4 @@ typings/
 
 node_modules/
 
-.runtimeconfig.json
-.runtimeconfig**.json
+.env

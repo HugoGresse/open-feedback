@@ -1,36 +1,59 @@
 import { AppEnv } from '../types/AppEnv'
-import * as functions from 'firebase-functions'
 import { MailgunEnv } from '../types/MailgunEnv'
+import { OpsGenieEnv } from '../types/OpsGenieEnv'
 
 export const getAppEnv = (): AppEnv => {
-    const { app } = functions.config()
-    if (!app) {
-        throw new Error('Missing app environment')
+    const appEnv = process.env.APP_ENV
+    const appUrl = process.env.APP_URL
+    const contactEmail = process.env.APP_CONTACTEMAIL
+    const recaptchaSecret = process.env.APP_RECAPTCHAV3SECRET
+    if (!appEnv) {
+        throw new Error('APP_ENV is not defined in environment variables')
     }
-    const { env, url, contactemail, recaptchav3secret } = app
-    if (!env || !url) {
-        throw new Error('Missing app env or app url')
+    if (!appUrl) {
+        throw new Error('APP_URL is not defined in environment variables')
     }
     return {
-        env,
-        url,
-        contactEmail: contactemail,
-        recaptchaV3Secret: recaptchav3secret,
+        env: appEnv,
+        url: appUrl,
+        contactEmail: contactEmail,
+        recaptchaV3Secret: recaptchaSecret,
     }
 }
 
 export const getMailgunEnv = (): MailgunEnv => {
-    const { mailgun } = functions.config()
-    if (!mailgun) {
-        throw new Error('Missing mailgun environment')
+    const mailgunDomain = process.env.MAILGUN_DOMAIN
+    const mailgunKey = process.env.MAILGUN_KEY
+    const mailgunApi = process.env.MAILGUN_API
+    if (!mailgunDomain) {
+        throw new Error(
+            'MAILGUN_DOMAIN is not defined in environment variables'
+        )
     }
-    const { key, domain, api } = mailgun
-    if (!key || !domain || !api) {
-        throw new Error('Missing mailgun key or mailgun domain or mailgun api')
+    if (!mailgunKey) {
+        throw new Error('MAILGUN_KEY is not defined in environment variables')
     }
+    if (!mailgunApi) {
+        throw new Error('MAILGUN_API is not defined in environment variables')
+    }
+
     return {
-        key,
-        domain,
-        api,
+        key: mailgunKey,
+        domain: mailgunDomain,
+        api: mailgunApi,
+    }
+}
+
+export const getOpsGenieEnv = (): OpsGenieEnv | null => {
+    const opsGenieKey = process.env.OPSGENIE_KEY
+    const opsGenieApi = process.env.OPSGENIE_API
+
+    if (!opsGenieKey || !opsGenieApi) {
+        return null
+    }
+
+    return {
+        key: opsGenieKey,
+        api: opsGenieApi,
     }
 }
