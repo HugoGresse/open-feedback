@@ -1,7 +1,9 @@
 import firebaseFunctionsTest from 'firebase-functions-test'
 import { userCreate } from './userCreate'
-import { getFirestoreMocksAndInit } from '../testUtils/firestoreStub'
-import { makeDocumentSnapshot } from 'firebase-functions-test/lib/providers/firestore'
+import {
+    getFirestoreMocksAndInit,
+    makeDocumentSnapshot,
+} from '../testUtils/firestoreStub'
 
 const test = firebaseFunctionsTest()
 

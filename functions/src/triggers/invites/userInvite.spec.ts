@@ -8,9 +8,11 @@ import { Response } from 'node-fetch'
 
 jest.mock('../../email/send')
 import send from '../../email/send'
-import { getFirestoreMocksAndInit } from '../../testUtils/firestoreStub'
+import {
+    getFirestoreMocksAndInit,
+    makeDocumentSnapshot,
+} from '../../testUtils/firestoreStub'
 import * as admin from 'firebase-admin'
-import { makeDocumentSnapshot } from 'firebase-functions-test/lib/providers/firestore'
 
 const test = firebaseFunctionsTest()
 
@@ -22,34 +24,33 @@ describe('userInviteCreated', () => {
         originUserName: 'Hugo G',
         destinationUserInfo: 'email@example.com',
     }
-
+    const OLD_ENV = process.env
     beforeEach(() => {
+        process.env.APP_ENV = 'test'
+        process.env.APP_URL = 'http://localhost:3000'
+        process.env.MAILGUN_API = 'MAILGUN_API'
+        process.env.MAILGUN_DOMAIN = 'MAILGUN_DOMAIN'
+        process.env.MAILGUN_KEY = 'MAILGUN_KEY'
+
         test.mockConfig({
             app: {
                 url: 'http://localhost',
                 domain: 'http://localhost',
                 env: 'development',
             },
-            mailgun: {
-                key: 'MAILGUN_KEY',
-                domain: 'MAILGUN_DOMAIN',
-                api: 'MAILGUN_API',
-            },
         })
+    })
+    afterEach(() => {
+        jest.clearAllMocks()
+        jest.resetModules()
+        process.env = { ...OLD_ENV }
+        delete process.env.NODE_ENV
     })
 
     it('should reject when a user is invited to a project while no data is received from firestore', async () => {
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
-        const snapshot = makeDocumentSnapshot(
-            {
-                id: 'ee',
-                data: () => {
-                    // Empty
-                },
-            },
-            `invites/${invite.id}`
-        )
+        const snapshot = makeDocumentSnapshot(null, `invites/${invite.id}`)
         await expect(userInviteCreatedWrapped(snapshot)).rejects.toEqual(
             new Error('Empty data')
         )
@@ -64,13 +65,7 @@ describe('userInviteCreated', () => {
 
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
-        const snapshot = makeDocumentSnapshot(
-            {
-                id: invite.id,
-                data: () => invite,
-            },
-            `invites/${invite.id}`
-        )
+        const snapshot = makeDocumentSnapshot(invite, `invites/${invite.id}`)
         await expect(userInviteCreatedWrapped(snapshot)).rejects.toEqual(
             'firestore update failed'
         )
@@ -110,13 +105,7 @@ describe('userInviteCreated', () => {
 
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
-        const snapshot = makeDocumentSnapshot(
-            {
-                id: invite.id,
-                data: () => invite,
-            },
-            `invites/${invite.id}`
-        )
+        const snapshot = makeDocumentSnapshot(invite, `invites/${invite.id}`)
         await expect(userInviteCreatedWrapped(snapshot)).resolves.toEqual(
             'forEach not implemented or firebase issue'
         )

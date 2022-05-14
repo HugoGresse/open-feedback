@@ -1,11 +1,11 @@
 import firebaseFunctionsTest from 'firebase-functions-test'
 import { userInviteCreated } from './userInvite'
-import { makeDocumentSnapshot } from 'firebase-functions-test/lib/providers/firestore'
+import { makeDocumentSnapshot } from '../../testUtils/firestoreStub'
 
 const test = firebaseFunctionsTest()
 
-// Due to an issue with the config, it seems that when the mockConfig is set once, it doesn't work well with the other
-// future call...
+// Due to an issue with the config/env, it seems that when the mockConfig is set once, it doesn't work well with the
+// other future call...
 describe('userInviteCreated', () => {
     const invite = {
         id: '001',
@@ -16,18 +16,11 @@ describe('userInviteCreated', () => {
     }
 
     it('should reject when a user is invited to a project while no config is specified', async () => {
-        test.mockConfig({})
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
-        const snapshot = makeDocumentSnapshot(
-            {
-                id: invite.id,
-                data: () => invite,
-            },
-            `invites/${invite.id}`
-        )
+        const snapshot = makeDocumentSnapshot(invite, `invites/${invite.id}`)
         await expect(userInviteCreatedWrapped(snapshot)).rejects.toEqual(
-            new Error('Missing app environment')
+            new Error('APP_ENV is not defined in environment variables')
         )
     })
 })
