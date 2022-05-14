@@ -81,7 +81,7 @@ export const upVoteOnTextVoteItemVote =
         fireStoreMainInstance
             .collection('projects')
             .doc(projectId)
-            .collection('userVotesdzadza')
+            .collection('userVotes')
             .doc(id)
             .set(voteContent, { merge: true })
             .then(() => {
