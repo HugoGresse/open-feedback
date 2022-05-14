@@ -9,11 +9,11 @@ import * as admin from 'firebase-admin'
 export const FieldValue = admin.firestore.FieldValue
 
 const getMockedFirestore = (docData: {}) =>
-    (({
-        collection: jest.fn(path => ({
-            doc: jest.fn(doc => ({
-                collection: jest.fn(secondPath => ({
-                    doc: jest.fn(newVote => ({
+    ({
+        collection: jest.fn((path) => ({
+            doc: jest.fn((doc) => ({
+                collection: jest.fn((secondPath) => ({
+                    doc: jest.fn((newVote) => ({
                         get: () =>
                             Promise.resolve({
                                 data: () => docData,
@@ -26,7 +26,7 @@ const getMockedFirestore = (docData: {}) =>
                 })),
             })),
         })),
-    } as unknown) as FirebaseFirestore.Firestore)
+    } as unknown as FirebaseFirestore.Firestore)
 
 describe('incrementVoteAggregate', () => {
     // Boolean vote
@@ -120,6 +120,7 @@ describe('incrementVoteAggregate', () => {
                 '1': {
                     createdAt: {},
                     text: 'toto1',
+                    plus: 1,
                     updatedAt: {},
                     userId: 'u1',
                 },
@@ -163,6 +164,7 @@ describe('incrementVoteAggregate', () => {
                     1: {
                         createdAt: {},
                         text: 'toto1',
+                        plus: 1,
                         updatedAt: {},
                         userId: 'u1',
                     },
@@ -176,17 +178,48 @@ describe('incrementVoteAggregate', () => {
                 1: {
                     createdAt: {},
                     text: 'toto1',
+                    plus: 1,
                     updatedAt: {},
                     userId: 'u1',
                 },
                 2: {
                     createdAt: {},
                     text: 'grosminé',
+                    plus: 1,
                     updatedAt: {},
                     userId: 'u1',
                 },
             },
         })
+    })
+
+    it('successfully add vote on a text vote item', async () => {
+        const input: VoteData = {
+            projectId: 'p1',
+            talkId: 's1',
+            voteItemId: 'vi1',
+            userId: 'u1',
+            status: VOTE_STATUS_ACTIVE,
+            createdAt: {},
+            updatedAt: {},
+        }
+
+        const result = await incrementVoteAggregate(
+            getMockedFirestore({
+                [input.voteItemId]: {
+                    1: {
+                        createdAt: {},
+                        text: 'toto1',
+                        plus: 1,
+                        updatedAt: {},
+                        userId: 'u1',
+                    },
+                },
+            }),
+            new Vote('1', input)
+        )
+
+        expect(result).toEqual({ [input.voteItemId]: FieldValue.increment(1) })
     })
     it('successfully remove text to vote aggregate for an existing voteItemId & talk', async () => {
         const input: VoteData = {
