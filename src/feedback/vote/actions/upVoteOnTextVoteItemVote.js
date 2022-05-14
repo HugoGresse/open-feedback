@@ -14,6 +14,7 @@ import {
     ADD_VOTE_BEFORE_SUCCESS,
     ADD_VOTE_ERROR,
     ADD_VOTE_SUCCESS,
+    REMOVE_VOTE_BEFORE_SUCCESS,
     REMOVE_VOTE_SUCCESS,
 } from '../voteActionTypes'
 import { INCREMENT_VOTE_LOCALLY } from '../../project/projectActionTypes'
@@ -29,7 +30,7 @@ export const upVoteOnTextVoteItemVote =
             return
         }
 
-        const voteId = vote.id // This is the text vote the user upvoted
+        const voteId = vote.id // This is the text vote the user up voted
 
         const state = getState()
         const talkId = getSelectedTalkIdSelector(state)
@@ -132,7 +133,24 @@ export const removeUpVoteOnTextVoteItemVote =
 
         const project = getProjectSelector(getState())
 
-        // TODO : optimistic UI
+        dispatch({
+            type: REMOVE_VOTE_BEFORE_SUCCESS,
+            payload: voteToDelete,
+        })
+
+        dispatch({
+            type: INCREMENT_VOTE_LOCALLY,
+            payload: {
+                vote: {
+                    ...voteToDelete,
+                    id: voteToDelete.voteId,
+                    text: 'used only as type...',
+                    plus: 1,
+                },
+                amount: -1,
+            },
+        })
+
         fireStoreMainInstance
             .collection('projects')
             .doc(project.id)
@@ -146,11 +164,10 @@ export const removeUpVoteOnTextVoteItemVote =
                 { merge: true }
             )
             .then(() => {
-                // TODO : optimistic UI
-                // dispatch({
-                //     type: REMOVE_VOTE_SUCCESS,
-                //     payload: voteToDelete,
-                // })
+                dispatch({
+                    type: REMOVE_VOTE_SUCCESS,
+                    payload: voteToDelete,
+                })
                 trackUnvote(project.name, project.id)
             })
             .catch((error) => {
@@ -162,12 +179,17 @@ export const removeUpVoteOnTextVoteItemVote =
                     },
                 })
 
-                // dispatch({
-                //     type: INCREMENT_VOTE_LOCALLY,
-                //     payload: {
-                //         vote: voteToDelete,
-                //         amount: 1,
-                //     },
-                // })
+                dispatch({
+                    type: INCREMENT_VOTE_LOCALLY,
+                    payload: {
+                        vote: {
+                            ...voteToDelete,
+                            id: voteToDelete.voteId,
+                            text: 'used only as type...',
+                            plus: 1,
+                        },
+                        amount: 1,
+                    },
+                })
             })
     }
