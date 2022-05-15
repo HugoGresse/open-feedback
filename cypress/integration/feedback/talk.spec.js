@@ -90,7 +90,7 @@ describe('Single talk', function () {
             feedback.clearUserSession()
             cy.reload()
             // eslint-disable-next-line cypress/no-unnecessary-waiting
-            cy.wait(1000) // user login anonymous
+            cy.wait(3000) // user login anonymous
 
             // assert data change before reload
             cy.get('.comments').should('contain', inputText)
