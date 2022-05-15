@@ -3,6 +3,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { DateTime } from 'luxon'
 import Typography from '@material-ui/core/Typography'
 import { VoteButton } from '../components/VoteButton'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -40,10 +41,13 @@ export const VoteTextResultItem = ({
     isSelected,
     chipColors,
     onVoteChange,
+    currentUserId,
 }) => {
     const classes = useStyles({
         isLast,
     })
+    const { t } = useTranslation()
+    const isVoteFromUser = vote.userId === currentUserId
 
     return (
         <li className={classes.container}>
@@ -52,7 +56,8 @@ export const VoteTextResultItem = ({
                 count={1}
                 isSelected={isSelected}
                 chipColors={chipColors}
-                onClick={onVoteChange}>
+                onClick={onVoteChange}
+            >
                 {vote.plus} {vote.plus > 1 ? 'votes' : 'vote'}
             </VoteButton>
             <div className={classes.right}>
@@ -60,6 +65,7 @@ export const VoteTextResultItem = ({
                     {DateTime.fromJSDate(vote.updatedAt)
                         .minus({ seconds: 1 })
                         .toRelative()}
+                    {isVoteFromUser ? ', ' + t('vote.yourVote') : ''}
                 </p>
                 <Typography className={classes.comment} color="textPrimary">
                     {vote.text}

@@ -22,7 +22,10 @@ export const getUserVotesByTalkAndVoteItemSelector = createSelector(
         Object.values(votes)
             .filter((vote) => vote.talkId === talkId)
             .forEach((vote) => {
-                result[vote.voteItemId] = vote
+                if (!result[vote.voteItemId]) {
+                    result[vote.voteItemId] = []
+                }
+                result[vote.voteItemId].push(vote)
             })
         return result
     }

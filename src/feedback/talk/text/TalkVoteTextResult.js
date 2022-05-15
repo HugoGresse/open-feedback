@@ -33,6 +33,7 @@ const TalkVoteTextResult = ({
                         chipColors={chipColors}
                         isLast={key === result.length - 1}
                         isSelected={isSelected}
+                        currentUserId={user.uid}
                         onVoteChange={() => {
                             if (isSelected) {
                                 dispatch(

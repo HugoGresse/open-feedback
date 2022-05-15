@@ -37,11 +37,12 @@ export const voteFor = (talkId, voteItem, data, translate) => {
         const project = getProjectSelector(getState())
         const projectId = project.id
 
-        const existingVote = getUserVotesByTalkAndVoteItemSelector(getState())[
-            voteItem.id
-        ]
-
-        const [id] = getVoteId(voteItem, projectId, getState)
+        const [id, existingVote] = getVoteId(
+            voteItem,
+            projectId,
+            getState,
+            data
+        )
 
         const voteContent = {
             projectId: projectId,

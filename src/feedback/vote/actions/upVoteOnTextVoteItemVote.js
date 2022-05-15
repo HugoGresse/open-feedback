@@ -40,9 +40,6 @@ export const upVoteOnTextVoteItemVote =
 
         const [id] = getVoteId(voteItem, projectId, getState)
 
-        // TODO list:
-        // 2. Detect if already voted to remove plus
-
         const voteContent = {
             projectId: projectId,
             talkId: talkId,

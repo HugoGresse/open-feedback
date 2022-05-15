@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import TalkVoteTextResult from './TalkVoteTextResult'
 import { Trans, useTranslation } from 'react-i18next'
-import { VOTE_STATUS_HIDDEN } from '../../../core/contants'
+import { VOTE_STATUS_HIDDEN, VOTE_TYPE_TEXT_PLUS } from '../../../core/contants'
 import COLORS from '../../../constants/colors'
 import Typography from '@material-ui/core/Typography'
 import makeStyles from '@material-ui/core/styles/makeStyles'
@@ -83,7 +83,9 @@ export const TalkVoteText = ({
 
     useEffect(() => {
         if (currentUserVotes && !data.dataLoaded) {
-            const foundTextVote = currentUserVotes.find((vote) => !!vote.text)
+            const foundTextVote = currentUserVotes.find(
+                (vote) => !!vote.text && vote.voteType !== VOTE_TYPE_TEXT_PLUS
+            )
             if (foundTextVote) {
                 setData({
                     dataLoaded: true,
@@ -113,7 +115,8 @@ export const TalkVoteText = ({
         })
     }
 
-    const saveUpdateKey = currentUserVotes ? 'comment.update' : 'comment.save'
+    const saveUpdateKey =
+        currentUserVotes && data.dataLoaded ? 'comment.update' : 'comment.save'
 
     return (
         <Grid
