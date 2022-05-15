@@ -52,6 +52,7 @@ const deleteProjectFirestore = async (projectId: string) => {
         .delete(`/projects/${projectId}`, {
             project: process.env.GCLOUD_PROJECT,
             recursive: true,
+            force: true,
             yes: true,
         })
         .then(() => {
