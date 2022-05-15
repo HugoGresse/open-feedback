@@ -193,7 +193,7 @@ describe('incrementVoteAggregate', () => {
         })
     })
 
-    it('successfully add vote on a text vote item', async () => {
+    it('successfully add vote (plus) on a text vote item', async () => {
         const input: VoteData = {
             projectId: 'p1',
             talkId: 's1',
@@ -220,6 +220,52 @@ describe('incrementVoteAggregate', () => {
         )
 
         expect(result).toEqual({ [input.voteItemId]: FieldValue.increment(1) })
+    })
+    it('successfully add a text vote on a text vote item where the user already upVoted another text', async () => {
+        const input: VoteData = {
+            projectId: 'p1',
+            talkId: 's1',
+            voteItemId: 'vi1',
+            userId: 'secondUser',
+            text: 'New vote',
+            status: VOTE_STATUS_ACTIVE,
+            createdAt: {},
+            updatedAt: {},
+        }
+
+        const result = await incrementVoteAggregate(
+            getMockedFirestore({
+                [input.voteItemId]: {
+                    1: {
+                        createdAt: {},
+                        text: 'toto1',
+                        plus: 2,
+                        updatedAt: {},
+                        userId: 'u1',
+                    },
+                },
+            }),
+            new Vote('2', input)
+        )
+
+        expect(result).toEqual({
+            [input.voteItemId]: {
+                1: {
+                    createdAt: {},
+                    text: 'toto1',
+                    plus: 2,
+                    updatedAt: {},
+                    userId: 'u1',
+                },
+                2: {
+                    createdAt: {},
+                    text: 'New vote',
+                    plus: 1,
+                    updatedAt: {},
+                    userId: 'secondUser',
+                },
+            },
+        })
     })
     it('successfully remove text to vote aggregate for an existing voteItemId & talk', async () => {
         const input: VoteData = {
