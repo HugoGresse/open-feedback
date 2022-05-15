@@ -14,10 +14,7 @@ import {
 import { fireStoreMainInstance, serverTimestamp } from '../../firebase'
 import { getUserSelector } from '../auth/authSelectors'
 import { getProjectSelector } from '../project/projectSelectors'
-import {
-    getCurrentUserVotesSelector,
-    getUserVotesByTalkAndVoteItemSelector,
-} from './voteSelectors'
+import { getCurrentUserVotesSelector } from './voteSelectors'
 import { INCREMENT_VOTE_LOCALLY } from '../project/projectActionTypes'
 import {
     VOTE_STATUS_ACTIVE,
