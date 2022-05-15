@@ -20,7 +20,7 @@ Cypress.Commands.add('getVoteCountData', (baseEl) => {
     cy.get(`div[aria-label="${baseEl}"] button`)
         .children()
         .then((childrens) => {
-            if (childrens.length === 1) {
+            if (childrens.length === 3) {
                 return Promise.resolve(0)
             } else {
                 return cy

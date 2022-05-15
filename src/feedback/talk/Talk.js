@@ -49,7 +49,6 @@ class Talk extends Component {
     }
 
     onVoteItemChange = (voteItem, data, vote) => {
-        // TODO : finish managing this new third params
         if (vote) {
             switch (voteItem.type) {
                 case VOTE_TYPE_TEXT:
