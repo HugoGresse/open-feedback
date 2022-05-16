@@ -24,6 +24,7 @@ export class FeedbackApp {
     clearUserSession() {
         // New user account without any voted stuffs
         indexedDB.deleteDatabase('firebaseLocalStorageDb')
+        cy.clearCookies()
         // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(2000)
     }

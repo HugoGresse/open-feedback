@@ -87,8 +87,9 @@ describe('Single talk', function () {
                 )
             })
 
-            feedback.clearUserSession()
             cy.reload()
+            feedback.clearUserSession()
+            // cy.reload()
             // eslint-disable-next-line cypress/no-unnecessary-waiting
             cy.wait(3000) // user login anonymous
 
