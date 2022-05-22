@@ -1,9 +1,10 @@
 import * as functions from 'firebase-functions'
 import fetch from 'node-fetch'
 import { isEmpty } from 'lodash'
+import { getOpsGenieEnv } from '../helpers/env'
 
 export const alert = functions.https.onCall((data) => {
-    const { opsgenie } = functions.config()
+    const opsGenieEnv = getOpsGenieEnv()
 
     if (isEmpty(data)) {
         throw new functions.https.HttpsError(
@@ -12,27 +13,14 @@ export const alert = functions.https.onCall((data) => {
         )
     }
 
-    if (isEmpty(opsgenie)) {
+    if (opsGenieEnv === null) {
         throw new functions.https.HttpsError(
             'failed-precondition',
             'Missing credentials for opsgenie'
         )
     }
 
-    const { api, key } = opsgenie
-
-    if (isEmpty(api)) {
-        throw new functions.https.HttpsError(
-            'failed-precondition',
-            'Missing  api url for opsgenie'
-        )
-    }
-    if (isEmpty(key)) {
-        throw new functions.https.HttpsError(
-            'failed-precondition',
-            'Missing key for opsgenie'
-        )
-    }
+    const { api, key } = opsGenieEnv
 
     return fetch(`${api}/v2/alerts`, {
         method: 'POST',

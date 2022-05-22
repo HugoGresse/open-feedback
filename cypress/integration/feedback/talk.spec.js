@@ -64,10 +64,72 @@ describe('Single talk', function () {
         })
     })
 
-    it('Check that text vote does work (post, edit and delete)', function () {
+    it('Check that boolean vote does work with multiples votes as the same time as text votes', function () {
         feedback.clearUserSession()
 
+        // to test if this help fixing this random test
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        const voteButtonText = 'Trop de code'
+
+        cy.getVoteCountData(voteButtonText).then((originalVoteCount) => {
+            cy.checkA11yWithoutFirebaseEmulatorsWarning()
+            cy.contains(voteButtonText).parent().click()
+
+            const inputText = stringGenerator()
+            const voteTextAreaSelector = 'textarea[placeholder="Your answer"]'
+            cy.get(voteTextAreaSelector).type(inputText)
+            cy.contains('Save').click()
+            cy.get('.comments').should('contain', inputText)
+
+            cy.getVoteCountData(voteButtonText).should((voteCount) => {
+                expect(voteCount, 'Vote count incremented').to.equal(
+                    originalVoteCount + 1
+                )
+            })
+
+            cy.reload()
+            feedback.clearUserSession()
+            // cy.reload()
+            // eslint-disable-next-line cypress/no-unnecessary-waiting
+            cy.wait(3000) // user login anonymous
+
+            // assert data change before reload
+            cy.get('.comments').should('contain', inputText)
+            cy.getVoteCountData(voteButtonText).should((voteCount) => {
+                expect(voteCount, 'Vote count still incremented').to.equal(
+                    originalVoteCount + 1
+                )
+            })
+
+            // new boolean vote
+            cy.contains(voteButtonText).parent().click()
+            cy.getVoteCountData(voteButtonText).should((voteCount) => {
+                expect(voteCount, 'Vote count still incremented').to.equal(
+                    originalVoteCount + 2
+                )
+            })
+            // new text up vote
+            cy.contains(inputText)
+                .parent()
+                .parent()
+                .get('button')
+                .first()
+                .click()
+            cy.contains(inputText)
+                .parent()
+                .parent()
+                .get('button')
+                .should('contain', '2 votes')
+        })
+    })
+
+    it('Check that text vote does work (post, edit and delete)', function () {
+        feedback.clearUserSession()
         cy.checkA11yWithoutFirebaseEmulatorsWarning()
+        cy.reload()
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(2000) // user login anonymous
+
         const inputText = stringGenerator()
         const textEdited = stringGenerator()
         const voteTextAreaSelector = 'textarea[placeholder="Your answer"]'
@@ -79,10 +141,10 @@ describe('Single talk', function () {
         cy.get(voteTextAreaSelector).type(textEdited)
         cy.contains('Update').click()
         cy.get('.comments').should('contain', inputText + textEdited)
+        cy.get('.comments').should('contain', '1 vote')
 
         // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(500)
-        cy.checkA11yWithoutFirebaseEmulatorsWarning()
         cy.contains('Delete').click()
         cy.get('.comments').should('not.contain', inputText + textEdited)
     })

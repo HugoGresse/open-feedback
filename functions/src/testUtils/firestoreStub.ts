@@ -1,15 +1,26 @@
-import * as admin from "firebase-admin"
+import * as admin from 'firebase-admin'
+
+// test().firestore.makeDocumentSnapshot
+export const makeDocumentSnapshot = (
+    data: Record<any, any> | null,
+    path: string
+): any => {
+    return {
+        ...data,
+        data: () => data,
+    }
+}
 
 export const getFirestoreMocksAndInit = () => {
     const firestoreStub = jest.fn(() => ({
-        collection
+        collection,
     }))
 
     const collection = jest.fn((path) => {
         return {
             where,
             limit,
-            doc
+            doc,
         }
     })
 
@@ -18,15 +29,19 @@ export const getFirestoreMocksAndInit = () => {
             get,
             set,
             update,
-            onSnapshot
+            onSnapshot,
         }
     })
 
-    const where: (firstTerm: string, operator: string, secondTerm: string) => {
-        get: () => {},
-        set: () => {},
-        update: () => {},
-        onSnapshot: () => {},
+    const where: (
+        firstTerm: string,
+        operator: string,
+        secondTerm: string
+    ) => {
+        get: () => {}
+        set: () => {}
+        update: () => {}
+        onSnapshot: () => {}
     } = jest.fn((firstTerm: string, operator: string, secondTerm: string) => {
         return {
             where,
@@ -34,17 +49,17 @@ export const getFirestoreMocksAndInit = () => {
             get,
             set,
             update,
-            onSnapshot
+            onSnapshot,
         }
     })
 
     const limit = jest.fn((limitCount: number) => {
-      return {
-          get,
-          set,
-          update,
-          onSnapshot
-      }
+        return {
+            get,
+            set,
+            update,
+            onSnapshot,
+        }
     })
 
     const get = jest.fn((): Promise<any> => Promise.resolve(true))
@@ -62,13 +77,13 @@ export const getFirestoreMocksAndInit = () => {
         get,
         set,
         update,
-        onSnapshot
+        onSnapshot,
     }
 }
 
 export const replaceFirestoreByStub = (stub: any) => {
-    Object.defineProperty(
-        admin,
-        'firestore',
-        {get: () => stub, configurable: true})
+    Object.defineProperty(admin, 'firestore', {
+        get: () => stub,
+        configurable: true,
+    })
 }

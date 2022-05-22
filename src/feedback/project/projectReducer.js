@@ -63,16 +63,38 @@ const projectReducer = (state = initState, { payload, type }) => {
             let newVoteValue
             if (vote.text) {
                 if (payload.amount === -1) {
-                    // Remove a vote from the aggregate localy before database update
+                    if (vote.plus) {
+                        // If the user remove his vote on another user text vote
+                        newVoteValue = {
+                            ...precedentData,
+                            [vote.id]: {
+                                ...precedentData[vote.id],
+                                plus: precedentData[vote.id].plus - 1,
+                                updatedAt: nowTimestamp(),
+                            },
+                        }
+                    } else {
+                        // Remove a vote from the aggregate locally before database update
+                        newVoteValue = {
+                            ...precedentData,
+                        }
+                        delete newVoteValue[vote.id]
+                    }
+                } else if (vote.plus) {
                     newVoteValue = {
                         ...precedentData,
+                        [vote.id]: {
+                            ...precedentData[vote.id],
+                            plus: precedentData[vote.id].plus + 1,
+                            updatedAt: nowTimestamp(),
+                        },
                     }
-                    delete newVoteValue[vote.id]
                 } else {
                     newVoteValue = {
                         ...precedentData,
                         [vote.id]: {
                             ...vote,
+                            plus: 1,
                             text: vote.text,
                             updatedAt: nowTimestamp(),
                             createdAt: nowTimestamp(),

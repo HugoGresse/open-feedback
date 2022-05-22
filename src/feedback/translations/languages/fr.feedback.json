@@ -12,7 +12,8 @@
     "vote": {
         "adminNotAnonymous": "Vous êtes connecté à l'admin, le vote ne sera pas anonyme.",
         "rangePassed": "La date de fin de vote est passé, impossible de sauvegarder le vote.",
-        "rangeNotReached": "Vous ne pouvez pas voter avant le  "
+        "rangeNotReached": "Vous ne pouvez pas voter avant le  ",
+        "yourVote": "de vous"
     },
     "searchPlaceholder": "Recherche",
     "searchNoMatchAtAll": "Aucune présentation ne correspond à vos critères.",

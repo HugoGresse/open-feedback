@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core'
 
 import PropTypes from 'prop-types'
-import { getRandomArbitrary } from '../utils/Random'
+import { getRandomArbitrary } from '../../utils/Random'
 
 const styles = () => ({
     canvas: {
@@ -29,17 +29,18 @@ class TalkItemVoteBackground extends Component {
     }
 
     componentDidMount() {
-        if (this.props.count && this.canvasRef.current) {
+        if (this.canvasRef.current) {
             this.createRandomCircle(
                 this.canvasRef.current.getContext('2d'),
-                this.props.count
+                this.props.count || 0
             )
         }
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.count && this.canvasRef.current) {
-            if (this.props.count !== prevProps.count) {
+        if (this.canvasRef.current) {
+            const count = this.props.count || 0
+            if (count !== prevProps.count) {
                 this.canvasState = {
                     ...this.canvasState,
                     isDrawn: false,
@@ -47,7 +48,7 @@ class TalkItemVoteBackground extends Component {
             }
             this.createRandomCircle(
                 this.canvasRef.current.getContext('2d'),
-                this.props.count
+                count
             )
         }
     }

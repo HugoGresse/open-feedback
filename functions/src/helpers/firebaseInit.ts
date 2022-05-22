@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin'
 
-export const initFirebase = (env: string) => {
+export const initFirebase = () => {
     admin.initializeApp()
 }
 

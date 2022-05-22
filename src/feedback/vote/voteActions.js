@@ -14,59 +14,32 @@ import {
 import { fireStoreMainInstance, serverTimestamp } from '../../firebase'
 import { getUserSelector } from '../auth/authSelectors'
 import { getProjectSelector } from '../project/projectSelectors'
-import {
-    getCurrentUserVotesSelector,
-    getUserVotesByTalkAndVoteItemSelector,
-} from './voteSelectors'
+import { getCurrentUserVotesSelector } from './voteSelectors'
 import { INCREMENT_VOTE_LOCALLY } from '../project/projectActionTypes'
-import { checkDateBeforeVote } from './checkDataBeforeVote'
 import {
     VOTE_STATUS_ACTIVE,
     VOTE_STATUS_DELETED,
     VOTE_TYPE_TEXT,
 } from '../../core/contants'
 import { trackUnvote, trackVote } from '../utils/track'
+import { getVoteId } from './getVoteId'
+import { isVoteAllowed } from './actions/isVoteAllowed'
 
 export const voteFor = (talkId, voteItem, data, translate) => {
     return (dispatch, getState) => {
-        if (checkDateBeforeVote(dispatch, getState(), translate)) {
+        if (!isVoteAllowed(dispatch, getState, translate)) {
             return
-        }
-
-        if (!getUserSelector(getState()).isAnonymous) {
-            dispatch({
-                type: ADD_VOTE_ERROR,
-                payload: {
-                    error: translate('vote.adminNotAnonymous'),
-                },
-            })
         }
 
         const project = getProjectSelector(getState())
         const projectId = project.id
 
-        const existingVote = getUserVotesByTalkAndVoteItemSelector(getState())[
-            voteItem.id
-        ]
-
-        let id = ''
-        if (existingVote) {
-            if (existingVote.pending) {
-                // eslint-disable-next-line no-console
-                console.info(
-                    'Unable to modify a vote that has not been writed on the database'
-                )
-                return
-            }
-
-            id = existingVote.id
-        } else {
-            id = fireStoreMainInstance
-                .collection('projects')
-                .doc(projectId)
-                .collection('userVotes')
-                .doc().id
-        }
+        const [id, existingVote] = getVoteId(
+            voteItem,
+            projectId,
+            getState,
+            data
+        )
 
         const voteContent = {
             projectId: projectId,
@@ -151,7 +124,7 @@ export const removeVote = (voteToDelete, translate) => {
             return
         }
 
-        if (checkDateBeforeVote(dispatch, getState(), translate)) {
+        if (!isVoteAllowed(dispatch, getState, translate)) {
             return
         }
 
@@ -211,7 +184,7 @@ export const removeVote = (voteToDelete, translate) => {
 
 export const updateVote = (vote, data, translate) => (dispatch, getState) => {
     if (
-        checkDateBeforeVote(dispatch, getState(), translate) ||
+        !isVoteAllowed(dispatch, getState, translate) ||
         data.trim().length === 0
     ) {
         return

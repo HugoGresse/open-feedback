@@ -12,7 +12,8 @@
     "vote": {
         "adminNotAnonymous": "You are logged in to the admin, your vote will not be anonymous.",
         "rangePassed": "Unable to save the vote, the vote period has passed.",
-        "rangeNotReached": "You cannot vote before the "
+        "rangeNotReached": "You cannot vote before the ",
+        "yourVote": "from you"
     },
     "searchPlaceholder": "Search",
     "searchNoMatchAtAll": "No talk matched your criteria.",
