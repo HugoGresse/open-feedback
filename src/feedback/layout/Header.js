@@ -10,6 +10,7 @@ import { darken } from '@material-ui/core/styles'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '@material-ui/core'
 import { isInIFrame } from '../utils/isInIFrame'
+import useQuery from '../../utils/useQuery'
 
 const useStyles = makeStyles((theme) => ({
     logo: {
@@ -74,12 +75,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const Header = ({ project }) => {
+export const Header = ({ project }) => {
     const classes = useStyles({
         inIFrame: isInIFrame(),
     })
     const { t } = useTranslation()
     const matchParams = useParams()
+    const hideHeader = useQuery().get('hideHeader')
+
+    if (hideHeader && hideHeader === 'true') {
+        return null
+    }
 
     return (
         <header className={classes.container}>
@@ -88,7 +94,8 @@ const Header = ({ project }) => {
                     {matchParams.talkId && (
                         <Link
                             title={t('talks.list')}
-                            to={`/${matchParams.projectId}/${matchParams.date}`}>
+                            to={`/${matchParams.projectId}/${matchParams.date}`}
+                        >
                             <ArrowBack color="primary" />
                         </Link>
                     )}
@@ -99,7 +106,8 @@ const Header = ({ project }) => {
                             href={project.scheduleLink}
                             target="_blank"
                             title={`${project.name} website`}
-                            rel="noopener noreferrer">
+                            rel="noopener noreferrer"
+                        >
                             <CalendarToday />
                         </a>
                     </div>
@@ -114,7 +122,8 @@ const Header = ({ project }) => {
                         <Typography
                             variant="h1"
                             color="textPrimary"
-                            aria-label={project.hideEventName && project.name}>
+                            aria-label={project.hideEventName && project.name}
+                        >
                             {!project.hideEventName && project.name}
                         </Typography>
                     </Hidden>
@@ -124,5 +133,3 @@ const Header = ({ project }) => {
         </header>
     )
 }
-
-export default Header

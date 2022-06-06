@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react'
-
-import Header from './layout/Header'
 import '../App.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
@@ -23,6 +21,7 @@ import { signIn } from './auth/authActions'
 import { getVotes } from './vote/voteActions'
 import { useTranslation } from 'react-i18next'
 import { TALK_NO_DATE } from '../core/talks/talksUtils'
+import { Header } from './layout/Header'
 
 const useStyles = makeStyles((theme) => ({
     container: {
