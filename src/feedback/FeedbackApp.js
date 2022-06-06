@@ -11,9 +11,14 @@ import { grey } from '@material-ui/core/colors'
 import ErrorBoundary from '../baseComponents/customComponent/ErrorBoundary'
 import { ALERT_REACT_CATCHED_ERROR_FEEDBACK } from '../utils/alerting/alerts'
 import { COLORS } from '../constants/colors'
+import useQuery from '../utils/useQuery'
 
 const FeedbackApp = () => {
-    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+    const forceColorScheme = useQuery().get('forceColorScheme')
+    let prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+    if (forceColorScheme && forceColorScheme === 'light') {
+        prefersDarkMode = false
+    }
 
     const theme = React.useMemo(
         () =>
