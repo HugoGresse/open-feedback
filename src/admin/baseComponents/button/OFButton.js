@@ -2,7 +2,7 @@ import React from 'react'
 import { COLORS } from '../../../constants/colors'
 import Button from '@material-ui/core/Button'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { darken, fade, lighten } from '@material-ui/core/styles'
+import { darken, alpha, lighten } from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             background: (props) =>
                 props.design === 'text'
-                    ? lighten(fade(theme.palette[props.color].dark, 1), 0.8)
+                    ? lighten(alpha(theme.palette[props.color].dark, 1), 0.8)
                     : props.customBg
                     ? darken(props.customBg, 0.2)
                     : theme.palette[props.color].dark,
@@ -55,7 +55,8 @@ const OFButton = ({ children, loading, color, style, ...otherProps }) => {
             {...otherProps}
             classes={{
                 root: classes.root,
-            }}>
+            }}
+        >
             {children}
             {loading && (
                 <CircularProgress className={classes.loading} size={20} />
