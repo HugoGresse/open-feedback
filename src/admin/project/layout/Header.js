@@ -136,7 +136,10 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                                     xs={12}
                                     className={classes.topHeader}
                                 >
-                                    <Grid container justify="space-between">
+                                    <Grid
+                                        container
+                                        justifyContent="space-between"
+                                    >
                                         <Grid item xs={12} sm={7}>
                                             <Hidden mdUp>
                                                 <IconButton
@@ -245,13 +248,15 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
                     keepMounted
                     transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                     open={!!anchorEventSelect}
-                    onEnter={() => {
-                        if (projects.length === 1) {
-                            dispatch(getProjects())
-                            dispatch(getOrganizations())
-                        }
-                    }}
                     onClose={() => handleMenuClose()}
+                    TransitionProps={{
+                        onEnter: () => {
+                            if (projects.length === 1) {
+                                dispatch(getProjects())
+                                dispatch(getOrganizations())
+                            }
+                        },
+                    }}
                 >
                     {projects.map((project) => (
                         <MenuItem

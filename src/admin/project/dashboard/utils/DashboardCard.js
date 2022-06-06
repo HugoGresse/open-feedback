@@ -41,8 +41,9 @@ function DashboardCard({ title, titleIcon, rightChildren, children, classes }) {
             <CardContent className={classes.content}>
                 <Grid
                     container
-                    justify="space-between"
-                    className={classes.header}>
+                    justifyContent="space-between"
+                    className={classes.header}
+                >
                     <Grid item xs={12} sm={6}>
                         <Typography component="h3" gutterBottom>
                             <span className={classes.icon}>{titleIcon}</span>
