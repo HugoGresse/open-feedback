@@ -1,23 +1,43 @@
 import { createSelector } from 'reselect'
 import {
     getProjectVoteResultsSelector,
+    getProjectVoteStartEndTimeSelector,
     hideVotesUntilUserVoteSelector,
 } from '../../project/projectSelectors'
 import { getUserVotesByTalkAndVoteItemSelector } from '../../vote/voteSelectors'
 import { getSelectedTalkIdSelector } from './talkSelectors'
+import { isVoteWindowOpen } from '../../vote/checkDataBeforeVote'
 
 export const getVoteResultSelectorSelector = createSelector(
     getSelectedTalkIdSelector,
     getProjectVoteResultsSelector,
     hideVotesUntilUserVoteSelector,
     getUserVotesByTalkAndVoteItemSelector,
-    (selectedTalkId, voteResults, hideVotesUntilUserVote, currentUserVotes) => {
+    getProjectVoteStartEndTimeSelector,
+    (
+        selectedTalkId,
+        voteResults,
+        hideVotesUntilUserVote,
+        currentUserVotes,
+        projectVotesWindow
+    ) => {
         if (
             hideVotesUntilUserVote &&
             (!currentUserVotes || Object.keys(currentUserVotes).length === 0)
         ) {
-            // Hide other users votes until the user vote
-            return []
+            // Is vote window open?
+            if (projectVotesWindow[0] && projectVotesWindow[1]) {
+                const [voteWindowOpen] = isVoteWindowOpen(
+                    projectVotesWindow[0],
+                    projectVotesWindow[1]
+                )
+                if (voteWindowOpen) {
+                    return []
+                }
+            } else {
+                // Hide other users votes until the user vote
+                return []
+            }
         }
         if (!voteResults || !voteResults[selectedTalkId]) {
             return []
