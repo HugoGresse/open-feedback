@@ -4,29 +4,35 @@ import { ADD_VOTE_ERROR } from './voteActionTypes'
 export const checkDateBeforeVote = (dispatch, state, translate) => {
     const project = getProjectSelector(state)
 
+    const [isOpen, reason, date] = isVoteWindowOpen(
+        project.voteStartTime,
+        project.voteEndTime
+    )
+
+    if (isOpen) {
+        return false
+    }
+
+    dispatch({
+        type: ADD_VOTE_ERROR,
+        payload: {
+            error: translate(reason) + (date ? ` ${date}` : ''),
+        },
+    })
+    return true
+}
+
+export const isVoteWindowOpen = (voteStartTime, voteEndTime) => {
     const currentDate = new Date().getTime()
 
-    if (project.voteEndTime && Date.parse(project.voteEndTime) < currentDate) {
-        dispatch({
-            type: ADD_VOTE_ERROR,
-            payload: {
-                error: translate('vote.rangePassed'),
-            },
-        })
-        return true
-    } else if (
-        project.voteStartTime &&
-        currentDate < Date.parse(project.voteStartTime)
-    ) {
-        dispatch({
-            type: ADD_VOTE_ERROR,
-            payload: {
-                error: `${translate('vote.rangeNotReached')} ${new Date(
-                    project.voteStartTime
-                ).toLocaleString()}.`,
-            },
-        })
-        return true
+    if (voteEndTime && Date.parse(voteEndTime) < currentDate) {
+        return [false, 'vote.rangePassed']
+    } else if (voteStartTime && currentDate < Date.parse(voteStartTime)) {
+        return [
+            false,
+            'vote.rangeNotReached',
+            new Date(voteStartTime).toLocaleString(),
+        ]
     }
-    return false
+    return [true]
 }

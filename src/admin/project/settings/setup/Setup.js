@@ -32,6 +32,9 @@ const Setup = () => {
                             disableSoloTalkRedirect={
                                 project.disableSoloTalkRedirect
                             }
+                            hideVotesUntilUserVote={
+                                project.hideVotesUntilUserVote
+                            }
                         />
                     </Suspense>
                 </CardContent>

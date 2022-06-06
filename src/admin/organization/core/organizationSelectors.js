@@ -25,6 +25,8 @@ export const getOrganizationLanguagesSelector = (state) =>
     getSelectedOrganizationSelector(state).languages || []
 export const disableSoloTalkRedirectSelector = (state) =>
     getSelectedOrganizationSelector(state).disableSoloTalkRedirect || false
+export const hideVotesUntilUserVoteSelector = (state) =>
+    getSelectedOrganizationSelector(state).hideVotesUntilUserVote || false
 
 // Memoized selectors
 

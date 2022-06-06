@@ -24,7 +24,7 @@ const variantIcon = {
     error: ErrorIcon,
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     success: {
         backgroundColor: green[600],
     },
@@ -103,7 +103,10 @@ const Notifications = () => {
             open={isOpen}
             autoHideDuration={4000}
             onClose={handleClose}
-            onExited={handleExited}>
+            TransitionProps={{
+                onExited: handleExited,
+            }}
+        >
             <SnackbarContent
                 className={contentClass}
                 aria-describedby="client-snackbar"
@@ -113,7 +116,8 @@ const Notifications = () => {
                         key="close"
                         aria-label="Close"
                         color="inherit"
-                        onClick={handleClose}>
+                        onClick={handleClose}
+                    >
                         <CloseIcon className={classes.closeIcon} />
                     </IconButton>,
                 ]}

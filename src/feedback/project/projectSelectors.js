@@ -1,39 +1,40 @@
 import { createSelector } from 'reselect'
 
-const getProjectState = state => state.project
+const getProjectState = (state) => state.project
 
-const getProject = state => getProjectState(state).project
+const getProject = (state) => getProjectState(state).project
 
-export const getProjectSelector = state =>
+export const getProjectSelector = (state) =>
     getProject(state).id ? getProject(state) : null
 
-export const getProjectIdSelector = state => getProject(state).id
+export const getProjectIdSelector = (state) => getProject(state).id
 
-export const getProjectVoteItemsSelector = state =>
+export const getProjectVoteStartEndTimeSelector = (state) => [
+    getProjectSelector(state).voteStartTime,
+    getProjectSelector(state).voteEndTime,
+]
+export const getProjectVoteItemsSelector = (state) =>
     getProjectSelector(state).voteItems
-
-export const getProjectVoteResultsSelector = state =>
+export const getProjectVoteResultsSelector = (state) =>
     getProjectState(state).talkVotes
-
-export const getProjectLoadErrorSelector = state =>
+export const getProjectLoadErrorSelector = (state) =>
     getProjectState(state).projectLoadError
-export const isProjectNotFoundSelector = state =>
+export const isProjectNotFoundSelector = (state) =>
     getProjectState(state).projectLoadNotFound
-
-export const getProjectSelectedDateSelector = state =>
+export const getProjectSelectedDateSelector = (state) =>
     getProjectState(state).selectedDate
-
-export const getProjectVotesErrorSelector = state =>
+export const getProjectVotesErrorSelector = (state) =>
     getProjectState(state).projectVotesError
-
-export const getProjectChipColorsSelector = state =>
+export const getProjectChipColorsSelector = (state) =>
     getProjectSelector(state).chipColors
+export const hideVotesUntilUserVoteSelector = (state) =>
+    getProjectSelector(state).hideVotesUntilUserVote
 
 //  MEMOIZED SELECTORS HERE
 
 export const getProjectVoteItemsOrderedSelector = createSelector(
     getProjectVoteItemsSelector,
-    voteItems => {
+    (voteItems) => {
         if (!voteItems) {
             return []
         }

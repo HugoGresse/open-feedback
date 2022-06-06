@@ -17,6 +17,7 @@ export const newOrganization = (name) => async (dispatch, getState) => {
         favicon: `${window.location.protocol}//${window.location.host}/favicon-32x32.png`,
         logoSmall: `${window.location.protocol}//${window.location.host}/android-chrome-192x192.png`,
         disableSoloTalkRedirect: false,
+        hideVotesUntilUserVote: false,
         languages: [],
         chipColors: [newRandomHexColor()],
         createdAt: serverTimestamp(),

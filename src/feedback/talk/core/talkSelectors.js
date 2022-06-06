@@ -1,8 +1,6 @@
 import { createSelector } from 'reselect'
-
 import { getSpeakersListSelector } from '../../../core/speakers/speakerSelectors'
 import { getTalksListSelector } from '../../../core/talks/talksSelectors'
-import { getProjectVoteResultsSelector } from '../../project/projectSelectors'
 
 export const getTalkSelector = (state) => state.talk
 
@@ -27,46 +25,5 @@ export const getSpeakersForSelectedTalkSelector = createSelector(
         return Object.values(speakers).filter((speaker) => {
             return talk.speakers.includes(speaker.id)
         })
-    }
-)
-export const getVoteResultSelectorSelector = createSelector(
-    getSelectedTalkIdSelector,
-    getProjectVoteResultsSelector,
-    (selectedTalkId, voteResults) => {
-        if (!voteResults || !voteResults[selectedTalkId]) {
-            return []
-        }
-        let results = voteResults[selectedTalkId]
-
-        // Transform results.id.{ id: voteText1, id: voteText2, id: voteText3} into an array
-        let transformResult = {}
-        Object.entries(results).forEach(([key, value]) => {
-            if (typeof value === 'object') {
-                transformResult[key] = []
-                Object.entries(value).forEach(([, value2]) => {
-                    const keys = Object.keys(value2)
-                    if (
-                        !value2 ||
-                        keys.length === 0 ||
-                        (keys.length === 1 && keys[0] === 'id')
-                    ) {
-                        // Empty object due to deletion
-                        return
-                    }
-                    transformResult[key].push({
-                        ...value2,
-                        updatedAt: value2.updatedAt.toDate(),
-                        createdAt: value2.createdAt.toDate(),
-                    })
-                })
-                transformResult[key] = transformResult[key].sort(
-                    (a, b) => b.updatedAt - a.updatedAt
-                )
-            } else {
-                transformResult[key] = value
-            }
-        })
-
-        return transformResult
     }
 )

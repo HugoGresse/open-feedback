@@ -19,6 +19,7 @@ const SettingsForm = ({
     onSave,
     initialLanguages,
     disableSoloTalkRedirect,
+    hideVotesUntilUserVote = false,
     displayTitle = true,
 }) => {
     const { t } = useTranslation()
@@ -28,6 +29,7 @@ const SettingsForm = ({
             validationSchema={object().shape({
                 languages: array().of(string()),
                 disableSoloTalkRedirect: bool(),
+                hideVotesUntilUserVote: bool(),
             })}
             initialValues={{
                 languages: initialLanguages.map((tag) => ({
@@ -35,7 +37,9 @@ const SettingsForm = ({
                     tag,
                 })),
                 disableSoloTalkRedirect: !disableSoloTalkRedirect,
-            }}>
+                hideVotesUntilUserVote: hideVotesUntilUserVote,
+            }}
+        >
             {({ values }) => (
                 <Form method="POST">
                     {displayTitle && (
@@ -49,7 +53,8 @@ const SettingsForm = ({
                             <OFFormControl
                                 name={t('settingsSetup.languages')}
                                 fieldName="languages"
-                                type="text">
+                                type="text"
+                            >
                                 <Field
                                     name="languages"
                                     value={values.languages}
@@ -79,6 +84,20 @@ const SettingsForm = ({
                                     }
                                 />
                             </OFFormControl>
+                            <OFFormControl fieldName="hideVotesUntilUserVote">
+                                <FormControlLabel
+                                    label={t(
+                                        'settingsSetup.hideVotesUntilUserVote'
+                                    )}
+                                    labelPlacement="start"
+                                    control={
+                                        <Field
+                                            name="hideVotesUntilUserVote"
+                                            component={OFSwitch}
+                                        />
+                                    }
+                                />
+                            </OFFormControl>
                         </Grid>
                     </Grid>
 
@@ -90,7 +109,10 @@ const SettingsForm = ({
                             return onSave({
                                 ...values,
                                 languages,
-                                disableSoloTalkRedirect: !values.disableSoloTalkRedirect,
+                                disableSoloTalkRedirect:
+                                    !values.disableSoloTalkRedirect,
+                                hideVotesUntilUserVote:
+                                    values.hideVotesUntilUserVote,
                             })
                         }}
                         render={({ isSaving, lastSavedDate, saveError }) => (
