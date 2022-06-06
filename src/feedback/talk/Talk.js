@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-
 import {
     getSelectedTalkSelector,
     getTalkLoadErrorSelector,
@@ -22,7 +21,6 @@ import {
     getProjectChipColorsSelector,
     getProjectVoteItemsOrderedSelector,
 } from '../project/projectSelectors'
-import { getVoteResultSelectorSelector } from './core/talkSelectors'
 import {
     getActiveUserVotesByTalkAndVoteItemSelector,
     getErrorVotePostSelector,
@@ -38,6 +36,7 @@ import { SPACING } from '../../constants/constants'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../core/contants'
 import { withTranslation } from 'react-i18next'
 import TalkHeader from './TalkHeader'
+import { getVoteResultSelectorSelector } from './core/getVoteResultSelectorSelector'
 
 class Talk extends Component {
     componentDidMount() {
