@@ -224,7 +224,8 @@
         },
         "settings": "Paramètres",
         "languages": "Langues additionnelles (pour le bulletin de votes)",
-        "disableSoloTalkRedirect": "Forcer la redirection à la présentation si il n'y en a qu'une listé"
+        "disableSoloTalkRedirect": "Forcer la redirection à la présentation si il n'y en a qu'une listé",
+        "hideVotesUntilUserVote": "Les votes des autres utilisateurs ne sont pas visibles tant que l'utilisateur n'a pas voté pour la présentations ou que la période de vote est ouverte"
     },
     "users": {
         "add": "Ajouter un utilisateur",

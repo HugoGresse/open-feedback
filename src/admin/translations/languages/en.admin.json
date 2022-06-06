@@ -224,7 +224,8 @@
         },
         "settings": "Settings",
         "languages": "Additional languages (for the voting form)",
-        "disableSoloTalkRedirect": "Force redirect to the talk if only one talk listed"
+        "disableSoloTalkRedirect": "Force redirect to the talk if only one talk listed",
+        "hideVotesUntilUserVote": "Other users votes are hidden until the user vote on a talk or the vote window is open"
     },
     "users": {
         "add": "Add a user",

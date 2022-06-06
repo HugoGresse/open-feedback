@@ -5,6 +5,7 @@ import { OrgDataInfo } from '../layout/OrgDataInfo'
 import {
     disableSoloTalkRedirectSelector,
     getOrganizationLanguagesSelector,
+    hideVotesUntilUserVoteSelector,
 } from '../core/organizationSelectors'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import { editOrganization } from '../core/actions/editOrganization'
@@ -15,7 +16,8 @@ const SettingsForm = lazy(() =>
 export const OrganizationVotingFormSettings = () => {
     const dispatch = useDispatch()
     const disableSoloTalkRedirect = useSelector(disableSoloTalkRedirectSelector)
-    // Doing this prevent the selector to be connected to redux directly, thus prevent future update of initialValues
+    const hideVotesUntilUserVote = useSelector(hideVotesUntilUserVoteSelector)
+    // Doing this prevents the selector to be connected to redux directly, thus prevent future update of initialValues
     const initialLanguages = getOrganizationLanguagesSelector(
         useStore().getState()
     )
@@ -28,6 +30,7 @@ export const OrganizationVotingFormSettings = () => {
                     onSave={(settings) => dispatch(editOrganization(settings))}
                     initialLanguages={initialLanguages}
                     disableSoloTalkRedirect={disableSoloTalkRedirect}
+                    hideVotesUntilUserVote={hideVotesUntilUserVote}
                     displayTitle={false}
                 />
             </Suspense>
