@@ -16,8 +16,12 @@ import useQuery from '../utils/useQuery'
 const FeedbackApp = () => {
     const forceColorScheme = useQuery().get('forceColorScheme')
     let prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
-    if (forceColorScheme && forceColorScheme === 'light') {
-        prefersDarkMode = false
+    if (forceColorScheme) {
+        if (forceColorScheme === 'light') {
+            prefersDarkMode = false
+        } else if (forceColorScheme === 'dark') {
+            prefersDarkMode = true
+        }
     }
 
     const theme = React.useMemo(
