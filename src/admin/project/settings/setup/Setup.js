@@ -35,6 +35,7 @@ const Setup = () => {
                             hideVotesUntilUserVote={
                                 project.hideVotesUntilUserVote
                             }
+                            liveUserVotes={project.liveUserVotes}
                         />
                     </Suspense>
                 </CardContent>
