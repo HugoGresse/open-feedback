@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import {
     getSelectedTalkSelector,
     getTalkLoadErrorSelector,
@@ -34,151 +34,122 @@ import Error from '../../baseComponents/customComponent/Error'
 import Snackbar from '../../baseComponents/customComponent/Snackbar'
 import { SPACING } from '../../constants/constants'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../core/contants'
-import { withTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import TalkHeader from './TalkHeader'
 import { getVoteResultSelectorSelector } from './core/getVoteResultSelectorSelector'
 
-class Talk extends Component {
-    componentDidMount() {
-        const id = this.props.match.params.talkId
-        this.props.getTalk(id)
-        this.props.setSelectedTalk(id)
-        this.props.getSpeakers()
-        this.props.getVoteResult(id)
-    }
+export const Talk = ({ match }) => {
+    const { t } = useTranslation()
+    const dispatch = useDispatch()
+    const id = match.params.talkId
 
-    onVoteItemChange = (voteItem, data, vote) => {
+    const talk = useSelector(getSelectedTalkSelector)
+    const speakers = useSelector(getSpeakersForSelectedTalkSelector)
+    const voteItems = useSelector(getProjectVoteItemsOrderedSelector)
+    const userVotes = useSelector(getActiveUserVotesByTalkAndVoteItemSelector)
+    const voteResults = useSelector(getVoteResultSelectorSelector)
+    const errorTalkLoad = useSelector(getTalkLoadErrorSelector)
+    const errorVotePost = useSelector(getErrorVotePostSelector)
+    const errorVotesLoad = useSelector(getErrorVotesLoadSelector)
+    const chipColors = useSelector(getProjectChipColorsSelector)
+
+    useEffect(() => {
+        dispatch(getTalk(id))
+        dispatch(setSelectedTalk(id))
+        dispatch(getSpeakers())
+        const unsubscribe = dispatch(getVoteResult(id))
+
+        return () => {
+            if (unsubscribe) {
+                unsubscribe()
+            }
+        }
+    }, [dispatch, id])
+
+    const onVoteItemChange = (voteItem, data, vote) => {
         if (vote) {
             switch (voteItem.type) {
                 case VOTE_TYPE_TEXT:
                     if (data && data.length > 0) {
-                        this.props.updateVote(vote, data, this.props.t)
+                        dispatch(updateVote(vote, data, t))
                     } else {
-                        this.props.removeVote(vote, this.props.t)
+                        dispatch(removeVote(vote, t))
                     }
                     break
                 default:
                 case VOTE_TYPE_BOOLEAN:
-                    this.props.removeVote(vote, this.props.t)
+                    dispatch(removeVote(vote, t))
                     break
             }
         } else {
-            this.props.voteFor(this.props.talk.id, voteItem, data, this.props.t)
+            dispatch(voteFor(talk.id, voteItem, data, t))
         }
     }
 
-    onRetryLoadVotesClick = () => {
-        this.props.removeVoteLoadError()
-        this.props.getVotes()
+    const onRetryLoadVotesClick = () => {
+        dispatch(removeVoteLoadError())
+        dispatch(getVotes())
     }
 
-    closeErrorVotePostClick = () => {
-        this.props.removeVotePostError()
+    const closeErrorVotePostClick = () => {
+        dispatch(removeVotePostError())
     }
 
-    closeErrorVoteLoadClick = () => {
-        this.props.removeVoteLoadError()
+    const closeErrorVoteLoadClick = () => {
+        dispatch(removeVoteLoadError())
     }
 
-    render() {
-        const {
-            speakers,
-            talk,
-            voteItems,
-            userVotes,
-            voteResults,
-            errorTalkLoad,
-            errorVotePost,
-            errorVotesLoad,
-            chipColors,
-        } = this.props
-
-        if (errorTalkLoad) {
-            return (
-                <Error
-                    error="Unable to load the talk/speakers/vote options"
-                    errorDetail={errorTalkLoad}
-                />
-            )
-        }
-
-        if (!talk || !speakers || !voteItems) {
-            return <LoaderMatchParent />
-        }
-
-        let snackBarError = null
-        if (errorVotePost) {
-            snackBarError = (
-                <Snackbar
-                    text={errorVotePost}
-                    closeCallback={this.closeErrorVotePostClick}
-                />
-            )
-        }
-
-        if (errorVotesLoad) {
-            snackBarError = (
-                <Snackbar
-                    text={
-                        'Unable to load the vote results, reason: ' +
-                        errorVotePost
-                    }
-                    actionText="Retry"
-                    actionCallback={this.onRetryLoadVotesClick}
-                    closeCallback={this.closeErrorVoteLoadClick}
-                />
-            )
-        }
+    if (errorTalkLoad) {
         return (
-            <div>
-                <TalkHeader talk={talk} speakers={speakers} />
-                <Grid container spacing={SPACING.LAYOUT}>
-                    {voteItems.map((voteItem, key) => (
-                        <TalkVote
-                            key={key}
-                            voteItem={voteItem}
-                            userVotes={userVotes[voteItem.id]}
-                            voteResult={voteResults[voteItem.id]}
-                            chipColors={chipColors}
-                            onVoteChange={this.onVoteItemChange}
-                        />
-                    ))}
-                </Grid>
-                {snackBarError}
-            </div>
+            <Error
+                error="Unable to load the talk/speakers/vote options"
+                errorDetail={errorTalkLoad}
+            />
         )
     }
-}
 
-const mapStateToProps = (state) => ({
-    talk: getSelectedTalkSelector(state),
-    speakers: getSpeakersForSelectedTalkSelector(state),
-    voteItems: getProjectVoteItemsOrderedSelector(state),
-    userVotes: getActiveUserVotesByTalkAndVoteItemSelector(state),
-    voteResults: getVoteResultSelectorSelector(state),
-    errorTalkLoad: getTalkLoadErrorSelector(state),
-    errorVotePost: getErrorVotePostSelector(state),
-    errorVotesLoad: getErrorVotesLoadSelector(state),
-    chipColors: getProjectChipColorsSelector(state),
-})
-
-const mapDispatchToProps = Object.assign(
-    {},
-    {
-        getTalk: getTalk,
-        setSelectedTalk: setSelectedTalk,
-        getSpeakers: getSpeakers,
-        getVoteResult: getVoteResult,
-        voteFor: voteFor,
-        removeVote: removeVote,
-        updateVote: updateVote,
-        removeVoteLoadError: removeVoteLoadError,
-        removeVotePostError: removeVotePostError,
-        getVotes: getVotes,
+    if (!talk || !speakers || !voteItems) {
+        return <LoaderMatchParent />
     }
-)
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withTranslation()(Talk))
+    let snackBarError = null
+    if (errorVotePost) {
+        snackBarError = (
+            <Snackbar
+                text={errorVotePost}
+                closeCallback={closeErrorVotePostClick}
+            />
+        )
+    }
+
+    if (errorVotesLoad) {
+        snackBarError = (
+            <Snackbar
+                text={
+                    'Unable to load the vote results, reason: ' + errorVotePost
+                }
+                actionText="Retry"
+                actionCallback={onRetryLoadVotesClick}
+                closeCallback={closeErrorVoteLoadClick}
+            />
+        )
+    }
+    return (
+        <div>
+            <TalkHeader talk={talk} speakers={speakers} />
+            <Grid container spacing={SPACING.LAYOUT}>
+                {voteItems.map((voteItem, key) => (
+                    <TalkVote
+                        key={key}
+                        voteItem={voteItem}
+                        userVotes={userVotes[voteItem.id]}
+                        voteResult={voteResults[voteItem.id]}
+                        chipColors={chipColors}
+                        onVoteChange={onVoteItemChange}
+                    />
+                ))}
+            </Grid>
+            {snackBarError}
+        </div>
+    )
+}

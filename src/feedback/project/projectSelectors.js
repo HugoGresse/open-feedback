@@ -29,6 +29,8 @@ export const getProjectChipColorsSelector = (state) =>
     getProjectSelector(state).chipColors
 export const hideVotesUntilUserVoteSelector = (state) =>
     getProjectSelector(state).hideVotesUntilUserVote
+export const isLiveUserVotesSelector = (state) =>
+    getProjectSelector(state).liveUserVotes
 
 //  MEMOIZED SELECTORS HERE
 

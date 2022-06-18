@@ -6,7 +6,7 @@ import {
     SET_SELECTED_DATE,
 } from './projectActionTypes'
 import { fireStoreMainInstance } from '../../firebase'
-import { getProjectSelector } from './projectSelectors'
+import { getProjectSelector, isLiveUserVotesSelector } from './projectSelectors'
 import { initProjectApi } from '../../core/setupType/projectApi'
 
 export const getProject = (projectId) => (dispatch) => {
@@ -54,54 +54,67 @@ export const setSelectedDate = (date) => ({
 })
 
 export const getVoteResult = (talkId) => (dispatch, getState) => {
-    return fireStoreMainInstance
-        .collection('projects')
-        .doc(getProjectSelector(getState()).id)
-        .collection('sessionVotes')
-        .doc(talkId)
-        .get()
-        .then((talkSnapshot) => {
-            const inputVotes = talkSnapshot.data()
+    const onNewVotes = (snapshot) => {
+        const inputVotes = snapshot.data()
 
-            // Add the vote id inside the actual vote to be re-used on other parts
-            const votesWithIds = inputVotes
-                ? Object.keys(inputVotes).reduce((acc, key) => {
-                      if (Object.keys(inputVotes[key]).length === 0) {
-                          acc[key] = inputVotes[key]
-                      } else {
-                          acc[key] = {
-                              ...Object.keys(inputVotes[key]).reduce(
-                                  (acc2, key2) => {
-                                      acc2[key2] = {
-                                          ...inputVotes[key][key2],
-                                          id: key2,
-                                      }
-                                      return acc2
-                                  },
-                                  {}
-                              ),
-                          }
+        // Add the vote id inside the actual vote to be re-used on other parts
+        const votesWithIds = inputVotes
+            ? Object.keys(inputVotes).reduce((acc, key) => {
+                  if (Object.keys(inputVotes[key]).length === 0) {
+                      acc[key] = inputVotes[key]
+                  } else {
+                      acc[key] = {
+                          ...Object.keys(inputVotes[key]).reduce(
+                              (acc2, key2) => {
+                                  acc2[key2] = {
+                                      ...inputVotes[key][key2],
+                                      id: key2,
+                                  }
+                                  return acc2
+                              },
+                              {}
+                          ),
                       }
-                      return acc
-                  }, {})
-                : {}
+                  }
+                  return acc
+              }, {})
+            : {}
 
-            const talk = {
-                id: talkSnapshot.id,
-                ...votesWithIds,
-            }
+        const talk = {
+            id: snapshot.id,
+            ...votesWithIds,
+        }
 
-            dispatch({
-                type: GET_PROJECT_VOTE_RESULT_SUCCESS,
-                payload: talk,
-            })
+        dispatch({
+            type: GET_PROJECT_VOTE_RESULT_SUCCESS,
+            payload: talk,
         })
-        .catch((err) => {
-            dispatch({
-                type: GET_PROJECT_VOTE_RESULT_ERROR,
-                payload: err,
-            })
+    }
+
+    const onError = (error) => {
+        dispatch({
+            type: GET_PROJECT_VOTE_RESULT_ERROR,
+            payload: error,
         })
+    }
+
+    if (isLiveUserVotesSelector(getState())) {
+        return fireStoreMainInstance
+            .collection('projects')
+            .doc(getProjectSelector(getState()).id)
+            .collection('sessionVotes')
+            .doc(talkId)
+            .onSnapshot((snapshot) => onNewVotes(snapshot), onError)
+    } else {
+        fireStoreMainInstance
+            .collection('projects')
+            .doc(getProjectSelector(getState()).id)
+            .collection('sessionVotes')
+            .doc(talkId)
+            .get()
+            .then(onNewVotes)
+            .catch(onError)
+    }
 }
 
 const getVoteLabelInClosestLanguage = (voteItems, navigatorLang) => {
