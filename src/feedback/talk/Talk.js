@@ -37,17 +37,21 @@ import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../core/contants'
 import { useTranslation } from 'react-i18next'
 import TalkHeader from './TalkHeader'
 import { getVoteResultSelectorSelector } from './core/getVoteResultSelectorSelector'
+import useQuery from '../../utils/useQuery'
 
 export const Talk = ({ match }) => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
+    const displayVotes = useQuery().get('displayVotes')
     const id = match.params.talkId
 
     const talk = useSelector(getSelectedTalkSelector)
     const speakers = useSelector(getSpeakersForSelectedTalkSelector)
     const voteItems = useSelector(getProjectVoteItemsOrderedSelector)
     const userVotes = useSelector(getActiveUserVotesByTalkAndVoteItemSelector)
-    const voteResults = useSelector(getVoteResultSelectorSelector)
+    const voteResults = useSelector((state) =>
+        getVoteResultSelectorSelector(state, displayVotes)
+    )
     const errorTalkLoad = useSelector(getTalkLoadErrorSelector)
     const errorVotePost = useSelector(getErrorVotePostSelector)
     const errorVotesLoad = useSelector(getErrorVotesLoadSelector)

@@ -227,7 +227,7 @@
         "settings": "Settings",
         "languages": "Additional languages (for the voting form)",
         "disableSoloTalkRedirect": "Force redirect to the talk if only one talk listed",
-        "hideVotesUntilUserVote": "Other users votes are hidden until the user vote on a talk or the vote window is open",
+        "hideVotesUntilUserVote": "Hide votes until the user vote on a talk or the vote window is open (add ?displayVotes=true to the URL to display the votes directly)",
         "liveUserVotes": "Live user votes (users votes will be displayed live, without reloading the talk page)"
     },
     "users": {

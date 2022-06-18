@@ -14,15 +14,18 @@ export const getVoteResultSelectorSelector = createSelector(
     hideVotesUntilUserVoteSelector,
     getUserVotesByTalkAndVoteItemSelector,
     getProjectVoteStartEndTimeSelector,
+    (_, displayVotes) => displayVotes,
     (
         selectedTalkId,
         voteResults,
         hideVotesUntilUserVote,
         currentUserVotes,
-        projectVotesWindow
+        projectVotesWindow,
+        displayVotes
     ) => {
         if (
             hideVotesUntilUserVote &&
+            !displayVotes &&
             (!currentUserVotes || Object.keys(currentUserVotes).length === 0)
         ) {
             // Is vote window open?
