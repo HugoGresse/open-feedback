@@ -34,5 +34,11 @@ module.exports = {
             'error',
             { 'ts-ignore': 'allow-with-description' },
         ],
+        'quote-props': ['warn', 'consistent-as-needed'],
+        'operator-linebreak': [
+            'error',
+            'after',
+            { overrides: { '?': 'before', ':': 'before' } },
+        ],
     },
 }
