@@ -25,6 +25,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import SlideshowIcon from '@material-ui/icons/Slideshow'
 import CommentIcon from '@material-ui/icons/Comment'
 import IconButton from '@material-ui/core/IconButton'
+import DonateIcon from '@material-ui/icons/CardGiftcard'
 import OFMenuItem from './OFMenuItem'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import RoutingMap from '../../RoutingMap'
@@ -32,6 +33,7 @@ import Drawer from '@material-ui/core/Drawer'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
 
 const innerTheme = createTheme({
     palette: {
@@ -192,6 +194,24 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                         aria-label="user/logout"
                         className={classes.userBox}
                     >
+                        <div className={classes.list}>
+                            <ListItem
+                                button
+                                component="a"
+                                target="_blank"
+                                href="https://github.com/sponsors/HugoGresse"
+                            >
+                                <ListItemIcon className={classes.listItemIcon}>
+                                    {<DonateIcon />}
+                                </ListItemIcon>
+                                <ListItemText
+                                    primaryTypographyProps={{
+                                        color: 'textPrimary',
+                                    }}
+                                    primary={t('Donate') + ' 🙏'}
+                                />
+                            </ListItem>
+                        </div>
                         <ListItem>
                             {user.photoURL && (
                                 <ListItemAvatar>
