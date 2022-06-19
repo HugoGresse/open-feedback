@@ -24,7 +24,7 @@ export const getFirestoreMocksAndInit = () => {
         }
     })
 
-    const doc = jest.fn((docId) => {
+    const doc = jest.fn(() => {
         return {
             get,
             set,
@@ -38,11 +38,11 @@ export const getFirestoreMocksAndInit = () => {
         operator: string,
         secondTerm: string
     ) => {
-        get: () => {}
-        set: () => {}
-        update: () => {}
-        onSnapshot: () => {}
-    } = jest.fn((firstTerm: string, operator: string, secondTerm: string) => {
+        get: () => Promise<any>
+        set: () => Promise<any>
+        update: () => Promise<any>
+        onSnapshot: () => Promise<any>
+    } = jest.fn(() => {
         return {
             where,
             limit,

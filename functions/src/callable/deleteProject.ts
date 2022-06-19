@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions'
-// @ts-ignore
+// @ts-ignore: no type declaration for firebase tools
 import firebaseTools from 'firebase-tools'
 import * as admin from 'firebase-admin'
 import { assertUserAuthenticated } from '../helpers/assertUserAuthenticated'
