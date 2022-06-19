@@ -86,6 +86,7 @@ const resize = async (
 
     const bufferData: any[] = []
     const tempWritableStream = new stream.Writable()
+    // eslint-disable-next-line
     tempWritableStream._write = function (chunk, encoding, done) {
         bufferData.push(chunk)
         done()
