@@ -208,7 +208,7 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                                     primaryTypographyProps={{
                                         color: 'textPrimary',
                                     }}
-                                    primary={t('Donate') + ' 🙏'}
+                                    primary={t('common.donate') + ' 🙏'}
                                 />
                             </ListItem>
                         </div>
