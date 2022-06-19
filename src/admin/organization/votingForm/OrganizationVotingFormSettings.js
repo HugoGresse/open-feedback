@@ -32,6 +32,7 @@ export const OrganizationVotingFormSettings = () => {
                     disableSoloTalkRedirect={disableSoloTalkRedirect}
                     hideVotesUntilUserVote={hideVotesUntilUserVote}
                     displayTitle={false}
+                    isOrganizationSettings={true}
                 />
             </Suspense>
         </Box>
