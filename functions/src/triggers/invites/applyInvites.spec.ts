@@ -23,6 +23,7 @@ describe('applyInvites', () => {
         const { update, doc } = getFirestoreMocksAndInit()
 
         update.mockImplementationOnce(() =>
+            // eslint-disable-next-line prefer-promise-reject-errors
             Promise.reject('projects update rejected!')
         )
         update.mockImplementationOnce(() =>

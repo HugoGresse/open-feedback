@@ -72,9 +72,10 @@ export const userInviteCreated = functions.firestore
                             if (querySnapshot.empty) {
                                 return Promise.resolve('no user matched')
                             }
-                            let promise: Promise<any> = Promise.resolve(
-                                'forEach not implemented or firebase issue'
-                            )
+                            let promise: Promise<string | any[]> =
+                                Promise.resolve(
+                                    'forEach not implemented or firebase issue'
+                                )
                             querySnapshot.forEach((userSnapshot) => {
                                 promise = checkPendingInviteAndProcessThem(
                                     userSnapshot.data() as admin.auth.UserRecord
@@ -85,6 +86,7 @@ export const userInviteCreated = functions.firestore
                 })
         }
 
+        // eslint-disable-next-line prefer-promise-reject-errors
         return Promise.reject(
             'Function failed due to not successful email send'
         )

@@ -1,5 +1,6 @@
 import layout from './layout/layout'
 
+/* eslint-disable max-len */
 const userInvited = (
     header: string,
     content: string,
@@ -48,5 +49,6 @@ const userInvited = (
                             </td>
                         </tr>
 `)
+/* eslint-enable max-len */
 
 export default userInvited

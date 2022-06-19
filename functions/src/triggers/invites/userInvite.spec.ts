@@ -58,6 +58,7 @@ describe('userInviteCreated', () => {
     it('should reject when a user is invited to a project, email sent but db update failed', async () => {
         const { update, collection, doc } = getFirestoreMocksAndInit()
         update.mockImplementation(() =>
+            // eslint-disable-next-line prefer-promise-reject-errors
             Promise.reject('firestore update failed')
         )
         ;(send as any).mockImplementation(() => new Response())

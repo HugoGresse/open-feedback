@@ -2,8 +2,8 @@ import { firestoreIncrement } from '../../helpers/firebaseInit'
 import { AggregatedVote } from './AggregatedVote'
 import { VoteItemAggregationChange } from './VoteItemAggregationChange'
 
-export const VOTE_STATUS_ACTIVE: 'active' = 'active'
-export const VOTE_STATUS_DELETED: 'deleted' = 'deleted'
+export const VOTE_STATUS_ACTIVE = 'active'
+export const VOTE_STATUS_DELETED = 'deleted'
 
 export type VoteStatus = typeof VOTE_STATUS_ACTIVE | typeof VOTE_STATUS_DELETED
 export const VOTE_TYPE_TEXT_PLUS = 'textPlus'
@@ -147,6 +147,6 @@ export class Vote {
     }
 }
 
-const isIdValid = (id: any): boolean => {
-    return id && id.length > 0
+const isIdValid = (id: string | null): boolean => {
+    return !!(id && id.length > 0)
 }

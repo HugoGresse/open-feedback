@@ -35,14 +35,14 @@ export const resizeAndMoveImage = functions.https.onCall(
         const bucket = admin.storage().bucket()
 
         const [file, fileName] = await resize(
-            // @ts-ignore
+            // @ts-ignore due to firebase tools
             bucket,
             tempStoragePath,
             data.width,
             data.height
         )
         const [newFile] = await moveToFinalDir(
-            // @ts-ignore
+            // @ts-ignore due to firebase tools
             bucket,
             file,
             fileName,
@@ -60,10 +60,10 @@ export const resizeAndMoveImage = functions.https.onCall(
  * 4. Save it to GCP back
  * 5. Delete original image
  *
- * @param bucket
- * @param filePath
- * @param width
- * @param height
+ * @param {Bucket} bucket the storage bucket
+ * @param {string} filePath the file path within the bucjet
+ * @param {number} width image width in px
+ * @param {number} height image height in px
  */
 const resize = async (
     bucket: Bucket,
@@ -148,7 +148,7 @@ const minimizeImageFromBufferArray = async (
 const saveImage = (
     inputBuffer: Buffer,
     file: File,
-    metadata: {}
+    metadata: Record<string, unknown>
 ): Promise<void> => {
     return new Promise((resolve, reject) => {
         file.save(
