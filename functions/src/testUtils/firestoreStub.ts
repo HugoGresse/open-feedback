@@ -1,10 +1,7 @@
 import * as admin from 'firebase-admin'
 
 // test().firestore.makeDocumentSnapshot
-export const makeDocumentSnapshot = (
-    data: Record<any, any> | null,
-    path: string
-): any => {
+export const makeDocumentSnapshot = (data: Record<any, any> | null): any => {
     return {
         ...data,
         data: () => data,
@@ -24,7 +21,7 @@ export const getFirestoreMocksAndInit = () => {
         }
     })
 
-    const doc = jest.fn((docId) => {
+    const doc = jest.fn(() => {
         return {
             get,
             set,
@@ -38,11 +35,11 @@ export const getFirestoreMocksAndInit = () => {
         operator: string,
         secondTerm: string
     ) => {
-        get: () => {}
-        set: () => {}
-        update: () => {}
-        onSnapshot: () => {}
-    } = jest.fn((firstTerm: string, operator: string, secondTerm: string) => {
+        get: () => Record<string, unknown>
+        set: () => Record<string, unknown>
+        update: () => Record<string, unknown>
+        onSnapshot: () => Record<string, unknown>
+    } = jest.fn(() => {
         return {
             where,
             limit,

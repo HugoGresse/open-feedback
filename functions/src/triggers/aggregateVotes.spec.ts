@@ -8,18 +8,21 @@ import {
 import * as admin from 'firebase-admin'
 export const FieldValue = admin.firestore.FieldValue
 
-const getMockedFirestore = (docData: {}) =>
+const getMockedFirestore = (docData: Record<string, unknown>) =>
     ({
-        collection: jest.fn((path) => ({
-            doc: jest.fn((doc) => ({
-                collection: jest.fn((secondPath) => ({
-                    doc: jest.fn((newVote) => ({
+        collection: jest.fn(() => ({
+            doc: jest.fn(() => ({
+                collection: jest.fn(() => ({
+                    doc: jest.fn(() => ({
                         get: () =>
                             Promise.resolve({
                                 data: () => docData,
                                 exists: true,
                             }),
-                        set: (data: {}, options: {}) => {
+                        set: (
+                            data: Record<string, unknown>,
+                            options: Record<string, unknown>
+                        ) => {
                             return Promise.resolve(data)
                         },
                     })),

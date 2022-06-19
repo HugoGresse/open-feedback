@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 export default (children: string) => `
 <!DOCTYPE html>
 <html
@@ -122,7 +123,7 @@ export default (children: string) => `
                                 <td class="aligncenter content-block"
                                     style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; vertical-align: top; color: #CECECE; text-align: center; margin: 0; padding: 0 0 20px;"
                                     align="center" valign="top">
-                                    Email sent by 
+                                    Email sent by
                                     <a href="https://openfeedback.io" style="margin: 0; text-decoration: underline; color: #CECECE;">
                                         openfeedback.io
                                     </a>
@@ -152,3 +153,4 @@ export default (children: string) => `
 
 </html>
 `
+/* eslint-enable max-len */

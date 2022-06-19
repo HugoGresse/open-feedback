@@ -19,15 +19,20 @@ module.exports = {
     },
     ignorePatterns: [
         '/lib/**/*', // Ignore built files.
+        'jest.config.js', // Ignore jest config.
     ],
     plugins: ['@typescript-eslint', 'import'],
     rules: {
-        indent: ['error', 4],
+        indent: ['warn', 4],
         semi: [2, 'never'],
         'object-curly-spacing': ['error', 'always'],
         quotes: ['error', 'single'],
         'max-len': ['warn', { code: 120 }],
         'import/no-unresolved': 0,
         'require-jsdoc': ['off'],
+        '@typescript-eslint/ban-ts-comment': [
+            'error',
+            { 'ts-ignore': 'allow-with-description' },
+        ],
     },
 }
