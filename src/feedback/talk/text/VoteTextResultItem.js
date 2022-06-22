@@ -48,6 +48,7 @@ export const VoteTextResultItem = ({
     })
     const { t } = useTranslation()
     const isVoteFromUser = vote.userId === currentUserId
+    const voteCount = vote.plus === undefined ? 1 : vote.plus // vote.plus can be undefined for old projects
 
     return (
         <li className={classes.container}>
@@ -58,7 +59,7 @@ export const VoteTextResultItem = ({
                 chipColors={chipColors}
                 onClick={onVoteChange}
             >
-                {vote.plus} {vote.plus > 1 ? 'votes' : 'vote'}
+                {voteCount} {voteCount > 1 ? 'votes' : 'vote'}
             </VoteButton>
             <div className={classes.right}>
                 <p className={classes.date}>
