@@ -1,6 +1,7 @@
 {
     "common": {
-        "loading": "Loading"
+        "loading": "Loading",
+        "donate": "Donate"
     },
     "comment": {
         "placeholder": "Your answer",

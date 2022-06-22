@@ -12,7 +12,7 @@ import {
 import Error from '../baseComponents/customComponent/Error'
 import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent'
 import { getLoginErrorSelector, isLoggedSelector } from './auth/authSelectors'
-import Footer from './layout/Footer'
+import { Footer } from './layout/Footer'
 import { getTalksDatesSelector } from '../core/talks/talksSelectors'
 import HardRedirect from '../baseComponents/HardRedirect'
 import { getProject } from './project/projectActions'
