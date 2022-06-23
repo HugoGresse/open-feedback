@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Box, useTheme } from '@material-ui/core'
+import Link from '@material-ui/core/Link'
 
 export const Footer = () => {
     const { t } = useTranslation()
@@ -31,6 +32,17 @@ export const Footer = () => {
                     alt="open feedback"
                 />
             </a>
+
+            <Link
+                href="https://github.com/sponsors/HugoGresse"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: theme.palette.primary.contrastText }}
+            >
+                <span style={{ left: 16, top: -2, position: 'relative' }}>
+                    {t('common.donate')}
+                </span>
+            </Link>
         </Box>
     )
 }
