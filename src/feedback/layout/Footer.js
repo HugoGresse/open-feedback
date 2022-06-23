@@ -32,17 +32,6 @@ export const Footer = () => {
                     alt="open feedback"
                 />
             </a>
-
-            <Link
-                href="https://github.com/sponsors/HugoGresse"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: '#ff6847' }}
-            >
-                <span style={{ left: 16, top: -2, position: 'relative' }}>
-                    {t('common.donate')}
-                </span>
-            </Link>
         </Box>
     )
 }
