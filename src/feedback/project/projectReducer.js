@@ -85,7 +85,7 @@ const projectReducer = (state = initState, { payload, type }) => {
                         ...precedentData,
                         [vote.id]: {
                             ...precedentData[vote.id],
-                            plus: precedentData[vote.id].plus + 1,
+                            plus: (precedentData[vote.id].plus || 1) + 1,
                             updatedAt: nowTimestamp(),
                         },
                     }
