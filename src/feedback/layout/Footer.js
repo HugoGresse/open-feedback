@@ -1,7 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Box, useTheme } from '@material-ui/core'
-import Link from '@material-ui/core/Link'
 
 export const Footer = () => {
     const { t } = useTranslation()
