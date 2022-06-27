@@ -16,9 +16,7 @@
 *.DS_Store
 *.log
 *.iml
-.env.production.local
-.env.development.local
-.env.test.local
+.env.*.local
 .env.local
 
 
