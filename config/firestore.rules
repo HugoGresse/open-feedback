@@ -15,7 +15,6 @@ service cloud.firestore {
 
         // Projects
         function projectData(projectId) { return get(/databases/$(database)/documents/projects/$(projectId)).data; }
-        function isOwner(data) { return data.owner == request.auth.uid;}
         function isAdmin(data) { return data.owner == request.auth.uid || request.auth.uid in data.members;}
 
         // Org
