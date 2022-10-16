@@ -225,6 +225,12 @@
                 "defaultError": "Erreur lors de la suppression de l'évènement, "
             }
         },
+        "resetVotes": {
+            "button": "Réinitialiser les votes à zéro",
+            "confirmTitle": "Êtes-vous sûr de vouloir réinitialiser/supprimer tous les votes ?",
+            "confirmDescription": "Cci est définitif, tous les votes seront supprimés.",
+            "deleted": "Votes supprimés."
+        },
         "settings": "Paramètres",
         "languages": "Langues additionnelles (pour le bulletin de votes)",
         "disableSoloTalkRedirect": "Forcer la redirection à la présentation si il n'y en a qu'une listé",

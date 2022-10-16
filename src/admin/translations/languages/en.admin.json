@@ -225,6 +225,12 @@
                 "defaultError": "Failed to delete the event, "
             }
         },
+        "resetVotes": {
+            "button": "Reset votes to zero",
+            "confirmTitle": "Are you sure you want to reset/remove all the votes?",
+            "confirmDescription": "This is definitive, all votes will be deleted.",
+            "deleted": "Votes deleted."
+        },
         "settings": "Settings",
         "languages": "Additional languages (for the voting form)",
         "disableSoloTalkRedirect": "Force redirect to the talk if only one talk listed",

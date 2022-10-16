@@ -92,6 +92,14 @@ const addFullDataToProject = async (app, projectId, userId) => {
             voteItemId: 'toto',
             status: 'active',
         })
+    // Add dumb aggregate data
+    await app
+        .collection('projects')
+        .doc(projectId)
+        .collection('sessionVotes')
+        .add({
+            toto: 1,
+        })
 }
 
 const assertProjectAllCollections = async (app, projectId, assertMethod) => {
@@ -549,9 +557,8 @@ describe('Firestore rules', () => {
                 .collection('organizations')
                 .doc('FirstOrg')
                 .update({
-                    viewerUserIds: firebase.firestore.FieldValue.arrayUnion(
-                        UID_VIEWER
-                    ),
+                    viewerUserIds:
+                        firebase.firestore.FieldValue.arrayUnion(UID_VIEWER),
                 })
             await firebase.assertSucceeds(addUserToOrg)
 
@@ -914,6 +921,124 @@ describe('Firestore rules', () => {
 
             const project = createProject(app, 'First project', UID_VIEWER)
             await firebase.assertSucceeds(project)
+        })
+
+        it('can delete existing votes if owner', async () => {
+            const app = createApp(UID_VIEWER)
+            const project = await createProject(
+                app,
+                'First project',
+                UID_VIEWER
+            )
+            const projectId = project.id
+            await addFullDataToProject(app, projectId, UID_VIEWER)
+
+            // Check userVotes
+            const userVotes = await app
+                .collection('projects')
+                .doc(projectId)
+                .collection('userVotes')
+                .get()
+            const results = await firebase.assertSucceeds(userVotes)
+            expect(results.docs.length).toEqual(1)
+            for (const doc of results.docs) {
+                const deleteUserVote = app
+                    .collection('projects')
+                    .doc(projectId)
+                    .collection('userVotes')
+                    .doc(doc.id)
+                    .delete()
+                await firebase.assertSucceeds(deleteUserVote)
+            }
+
+            // Check sessionVotes
+            const sessionVotes = await app
+                .collection('projects')
+                .doc(projectId)
+                .collection('sessionVotes')
+                .get()
+            const results2 = await firebase.assertSucceeds(sessionVotes)
+            expect(results2.docs.length).toEqual(1)
+            for (const doc of results2.docs) {
+                const deleteVote = app
+                    .collection('projects')
+                    .doc(projectId)
+                    .collection('sessionVotes')
+                    .doc(doc.id)
+                    .delete()
+                await firebase.assertSucceeds(deleteVote)
+            }
+        })
+
+        it('cannot delete existing votes if anonymous but can if member', async () => {
+            const adminApp = createApp(UID_ADMIN)
+            const viewerApp = createApp(UID_VIEWER)
+            const anotherApp = createApp(UID_ANOTHER_ADMIN)
+            const project = await createProject(
+                adminApp,
+                'First project',
+                UID_ADMIN
+            )
+            const projectId = project.id
+            await addFullDataToProject(adminApp, projectId, UID_ADMIN)
+
+            const addViewerAsMemberOnProject = adminApp
+                .collection('projects')
+                .doc(projectId)
+                .update({
+                    members: [UID_ADMIN, UID_VIEWER],
+                })
+            await firebase.assertSucceeds(addViewerAsMemberOnProject)
+
+            // Check userVotes
+            const userVotes = await viewerApp
+                .collection('projects')
+                .doc(projectId)
+                .collection('userVotes')
+                .get()
+            const results = await firebase.assertSucceeds(userVotes)
+            expect(results.docs.length).toEqual(1)
+            for (const doc of results.docs) {
+                const deleteUserVote = viewerApp
+                    .collection('projects')
+                    .doc(projectId)
+                    .collection('userVotes')
+                    .doc(doc.id)
+                    .delete()
+                await firebase.assertSucceeds(deleteUserVote)
+                const deleteUserVote2 = anotherApp
+                    .collection('projects')
+                    .doc(projectId)
+                    .collection('userVotes')
+                    .doc(doc.id)
+                    .delete()
+                await firebase.assertFails(deleteUserVote2)
+            }
+
+            // Check sessionVotes
+            const sessionVotes = await viewerApp
+                .collection('projects')
+                .doc(projectId)
+                .collection('sessionVotes')
+                .get()
+            const results2 = await firebase.assertSucceeds(sessionVotes)
+            expect(results2.docs.length).toEqual(1)
+            for (const doc of results2.docs) {
+                const deleteVote = viewerApp
+                    .collection('projects')
+                    .doc(projectId)
+                    .collection('sessionVotes')
+                    .doc(doc.id)
+                    .delete()
+                await firebase.assertSucceeds(deleteVote)
+                const deleteVote2 = anotherApp
+                    .collection('projects')
+                    .doc(projectId)
+                    .collection('sessionVotes')
+                    .doc(doc.id)
+                    .delete()
+                await firebase.assertFails(deleteVote2)
+            }
         })
     })
 })

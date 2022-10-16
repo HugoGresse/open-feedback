@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from 'react'
 import CardContent from '@material-ui/core/CardContent'
 import OFCard from '../../../baseComponents/OFCard'
 import SetupForm from './SetupForm'
-import DeleteProject from './DeleteProject'
+import { DeleteProject } from './DeleteProject'
 import LoaderMatchParent from '../../../../baseComponents/customComponent/LoaderMatchParent'
 import { editProject } from '../../core/actions/editProject'
 import { useDispatch, useSelector, useStore } from 'react-redux'
@@ -10,6 +10,8 @@ import {
     getLanguagesSelector,
     getSelectedProjectSelector,
 } from '../../core/projectSelectors'
+import { ResetVotes } from './ResetVotes'
+import BottomActionLayout from '../../layout/BottomActionLayout'
 
 const SettingsForm = lazy(() => import('./SettingsForm'))
 
@@ -45,7 +47,11 @@ const Setup = () => {
                     <SetupForm />
                 </CardContent>
             </OFCard>
-            <DeleteProject />
+
+            <BottomActionLayout>
+                <ResetVotes />
+                <DeleteProject />
+            </BottomActionLayout>
         </>
     )
 }
