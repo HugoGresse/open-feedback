@@ -95,7 +95,7 @@ export const TalkVoteText = ({
                 })
             }
         }
-    }, [currentUserVotes, data.dataLoaded])
+    }, [currentUserVotes, data.vote, data.dataLoaded])
 
     const onTextChange = (event) => {
         setData({
