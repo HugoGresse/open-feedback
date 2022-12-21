@@ -28,7 +28,7 @@ import {
 } from '../vote/voteSelectors'
 
 import Grid from '@material-ui/core/Grid'
-import TalkVote from './TalkVote'
+import { TalkVote } from './TalkVote'
 import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent'
 import Error from '../../baseComponents/customComponent/Error'
 import Snackbar from '../../baseComponents/customComponent/Snackbar'
