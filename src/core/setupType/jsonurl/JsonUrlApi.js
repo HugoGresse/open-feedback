@@ -1,3 +1,5 @@
+import { isString } from '../../../utils/stringUtils'
+
 class JsonUrlApi {
     constructor(config) {
         if (config.jsonUrl !== this.jsonUrl) {
@@ -10,17 +12,36 @@ class JsonUrlApi {
         if (this.data) {
             return Promise.resolve(this.data)
         }
-        return fetch(this.jsonUrl).then(async response => {
+        return fetch(this.jsonUrl).then(async (response) => {
             if (response.ok) {
                 this.data = await response.json()
                 if (this.data.sessions) {
                     let tempId = ''
                     // Convert numeric id to string
-                    Object.values(this.data.sessions).forEach(talk => {
+                    Object.values(this.data.sessions).forEach((talk) => {
                         tempId = '' + talk.id
                         this.data.sessions[tempId] = {
                             ...talk,
                             id: tempId,
+                        }
+                        // Cleanup to only keep strings
+                        if (
+                            this.data.sessions[tempId].speakers &&
+                            Array.isArray(this.data.sessions[tempId].speakers)
+                        ) {
+                            this.data.sessions[tempId].speakers =
+                                this.data.sessions[tempId].speakers.filter(
+                                    (id) => isString(id)
+                                )
+                        }
+                        if (
+                            this.data.sessions[tempId].tags &&
+                            Array.isArray(this.data.sessions[tempId].tags)
+                        ) {
+                            this.data.sessions[tempId].tags =
+                                this.data.sessions[tempId].tags.filter((id) =>
+                                    isString(id)
+                                )
                         }
                     })
                 }
@@ -35,11 +56,11 @@ class JsonUrlApi {
     }
 
     getTalks() {
-        return this.getJsonData().then(data => data.sessions)
+        return this.getJsonData().then((data) => data.sessions)
     }
 
     getTalk(talkId) {
-        return this.getJsonData().then(data => {
+        return this.getJsonData().then((data) => {
             return {
                 [talkId]: data.sessions[talkId],
             }
@@ -47,7 +68,7 @@ class JsonUrlApi {
     }
 
     getSpeakers() {
-        return this.getJsonData().then(data => data.speakers)
+        return this.getJsonData().then((data) => data.speakers)
     }
 
     isReadOnly() {

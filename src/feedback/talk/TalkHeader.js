@@ -20,11 +20,14 @@ const formatTalkDateTime = (talk) => {
         .setZone('local', { keepLocalTime: true })
         .toLocaleString(DateTime.TIME_SIMPLE)
 
-    const endTime = DateTime.fromISO(talk.endTime, {
-        setZone: true,
-    }).toLocaleString(DateTime.TIME_SIMPLE)
+    const endTime = talk.endTime
+        ? ' - ' +
+          DateTime.fromISO(talk.endTime, {
+              setZone: true,
+          }).toLocaleString(DateTime.TIME_SIMPLE)
+        : ''
 
-    return `${startDate} / ${startTime} - ${endTime}`
+    return `${startDate} / ${startTime}${endTime}`
 }
 
 const useStyles = makeStyles(() => ({
