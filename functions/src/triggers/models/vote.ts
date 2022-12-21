@@ -81,7 +81,10 @@ export class Vote {
         aggregatedVote?: AggregatedVote
     ): VoteItemAggregationChange {
         if (this.isTextPlusVote()) {
-            if (!this.voteData.voteId) {
+            if (
+                !this.voteData.voteId ||
+                this.isTextVoteDeleted(aggregatedVote)
+            ) {
                 return {}
             }
             return {
@@ -144,6 +147,20 @@ export class Vote {
                 this.getIncrementValue()
             ),
         }
+    }
+
+    private isTextVoteDeleted(aggregatedVote?: AggregatedVote): boolean {
+        // When deleting a text vote, the vote will be an empty object {}, and if the user did not have the latest version, he will upvote a textVote which does not exist, just an empty object.
+        return (
+            !this.voteData ||
+            !aggregatedVote ||
+            !aggregatedVote[this.voteData.voteItemId] ||
+            !this.voteData.voteId ||
+            !aggregatedVote[this.voteData.voteItemId][this.voteData.voteId] ||
+            Object.keys(
+                aggregatedVote[this.voteData.voteItemId][this.voteData.voteId]
+            ).length === 0
+        )
     }
 }
 
