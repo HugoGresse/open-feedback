@@ -81,8 +81,8 @@ export const TalkVoteText = ({
         dataLoaded: false,
     })
 
-    useEffect(() => {
-        if (currentUserVotes && !data.dataLoaded) {
+    const getVoteFromCurrentVotes = () => {
+        if (currentUserVotes && (!data.dataLoaded || !data.vote)) {
             const foundTextVote = currentUserVotes.find(
                 (vote) => !!vote.text && vote.voteType !== VOTE_TYPE_TEXT_PLUS
             )
@@ -95,7 +95,11 @@ export const TalkVoteText = ({
                 })
             }
         }
-    }, [currentUserVotes, data.dataLoaded])
+    }
+
+    useEffect(() => {
+        getVoteFromCurrentVotes()
+    }, [currentUserVotes, data.dataLoaded, getVoteFromCurrentVotes])
 
     const onTextChange = (event) => {
         setData({
@@ -105,14 +109,15 @@ export const TalkVoteText = ({
     }
 
     const onVoteDelete = () => {
-        onVoteChange(voteItem, null, data.vote)
-
         setData({
             ...data,
             comment: '',
             status: null,
             vote: null,
         })
+        if (data.vote) {
+            onVoteChange(voteItem, null, data.vote)
+        }
     }
 
     const saveUpdateKey =
