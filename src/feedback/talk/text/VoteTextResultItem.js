@@ -54,7 +54,7 @@ export const VoteTextResultItem = ({
         <li className={classes.container}>
             <VoteButton
                 className={classes.button}
-                count={1}
+                count={voteCount ?? 1}
                 isSelected={isSelected}
                 chipColors={chipColors}
                 onClick={onVoteChange}
