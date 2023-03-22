@@ -41,7 +41,7 @@ You want to contribute and keep Open Feedback in a good shape, go there:
 ## Community SDK
 
 OpenFeedback doesn't have official SDKs to embed OpenFeedback inside existing native app but the community has made those awesome libraries: 
-- **Android SDK** _by [Martin Bonnin](https://github.com/martinbonnin/)_: https://github.com/paug/openfeedback-android-sdk
+- **Kotlin SDK** _by [Gérard Paligo](https://github.com/GerardPaligot/) and [Martin Bonnin](https://github.com/martinbonnin/)_: https://github.com/paug/openfeedback-android-sdk
 
 ### Supports
 
