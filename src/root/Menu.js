@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { COLORS } from '../constants/colors'
 import { useTranslation } from 'react-i18next'
 import Box from '@material-ui/core/Box'
+import { Link } from 'react-router-dom';
 
 const MenuList = styled.ul`
     @media (max-width: 640px) {
@@ -46,7 +47,9 @@ const Menu = () => {
             display="flex"
             justifyContent="space-between"
             component="nav">
-            <img height="40" src={logoWhite} alt="open feedback" />
+            <Link to="/">
+                <img height="40" src={logoWhite} alt="open feedback" />
+            </Link>
             <MenuList>
                 <li>
                     <a href="#howitworks">{t('menu.howitworks')}</a>
