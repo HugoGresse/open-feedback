@@ -144,10 +144,10 @@ export const getVotesByHourSelector = createSelector(
         let tempDateString
         const collection = userVotes.reduce((acc, userVote) => {
             if (!userVote.createdAt) {
-                console.warn(
-                    'userVote.createdAt is null or undefined, this should not happen',
-                    userVote
-                )
+                // console.warn(
+                //     'userVote.createdAt is null or undefined, this should not happen',
+                //     userVote
+                // )
                 return acc
             }
             tempDate = DateTime.fromJSDate(userVote.createdAt.toDate())
