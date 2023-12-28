@@ -14,14 +14,15 @@ import { VOTE_STATUS_ACTIVE } from '../../../core/contants'
 import { getSpeakersListSelector } from '../../../core/speakers/speakerSelectors'
 import { DateTime } from 'luxon'
 
-const getDashboard = state => getAdminStateSelector(state).adminDashboard
-const getDashboardData = state => getDashboard(state).data
-const getTalkVotes = state => getDashboardData(state).talkVotes
-const getUserVotes = state => getDashboardData(state).userVotes
+const getDashboard = (state) => getAdminStateSelector(state).adminDashboard
+const getDashboardData = (state) => getDashboard(state).data
+const getTalkVotes = (state) => getDashboardData(state).talkVotes
+const getUserVotes = (state) => getDashboardData(state).userVotes
 
 export const getActiveUserVoteSelector = createSelector(
     getUserVotes,
-    userVotes => userVotes.filter(vote => vote.status === VOTE_STATUS_ACTIVE)
+    (userVotes) =>
+        userVotes.filter((vote) => vote.status === VOTE_STATUS_ACTIVE)
 )
 
 // MEMOIZED
@@ -76,7 +77,7 @@ export const getTalksWithVotesSelector = createSelector(
                 trackTitle: talk.trackTitle,
                 speakers:
                     talk.speakers && Object.keys(speakers).length > 0
-                        ? talk.speakers.map(speakerId => speakers[speakerId])
+                        ? talk.speakers.map((speakerId) => speakers[speakerId])
                         : [],
                 date: talk.startTime && talk.startTime.split('T')[0],
             })
@@ -88,9 +89,9 @@ export const getTalksWithVotesSelector = createSelector(
 
 export const getMostVotedTalkSelector = createSelector(
     getTalksWithVotesSelector,
-    talksWithVotes =>
+    (talksWithVotes) =>
         talksWithVotes
-            .filter(talk => talk.voteCount > 0)
+            .filter((talk) => talk.voteCount > 0)
             .sort((a, b) => {
                 if (a.voteCount < b.voteCount) {
                     return 1
@@ -105,7 +106,7 @@ export const getMostVotedTalkSelector = createSelector(
 
 export const getLeastVotedTalkSelector = createSelector(
     getTalksWithVotesSelector,
-    talksWithVotes =>
+    (talksWithVotes) =>
         talksWithVotes
             .sort((a, b) => {
                 if (a.voteCount < b.voteCount) {
@@ -121,9 +122,9 @@ export const getLeastVotedTalkSelector = createSelector(
 
 export const getMostCommentedTalkSelector = createSelector(
     getTalksWithVotesSelector,
-    talksWithVotes =>
+    (talksWithVotes) =>
         talksWithVotes
-            .filter(talk => talk.commentCount > 0)
+            .filter((talk) => talk.commentCount > 0)
             .sort((a, b) => {
                 if (a.commentCount < b.commentCount) {
                     return 1
@@ -138,10 +139,17 @@ export const getMostCommentedTalkSelector = createSelector(
 
 export const getVotesByHourSelector = createSelector(
     getActiveUserVoteSelector,
-    userVotes => {
+    (userVotes) => {
         let tempDate
         let tempDateString
         const collection = userVotes.reduce((acc, userVote) => {
+            if (!userVote.createdAt) {
+                console.warn(
+                    'userVote.createdAt is null or undefined, this should not happen',
+                    userVote
+                )
+                return acc
+            }
             tempDate = DateTime.fromJSDate(userVote.createdAt.toDate())
             tempDateString = `${tempDate.year}-${tempDate.month}-${tempDate.day} ${tempDate.hour}`
 
@@ -168,38 +176,16 @@ export const getVotesByHourSelector = createSelector(
 
 export const getVotesByDaySelector = createSelector(
     getVotesByHourSelector,
-    votesByHours => {
+    (votesByHours) => {
         const hours = [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            18,
-            19,
-            20,
-            21,
-            22,
-            23,
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+            19, 20, 21, 22, 23,
         ]
         return votesByHours.reduce((acc, hourVote) => {
             if (!acc[hourVote.day]) {
                 acc[hourVote.day] = []
                 // Add missing hours
-                hours.forEach(hour => {
+                hours.forEach((hour) => {
                     acc[hourVote.day][hour] = {
                         x: twoDigits(hour),
                         y: 0,
@@ -220,15 +206,15 @@ export const getVotesByDaySelector = createSelector(
 
 const getVoteByUserSelector = createSelector(
     getActiveUserVoteSelector,
-    userVotes => groupBy(userVotes, 'userId')
+    (userVotes) => groupBy(userVotes, 'userId')
 )
 
 const getBooleanVotesSelector = createSelector(
     getActiveUserVoteSelector,
     getBooleanVoteItemsSelector,
     (userVotes, booleanVoteItems) => {
-        const booleansVoteItemIds = booleanVoteItems.map(item => item.id)
-        return userVotes.filter(vote =>
+        const booleansVoteItemIds = booleanVoteItems.map((item) => item.id)
+        return userVotes.filter((vote) =>
             booleansVoteItemIds.includes(vote.voteItemId)
         )
     }
@@ -241,8 +227,8 @@ const getCommentVotesSelector = createSelector(
         if (!textVoteItems) {
             return []
         }
-        const textVoteItemIds = textVoteItems.map(item => item.id)
-        return userVotes.filter(vote =>
+        const textVoteItemIds = textVoteItems.map((item) => item.id)
+        return userVotes.filter((vote) =>
             textVoteItemIds.includes(vote.voteItemId)
         )
     }
@@ -250,17 +236,17 @@ const getCommentVotesSelector = createSelector(
 
 export const getTotalVoterCountSelector = createSelector(
     getVoteByUserSelector,
-    voteByUser => Object.keys(voteByUser).length
+    (voteByUser) => Object.keys(voteByUser).length
 )
 
 export const getTotalVoteCountSelector = createSelector(
     getBooleanVotesSelector,
-    booleanVotes => booleanVotes.length
+    (booleanVotes) => booleanVotes.length
 )
 
 export const getTotalCommentsSelector = createSelector(
     getCommentVotesSelector,
-    commentVotes => commentVotes.length
+    (commentVotes) => commentVotes.length
 )
 
 export const getBooleanCountByUser = createSelector(
