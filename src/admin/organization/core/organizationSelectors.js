@@ -27,6 +27,8 @@ export const disableSoloTalkRedirectSelector = (state) =>
     getSelectedOrganizationSelector(state).disableSoloTalkRedirect || false
 export const hideVotesUntilUserVoteSelector = (state) =>
     getSelectedOrganizationSelector(state).hideVotesUntilUserVote || false
+export const displayFullEventDatesSelector = (state) =>
+    getSelectedOrganizationSelector(state).displayFullDates || false
 
 // Memoized selectors
 

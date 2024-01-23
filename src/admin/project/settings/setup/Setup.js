@@ -37,6 +37,7 @@ const Setup = () => {
                             hideVotesUntilUserVote={
                                 project.hideVotesUntilUserVote
                             }
+                            displayFullDates={project.displayFullDates}
                             liveUserVotes={project.liveUserVotes}
                         />
                     </Suspense>

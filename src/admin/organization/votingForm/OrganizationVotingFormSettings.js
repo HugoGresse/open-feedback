@@ -4,6 +4,7 @@ import Box from '@material-ui/core/Box'
 import { OrgDataInfo } from '../layout/OrgDataInfo'
 import {
     disableSoloTalkRedirectSelector,
+    displayFullEventDatesSelector,
     getOrganizationLanguagesSelector,
     hideVotesUntilUserVoteSelector,
 } from '../core/organizationSelectors'
@@ -21,6 +22,7 @@ export const OrganizationVotingFormSettings = () => {
     const initialLanguages = getOrganizationLanguagesSelector(
         useStore().getState()
     )
+    const displayFullDates = useSelector(displayFullEventDatesSelector)
 
     return (
         <Box padding={2} paddingTop={0}>
@@ -33,6 +35,7 @@ export const OrganizationVotingFormSettings = () => {
                     hideVotesUntilUserVote={hideVotesUntilUserVote}
                     displayTitle={false}
                     isOrganizationSettings={true}
+                    displayFullDates={displayFullDates}
                 />
             </Suspense>
         </Box>

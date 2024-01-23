@@ -6,15 +6,26 @@ import { useTheme } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import useQuery from '../../utils/useQuery'
+import { useSelector } from 'react-redux'
+import { isFullDatesDisplayedSelector } from '../project/projectSelectors'
 
-const formatTalkDateTime = (talk) => {
+const DATE_FORMAT = {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+}
+
+const DATE_FORMAT_LONG = {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+}
+
+const formatTalkDateTime = (talk, displayFullDates = false) => {
     const startDate = DateTime.fromISO(talk.startTime, {
         setZone: true,
-    }).toLocaleString({
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-    })
+    }).toLocaleString(displayFullDates ? DATE_FORMAT_LONG : DATE_FORMAT)
 
     const startTime = DateTime.fromISO(talk.startTime, { setZone: true })
         .setZone('local', { keepLocalTime: true })
@@ -36,10 +47,11 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-const TalkHeader = ({ talk, speakers }) => {
+export const TalkHeader = ({ talk, speakers }) => {
     const classes = useStyles()
     const theme = useTheme()
     const hideHeader = useQuery().get('hideHeader')
+    const displayFullDates = useSelector(isFullDatesDisplayedSelector)
 
     if (hideHeader && hideHeader === 'true') {
         return <Box height={2}></Box>
@@ -70,11 +82,9 @@ const TalkHeader = ({ talk, speakers }) => {
                 color={theme.palette.textDimmed}
                 marginBottom={2}
             >
-                {talk.startTime && formatTalkDateTime(talk)}
+                {talk.startTime && formatTalkDateTime(talk, displayFullDates)}
             </Box>
             <SpeakerList speakers={speakers} />
         </Box>
     )
 }
-
-export default TalkHeader

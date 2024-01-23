@@ -35,7 +35,7 @@ import Snackbar from '../../baseComponents/customComponent/Snackbar'
 import { SPACING } from '../../constants/constants'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../core/contants'
 import { useTranslation } from 'react-i18next'
-import TalkHeader from './TalkHeader'
+import { TalkHeader } from './TalkHeader'
 import { getVoteResultSelectorSelector } from './core/getVoteResultSelectorSelector'
 import useQuery from '../../utils/useQuery'
 

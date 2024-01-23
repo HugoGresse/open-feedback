@@ -235,7 +235,8 @@
         "languages": "Langues additionnelles (pour le bulletin de votes)",
         "disableSoloTalkRedirect": "Forcer la redirection à la présentation si il n'y en a qu'une listé",
         "hideVotesUntilUserVote": "Cacher les votes des autres utilisateurs tant que l'utilisateur n'a pas voté pour la présentation ou que la période de vote est ouverte (ajoutez ?displayVotes=true à l'URL pour afficher les votes directement)",
-        "liveUserVotes": "Affichage des votes en temps réel (les votes des utilisateurs seront affichés en direct, sans recharger la page)"
+        "liveUserVotes": "Affichage des votes en temps réel (les votes des utilisateurs seront affichés en direct, sans recharger la page)",
+        "displayFullDates": "Afficher les dates complètes (jour de la semaine + numéro du jour + mois) au lieu de seulement le jour de la semaine et le numéro du jour dans la liste des présentations."
     },
     "users": {
         "add": "Ajouter un utilisateur",

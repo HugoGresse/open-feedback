@@ -40,8 +40,19 @@ const DATE_FORMAT = {
     weekday: 'long',
     day: 'numeric',
 }
+const DATE_FORMAT_LONG = {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+}
 
-export const TalkDateMenuItem = ({ date, url, isSelected, noDateLabel }) => {
+export const TalkDateMenuItem = ({
+    date,
+    url,
+    isSelected,
+    noDateLabel,
+    displayFullDates,
+}) => {
     const { t } = useTranslation()
     const classes = useStyles({
         isSelected,
@@ -49,6 +60,9 @@ export const TalkDateMenuItem = ({ date, url, isSelected, noDateLabel }) => {
 
     const getDateLabel = (date) => {
         if (date !== TALK_NO_DATE) {
+            if (displayFullDates) {
+                return DateTime.fromISO(date).toLocaleString(DATE_FORMAT_LONG)
+            }
             return DateTime.fromISO(date).toLocaleString(DATE_FORMAT)
         }
         return noDateLabel
@@ -61,7 +75,8 @@ export const TalkDateMenuItem = ({ date, url, isSelected, noDateLabel }) => {
             <Link
                 to={`${url}`}
                 className={classes.a}
-                title={t('talks.date') + label}>
+                title={t('talks.date') + label}
+            >
                 {label}
             </Link>
         </div>
