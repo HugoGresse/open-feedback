@@ -235,7 +235,8 @@
         "languages": "Additional languages (for the voting form)",
         "disableSoloTalkRedirect": "Force redirect to the talk if only one talk listed",
         "hideVotesUntilUserVote": "Hide votes until the user vote on a talk or the vote window is open (add ?displayVotes=true to the URL to display the votes directly)",
-        "liveUserVotes": "Realtime user votes (users votes will be displayed live, without reloading the talk page)"
+        "liveUserVotes": "Realtime user votes (users votes will be displayed live, without reloading the talk page)",
+        "displayFullDates": "Show full dates (day of the week + date + month) instead of just the day of the week and date in the list of conversations."
     },
     "users": {
         "add": "Add a user",

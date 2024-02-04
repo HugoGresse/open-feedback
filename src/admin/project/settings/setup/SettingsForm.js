@@ -24,6 +24,7 @@ const SettingsForm = ({
     displayTitle = true,
     liveUserVotes = false,
     isOrganizationSettings = false,
+    displayFullDates = false,
 }) => {
     const { t } = useTranslation()
     const [donationDialogOpen, setDonationDialogOpen] = useState(false)
@@ -36,6 +37,7 @@ const SettingsForm = ({
                     disableSoloTalkRedirect: bool(),
                     hideVotesUntilUserVote: bool(),
                     liveUserVotes: bool(),
+                    displayFullDates: bool(),
                 })}
                 initialValues={{
                     languages: initialLanguages.map((tag) => ({
@@ -45,6 +47,7 @@ const SettingsForm = ({
                     disableSoloTalkRedirect: !disableSoloTalkRedirect,
                     hideVotesUntilUserVote: hideVotesUntilUserVote,
                     liveUserVotes: liveUserVotes,
+                    displayFullDates: displayFullDates,
                 }}
             >
                 {({ values }) => (
@@ -73,6 +76,20 @@ const SettingsForm = ({
                                         ]}
                                         multiple={true}
                                         component={OFAutoComplete}
+                                    />
+                                </OFFormControl>
+                                <OFFormControl fieldName="displayFullDates">
+                                    <FormControlLabel
+                                        label={t(
+                                            'settingsSetup.displayFullDates'
+                                        )}
+                                        labelPlacement="start"
+                                        control={
+                                            <Field
+                                                name="displayFullDates"
+                                                component={OFSwitch}
+                                            />
+                                        }
                                     />
                                 </OFFormControl>
                             </Grid>

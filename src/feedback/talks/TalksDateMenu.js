@@ -4,6 +4,7 @@ import { getTalksDatesSelector } from '../../core/talks/talksSelectors'
 import {
     getProjectIdSelector,
     getProjectSelectedDateSelector,
+    isFullDatesDisplayedSelector,
 } from '../project/projectSelectors'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { useTranslation } from 'react-i18next'
@@ -25,6 +26,7 @@ const TalksDateMenu = () => {
     const talksDates = useSelector(getTalksDatesSelector)
     const selectedDate = useSelector(getProjectSelectedDateSelector)
     const currentProjectId = useSelector(getProjectIdSelector)
+    const displayFullDates = useSelector(isFullDatesDisplayedSelector)
     const { items } = usePagination({
         count: talksDates.length,
         page: talksDates.indexOf(selectedDate) + 1,
@@ -62,6 +64,7 @@ const TalksDateMenu = () => {
                                 }`}
                                 noDateLabel={t('talks.menuNoDate')}
                                 isSelected={selected}
+                                displayFullDates={displayFullDates}
                             />
                         )
                     }

@@ -31,6 +31,8 @@ export const hideVotesUntilUserVoteSelector = (state) =>
     getProjectSelector(state).hideVotesUntilUserVote
 export const isLiveUserVotesSelector = (state) =>
     getProjectSelector(state).liveUserVotes
+export const isFullDatesDisplayedSelector = (state) =>
+    getProjectSelector(state).displayFullDates
 
 //  MEMOIZED SELECTORS HERE
 

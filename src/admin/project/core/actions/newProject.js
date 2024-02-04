@@ -25,6 +25,7 @@ export const newProject =
         projectData.favicon = `${window.location.protocol}//${window.location.host}/favicon-32x32.png`
         projectData.logoSmall = `${window.location.protocol}//${window.location.host}/android-chrome-192x192.png`
         projectData.hideVotesUntilUserVote = false
+        projectData.displayFullDates = false
 
         if (
             organizationId !== NO_ORGANIZATION_FAKE_ID &&
@@ -42,6 +43,8 @@ export const newProject =
                     organization.disableSoloTalkRedirect
                 projectData.hideVotesUntilUserVote =
                     organization.hideVotesUntilUserVote || false
+                projectData.displayFullDates =
+                    organization.displayFullDates || false
             }
         }
 
