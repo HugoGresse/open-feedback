@@ -10,7 +10,7 @@ import {
     SAVE_VOTEITEMS_ERROR,
     SAVE_VOTEITEMS_ONGOING,
     SAVE_VOTEITEMS_SUCCESS,
-} from './votingFormActionTypes'
+} from './votingFormActionTypes.jsx'
 import { SELECT_PROJECT } from '../../core/projectActionTypes'
 
 const initState = {
@@ -31,7 +31,7 @@ const votingFormReducer = (state = initState, { payload, type }) => {
             }
         case EDIT_VOTEITEM: {
             let shouldConfirm = state.shouldConfirmSave
-            const voteItems = state.voteItems.map(item => {
+            const voteItems = state.voteItems.map((item) => {
                 if (item.id === payload.id) {
                     return payload
                 }
@@ -54,7 +54,7 @@ const votingFormReducer = (state = initState, { payload, type }) => {
         case MOVE_UP_VOTEITEM: {
             const newPosition = payload.position > 1 ? payload.position - 1 : 0
 
-            const voteItems = state.voteItems.map(item => {
+            const voteItems = state.voteItems.map((item) => {
                 if (item.id === payload.id) {
                     return {
                         ...item,
@@ -78,7 +78,7 @@ const votingFormReducer = (state = initState, { payload, type }) => {
         case MOVE_DOWN_VOTEITEM: {
             const newPosition = payload.position + 1
 
-            const voteItems = state.voteItems.map(item => {
+            const voteItems = state.voteItems.map((item) => {
                 if (item.id === payload.id) {
                     return {
                         ...item,
@@ -100,7 +100,7 @@ const votingFormReducer = (state = initState, { payload, type }) => {
         }
         case DELETE_VOTEITEM: {
             const indexToRemove = state.voteItems.findIndex(
-                item => item.id === payload.id
+                (item) => item.id === payload.id
             )
             const voteItems = [
                 ...state.voteItems.slice(0, indexToRemove),

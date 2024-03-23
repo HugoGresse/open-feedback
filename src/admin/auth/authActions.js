@@ -99,15 +99,15 @@ export const didSignIn = (user, error) => {
     }
 }
 
-export const signOut = (history) => (dispatch) => {
+export const signOut = (navigate) => (dispatch) => {
     authProvider.signOut().then(() => {
         dispatch({
             type: LOGOUT,
         })
-        if (history.location.pathname === '/admin/') {
+        if (window.location.pathname === '/admin/') {
             window.location.reload()
         } else {
-            history.replace('/admin/')
+            navigate.replace('/admin/')
         }
     })
 }

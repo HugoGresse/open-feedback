@@ -7,7 +7,7 @@ import { addNotification } from '../../../notification/notifcationActions'
 import { EDIT_PROJECT_ERROR, EDIT_PROJECT_SUCCESS } from '../projectActionTypes'
 import { deleteOldFilesIfNewValueDiffer } from '../../utils/storage/deleteImageIfPossible'
 import { getSortedVoteItemsSelector } from '../../settings/votingForm/votingFormSelectors'
-import { getVoteItems } from '../../settings/votingForm/votingFormActions'
+import { getVoteItems } from '../../settings/votingForm/votingFormActions.jsx'
 
 export const editProject = (projectData) => (dispatch, getState) => {
     const currentProject = getSelectedProjectSelector(getState())

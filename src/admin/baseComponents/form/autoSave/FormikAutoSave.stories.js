@@ -1,9 +1,9 @@
 import React from 'react'
 import { Form, Formik } from 'formik'
-import FormikAutoSave from './FormikAutoSave'
+import FormikAutoSave from './FormikAutoSave.jsx'
 import { object, string } from 'yup'
-import { CircularProgress } from '@material-ui/core'
-import OFFormControlInputFormiked from '../formControl/OFFormControlInputFormiked'
+import { CircularProgress } from '@mui/material'
+import OFFormControlInputFormiked from '../formControl/OFFormControlInputFormiked.jsx'
 
 export default {
     component: FormikAutoSave,
