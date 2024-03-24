@@ -71,30 +71,23 @@ export const AdminApp = () => {
                             <Routes>
                                 <Route
                                     exact
-                                    path="/admin/event/"
-                                    render={(props) => (
-                                        <Navigate to="/admin/"/>
-                                    )}
+                                    path="/event/"
+                                    element={<Navigate to="/admin/"/>}
                                 />
 
                                 <Route
-                                    path="/admin/event/:projectId"
-                                    render={(props) => (
-                                        <ProjectApp
-                                            match={props.match}
+                                    path="/event/:projectId"
+                                    element={<ProjectApp
                                             key={projectId}
-                                        />
-                                    )}
+                                        />}
                                 />
                                 <Route
                                     exact
-                                    path="/admin/:projectId/"
-                                    render={(props) => (
-                                        <Navigate to="/admin/event/:projectId"/>
-                                    )}
+                                    path="/:projectId/"
+                                    element={ <Navigate to="/admin/event/:projectId"/>}
                                 />
 
-                                <Route path="/admin/" component={AdminRoot} />
+                                <Route path="/" element={<AdminRoot/>} />
                             </Routes>
                             <SlidingOrganizationApp />
 

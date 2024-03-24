@@ -12,13 +12,14 @@ import {
     trackUserId,
 } from '../../utils/analytics/track'
 
-export const didSignIn = (user, error) => {
+export const didSignIn = (baseUser, error) => {
     return async (dispatch, getState) => {
         if (isLoggedSelector(getState()) && isUserValidSelector(getState())) {
             return
         }
 
-        if (user) {
+        if (baseUser) {
+            const user = baseUser.toJSON()
             if (user.isAnonymous) {
                 dispatch({
                     type: LOGIN_ERROR,

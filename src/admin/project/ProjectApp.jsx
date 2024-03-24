@@ -6,7 +6,7 @@ import VotingForm from './settings/votingForm/VotingForm.jsx'
 import Setup from './settings/setup/Setup.jsx'
 import Project from './Project.jsx'
 import React, { useEffect } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useMatch } from 'react-router-dom'
 import ProjectSettings from './settings/event/ProjectSettings.jsx'
 import ProjectLayout from './layout/ProjectLayout.jsx'
 import { useDispatch } from 'react-redux'
@@ -15,7 +15,8 @@ import Moderation from './moderation/Moderation.jsx'
 import ProjectUsers from './settings/users/ProjectUsers.jsx'
 import { getProject } from './core/actions/getProject'
 
-const ProjectApp = ({ match }) => {
+const ProjectApp = () => {
+    const match = useMatch("/admin/event/:projectId")
     const dispatch = useDispatch()
 
     useEffect(() => {

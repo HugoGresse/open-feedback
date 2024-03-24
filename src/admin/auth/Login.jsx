@@ -41,7 +41,7 @@ const Login = memo(({ children }) => {
                     }
                     if (!user.emailVerified && !user.phoneNumber) {
                         user.sendEmailVerification({
-                            url: `https://${process.env.REACT_APP_AUTH_DOMAIN}/admin/`,
+                            url: `https://${import.meta.env.VITE_AUTH_DOMAIN}/admin/`,
                         }).then(() => {
                             // Email sent.
                         })
