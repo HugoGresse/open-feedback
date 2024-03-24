@@ -2,7 +2,8 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import React from 'react'
 import { ErrorMessage, useField } from 'formik'
-import { makeStyles, Typography } from '@mui/material'
+import { makeStyles } from '@mui/styles'
+import Typography from '@mui/material/Typography'
 
 const useStyles = makeStyles((theme) => ({
     formControl: {

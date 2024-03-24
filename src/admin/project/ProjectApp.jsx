@@ -6,7 +6,7 @@ import VotingForm from './settings/votingForm/VotingForm.jsx'
 import Setup from './settings/setup/Setup.jsx'
 import Project from './Project.jsx'
 import React, { useEffect } from 'react'
-import { Redirect, Route, Switch } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import ProjectSettings from './settings/event/ProjectSettings.jsx'
 import ProjectLayout from './layout/ProjectLayout.jsx'
 import { useDispatch } from 'react-redux'
@@ -25,12 +25,16 @@ const ProjectApp = ({ match }) => {
     return (
         <Project match={match} key={match.params.projectId}>
             <ProjectLayout baseUrl={ROUTE_EVENT_BASE}>
-                <Switch>
-                    <Redirect
+                <Routes>
+
+                    <Route
                         exact
-                        from={`${match.url}`}
-                        to={`${match.url}${RoutingMap.dashboard.url}`}
+                        path={`${match.url}`}
+                        render={(props) => <Navigate
+                            to={`${match.url}${RoutingMap.dashboard.url}`}
+                        />}
                     />
+
 
                     <Route
                         exact
@@ -78,7 +82,7 @@ const ProjectApp = ({ match }) => {
                     />
 
                     <Route component={Layout404} />
-                </Switch>
+                </Routes>
             </ProjectLayout>
         </Project>
     )

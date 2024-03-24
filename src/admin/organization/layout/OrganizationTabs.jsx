@@ -3,7 +3,7 @@ import { Tab, Tabs } from '@mui/material'
 import withStyles from '@mui/styles/withStyles';
 import { useTranslation } from 'react-i18next'
 import Box from '@mui/material/Box'
-import { Link, useRouteMatch } from 'react-router-dom'
+import { Link, useMatch } from 'react-router-dom'
 import { ORGANIZATION_ROUTES } from '../../RoutingMap'
 
 function a11yProps(index) {
@@ -29,15 +29,15 @@ export const OrganizationTabs = ({ baseUrl }) => {
     const votingFormPath = `${baseUrl}${ORGANIZATION_ROUTES.votingForm.url}`
     const themePath = `${baseUrl}${ORGANIZATION_ROUTES.theme.url}`
 
-    const matchUsers = useRouteMatch({
+    const matchUsers = useMatch({
         path: userPath,
         exact: true,
     })
-    const matchVotingForm = useRouteMatch({
+    const matchVotingForm = useMatch({
         path: votingFormPath,
         exact: true,
     })
-    const matchTheme = useRouteMatch({
+    const matchTheme = useMatch({
         path: themePath,
         exact: true,
     })

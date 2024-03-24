@@ -26,6 +26,8 @@ const Link = styled.a`
 export const Footer = () => {
     const { t } = useTranslation()
 
+    const year = new Date().getFullYear()
+
     return (
         <>
             <Wrapper>
@@ -41,7 +43,7 @@ export const Footer = () => {
                             </Box>
                         </Grid>
                         <Grid item xs={6} sm={2}>
-                            <Link href="/about">{t('footer.about')}</Link>
+                            <a href="#about">{t('footer.about')}</a>
                         </Grid>
                         <Grid item xs={6} sm={2}>
                             <Link
@@ -51,7 +53,7 @@ export const Footer = () => {
                             </Link>
                         </Grid>
                         <Grid item xs={6} sm={2}>
-                            <Link href="/src/root/Contact">{t('footer.contact')}</Link>
+                            <a href="#contact">{t('footer.contact')}</a>
                         </Grid>
                     </Grid>
                 </InnerWrapper>
@@ -60,7 +62,7 @@ export const Footer = () => {
                 <InnerWrapper>
                     <Grid container>
                         <Grid item xs={12} sm={8}>
-                            © 2021 OpenFeedback
+                            © 2021-{year} OpenFeedback
                         </Grid>
                         <Grid
                             item

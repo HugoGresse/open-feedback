@@ -1,9 +1,10 @@
-import { Box, makeStyles } from '@mui/material'
+import { Box} from '@mui/material'
 import React from 'react'
 import Typography from '@mui/material/Typography'
 import { Trans, useTranslation } from 'react-i18next'
 import NavLinkMui from '../project/layout/NavLinkMui.jsx'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles((theme) => ({
     quatrecentquatre: {

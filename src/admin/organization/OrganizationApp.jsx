@@ -4,7 +4,7 @@ import { OrganizationLayout } from './layout/OrganizationLayout.jsx'
 import { createTheme, ThemeProvider, StyledEngineProvider, adaptV4Theme } from '@mui/material';
 import { useDispatch } from 'react-redux'
 import { getOrganizations } from './core/actions/getOrganizations'
-import { Redirect, Route, Switch } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { OrganizationUsers } from './users/OrganizationUsers.jsx'
 import { OrganizationTheme } from './theme/OrganizationTheme.jsx'
 import { OrganizationVotingForm } from './votingForm/OrganizationVotingForm.jsx'
@@ -32,7 +32,7 @@ export const OrganizationApp = ({ match, onClose }) => {
             <ThemeProvider theme={createOrganizationTheme}>
                 <Organization match={match} key={match.params.organizationId}>
                     <OrganizationLayout onClose={onClose} baseUrl={url}>
-                        <Switch>
+                        <Routes>
                             <Route
                                 exacte
                                 path={`${path}/users`}
@@ -48,9 +48,12 @@ export const OrganizationApp = ({ match, onClose }) => {
                                 path={`${path}/votingForm`}
                                 component={OrganizationVotingForm}
                             />
-
-                            <Redirect from={path} to={`${path}/users`} />
-                        </Switch>
+                            <Route
+                                exacte
+                                path={path}
+                                render={() => <Navigate to={`${path}/users`} />}
+                            />
+                        </Routes>
                     </OrganizationLayout>
                 </Organization>
             </ThemeProvider>

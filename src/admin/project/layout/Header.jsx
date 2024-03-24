@@ -18,7 +18,7 @@ import {
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import RoutingMap from '../../RoutingMap'
-import { withRouter, useNavigate} from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import Hidden from '@mui/material/Hidden'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -83,7 +83,8 @@ const useStyles = makeStyles({
     },
 })
 
-const Header = ({ refTarget, location, toggleDrawer }) => {
+const Header = ({ refTarget, toggleDrawer }) => {
+    const location = useLocation()
     const dispatch = useDispatch()
     const selectedProjectId = useSelector(getSelectedProjectIdSelector)
     const selectedProject = useSelector(getSelectedProjectSelector)
@@ -280,4 +281,4 @@ const Header = ({ refTarget, location, toggleDrawer }) => {
     </>;
 }
 
-export default withRouter(Header)
+export default Header

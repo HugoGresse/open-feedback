@@ -29,43 +29,43 @@
         "prepare": "husky install"
     },
     "devDependencies": {
+        "@firebase/testing": "^0.20.11",
+        "@storybook/addon-docs": "^8.0.4",
+        "@storybook/addons": "^7.6.17",
+        "@storybook/react": "^8.0.4",
         "@types/react": "^18.2.66",
         "@types/react-dom": "^18.2.22",
         "@typescript-eslint/eslint-plugin": "^7.2.0",
         "@typescript-eslint/parser": "^7.2.0",
         "@vitejs/plugin-react": "^4.2.1",
-        "eslint": "^8.57.0",
-        "eslint-plugin-react-hooks": "^4.6.0",
-        "eslint-plugin-react-refresh": "^0.4.6",
-        "typescript": "^5.2.2",
-        "vite": "^5.2.0",
-        "@firebase/testing": "^0.20.11",
-        "@storybook/addon-docs": "^8.0.4",
-        "@storybook/addons": "^7.6.17",
-        "@storybook/react": "^8.0.4",
         "axe-core": "^4.3.2",
         "cypress": "13.7.1",
         "cypress-axe": "^1.5.0",
+        "eslint": "^8.57.0",
         "eslint-plugin-cypress": "^2.15.1",
         "eslint-plugin-i18n-json": "^4.0.0",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-react-refresh": "^0.4.6",
         "firebase-tools": "^9.13.1",
         "husky": "^5.1.3",
         "jest-fetch-mock": "^3.0.3",
         "lint-staged": "^10.5.4",
-        "prettier": "^3.2.5"
+        "prettier": "^3.2.5",
+        "typescript": "^5.2.2",
+        "vite": "^5.2.0"
     },
     "dependencies": {
-        "@date-io/luxon": "^3.0.0",
         "@emotion/styled": "^11.11.0",
+        "@mdi/js": "^7.3.67",
+        "@mdi/react": "^1.6.1",
+        "@mui/icons-material": "^5.15.14",
         "@mui/lab": "5.0.0-alpha.168",
         "@mui/material": "^5.15.14",
         "@mui/styles": "^5.15.14",
-        "@mui/icons-material": "^5.15.14",
         "@mui/x-data-grid": "^6.19.6",
-        "@mui/x-date-pickers": "^6.19.7",
-        "@mdi/js": "^7.3.67",
-        "@mdi/react": "^1.6.1",
-        "@nivo/api": "0.74.1",
+        "@mui/x-date-pickers": "^6.19.8",
+        "@nivo/core": "^0.85.1",
+        "@nivo/line": "^0.85.1",
         "clipboard-copy": "^4.0.1",
         "env-cmd": "^10.1.0",
         "file-saver": "^2.0.5",
@@ -99,6 +99,11 @@
         "styled-system": "^5.1.5",
         "wait-on": "^7.2.0",
         "yup": "^0.32.9"
+    },
+    "overrides": {
+        "@mui/styles": {
+            "react": "react"
+        }
     },
     "eslintIgnore": [
         "*.ts"

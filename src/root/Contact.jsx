@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react'
 import InnerWrapper from './component/InnerWrapper.jsx'
-import ScrollableAnchor from 'react-scrollable-anchor'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { Button, CircularProgress, TextField } from '@mui/material'
@@ -96,11 +95,9 @@ export const Contact = () => {
             bgcolor="#eee"
             flexGrow="1"
             textAlign="center">
-            <ScrollableAnchor id="contact">
-                <Typography variant="h2" style={{ marginTop: 16 }}>
-                    {t('contact.title')}
-                </Typography>
-            </ScrollableAnchor>
+            <Typography variant="h2" id="contact" style={{ marginTop: 16 }}>
+                {t('contact.title')}
+            </Typography>
 
             <InnerWrapper>
                 <form onSubmit={submit} ref={formRef}>

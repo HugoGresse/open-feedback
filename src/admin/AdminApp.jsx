@@ -3,7 +3,7 @@ import { I18nextProvider } from 'react-i18next'
 import i18n from './translations/i18n'
 import { setFavicon } from '../utils/dom'
 import Login from './auth/Login.jsx'
-import { Redirect, Route, Switch, useParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import AdminRoot from './root/AdminRoot.jsx'
 import Notifications from './notification/Notifications.jsx'
 import {
@@ -68,8 +68,14 @@ export const AdminApp = () => {
                 <Login>
                     <StyledEngineProvider injectFirst>
                         <ThemeProvider theme={innerTheme}>
-                            <Switch>
-                                <Redirect exact from="/admin/event/" to="/admin/" />
+                            <Routes>
+                                <Route
+                                    exact
+                                    path="/admin/event/"
+                                    render={(props) => (
+                                        <Navigate to="/admin/"/>
+                                    )}
+                                />
 
                                 <Route
                                     path="/admin/event/:projectId"
@@ -80,15 +86,16 @@ export const AdminApp = () => {
                                         />
                                     )}
                                 />
-                                {/* v0.23 migration when organization is introduced*/}
-                                <Redirect
+                                <Route
                                     exact
-                                    from="/admin/:projectId"
-                                    to="/admin/event/:projectId"
+                                    path="/admin/:projectId/"
+                                    render={(props) => (
+                                        <Navigate to="/admin/event/:projectId"/>
+                                    )}
                                 />
 
                                 <Route path="/admin/" component={AdminRoot} />
-                            </Switch>
+                            </Routes>
                             <SlidingOrganizationApp />
 
                             <Notifications />

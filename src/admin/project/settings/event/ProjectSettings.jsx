@@ -5,8 +5,8 @@ import CardContent from '@mui/material/CardContent'
 import { getSelectedProjectSelector } from '../../core/projectSelectors'
 import LoaderMatchParent from '../../../../baseComponents/customComponent/LoaderMatchParent.jsx'
 import ProjectSettingsForm from './ProjectSettingsForm.jsx'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import LuxonUtils from '@date-io/luxon'
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
 
 const ProjectSettings = () => {
     const project = useSelector(getSelectedProjectSelector)
@@ -18,11 +18,10 @@ const ProjectSettings = () => {
     return (
         <OFCard>
             <CardContent>
-                <MuiPickersUtilsProvider
-                    utils={LuxonUtils}
-                    locale={navigator.language || navigator.userLanguage}>
+                <LocalizationProvider
+                    dateAdapter={AdapterLuxon}>
                     <ProjectSettingsForm project={project} />
-                </MuiPickersUtilsProvider>
+                </LocalizationProvider>
             </CardContent>
         </OFCard>
     )

@@ -4,14 +4,14 @@ import { object, string, array } from 'yup'
 import SidePanelLayout from '../../baseComponents/layouts/sidepanel/SidePanelLayout.jsx'
 import OFButton from '../../baseComponents/button/OFButton.jsx'
 import OFFormControl from '../../baseComponents/form/formControl/OFFormControl.jsx'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import LuxonUtils from '@date-io/luxon'
 import OFAutoComplete from '../../baseComponents/form/autoComplete/OFAutoComplete.jsx'
 import OFFormControlInputFormiked from '../../baseComponents/form/formControl/OFFormControlInputFormiked.jsx'
 import SpeakerAddEditPanel from '../speakers/SpeakerAddEditPanel.jsx'
 import { useTranslation } from 'react-i18next'
 import { DateTime } from 'luxon'
 import TalkStartEndTimeFields from './TalkStartEndTimeFields.jsx'
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
+import { LocalizationProvider } from '@mui/x-date-pickers'
 
 const TalkAddEditPanel = ({
     isOpen,
@@ -34,9 +34,7 @@ const TalkAddEditPanel = ({
                 isOpen={isOpen}
                 onClose={onClose}
                 title={talk ? t('talks.titleEdit') : t('talks.titleAdd')}>
-                <MuiPickersUtilsProvider
-                    utils={LuxonUtils}
-                    locale={navigator.language || navigator.userLanguage}>
+                <LocalizationProvider dateAdapter={AdapterLuxon}>
                     <Formik
                         validationSchema={object().shape({
                             title: string()
@@ -189,7 +187,7 @@ const TalkAddEditPanel = ({
                             </Form>
                         )}
                     </Formik>
-                </MuiPickersUtilsProvider>
+                </LocalizationProvider>
             </SidePanelLayout>
         </>
     )

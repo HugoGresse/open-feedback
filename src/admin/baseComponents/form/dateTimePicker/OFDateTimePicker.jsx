@@ -1,7 +1,7 @@
 import React from 'react'
-import { DateTimePicker } from '@material-ui/pickers'
 import OFInputForDateTimePicker from './OFInputForDateTimePicker.jsx'
 import { useTranslation } from 'react-i18next'
+import { DateTimePicker } from '@mui/x-date-pickers'
 
 const OFDateTimePicker = ({
     field,

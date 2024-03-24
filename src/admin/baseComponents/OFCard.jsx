@@ -1,6 +1,7 @@
 import React from 'react'
 import { alpha, darken, lighten } from '@mui/material/styles';
-import { Card, makeStyles } from '@mui/material'
+import { Card } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles((theme) => ({
     root: {

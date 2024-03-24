@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useRouteMatch } from 'react-router-dom'
+import { useMatch, useNavigate } from 'react-router-dom'
 import { Backdrop, Modal, Slide } from '@mui/material'
 import { OrganizationApp } from './OrganizationApp.jsx'
 import { makeStyles } from '@mui/styles'
@@ -32,7 +32,7 @@ export const SlidingOrganizationApp = React.forwardRef(function (props, ref) {
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const [isClosing, setClosing] = useState(false)
-    const match = useRouteMatch({
+    const match = useMatch({
         path: '/admin/org/:organizationId',
     })
     const mounted = React.useRef(false)

@@ -4,7 +4,6 @@ import { COLORS } from '../constants/colors'
 import InnerWrapper from './component/InnerWrapper.jsx'
 import { Trans, useTranslation } from 'react-i18next'
 import Box from '@mui/material/Box'
-import ScrollableAnchor from 'react-scrollable-anchor'
 import Typography from '@mui/material/Typography'
 
 const List = styled.ul`
@@ -58,13 +57,12 @@ const FAQ = () => {
                 alignItems="center"
                 flexGrow="1"
                 textAlign="center">
-                <ScrollableAnchor id={'faq'}>
-                    <Typography
-                        variant="h2"
-                        style={{ marginTop: 16, marginBottom: 32 }}>
-                        FAQ
-                    </Typography>
-                </ScrollableAnchor>
+                <Typography
+                    variant="h2"
+                    id={'faq'}
+                    style={{ marginTop: 16, marginBottom: 32 }}>
+                    FAQ
+                </Typography>
 
                 <List>
                     <li>
