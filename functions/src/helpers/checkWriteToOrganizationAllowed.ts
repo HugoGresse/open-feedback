@@ -1,8 +1,8 @@
 import * as functions from 'firebase-functions'
-import { CallableContext } from 'firebase-functions/lib/providers/https'
 import { assertUserAuthenticated } from './assertUserAuthenticated'
 import { getOrganization } from './getOrganization'
 import { isOrganizationWriteAllowed } from './isOrganizationWriteAllowed'
+import { CallableContext } from 'firebase-functions/lib/common/providers/https'
 
 export const checkWriteToOrganizationAllowed = async (
     context: CallableContext,
