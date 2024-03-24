@@ -18,8 +18,9 @@ const SettingsForm = lazy(() => import('./SettingsForm.jsx'))
 const Setup = () => {
     const dispatch = useDispatch()
     const project = useSelector(getSelectedProjectSelector)
+    const store = useStore()
     // Doing this prevent the selector to be connected to redux directly, thus prevent future update of initialValues
-    const initialLanguages = getLanguagesSelector(useStore().getState())
+    const initialLanguages = getLanguagesSelector(store.getState())
 
     return (
         <>

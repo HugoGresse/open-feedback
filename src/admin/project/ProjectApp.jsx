@@ -6,7 +6,7 @@ import VotingForm from './settings/votingForm/VotingForm.jsx'
 import Setup from './settings/setup/Setup.jsx'
 import Project from './Project.jsx'
 import React, { useEffect } from 'react'
-import { Navigate, Route, Routes, useMatch } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import ProjectSettings from './settings/event/ProjectSettings.jsx'
 import ProjectLayout from './layout/ProjectLayout.jsx'
 import { useDispatch } from 'react-redux'
@@ -16,7 +16,7 @@ import ProjectUsers from './settings/users/ProjectUsers.jsx'
 import { getProject } from './core/actions/getProject'
 
 const ProjectApp = () => {
-    const match = useMatch("/admin/event/:projectId")
+    const params = useParams()
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -24,62 +24,60 @@ const ProjectApp = () => {
     }, [dispatch])
 
     return (
-        <Project match={match} key={match.params.projectId}>
+        <Project urlProjectId={params.projectId} key={params.projectId}>
             <ProjectLayout baseUrl={ROUTE_EVENT_BASE}>
                 <Routes>
-
                     <Route
                         exact
-                        path={`${match.url}`}
-                        render={(props) => <Navigate
-                            to={`${match.url}${RoutingMap.dashboard.url}`}
+                        path="/"
+                        element={<Navigate
+                            to={RoutingMap.dashboard.url}
                         />}
                     />
 
-
                     <Route
                         exact
-                        path={`${match.url}${RoutingMap.dashboard.url}`}
-                        render={(props) => <ProjectDashboard {...props} />}
+                        path={RoutingMap.dashboard.url}
+                        element={<ProjectDashboard/>}
                     />
                     <Route
                         exact
-                        path={`${match.url}${RoutingMap.talks.url}`}
-                        render={(props) => <Talks {...props} />}
+                        path={RoutingMap.talks.url}
+                        element={<Talks/>}
                     />
                     <Route
                         exact
-                        path={`${match.url}${RoutingMap.speakers.url}`}
-                        render={(props) => <Speakers {...props} />}
+                        path={RoutingMap.speakers.url}
+                        element={<Speakers/>}
                     />
                     <Route
                         exact
-                        path={`${match.url}${RoutingMap.moderation.url}`}
-                        render={(props) => <Moderation {...props} />}
-                    />
-
-                    <Route
-                        exact
-                        path={`${match.url}${RoutingMap.settingEvent.url}`}
-                        render={(props) => <ProjectSettings {...props} />}
+                        path={RoutingMap.moderation.url}
+                        element={<Moderation/>}
                     />
 
                     <Route
                         exact
-                        path={`${match.url}${RoutingMap.settingVotingform.url}`}
-                        render={(props) => <VotingForm {...props} />}
+                        path={RoutingMap.settingEvent.url}
+                        element={<ProjectSettings/>}
                     />
 
                     <Route
                         exact
-                        path={`${match.url}${RoutingMap.settingSetup.url}`}
-                        render={(props) => <Setup {...props} />}
+                        path={RoutingMap.settingVotingform.url}
+                        element={<VotingForm/>}
                     />
 
                     <Route
                         exact
-                        path={`${match.url}${RoutingMap.settingUsers.url}`}
-                        render={(props) => <ProjectUsers {...props} />}
+                        path={RoutingMap.settingSetup.url}
+                        element={<Setup/>}
+                    />
+
+                    <Route
+                        exact
+                        path={RoutingMap.settingUsers.url}
+                        element={<ProjectUsers/>}
                     />
 
                     <Route component={Layout404} />

@@ -12,12 +12,14 @@ import {
     StyledEngineProvider,
     responsiveFontSizes,
     adaptV4Theme,
-} from '@mui/material';
+} from '@mui/material'
 import ProjectApp from './project/ProjectApp.jsx'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { useSmallchat } from './project/utils/smallchat'
 import { COLORS } from '../constants/colors'
 import { SlidingOrganizationApp } from './organization/SlidingOrganizationApp.jsx'
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
+import { LocalizationProvider } from '@mui/x-date-pickers'
 
 const innerTheme = responsiveFontSizes(
     createTheme(adaptV4Theme({
@@ -47,7 +49,7 @@ const innerTheme = responsiveFontSizes(
                 fontSize: 28,
             },
         },
-    }))
+    })),
 )
 
 export const AdminApp = () => {
@@ -68,34 +70,36 @@ export const AdminApp = () => {
                 <Login>
                     <StyledEngineProvider injectFirst>
                         <ThemeProvider theme={innerTheme}>
-                            <Routes>
-                                <Route
-                                    exact
-                                    path="/event/"
-                                    element={<Navigate to="/admin/"/>}
-                                />
+                            <LocalizationProvider dateAdapter={AdapterLuxon}>
+                                <Routes>
+                                    <Route
+                                        exact
+                                        path="/event/"
+                                        element={<Navigate to="/admin/" />}
+                                    />
 
-                                <Route
-                                    path="/event/:projectId"
-                                    element={<ProjectApp
+                                    <Route
+                                        path="/event/:projectId/*"
+                                        element={<ProjectApp
                                             key={projectId}
                                         />}
-                                />
-                                <Route
-                                    exact
-                                    path="/:projectId/"
-                                    element={ <Navigate to="/admin/event/:projectId"/>}
-                                />
+                                    />
+                                    <Route
+                                        exact
+                                        path="/:projectId/"
+                                        element={<Navigate to="/admin/event/:projectId" />}
+                                    />
 
-                                <Route path="/" element={<AdminRoot/>} />
-                            </Routes>
-                            <SlidingOrganizationApp />
+                                    <Route path="/" element={<AdminRoot />} />
+                                </Routes>
+                                <SlidingOrganizationApp />
 
-                            <Notifications />
+                                <Notifications />
+                            </LocalizationProvider>
                         </ThemeProvider>
                     </StyledEngineProvider>
                 </Login>
             </HelmetProvider>
         </I18nextProvider>
-    );
+    )
 }

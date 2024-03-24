@@ -12,21 +12,21 @@ import {
     unselectProject,
 } from './core/actions/selectUnselectProject'
 
-const Project = ({ children, match }) => {
+const Project = ({ children, urlProjectId }) => {
     const dispatch = useDispatch()
     const projectId = useSelector(getSelectedProjectIdSelector)
 
     useEffect(() => {
-        dispatch(selectProject(match.params.projectId))
+        dispatch(selectProject(urlProjectId))
         return () => {
             dispatch(unselectProject(null))
         }
-    }, [dispatch, match.params.projectId])
+    }, [dispatch, urlProjectId])
 
     const selectedProject = useSelector(getSelectedProjectSelector)
     const isProjectsLoaded = useSelector(isProjectsLoadedSelector)
 
-    if (match.params.projectId !== projectId) {
+    if (urlProjectId !== projectId) {
         // As the Project key is changing from the url, there is a time where the children are rerendered uselssly
         // causing action to be rerendered. This help synchronizing the url and the redux state on project switch.
         return <LoaderMatchParent />
