@@ -1,10 +1,10 @@
-import OFInput from './OFInput'
+import OFInput from './OFInput.jsx'
 import React from 'react'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
+import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
+import CloseIcon from '@mui/icons-material/Close'
 import { Formik } from 'formik'
-import OFFormControlInputFormiked from '../formControl/OFFormControlInputFormiked'
+import OFFormControlInputFormiked from '../formControl/OFFormControlInputFormiked.jsx'
 
 export default {
     component: OFInput,
@@ -20,7 +20,8 @@ export const withFormControl = () => (
         initialValues={{
             name: '',
             nameDisabled: 'some value',
-        }}>
+        }}
+    >
         <div>
             <OFFormControlInputFormiked
                 name="This is a simple input"
@@ -70,7 +71,7 @@ export const endAdornment = () => (
         value="some value"
         endAdornment={
             <InputAdornment position="end">
-                <IconButton aria-label="Remove current search">
+                <IconButton aria-label="Remove current search" size="large">
                     <CloseIcon />
                 </IconButton>
             </InputAdornment>

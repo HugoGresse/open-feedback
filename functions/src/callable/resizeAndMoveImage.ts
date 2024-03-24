@@ -6,9 +6,9 @@ import { checkWriteToProjectAllowed } from '../helpers/checkWriteToProjectAllowe
 import stream from 'stream'
 import imageminPngquant from 'imagemin-pngquant'
 import imageminJpegtran from 'imagemin-jpegtran'
-import { HttpsError } from 'firebase-functions/lib/providers/https'
 import { Bucket, File } from '@google-cloud/storage'
 import { checkWriteToOrganizationAllowed } from '../helpers/checkWriteToOrganizationAllowed'
+import { HttpsError } from 'firebase-functions/v1/https'
 
 /**
  * Upon calling this function with a given file path on GCP Storage, it will resize and move the image to
@@ -105,9 +105,8 @@ const resize = async (
     return await new Promise((resolve, reject) =>
         tempWritableStream
             .on('finish', async () => {
-                const transformedBuffer = await minimizeImageFromBufferArray(
-                    bufferData
-                )
+                const transformedBuffer =
+                    await minimizeImageFromBufferArray(bufferData)
                 await saveImage(transformedBuffer, outputFile, metadata)
                 await bucket.file(filePath).delete()
                 resolve([outputFile, newFileName])

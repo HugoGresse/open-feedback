@@ -1,6 +1,7 @@
 import { useScript } from '../../../utils/hooks/useScript'
 
-export const useSmallchat = () => useScript(process.env.REACT_APP_SMALL_CHAT)
+export const useSmallchat = () =>
+    useScript(import.meta.env.REACT_APP_SMALL_CHAT)
 
 export const getSmallChatTopButton = () => {
     const topButton = document.querySelector('#Smallchat')

@@ -1,8 +1,8 @@
-import OFFormControl from '../formControl/OFFormControl'
+import OFFormControl from '../formControl/OFFormControl.jsx'
 import React from 'react'
 import { Field, Formik } from 'formik'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import { OFSwitch } from './OFSwitch'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import { OFSwitch } from './OFSwitch.jsx'
 
 export default {
     component: OFSwitch,
@@ -13,7 +13,8 @@ export const defaultUsage = () => (
     <Formik
         initialValues={{
             restrictVoteRange: false,
-        }}>
+        }}
+    >
         <OFFormControl fieldName="restrictVoteRange">
             <FormControlLabel
                 label="Swich label"

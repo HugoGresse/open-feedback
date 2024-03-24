@@ -12,13 +12,14 @@ import {
     trackUserId,
 } from '../../utils/analytics/track'
 
-export const didSignIn = (user, error) => {
+export const didSignIn = (baseUser, error) => {
     return async (dispatch, getState) => {
         if (isLoggedSelector(getState()) && isUserValidSelector(getState())) {
             return
         }
 
-        if (user) {
+        if (baseUser) {
+            const user = baseUser.toJSON()
             if (user.isAnonymous) {
                 dispatch({
                     type: LOGIN_ERROR,
@@ -99,15 +100,15 @@ export const didSignIn = (user, error) => {
     }
 }
 
-export const signOut = (history) => (dispatch) => {
+export const signOut = (navigate) => (dispatch) => {
     authProvider.signOut().then(() => {
         dispatch({
             type: LOGOUT,
         })
-        if (history.location.pathname === '/admin/') {
+        if (window.location.pathname === '/admin/') {
             window.location.reload()
         } else {
-            history.replace('/admin/')
+            navigate.replace('/admin/')
         }
     })
 }

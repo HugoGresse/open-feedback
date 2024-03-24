@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import SimpleDialog from './SimpleDialog'
-import OFButton from '../button/OFButton'
+import SimpleDialog from './SimpleDialog.jsx'
+import OFButton from '../button/OFButton.jsx'
 
 export default {
     component: SimpleDialog,

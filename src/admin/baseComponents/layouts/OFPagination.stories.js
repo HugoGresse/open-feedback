@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import OFPagination from './OFPagination'
-import Typography from '@material-ui/core/Typography'
+import OFPagination from './OFPagination.jsx'
+import Typography from '@mui/material/Typography'
 
 export default {
     component: OFPagination,

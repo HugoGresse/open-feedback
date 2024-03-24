@@ -1,7 +1,6 @@
-import admin from 'firebase-admin'
+import admin, { firestore } from 'firebase-admin'
 import { arrayUnion, serverTimestamp } from '../../helpers/firebaseInit'
 import { OrganizationRole } from '../../types/OrganizationRoles'
-import { firestore } from 'firebase-admin/lib/firestore'
 import FieldValue = firestore.FieldValue
 import { InvitationType } from '../../types/InvitationType'
 

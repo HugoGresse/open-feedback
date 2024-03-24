@@ -1,4 +1,4 @@
-import OFTextArea from './OFTextArea'
+import OFTextArea from './OFTextArea.jsx'
 import React from 'react'
 
 export default {

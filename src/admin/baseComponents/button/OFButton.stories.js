@@ -1,4 +1,4 @@
-import OFButton from './OFButton'
+import OFButton from './OFButton.jsx'
 import React from 'react'
 
 export default {

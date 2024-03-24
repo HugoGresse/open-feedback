@@ -1,4 +1,4 @@
-import OFAutoComplete from './OFAutoComplete'
+import OFAutoComplete from './OFAutoComplete.jsx'
 import React, { useState } from 'react'
 
 const data = ['Web', 'Back', 'Cloud', 'UX', 'Design', 'Food', 'Biking']

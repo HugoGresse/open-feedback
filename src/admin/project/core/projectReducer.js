@@ -10,7 +10,7 @@ import {
     SELECT_PROJECT,
 } from './projectActionTypes'
 import { LOGOUT } from '../../auth/authActionTypes'
-import { SAVE_VOTEITEMS_SUCCESS } from '../settings/votingForm/votingFormActionTypes'
+import { SAVE_VOTEITEMS_SUCCESS } from '../settings/votingForm/votingFormActionTypes.jsx'
 
 const initState = {
     data: {

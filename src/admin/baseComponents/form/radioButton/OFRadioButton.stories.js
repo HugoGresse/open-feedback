@@ -1,7 +1,7 @@
-import OFRadioButton from './OFRadioButton'
+import OFRadioButton from './OFRadioButton.jsx'
 import React from 'react'
-import Typography from '@material-ui/core/Typography'
-import RadioButtonGroup from './RadioButtonGroup'
+import Typography from '@mui/material/Typography'
+import RadioButtonGroup from './RadioButtonGroup.jsx'
 import { Field, Formik } from 'formik'
 
 export default {
@@ -15,7 +15,8 @@ export const defaultUsage = () => (
     <Formik
         initialValues={{
             [name]: '',
-        }}>
+        }}
+    >
         <RadioButtonGroup fieldName={name}>
             <Field
                 component={OFRadioButton}

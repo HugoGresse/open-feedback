@@ -5,7 +5,7 @@ import { getOrganizationsSelector } from '../../organization/core/organizationSe
 import {
     PROJECT_USER_ROLE_MEMBER,
     PROJECT_USER_ROLE_OWNER,
-} from '../settings/users/ProjectUserRoles'
+} from '../settings/users/ProjectUserRoles.jsx'
 
 const getProjects = (state) => getAdminStateSelector(state).adminProject
 const getProjectsData = (state) => getProjects(state).data

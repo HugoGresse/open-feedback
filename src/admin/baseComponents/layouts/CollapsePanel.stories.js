@@ -1,5 +1,5 @@
 import React from 'react'
-import CollapsePanel from './CollapsePanel'
+import CollapsePanel from './CollapsePanel.jsx'
 
 export default {
     component: CollapsePanel,
