@@ -1,24 +1,44 @@
 /* eslint-disable no-console */
-// initialize firestore database
-import * as admin from 'firebase-admin'
-import firebase from 'firebase'
-import CollectionReference = firebase.firestore.CollectionReference
+import {
+    getFirestore,
+    CollectionReference,
+    DocumentData,
+} from 'firebase-admin/firestore'
 
-export const db = admin.firestore()
+export const db = getFirestore()
 
 type FirebaseId = string
 
 export const getProject = async (id: FirebaseId) => {
-    const doc = await db
-        .collection('projects')
-        .doc(id)
-        .get()
+    const doc = await db.collection('projects').doc(id).get()
     return { id: doc.id, ...doc.data() }
 }
 
 export const getAllProjects = async () => {
     const projects = await db.collection('projects').get()
-    return projects.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    return projects.docs.map((doc: DocumentData) => ({
+        id: doc.id,
+        ...doc.data(),
+    }))
+}
+
+export const getAllMatchingProjects = async (owner: string | null = null) => {
+    const collectionRef = db.collection('projects')
+
+    let query = null
+
+    if (owner) {
+        console.log('where owner', owner)
+        query = collectionRef.where('owner', '==', owner)
+    }
+
+    if (!query) {
+        throw new Error('No filters provided')
+    }
+
+    const projects = await query.get()
+    console.log(projects.size)
+    return projects.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
 }
 
 /**
@@ -61,7 +81,7 @@ export const updateDocuments = async (
     callback: (project: any) => {}
 ) => {
     const collectionSnapshot = await collectionReference.get()
-    const collectionData = collectionSnapshot.docs.map(doc => ({
+    const collectionData = collectionSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
         _path: doc.ref.path,
