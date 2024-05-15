@@ -29,12 +29,12 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const TalkListItem = ({
-    item,
-    speakers,
-    onEdit,
-    onRemove,
-    onSpeakerClicked,
-}) => {
+                          item,
+                          speakers,
+                          onEdit,
+                          onRemove,
+                          onSpeakerClicked,
+                      }) => {
     const classes = useStyles()
 
     return (
@@ -67,8 +67,8 @@ const TalkListItem = ({
                         icon={<CalendarIcon />}
                         size="small"
                         label={DateTime.fromISO(
-                            item.startTime
-                        ).toLocaleString()}
+                            item.startTime,
+                        ).toFormat("t, cccc d")}
                         style={{ marginBottom: item.startTime ? 5 : 0 }}
                         variant="outlined"
                     />
@@ -84,7 +84,7 @@ const TalkListItem = ({
                 </IconButton>
             </Grid>
         </OFListItem>
-    );
+    )
 }
 
 export default TalkListItem

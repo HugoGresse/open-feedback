@@ -19,6 +19,7 @@ import { COLORS } from '../constants/colors'
 import { SlidingOrganizationApp } from './organization/SlidingOrganizationApp.jsx'
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
 import { LocalizationProvider } from '@mui/x-date-pickers'
+import { DateTime } from 'luxon'
 
 const innerTheme = responsiveFontSizes(
     createTheme({
@@ -69,7 +70,7 @@ export const AdminApp = () => {
                 <Login>
                     <StyledEngineProvider injectFirst>
                         <ThemeProvider theme={innerTheme}>
-                            <LocalizationProvider dateAdapter={AdapterLuxon}>
+                            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={DateTime.now().resolvedLocaleOptions().locale}>
                                 <Routes>
                                     <Route
                                         exact

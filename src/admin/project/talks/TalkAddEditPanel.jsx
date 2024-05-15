@@ -34,7 +34,7 @@ const TalkAddEditPanel = ({
                 isOpen={isOpen}
                 onClose={onClose}
                 title={talk ? t('talks.titleEdit') : t('talks.titleAdd')}>
-                <LocalizationProvider dateAdapter={AdapterLuxon}>
+                <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={DateTime.now().resolvedLocaleOptions().locale}>
                     <Formik
                         validationSchema={object().shape({
                             title: string()

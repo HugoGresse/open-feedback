@@ -65,6 +65,8 @@ const TalkList = () => {
         if (talkNotReadableCheck()) return
         setEditTalk({
             ...talk,
+            startTime: DateTime.fromISO(talk.startTime),
+            endTime: DateTime.fromISO(talk.endTime),
             speakers: talk
                 ? talk.speakers.map((id) =>
                       speakersMap[id] ? speakersMap[id] : { id: id, name: id }

@@ -3,6 +3,7 @@ import OFFormControl from '../../baseComponents/form/formControl/OFFormControl.j
 import { Field, useField } from 'formik'
 import OFDateTimePicker from '../../baseComponents/form/dateTimePicker/OFDateTimePicker.jsx'
 import { useTranslation } from 'react-i18next'
+import { DateTime } from 'luxon'
 
 const startTimeFieldName = 'startTime'
 const endTimeFieldName = 'endTime'
@@ -37,7 +38,7 @@ const TalkStartEndTimeFields = ({ defaultValue }) => {
                 fieldName={startTimeFieldName}>
                 <Field
                     name={startTimeFieldName}
-                    format="FFF"
+                    format="t, cccc d"
                     initialFocusedDate={defaultValue}
                     component={OFDateTimePicker}
                 />
@@ -48,7 +49,7 @@ const TalkStartEndTimeFields = ({ defaultValue }) => {
                 fieldName={endTimeFieldName}>
                 <Field
                     name={endTimeFieldName}
-                    format="FFF"
+                    format="t, cccc d"
                     component={OFDateTimePicker}
                 />
             </OFFormControl>
