@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
-    - name: Setup Node 14
-      uses: actions/setup-node@v2
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
-        node-version: '14'
+          node-version-file: .nvmrc
+          cache: 'npm'
     - name: "Create .runtimeconfig.json"
       run: 'echo "$RUNTIME_CONFIG_TEST" > functions/.runtimeconfig.json'
       shell: bash
@@ -34,16 +34,16 @@ jobs:
         wait-on: 'http://localhost:3000, http://localhost:8080, http://localhost:9099'
         record: true
       env:
-        CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_DASHBOARD_KEY }}
         VITE_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
         VITE_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
         VITE_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
         VITE_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
         VITE_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
+        VITE_EMULATORS: true
+        EMULATORS_NAMES: "firestore,auth,functions"
+        CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_DASHBOARD_KEY }}
         CYPRESS_VITE_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
         CYPRESS_VITE_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
         CYPRESS_VITE_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
         CYPRESS_VITE_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
         CYPRESS_VITE_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
-        VITE_EMULATORS: true
-        EMULATORS_NAMES: "firestore,auth,functions"
