@@ -56,6 +56,10 @@ const FeedbackApp = () => {
                             default: prefersDarkMode ? '#303030' : '#fafafa',
                             paper: prefersDarkMode ? '#595959' : '#EDEDED',
                         },
+                        text: {
+                            primary: prefersDarkMode ? grey[50] : grey[900],
+                            secondary: prefersDarkMode ? "rgba(255, 255, 255, 0.7)" : grey[600],
+                        },
                         mode: prefersDarkMode ? 'dark' : 'light',
                         pageBackground: prefersDarkMode ? '#303030' : '#fff',
                         headerShadow: prefersDarkMode ? '#000' : '#B3B3B3',

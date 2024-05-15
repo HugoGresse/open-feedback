@@ -51,9 +51,9 @@ export const Talk = () => {
     const talk = useSelector(getSelectedTalkSelector)
     const speakers = useSelector(getSpeakersForSelectedTalkSelector)
     const voteItems = useSelector(getProjectVoteItemsOrderedSelector)
-    const userVotes = useSelector(getActiveUserVotesByTalkAndVoteItemSelector)
+    const userVotes = useSelector(state => getActiveUserVotesByTalkAndVoteItemSelector(state, talkId))
     const voteResults = useSelector((state) =>
-        getVoteResultSelectorSelector(state, displayVotes)
+        getVoteResultSelectorSelector(state, displayVotes),
     )
     const errorTalkLoad = useSelector(getTalkLoadErrorSelector)
     const errorVotePost = useSelector(getErrorVotePostSelector)
