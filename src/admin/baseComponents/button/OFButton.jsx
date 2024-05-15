@@ -1,70 +1,54 @@
 import React from 'react'
 import { COLORS } from '../../../constants/colors'
 import Button from '@mui/material/Button'
-import { darken, alpha, lighten } from '@mui/material/styles';
+import { darken, alpha, lighten } from '@mui/material/styles'
 import CircularProgress from '@mui/material/CircularProgress'
-import { makeStyles } from '@mui/styles'
 import { useTheme } from '@mui/material'
 
-const useStyles = makeStyles(() => {
-    return ({
-        root: {
-            background: ({ theme, ...props }) =>
-                props.design === 'text'
-                    ? 'none'
-                    : props.customBg
-                        ? props.customBg
-                        : theme.palette[props.color].main,
-            color: ({ theme, ...props }) =>
-                props.customText
-                    ? props.customText
-                    : props.design === 'text'
-                        ? theme.primaryText
-                        : COLORS.WHITE,
-            padding: ({ theme, ...props }) =>
-                props.type === 'big'
-                    ? '12px 32px'
-                    : props.type === 'small'
-                        ? '3px 4px'
-                        : '6px 8px',
-            '&:hover': {
-                background: ({ theme, ...props }) =>
-                    props.design === 'text'
-                        ? lighten(alpha(theme.palette[props.color].dark, 1), 0.8)
-                        : props.customBg
-                            ? darken(props.customBg, 0.2)
-                            : theme.palette[props.color].dark,
-            },
-            '&:disabled': {
-                color: ({ theme, ...props }) => theme.palette[props.color].dark,
-            },
-        },
-        loading: {
-            color: 'white',
-            marginLeft: 10,
-        },
-    })
-})
-
-const OFButton = ({ children, loading, color, style, ...otherProps }) => {
+const OFButton = ({ children, loading, color = 'primary', style = {}, ...otherProps }) => {
     const theme = useTheme()
-    const classes = useStyles({
-        color: color || 'primary',
-        ...style,
-        theme: theme
-    })
 
     return (
         <Button
             style={style}
             {...otherProps}
-            classes={{
-                root: classes.root,
+            sx={{
+                background:
+                    style.design === 'text'
+                        ? 'none'
+                        : style.customBg
+                            ? style.customBg
+                            : theme.palette[color].main,
+                color:
+                    style.customText
+                        ? style.customText
+                        : style.design === 'text'
+                            ? theme.palette.text.primary
+                            : COLORS.WHITE,
+                padding:
+                    style.type === 'big'
+                        ? '12px 32px'
+                        : style.type === 'small'
+                            ? '3px 4px'
+                            : '6px 8px',
+                ':hover': {
+                    background: style.design === 'text'
+                        ? lighten(alpha(theme.palette[color].dark, 1), 0.8)
+                        : style.customBg
+                            ? darken(style.customBg, 0.2)
+                            : theme.palette[color].dark,
+                },
+                ':disabled': {
+                    color: theme.palette[color].dark,
+                },
             }}
         >
             {children}
             {loading && (
-                <CircularProgress className={classes.loading} size={20} />
+                <CircularProgress size={20} sx={{
+                    color: 'white',
+                    marginLeft: 10,
+                }}/>
             )}
         </Button>
     )

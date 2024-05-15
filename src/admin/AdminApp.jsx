@@ -11,7 +11,6 @@ import {
     ThemeProvider,
     StyledEngineProvider,
     responsiveFontSizes,
-    adaptV4Theme,
 } from '@mui/material'
 import ProjectApp from './project/ProjectApp.jsx'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
@@ -22,7 +21,7 @@ import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 
 const innerTheme = responsiveFontSizes(
-    createTheme(adaptV4Theme({
+    createTheme({
         palette: {
             mode: 'light',
             primary: {
@@ -49,7 +48,7 @@ const innerTheme = responsiveFontSizes(
                 fontSize: 28,
             },
         },
-    })),
+    })
 )
 
 export const AdminApp = () => {
@@ -91,6 +90,7 @@ export const AdminApp = () => {
                                     />
 
                                     <Route path="/" element={<AdminRoot />} />
+                                    <Route path="*" element={<AdminRoot />} />
                                 </Routes>
                                 <SlidingOrganizationApp />
 

@@ -5,7 +5,7 @@ export const redirectToProject = (currentProjectId, newProjectId, navigate) => {
         return
     }
 
-    // If we have switch the project at runtime
+    // If we have to switch the project at runtime
     if (
         currentProjectId &&
         window.location.pathname.includes(currentProjectId)

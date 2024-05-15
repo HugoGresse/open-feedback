@@ -43,7 +43,7 @@ const useStyles = makeStyles({
 const NewProject = ({ organizationId, onCancel }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
-    const navigate = useNavigate
+    const navigate = useNavigate()
     const { t } = useTranslation()
 
     const projectIdDefaultValue = getNewProjectId()
@@ -75,7 +75,7 @@ const NewProject = ({ organizationId, onCancel }) => {
                 if (!useOrganizationSettings) {
                     await dispatch(fillDefaultVotingForm(t))
                     await dispatch(saveVoteItems(true))
-                    // The votes was saved in db but the query to retrieve does not returns them if queried directly after (sometimes)
+                    // The votes were saved in db but the query to retrieve does not return them if queried directly after (sometimes)
                     await sleep(1000)
                 }
                 await dispatch(getProject())

@@ -150,7 +150,12 @@ const SidePanelUploadLayout = ({
                     setOpen(false)
                 }}
                 title={title}
-                containerProps={getRootProps()}>
+                containerProps={{
+                    ...getRootProps(),
+                    sx: {
+                        zIndex: 1300,
+                    },
+                }}>
                 <SidePanelUploadForm
                     fieldName={fieldName}
                     fieldValue={field.value}

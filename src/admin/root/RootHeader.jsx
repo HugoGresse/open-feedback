@@ -48,12 +48,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const RootHeader = () => {
+export const RootHeader = () => {
     const navigate =useNavigate()
     const dispatch = useDispatch()
     const classes = useStyles()
 
     const user = useSelector(getUserSelector)
+
+    const displayedUserName = user.displayName || (user.email.split('@') || [""])[0]
 
     return (
         <header className={classes.container}>
@@ -66,9 +68,9 @@ const RootHeader = () => {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.right}>
-                    {user.photoURL && <Avatar alt="user" src={user.photoURL} />}
+                    <Avatar alt={displayedUserName} src={user.photoURL} />
                     <Typography className={classes.user}>
-                        {user.displayName}
+                        {displayedUserName}
                     </Typography>
                     <IconButton
                         edge="end"
@@ -83,5 +85,3 @@ const RootHeader = () => {
         </header>
     );
 }
-
-export default RootHeader

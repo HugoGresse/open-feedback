@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Organization } from './Organization.jsx'
 import { OrganizationLayout } from './layout/OrganizationLayout.jsx'
-import { createTheme, ThemeProvider, StyledEngineProvider, adaptV4Theme } from '@mui/material';
+import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material';
 import { useDispatch } from 'react-redux'
 import { getOrganizations } from './core/actions/getOrganizations'
 import { Navigate, Route, Routes } from 'react-router-dom'
@@ -10,48 +10,48 @@ import { OrganizationTheme } from './theme/OrganizationTheme.jsx'
 import { OrganizationVotingForm } from './votingForm/OrganizationVotingForm.jsx'
 
 const createOrganizationTheme = (parentTheme) =>
-    createTheme(adaptV4Theme({
+    createTheme({
         ...parentTheme,
         palette: {
             primary: {
                 ...parentTheme.palette.secondary,
             },
         },
-    }))
+    })
 
 export const OrganizationApp = ({ match, onClose }) => {
     const dispatch = useDispatch()
-    const { path, url } = match
+    const { pathname, pathnameBase } = match
 
     useEffect(() => {
         dispatch(getOrganizations())
     }, [dispatch])
 
+
+    const organizationId = match.params.organizationId
+    const baseUrl = `/org/${organizationId}`
+
     return (
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={createOrganizationTheme}>
-                <Organization match={match} key={match.params.organizationId}>
-                    <OrganizationLayout onClose={onClose} baseUrl={url}>
-                        <Routes>
+                <Organization match={match} key={organizationId}>
+                    <OrganizationLayout onClose={onClose} baseUrl={pathnameBase}>
+                        <Routes location={pathname}>
                             <Route
-                                exacte
-                                path={`${path}/users`}
-                                component={OrganizationUsers}
+                                path={`${baseUrl}/users`}
+                                element={<OrganizationUsers />}
                             />
                             <Route
-                                exacte
-                                path={`${path}/theme`}
-                                component={OrganizationTheme}
+                                path={`${baseUrl}/theme`}
+                                element={<OrganizationTheme />}
                             />
                             <Route
-                                exacte
-                                path={`${path}/votingForm`}
-                                component={OrganizationVotingForm}
+                                path={`${baseUrl}/votingForm`}
+                                element={<OrganizationVotingForm />}
                             />
                             <Route
-                                exacte
-                                path={path}
-                                render={() => <Navigate to={`${path}/users`} />}
+                                path={`${baseUrl}/`}
+                                element={<Navigate to={`${pathname}/users`} />}
                             />
                         </Routes>
                     </OrganizationLayout>

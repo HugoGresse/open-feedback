@@ -33,7 +33,7 @@ export const SlidingOrganizationApp = React.forwardRef(function (props, ref) {
     const [open, setOpen] = useState(false)
     const [isClosing, setClosing] = useState(false)
     const match = useMatch({
-        path: '/admin/org/:organizationId',
+        path: '/admin/org/:organizationId/*',
     })
     const mounted = React.useRef(false)
     React.useEffect(() => {
@@ -55,9 +55,13 @@ export const SlidingOrganizationApp = React.forwardRef(function (props, ref) {
         <Modal
             ref={ref}
             open={open}
-            BackdropComponent={Backdrop}
-            BackdropProps={{
-                timeout: 500,
+            slot={{
+                backdrop: Backdrop,
+            }}
+            slotProps={{
+                backdrop: {
+                    timeout: 500,
+                },
             }}
             onClose={close}
         >

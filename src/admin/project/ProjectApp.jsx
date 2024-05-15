@@ -31,7 +31,7 @@ const ProjectApp = () => {
                         exact
                         path="/"
                         element={<Navigate
-                            to={RoutingMap.dashboard.url}
+                            to={`${ROUTE_EVENT_BASE}/${params.projectId}${RoutingMap.dashboard.url}`}
                         />}
                     />
 

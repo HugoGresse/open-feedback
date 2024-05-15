@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const RootContentLayout = ({ isUserValid, children }) => {
+export const RootContentLayout = ({ isUserValid, children }) => {
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -26,5 +26,3 @@ const RootContentLayout = ({ isUserValid, children }) => {
         </Container>
     )
 }
-
-export default RootContentLayout

@@ -23,7 +23,13 @@ const UserInvitePanel = ({
         <SidePanelLayout
             title={t('users.add')}
             isOpen={isOpen}
-            onClose={onClose}>
+            onClose={onClose}
+            containerProps={{
+                sx: {
+                    zIndex: 1300,
+                }
+            }}
+        >
             <Formik
                 validationSchema={object().shape({
                     email: string()

@@ -4,22 +4,11 @@ import React from 'react'
 import { ErrorMessage, useField } from 'formik'
 import { makeStyles } from '@mui/styles'
 import Typography from '@mui/material/Typography'
+import { useTheme } from '@mui/material'
 
 const useStyles = makeStyles((theme) => ({
-    formControl: {
-        width: '100%',
-        marginTop: (props) => !props.noTopMargin && theme.spacing(3),
-    },
-    label: {
-        fontSize: theme.typography.fontSize * 1.2,
-        position: 'relative',
-        marginBottom: theme.spacing(1),
-    },
     focusedLabel: {
         color: `${theme.palette.primary.inputLabel} !important`,
-    },
-    errorMessage: {
-        color: 'red',
     },
 }))
 
@@ -31,17 +20,25 @@ const OFFormControl = ({
     noTopMargin,
     color,
 }) => {
+    const theme = useTheme()
     const classes = useStyles({
         noTopMargin,
     })
     const [, meta] = useField(fieldName)
 
     return (
-        <FormControl className={classes.formControl}>
+        <FormControl sx={{
+            width: '100%',
+            marginTop: !noTopMargin ? 3 : 0,
+        }}>
             <InputLabel
                 shrink
                 htmlFor={fieldName}
-                className={classes.label}
+                variant="standard"
+                sx={{
+                    fontSize: theme.typography.fontSize * 1.2,
+                    position: 'relative',
+                }}
                 classes={{
                     focused: classes.focusedLabel,
                 }}
@@ -50,7 +47,9 @@ const OFFormControl = ({
             </InputLabel>
             {children}
             {displayErrorMessageDirectly && meta.error && (
-                <Typography className={classes.errorMessage} role="alert">
+                <Typography sx={{
+                    color: 'red',
+                }} role="alert">
                     {meta.error}
                 </Typography>
             )}
