@@ -33,7 +33,7 @@ export const getUserVotesByTalkAndVoteItemSelector = createSelector(
 
 export const getActiveUserVotesByTalkAndVoteItemSelector = createSelector(
     getCurrentUserVotesSelector,
-    getSelectedTalkIdSelector,
+    (state, talkId) => talkId,
     (votes, talkId) => {
         const result = {}
         Object.values(votes)
