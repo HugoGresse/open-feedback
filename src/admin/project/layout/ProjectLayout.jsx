@@ -50,7 +50,7 @@ const ProjectLayout = ({ baseUrl, children }) => {
     }, [])
 
     const theme = useTheme()
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
     const [state, setState] = React.useState({
         drawerOpen: !isMobile,
     })
@@ -88,7 +88,6 @@ const ProjectLayout = ({ baseUrl, children }) => {
 
             <SideBar
                 baseUrl={baseUrl}
-                className={classes.sidebar}
                 drawerOpen={state.drawerOpen}
                 isMobile={isMobile}
                 toggleDrawer={toggleDrawer(false)}

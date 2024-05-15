@@ -87,6 +87,8 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
     const user = useSelector(getUserSelector)
     const selectedProjectId = useSelector(getSelectedProjectIdSelector)
 
+    const displayedUserName = user.displayName || (user.email.split('@') || [""])[0]
+
     return (
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={innerTheme}>
@@ -119,7 +121,7 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                             className={classes.list}
                             onClick={(event) => toggleDrawer(event)}
                             subheader={
-                                <ListSubheader component="div">
+                                <ListSubheader component="div" sx={{background: "transparent"}}>
                                     {t('layout.sidebar.data')}
                                 </ListSubheader>
                             }
@@ -157,7 +159,7 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                             className={classes.list}
                             onClick={(event) => toggleDrawer(event)}
                             subheader={
-                                <ListSubheader component="div">
+                                <ListSubheader component="div" sx={{background: "transparent"}}>
                                     {t('layout.sidebar.settings')}
                                 </ListSubheader>
                             }
@@ -213,16 +215,14 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                                 </ListItem>
                             </div>
                             <ListItem>
-                                {user.photoURL && (
-                                    <ListItemAvatar>
-                                        <Avatar alt="user" src={user.photoURL} />
-                                    </ListItemAvatar>
-                                )}
+                                <ListItemAvatar>
+                                    <Avatar alt={displayedUserName} src={user.photoURL} />
+                                </ListItemAvatar>
                                 <ListItemText
                                     primaryTypographyProps={{
                                         color: 'textPrimary',
                                     }}
-                                    primary={user.displayName}
+                                    primary={displayedUserName}
                                 />
                                 <ListItemSecondaryAction>
                                     <IconButton

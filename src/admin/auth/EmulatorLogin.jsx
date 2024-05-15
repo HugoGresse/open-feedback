@@ -55,7 +55,7 @@ const verifyEmail = async (user = null) => {
     }
 
     const response = await fetch(
-        `http://localhost:9099/emulator/v1/projects/${process.env.REACT_APP_PROJECT_ID}/oobCodes`
+        `http://localhost:9099/emulator/v1/projects/${import.meta.env.VITE_PROJECT_ID}/oobCodes`
     )
     const responseJson = await response.json()
 

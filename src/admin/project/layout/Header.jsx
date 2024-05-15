@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { COLORS } from '../../../constants/colors'
 import { useDispatch, useSelector } from 'react-redux'
-import { createTheme, Grid, adaptV4Theme } from '@mui/material';
+import { createTheme, Grid } from '@mui/material';
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles'
 import AppBar from '@mui/material/AppBar'
@@ -34,11 +34,15 @@ import { getProjects } from '../core/actions/getProjects'
 import { getOrganizations } from '../../organization/core/actions/getOrganizations'
 import { getSelectedOrganizationSelector } from '../../organization/core/organizationSelectors'
 
-const innerTheme = createTheme(adaptV4Theme({
+const innerTheme = createTheme({
     palette: {
         mode: 'dark',
+        primary: {
+            main: '#fff',
+            contrastText: '#fff',
+        }
     },
-}))
+})
 
 const useStyles = makeStyles({
     appbar: {
@@ -76,6 +80,7 @@ const useStyles = makeStyles({
     },
     changeEventButton: {
         textTransform: 'none',
+        color: COLORS.WHITE
     },
     title: {
         marginTop: 20,

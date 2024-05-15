@@ -19,14 +19,14 @@ Create a firebase project with the [firebase console](https://console.firebase.g
 3. Activate "Google" as a sign-in provider for Admin Authentication. (You may want to add Email/Pwd", "Phone", "Google", "GitHub" later on)
 4. Create a `.env.production.local` file by copying `.env` file at root folder and set firebase environment variables. You can get all these variables from the Firebase Console homepage by clicking "Add an application" and selecting the web icon.
 
-  * `REACT_APP_ADMIN_EMAIL=<ADMIN_EMAIL>`
-  * `REACT_APP_APPID=<APP_ID>`
-  * `REACT_APP_API_KEY=<API_KEY>`
-  * `REACT_APP_AUTH_DOMAIN=<AUTH_DOMAIN>`
-  * `REACT_APP_DATABASE_URL=<DATABASE_URL>`
-  * `REACT_APP_PROJECT_ID=<PROJECT_ID>`
-  * `REACT_APP_STORAGE_BUCKET=<STORAGE_BUCKET>`
-  * `REACT_APP_MEASUREMENT_ID=<MEASUREMENT_ID>` (replace Google Analytics specific configuration)
+  * `VITE_ADMIN_EMAIL=<ADMIN_EMAIL>`
+  * `VITE_APPID=<APP_ID>`
+  * `VITE_API_KEY=<API_KEY>`
+  * `VITE_AUTH_DOMAIN=<AUTH_DOMAIN>`
+  * `VITE_DATABASE_URL=<DATABASE_URL>`
+  * `VITE_PROJECT_ID=<PROJECT_ID>`
+  * `VITE_STORAGE_BUCKET=<STORAGE_BUCKET>`
+  * `VITE_MEASUREMENT_ID=<MEASUREMENT_ID>` (replace Google Analytics specific configuration)
 
 5. In package.json, change `homepage` to your instance url.
 
@@ -81,7 +81,7 @@ SmallChat has a free tier and you can answer from Slack directly.
 2. Add the js url to the desired env file (ex: `.env.local`):
     ```
     # Small Chat (custom live support)
-    REACT_APP_SMALL_CHAT=https://embed.small.chat/T<someNumbers>.js
+    VITE_SMALL_CHAT=https://embed.small.chat/T<someNumbers>.js
     ```
 
 
