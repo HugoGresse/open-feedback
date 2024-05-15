@@ -59,7 +59,7 @@ const VoteItemList = ({ languages, selectedProjectOrOrganizationId }) => {
                 buttonText={t('common.save')}
             />
 
-            <Grid container component="ul">
+            <Grid container component="ul" spacing={1}>
                 {voteItems.map((item, index) => (
                     <VoteItem
                         key={item.id}

@@ -17,18 +17,11 @@ import InputLangAdornment from './InputLangAdornment.jsx'
 const useStyles = makeStyles((theme) => ({
     cell: {
         paddingRight: 12,
-        [theme.breakpoints.down('xl')]: {
-            paddingTop: 12,
-            paddingRight: 0,
-        },
     },
     inputLang: {
         marginTop: 8,
     },
     typeCell: {
-        [theme.breakpoints.down('xl')]: {
-            paddingTop: 12,
-        },
     },
     buttonCell: {
         textAlign: 'right',

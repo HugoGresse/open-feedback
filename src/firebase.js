@@ -16,7 +16,7 @@ const config = {
     appId: import.meta.env.VITE_APPID,
     measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 }
-
+console.log(import.meta.env)
 const firebaseMain = firebase.initializeApp(config)
 
 export const auth = firebase.auth
@@ -40,7 +40,7 @@ export const functions = {
 }
 export const HttpsFunctionsUrl = {
     sendContactEmail: isUsingEmulators
-        ? `http://localhost:5001/${config.projectId}/us-central1/sendContactEmail`
+        ? `http://127.0.0.1:5001/${config.projectId}/us-central1/sendContactEmail`
         : `https://us-central1-${config.projectId}.cloudfunctions.net/sendContactEmail`,
 }
 authProvider.useDeviceLanguage()
@@ -52,7 +52,7 @@ if (isUsingEmulators) {
     // eslint-disable-next-line no-console
     console.log('ℹ️ App is using Firebase Emulators')
     authProvider.useEmulator('http://localhost:9099')
-    firebase.functions().useEmulator('localhost', 5001)
+    firebase.functions().useEmulator('127.0.0.1', 5001)
     // Fix issue with Cypress, see https://github.com/cypress-io/cypress/issues/6350#issuecomment-697122434
     fireStoreMainInstance.settings({
         experimentalForceLongPolling: true,

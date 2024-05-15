@@ -45,8 +45,8 @@ const ProjectSettingsForm = ({ project }) => {
         faviconUrl: project.favicon || '',
         chipColors: project.chipColors,
         restrictVoteRange: !!project.voteStartTime,
-        voteStartTime: project.voteStartTime || DateTime.local().toISO(),
-        voteEndTime: project.voteEndTime || DateTime.local().toISO(),
+        voteStartTime: DateTime.fromISO(project.voteStartTime) || DateTime.local(),
+        voteEndTime: DateTime.fromISO(project.voteEndTime) || DateTime.local(),
         hideEventName: project.hideEventName || false,
     }
 
