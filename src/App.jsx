@@ -19,7 +19,7 @@ const App = () => {
                 <Route strict exact path="/admin" render={() => <Navigate to="/admin/" />} />
                 <Route path="/admin/" element={<AdminApp />} />
                 <Route path="/admin//*" element={<AdminApp />} />
-                <Route path="/:projectId" component={FeedbackApp} />
+                <Route path="/:projectId//*" element={<FeedbackApp />} />
                 <Route component={Page404} status={404} />
             </Routes>
         </Router>

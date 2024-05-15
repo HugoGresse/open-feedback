@@ -38,12 +38,15 @@ import { useTranslation } from 'react-i18next'
 import { TalkHeader } from './TalkHeader.jsx'
 import { getVoteResultSelectorSelector } from './core/getVoteResultSelectorSelector'
 import useQuery from '../../utils/useQuery'
+import { useParams } from 'react-router-dom'
 
-export const Talk = ({ match }) => {
+export const Talk = () => {
+    const { talkId } = useParams()
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const displayVotes = useQuery().get('displayVotes')
-    const id = match.params.talkId
+
+    const id = talkId
 
     const talk = useSelector(getSelectedTalkSelector)
     const speakers = useSelector(getSpeakersForSelectedTalkSelector)

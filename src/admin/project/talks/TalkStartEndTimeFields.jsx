@@ -3,7 +3,6 @@ import OFFormControl from '../../baseComponents/form/formControl/OFFormControl.j
 import { Field, useField } from 'formik'
 import OFDateTimePicker from '../../baseComponents/form/dateTimePicker/OFDateTimePicker.jsx'
 import { useTranslation } from 'react-i18next'
-import { DateTime } from 'luxon'
 
 const startTimeFieldName = 'startTime'
 const endTimeFieldName = 'endTime'

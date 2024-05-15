@@ -5,13 +5,13 @@ import HowItWorks from './HowItWorks.jsx'
 import FAQ from './FAQ.jsx'
 import { I18nextProvider } from 'react-i18next'
 import i18n from './translations/i18n'
-import { createTheme, ThemeProvider, StyledEngineProvider, adaptV4Theme } from '@mui/material/styles';
+import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import { showSmallChat, useSmallchat } from '../admin/project/utils/smallchat'
 import { Footer } from './Footer.jsx'
 import { Contact } from './Contact.jsx'
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 
-const theme = createTheme(adaptV4Theme({
+const theme = createTheme({
     typography: {
         h1: {
             fontSize: 28,
@@ -31,7 +31,7 @@ const theme = createTheme(adaptV4Theme({
             contrastText: '#fff',
         },
     },
-}))
+})
 
 const Root = () => {
     const [scriptLoaded] = useSmallchat()

@@ -5,8 +5,8 @@ import TalksListWrapper from './talks/TalksListWrapper.jsx'
 import { Talk } from './talk/Talk.jsx'
 import { I18nextProvider } from 'react-i18next'
 import i18n from './translations/i18n'
-import { responsiveFontSizes, useMediaQuery, adaptV4Theme } from '@mui/material';
-import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
+import { responsiveFontSizes, useMediaQuery } from '@mui/material'
+import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { grey } from '@mui/material/colors'
 import ErrorBoundary from '../baseComponents/customComponent/ErrorBoundary.jsx'
 import { ALERT_REACT_CATCHED_ERROR_FEEDBACK } from '../utils/alerting/alerts'
@@ -27,7 +27,7 @@ const FeedbackApp = () => {
     const theme = React.useMemo(
         () =>
             responsiveFontSizes(
-                createTheme(adaptV4Theme({
+                createTheme({
                     typography: {
                         h1: {
                             fontSize: 24,
@@ -52,7 +52,11 @@ const FeedbackApp = () => {
                             main: '#3673ff',
                             contrastText: 'rgba(255,255,255, 0.87)',
                         },
-                        type: prefersDarkMode ? 'dark' : 'light',
+                        background: {
+                            default: prefersDarkMode ? '#303030' : '#fafafa',
+                            paper: prefersDarkMode ? '#595959' : '#EDEDED',
+                        },
+                        mode: prefersDarkMode ? 'dark' : 'light',
                         pageBackground: prefersDarkMode ? '#303030' : '#fff',
                         headerShadow: prefersDarkMode ? '#000' : '#B3B3B3',
                         paperBorder: prefersDarkMode ? grey[600] : grey[300],
@@ -65,9 +69,9 @@ const FeedbackApp = () => {
                             : grey[50],
                         textDimmed: prefersDarkMode ? grey[400] : grey[600],
                     },
-                }))
+                }),
             ),
-        [prefersDarkMode]
+        [prefersDarkMode],
     )
 
     return (
@@ -77,37 +81,29 @@ const FeedbackApp = () => {
                     <ThemeProvider theme={theme}>
                         <Routes>
                             <Route
-                                exact
-                                path="/:projectId"
-                                render={(props) => (
-                                    <AppLayout>
-                                        <TalksListWrapper {...props} />
-                                    </AppLayout>
-                                )}
+                                path="/"
+                                element={<AppLayout>
+                                    <TalksListWrapper />
+                                </AppLayout>}
                             />
                             <Route
-                                exact
-                                path="/:projectId/:date"
-                                render={(props) => (
-                                    <AppLayout>
-                                        <TalksListWrapper {...props} />
-                                    </AppLayout>
-                                )}
+                                path="/:date"
+                                element={<AppLayout>
+                                    <TalksListWrapper />
+                                </AppLayout>}
                             />
                             <Route
-                                path="/:projectId/:date/:talkId"
-                                render={(props) => (
-                                    <AppLayout>
-                                        <Talk {...props} />
-                                    </AppLayout>
-                                )}
+                                path="/:date/:talkId"
+                                element={<AppLayout>
+                                    <Talk />
+                                </AppLayout>}
                             />
                         </Routes>
                     </ThemeProvider>
                 </StyledEngineProvider>
             </I18nextProvider>
         </ErrorBoundary>
-    );
+    )
 }
 
 export default FeedbackApp

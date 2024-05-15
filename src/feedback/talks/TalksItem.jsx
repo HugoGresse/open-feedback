@@ -80,7 +80,7 @@ export const TalksItem = ({ talk, userVote }) => {
                 title={t('talks.vote') + talk.title}
                 className={classes.a}>
                 <Paper className={itemClasses}>
-                    <Typography className={classes.talkTitle}>
+                    <Typography color="textPrimary" className={classes.talkTitle}>
                         {talk.title}
                     </Typography>
                     {speakers && (

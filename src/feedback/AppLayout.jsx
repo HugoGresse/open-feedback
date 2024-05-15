@@ -24,12 +24,12 @@ import { Header } from './layout/Header.jsx'
 import { styled, useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
 
-const Layout = styled('main')((theme) => ({
+const Layout = styled('main')(({ theme }) => ({
     marginLeft: 0,
     marginRight: 0,
     width: '100%',
     boxSizing: 'border-box',
-    [theme.breakpoints.up(900 + theme.spacing(6))]: {
+    [theme.breakpoints.up(900)]: {
         width: 900,
         marginLeft: 'auto',
         marginRight: 'auto',
@@ -104,7 +104,7 @@ const AppLayout = ({ children }) => {
         )
     } else {
         return (
-            <Box backgroundColor={theme.color.pageBackground} minHeight="100vh" display="flex" flexDirection="column">
+            <Box backgroundColor={theme.palette.pageBackground} minHeight="100vh" display="flex" flexDirection="column">
                 {project ? (
                     <Box flex={1}>
                         <Header project={project} />

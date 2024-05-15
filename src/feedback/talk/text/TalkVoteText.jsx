@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { emphasize } from '@mui/material'
+import { emphasize, styled } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import SaveIcon from '@mui/icons-material/Save'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -37,8 +37,6 @@ const useStyles = makeStyles((theme) => ({
         transition: 'all 200ms ease-out',
     },
     textArea: {
-        width: '100%',
-        height: '100%',
     },
     leftIcon: {
         marginRight: theme.spacing(1),
@@ -65,6 +63,15 @@ const useStyles = makeStyles((theme) => ({
         verticalAlign: 'text-bottom',
     },
 }))
+
+const VoteTextField = styled(TextField)({
+    width: '100%',
+    height: '100%',
+    border: "none",
+    '& .MuiInput-underline:after, & .MuiInput-underline:before': {
+        borderBottom: 'none !important',
+    },
+});
 
 export const TalkVoteText = ({
     currentUserVotes,
@@ -132,14 +139,10 @@ export const TalkVoteText = ({
                 {voteItem.name}
             </Typography>
             <Paper elevation={1} className={classes.item}>
-                <TextField
+                <VoteTextField
                     multiline
                     fullWidth
-                    margin="none"
-                    InputProps={{
-                        disableUnderline: true,
-                    }}
-                    className={classes.textArea}
+                    variant="standard"
                     placeholder={t('comment.placeholder')}
                     onChange={onTextChange}
                     value={data.comment}

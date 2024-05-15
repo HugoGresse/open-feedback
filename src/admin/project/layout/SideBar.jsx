@@ -4,7 +4,7 @@ import logo from '../../../assets/logo-openfeedback-color&white.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserSelector } from '../../auth/authSelectors'
 import { signOut } from '../../auth/authActions'
-import { createTheme, adaptV4Theme } from '@mui/material';
+import { createTheme } from '@mui/material';
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles'
 import List from '@mui/material/List'
@@ -34,11 +34,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import ListItemIcon from '@mui/material/ListItemIcon'
 
-const innerTheme = createTheme(adaptV4Theme({
+const innerTheme = createTheme({
     palette: {
         mode: 'dark',
     },
-}))
+})
 
 const useStyles = makeStyles({
     container: {

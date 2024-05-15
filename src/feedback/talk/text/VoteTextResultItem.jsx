@@ -11,8 +11,8 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(2),
     },
     button: {
-        width: 80,
-        height: 80,
+        width: "80px !important",
+        height: "80px !important",
         float: 'left',
         marginRight: theme.spacing(2),
     },
