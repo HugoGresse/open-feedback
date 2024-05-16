@@ -764,12 +764,12 @@ describe('Firestore rules', () => {
                 UID_OWNER
             )
 
-            ownerApp.collection('invites').add({
+            await ownerApp.collection('invites').add({
                 organizationId: 'FirstOrg',
                 destinationUserInfo: UID_VIEWER,
                 role: 'Viewer',
             })
-            adminApp.collection('invites').add({
+            await adminApp.collection('invites').add({
                 organizationId: 'FirstOrg',
                 destinationUserInfo: UID_ANOTHER_ADMIN,
                 role: 'Admin',
@@ -883,12 +883,10 @@ describe('Firestore rules', () => {
                 .where('organizationId', '==', 'FirstOrg')
                 .get()
 
-            const invitesListFromViewer = await firebase.assertSucceeds(
-                listFromViewer
-            )
-            const invitesListFromEditor = await firebase.assertSucceeds(
-                listFromEditor
-            )
+            const invitesListFromViewer =
+                await firebase.assertSucceeds(listFromViewer)
+            const invitesListFromEditor =
+                await firebase.assertSucceeds(listFromEditor)
             expect(invitesListFromViewer.docs.length).toEqual(2)
             expect(invitesListFromEditor.docs.length).toEqual(2)
         })

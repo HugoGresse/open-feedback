@@ -7,13 +7,14 @@ import {
 } from './models/vote'
 import * as admin from 'firebase-admin'
 export const FieldValue = admin.firestore.FieldValue
+import { vi } from 'vitest'
 
 const getMockedFirestore = (docData: Record<string, unknown>) =>
     ({
-        collection: jest.fn(() => ({
-            doc: jest.fn(() => ({
-                collection: jest.fn(() => ({
-                    doc: jest.fn(() => ({
+        collection: vi.fn(() => ({
+            doc: vi.fn(() => ({
+                collection: vi.fn(() => ({
+                    doc: vi.fn(() => ({
                         get: () =>
                             Promise.resolve({
                                 data: () => docData,
@@ -29,7 +30,7 @@ const getMockedFirestore = (docData: Record<string, unknown>) =>
                 })),
             })),
         })),
-    } as unknown as FirebaseFirestore.Firestore)
+    }) as unknown as FirebaseFirestore.Firestore
 
 describe('incrementVoteAggregate', () => {
     // Boolean vote

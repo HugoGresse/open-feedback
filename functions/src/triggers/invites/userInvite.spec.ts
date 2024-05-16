@@ -9,8 +9,9 @@ import {
 } from '../../testUtils/firestoreStub'
 import * as admin from 'firebase-admin'
 import { Response } from 'node-fetch'
+import { vi } from 'vitest'
 
-jest.mock('../../email/send')
+vi.mock('../../email/send')
 import send from '../../email/send'
 
 const test = firebaseFunctionsTest()
@@ -40,8 +41,8 @@ describe('userInviteCreated', () => {
         })
     })
     afterEach(() => {
-        jest.clearAllMocks()
-        jest.resetModules()
+        vi.clearAllMocks()
+        vi.resetModules()
         process.env = { ...OLD_ENV }
         delete process.env.NODE_ENV
     })
