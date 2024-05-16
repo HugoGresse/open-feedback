@@ -12,8 +12,6 @@
         "build": "vite build",
         "build:dev": "vite build --mode development",
         "test": "vitest",
-        "test:firestoreRulesStandalone": "npx firebase emulators:exec --only firestore 'jest --roots config --env=./config/firestore.rules.jestEnv.js'",
-        "test:firestoreRules": "jest --roots config --env=./config/firestore.rules.jestEnv.js",
         "deploy": "npm run build && firebase deploy",
         "deploy:dev": "npm run build:dev && firebase deploy",
         "release": "npm version minor && npm run deploy && git push && git push --tags",
