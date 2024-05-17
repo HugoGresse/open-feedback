@@ -48,7 +48,7 @@ export const resizeAndMoveImage = functions.https.onCall(
             fileName,
             docId
         )
-        return encodeURI(await makePublicAndGetUrl(newFile))
+        return await makePublicAndGetUrl(newFile)
     }
 )
 
@@ -126,7 +126,21 @@ const moveToFinalDir = (
 }
 
 const makePublicAndGetUrl = async (file: File): Promise<string> => {
-    await file.makePublic()
+    const result = await file.makePublic()
+
+    const isEmulator = process.env.FUNCTIONS_EMULATOR === 'true'
+    if (
+        result[0] !== undefined &&
+        result[0].selfLink !== undefined &&
+        isEmulator
+    ) {
+        const fileInfo = await fetch(
+            result[0].selfLink.replace('/acl/allUsers', '')
+        )
+        const data = await fileInfo.json()
+        return data.mediaLink
+    }
+
     return `https://${file.bucket.name}.storage.googleapis.com/${file.name}`
 }
 
