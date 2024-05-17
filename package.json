@@ -11,7 +11,7 @@
         "start:local:back": "firebase emulators:start --import=./cypress/fixtures/firebase-emulators-data --only firestore,auth,functions",
         "build": "vite build",
         "build:dev": "vite build --mode development",
-        "test": "vitest",
+        "test": "firebase emulators:exec --only firestore vitest",
         "deploy": "npm run build && firebase deploy",
         "deploy:dev": "npm run build:dev && firebase deploy",
         "release": "npm version minor && npm run deploy && git push && git push --tags",

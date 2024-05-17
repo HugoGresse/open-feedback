@@ -1,16 +1,17 @@
 {
     "compilerOptions": {
         "module": "commonjs",
+        "target": "es2022",
         "noImplicitReturns": true,
         "noUnusedLocals": true,
         "outDir": "lib",
         "sourceMap": true,
         "strict": true,
-        "target": "es2018",
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "typeRoots": ["./node_modules/@types"]
     },
     "compileOnSave": true,
-    "include": ["src"]
+    "include": ["src"],
+    "exclude": ["vitest.config.ts", "src/**/**.spec.ts", "src/testUtils/**"]
 }
