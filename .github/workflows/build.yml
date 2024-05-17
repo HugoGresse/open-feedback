@@ -22,15 +22,17 @@ jobs:
     - name: npm lint:i18n
       run: |
         npm run lint:i18n
-    - name: npm test & test functions/
+    - name: functions npm install (ci)
+      run: |
+          cd functions
+          npm ci
+    - name: npm test (Firestore rules and functions/)
       run: |
         npm run test
-    - name: move to function, install & build
+    - name: build functions/
       run: |
         cd functions
-        npm ci
-        npm run build --if-present
-#        npm run test # Already done from root
+        npm run build
     - name: run lighthouse ci
       run: |
           npm install -g @lhci/cli@0.3.x
