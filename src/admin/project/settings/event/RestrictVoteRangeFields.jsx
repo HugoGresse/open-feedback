@@ -16,18 +16,18 @@ const RestrictVoteRangeFields = ({ isOpen }) => {
 
     useEffect(() => {
         if (
-            startField.value !== startMeta.initialValue &&
+            startField.value.toMillis() !== startMeta.initialValue.toMillis() &&
             !endMeta.touched &&
-            startField.value !== endField.value
+            startField.value.toMillis() !== endField.value.toMillis()
         ) {
             endHelpers.setValue(startField.value)
         }
     }, [
         startField.value,
         startMeta.initialValue,
+        endField.value,
         endHelpers,
         endMeta.touched,
-        endField.value,
     ])
 
     return (
@@ -38,7 +38,7 @@ const RestrictVoteRangeFields = ({ isOpen }) => {
                     fieldName="voteStartTime">
                     <Field
                         name="voteStartTime"
-                        format="FFF"
+                        format="cccc d, t"
                         component={OFDateTimePicker}
                     />
                 </OFFormControl>
@@ -48,7 +48,7 @@ const RestrictVoteRangeFields = ({ isOpen }) => {
                     fieldName="voteEndTime">
                     <Field
                         name="voteEndTime"
-                        format="FFF"
+                        format="cccc d, t"
                         component={OFDateTimePicker}
                     />
                 </OFFormControl>

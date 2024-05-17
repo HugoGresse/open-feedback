@@ -50,8 +50,8 @@ export const OrganizationApp = ({ match, onClose }) => {
                                 element={<OrganizationVotingForm />}
                             />
                             <Route
-                                path={`${baseUrl}/`}
-                                element={<Navigate to={`${pathname}/users`} />}
+                                path={`${baseUrl}`}
+                                element={<Navigate to={`${pathname}users`} />}
                             />
                         </Routes>
                     </OrganizationLayout>

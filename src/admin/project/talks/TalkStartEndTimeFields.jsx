@@ -14,9 +14,9 @@ const TalkStartEndTimeFields = ({ defaultValue }) => {
     useEffect(() => {
         // Update end time if start time is touched and updated
         if (
-            startField.value !== startMeta.initialValue &&
+            startField.value.toMillis() !== startMeta.initialValue.toMillis() &&
             !endMeta.touched &&
-            startField.value !== endField.value
+            startField.value.toMillis() !== endField.value.toMillis()
         ) {
             endHelpers.setValue(startField.value)
         }
@@ -24,7 +24,7 @@ const TalkStartEndTimeFields = ({ defaultValue }) => {
         startField.value,
         endHelpers,
         startMeta.initialValue,
-        endMeta,
+        endMeta.touched,
         endField.value,
     ])
 
@@ -37,7 +37,7 @@ const TalkStartEndTimeFields = ({ defaultValue }) => {
                 fieldName={startTimeFieldName}>
                 <Field
                     name={startTimeFieldName}
-                    format="t, cccc d"
+                    format="cccc d, t"
                     initialFocusedDate={defaultValue}
                     component={OFDateTimePicker}
                 />
@@ -48,7 +48,7 @@ const TalkStartEndTimeFields = ({ defaultValue }) => {
                 fieldName={endTimeFieldName}>
                 <Field
                     name={endTimeFieldName}
-                    format="t, cccc d"
+                    format="cccc d, t"
                     component={OFDateTimePicker}
                 />
             </OFFormControl>

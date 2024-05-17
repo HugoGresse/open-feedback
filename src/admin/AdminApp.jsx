@@ -3,7 +3,7 @@ import { I18nextProvider } from 'react-i18next'
 import i18n from './translations/i18n'
 import { setFavicon } from '../utils/dom'
 import Login from './auth/Login.jsx'
-import { Navigate, Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import AdminRoot from './root/AdminRoot.jsx'
 import Notifications from './notification/Notifications.jsx'
 import {

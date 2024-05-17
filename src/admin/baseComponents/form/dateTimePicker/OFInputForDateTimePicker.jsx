@@ -2,17 +2,18 @@ import React from 'react'
 import OFInput from '../input/OFInput.jsx'
 
 const OFInputForDateTimePicker = ({
-    icon,
-    name,
-    value,
-    onClick,
-    onError,
-    onBlur,
-    onKeyDown,
-    inputRef,
-    disabled,
-    autoComplete,
-}) => {
+                                      icon,
+                                      name,
+                                      value,
+                                      onClick,
+                                      onError,
+                                      onBlur,
+                                      onKeyDown,
+                                      disabled,
+                                      autoComplete,
+                                      onFocus,
+                                      InputProps,
+                                  }) => {
     return (
         <OFInput
             icon={icon}
@@ -21,8 +22,13 @@ const OFInputForDateTimePicker = ({
             onClick={onClick}
             onError={onError}
             onBlur={onBlur}
+            onFocus={() => {
+                if(onFocus) {
+                    onFocus()
+                }
+            }}
             onKeyDown={onKeyDown}
-            inputRef={inputRef}
+            inputRef={InputProps.ref}
             disabled={disabled}
             autoComplete={autoComplete}
         />
