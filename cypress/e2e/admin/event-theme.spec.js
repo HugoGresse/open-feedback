@@ -1,7 +1,7 @@
 import { stringGenerator } from '../../utils/generateString'
 import { AdminApp } from '../../support/AdminApp'
 import { FeedbackApp } from '../../support/FeedbackApp'
-import { generateUrl } from '../../utils/generateUrl'
+import { generateUrl } from '../../utils/generateUrl.js'
 import { DateTime } from 'luxon'
 
 describe('Event and theme options', function () {
@@ -44,8 +44,13 @@ describe('Event and theme options', function () {
         app.eventTheme.assertVoteRangeRestricted(false)
         app.eventTheme.setVoteRangeRestricted(true)
         app.eventTheme.assertVoteRangeRestricted(true)
-        app.eventTheme.editVoteRangeOpenTime(15, 13, 35)
-        app.eventTheme.editVoteRangeEndTime(15, 13, 35)
+
+        // Restrict the vote range to last day only
+        const dateStartAt = DateTime.local().minus({ days: 2 }).day
+        const dateEndAt = DateTime.local().minus({ days: 1 }).day
+
+        app.eventTheme.editVoteRangeOpenTime(dateStartAt, 13, 35)
+        app.eventTheme.editVoteRangeEndTime(dateEndAt, 13, 35)
 
         const imageUrl =
             'https://openfeedback.io/static/logos/openfeedback%20black%20orange-1x.png'
@@ -73,14 +78,19 @@ describe('Event and theme options', function () {
         app.eventTheme.open()
 
         const dateTime = DateTime.local()
-            .minus({ months: 1 })
+            .setLocale(APP_LANG)
             .set({ days: 15, hours: 13, minutes: 35, seconds: 0 })
+
         app.eventTheme.assertVoteRangeRestricted(false)
         app.eventTheme.setVoteRangeRestricted(true)
         app.eventTheme.editVoteRangeOpenTime(15, 13, 35)
 
         app.eventTheme.save(true)
         cy.reload()
-        app.eventTheme.assertVoteRangeStartTime(dateTime.toFormat('FFF'))
+        // May not work if you don't set the browser lang to APP_LANG
+        // Also, for some reason, the luxon toFormat here set the hour to "1" instead of "01"
+        app.eventTheme.assertVoteRangeStartTime(
+            dateTime.toFormat('cccc d, t').replace('1:', '01:')
+        )
     })
 })

@@ -1,3 +1,4 @@
+export const APP_LANG = 'en-US'
 const project = {
     chipColors: ['c67d10'],
     config: {

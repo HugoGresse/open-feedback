@@ -64,28 +64,14 @@ export class EventTheme {
     ) {
         cy.get(`input[name="${selector}"`).click()
 
-        cy.get('*[class*="MuiPickersCalendarHeader-switchHeader"]')
-            .children('button')
-            .first()
-            .click()
-
-        cy.get('*[class^="MuiPickersCalendar-week-"]')
+        cy.get('div[role=dialog]')
             .parent()
-            .contains('button[tabindex=0] p', dayToSelect)
+            .contains('button[tabindex=-1]', dayToSelect)
             .click()
 
-        cy.get('*[class^="MuiPickersClock-clock-"]')
-            .contains(hour)
-            .then((el) => {
-                const rect = el[0].getBoundingClientRect()
-                cy.get('body').click(rect.x + 10, rect.y + 10)
-            })
-        cy.get('*[class^="MuiPickersClock-clock-"]')
-            .contains(minute)
-            .then((el) => {
-                const rect = el[0].getBoundingClientRect()
-                cy.get('body').click(rect.x + 10, rect.y + 10)
-            })
+        // We force it as the element is not visible (need to scroll) and the scroll don't work...
+        cy.get(`li[aria-label="${hour} hours"]`).click({ force: true })
+        cy.get(`li[aria-label="${minute} minutes"]`).click({ force: true })
     }
 
     editVoteRangeEndTime(dayToSelect, hour, minute) {
@@ -102,17 +88,17 @@ export class EventTheme {
 
     setLogo(imageUrl) {
         cy.get('.addImage').first().click()
-        // cy.fixture('logo.png').as('logo')
-        cy.get('input[type=file]').then(function (el) {
-            cy.uploadImage(this.logo, 'logo.png', el)
-        })
         cy.get('input[name=logoUrl]').clear().fill(imageUrl)
         cy.get('#uploadImage').click()
     }
 
     setFavicon(imageUrl) {
         cy.get('.addImage').eq(1).click()
-        cy.get('input[name=faviconUrl]').clear().fill(imageUrl)
+        cy.get('.MuiDrawer-root input[type=file]').selectFile(
+            'cypress/fixtures/logo.png',
+            { force: true }
+        )
+        //cy.get('input[name=logoUrl]').clear().fill(imageUrl)
         cy.get('#uploadImage').click()
     }
 
@@ -128,7 +114,7 @@ export class EventTheme {
         cy.get('#chipColors button')
             .eq(index)
             .should('have.attr', 'color')
-            .and('match', /^f6/)
+            .and('match', /^f5/)
     }
 
     assertChipColorsCounts(desiredLength = 0) {

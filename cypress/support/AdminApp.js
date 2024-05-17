@@ -2,6 +2,7 @@ import { VotingForm } from './AdminApp.VotingForm'
 import { Settings } from './AdminApp.Settings'
 import { EventTheme } from './AdminApp.EventTheme'
 import { Organization } from './AdminApp.Organization'
+import { onBeforeLoadChangeNavigatorLanguages } from '../utils/onBeforeLoadChangeNavigatorLanguages.js'
 
 export const VOTE_ITEM_TYPES = {
     chip: 'Chip',
@@ -15,11 +16,7 @@ export class AdminApp {
 
     open() {
         cy.visit('/admin', {
-            onBeforeLoad: (win) => {
-                Object.defineProperty(win.navigator, 'languages', {
-                    value: ['en-US'],
-                })
-            },
+            ...onBeforeLoadChangeNavigatorLanguages,
         })
         cy.injectAxe()
     }

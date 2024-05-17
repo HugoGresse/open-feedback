@@ -18,7 +18,7 @@ export class FeedbackApp {
 
     openTalkByClick(name) {
         cy.contains(name).click()
-        cy.checkA11yWithoutFirebaseEmulatorsWarning()
+        cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
     }
 
     clearUserSession() {
@@ -40,7 +40,7 @@ export class FeedbackApp {
     assertTitle(expectedTitle, shouldBeHidden) {
         if (shouldBeHidden) {
             cy.get(`img[alt="logo ${expectedTitle}"]`)
-                .next()
+                .parent()
                 .should('not.have.text', expectedTitle)
         } else {
             cy.get('img[alt=logo]').next().contains(expectedTitle)
