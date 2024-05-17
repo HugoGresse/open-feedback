@@ -14,7 +14,13 @@ export class AdminApp {
     organization = new Organization()
 
     open() {
-        cy.visit('/admin')
+        cy.visit('/admin', {
+            onBeforeLoad: (win) => {
+                Object.defineProperty(win.navigator, 'languages', {
+                    value: ['en-US'],
+                })
+            },
+        })
         cy.injectAxe()
     }
 
@@ -87,10 +93,8 @@ export class AdminApp {
         }
         if (speakers.length > 0) {
             for (const speaker of speakers) {
-                const {
-                    typeForAutoComplete,
-                    useFirstFromAutoComplete,
-                } = speaker
+                const { typeForAutoComplete, useFirstFromAutoComplete } =
+                    speaker
 
                 if (typeForAutoComplete) {
                     cy.get('input[id=speakers]').type(typeForAutoComplete, {

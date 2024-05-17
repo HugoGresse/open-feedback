@@ -4,6 +4,7 @@ import 'firebase/compat/auth'
 import 'firebase/compat/performance'
 import 'firebase/compat/functions'
 import 'firebase/compat/analytics'
+import 'firebase/compat/storage'
 
 export const isUsingEmulators = import.meta.env.VITE_EMULATORS === 'true'
 
@@ -50,12 +51,15 @@ if (process.env.NODE_ENV === 'production') {
 if (isUsingEmulators) {
     // eslint-disable-next-line no-console
     console.log('ℹ️ App is using Firebase Emulators')
-    authProvider.useEmulator('http://localhost:9099')
+    authProvider.useEmulator('http://127.0.0.1:9099')
+    firebase.storage().useEmulator('127.0.0.1', 9199)
     firebase.functions().useEmulator('127.0.0.1', 5001)
     // Fix issue with Cypress, see https://github.com/cypress-io/cypress/issues/6350#issuecomment-697122434
     fireStoreMainInstance.settings({
         experimentalForceLongPolling: true,
-        host: 'localhost:8080',
+        host: '127.0.0.1:8080',
         ssl: false,
     })
 }
+
+console.log('isUsingEmulators', isUsingEmulators)

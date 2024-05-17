@@ -40,7 +40,6 @@ jobs:
         VITE_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
         VITE_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
         VITE_EMULATORS: true
-        EMULATORS_NAMES: "firestore,auth,functions"
         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_DASHBOARD_KEY }}
         CYPRESS_VITE_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
         CYPRESS_VITE_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}

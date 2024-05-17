@@ -3,7 +3,7 @@ import { I18nextProvider } from 'react-i18next'
 import i18n from './translations/i18n'
 import { setFavicon } from '../utils/dom'
 import Login from './auth/Login.jsx'
-import { Navigate, Route, Routes, useParams } from 'react-router-dom'
+import { Navigate, Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import AdminRoot from './root/AdminRoot.jsx'
 import Notifications from './notification/Notifications.jsx'
 import {
@@ -20,6 +20,7 @@ import { SlidingOrganizationApp } from './organization/SlidingOrganizationApp.js
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { DateTime } from 'luxon'
+import { EnforceTrailingSlash } from '../utils/EnforceTrailingSlash.jsx'
 
 const innerTheme = responsiveFontSizes(
     createTheme({
@@ -49,8 +50,9 @@ const innerTheme = responsiveFontSizes(
                 fontSize: 28,
             },
         },
-    })
+    }),
 )
+
 
 export const AdminApp = () => {
     useSmallchat()
@@ -70,28 +72,33 @@ export const AdminApp = () => {
                 <Login>
                     <StyledEngineProvider injectFirst>
                         <ThemeProvider theme={innerTheme}>
-                            <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={DateTime.now().resolvedLocaleOptions().locale}>
+                            <LocalizationProvider dateAdapter={AdapterLuxon}
+                                                  adapterLocale={DateTime.now().resolvedLocaleOptions().locale}>
                                 <Routes>
                                     <Route
-                                        exact
-                                        path="/event/"
-                                        element={<Navigate to="/admin/" />}
-                                    />
+                                        element={<EnforceTrailingSlash />}
+                                    >
+                                        <Route
+                                            exact
+                                            path="/event/"
+                                            element={<Navigate to="/admin/" />}
+                                        />
 
-                                    <Route
-                                        path="/event/:projectId/*"
-                                        element={<ProjectApp
-                                            key={projectId}
-                                        />}
-                                    />
-                                    <Route
-                                        exact
-                                        path="/:projectId/"
-                                        element={<Navigate to="/admin/event/:projectId" />}
-                                    />
+                                        <Route
+                                            path="/event/:projectId/*"
+                                            element={<ProjectApp
+                                                key={projectId}
+                                            />}
+                                        />
+                                        <Route
+                                            exact
+                                            path="/:projectId/"
+                                            element={<Navigate to="/admin/event/:projectId" />}
+                                        />
 
-                                    <Route path="/" element={<AdminRoot />} />
-                                    <Route path="*" element={<AdminRoot />} />
+                                        <Route path="/" element={<AdminRoot />} />
+                                        <Route path="*" element={<AdminRoot />} />
+                                    </Route>
                                 </Routes>
                                 <SlidingOrganizationApp />
 

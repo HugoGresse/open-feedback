@@ -103,10 +103,9 @@ export class EventTheme {
     setLogo(imageUrl) {
         cy.get('.addImage').first().click()
         // cy.fixture('logo.png').as('logo')
-        // Firebase storage emulators not available yet (jan 15 2021)
-        // cy.get('input[type=file]').then(function(el) {
-        //     cy.uploadImage(this.logo, 'logo.png', el)
-        // })
+        cy.get('input[type=file]').then(function (el) {
+            cy.uploadImage(this.logo, 'logo.png', el)
+        })
         cy.get('input[name=logoUrl]').clear().fill(imageUrl)
         cy.get('#uploadImage').click()
     }
