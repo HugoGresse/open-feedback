@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import OFInput from '../input/OFInput.jsx'
 
 const OFInputForDateTimePicker = ({
@@ -13,7 +13,11 @@ const OFInputForDateTimePicker = ({
                                       autoComplete,
                                       onFocus,
                                       InputProps,
+                                      focused,
+...otherProps
                                   }) => {
+    const otherRef = useRef()
+    const {ref, endAdornment, ...otherInputProps} = InputProps
     return (
         <OFInput
             icon={icon}
@@ -28,9 +32,11 @@ const OFInputForDateTimePicker = ({
                 }
             }}
             onKeyDown={onKeyDown}
-            inputRef={InputProps.ref}
+            forwardedRef={InputProps.ref || otherRef}
             disabled={disabled}
             autoComplete={autoComplete}
+            {...otherInputProps}
+            {...otherProps}
         />
     )
 }

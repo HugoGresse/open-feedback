@@ -10,8 +10,6 @@ import SpeakerAddEditPanel from '../speakers/SpeakerAddEditPanel.jsx'
 import { useTranslation } from 'react-i18next'
 import { DateTime } from 'luxon'
 import TalkStartEndTimeFields from './TalkStartEndTimeFields.jsx'
-import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
-import { LocalizationProvider } from '@mui/x-date-pickers'
 
 const TalkAddEditPanel = ({
     isOpen,
@@ -34,7 +32,6 @@ const TalkAddEditPanel = ({
                 isOpen={isOpen}
                 onClose={onClose}
                 title={talk ? t('talks.titleEdit') : t('talks.titleAdd')}>
-                <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale={DateTime.now().resolvedLocaleOptions().locale}>
                     <Formik
                         validationSchema={object().shape({
                             title: string()
@@ -187,7 +184,6 @@ const TalkAddEditPanel = ({
                             </Form>
                         )}
                     </Formik>
-                </LocalizationProvider>
             </SidePanelLayout>
         </>
     )

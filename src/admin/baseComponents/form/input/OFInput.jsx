@@ -37,6 +37,9 @@ const OFInputStyled = styled(InputBase)`
     &:focus-within {
         ${(props) => `border: 1px solid ${props.$primaryColor};`}
     }
+    &:hover {
+        border-color: #bbb;
+    }
 `
 
 const useStyles = makeStyles({

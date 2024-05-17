@@ -14,9 +14,9 @@ const TalkStartEndTimeFields = ({ defaultValue }) => {
     useEffect(() => {
         // Update end time if start time is touched and updated
         if (
-            startField.value.toMillis() !== startMeta.initialValue.toMillis() &&
+            startField.value?.toMillis() !== startMeta.initialValue?.toMillis() &&
             !endMeta.touched &&
-            startField.value.toMillis() !== endField.value.toMillis()
+            startField.value?.toMillis() !== endField.value?.toMillis()
         ) {
             endHelpers.setValue(startField.value)
         }

@@ -7,8 +7,8 @@
     "scripts": {
         "start": "vite",
         "start:prod": "vite --mode production",
-        "start:local": "firebase emulators:start --import=./cypress/fixtures/firebase-emulators-data --only firestore,auth,functions & npm run start",
-        "start:local:back": "firebase emulators:start --import=./cypress/fixtures/firebase-emulators-data --only firestore,auth,functions",
+        "start:local": "firebase emulators:start --import=./cypress/fixtures/firebase-emulators-data --only firestore,auth,functions,storage & npm run start",
+        "start:local:back": "firebase emulators:start --import=./cypress/fixtures/firebase-emulators-data --only firestore,auth,functions,storage",
         "build": "vite build",
         "build:dev": "vite build --mode development",
         "test": "firebase emulators:exec --only firestore vitest",

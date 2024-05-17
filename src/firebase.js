@@ -61,5 +61,3 @@ if (isUsingEmulators) {
         ssl: false,
     })
 }
-
-console.log('isUsingEmulators', isUsingEmulators)
