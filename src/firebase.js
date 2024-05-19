@@ -17,7 +17,6 @@ const config = {
     appId: import.meta.env.VITE_APPID,
     measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 }
-console.log(config)
 const firebaseMain = firebase.initializeApp(config)
 
 export const auth = firebase.auth

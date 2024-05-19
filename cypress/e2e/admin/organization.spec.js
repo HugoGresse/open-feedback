@@ -48,7 +48,7 @@ describe('Test organization as owner role', function () {
         )
 
         // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(1000)
+        cy.wait(3000) // multiple saved snackbar messages
         app.votingForm.save(false, true)
 
         app.organization.openTheme()

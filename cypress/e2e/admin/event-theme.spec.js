@@ -3,6 +3,7 @@ import { AdminApp } from '../../support/AdminApp'
 import { FeedbackApp } from '../../support/FeedbackApp'
 import { generateUrl } from '../../utils/generateUrl.js'
 import { DateTime } from 'luxon'
+import { APP_LANG } from '../../testedProjectContent.js'
 
 describe('Event and theme options', function () {
     const data = {

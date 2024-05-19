@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 export const OrganizationLayout = ({ children, onClose, baseUrl }) => {
     const classes = useStyles()
     const selectedOrganization = useSelector(getSelectedOrganizationSelector)
-    const orgName = selectedOrganization.name
+    const orgName = selectedOrganization.name || ''
 
     return (
         <Box>
