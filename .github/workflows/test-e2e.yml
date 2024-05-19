@@ -39,6 +39,7 @@ jobs:
             echo "VITE_AUTH_DOMAIN=$CYPRESS_VITE_AUTH_DOMAIN" >> .env.test.local
             echo "VITE_DATABASE_URL=$CYPRESS_VITE_DATABASE_URL" >> .env.test.local
             echo "VITE_PROJECT_ID=$CYPRESS_VITE_PROJECT_ID" >> .env.test.local
+            echo "VITE_PROJECT_ID=$CYPRESS_VITE_STORAGE_BUCKET" >> .env.test.local
             echo "VITE_EMULATORS=true" >> .env.test.local
             cat .env.test.local
       env:
@@ -49,6 +50,7 @@ jobs:
           CYPRESS_VITE_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
           CYPRESS_VITE_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
           CYPRESS_VITE_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
+          CYPRESS_VITE_STORAGE_BUCKET: ${{ secrets.E2E_FIREBASE_BUCKET }}
           FIREBASE_STORAGE_EMULATOR_HOST: 127.0.0.1:9199
 
     - name: Run Cypress E2E test

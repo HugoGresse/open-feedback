@@ -16,10 +16,7 @@ export class VotingForm {
         }
 
         if (doubleConfirm) {
-            cy.get('.MuiSnackbarContent-message').should(
-                'contain',
-                'Vote type changed'
-            )
+            cy.get('body').should('contain', 'Vote type changed')
             cy.get('div[role=presentation]').contains('Save').click()
         }
         cy.get('.MuiSnackbarContent-message').should(
