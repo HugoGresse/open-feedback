@@ -73,7 +73,10 @@ export class AdminApp {
         const { addTagFromAutoComplete } = tagsOptions
         if (addFirstAvailableTrack) {
             cy.get('input[id=trackTitle]').focus().click()
-            cy.get('#trackTitle-popup').children().first().click()
+            cy.get('div[role=presentation] #trackTitle-listbox')
+                .children()
+                .first()
+                .click()
         }
         if (assertTrackTitle) {
             cy.get('input[id=trackTitle]').should(
@@ -99,7 +102,7 @@ export class AdminApp {
                     })
                 }
                 if (useFirstFromAutoComplete) {
-                    cy.get('#speakers-popup').children().first().click()
+                    cy.get('#speakers-listbox').children().first().click()
                 }
             }
         }
