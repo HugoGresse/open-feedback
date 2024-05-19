@@ -21,15 +21,40 @@ jobs:
     - name: "test"
       run: 'cat functions/.runtimeconfig.json'
       shell: bash
+
     - name: Install functions dependencies
       run: |
             cd functions
             npm ci
             npm run build
+
+    - name: Install front dependencies
+      run: npm ci
+
     - name: Change .firebaserc file to use open-feedback-cypress project ID
       run: |
                 sed -i 's/open-feedback-42/open-feedback-cypress/g' .firebaserc
                 cat .firebaserc
+    - name: Create .env.test.local
+      run: |
+            echo "VITE_APPID=$CYPRESS_VITE_APPID" > .env.test.local
+            echo "VITE_API_KEY=$CYPRESS_VITE_API_KEY" >> .env.test.local
+            echo "VITE_AUTH_DOMAIN=$CYPRESS_VITE_AUTH_DOMAIN" >> .env.test.local
+            echo "VITE_DATABASE_URL=$CYPRESS_VITE_DATABASE_URL" >> .env.test.local
+            echo "VITE_PROJECT_ID=$CYPRESS_VITE_PROJECT_ID" >> .env.test.local
+            echo "VITE_EMULATORS=true" >> .env.test.local
+            cat .env.test.local
+      env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}
+          VITE_EMULATORS: true
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_DASHBOARD_KEY }}
+          CYPRESS_VITE_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
+          CYPRESS_VITE_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
+          CYPRESS_VITE_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
+          CYPRESS_VITE_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
+          CYPRESS_VITE_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
+          FIREBASE_STORAGE_EMULATOR_HOST: 127.0.0.1:9199
+
     - name: Run Cypress E2E test
       uses: cypress-io/github-action@v2
       with:
@@ -39,15 +64,4 @@ jobs:
         record: true
       env:
         GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}
-        VITE_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
-        VITE_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
-        VITE_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
-        VITE_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
-        VITE_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
         VITE_EMULATORS: true
-        CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_DASHBOARD_KEY }}
-        CYPRESS_VITE_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
-        CYPRESS_VITE_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
-        CYPRESS_VITE_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
-        CYPRESS_VITE_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
-        CYPRESS_VITE_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
