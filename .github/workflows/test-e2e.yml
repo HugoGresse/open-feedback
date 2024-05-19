@@ -39,7 +39,7 @@ jobs:
             echo "VITE_AUTH_DOMAIN=$CYPRESS_VITE_AUTH_DOMAIN" >> .env.test.local
             echo "VITE_DATABASE_URL=$CYPRESS_VITE_DATABASE_URL" >> .env.test.local
             echo "VITE_PROJECT_ID=$CYPRESS_VITE_PROJECT_ID" >> .env.test.local
-            echo "VITE_PROJECT_ID=$CYPRESS_VITE_STORAGE_BUCKET" >> .env.test.local
+            echo "CYPRESS_VITE_STORAGE_BUCKET=$CYPRESS_VITE_STORAGE_BUCKET" >> .env.test.local
             echo "VITE_EMULATORS=true" >> .env.test.local
             cat .env.test.local
       env:
