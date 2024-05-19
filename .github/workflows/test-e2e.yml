@@ -32,7 +32,7 @@ jobs:
       run: |
                 sed -i 's/open-feedback-42/open-feedback-cypress/g' .firebaserc
                 cat .firebaserc
-    - name: Create .env.test.local
+    - name: Create .env
       run: |
             echo "VITE_APPID=$CYPRESS_VITE_APPID" > .env.test.local
             echo "VITE_API_KEY=$CYPRESS_VITE_API_KEY" >> .env.test.local
