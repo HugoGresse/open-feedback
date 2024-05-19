@@ -13,6 +13,11 @@ jobs:
       with:
           node-version-file: .nvmrc
           cache: 'npm'
+
+    - uses: 'google-github-actions/auth@v2'
+      with:
+          credentials_json: '${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}'
+
     - name: "Create .runtimeconfig.json"
       run: 'echo "$RUNTIME_CONFIG_TEST" > functions/.runtimeconfig.json'
       shell: bash
@@ -32,11 +37,11 @@ jobs:
       run: |
                 sed -i 's/open-feedback-42/open-feedback-cypress/g' .firebaserc
                 cat .firebaserc
-    - name: Create serviceAccount.json
-      run: |
-            echo "$SERVICE_ACCOUNT_JSON" > serviceAccount.json
-      env:
-          SERVICE_ACCOUNT_JSON: ${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}
+#    - name: Create serviceAccount.json
+#      run: |
+#            echo "$SERVICE_ACCOUNT_JSON" > serviceAccount.json
+#      env:
+#          SERVICE_ACCOUNT_JSON: ${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}
 
     - name: Create .env.test.local
       run: |
@@ -49,7 +54,7 @@ jobs:
             echo "VITE_EMULATORS=true" >> .env.test.local
             cat .env.test.local
       env:
-          GOOGLE_APPLICATION_CREDENTIALS: serviceAccount.json
+#          GOOGLE_APPLICATION_CREDENTIALS: serviceAccount.json
           VITE_EMULATORS: true
           CYPRESS_VITE_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
           CYPRESS_VITE_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
@@ -68,7 +73,7 @@ jobs:
         wait-on: 'http://127.0.0.1:3000, http://127.0.0.1:8080, http://127.0.0.1:9099'
         record: true
       env:
-        GOOGLE_APPLICATION_CREDENTIALS: serviceAccount.json
+#        GOOGLE_APPLICATION_CREDENTIALS: serviceAccount.json
         VITE_EMULATORS: true
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_DASHBOARD_KEY }}
