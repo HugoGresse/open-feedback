@@ -20,7 +20,6 @@
         "cy:open": "env-cmd -f .env.test.local cypress open",
         "cy:run": "cypress run",
         "cy:start": "env-cmd -f .env.test.local npm run start:local",
-        "cy:start:ci": "npx firebase emulators:start --import=./cypress/fixtures/firebase-emulators-data --only \"firestore,auth,functions,storage\"",
         "storybook": "start-storybook -p 9009 -s public",
         "build-storybook": "build-storybook -s public",
         "lint:i18n": "eslint src/**/languages/*.json",

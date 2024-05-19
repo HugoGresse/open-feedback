@@ -26,14 +26,19 @@ jobs:
             cd functions
             npm ci
             npm run build
+    - name: Change .firebaserc file to use open-feedback-cypress project ID
+      run: |
+                sed -i 's/open-feedback-42/open-feedback-cypress/g' .firebaserc
+                cat .firebaserc
     - name: Run Cypress E2E test
       uses: cypress-io/github-action@v2
       with:
         build: npm run build
-        start: npm run cy:start:ci -- --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} --project open-feedback-cypress, npx firebase serve --only hosting -p 3000 --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}
+        start: npm run cy:start
         wait-on: 'http://localhost:3000, http://localhost:8080, http://localhost:9099'
         record: true
       env:
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}
         VITE_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
         VITE_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
         VITE_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
