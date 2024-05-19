@@ -32,15 +32,15 @@ jobs:
       run: |
                 sed -i 's/open-feedback-42/open-feedback-cypress/g' .firebaserc
                 cat .firebaserc
-    - name: Create .env
+    - name: Create .env.test.local
       run: |
-            echo "VITE_APPID=$CYPRESS_VITE_APPID" > .env
-            echo "VITE_API_KEY=$CYPRESS_VITE_API_KEY" >> .env
-            echo "VITE_AUTH_DOMAIN=$CYPRESS_VITE_AUTH_DOMAIN" >> .env
-            echo "VITE_DATABASE_URL=$CYPRESS_VITE_DATABASE_URL" >> .env
-            echo "VITE_PROJECT_ID=$CYPRESS_VITE_PROJECT_ID" >> .env
-            echo "VITE_EMULATORS=true" >> .env
-            cat .env
+            echo "VITE_APPID=$CYPRESS_VITE_APPID" > .env.test.local
+            echo "VITE_API_KEY=$CYPRESS_VITE_API_KEY" >> .env.test.local
+            echo "VITE_AUTH_DOMAIN=$CYPRESS_VITE_AUTH_DOMAIN" >> .env.test.local
+            echo "VITE_DATABASE_URL=$CYPRESS_VITE_DATABASE_URL" >> .env.test.local
+            echo "VITE_PROJECT_ID=$CYPRESS_VITE_PROJECT_ID" >> .env.test.local
+            echo "VITE_EMULATORS=true" >> .env.test.local
+            cat .env.test.local
       env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}
           VITE_EMULATORS: true
