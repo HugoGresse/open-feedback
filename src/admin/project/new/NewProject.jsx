@@ -91,7 +91,7 @@ const NewProject = ({ organizationId, onCancel }) => {
 
     return (
         <Grid container className={classes.container}>
-            <Grid item xs={12} sm={9} className={classes.leftContainer}>
+            <Grid item xs={12} lg={9} className={classes.leftContainer}>
                 {currentStep === 1 && (
                     <Step1
                         onCancel={onCancel}
