@@ -72,6 +72,7 @@ jobs:
         start: npm run cy:start
         wait-on: 'http://127.0.0.1:3000, http://127.0.0.1:8080, http://127.0.0.1:9099'
         record: true
+        parallel: true
       env:
 #        GOOGLE_APPLICATION_CREDENTIALS: serviceAccount.json
         VITE_EMULATORS: true
