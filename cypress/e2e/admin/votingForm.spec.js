@@ -13,6 +13,7 @@ describe('Test voting form edition', function () {
     const feedback = new FeedbackApp()
 
     beforeEach(() => {
+        cy.clearFirebaseInstallAndAuth()
         app.open()
         app.loginIfNeeded()
     })

@@ -33,6 +33,7 @@ describe('Test creating a new project', function () {
     const feedback = new FeedbackApp()
 
     beforeEach(() => {
+        cy.clearFirebaseInstallAndAuth()
         app.open()
         app.loginIfNeeded()
     })

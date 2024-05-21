@@ -14,6 +14,7 @@ describe('Test organization as owner role', function () {
     const feedback = new FeedbackApp()
 
     beforeEach(() => {
+        cy.clearFirebaseInstallAndAuth()
         app.open()
         app.loginIfNeeded()
     })

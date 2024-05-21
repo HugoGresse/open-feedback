@@ -16,6 +16,7 @@ describe('Event and theme options', function () {
     const feedback = new FeedbackApp()
 
     beforeEach(() => {
+        cy.clearFirebaseInstallAndAuth()
         app.open()
         app.loginIfNeeded()
     })
