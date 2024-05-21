@@ -11,7 +11,7 @@ describe('Navigate on talk list', function () {
     it('Check talks are loaded & displayed', function () {
         feedback.assertTracks(3)
         feedback.assertTalks(4)
-        cy.checkA11yWithoutFirebaseEmulatorsWarning()
+        cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
 
         cy.get('body').should('contain', '27 Thursday')
 
@@ -29,7 +29,7 @@ describe('Navigate on talk list', function () {
 
     it('Check dates changes the displayed talks + extended search', function () {
         feedback.assertTracks(3)
-        cy.checkA11yWithoutFirebaseEmulatorsWarning()
+        cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
 
         cy.contains('28 Friday')
             .should('have.attr', 'href', `/${testProjectId}/2019-06-28`)
@@ -47,7 +47,7 @@ describe('Navigate on talk list', function () {
 
         // Extended search should match more talks
         feedback.search('random')
-        cy.checkA11yWithoutFirebaseEmulatorsWarning()
+        cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
         feedback.assertTalksSearchSuggestions(3, [
             'Why awesome?',
             'The one time story telling',
@@ -58,20 +58,20 @@ describe('Navigate on talk list', function () {
     it('Check filter works', function () {
         // Speaker
         feedback.search('Michel')
-        cy.checkA11yWithoutFirebaseEmulatorsWarning()
+        cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
         feedback.assertTracks(1)
         feedback.assertTalks(2)
 
         // Tags
         feedback.search('Front')
-        cy.checkA11yWithoutFirebaseEmulatorsWarning()
+        cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
         feedback.assertTracks(2)
         feedback.assertTalks(2)
         feedback.assertTalkInList('React')
 
         // Talk
         feedback.search('Vue > React')
-        cy.checkA11yWithoutFirebaseEmulatorsWarning()
+        cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
         feedback.assertTracks(1)
         feedback.assertTalks(1)
         feedback.assertTalkInList('Vue > React')

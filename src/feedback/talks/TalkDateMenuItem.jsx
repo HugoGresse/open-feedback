@@ -6,24 +6,10 @@ import { DateTime } from 'luxon'
 import { Link } from 'react-router-dom'
 import React from 'react'
 import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import { useTheme } from '@mui/material'
 
-const useStyles = makeStyles((theme) => ({
-    item: {
-        transition: 'all 120ms ease-in-out',
-        color: (props) =>
-            props.isSelected
-                ? theme.palette.text.primary
-                : theme.palette.text.secondary,
-        borderBottom: (props) =>
-            `2px ${
-                props.isSelected
-                    ? COLORS.RED_ORANGE
-                    : theme.palette.pageBackground
-            } solid`,
-        '&:hover': {
-            color: COLORS.RED_ORANGE,
-        },
-    },
+const useStyles = makeStyles(() => ({
     a: {
         padding: 10,
         color: 'inherit',
@@ -53,6 +39,7 @@ export const TalkDateMenuItem = ({
     noDateLabel,
     displayFullDates,
 }) => {
+    const theme = useTheme()
     const { t } = useTranslation()
     const classes = useStyles({
         isSelected,
@@ -71,7 +58,20 @@ export const TalkDateMenuItem = ({
     const label = getDateLabel(date)
 
     return (
-        <div className={classes.item}>
+        <Box sx={{
+            transition: 'all 120ms ease-in-out',
+            color: isSelected
+                    ? theme.palette.text.primary
+                    : theme.palette.text.secondary,
+            borderBottom:
+                `2px ${ isSelected
+                        ? COLORS.RED_ORANGE
+                        : theme.palette.pageBackground
+                } solid`,
+            '&:hover': {
+                color: COLORS.RED_ORANGE,
+            },
+        }}>
             <Link
                 to={`${url}`}
                 className={classes.a}
@@ -79,7 +79,7 @@ export const TalkDateMenuItem = ({
             >
                 {label}
             </Link>
-        </div>
+        </Box>
     )
 }
 

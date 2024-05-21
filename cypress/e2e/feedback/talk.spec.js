@@ -37,7 +37,7 @@ describe('Single talk', function () {
         const voteButtonText = 'Trop de code'
 
         cy.getVoteCountData(voteButtonText).then((originalVoteCount) => {
-            cy.checkA11yWithoutFirebaseEmulatorsWarning()
+            cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
             cy.contains(voteButtonText).parent().click()
 
             cy.getVoteCountData(voteButtonText).should((voteCount) => {
