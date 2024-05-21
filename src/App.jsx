@@ -8,17 +8,17 @@ import './App.css'
 
 import Page404 from './Page404.jsx'
 import FeedbackApp from './feedback/FeedbackApp.jsx'
-import Root from './root/Root.jsx'
-import { AdminApp } from './admin/AdminApp.jsx'
+import { SuspendedAdminApp } from './admin/SuspendedAdminApp.jsx'
+import SuspendedRootApp from './root/SuspendedRootApp.jsx'
 
 const App = () => {
     return (
         <Router>
             <Routes>
-                <Route exact path="/" element={<Root />} />
+                <Route exact path="/" element={<SuspendedRootApp />} />
                 <Route strict exact path="/admin" render={() => <Navigate to="/admin/" />} />
-                <Route path="/admin/" element={<AdminApp />} />
-                <Route path="/admin//*" element={<AdminApp />} />
+                <Route path="/admin/" element={<SuspendedAdminApp/>} />
+                <Route path="/admin//*" element={<SuspendedAdminApp />} />
                 <Route path="/:projectId//*" element={<FeedbackApp />} />
                 <Route component={Page404} status={404} />
             </Routes>

@@ -2,10 +2,10 @@ import React, { Suspense, lazy } from 'react'
 import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent.jsx'
 import ErrorBoundary from '../baseComponents/customComponent/ErrorBoundary.jsx'
 import { ALERT_REACT_CATCHED_ERROR_ADMIN } from '../utils/alerting/alerts'
-// noinspection JSCheckFunctionSignatures
+
 const AdminApp = lazy(() => import('./AdminApp.jsx'))
 
-const SuspendedAdminApp = () => {
+export const SuspendedAdminApp = () => {
     return (
         <ErrorBoundary errorToReport={ALERT_REACT_CATCHED_ERROR_ADMIN}>
             <Suspense fallback={<LoaderMatchParent />}>
@@ -14,5 +14,3 @@ const SuspendedAdminApp = () => {
         </ErrorBoundary>
     )
 }
-
-export default SuspendedAdminApp

@@ -54,7 +54,7 @@ const innerTheme = responsiveFontSizes(
 )
 
 
-export const AdminApp = () => {
+export default function AdminApp() {
     useSmallchat()
 
     useEffect(() => {
