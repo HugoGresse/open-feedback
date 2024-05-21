@@ -3,9 +3,29 @@ import ErrorIcon from '@mui/icons-material/Error'
 import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { makeStyles } from '@mui/styles'
 
 
-export const Error = ({ error, errorDetail, classes }) => {
+const useStyles = makeStyles(() => ({
+    root: {
+        maxWidth: '100%',
+        textAlign: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        height: '100vh',
+        justifyContent: 'center',
+        flexDirection: 'column',
+    },
+    errorDetail: {
+        fontFamily: 'monospace',
+    },
+    button: {
+        marginTop: '30px',
+    },
+}))
+
+export const Error = ({ error, errorDetail }) => {
+    const classes = useStyles()
     const reportString = `mailto:hugo.gresse@gmail.com?subject=OpenFeedback%20Error&body=@error:${JSON.stringify(
         error,
     )}@detail:${JSON.stringify(errorDetail)}@url:${JSON.stringify(

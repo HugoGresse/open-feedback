@@ -26,7 +26,7 @@ describe('Single talk', function () {
             .should('contain', 'Friday, June 28')
             .should('contain', '9:00')
             .should('contain', '9:50')
-        cy.checkA11yWithoutFirebaseEmulatorsWarning()
+        cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
     })
 
     it('Check that boolean vote does work (increment/decrement count)', function () {
@@ -60,7 +60,7 @@ describe('Single talk', function () {
                     originalVoteCount
                 )
             })
-            cy.checkA11yWithoutFirebaseEmulatorsWarning()
+            cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
         })
     })
 
@@ -72,7 +72,7 @@ describe('Single talk', function () {
         const voteButtonText = 'Trop de code'
 
         cy.getVoteCountData(voteButtonText).then((originalVoteCount) => {
-            cy.checkA11yWithoutFirebaseEmulatorsWarning()
+            cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
             cy.contains(voteButtonText).parent().click()
 
             const inputText = stringGenerator()
@@ -125,7 +125,7 @@ describe('Single talk', function () {
 
     it('Check that text vote does work (post, edit and delete)', function () {
         feedback.clearUserSession()
-        cy.checkA11yWithoutFirebaseEmulatorsWarning()
+        cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
         cy.reload()
         // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(2000) // user login anonymous
