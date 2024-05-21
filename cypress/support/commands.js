@@ -86,17 +86,33 @@ Cypress.on('uncaught:exception', (err, runnable) => {
     return true
 })
 
+const ifElementExists = (selector, attempt = 0, maxAttempt = 10) => {
+    if (attempt >= maxAttempt) {
+        return null
+    }
+    const queryResultLength = Cypress.$(selector).length
+    if (queryResultLength === 0) {
+        // no appearance, return null
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(100, { log: false }) // wait in small chunks
+        ifElementExists(selector, ++attempt, maxAttempt) // try again
+    }
+    return Promise.resolve(queryResultLength)
+}
+
 /**
  * Click to an email pwd account
  */
 Cypress.Commands.add('clickOnFakeLoginButtonIfVisible', () => {
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(500) // random value, the cookie/page may need additional load time...
     cy.getCookie('isLoggedIn').then((isLoggedIn) => {
         console.log('cookie', isLoggedIn)
         cy.log('isLoggedIn? ' + JSON.stringify(isLoggedIn))
         if (!isLoggedIn || isLoggedIn.value !== 'true') {
-            cy.contains('Fake login with EMAIL').click()
+            ifElementExists('.fakeLogin').then((queryResultLength) => {
+                if (queryResultLength) {
+                    cy.get('.fakeLogin').click()
+                }
+            })
         }
     })
 })

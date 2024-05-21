@@ -22,7 +22,7 @@ export const EmulatorLogin = () => {
         }
     }
 
-    return <OFButton onClick={onLoginPress}>Fake login with EMAIL</OFButton>
+    return <OFButton onClick={onLoginPress} className="fakeLogin">Fake login with EMAIL</OFButton>
 }
 
 const login = async (email, password) => {
