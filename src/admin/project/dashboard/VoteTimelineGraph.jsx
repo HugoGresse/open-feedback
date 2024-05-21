@@ -1,12 +1,13 @@
 import React from 'react'
 import { ResponsiveLine } from '@nivo/line'
-import { useTheme } from '@nivo/core'
 import COLORS from '../../../constants/colors'
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { animated } from 'react-spring'
+import { useTheme as useMuiTheme } from '@mui/material'
+import { useTheme as useNivoTheme} from '@nivo/core'
 
 const VoteTimelineGraph = ({ votes }) => {
-    const theme = useTheme()
+    const theme = useMuiTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('lg'))
 
     return (
@@ -44,7 +45,7 @@ const VoteTimelineGraph = ({ votes }) => {
 }
 
 const VerticalTick = (tick) => {
-    const theme = useTheme()
+    const theme = useNivoTheme()
 
     // Hide first tick at 0, 0
     if (tick.tickIndex === 0 || tick.value === 0) {

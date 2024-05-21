@@ -42,29 +42,23 @@ const VoteTimeline = ({ dinoStartDelay }) => {
             titleIcon={<InsertChartOutlined />}
             rightChildren={
                 <Typography variant="body1">
+                    {votes && dateTime.toLocaleString(dateFormat)}
                     <OFButton
+                        disabled={selectedIndex === 0 || !votes}
                         style={{
                             design: 'text',
                             minWidth: '20px',
                             marginTop: -2,
-                            display:
-                                selectedIndex === 0 || !votes
-                                    ? 'none'
-                                    : 'inline-flex',
                         }}
                         onClick={() => changeDate(selectedIndex - 1)}>
                         <ArrowLeftIcon />
                     </OFButton>
-                    {votes && dateTime.toLocaleString(dateFormat)}
                     <OFButton
+                        disabled={selectedIndex + 1 >= voteByDayKeys.length}
                         style={{
                             design: 'text',
                             minWidth: '20px',
                             marginTop: -2,
-                            display:
-                                selectedIndex + 1 < voteByDayKeys.length
-                                    ? 'inline-flex'
-                                    : 'none',
                         }}
                         onClick={() => changeDate(selectedIndex + 1)}>
                         <ArrowRightIcon />
