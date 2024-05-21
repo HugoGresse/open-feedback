@@ -13,7 +13,9 @@ export const ALERT_REACT_CATCHED_ERROR_ADMIN = (error, stack) => ({
     message: 'React error catched',
     alias:
         'react-error-catch-' +
-        hashString(String(error) + JSON.stringify(stack) + window.origin),
+        hashString(
+            String(error) + JSON.stringify(stack) + window.location.href
+        ),
     description: 'An error occurred in javascript catched by React DidCatch.',
     details: {
         error: String(error),
@@ -29,7 +31,9 @@ export const ALERT_REACT_CATCHED_ERROR_FEEDBACK = (error, stack) => ({
     message: 'Feedback App: React error catched',
     alias:
         'feedback-react-error-catch-' +
-        hashString(String(error) + JSON.stringify(stack) + window.origin),
+        hashString(
+            String(error) + JSON.stringify(stack) + window.location.href
+        ),
     description: 'An error occurred in javascript catched by React DidCatch.',
     details: {
         error: String(error),
@@ -45,7 +49,9 @@ export const ALERT_REACT_CATCHED_ERROR_LANDING = (error, stack) => ({
     message: 'Root/Landing App: React error catched',
     alias:
         'landing-react-error-catch-' +
-        hashString(String(error) + JSON.stringify(stack) + window.origin),
+        hashString(
+            String(error) + JSON.stringify(stack) + window.location.href
+        ),
     description: 'An error occurred in javascript catched by React DidCatch.',
     details: {
         error: String(error),
