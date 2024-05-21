@@ -90,6 +90,8 @@ Cypress.on('uncaught:exception', (err, runnable) => {
  * Click to an email pwd account
  */
 Cypress.Commands.add('clickOnFakeLoginButtonIfVisible', () => {
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(500) // random value, the cookie/page may need additional load time...
     cy.getCookie('isLoggedIn').then((isLoggedIn) => {
         console.log('cookie', isLoggedIn)
         cy.log('isLoggedIn? ' + JSON.stringify(isLoggedIn))
