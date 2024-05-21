@@ -47,3 +47,5 @@ cypress.env.json
 # lighthouse ci
 .lighthouseci/
 /.eslintcache
+
+storybook-static
