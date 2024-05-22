@@ -3,6 +3,7 @@ import React from 'react'
 import { Field, Formik } from 'formik'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { OFSwitch } from './OFSwitch.jsx'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 export default {
     component: OFSwitch,
@@ -10,18 +11,20 @@ export default {
 }
 
 export const defaultUsage = () => (
-    <Formik
-        initialValues={{
-            restrictVoteRange: false,
-        }}
-    >
-        <OFFormControl fieldName="restrictVoteRange">
-            <FormControlLabel
-                label="Swich label"
-                control={
-                    <Field name="restrictVoteRange" component={OFSwitch} />
-                }
-            />
-        </OFFormControl>
-    </Formik>
+    <ThemeProvider theme={createTheme()}>
+        <Formik
+            initialValues={{
+                restrictVoteRange: false,
+            }}
+        >
+            <OFFormControl fieldName="restrictVoteRange">
+                <FormControlLabel
+                    label="Swich label"
+                    control={
+                        <Field name="restrictVoteRange" component={OFSwitch} />
+                    }
+                />
+            </OFFormControl>
+        </Formik>
+    </ThemeProvider>
 )

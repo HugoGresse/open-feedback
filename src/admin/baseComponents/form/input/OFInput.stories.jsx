@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import { Formik } from 'formik'
 import OFFormControlInputFormiked from '../formControl/OFFormControlInputFormiked.jsx'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 export default {
     component: OFInput,
@@ -16,6 +17,7 @@ export const defaultUsage = () => (
 )
 
 export const withFormControl = () => (
+    <ThemeProvider theme={createTheme()}>
     <Formik
         initialValues={{
             name: '',
@@ -37,6 +39,7 @@ export const withFormControl = () => (
             />
         </div>
     </Formik>
+    </ThemeProvider>
 )
 
 export const disabled = () => (

@@ -1,9 +1,11 @@
 import OFDateTimePicker from './OFDateTimePicker.jsx'
 import React from 'react'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import LuxonUtils from '@date-io/luxon'
 import { Field, Formik } from 'formik'
 import OFFormControl from '../formControl/OFFormControl.jsx'
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { DateTime } from 'luxon'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 export default {
     component: OFDateTimePicker,
@@ -16,32 +18,32 @@ export const defaultUsage = () => (
             Date: new Date().toString(),
         }}
     >
-        <MuiPickersUtilsProvider
-            utils={LuxonUtils}
-            locale={navigator.language || navigator.userLanguage}
-        >
+
+        <LocalizationProvider dateAdapter={AdapterLuxon}
+                              adapterLocale={DateTime.now().resolvedLocaleOptions().locale}>
             <Field name="startTime" format="FFF" component={OFDateTimePicker} />
-        </MuiPickersUtilsProvider>
+        </LocalizationProvider>
     </Formik>
 )
 
 export const withFormControl = () => (
-    <Formik
-        initialValues={{
-            Date: new Date().toString(),
-        }}
-    >
-        <MuiPickersUtilsProvider
-            utils={LuxonUtils}
-            locale={navigator.language || navigator.userLanguage}
+    <ThemeProvider theme={createTheme()}>
+        <Formik
+            initialValues={{
+                Date: new Date().toString(),
+            }}
         >
-            <OFFormControl name="Pick the date" fieldName="startTime">
-                <Field
-                    name="startTime"
-                    format="FFF"
-                    component={OFDateTimePicker}
-                />
-            </OFFormControl>
-        </MuiPickersUtilsProvider>
-    </Formik>
+
+            <LocalizationProvider dateAdapter={AdapterLuxon}
+                                  adapterLocale={DateTime.now().resolvedLocaleOptions().locale}>
+                <OFFormControl name="Pick the date" fieldName="startTime">
+                    <Field
+                        name="startTime"
+                        format="FFF"
+                        component={OFDateTimePicker}
+                    />
+                </OFFormControl>
+            </LocalizationProvider>
+        </Formik>
+    </ThemeProvider>
 )
