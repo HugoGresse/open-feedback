@@ -5,7 +5,7 @@
         "noUnusedLocals": true,
         "sourceMap": true,
         "strict": true,
-        "target": "es2017",
+        "target": "esnext",
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "typeRoots": ["./node_modules/@types"]

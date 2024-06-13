@@ -9,3 +9,5 @@ node_modules/
 
 serviceAccountKey.json
 serviceAccountKey.**.json
+*.json
+*.csv
