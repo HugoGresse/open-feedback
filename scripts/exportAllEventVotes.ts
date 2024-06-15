@@ -82,10 +82,36 @@ const exportAllEventVotes = async (projectId: string) => {
     // Write the final export to a CSV file
     const csv = require('csv-writer').createObjectCsvWriter({
         path: './exported-event-votes.csv',
-        header: Object.keys(finalExport[0]).map((key: string) => ({
-            id: key,
-            title: key,
-        })),
+        header: [
+            {
+                id: 'sessionId',
+                title: 'sessionId',
+            },
+            {
+                id: 'title',
+                title: 'title',
+            },
+            {
+                id: 'speakers',
+                title: 'speakers',
+            },
+            {
+                id: 'speakersName',
+                title: 'speakersName',
+            },
+            {
+                id: 'tags',
+                title: 'tags',
+            },
+            {
+                id: 'trackTitle',
+                title: 'trackTitle',
+            },
+            ...project.voteItems.map((item: { id: string; name: string }) => ({
+                id: item.name,
+                title: item.name,
+            })),
+        ],
         fieldDelimiter: ';',
     })
     await csv.writeRecords(finalExport)

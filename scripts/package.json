@@ -12,6 +12,6 @@
         "csv-writer": "^1.6.0",
         "firebase": "^10.11.0",
         "firebase-admin": "^12.0.0",
-        "typescript": "^3.7.2"
+        "typescript": "^5.4.5"
     }
 }
