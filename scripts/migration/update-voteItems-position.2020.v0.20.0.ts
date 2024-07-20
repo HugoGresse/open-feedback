@@ -5,8 +5,8 @@
  * Migrate from v0.19.0 to v0.20.0
  **/
 
-import './helpers/initFirestore'
-import { updateProjects } from './helpers/updates'
+import '../helpers/initFirestore'
+import { updateProjects } from '../helpers/updates'
 
 interface VoteItem {
     position: number
@@ -16,7 +16,7 @@ interface VoteItem {
 }
 
 const main = async () => {
-    await updateProjects(async project => {
+    await updateProjects(async (project) => {
         if (!project.voteItems || project.voteItems.length === 0) {
             return null
         }

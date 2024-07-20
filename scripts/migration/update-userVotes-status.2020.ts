@@ -3,8 +3,8 @@
  * It did not exist before where 'deleted' will be assiotiated with a .delete() operation.
  * Migrate from v0.15.0 to v0.16.0
  **/
-import './helpers/initFirestore'
-import { db, getAllProjects, updateDocuments } from './helpers/updates'
+import '../helpers/initFirestore'
+import { db, getAllProjects, updateDocuments } from '../helpers/updates'
 
 const main = async () => {
     const projects: any = await getAllProjects()
@@ -22,7 +22,7 @@ const main = async () => {
                 .collection('projects')
                 .doc(project.id)
                 .collection('userVotes') as any,
-            async userVote => {
+            async (userVote) => {
                 if (userVote.status) {
                     return {}
                 }
