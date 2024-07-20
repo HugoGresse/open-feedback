@@ -19,7 +19,10 @@ export class VotingForm {
             cy.get('body').should('contain', 'Vote type changed')
             cy.get('div[role=presentation]').contains('Save').click()
         }
-        cy.get('body').should('contain', 'Voting form saved')
+        cy.get('.MuiSnackbarContent-message').should(
+            'contain',
+            'Voting form saved'
+        )
     }
 
     assertVoteItemLength(requiredLength, additionalLang, langCountHalf = true) {
@@ -29,7 +32,7 @@ export class VotingForm {
             requiredLength
         )
         if (additionalLang) {
-            cy.get(`div[title="${additionalLang}"`).should(
+            cy.get(`div[aria-label="${additionalLang}"`).should(
                 'have.length',
                 langCountHalf ? requiredLength / 2 : requiredLength
             )
@@ -57,6 +60,7 @@ export class VotingForm {
     addVoteItemWithLang(nameDefault, nameInLang, lang) {
         cy.contains('New item').click()
         cy.get(`div[aria-label="${lang}"]`)
+            .last()
             .parent()
             .within(() => {
                 cy.get('input[type=text]').last().type(nameInLang)

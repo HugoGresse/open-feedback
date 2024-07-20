@@ -6,9 +6,9 @@ import { checkWriteToProjectAllowed } from '../helpers/checkWriteToProjectAllowe
 import stream from 'stream'
 import imageminPngquant from 'imagemin-pngquant'
 import imageminJpegtran from 'imagemin-jpegtran'
-import { HttpsError } from 'firebase-functions/lib/providers/https'
 import { Bucket, File } from '@google-cloud/storage'
 import { checkWriteToOrganizationAllowed } from '../helpers/checkWriteToOrganizationAllowed'
+import { HttpsError } from 'firebase-functions/v1/https'
 
 /**
  * Upon calling this function with a given file path on GCP Storage, it will resize and move the image to
@@ -48,7 +48,7 @@ export const resizeAndMoveImage = functions.https.onCall(
             fileName,
             docId
         )
-        return encodeURI(await makePublicAndGetUrl(newFile))
+        return await makePublicAndGetUrl(newFile)
     }
 )
 
@@ -105,9 +105,8 @@ const resize = async (
     return await new Promise((resolve, reject) =>
         tempWritableStream
             .on('finish', async () => {
-                const transformedBuffer = await minimizeImageFromBufferArray(
-                    bufferData
-                )
+                const transformedBuffer =
+                    await minimizeImageFromBufferArray(bufferData)
                 await saveImage(transformedBuffer, outputFile, metadata)
                 await bucket.file(filePath).delete()
                 resolve([outputFile, newFileName])
@@ -127,7 +126,21 @@ const moveToFinalDir = (
 }
 
 const makePublicAndGetUrl = async (file: File): Promise<string> => {
-    await file.makePublic()
+    const result = await file.makePublic()
+
+    const isEmulator = process.env.FUNCTIONS_EMULATOR === 'true'
+    if (
+        result[0] !== undefined &&
+        result[0].selfLink !== undefined &&
+        isEmulator
+    ) {
+        const fileInfo = await fetch(
+            result[0].selfLink.replace('/acl/allUsers', '')
+        )
+        const data = await fileInfo.json()
+        return data.mediaLink
+    }
+
     return `https://${file.bucket.name}.storage.googleapis.com/${file.name}`
 }
 

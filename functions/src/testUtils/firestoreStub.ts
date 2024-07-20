@@ -1,4 +1,5 @@
 import * as admin from 'firebase-admin'
+import { vi } from 'vitest'
 
 // test().firestore.makeDocumentSnapshot
 export const makeDocumentSnapshot = (
@@ -12,11 +13,11 @@ export const makeDocumentSnapshot = (
 }
 
 export const getFirestoreMocksAndInit = () => {
-    const firestoreStub = jest.fn(() => ({
+    const firestoreStub = vi.fn(() => ({
         collection,
     }))
 
-    const collection = jest.fn((path) => {
+    const collection = vi.fn((path) => {
         return {
             where,
             limit,
@@ -24,7 +25,7 @@ export const getFirestoreMocksAndInit = () => {
         }
     })
 
-    const doc = jest.fn(() => {
+    const doc = vi.fn(() => {
         return {
             get,
             set,
@@ -42,7 +43,7 @@ export const getFirestoreMocksAndInit = () => {
         set: () => Promise<any>
         update: () => Promise<any>
         onSnapshot: () => Promise<any>
-    } = jest.fn(() => {
+    } = vi.fn(() => {
         return {
             where,
             limit,
@@ -53,7 +54,7 @@ export const getFirestoreMocksAndInit = () => {
         }
     })
 
-    const limit = jest.fn((limitCount: number) => {
+    const limit = vi.fn((limitCount: number) => {
         return {
             get,
             set,
@@ -62,10 +63,10 @@ export const getFirestoreMocksAndInit = () => {
         }
     })
 
-    const get = jest.fn((): Promise<any> => Promise.resolve(true))
-    const set = jest.fn((): Promise<any> => Promise.resolve(true))
-    const update = jest.fn((): Promise<any> => Promise.resolve(true))
-    const onSnapshot = jest.fn((): Promise<any> => Promise.resolve(true))
+    const get = vi.fn((): Promise<any> => Promise.resolve(true))
+    const set = vi.fn((): Promise<any> => Promise.resolve(true))
+    const update = vi.fn((): Promise<any> => Promise.resolve(true))
+    const onSnapshot = vi.fn((): Promise<any> => Promise.resolve(true))
 
     replaceFirestoreByStub(firestoreStub)
 

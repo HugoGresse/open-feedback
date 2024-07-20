@@ -2,6 +2,7 @@ import { VotingForm } from './AdminApp.VotingForm'
 import { Settings } from './AdminApp.Settings'
 import { EventTheme } from './AdminApp.EventTheme'
 import { Organization } from './AdminApp.Organization'
+import { onBeforeLoadChangeNavigatorLanguages } from '../utils/onBeforeLoadChangeNavigatorLanguages.js'
 
 export const VOTE_ITEM_TYPES = {
     chip: 'Chip',
@@ -14,7 +15,9 @@ export class AdminApp {
     organization = new Organization()
 
     open() {
-        cy.visit('/admin')
+        cy.visit('/admin', {
+            ...onBeforeLoadChangeNavigatorLanguages,
+        })
         cy.injectAxe()
     }
 
@@ -70,7 +73,10 @@ export class AdminApp {
         const { addTagFromAutoComplete } = tagsOptions
         if (addFirstAvailableTrack) {
             cy.get('input[id=trackTitle]').focus().click()
-            cy.get('#trackTitle-popup').children().first().click()
+            cy.get('div[role=presentation] #trackTitle-listbox')
+                .children()
+                .first()
+                .click()
         }
         if (assertTrackTitle) {
             cy.get('input[id=trackTitle]').should(
@@ -87,10 +93,8 @@ export class AdminApp {
         }
         if (speakers.length > 0) {
             for (const speaker of speakers) {
-                const {
-                    typeForAutoComplete,
-                    useFirstFromAutoComplete,
-                } = speaker
+                const { typeForAutoComplete, useFirstFromAutoComplete } =
+                    speaker
 
                 if (typeForAutoComplete) {
                     cy.get('input[id=speakers]').type(typeForAutoComplete, {
@@ -98,7 +102,7 @@ export class AdminApp {
                     })
                 }
                 if (useFirstFromAutoComplete) {
-                    cy.get('#speakers-popup').children().first().click()
+                    cy.get('#speakers-listbox').children().first().click()
                 }
             }
         }

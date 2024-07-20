@@ -1,29 +1,29 @@
 import { ROUTE_EVENT_SEGMENT } from '../../RoutingMap'
 
-export const redirectToProject = (currentProjectId, newProjectId, history) => {
+export const redirectToProject = (currentProjectId, newProjectId, navigate) => {
     if (newProjectId === currentProjectId) {
         return
     }
 
-    // If we have switch the project at runtime
+    // If we have to switch the project at runtime
     if (
         currentProjectId &&
-        history.location.pathname.includes(currentProjectId)
+        window.location.pathname.includes(currentProjectId)
     ) {
-        const redirectUrl = history.location.pathname.replace(
+        const redirectUrl = window.location.pathname.replace(
             currentProjectId,
             newProjectId
         )
 
-        history.push(redirectUrl)
+        navigate(redirectUrl)
     } else if (
         !currentProjectId &&
-        history.location.pathname.includes(newProjectId)
+        window.location.pathname.includes(newProjectId)
     ) {
         // No nothing, hard refresh, id in url but not in states
     } else {
-        history.push(
-            `${history.location.pathname}${ROUTE_EVENT_SEGMENT}/${newProjectId}`
+        navigate(
+            `${window.location.pathname}${ROUTE_EVENT_SEGMENT}/${newProjectId}`
         )
     }
 }

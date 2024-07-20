@@ -1,12 +1,17 @@
 import { VOTE_ITEM_TYPES } from './AdminApp'
+import { onBeforeLoadChangeNavigatorLanguages } from '../utils/onBeforeLoadChangeNavigatorLanguages.js'
 
 export class FeedbackApp {
     open(talkId, options = {}) {
         const rootUrl = `/${Cypress.env('firestoreTestProjectId')}`
         if (talkId) {
-            cy.visit(`${rootUrl}/${talkId}`)
+            cy.visit(`${rootUrl}/${talkId}`, {
+                ...onBeforeLoadChangeNavigatorLanguages,
+            })
         } else {
-            cy.visit(rootUrl)
+            cy.visit(rootUrl, {
+                ...onBeforeLoadChangeNavigatorLanguages,
+            })
         }
 
         cy.injectAxe()
@@ -18,13 +23,18 @@ export class FeedbackApp {
 
     openTalkByClick(name) {
         cy.contains(name).click()
-        cy.checkA11yWithoutFirebaseEmulatorsWarning()
+        cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
     }
 
     clearUserSession() {
         // New user account without any voted stuffs
         indexedDB.deleteDatabase('firebaseLocalStorageDb')
+        indexedDB.deleteDatabase('firebase-installations-database')
+        indexedDB.deleteDatabase('firebase-heartbeat-database')
         cy.clearCookies()
+
+        cy.reload()
+        cy.injectAxe()
         // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(2000)
     }
@@ -40,7 +50,7 @@ export class FeedbackApp {
     assertTitle(expectedTitle, shouldBeHidden) {
         if (shouldBeHidden) {
             cy.get(`img[alt="logo ${expectedTitle}"]`)
-                .next()
+                .parent()
                 .should('not.have.text', expectedTitle)
         } else {
             cy.get('img[alt=logo]').next().contains(expectedTitle)

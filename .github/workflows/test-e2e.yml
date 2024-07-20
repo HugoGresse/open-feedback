@@ -1,18 +1,32 @@
 name: Run End to End test using Cypress
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   cypress-run:
     name: Run End to end test using Cypress
     runs-on: ubuntu-latest
+    strategy:
+        # when one test fails, DO NOT cancel the other
+        # containers, because this will kill Cypress processes
+        # leaving Cypress Cloud hanging ...
+        # https://github.com/cypress-io/github-action/issues/48
+        fail-fast: false
+        matrix:
+            # run 3 copies of the current job in parallel
+            containers: [1, 2, 3]
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
-    - name: Setup Node 14
-      uses: actions/setup-node@v2
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
-        node-version: '14'
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+    - uses: 'google-github-actions/auth@v2'
+      with:
+          credentials_json: '${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}'
+
     - name: "Create .runtimeconfig.json"
       run: 'echo "$RUNTIME_CONFIG_TEST" > functions/.runtimeconfig.json'
       shell: bash
@@ -21,29 +35,55 @@ jobs:
     - name: "test"
       run: 'cat functions/.runtimeconfig.json'
       shell: bash
+
     - name: Install functions dependencies
       run: |
             cd functions
             npm ci
             npm run build
-    - name: Run Cypress E2E test
-      uses: cypress-io/github-action@v2
-      with:
-        build: npm run build
-        start: npm run cy:start:ci -- --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }} --project open-feedback-cypress, npx firebase serve --only hosting -p 3000 --token=${{ secrets.CYPRESS_FIREBASE_TOKEN }}
-        wait-on: 'http://localhost:3000, http://localhost:8080, http://localhost:9099'
-        record: true
+
+    - name: Change .firebaserc file to use open-feedback-cypress project ID
+      run: |
+                sed -i 's/open-feedback-42/open-feedback-cypress/g' .firebaserc
+                cat .firebaserc
+#    - name: Create serviceAccount.json
+#      run: |
+#            echo "$SERVICE_ACCOUNT_JSON" > serviceAccount.json
+#      env:
+#          SERVICE_ACCOUNT_JSON: ${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}
+
+    - name: Create .env.test.local
+      run: |
+            echo "VITE_APPID=$CYPRESS_VITE_APPID" > .env.test.local
+            echo "VITE_API_KEY=$CYPRESS_VITE_API_KEY" >> .env.test.local
+            echo "VITE_AUTH_DOMAIN=$CYPRESS_VITE_AUTH_DOMAIN" >> .env.test.local
+            echo "VITE_DATABASE_URL=$CYPRESS_VITE_DATABASE_URL" >> .env.test.local
+            echo "VITE_PROJECT_ID=$CYPRESS_VITE_PROJECT_ID" >> .env.test.local
+            echo "VITE_STORAGE_BUCKET=$CYPRESS_VITE_STORAGE_BUCKET" >> .env.test.local
+            echo "VITE_EMULATORS=true" >> .env.test.local
+            cat .env.test.local
       env:
+#          GOOGLE_APPLICATION_CREDENTIALS: serviceAccount.json
+          VITE_EMULATORS: true
+          CYPRESS_VITE_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
+          CYPRESS_VITE_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
+          CYPRESS_VITE_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
+          CYPRESS_VITE_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
+          CYPRESS_VITE_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
+          CYPRESS_VITE_STORAGE_BUCKET: ${{ secrets.E2E_FIREBASE_BUCKET }}
+          FIREBASE_STORAGE_EMULATOR_HOST: 127.0.0.1:9199
+
+    - name: Run Cypress E2E test
+      uses: cypress-io/github-action@v6
+      with:
+        browser: chrome
+        build: npm run build
+        start: npm run cy:start
+        wait-on: 'http://127.0.0.1:3000, http://127.0.0.1:8080, http://127.0.0.1:9099'
+        record: true
+        parallel: true
+      env:
+#        GOOGLE_APPLICATION_CREDENTIALS: serviceAccount.json
+        VITE_EMULATORS: true
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_DASHBOARD_KEY }}
-        REACT_APP_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
-        REACT_APP_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
-        REACT_APP_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
-        REACT_APP_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
-        REACT_APP_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
-        CYPRESS_REACT_APP_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
-        CYPRESS_REACT_APP_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
-        CYPRESS_REACT_APP_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
-        CYPRESS_REACT_APP_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
-        CYPRESS_REACT_APP_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
-        REACT_APP_EMULATORS: true
-        EMULATORS_NAMES: "firestore,auth,functions"

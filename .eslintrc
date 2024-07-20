@@ -5,11 +5,23 @@
         "cypress/globals": true,
         "node": true
     },
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
     "plugins": ["react", "cypress"],
     "extends": [
-        "react-app",
+        "eslint:recommended",
+        "plugin:react/recommended",
         "plugin:i18n-json/recommended"
     ],
+    "settings": {
+        "react": {
+            "createClass": "createReactClass", // Regex for Component Factory to use,
+            "pragma": "React",  // Pragma to use, default to "React"
+            "fragment": "Fragment",  // Fragment to use (may be a property of <pragma>), default to "Fragment"
+            "version": "detect" // React version. "detect" automatically picks the version you have installed.
+        }
+    },
     "rules": {
         "comma-dangle": 0,
         "react/jsx-uses-vars": 1,

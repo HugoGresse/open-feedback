@@ -1,9 +1,10 @@
-import * as admin from 'firebase-admin'
+import { initializeApp } from 'firebase-admin/app'
+import { FieldValue } from 'firebase-admin/firestore'
 
 export const initFirebase = () => {
-    admin.initializeApp()
+    initializeApp()
 }
 
-export const arrayUnion = admin.firestore.FieldValue.arrayUnion
-export const serverTimestamp = admin.firestore.FieldValue.serverTimestamp
-export const firestoreIncrement = admin.firestore.FieldValue.increment
+export const arrayUnion = FieldValue.arrayUnion
+export const serverTimestamp = FieldValue.serverTimestamp
+export const firestoreIncrement = FieldValue.increment

@@ -10,6 +10,7 @@
 
 # production
 /build
+/dist
 
 # misc
 *~
@@ -46,3 +47,5 @@ cypress.env.json
 # lighthouse ci
 .lighthouseci/
 /.eslintcache
+
+storybook-static

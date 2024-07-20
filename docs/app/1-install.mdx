@@ -1,0 +1,152 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Documentation/Install" />
+
+# Installation
+
+## Pre-requisites
+
+- node 14, 16 or 17
+- npm
+
+## Setup
+
+### Configure Firebase
+Create a firebase project with the [firebase console](https://console.firebase.google.com).
+
+1. Create a "Cloud Firestore" Database. It's okay to start in 'locked' mode. The rules will be overriden when you deploy.
+2. Activate "Anonymous" as a sign-in provider for Authentication of voters
+3. Activate "Google" as a sign-in provider for Admin Authentication. (You may want to add Email/Pwd", "Phone", "Google", "GitHub" later on)
+4. Create a `.env.production.local` file by copying `.env` file at root folder and set firebase environment variables. You can get all these variables from the Firebase Console homepage by clicking "Add an application" and selecting the web icon.
+
+  * `VITE_ADMIN_EMAIL=<ADMIN_EMAIL>`
+  * `VITE_APPID=<APP_ID>`
+  * `VITE_API_KEY=<API_KEY>`
+  * `VITE_AUTH_DOMAIN=<AUTH_DOMAIN>`
+  * `VITE_DATABASE_URL=<DATABASE_URL>`
+  * `VITE_PROJECT_ID=<PROJECT_ID>`
+  * `VITE_STORAGE_BUCKET=<STORAGE_BUCKET>`
+  * `VITE_MEASUREMENT_ID=<MEASUREMENT_ID>` (replace Google Analytics specific configuration)
+
+5. In package.json, change `homepage` to your instance url.
+
+### Configure Mailgun (optional)
+The application sends emails through the Mailgun API
+
+You have to create a Mailgun account if you want to send those emails, if not the app will still works perfectly but without sending any email.
+
+Mailgun API is used to send email through Cloud Functions, so you will have to add environment variables with Firebase CLI:
+
+- The application URL: app.url (ex: `http://localhost:3000`)
+- The API key: mailgun.key
+- The domain name: mailgun.domain
+- The Mailgun API url: mailgun.api (ex https://api.eu.mailgun.net/v3/SOMETHINGLIKE_THIS/messages)
+
+Here the command to register those variables:
+
+    firebase functions:config:set app.url="https://myserver.com" mailgun.key="MAILGUN API KEY" mailgun.domain="MAILGUN DOMAIN"  mailgun.api="https://api.eu.mailgun.net/v3/SOMETHINGLIKE_THIS/messages"
+
+To test cloud functions with Mailgun on your local machine (with cloud function shell), you will need to generate ``.runtimeconfig.json` file with environment variables :
+
+    firebase functions:config:get > .runtimeconfig.json
+
+> Important Note: Mailgun is an external service from Firebase and Google, so to be able use it with you will need to activate Firebase pricing.
+
+### Configure OpsGenie (optional)
+The application report alerting using OpsGenie, it is optional and the app will still works perfectly but without any alerting.
+
+You will have to add environment variables with Firebase CLI:
+
+- The application URL: app.url (ex: `http://localhost:3000`)
+- The OpsGenie API key: opsgenie.key
+- The OpsGenie api domain: opsgenie.api
+- For contact email (optional): app.contactemail
+- For contact email captcha, the recaptcha V3 Secret: app. recaptchav3secret
+
+Here the command to register those variables:
+
+    firebase functions:config:set app.url="https://myserver.com" opsgenie.api="https://api.eu.opsgenie.com" opsgenie.key="xxxxx-xxxxxx-xxxxxx-xxxxx"
+
+To test alerting on your local machine (with cloud function shell), you will need to generate ``.runtimeconfig.json` file with environment variables :
+
+    firebase functions:config:get > .runtimeconfig.json
+
+> Important Note: OpsGenie is an external service from Firebase and Google, so to be able use it with you will need to activate Firebase pricing.
+
+### Configure SmallChat (optional)
+Smallchat provide a live support interface for your web app. It's the "Send a message" at the bottom right that allow users to communicate directly with the you.
+SmallChat has a free tier and you can answer from Slack directly.
+
+1. Create your account on [small.chat](https://small.chat/)
+2. Add the js url to the desired env file (ex: `.env.local`):
+    ```
+    # Small Chat (custom live support)
+    VITE_SMALL_CHAT=https://embed.small.chat/T<someNumbers>.js
+    ```
+
+
+## Run
+
+## Cloud functions
+
+The project uses cloud functions for vote aggregations. Before deploying the application, you need to resolve cloud functions dependencies.
+
+
+Cloud functions uses its own `package.json`, first install dependencies. From the `/functions` folder:
+
+```
+npm i
+```
+
+And then from the root of the project:
+
+```
+firebase functions:config:set 'app.contactemail=<ADMIN_EMAIL>'
+```
+
+The next deploy will also deploy Firebase Cloud Functions
+
+## Deploy
+
+### Pre-requisites
+1. Install firebase-cli :
+    ```
+    npm install firebase-tools -g
+    ```
+
+2. You must be logged with firebase and select project ([Firebase documentation](https://firebase.google.com/docs/web)) :
+    ```
+    firebase login
+    firebase use --add
+    ```
+3. Install dependencies for the app and cloud functions.
+
+### Build and deploy the app
+
+```
+npm run deploy
+```
+
+Install dependencies for the app and cloud functions.
+
+The first time your run the app, it may fail to do firestore queries due to missing indexes. If that happens, you'll see an error message in the console with a link that you can follow to create the indices.
+
+### Run the app in dev mode
+
+
+1. Clone the Open Feedback app and install dependencies
+    ```
+    git clone git@github.com:HugoGresse/open-feedback.git
+    npm i
+    ```
+2. Configure the app with [Firebase](#configure-firebase)
+3. Start the app
+    ```
+    npm start
+    ```
+
+    >Before using the app, you'll need to deploy the firestore security rules at least once (see below for how to deploy with firebase)
+
+4. Open [http://localhost:3000](http://localhost:3000) to view the app in the browser.
+
+

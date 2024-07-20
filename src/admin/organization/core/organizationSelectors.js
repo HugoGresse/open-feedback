@@ -51,7 +51,7 @@ export const isOrganizationRightAllowed = createSelector(
     (organization, userId) => {
         return (
             organization.ownerUserId === userId ||
-            organization.adminUserIds.includes(userId)
+            (organization.adminUserIds || []).includes(userId)
         )
     }
 )

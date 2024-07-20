@@ -228,7 +228,7 @@
         "resetVotes": {
             "button": "Réinitialiser les votes à zéro",
             "confirmTitle": "Êtes-vous sûr de vouloir réinitialiser/supprimer tous les votes ?",
-            "confirmDescription": "Cci est définitif, tous les votes seront supprimés.",
+            "confirmDescription": "Ceci est définitif, tous les votes seront supprimés.",
             "deleted": "Votes supprimés."
         },
         "settings": "Paramètres",

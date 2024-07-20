@@ -20,7 +20,8 @@ export const ALERT_REACT_CATCHED_ERROR_ADMIN = (error, stack) => ({
     details: {
         error: String(error),
         stack: JSON.stringify(stack),
-        origin: window.location.href,
+        origin: window.origin,
+        location: window.location,
     },
     tags: ['react'],
     priority: 'P5',
@@ -37,7 +38,8 @@ export const ALERT_REACT_CATCHED_ERROR_FEEDBACK = (error, stack) => ({
     details: {
         error: String(error),
         stack: JSON.stringify(stack),
-        origin: window.location.href,
+        origin: window.origin,
+        location: window.location,
     },
     tags: ['react'],
     priority: 'P2',
@@ -54,7 +56,8 @@ export const ALERT_REACT_CATCHED_ERROR_LANDING = (error, stack) => ({
     details: {
         error: String(error),
         stack: JSON.stringify(stack),
-        origin: window.location.href,
+        origin: window.origin,
+        location: window.location,
     },
     tags: ['react'],
     priority: 'P2',

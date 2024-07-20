@@ -1,5 +1,5 @@
-import { CallableContext } from 'firebase-functions/lib/providers/https'
 import * as functions from 'firebase-functions'
+import { CallableContext } from 'firebase-functions/lib/common/providers/https'
 
 export const assertUserAuthenticated = (context: CallableContext): string => {
     if (!(context.auth && context.auth.token)) {

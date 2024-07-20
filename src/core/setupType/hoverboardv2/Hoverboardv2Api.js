@@ -1,4 +1,4 @@
-import firebase from 'firebase/app'
+import firebase from 'firebase/compat/app'
 import { formatTalksWithScheduledForHoverboardv2 } from '../../talks/talksUtils'
 
 class Hoverboardv2Api {
@@ -6,7 +6,7 @@ class Hoverboardv2Api {
         this.config = config
 
         if (
-            firebase.apps.filter(app => app.name === this.config.projectId)
+            firebase.apps.filter((app) => app.name === this.config.projectId)
                 .length > 0
         ) {
             return
@@ -29,14 +29,14 @@ class Hoverboardv2Api {
             ([resultSchedule, resultTalks]) => {
                 let talks = {}
                 let schedule = []
-                resultTalks.forEach(doc => {
+                resultTalks.forEach((doc) => {
                     talks[doc.id] = {
                         ...doc.data(),
                         id: doc.id,
                     }
                 })
 
-                resultSchedule.forEach(doc => {
+                resultSchedule.forEach((doc) => {
                     schedule.push(doc.data())
                 })
 
@@ -48,10 +48,7 @@ class Hoverboardv2Api {
     getTalk(talkId) {
         const firestore = this.getFirestore()
         const schedulePromise = firestore.collection('schedule').get()
-        const talksPromise = firestore
-            .collection('sessions')
-            .doc(talkId)
-            .get()
+        const talksPromise = firestore.collection('sessions').doc(talkId).get()
 
         return Promise.all([schedulePromise, talksPromise]).then(
             ([resultSchedule, resultTalks]) => {
@@ -63,7 +60,7 @@ class Hoverboardv2Api {
                     id: resultTalks.id,
                 }
 
-                resultSchedule.forEach(doc => {
+                resultSchedule.forEach((doc) => {
                     schedule.push(doc.data())
                 })
 
@@ -76,10 +73,10 @@ class Hoverboardv2Api {
         return this.getFirestore()
             .collection('speakers')
             .get()
-            .then(speakersSnapshot => {
+            .then((speakersSnapshot) => {
                 let speakers = {}
 
-                speakersSnapshot.forEach(doc => {
+                speakersSnapshot.forEach((doc) => {
                     speakers[doc.id] = doc.data()
                     speakers[doc.id].id = doc.id
                 })

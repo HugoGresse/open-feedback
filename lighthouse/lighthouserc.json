@@ -4,7 +4,7 @@
             "budgetsFile": "./lighthouse/budget.json"
         },
         "collect": {
-            "staticDistDir": "./build"
+            "staticDistDir": "./dist"
         },
         "upload": {
             "target": "temporary-public-storage"

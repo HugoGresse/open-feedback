@@ -5,7 +5,7 @@ import { addNotification } from '../../../notification/notifcationActions'
 import { redirectToOrganization } from '../../../organization/utils/redirectToOrganization'
 
 let stopListenForInvite
-export const listenForInvite = (inviteId, history) => (dispatch) => {
+export const listenForInvite = (inviteId, navigate) => (dispatch) => {
     stopListenForInvite = fireStoreMainInstance
         .collection('invites')
         .doc(inviteId)
@@ -18,7 +18,7 @@ export const listenForInvite = (inviteId, history) => (dispatch) => {
                         payload: data,
                     })
                     if (data.status === 'completed') {
-                        onInviteCompleted(data, history)
+                        onInviteCompleted(data, navigate)
                     }
                 } else {
                     dispatch(
@@ -47,11 +47,11 @@ export const unsubscribeRealtimeInviteListener = () => () => {
     stopListenForInvite && stopListenForInvite()
 }
 
-const onInviteCompleted = (invite, history) => {
+const onInviteCompleted = (invite, navigate) => {
     if (invite.projectId) {
-        redirectToProject(null, invite.projectId, history)
+        redirectToProject(null, invite.projectId, navigate)
     } else if (invite.organizationId) {
-        redirectToOrganization(invite.organizationId, history)
+        redirectToOrganization(invite.organizationId, navigate)
     } else {
         throw new Error('Unmanaged invite type on completion')
     }

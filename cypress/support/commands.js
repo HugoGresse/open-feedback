@@ -1,4 +1,5 @@
 const { triggerSaveKeypress } = require('../utils/triggerSaveKeyPress')
+import 'cypress-if'
 
 Cypress.Commands.add('checkA11yWithoutFirebaseEmulatorsWarning', () => {
     // Firebase emulators add a message the the bottom of the screen containing:
@@ -6,11 +7,25 @@ Cypress.Commands.add('checkA11yWithoutFirebaseEmulatorsWarning', () => {
     // which does not appear in production, we discoard this for Axe run confis
 
     // .MuiButtonBase-root is because white text on blue or orange background is
-    // computed hs having the wrong ratio but is usually better
+    // computed as having the wrong ratio but is usually better
     // source https://uxmovement.com/buttons/the-myths-of-color-contrast-accessibility/
     cy.checkA11y({
         exclude: [['.firebase-emulator-warning'], ['.MuiButtonBase-root']],
     })
+})
+
+/** The H1 can be hidden depending on the project settings... */
+Cypress.Commands.add('checkA11yWithoutFirebaseEmulatorsWarningAndH1', () => {
+    cy.checkA11y(
+        {
+            exclude: [['.firebase-emulator-warning'], ['.MuiButtonBase-root']],
+        },
+        {
+            rules: {
+                'page-has-heading-one': { enabled: false },
+            },
+        }
+    )
 })
 
 /**
@@ -47,21 +62,6 @@ Cypress.Commands.add(
     }
 )
 
-Cypress.Commands.add('uploadImage', (image, imagePath, el) => {
-    // convert the logo base64 string to a blob
-    const blob = Cypress.Blob.base64StringToBlob(image, 'image/png')
-
-    const file = new File([blob], imagePath, { type: 'image/png' })
-    const list = new DataTransfer()
-
-    list.items.add(file)
-    const myFileList = list.files
-
-    el[0].files = myFileList
-    el[0].dispatchEvent(new Event('change', { bubbles: true }))
-    console.log('Image upload set!')
-})
-
 Cypress.Commands.add('typeSaveButtons', () => {
     cy.document().then((doc) => {
         triggerSaveKeypress(doc)
@@ -87,15 +87,20 @@ Cypress.on('uncaught:exception', (err, runnable) => {
     return true
 })
 
-/**
- * Click to an email pwd account
- */
+Cypress.Commands.add('clearFirebaseInstallAndAuth', () => {
+    cy.clearAllCookies()
+    indexedDB.deleteDatabase('firebaseLocalStorageDb')
+    indexedDB.deleteDatabase('firebase-installations-database')
+    indexedDB.deleteDatabase('firebase-heartbeat-database')
+})
+
 Cypress.Commands.add('clickOnFakeLoginButtonIfVisible', () => {
     cy.getCookie('isLoggedIn').then((isLoggedIn) => {
         console.log('cookie', isLoggedIn)
         cy.log('isLoggedIn? ' + JSON.stringify(isLoggedIn))
+
         if (!isLoggedIn || isLoggedIn.value !== 'true') {
-            cy.contains('Fake login with EMAIL').click()
+            cy.get('.fakeLogin').click()
         }
     })
 })

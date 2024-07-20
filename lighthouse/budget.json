@@ -1,20 +1,20 @@
 [
     {
-        "path":"/*",
-        "resourceSizes":[
+        "path": "/*",
+        "resourceSizes": [
             {
-                "resourceType":"total",
-                "budget":740000
+                "resourceType": "total",
+                "budget": 740000
             },
             {
-                "resourceType":"script",
-                "budget":690000
+                "resourceType": "script",
+                "budget": 690000
             }
         ],
-        "resourceCounts":[
+        "resourceCounts": [
             {
-                "resourceType":"third-party",
-                "budget":14
+                "resourceType": "third-party",
+                "budget": 20
             }
         ]
     }

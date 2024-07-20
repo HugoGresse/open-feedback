@@ -1,35 +1,35 @@
 const RoutingMap = {
     dashboard: {
         i18key: 'rooting.dashboard',
-        url: '/dashboard',
+        url: '/dashboard/',
     },
     talks: {
         i18key: 'rooting.talks',
-        url: '/talks',
+        url: '/talks/',
     },
     speakers: {
         i18key: 'rooting.speakers',
-        url: '/speakers',
+        url: '/speakers/',
     },
     moderation: {
         i18key: 'rooting.moderation',
-        url: '/moderation',
+        url: '/moderation/',
     },
     settingEvent: {
         i18key: 'rooting.settingEvent',
-        url: '/setting/event',
+        url: '/setting/event/',
     },
     settingVotingform: {
         i18key: 'rooting.settingVotingform',
-        url: '/setting/votingform',
+        url: '/setting/votingform/',
     },
     settingSetup: {
         i18key: 'rooting.settingSetup',
-        url: '/setting/setup',
+        url: '/setting/setup/',
     },
     settingUsers: {
         i18key: 'rooting.settingUsers',
-        url: '/setting/users',
+        url: '/setting/users/',
     },
 }
 export default RoutingMap

@@ -1,22 +1,22 @@
-import firebase from 'firebase/app'
-import 'firebase/firestore'
-import 'firebase/auth'
-import 'firebase/performance'
-import 'firebase/functions'
-import 'firebase/analytics'
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/firestore'
+import 'firebase/compat/auth'
+import 'firebase/compat/performance'
+import 'firebase/compat/functions'
+import 'firebase/compat/analytics'
+import 'firebase/compat/storage'
 
-export const isUsingEmulators = process.env.REACT_APP_EMULATORS === 'true'
+export const isUsingEmulators = import.meta.env.VITE_EMULATORS === 'true'
 
 const config = {
-    apiKey: process.env.REACT_APP_API_KEY,
-    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-    databaseURL: process.env.REACT_APP_DATABASE_URL,
-    projectId: process.env.REACT_APP_PROJECT_ID,
-    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-    appId: process.env.REACT_APP_APPID,
-    measurementId: process.env.REACT_APP_MEASUREMENT_ID,
+    apiKey: import.meta.env.VITE_API_KEY,
+    authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+    databaseURL: import.meta.env.VITE_DATABASE_URL,
+    projectId: import.meta.env.VITE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+    appId: import.meta.env.VITE_APPID,
+    measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 }
-
 const firebaseMain = firebase.initializeApp(config)
 
 export const auth = firebase.auth
@@ -40,7 +40,7 @@ export const functions = {
 }
 export const HttpsFunctionsUrl = {
     sendContactEmail: isUsingEmulators
-        ? `http://localhost:5001/${config.projectId}/us-central1/sendContactEmail`
+        ? `http://127.0.0.1:5001/${config.projectId}/us-central1/sendContactEmail`
         : `https://us-central1-${config.projectId}.cloudfunctions.net/sendContactEmail`,
 }
 authProvider.useDeviceLanguage()
@@ -51,12 +51,13 @@ if (process.env.NODE_ENV === 'production') {
 if (isUsingEmulators) {
     // eslint-disable-next-line no-console
     console.log('ℹ️ App is using Firebase Emulators')
-    authProvider.useEmulator('http://localhost:9099')
-    firebase.functions().useEmulator('localhost', 5001)
+    authProvider.useEmulator('http://127.0.0.1:9099')
+    firebase.storage().useEmulator('127.0.0.1', 9199)
+    firebase.functions().useEmulator('127.0.0.1', 5001)
     // Fix issue with Cypress, see https://github.com/cypress-io/cypress/issues/6350#issuecomment-697122434
     fireStoreMainInstance.settings({
         experimentalForceLongPolling: true,
-        host: 'localhost:8080',
+        host: '127.0.0.1:8080',
         ssl: false,
     })
 }

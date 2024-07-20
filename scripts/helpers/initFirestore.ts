@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import * as admin from 'firebase-admin'
+import { initializeApp, cert } from 'firebase-admin/app'
 
 // service account credentials (need to be downloaded from firebase console)
 import serviceAccount from '../serviceAccountKey.json'
@@ -13,9 +13,8 @@ if (!serviceAccount) {
     process.exit(1)
 }
 
-// initialize app credentials
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount as any),
+initializeApp({
+    credential: cert(serviceAccount as any),
 })
 
 console.log('Connected.\n \n')
