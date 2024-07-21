@@ -50,8 +50,8 @@ export const useFirestoreCollection = <T>(
                 .finally(() => {
                     setLoading(false)
                 })
-        } catch (error: any) {
-            setError(error.message)
+        } catch (error: unknown | { message: string }) {
+            setError(error instanceof Error ? error.message : `${error}`)
         }
     }, [requestId])
 
@@ -94,8 +94,6 @@ export const useFirestoreDocument = <T>(
     const load = useCallback(() => {
         setLoading(true)
 
-        let unsubcribeFunc = () => {}
-
         try {
             ref.get()
                 .then((docSnapshot) => {
@@ -107,11 +105,9 @@ export const useFirestoreDocument = <T>(
                 .finally(() => {
                     setLoading(false)
                 })
-        } catch (error: any) {
-            setError(error.message)
+        } catch (error: unknown | { message: string }) {
+            setError(error instanceof Error ? error.message : `${error}`)
         }
-
-        return unsubcribeFunc
     }, [ref.path])
 
     useEffect(() => {
