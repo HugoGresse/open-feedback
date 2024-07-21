@@ -4,7 +4,7 @@ import {
     GET_USER_VOTES_ERROR,
     GET_USER_VOTES_SUCCESS,
 } from './dashboardActionTypes'
-import { fireStoreMainInstance } from '../../../firebase'
+import { fireStoreMainInstance } from '../../../firebase.ts'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 
 export const getTalkVotes = () => {
@@ -20,9 +20,9 @@ export const getTalkVotes = () => {
             .doc(projectId)
             .collection('sessionVotes')
             .get()
-            .then(snapshots => {
+            .then((snapshots) => {
                 const talkVotes = {}
-                snapshots.forEach(doc => {
+                snapshots.forEach((doc) => {
                     talkVotes[doc.id] = {
                         id: doc.id,
                         votes: doc.data(),
@@ -34,7 +34,7 @@ export const getTalkVotes = () => {
                     payload: talkVotes,
                 })
             })
-            .catch(err => {
+            .catch((err) => {
                 dispatch({
                     type: GET_TALK_VOTES_ERROR,
                     payload: err.toString(),
@@ -56,9 +56,9 @@ export const getUserVotes = () => {
             .collection('userVotes')
             .orderBy('createdAt')
             .get()
-            .then(snapshot => {
+            .then((snapshot) => {
                 const userVotes = []
-                snapshot.forEach(doc => {
+                snapshot.forEach((doc) => {
                     userVotes.push({
                         fireStoreId: doc.id,
                         ...doc.data(),
@@ -70,7 +70,7 @@ export const getUserVotes = () => {
                     payload: userVotes,
                 })
             })
-            .catch(err => {
+            .catch((err) => {
                 dispatch({
                     type: GET_USER_VOTES_ERROR,
                     payload: err.toString(),

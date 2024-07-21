@@ -11,7 +11,7 @@ import InnerWrapper from './component/InnerWrapper.jsx'
 import { useTranslation } from 'react-i18next'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { isUsingEmulators } from '../firebase'
+import { isUsingEmulators } from '../firebase.ts'
 
 const Wrapper = styled.header`
     background: ${COLORS.RED_ORANGE};

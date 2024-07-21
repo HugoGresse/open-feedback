@@ -11,7 +11,7 @@ import {
     SAVE_VOTEITEMS_ONGOING,
     SAVE_VOTEITEMS_SUCCESS,
 } from './votingFormActionTypes.jsx'
-import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase'
+import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase.ts'
 import {
     getSelectedProjectIdSelector,
     getSelectedProjectSelector,

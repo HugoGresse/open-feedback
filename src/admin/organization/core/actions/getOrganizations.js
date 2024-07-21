@@ -1,4 +1,4 @@
-import { fireStoreMainInstance } from '../../../../firebase'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
 import { getUserSelector } from '../../../auth/authSelectors'
 import {
     GET_ORGANIZATIONS_ERROR,

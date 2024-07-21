@@ -2,7 +2,7 @@ import React from 'react'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import OFButton from '../baseComponents/button/OFButton.jsx'
-import { authProvider } from '../../firebase'
+import { authProvider } from '../../firebase.ts'
 import { didSignIn } from './authActions'
 import { useTranslation } from 'react-i18next'
 

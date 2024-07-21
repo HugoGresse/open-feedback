@@ -7,7 +7,7 @@ import {
     INCREMENT_VOTE_LOCALLY,
     SET_SELECTED_DATE,
 } from './projectActionTypes'
-import { nowTimestamp } from '../../firebase'
+import { nowTimestamp } from '../../firebase.ts'
 import { ADD_VOTE_SUCCESS } from '../vote/voteActionTypes'
 
 const initState = {

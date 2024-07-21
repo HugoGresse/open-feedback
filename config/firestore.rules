@@ -24,8 +24,10 @@ service cloud.firestore {
         function isAnOrgAdmin(organization) { return request.auth.uid in organization.adminUserIds; }
         function isOrgOwner(organization) { return request.auth.uid == organization.ownerUserId; }
 
+        function isSuperAdmin(userId) { return exists(/databases/$(database)/documents/admins/users/admins/$(userId)); }
+
         match /users/{userId} {
-            allow get: if authenticated() && !isAnonymous();
+            allow get: if authenticated() && !isAnonymous() || isSuperAdmin(request.auth.uid);
             allow list: if authenticated() && itsMyDocument(userId) && limitOne();
             allow create: if authenticated() && itsMyDocument(userId) && userNotExists();
             allow update: if authenticated() && itsMyDocument(userId);
@@ -34,7 +36,7 @@ service cloud.firestore {
         // PROJECTS
         match /projects/{projectId} {
             allow get: if true;
-            allow list: if authenticated() && (isAdmin(resource.data) || isAnOrgViewer(getOrganization(resource.data.organizationId)));
+            allow list: if authenticated() && (isSuperAdmin(request.auth.uid) || isAdmin(resource.data) || isAnOrgViewer(getOrganization(resource.data.organizationId)) );
             allow create: if authenticated() && (!("organizationId" in request.resource.data) || isAnOrgEditor(getOrganization(request.resource.data.organizationId)));
             allow update: if authenticated() && (isAdmin(resource.data) || isAnOrgEditor(getOrganization(resource.data.organizationId))) && (isEmailVerified() || isPhoneNumberAccount());
             allow delete: if authenticated() && (isAdmin(resource.data) || isAnOrgAdmin(getOrganization(resource.data.organizationId))) && (isEmailVerified() || isPhoneNumberAccount());
@@ -93,8 +95,8 @@ service cloud.firestore {
         // ORGANIZATIONS
 
         match /organizations/{organizationId} {
-            allow get: if authenticated() && isAnOrgViewer(resource.data);
-            allow list: if authenticated() && isAnOrgViewer(resource.data);
+            allow get: if authenticated() && (isAnOrgViewer(resource.data) || isSuperAdmin(request.auth.uid) );
+            allow list: if authenticated() && (isAnOrgViewer(resource.data) || isSuperAdmin(request.auth.uid) );
             allow create: if authenticated();
             allow update: if authenticated() && ((isAnOrgAdmin(resource.data) && request.resource.data.ownerUserId == resource.data.ownerUserId) || isOrgOwner(resource.data) );
             allow delete: if authenticated() && isOrgOwner(resource.data);

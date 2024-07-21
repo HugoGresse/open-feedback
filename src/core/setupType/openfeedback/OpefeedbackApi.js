@@ -1,4 +1,4 @@
-import { fireStoreMainInstance, serverTimestamp } from '../../../firebase'
+import { fireStoreMainInstance, serverTimestamp } from '../../../firebase.ts'
 import { convertSnapshotToMap } from '../../../utils/firebaseUtils'
 
 class OpenfeedbackApi {
@@ -14,7 +14,7 @@ class OpenfeedbackApi {
         return this.firestoreProject()
             .collection('talks')
             .get()
-            .then(talksSnapshot => convertSnapshotToMap(talksSnapshot))
+            .then((talksSnapshot) => convertSnapshotToMap(talksSnapshot))
     }
 
     getTalk(talkId) {
@@ -22,7 +22,7 @@ class OpenfeedbackApi {
             .collection('talks')
             .doc(talkId)
             .get()
-            .then(talkDoc => ({
+            .then((talkDoc) => ({
                 [talkDoc.id]: {
                     id: talkDoc.id,
                     ...talkDoc.data(),
@@ -34,7 +34,7 @@ class OpenfeedbackApi {
         return this.firestoreProject()
             .collection('speakers')
             .get()
-            .then(talksSnapshot => convertSnapshotToMap(talksSnapshot))
+            .then((talksSnapshot) => convertSnapshotToMap(talksSnapshot))
     }
 
     addTalk(newTalk) {
@@ -45,14 +45,11 @@ class OpenfeedbackApi {
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
             })
-            .then(docRef => docRef.id)
+            .then((docRef) => docRef.id)
     }
 
     removeTalk(talkId) {
-        return this.firestoreProject()
-            .collection('talks')
-            .doc(talkId)
-            .delete()
+        return this.firestoreProject().collection('talks').doc(talkId).delete()
     }
 
     editTalk(talk) {
@@ -76,7 +73,7 @@ class OpenfeedbackApi {
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
             })
-            .then(docRef => docRef.id)
+            .then((docRef) => docRef.id)
     }
 
     removeSpeaker(speakerId) {

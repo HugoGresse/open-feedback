@@ -1,4 +1,4 @@
-import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase'
+import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase.ts'
 import { addNotification } from '../../../notification/notifcationActions'
 import { getSelectedOrganizationIdSelector } from '../organizationSelectors'
 import { getOrganization } from './getOrganization'

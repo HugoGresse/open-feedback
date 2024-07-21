@@ -5,7 +5,7 @@ import {
     GET_PROJECT_VOTE_RESULT_SUCCESS,
     SET_SELECTED_DATE,
 } from './projectActionTypes'
-import { fireStoreMainInstance } from '../../firebase'
+import { fireStoreMainInstance } from '../../firebase.ts'
 import { getProjectSelector, isLiveUserVotesSelector } from './projectSelectors'
 import { initProjectApi } from '../../core/setupType/projectApi'
 

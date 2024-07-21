@@ -12,7 +12,7 @@ import {
     getTalksAsArraySelector,
 } from '../../core/talks/talksSelectors'
 import Error from '../../baseComponents/customComponent/Error.jsx'
-import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import TalksDateMenu from './TalksDateMenu.jsx'
 import TalksList from './TalksList.jsx'
 import { getSpeakers } from '../../core/speakers/speakerActions'

@@ -4,7 +4,7 @@ import {
     ADD_PROJECT_SUCCESS,
 } from '../projectActionTypes'
 import { getUserSelector } from '../../../auth/authSelectors'
-import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase'
+import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase.ts'
 import { newRandomHexColor } from '../../../../utils/colorsUtils'
 import { addNotification } from '../../../notification/notifcationActions'
 import { trackNewProject } from '../../../utils/track'

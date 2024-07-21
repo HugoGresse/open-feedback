@@ -50,28 +50,25 @@ const notImplementApi = {
 
 export let projectApi = notImplementApi
 
-export const initProjectApi = (projectType, project) => {
+export const getProjectApi = (projectType, project) => {
     switch (projectType) {
         case PROJECT_TYPE_HOVERBOARDV2: {
-            projectApi = new HoverboardV2Api(project.config)
-            break
+            return new HoverboardV2Api(project.config)
         }
         case PROJECT_TYPE_JSONURL: {
-            projectApi = new JsonUrlApi(project.config)
-            break
+            return new JsonUrlApi(project.config)
         }
         case PROJECT_TYPE_OPENFEEDBACK: {
-            projectApi = new OpenfeedbackApi(project.id)
-            break
+            return new OpenfeedbackApi(project.id)
         }
         default: {
-            // eslint-disable-next-line no-console
-            console.error(
-                `This project type has not been implemented: ${projectType}`
-            )
-            break
+            return null
         }
     }
+}
+
+export const initProjectApi = (projectType, project) => {
+    projectApi = getProjectApi(projectType, project)
 }
 
 const logProjectNotInitialized = () => {

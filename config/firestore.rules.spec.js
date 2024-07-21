@@ -102,6 +102,17 @@ const addFullDataToProject = async (app, projectId, userId) => {
         })
 }
 
+const addUserToAdmins = async (app, userId) => {
+    await app
+        .collection('admins')
+        .doc('users')
+        .collection('admins')
+        .doc(userId)
+        .set({
+            admin: true,
+        })
+}
+
 const assertProjectAllCollections = async (app, projectId, assertMethod) => {
     const collections = ['talks', 'speakers', 'sessionVotes', 'userVotes']
 
@@ -1038,5 +1049,20 @@ describe('Firestore rules', () => {
                 await firebase.assertFails(deleteVote2)
             }
         })
+    })
+
+    describe('Super admins rules', () => {
+        it('cannot list or read projects if not super admin', async () => {
+            const app = createApp()
+
+            createProject(app, 'First project', UID_VIEWER)
+            createProject(app, 'Second project with another user', UID_ADMIN)
+
+            const listOrg = app.collection('projects').get()
+
+            await firebase.assertFails(listOrg)
+        })
+
+        // Note: cannot do more test as I cannot add super user with the regular app :/
     })
 })

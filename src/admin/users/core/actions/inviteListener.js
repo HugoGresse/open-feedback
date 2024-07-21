@@ -1,4 +1,4 @@
-import { fireStoreMainInstance } from '../../../../firebase'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
 import { USER_INVITE_GET_SUCCESS } from '../usersActionTypes'
 import { redirectToProject } from '../../../project/utils/redirectToProject'
 import { addNotification } from '../../../notification/notifcationActions'

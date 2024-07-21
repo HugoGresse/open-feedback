@@ -1,15 +1,15 @@
 import React, { memo, useEffect, useState } from 'react'
 import logoWhite from '../../assets/logo-openfeedback-white.png'
-import { auth, authProvider, isUsingEmulators } from '../../firebase'
+import { auth, authProvider, isUsingEmulators } from '../../firebase.ts'
 import { useDispatch, useSelector } from 'react-redux'
 import { getLoginErrorSelector, isLoggedSelector } from './authSelectors'
 import { didSignIn, signOut } from './authActions'
-import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import Box from '@mui/material/Box'
 import COLORS from '../../constants/colors'
 import { EmulatorLogin, setLoginCookie } from './EmulatorLogin.jsx'
 import { useNavigate } from 'react-router-dom'
-import StyledFirebaseAuth from '../../baseComponents/StyledFirebaseAuth.jsx'
+import StyledFirebaseAuth from '../../baseComponents/StyledFirebaseAuth.tsx'
 
 const Login = memo(({ children }) => {
     const navigate = useNavigate()

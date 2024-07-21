@@ -1,7 +1,7 @@
 import { newId } from '../../../../utils/stringUtils'
 import firebase from 'firebase/compat/app'
 import 'firebase/storage'
-import { functions } from '../../../../firebase'
+import { functions } from '../../../../firebase.ts'
 import { getUserSelector } from '../../../auth/authSelectors'
 import { getSelectedProjectIdSelector } from '../../core/projectSelectors'
 import { addNotification } from '../../../notification/notifcationActions'

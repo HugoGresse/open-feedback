@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
-import { onAuthStateChanged } from 'firebase/auth'
+import React, { useEffect, useRef, useState } from 'react'
+import { Auth, onAuthStateChanged } from 'firebase/auth'
 import * as firebaseui from 'firebaseui'
 import 'firebaseui/dist/firebaseui.css'
 
-const StyledFirebaseAuth = ({ uiConfig, firebaseAuth, className, uiCallback }) => {
+const StyledFirebaseAuth = ({ uiConfig, firebaseAuth, className, uiCallback }: { uiConfig: firebaseui.auth.Config, firebaseAuth: Auth, className ?: string, uiCallback: (widget: firebaseui.auth.AuthUI) => void }) => {
     const [userSignedIn, setUserSignedIn] = useState(false)
     const elementRef = useRef(null)
 
@@ -21,8 +21,9 @@ const StyledFirebaseAuth = ({ uiConfig, firebaseAuth, className, uiCallback }) =
         })
 
         // Trigger the callback if any was set.
-        if (uiCallback)
+        if (uiCallback) {
             uiCallback(firebaseUiWidget)
+        }
 
         // Render the firebaseUi Widget.
         // @ts-ignore

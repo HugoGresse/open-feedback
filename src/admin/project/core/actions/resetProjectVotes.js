@@ -1,4 +1,4 @@
-import { fireStoreMainInstance } from '../../../../firebase'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
 
 export const resetProjectVotes =
     (projectId, t, progressUpdates = (totalDocs, deletingDocsCount) => {}) =>

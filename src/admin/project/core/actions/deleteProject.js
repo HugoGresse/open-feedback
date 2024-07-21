@@ -1,4 +1,4 @@
-import { functions } from '../../../../firebase'
+import { functions } from '../../../../firebase.ts'
 import { addNotification } from '../../../notification/notifcationActions'
 
 export const deleteProject = (projectId, t) => (dispatch) =>

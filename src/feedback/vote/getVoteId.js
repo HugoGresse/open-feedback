@@ -1,5 +1,5 @@
 import { getUserVotesByTalkAndVoteItemSelector } from './voteSelectors'
-import { fireStoreMainInstance } from '../../firebase'
+import { fireStoreMainInstance } from '../../firebase.ts'
 import { VOTE_TYPE_TEXT_PLUS } from '../../core/contants'
 
 /**
@@ -11,9 +11,8 @@ import { VOTE_TYPE_TEXT_PLUS } from '../../core/contants'
  * @returns {[string]|[undefined,*]}
  */
 export const getVoteId = (voteItem, projectId, getState, data = null) => {
-    const existingVotes = getUserVotesByTalkAndVoteItemSelector(getState())[
-        voteItem.id
-    ]
+    const existingVotes =
+        getUserVotesByTalkAndVoteItemSelector(getState())[voteItem.id]
 
     const isPendingVote = (vote) => {
         if (vote.pending) {

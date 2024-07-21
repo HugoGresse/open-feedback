@@ -1,5 +1,5 @@
 import 'firebase/storage'
-import { functions } from '../../../../firebase'
+import { functions } from '../../../../firebase.ts'
 import { getSelectedProjectIdSelector } from '../../core/projectSelectors'
 import { getSelectedOrganizationIdSelector } from '../../../organization/core/organizationSelectors'
 
@@ -15,42 +15,39 @@ export const deleteImageIfPossible = (storageFullPath, docId) => {
         })
 }
 
-export const deleteOldFilesIfNewValueDiffer = (
-    oldObject,
-    newObject,
-    keyArray
-) => (dispatch, getState) => {
-    if (
-        !oldObject ||
-        !newObject ||
-        !keyArray ||
-        Object.keys(oldObject).length <= 0 ||
-        Object.keys(newObject) <= 0
-    ) {
-        return
-    }
-
-    const state = getState()
-    const projectId = getSelectedProjectIdSelector(state)
-    const organizationId = getSelectedOrganizationIdSelector(state)
-
-    const docId = projectId ? { projectId } : { organizationId }
-
-    keyArray.forEach((key) => {
-        const oldValue = oldObject[key]
-        const newValue = newObject[key]
-
-        if (!oldValue || !newValue) {
+export const deleteOldFilesIfNewValueDiffer =
+    (oldObject, newObject, keyArray) => (dispatch, getState) => {
+        if (
+            !oldObject ||
+            !newObject ||
+            !keyArray ||
+            Object.keys(oldObject).length <= 0 ||
+            Object.keys(newObject) <= 0
+        ) {
             return
         }
 
-        if (oldValue !== newValue) {
-            try {
-                const path = new URL(oldObject[key]).pathname.slice(1)
-                deleteImageIfPossible(path, docId)
-            } catch (ignore) {
-                // ignored
+        const state = getState()
+        const projectId = getSelectedProjectIdSelector(state)
+        const organizationId = getSelectedOrganizationIdSelector(state)
+
+        const docId = projectId ? { projectId } : { organizationId }
+
+        keyArray.forEach((key) => {
+            const oldValue = oldObject[key]
+            const newValue = newObject[key]
+
+            if (!oldValue || !newValue) {
+                return
             }
-        }
-    })
-}
+
+            if (oldValue !== newValue) {
+                try {
+                    const path = new URL(oldObject[key]).pathname.slice(1)
+                    deleteImageIfPossible(path, docId)
+                } catch (ignore) {
+                    // ignored
+                }
+            }
+        })
+    }

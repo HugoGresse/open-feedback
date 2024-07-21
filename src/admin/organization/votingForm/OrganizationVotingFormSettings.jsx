@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react'
-import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import Box from '@mui/material/Box'
 import { OrgDataInfo } from '../layout/OrgDataInfo.jsx'
 import {

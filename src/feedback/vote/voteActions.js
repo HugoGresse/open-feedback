@@ -11,7 +11,7 @@ import {
     UPDATE_VOTE_ERROR,
     UPDATE_VOTE_SUCCESS,
 } from './voteActionTypes'
-import { fireStoreMainInstance, serverTimestamp } from '../../firebase'
+import { fireStoreMainInstance, serverTimestamp } from '../../firebase.ts'
 import { getUserSelector } from '../auth/authSelectors'
 import { getProjectSelector } from '../project/projectSelectors'
 import { getCurrentUserVotesSelector } from './voteSelectors'

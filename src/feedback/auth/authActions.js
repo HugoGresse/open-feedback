@@ -1,4 +1,4 @@
-import { authProvider } from '../../firebase'
+import { authProvider } from '../../firebase.ts'
 import { LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT } from './authActionTypes'
 import { isLoggedSelector } from './authSelectors'
 import createAlert from '../../utils/alerting/createAlert'

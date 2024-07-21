@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions'
 import OFButton from '../../baseComponents/button/OFButton.jsx'
 import GetAppIcon from '@mui/icons-material/GetApp'
 import FileSaver from 'file-saver'
-import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import { useTranslation } from 'react-i18next'
 const QRCode = lazy(() => import('qrcode.react'))
 

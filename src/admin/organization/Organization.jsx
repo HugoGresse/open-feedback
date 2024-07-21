@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import Layout404 from '../baseComponents/Layout404.jsx'
 import {
     getSelectedOrganizationSelector,

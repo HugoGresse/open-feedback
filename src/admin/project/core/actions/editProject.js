@@ -2,7 +2,7 @@ import {
     getSelectedProjectIdSelector,
     getSelectedProjectSelector,
 } from '../projectSelectors'
-import { deleteField, fireStoreMainInstance } from '../../../../firebase'
+import { deleteField, fireStoreMainInstance } from '../../../../firebase.ts'
 import { addNotification } from '../../../notification/notifcationActions'
 import { EDIT_PROJECT_ERROR, EDIT_PROJECT_SUCCESS } from '../projectActionTypes'
 import { deleteOldFilesIfNewValueDiffer } from '../../utils/storage/deleteImageIfPossible'

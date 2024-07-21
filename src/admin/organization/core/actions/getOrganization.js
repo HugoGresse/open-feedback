@@ -1,4 +1,4 @@
-import { fireStoreMainInstance } from '../../../../firebase'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
 import {
     GET_ORGANIZATION_SUCCESS,
     GET_ORGANIZATIONS_ERROR,
