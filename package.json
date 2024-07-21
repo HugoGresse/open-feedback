@@ -78,7 +78,7 @@
         "clipboard-copy": "^4.0.1",
         "env-cmd": "^10.1.0",
         "file-saver": "^2.0.5",
-        "firebase": "^10.9.0",
+        "firebase": "^10.12.4",
         "firebaseui": "^6.1.0",
         "formik": "^2.2.6",
         "history": "^5.0.0",
