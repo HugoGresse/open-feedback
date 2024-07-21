@@ -1,6 +1,6 @@
 import React from 'react'
 import OFButton from '../baseComponents/button/OFButton.jsx'
-import { authProvider } from '../../firebase'
+import { authProvider } from '../../firebase.ts'
 import { didSignIn } from './authActions'
 import { useDispatch } from 'react-redux'
 

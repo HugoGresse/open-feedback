@@ -1,4 +1,4 @@
-import { analytics } from '../../firebase'
+import { analytics } from '../../firebase.ts'
 
 export const trackVote = (projectName, projectId, voteType) => {
     if (!analytics) return

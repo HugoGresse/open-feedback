@@ -10,6 +10,7 @@ import Page404 from './Page404.jsx'
 import FeedbackApp from './feedback/FeedbackApp.jsx'
 import { SuspendedAdminApp } from './admin/SuspendedAdminApp.jsx'
 import SuspendedRootApp from './root/SuspendedRootApp.jsx'
+import { SuspendedSuperAdminApp } from './superAdmin/SuspendedSuperAdminApp.tsx'
 
 const App = () => {
     return (
@@ -19,6 +20,7 @@ const App = () => {
                 <Route strict exact path="/admin" render={() => <Navigate to="/admin/" />} />
                 <Route path="/admin/" element={<SuspendedAdminApp/>} />
                 <Route path="/admin//*" element={<SuspendedAdminApp />} />
+                <Route path="/superadmin/" element={<SuspendedSuperAdminApp />} />
                 <Route path="/:projectId//*" element={<FeedbackApp />} />
                 <Route component={Page404} status={404} />
             </Routes>

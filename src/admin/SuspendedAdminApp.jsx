@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react'
-import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent.tsx'
 import ErrorBoundary from '../baseComponents/customComponent/ErrorBoundary.jsx'
 import { ALERT_REACT_CATCHED_ERROR_ADMIN } from '../utils/alerting/alerts'
 

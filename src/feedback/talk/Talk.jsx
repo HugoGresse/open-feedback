@@ -29,7 +29,7 @@ import {
 
 import Grid from '@mui/material/Grid'
 import { TalkVote } from './TalkVote.jsx'
-import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import Error from '../../baseComponents/customComponent/Error.jsx'
 import { Snackbar } from '../../baseComponents/customComponent/Snackbar.jsx'
 import { SPACING } from '../../constants/constants'

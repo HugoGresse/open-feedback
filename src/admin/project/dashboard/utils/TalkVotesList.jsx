@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import LoaderMatchParent from '../../../../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import DashboardCard from './DashboardCard.jsx'
 import NoData from './NoData.jsx'
 import Grid from '@mui/material/Grid'

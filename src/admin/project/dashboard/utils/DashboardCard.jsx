@@ -1,5 +1,5 @@
 import React from 'react'
-import LoaderMatchParent from '../../../../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'

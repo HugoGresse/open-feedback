@@ -5,7 +5,7 @@ import {
     getSelectedProjectSelector,
     isProjectsLoadedSelector,
 } from './core/projectSelectors'
-import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import Layout404 from '../baseComponents/Layout404.jsx'
 import {
     selectProject,

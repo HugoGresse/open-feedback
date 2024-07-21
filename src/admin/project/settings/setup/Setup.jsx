@@ -3,7 +3,7 @@ import CardContent from '@mui/material/CardContent'
 import OFCard from '../../../baseComponents/OFCard.jsx'
 import SetupForm from './SetupForm.jsx'
 import { DeleteProject } from './DeleteProject.jsx'
-import LoaderMatchParent from '../../../../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import { editProject } from '../../core/actions/editProject'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import {

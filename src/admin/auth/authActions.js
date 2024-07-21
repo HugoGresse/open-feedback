@@ -4,7 +4,7 @@ import {
     authProvider,
     fireStoreMainInstance,
     serverTimestamp,
-} from '../../firebase'
+} from '../../firebase.ts'
 import { isEmpty } from 'lodash'
 import {
     trackLogin,

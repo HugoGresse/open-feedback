@@ -5,14 +5,16 @@
         "cypress/globals": true,
         "node": true
     },
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest"
     },
-    "plugins": ["react", "cypress"],
+    "plugins": ["react", "cypress", "@typescript-eslint"],
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:i18n-json/recommended"
+        "plugin:i18n-json/recommended",
+        "plugin:@typescript-eslint/recommended"
     ],
     "settings": {
         "react": {

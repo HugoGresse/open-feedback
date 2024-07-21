@@ -10,7 +10,7 @@ import {
     isProjectNotFoundSelector,
 } from './project/projectSelectors'
 import Error from '../baseComponents/customComponent/Error.jsx'
-import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent.tsx'
 import { getLoginErrorSelector, isLoggedSelector } from './auth/authSelectors'
 import { Footer } from './layout/Footer.jsx'
 import { getTalksDatesSelector } from '../core/talks/talksSelectors'

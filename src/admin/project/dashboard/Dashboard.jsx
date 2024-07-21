@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
-import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import { getTalkVotes, getUserVotes } from './dashboardActions'
 import { getTalks } from '../../../core/talks/talksActions'
 import { getProjectSelector } from '../../../feedback/project/projectSelectors'

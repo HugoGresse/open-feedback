@@ -5,7 +5,7 @@ import {
     isProjectsLoadedSelector,
 } from '../project/core/projectSelectors'
 import Paper from '@mui/material/Paper'
-import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent.jsx'
+import LoaderMatchParent from '../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import { makeStyles } from '@mui/styles'
 import { OrganizationListItem } from './OrganizationListItem.jsx'
 import { NO_ORGANIZATION_FAKE_ID } from '../organization/core/organizationConstants'

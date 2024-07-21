@@ -1,4 +1,4 @@
-import { fireStoreMainInstance } from '../../../firebase'
+import { fireStoreMainInstance } from '../../../firebase.ts'
 
 export const getNewProjectId = () => {
     return fireStoreMainInstance.collection('projects').doc().id

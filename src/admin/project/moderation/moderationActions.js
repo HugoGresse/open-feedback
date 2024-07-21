@@ -4,7 +4,7 @@ import {
     HIDE_VOTE_SUCCESS,
     UNHIDE_VOTE_SUCCESS,
 } from './moderationActionTypes'
-import { fireStoreMainInstance, serverTimestamp } from '../../../firebase'
+import { fireStoreMainInstance, serverTimestamp } from '../../../firebase.ts'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import { VOTE_STATUS_ACTIVE, VOTE_STATUS_HIDDEN } from '../../../core/contants'
 import { addNotification } from '../../notification/notifcationActions'
@@ -27,9 +27,9 @@ export const getTextUserVotes = () => (dispatch, getState) => {
         .doc(projectId)
         .collection('sessionVotes')
         .get()
-        .then(snapshot => {
+        .then((snapshot) => {
             const talks = {}
-            snapshot.forEach(doc => {
+            snapshot.forEach((doc) => {
                 talks[doc.id] = {
                     talkId: doc.id,
                     ...doc.data(),
@@ -37,16 +37,16 @@ export const getTextUserVotes = () => (dispatch, getState) => {
             })
 
             const talksWithComments = {}
-            Object.values(talks).forEach(talk => {
+            Object.values(talks).forEach((talk) => {
                 const comments = Object.values(talk)
                     .filter(
-                        voteItemsVotes =>
+                        (voteItemsVotes) =>
                             typeof voteItemsVotes === 'object' &&
                             voteItemsVotes !== null
                     )
-                    .map(objectData =>
+                    .map((objectData) =>
                         Object.keys(objectData)
-                            .map(key => {
+                            .map((key) => {
                                 // Remove empty vote which are vote that has been deleted
                                 if (
                                     Object.keys(objectData[key]).length === 0 &&
@@ -61,7 +61,7 @@ export const getTextUserVotes = () => (dispatch, getState) => {
                                     ...objectData[key],
                                 }
                             })
-                            .filter(item => !!item)
+                            .filter((item) => !!item)
                     )
 
                 if (comments.length > 0) {
@@ -71,7 +71,7 @@ export const getTextUserVotes = () => (dispatch, getState) => {
 
             return talksWithComments
         })
-        .then(talksWithActiveComments => {
+        .then((talksWithActiveComments) => {
             return fireStoreMainInstance
                 .collection('projects')
                 .doc(projectId)
@@ -79,9 +79,9 @@ export const getTextUserVotes = () => (dispatch, getState) => {
                 .where('status', '==', VOTE_STATUS_HIDDEN)
                 .where('text', '>', '')
                 .get()
-                .then(snapshot => {
+                .then((snapshot) => {
                     let vote
-                    snapshot.forEach(doc => {
+                    snapshot.forEach((doc) => {
                         vote = doc.data()
                         if (!talksWithActiveComments[vote.talkId]) {
                             talksWithActiveComments[vote.talkId] = []
@@ -98,7 +98,7 @@ export const getTextUserVotes = () => (dispatch, getState) => {
                         payload: talksWithActiveComments,
                     })
                 })
-                .catch(err => {
+                .catch((err) => {
                     // eslint-disable-next-line no-console
                     console.error(err)
                     dispatch({
@@ -107,7 +107,7 @@ export const getTextUserVotes = () => (dispatch, getState) => {
                     })
                 })
         })
-        .catch(err => {
+        .catch((err) => {
             // eslint-disable-next-line no-console
             console.error(err)
             dispatch({
@@ -117,7 +117,7 @@ export const getTextUserVotes = () => (dispatch, getState) => {
         })
 }
 
-export const hideVote = vote => (dispatch, getState) => {
+export const hideVote = (vote) => (dispatch, getState) => {
     const projectId = getSelectedProjectIdSelector(getState())
 
     if (!projectId) {
@@ -140,7 +140,7 @@ export const hideVote = vote => (dispatch, getState) => {
                 payload: vote,
             })
         })
-        .catch(error => {
+        .catch((error) => {
             dispatch(
                 addNotification({
                     type: 'error',
@@ -151,7 +151,7 @@ export const hideVote = vote => (dispatch, getState) => {
         })
 }
 
-export const unhideVote = vote => (dispatch, getState) => {
+export const unhideVote = (vote) => (dispatch, getState) => {
     const projectId = getSelectedProjectIdSelector(getState())
 
     if (!projectId) {
@@ -174,7 +174,7 @@ export const unhideVote = vote => (dispatch, getState) => {
                 payload: vote,
             })
         })
-        .catch(error => {
+        .catch((error) => {
             dispatch(
                 addNotification({
                     type: 'error',

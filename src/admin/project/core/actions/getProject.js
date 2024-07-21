@@ -1,4 +1,4 @@
-import { fireStoreMainInstance } from '../../../../firebase'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
 import {
     getSelectedProjectIdSelector,
     getSelectedProjectSelector,
@@ -10,60 +10,59 @@ import { getSelectedOrganizationSelector } from '../../../organization/core/orga
 import { getOrganization } from '../../../organization/core/actions/getOrganization'
 import { selectOrganization } from '../../../organization/core/actions/selectUnselectActions'
 
-export const getProject = (selectedProjectId = null, initAPI) => (
-    dispatch,
-    getState
-) => {
-    return fireStoreMainInstance
-        .collection('projects')
-        .doc(selectedProjectId || getSelectedProjectIdSelector(getState()))
-        .get()
-        .then((doc) => {
-            if (doc.exists) {
-                const project = {
-                    id: doc.id,
-                    ...doc.data(),
-                }
-                if (
-                    project.organizationId &&
-                    !getSelectedOrganizationSelector(getState())
-                ) {
-                    dispatch(selectOrganization(project.organizationId))
-                    dispatch(getOrganization(project.organizationId))
-                }
+export const getProject =
+    (selectedProjectId = null, initAPI) =>
+    (dispatch, getState) => {
+        return fireStoreMainInstance
+            .collection('projects')
+            .doc(selectedProjectId || getSelectedProjectIdSelector(getState()))
+            .get()
+            .then((doc) => {
+                if (doc.exists) {
+                    const project = {
+                        id: doc.id,
+                        ...doc.data(),
+                    }
+                    if (
+                        project.organizationId &&
+                        !getSelectedOrganizationSelector(getState())
+                    ) {
+                        dispatch(selectOrganization(project.organizationId))
+                        dispatch(getOrganization(project.organizationId))
+                    }
 
-                return dispatch({
-                    type: GET_PROJECT_SUCCESS,
-                    payload: project,
-                })
-            } else {
+                    return dispatch({
+                        type: GET_PROJECT_SUCCESS,
+                        payload: project,
+                    })
+                } else {
+                    dispatch({
+                        type: GET_PROJECT_ERROR,
+                        payload: 'Event does not exist',
+                    })
+                }
+            })
+            .then(() => {
+                if (initAPI) {
+                    const state = getState()
+                    dispatch(
+                        initProjectApiIfReady(
+                            getSelectedProjectIdSelector(state),
+                            getSelectedProjectSelector(state)
+                        )
+                    )
+                }
+            })
+            .catch((err) => {
                 dispatch({
                     type: GET_PROJECT_ERROR,
-                    payload: 'Event does not exist',
+                    payload: err.toString(),
                 })
-            }
-        })
-        .then(() => {
-            if (initAPI) {
-                const state = getState()
                 dispatch(
-                    initProjectApiIfReady(
-                        getSelectedProjectIdSelector(state),
-                        getSelectedProjectSelector(state)
-                    )
+                    addNotification({
+                        type: 'error',
+                        i18nkey: 'project.errorLoad',
+                    })
                 )
-            }
-        })
-        .catch((err) => {
-            dispatch({
-                type: GET_PROJECT_ERROR,
-                payload: err.toString(),
             })
-            dispatch(
-                addNotification({
-                    type: 'error',
-                    i18nkey: 'project.errorLoad',
-                })
-            )
-        })
-}
+    }

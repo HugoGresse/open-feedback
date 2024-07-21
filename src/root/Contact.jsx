@@ -6,7 +6,7 @@ import { Button, CircularProgress, TextField } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { isValidEmail } from '../utils/stringUtils'
-import { HttpsFunctionsUrl } from '../firebase'
+import { HttpsFunctionsUrl } from '../firebase.ts'
 
 const INIT_STATE = {
     email: '',

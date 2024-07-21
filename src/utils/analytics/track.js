@@ -1,4 +1,4 @@
-import { analytics } from '../../firebase'
+import { analytics } from '../../firebase.ts'
 
 export const trackUserId = (userId) => {
     if (!analytics) return

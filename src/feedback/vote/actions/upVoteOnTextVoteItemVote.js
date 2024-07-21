@@ -1,5 +1,5 @@
 import { isVoteAllowed } from './isVoteAllowed'
-import { fireStoreMainInstance, serverTimestamp } from '../../../firebase'
+import { fireStoreMainInstance, serverTimestamp } from '../../../firebase.ts'
 import { trackUnvote, trackVote } from '../../utils/track'
 import { getProjectSelector } from '../../project/projectSelectors'
 import { getUserSelector } from '../../auth/authSelectors'

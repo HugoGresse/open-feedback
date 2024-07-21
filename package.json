@@ -23,7 +23,8 @@
         "storybook": "storybook dev -p 9009 ",
         "build-storybook": "storybook build ",
         "lint:i18n": "eslint src/**/languages/*.json",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "exportFirebaseEmulatorsData": "firebase emulators:export ./cypress/fixtures/firebase-emulators-data"
     },
     "devDependencies": {
         "@chromatic-com/storybook": "^1.4.0",
@@ -38,8 +39,8 @@
         "@storybook/theming": "^8.1.2",
         "@types/react": "^18.2.66",
         "@types/react-dom": "^18.2.22",
-        "@typescript-eslint/eslint-plugin": "^7.2.0",
-        "@typescript-eslint/parser": "^7.2.0",
+        "@typescript-eslint/eslint-plugin": "^7.16.1",
+        "@typescript-eslint/parser": "^7.16.1",
         "@vitejs/plugin-react": "^4.2.1",
         "axe-core": "^4.3.2",
         "cypress": "13.7.1",
@@ -58,7 +59,7 @@
         "lint-staged": "^10.5.4",
         "prettier": "^3.2.5",
         "storybook": "^8.1.2",
-        "typescript": "^5.2.2",
+        "typescript": "^5.5.3",
         "vite": "^5.2.0",
         "vitest": "^1.6.0"
     },
@@ -70,6 +71,7 @@
         "@mui/lab": "5.0.0-alpha.168",
         "@mui/material": "^5.15.14",
         "@mui/styles": "^5.15.14",
+        "@mui/x-data-grid": "^7.11.0",
         "@mui/x-date-pickers": "^7.4.0",
         "@nivo/core": "^0.85.1",
         "@nivo/line": "^0.85.1",
