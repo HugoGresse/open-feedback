@@ -83,7 +83,7 @@ export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
                             }
                         }}
                         uiConfig={{
-                            signInFlow: 'redirect',
+                            signInFlow: 'popup',
                             signInSuccessUrl: '/superadmin/',
                             signInOptions: [
                                 auth.GoogleAuthProvider.PROVIDER_ID,

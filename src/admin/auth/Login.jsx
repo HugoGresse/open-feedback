@@ -99,7 +99,7 @@ const Login = memo(({ children }) => {
                             }
                         }}
                         uiConfig={{
-                            signInFlow: 'redirect',
+                            signInFlow: 'popup',
                             signInSuccessUrl: '/admin/',
                             signInOptions: [
                                 auth.GoogleAuthProvider.PROVIDER_ID,
