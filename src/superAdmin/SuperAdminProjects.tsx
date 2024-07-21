@@ -75,6 +75,7 @@ export const SuperAdminProjects = () => {
             name: project.name,
             owner: project.owner,
             createdAt: project.createdAt,
+            setupType: project.setupType,
             orgName: extraInfos.organizations[project.organizationId || 0],
             dateCreated: extraInfos.projects[project.id]?.dateCreated,
             dateVote: extraInfos.projects[project.id]?.dateVote,

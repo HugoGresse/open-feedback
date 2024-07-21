@@ -2,7 +2,10 @@ import { ProjectExtraInfo, Project } from '../type.ts'
 import { useEffect, useState } from 'react'
 import { fireStoreMainInstance } from '../../firebase.ts'
 // @ts-ignore
-import { initProjectApi } from '../../core/setupType/projectApi.js'
+import {
+    getProjectApi,
+    initProjectApi,
+} from '../../core/setupType/projectApi.js'
 
 const getOrganizationName = async (organizationId: string) => {
     return fireStoreMainInstance
@@ -42,9 +45,13 @@ const getUser = async (
         })
 }
 
-const getSpeakers = async (project: Project) => {
-    // initProjectApi(project.setupType, project)
-    // TODO : initProjectApi is not working as it is a singleton, we need to create a specific API for each project
+const getSpeakersCount = async (project: Project) => {
+    const api = getProjectApi(project.setupType, project)
+    if (api) {
+        const speakers = await api.getSpeakers()
+        return Object.keys(speakers).length
+    }
+    return 0
 }
 
 export const useExtraProjectsInfo = (loadedProjects: Project[]) => {
@@ -92,6 +99,15 @@ export const useExtraProjectsInfo = (loadedProjects: Project[]) => {
                                 : '•',
                             speakerCount: 0,
                             link: `https://openfeedback.io/${project.id}/`,
+                        },
+                    }))
+
+                    const speakerCount = await getSpeakersCount(project)
+                    setProjects((pastState) => ({
+                        ...pastState,
+                        [project.id]: {
+                            ...pastState[project.id],
+                            speakerCount,
                         },
                     }))
                 }

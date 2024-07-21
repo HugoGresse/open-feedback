@@ -27,7 +27,7 @@ export const getInitialDateRanges = (): DateRange[] => {
     const last30D = new Date()
     last30D.setDate(last30D.getDate() - 30)
 
-    const numberOfYearsSince2021 = new Date().getFullYear() - 2021
+    const numberOfYearsSince2021 = new Date().getFullYear() - 2021 + 1
 
     return [
         {
@@ -45,6 +45,6 @@ export const getInitialDateRanges = (): DateRange[] => {
             startDate: last30D,
             endDate: new Date(),
         },
-        ...getYearlyDateRanges(2021, numberOfYearsSince2021),
+        ...getYearlyDateRanges(2021, numberOfYearsSince2021).reverse(),
     ]
 }

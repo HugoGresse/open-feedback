@@ -11,7 +11,7 @@ export type DateRange = {
 export const useProjects = (
     dateRange: DateRange
 ): UseQueryResult<Project[]> => {
-    let query = fireStoreMainInstance
+    const query = fireStoreMainInstance
         .collection('projects')
         .where('createdAt', '>=', dateRange.startDate)
         .where('createdAt', '<=', dateRange.endDate)

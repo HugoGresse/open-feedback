@@ -94,7 +94,13 @@ export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
                             callbacks: {
                                 // Avoid redirects after sign-in.
                                 signInSuccessWithAuthResult: () => false,
-                                signInFailure: (error: { code: string, credential: unknown }) => {
+                                signInFailure: (error: {
+                                    code: string, credential: {
+                                        signInMethod: string,
+                                        providerId: string,
+                                        toJSON: () => object,
+                                    }
+                                }) => {
                                     if (
                                         error.code !==
                                         'firebaseui/anonymous-upgrade-merge-conflict'

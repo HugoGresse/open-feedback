@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { onAuthStateChanged } from 'firebase/auth'
 import * as firebaseui from 'firebaseui'
 import 'firebaseui/dist/firebaseui.css'
 
-const StyledFirebaseAuth = ({ uiConfig, firebaseAuth, className, uiCallback }) => {
+const StyledFirebaseAuth = ({ uiConfig, firebaseAuth, className, uiCallback }: { uiConfig: any, firebaseAuth: any, className ?: string, uiCallback: any }) => {
     const [userSignedIn, setUserSignedIn] = useState(false)
     const elementRef = useRef(null)
 
