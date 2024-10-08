@@ -1,17 +1,3 @@
-<p align="center">
-  <img src="/public/static/logos/openfeedback%20black%20orange-3x.png" alt="OpenFeedback logo" />
-</p>
-<p align="center">
-  <strong>Collectez des feedbacks facilement</strong>
-</p>
-
-<h3 align="center">
-  <a href="https://gitter.im/open-feedback/community">Community</a>
-  <span> · </span>
-  <a href="https://contribute-open-feedback.netlify.com/">Documentation</a>
-</h3>
-
-<p align="center"><b>https://openfeedback.io/</b></p>
 
 ---
 
