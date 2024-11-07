@@ -79,7 +79,7 @@ jobs:
             echo "APP_ENV=development" > .env.local
             echo "APP_URL=http://localhost:3000" >> .env.local
             echo "FIREBASE_STORAGE_EMULATOR_HOST=127.0.0.1:9199" >> .env.local
-            cat .env.test.local
+            cat .env.local
       env:
           FIREBASE_STORAGE_EMULATOR_HOST: 127.0.0.1:9199
 
