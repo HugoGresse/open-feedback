@@ -57,8 +57,7 @@ const SidePanelUploadLayout = ({
     helpText,
     isSubmitting,
     title,
-    finalImageWidth = 500,
-    finalImageHeight = 500,
+    finalImageWidthHeight = 500,
 }) => {
     const { t } = useTranslation()
     const classes = useStyles()
@@ -74,7 +73,7 @@ const SidePanelUploadLayout = ({
             if (upload) {
                 setUploading(true)
                 const imageUrl = await dispatch(
-                    uploadImage(upload.file, finalImageWidth, finalImageHeight)
+                    uploadImage(upload.file, finalImageWidthHeight)
                 )
 
                 setUploading(false)

@@ -169,8 +169,7 @@ const ProjectSettingsForm = ({ project }) => {
                                             'settingsEvent.fieldFaviconUrl'
                                         )}
                                         helpText={t('baseComponents.imageHelp')}
-                                        finalImageWidth={200}
-                                        finalImageHeight={200}
+                                        finalImageWidthHeight={200}
                                     />
                                 </Grid>
                             </Grid>

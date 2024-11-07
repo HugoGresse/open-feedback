@@ -57,8 +57,7 @@ const SpeakerAddEditPanel = ({ isOpen, speaker, onClose, onSubmit }) => {
                             isSubmitting={isSubmitting}
                             title={t('speakers.photoUrl')}
                             helpText={t('baseComponents.imageHelp')}
-                            finalImageWidth={200}
-                            finalImageHeight={200}
+                            finalImageWidthHeight={200}
                         />
 
                         <OFFormControlInputFormiked

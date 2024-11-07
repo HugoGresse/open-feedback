@@ -61,3 +61,14 @@ if (isUsingEmulators) {
         ssl: false,
     })
 }
+
+export const getStoragePublicPath = async (
+    snapshotRef: firebase.storage.Reference
+) => {
+    if (isUsingEmulators) {
+        return await snapshotRef.getDownloadURL()
+    }
+    const bucket = snapshotRef.bucket
+    const path = snapshotRef.fullPath
+    return `https://storage.googleapis.com/${bucket}/${path}`
+}
