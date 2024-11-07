@@ -13,13 +13,14 @@ export const uploadImage =
         const projectId = getSelectedProjectIdSelector(state)
         const organizationId = getSelectedOrganizationIdSelector(state)
 
+        const folderName = projectId ? 'projects' : 'organizations'
         const fileFolderId = projectId ? projectId : organizationId
         const docProjectId = projectId ? { projectId } : { organizationId }
 
         const resizedImage = await resizeImage(file, width)
 
         const storageRef = firebase.storage().ref()
-        const pathRef = storageRef.child(`projects/${fileFolderId}/`)
+        const pathRef = storageRef.child(`${folderName}/${fileFolderId}/`)
 
         const uploadRef = pathRef.child(`${newId()}_${file.name}`)
 
