@@ -73,23 +73,13 @@ jobs:
           CYPRESS_VITE_STORAGE_BUCKET: ${{ secrets.E2E_FIREBASE_BUCKET }}
           FIREBASE_STORAGE_EMULATOR_HOST: 127.0.0.1:9199
 
-    - name: Create .env.local for functions
-      working-directory: ./functions
-      run: |
-            echo "APP_ENV=development" > .env.local
-            echo "APP_URL=http://localhost:3000" >> .env.local
-            echo "FIREBASE_STORAGE_EMULATOR_HOST=127.0.0.1:9199" >> .env.local
-            cat .env.local
-      env:
-          FIREBASE_STORAGE_EMULATOR_HOST: 127.0.0.1:9199
-
     - name: Run Cypress E2E test
       uses: cypress-io/github-action@v6
       with:
         browser: chrome
         build: npm run build
         start: npm run cy:start
-        wait-on: 'http://127.0.0.1:3000, http://127.0.0.1:8080, http://127.0.0.1:9099, http://127.0.0.1:5001, http://127.0.0.1:9199'
+        wait-on: 'http://127.0.0.1:3000, http://127.0.0.1:8080, http://127.0.0.1:9099'
         record: true
         parallel: true
       env:

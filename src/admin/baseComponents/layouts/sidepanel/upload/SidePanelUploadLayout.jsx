@@ -120,7 +120,7 @@ const SidePanelUploadLayout = ({
         noClick: true,
         noKeyboard: true,
         accept: 'image/jpeg, image/png',
-        maxSize: 1024 * 1024,
+        maxSize: 10024 * 10024,
     })
 
     return (

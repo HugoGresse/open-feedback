@@ -2,6 +2,17 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
 
+    // Projects
+    function projectData(projectId) { return firestore.get(/databases/(default)/documents/projects/$(projectId)).data; }
+    function isAdmin(data) { return data.owner == request.auth.uid || request.auth.uid in data.members;}
+
+    // org
+    function getOrganization(organizationId) { return firestore.get(/databases/(default)/documents/organizations/$(organizationId)).data; }
+    function isAnOrgEditor(organization) { return request.auth.uid in organization.editorUserIds; }
+    function isAnOrgAdmin(organization) { return request.auth.uid in organization.adminUserIds; }
+    function isOrgOwner(organization) { return request.auth.uid == organization.ownerUserId; }
+
+
     match /users/{userId}/{imageId} {
       allow read: if true;
       allow write: if request.auth != null
@@ -12,7 +23,14 @@ service firebase.storage {
 
     match /projects/{projectId}/{imageId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if request.auth != null
+                   && (
+                     isAdmin(projectData(projectId))
+                     || isAnOrgEditor(getOrganization(projectData(projectId).organizationId))
+                     || isAnOrgAdmin(getOrganization(projectData(projectId).organizationId))
+                   )
+                   && request.resource.size < 5 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
     }
 
   }
