@@ -10,7 +10,6 @@ service firebase.storage {
     function getOrganization(organizationId) { return firestore.get(/databases/(default)/documents/organizations/$(organizationId)).data; }
     function isAnOrgEditor(organization) { return request.auth.uid in organization.editorUserIds; }
     function isAnOrgAdmin(organization) { return request.auth.uid in organization.adminUserIds; }
-    function isOrgOwner(organization) { return request.auth.uid == organization.ownerUserId; }
 
 
     match /users/{userId}/{imageId} {

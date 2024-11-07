@@ -11,7 +11,6 @@ export { userCreate } from './triggers/userCreate'
 
 export { alert } from './callable/alert'
 export { deleteProject } from './callable/deleteProject'
-export { removeFileFromStorage } from './callable/removeFileFromStorage'
 
 // Http request
 export { sendContactEmail } from './http/sendContactEmail'
