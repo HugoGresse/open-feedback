@@ -2,6 +2,7 @@ import { createSelector } from 'reselect'
 import { getDateFromStartTime } from './talksUtils'
 import { getProjectSelectedDateSelector } from '../../feedback/project/projectSelectors'
 import { getSpeakersListSelector } from '../speakers/speakerSelectors'
+import { DateTime } from 'luxon'
 
 export const getTalksSelector = (state) => state.talks
 
@@ -115,11 +116,23 @@ export const getCurrentTalksGroupByTrackSelector = createSelector(
         if (filteredTalks.length === 0) {
             return []
         }
-        const talksGroupByTrack = filteredTalks.reduce((acc, curr) => {
-            if (!acc[curr.trackTitle]) {
-                acc[curr.trackTitle] = []
+        const talksGroupByTrack = filteredTalks.reduce((acc, talk) => {
+            if (!acc[talk.trackTitle]) {
+                acc[talk.trackTitle] = []
             }
-            acc[curr.trackTitle].push(curr)
+            acc[talk.trackTitle].push({
+                ...talk,
+                startTimeLuxon: talk.startTime
+                    ? DateTime.fromISO(talk.startTime, {
+                          setZone: true,
+                      })
+                    : null,
+                endTimeLuxon: talk.endTime
+                    ? DateTime.fromISO(talk.endTime, {
+                          setZone: true,
+                      })
+                    : null,
+            })
 
             return acc
         }, {})
@@ -129,7 +142,12 @@ export const getCurrentTalksGroupByTrackSelector = createSelector(
             .reduce((acc, track) => {
                 acc.push({
                     track: track,
-                    talks: talksGroupByTrack[track],
+                    talks: talksGroupByTrack[track].sort((a, b) => {
+                        if (a.startTimeLuxon && b.startTimeLuxon) {
+                            return a < b ? -1 : 1
+                        }
+                        return 0
+                    }),
                 })
                 return acc
             }, [])

@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-const TalksList = ({ talks, userTalkVote }) => {
+export const TalksList = ({ talks, userTalkVote }) => {
     const dispatch = useDispatch()
     const classes = useStyles()
 
@@ -40,5 +40,3 @@ const TalksList = ({ talks, userTalkVote }) => {
         </div>
     ))
 }
-
-export default TalksList
