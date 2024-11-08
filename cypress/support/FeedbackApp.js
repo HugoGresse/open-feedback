@@ -143,6 +143,12 @@ export class FeedbackApp {
                     case VOTE_ITEM_TYPES.chip:
                         cy.contains('span', name)
                         break
+                    case VOTE_ITEM_TYPES.title:
+                        cy.contains('h3', name)
+                        break
+                    case VOTE_ITEM_TYPES.separator:
+                        cy.get('hr').should('be.visible')
+                        break
                     default:
                         throw new Error(
                             `${type} not managed in Cypress assertVoteItem`
