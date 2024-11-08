@@ -280,6 +280,8 @@
         "resetToDefaultDialogDesc": "Les votes existant ne seront plus affiché, les statistiques listeront toujours ces votes.",
         "typeText": "Texte",
         "typeBoolean": "Pastille",
+        "typeTitle": "Titre",
+        "typeSeparator": "Séparateur",
         "editLang": "Vous pouvez modifier les langues depuis la page Évènement & thème.",
         "typeChangeDialogTitle": "Changement de type de vote",
         "typeChangeDialogDesc": "Le type d'un choix de vote a changé ou un choix de vote a été supprimé. Si il y a déjà des votes liés à ce choix, ils ne seront plus visible.",

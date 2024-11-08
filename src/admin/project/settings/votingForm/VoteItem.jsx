@@ -10,7 +10,7 @@ import { makeStyles } from '@mui/styles'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import { useTranslation } from 'react-i18next'
-import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../../../core/contants'
+import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_SEPARATOR, VOTE_TYPE_TEXT, VOTE_TYPE_TITLE } from '../../../../core/contants'
 import langMap from 'langmap'
 import InputLangAdornment from './InputLangAdornment.jsx'
 
@@ -36,6 +36,14 @@ const getTypes = (t) => [
     {
         type: VOTE_TYPE_TEXT,
         name: t('settingsVotingForm.typeText'),
+    },
+    {
+        type: VOTE_TYPE_TITLE,
+        name: t('settingsVotingForm.typeTitle'),
+    },
+    {
+        type: VOTE_TYPE_SEPARATOR,
+        name: t('settingsVotingForm.typeSeparator'),
     },
 ]
 
@@ -63,6 +71,8 @@ const VoteItem = ({
         }
     }, [focusId, setFocusLangIndex, focusedLangIndex, item.id])
 
+    const isSeparator = item.type === VOTE_TYPE_SEPARATOR
+
     return (
         <OFListItem
             style={{ paddingLeft: 20, paddingRight: 20 }}
@@ -76,6 +86,7 @@ const VoteItem = ({
                         focusedLangIndex === -1 &&
                         input.focus()
                     }
+                    disabled={isSeparator}
                     autoFocus={!item.name}
                     onChange={(event) => onChange(event.target.value)}
                     onFocus={() => {
@@ -95,7 +106,7 @@ const VoteItem = ({
                         }
                     }}
                 />
-                {languages.map((langTag, index) => (
+                {!isSeparator && languages.map((langTag, index) => (
                     <OFInput
                         key={langTag}
                         value={item.languages ? item.languages[langTag] : ''}
@@ -108,6 +119,7 @@ const VoteItem = ({
                             )
                         }}
                         className={classes.inputLang}
+                        disabled={isSeparator}
                         onChange={(event) =>
                             onLanguagesChange(langTag, event.target.value)
                         }

@@ -130,8 +130,6 @@ export const TalkVoteText = ({
         <Grid
             item
             xs={12}
-            sm={12}
-            md={12}
             className={classes.itemContainer}
             data-testid="VoteItem"
         >

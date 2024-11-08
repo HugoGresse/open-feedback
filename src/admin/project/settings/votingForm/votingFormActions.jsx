@@ -21,7 +21,7 @@ import {
     isSavingVotingFormSelector,
 } from './votingFormSelectors'
 import { newId } from '../../../../utils/stringUtils'
-import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../../../core/contants'
+import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_SEPARATOR, VOTE_TYPE_TEXT } from '../../../../core/contants'
 import { filterMap } from '../../../../utils/mapUtils'
 import { addNotification } from '../../../notification/notifcationActions'
 import {
@@ -59,6 +59,11 @@ export const onVoteItemChange = (voteItem) => (dispatch, getState) => {
     if (!editedVoteItem.local && editedVoteItem.type !== savedVoteItem.type) {
         editedVoteItem.oldId = editedVoteItem.id
         editedVoteItem.id = newId()
+    }
+
+    if (editedVoteItem.type === VOTE_TYPE_SEPARATOR) {
+        editedVoteItem.name = null
+        editedVoteItem.languages = {}
     }
 
     dispatch({
@@ -127,7 +132,12 @@ export const saveVoteItems = (hideNotification) => (dispatch, getState) => {
 
     let tempLanguages = {}
     const cleanedVoteItems = voteItems
-        .filter((item) => item.name)
+        .filter((item) => {
+            if (item.type === VOTE_TYPE_SEPARATOR) {
+                return true
+            }
+            return item.name
+        })
         .map((item) => {
             delete item.local
 

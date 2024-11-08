@@ -1,7 +1,9 @@
 import React from 'react'
 import TalkVoteBoolean from './boolean/TalkVoteBoolean.jsx'
 import { TalkVoteText } from './text/TalkVoteText.jsx'
-import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../core/contants'
+import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_SEPARATOR, VOTE_TYPE_TEXT, VOTE_TYPE_TITLE } from '../../core/contants'
+import { TalkVoteTitle } from './nonVoteItem/TalkVoteTitle.jsx'
+import { TalkVoteSeparator } from './nonVoteItem/TalkVoteSeparator.jsx'
 
 export const TalkVote = ({
     voteItem,
@@ -33,6 +35,16 @@ export const TalkVote = ({
                     voteResult={voteResult}
                     chipColors={chipColors}
                 />
+            )
+        case VOTE_TYPE_TITLE:
+            return (
+                <TalkVoteTitle
+                    voteItem={voteItem}
+                />
+            )
+        case VOTE_TYPE_SEPARATOR:
+            return (
+                <TalkVoteSeparator />
             )
     }
 }

@@ -280,6 +280,8 @@
         "resetToDefaultDialogDesc": "Existing votes will no longer be displayed, dashboard will still list them.",
         "typeText": "Text",
         "typeBoolean": "Chip",
+        "typeTitle": "Title",
+        "typeSeparator": "Separator",
         "editLang": "You can edit the languages from the Event & Theme page",
         "typeChangeDialogTitle": "Vote type changed",
         "typeChangeDialogDesc": "A vote type has changed or a vote item has been deleted. If there are already votes linked to this vote item, they will not be visible.",
