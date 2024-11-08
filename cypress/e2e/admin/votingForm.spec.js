@@ -7,6 +7,7 @@ describe('Test voting form edition', function () {
         projectName: `votingform ${stringGenerator()}`,
         talk1Name: 'Ttitle1',
         voteItem1: stringGenerator(),
+        voteItemTitle: stringGenerator(),
     }
 
     const app = new AdminApp()
@@ -28,6 +29,21 @@ describe('Test voting form edition', function () {
         app.votingForm.assertVoteItemLength(9)
         app.votingForm.addVoteItem(data.voteItem1)
         app.votingForm.assertVoteItemLength(10)
+
+        app.votingForm.addVoteItem(data.voteItemTitle)
+        app.votingForm.addVoteItem(stringGenerator())
+        app.votingForm.assertVoteItemLength(12)
+        app.votingForm.changeVoteItemType(
+            10,
+            VOTE_ITEM_TYPES.chip,
+            VOTE_ITEM_TYPES.title
+        )
+        app.votingForm.changeVoteItemType(
+            11,
+            VOTE_ITEM_TYPES.chip,
+            VOTE_ITEM_TYPES.separator
+        )
+
         app.votingForm.assertVoteItem(0, 'Fun 😃', VOTE_ITEM_TYPES.chip)
         app.votingForm.moveVoteItem(0, true)
         app.votingForm.assertVoteItem(
@@ -55,6 +71,8 @@ describe('Test voting form edition', function () {
         )
         feedback.assertVoteItem(1, 'Fun 😃', VOTE_ITEM_TYPES.chip)
         feedback.assertVoteItem(8, data.voteItem1, VOTE_ITEM_TYPES.chip)
+        feedback.assertVoteItem(9, data.voteItemTitle, VOTE_ITEM_TYPES.title)
+        feedback.assertVoteItem(10, null, VOTE_ITEM_TYPES.separator)
     })
 
     it('Reset voting form to default', function () {

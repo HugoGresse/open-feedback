@@ -7,6 +7,8 @@ import { onBeforeLoadChangeNavigatorLanguages } from '../utils/onBeforeLoadChang
 export const VOTE_ITEM_TYPES = {
     chip: 'Chip',
     text: 'Text',
+    title: 'Title',
+    separator: 'Separator',
 }
 export class AdminApp {
     votingForm = new VotingForm()
