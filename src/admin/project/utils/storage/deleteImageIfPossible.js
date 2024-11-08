@@ -1,18 +1,15 @@
+import firebase from 'firebase/compat/app'
 import 'firebase/storage'
-import { functions } from '../../../../firebase.ts'
-import { getSelectedProjectIdSelector } from '../../core/projectSelectors'
-import { getSelectedOrganizationIdSelector } from '../../../organization/core/organizationSelectors'
 
 export const deleteImageIfPossible = (storageFullPath, docId) => {
-    functions
-        .removeFileFromStorage({
-            storageFullPath,
-            ...docId,
-        })
-        .catch((error) => {
-            // eslint-disable-next-line no-console
-            console.log(error, error.message)
-        })
+    const refBase = firebase.storage().ref()
+    const fileToDelete = storageFullPath.split(refBase.bucket)[1]
+    const storageRef = firebase.storage().ref(fileToDelete)
+
+    storageRef.delete().catch((error) => {
+        // expected with emulators
+        console.warn(error)
+    })
 }
 
 export const deleteOldFilesIfNewValueDiffer =
@@ -27,12 +24,6 @@ export const deleteOldFilesIfNewValueDiffer =
             return
         }
 
-        const state = getState()
-        const projectId = getSelectedProjectIdSelector(state)
-        const organizationId = getSelectedOrganizationIdSelector(state)
-
-        const docId = projectId ? { projectId } : { organizationId }
-
         keyArray.forEach((key) => {
             const oldValue = oldObject[key]
             const newValue = newObject[key]
@@ -44,7 +35,7 @@ export const deleteOldFilesIfNewValueDiffer =
             if (oldValue !== newValue) {
                 try {
                     const path = new URL(oldObject[key]).pathname.slice(1)
-                    deleteImageIfPossible(path, docId)
+                    deleteImageIfPossible(path)
                 } catch (ignore) {
                     // ignored
                 }

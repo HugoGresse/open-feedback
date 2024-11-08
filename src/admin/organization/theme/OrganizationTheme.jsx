@@ -74,8 +74,7 @@ export const OrganizationTheme = () => {
                                     isSubmitting={isSubmitting}
                                     title={t('settingsEvent.fieldFaviconUrl')}
                                     helpText={t('baseComponents.imageHelp')}
-                                    finalImageWidth={200}
-                                    finalImageHeight={200}
+                                    finalImageWidthHeight={200}
                                 />
                             </Grid>
                             <Grid item xs={6} sm={4}>

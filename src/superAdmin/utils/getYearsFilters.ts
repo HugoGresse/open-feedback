@@ -31,8 +31,8 @@ export const getInitialDateRanges = (): DateRange[] => {
 
     return [
         {
-            name: '-365d',
-            startDate: last365D,
+            name: '-30d',
+            startDate: last30D,
             endDate: new Date(),
         },
         {
@@ -41,8 +41,8 @@ export const getInitialDateRanges = (): DateRange[] => {
             endDate: new Date(),
         },
         {
-            name: '-30d',
-            startDate: last30D,
+            name: '-365d',
+            startDate: last365D,
             endDate: new Date(),
         },
         ...getYearlyDateRanges(2021, numberOfYearsSince2021).reverse(),

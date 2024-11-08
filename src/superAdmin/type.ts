@@ -8,7 +8,7 @@ export type Project = {
     setupType: string
     organizationId?: string
     createdAt: Timestamp
-    voteStartTime?: Timestamp
+    voteStartTime?: string
 }
 
 export type ProjectExtraInfo = {

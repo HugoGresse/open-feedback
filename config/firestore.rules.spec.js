@@ -66,6 +66,12 @@ const getProject = (app, projectId) => {
     return app.collection('projects').doc(projectId).get()
 }
 
+const createSuperAdmin = async (app, userId) => {
+    return app.collection('admins/users/admins').doc(userId).set({
+        admin: true,
+    })
+}
+
 const addFullDataToProject = async (app, projectId, userId) => {
     const speakerRef = await app
         .collection('projects')
@@ -1061,6 +1067,22 @@ describe('Firestore rules', () => {
             const listOrg = app.collection('projects').get()
 
             await firebase.assertFails(listOrg)
+        })
+        it('cannot get or create a super admin', async () => {
+            const app = createApp(UID_ADMIN)
+
+            createProject(app, 'First project', UID_VIEWER)
+            createProject(app, 'Second project with another user', UID_EDITOR)
+
+            const superAdminCreationRequest = createSuperAdmin(app, UID_ADMIN)
+            await firebase.assertFails(superAdminCreationRequest)
+
+            const readSuperAdmin = app
+                .collection('admins/users/admins')
+                .doc(UID_ADMIN)
+                .get()
+
+            await firebase.assertFails(readSuperAdmin)
         })
 
         // Note: cannot do more test as I cannot add super user with the regular app :/

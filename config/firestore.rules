@@ -63,7 +63,7 @@ service cloud.firestore {
             }
 
             match /userVotes/{ref} {
-                allow read: if authenticated() && resource.data.userId == request.auth.uid || isAdmin(projectData(projectId)) || isAnOrgViewer(getOrganization(projectData(projectId).organizationId));
+                allow read: if authenticated() && isSuperAdmin(request.auth.uid) || resource.data.userId == request.auth.uid || isAdmin(projectData(projectId)) || isAnOrgViewer(getOrganization(projectData(projectId).organizationId));
                 allow create: if authenticated() && request.resource.data.userId == request.auth.uid;
                 allow update: if authenticated() && resource.data.userId == request.auth.uid || isAdmin(projectData(projectId));
                 allow delete: if authenticated() && (isAdmin(projectData(projectId)) || isAnOrgAdmin(getOrganization(projectData(projectId).organizationId))) && (isEmailVerified() || isPhoneNumberAccount());
@@ -100,6 +100,16 @@ service cloud.firestore {
             allow create: if authenticated();
             allow update: if authenticated() && ((isAnOrgAdmin(resource.data) && request.resource.data.ownerUserId == resource.data.ownerUserId) || isOrgOwner(resource.data) );
             allow delete: if authenticated() && isOrgOwner(resource.data);
+        }
+
+        // SUPER ADMIN
+
+        match /admins/users/admins/{userId} {
+            allow get: if authenticated() && isSuperAdmin(request.auth.uid);
+            allow list: if false;
+            allow create: if false;
+            allow update: if false;
+            allow delete: if false;
         }
     }
 }

@@ -19,9 +19,8 @@ import { Project, ProjectExtraInfo } from './type.ts'
  * @constructor
  */
 export const SuperAdminProjects = () => {
-
     const [dateRanges] = useState<DateRange[]>(getInitialDateRanges())
-    const [selectedDateRange, setSelectedDateRange] = useState<DateRange>(dateRanges[3])
+    const [selectedDateRange, setSelectedDateRange] = useState<DateRange>(dateRanges[0])
     const projects = useProjects(selectedDateRange)
     const extraInfos = useExtraProjectsInfo(projects.data || [])
 
@@ -105,18 +104,18 @@ export const SuperAdminProjects = () => {
                 {range.name}</Button>)}
         </Box>
 
-        <Box sx={{ height: 400 }}>
+        <Box sx={{ height: "90vh" }}>
             <DataGrid
                 rows={rows}
                 columns={columns}
                 initialState={{
                     pagination: {
                         paginationModel: {
-                            pageSize: 5,
+                            pageSize: 100,
                         },
                     },
                 }}
-                pageSizeOptions={[5]}
+                pageSizeOptions={[100]}
                 disableRowSelectionOnClick
             />
         </Box>

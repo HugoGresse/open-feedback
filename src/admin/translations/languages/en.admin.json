@@ -9,7 +9,7 @@
         "search": "Search",
         "imageUrl": "Image URL",
         "uploadImage": "Upload image",
-        "imageHelp": "Image must be a jpeg or png image, less than 1MB"
+        "imageHelp": "Image must be a jpeg or png image, less than 10MB"
     },
     "common": {
         "back": "Back",

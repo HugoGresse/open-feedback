@@ -9,7 +9,7 @@
         "search": "Recherche",
         "imageUrl": "URL de l'image",
         "uploadImage": "Charger l'image",
-        "imageHelp": "L'image doit être au format png ou jpeg et faire moins de 1Mo"
+        "imageHelp": "L'image doit être au format png ou jpeg et faire moins de 10 Mo"
     },
     "common": {
         "back": "Retour",

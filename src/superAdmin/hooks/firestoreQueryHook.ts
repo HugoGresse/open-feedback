@@ -35,6 +35,7 @@ export const useFirestoreCollection = <T>(
     }
 
     const load = useCallback(() => {
+        setData([])
         setLoading(true)
 
         try {

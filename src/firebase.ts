@@ -31,12 +31,6 @@ export const arrayUnionField = firebase.firestore.FieldValue.arrayUnion
 export const functions = {
     alert: firebase.functions().httpsCallable('alert'),
     deleteProject: firebase.functions().httpsCallable('deleteProject'),
-    resizeAndMoveImage: firebase
-        .functions()
-        .httpsCallable('resizeAndMoveImage'),
-    removeFileFromStorage: firebase
-        .functions()
-        .httpsCallable('removeFileFromStorage'),
 }
 export const HttpsFunctionsUrl = {
     sendContactEmail: isUsingEmulators
@@ -60,4 +54,15 @@ if (isUsingEmulators) {
         host: '127.0.0.1:8080',
         ssl: false,
     })
+}
+
+export const getStoragePublicPath = async (
+    snapshotRef: firebase.storage.Reference
+) => {
+    if (isUsingEmulators) {
+        return await snapshotRef.getDownloadURL()
+    }
+    const bucket = snapshotRef.bucket
+    const path = snapshotRef.fullPath
+    return `https://storage.googleapis.com/${bucket}/${path}`
 }

@@ -1,10 +1,9 @@
 import { ProjectExtraInfo, Project } from '../type.ts'
 import { useEffect, useState } from 'react'
 import { fireStoreMainInstance } from '../../firebase.ts'
-// @ts-ignore
 import {
     getProjectApi,
-    initProjectApi,
+    // @ts-ignore
 } from '../../core/setupType/projectApi.js'
 
 const getOrganizationName = async (organizationId: string) => {
@@ -48,8 +47,12 @@ const getUser = async (
 const getSpeakersCount = async (project: Project) => {
     const api = getProjectApi(project.setupType, project)
     if (api) {
-        const speakers = await api.getSpeakers()
-        return Object.keys(speakers).length
+        try {
+            const speakers = await api.getSpeakers()
+            return Object.keys(speakers).length
+        } catch (error) {
+            console.error(error)
+        }
     }
     return 0
 }
@@ -93,9 +96,9 @@ export const useExtraProjectsInfo = (loadedProjects: Project[]) => {
                                 .toDate()
                                 .toLocaleDateString(),
                             dateVote: project.voteStartTime
-                                ? project.voteStartTime
-                                      .toDate()
-                                      .toLocaleDateString()
+                                ? new Date(
+                                      project.voteStartTime
+                                  ).toLocaleDateString()
                                 : '•',
                             speakerCount: 0,
                             link: `https://openfeedback.io/${project.id}/`,

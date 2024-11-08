@@ -5,10 +5,12 @@ import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchPare
 import Box from '@mui/material/Box'
 import StyledFirebaseAuth from '../baseComponents/StyledFirebaseAuth.tsx'
 import { Button } from '@mui/material'
+import { useIsSuperAdmin } from './hooks/useIsSuperAdmin.ts'
 
 export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
     const [loggedInUser, setUser] = useState<{ uid: string } | null>(authProvider.currentUser)
     const [loaderDisplayed, setLoaderDisplay] = useState(true)
+    const isSuperAdmin = useIsSuperAdmin(loggedInUser)
 
     const setUserIfNeeded = (user: { uid: string } | null) => {
         if (JSON.stringify(user) !== JSON.stringify(loggedInUser)) {
@@ -41,6 +43,14 @@ export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
             unregisterAuthObserver()
         }
     }, [loggedInUser])
+
+    if(loggedInUser && !isSuperAdmin) {
+        return <Box color={'white'}>
+            <p>NOT A SUPER ADMIN, YOU CAN'T SEE THIS
+                OUST!</p>
+            <Button variant="contained" onClick={() => signOut()}>LOGOUT</Button>
+        </Box>
+    }
 
 
     if (loggedInUser) {
