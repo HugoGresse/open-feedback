@@ -6,7 +6,6 @@ import OFFormControl from '../../baseComponents/form/formControl/OFFormControl.j
 import { Field, Form, Formik } from 'formik'
 import ChipColorsEditor from '../../project/settings/event/ChipColorsEditor.jsx'
 import { object, string } from 'yup'
-import { rURLWithLocalhostSupported } from '../../project/utils/rURLWithLocalhostSupported'
 import { useTranslation } from 'react-i18next'
 import { getSelectedOrganizationSelector } from '../core/organizationSelectors'
 import { useDispatch, useSelector } from 'react-redux'
@@ -33,16 +32,8 @@ export const OrganizationTheme = () => {
             <Formik
                 validationSchema={object().shape({
                     logoUrl: string()
-                        .matches(
-                            rURLWithLocalhostSupported,
-                            t('settingsEvent.fieldLogoUrlNotValid')
-                        )
                         .required(t('settingsEvent.fieldLogoUrlRequired')),
                     faviconUrl: string()
-                        .matches(
-                            rURLWithLocalhostSupported,
-                            t('settingsEvent.fieldFaviconUrlNotValid')
-                        )
                         .required(t('settingsEvent.fieldFaviconUrlRequired')),
                 })}
                 initialValues={initialValues}

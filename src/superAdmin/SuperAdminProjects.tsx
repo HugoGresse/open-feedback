@@ -104,7 +104,7 @@ export const SuperAdminProjects = () => {
                 {range.name}</Button>)}
         </Box>
 
-        <Box sx={{ height: "90vh" }}>
+        <Box sx={{ height: "90vh", width: "90vw" }}>
             <DataGrid
                 rows={rows}
                 columns={columns}

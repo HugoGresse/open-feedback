@@ -18,7 +18,6 @@ import SidePanelUploadLayout from '../../../baseComponents/layouts/sidepanel/upl
 import { editProject } from '../../core/actions/editProject'
 import RestrictVoteRangeFields from './RestrictVoteRangeFields.jsx'
 import { SaveShortcut } from '../../../baseComponents/form/saveShortcut/SaveShortcut'
-import { rURLWithLocalhostSupported } from '../../utils/rURLWithLocalhostSupported'
 
 const useStyles = makeStyles((theme) => ({
     buttonContainer: {
@@ -58,16 +57,8 @@ const ProjectSettingsForm = ({ project }) => {
                     t('settingsEvent.fieldScheduleNotValid')
                 ),
                 logoUrl: string()
-                    .matches(
-                        rURLWithLocalhostSupported,
-                        t('settingsEvent.fieldLogoUrlNotValid')
-                    )
                     .required(t('settingsEvent.fieldLogoUrlRequired')),
                 faviconUrl: string()
-                    .matches(
-                        rURLWithLocalhostSupported,
-                        t('settingsEvent.fieldFaviconUrlNotValid')
-                    )
                     .required(t('settingsEvent.fieldFaviconUrlRequired')),
                 restrictVoteRange: boolean(),
                 voteStartTime: string(),
