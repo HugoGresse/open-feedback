@@ -143,10 +143,10 @@ export const getCurrentTalksGroupByTrackSelector = createSelector(
                 acc.push({
                     track: track,
                     talks: talksGroupByTrack[track].sort((a, b) => {
-                        if (a.startTimeLuxon && b.startTimeLuxon) {
-                            return a < b ? -1 : 1
+                        if (!a.startTimeLuxon || !b.startTimeLuxon) {
+                            return 0
                         }
-                        return 0
+                        return a.startTimeLuxon - b.startTimeLuxon
                     }),
                 })
                 return acc
