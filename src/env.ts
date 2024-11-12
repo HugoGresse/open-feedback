@@ -1,3 +1,2 @@
-import 'vite/client'
-
-export const ViteAuthDomain = import.meta.env.VITE_AUTH_DOMAIN
+// @ts-ignore
+export const OpenSponsorsUrl = import.meta.env.VITE_OPEN_SPONSORS
