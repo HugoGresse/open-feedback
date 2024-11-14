@@ -44,6 +44,11 @@
         "success": "Message sent 🚀",
         "submit": "Send"
     },
+    "sponsor": {
+        "title": "Sponsor",
+        "description": "Sponsors helps to keep the project alive, improve it and participate to the hosting costs.",
+        "becomeSponsor": "Become a sponsor"
+    },
     "footer": {
         "about": "About",
         "contact": "Contact"
