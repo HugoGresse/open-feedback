@@ -38,7 +38,8 @@
         "loading": "Loading",
         "donate": "Donate",
         "donationHint": "This feature is expensive, and we need your support to keep it free. If you like this app, please consider a donation.",
-        "donationContinue": "Open donation page"
+        "donationContinue": "Open donation page",
+        "becomeSponsor": "Become a sponsor"
     },
     "project": {
         "errorProjectsLoad": "Unable to load all projects.",

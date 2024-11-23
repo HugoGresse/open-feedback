@@ -55,7 +55,7 @@ export const Footer = () => {
                         style={{ color: theme.palette.textDimmed }}>
                         <span
                             style={{ left: 16, top: -2, position: 'relative' }}>
-                            Devenir sponsor
+                            {t('common.becomeSponsor')}
                         </span>
                     </Link>
                 </Box>

@@ -1,7 +1,8 @@
 {
     "common": {
         "loading": "Chargement",
-        "donate": "Faire un don"
+        "donate": "Faire un don",
+        "becomeSponsor": "Devenir sponsor"
     },
     "comment": {
         "placeholder": "Votre réponse",
