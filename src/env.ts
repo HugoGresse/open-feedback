@@ -1,2 +1,2 @@
 // @ts-ignore
-export const OpenSponsorsUrl = import.meta.env.VITE_OPEN_SPONSORS
+export const OpenSponsorsUrl: string = import.meta.env.VITE_OPEN_SPONSORS

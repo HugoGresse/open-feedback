@@ -21,7 +21,7 @@ export const Sponsor = () => {
             textAlign="center"
             paddingY={4}
             borderTop="1px solid #ccc">
-            <Typography variant="h2" id="contact" style={{ marginTop: 16 }}>
+            <Typography variant="h2" id="sponsor" style={{ marginTop: 16 }}>
                 {t('sponsor.title')}
             </Typography>
 

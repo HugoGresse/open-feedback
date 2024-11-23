@@ -12,7 +12,7 @@ export const useOSSSponsors = () => {
             const data = await response.json()
             setSponsors(data.sponsors || [])
         }
-        fetchData()
+        fetchData().catch(console.error)
     }, [])
 
     return sponsors
