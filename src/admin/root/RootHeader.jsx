@@ -11,6 +11,7 @@ import { getUserSelector } from '../auth/authSelectors'
 import { makeStyles } from '@mui/styles'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -49,23 +50,26 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const RootHeader = () => {
-    const navigate =useNavigate()
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const classes = useStyles()
 
     const user = useSelector(getUserSelector)
 
-    const displayedUserName = user.displayName || (user.email.split('@') || [""])[0]
+    const displayedUserName =
+        user.displayName || (user.email.split('@') || [''])[0]
 
     return (
         <header className={classes.container}>
             <Grid container>
                 <Grid item xs={12} sm={6} className={classes.left}>
-                    <img
-                        className={classes.logo}
-                        src={logo}
-                        alt="open feedback logo"
-                    />
+                    <Box component="a" href="/">
+                        <img
+                            className={classes.logo}
+                            src={logo}
+                            alt="open feedback logo"
+                        />
+                    </Box>
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.right}>
                     <Avatar alt={displayedUserName} src={user.photoURL} />
@@ -83,5 +87,5 @@ export const RootHeader = () => {
                 </Grid>
             </Grid>
         </header>
-    );
+    )
 }

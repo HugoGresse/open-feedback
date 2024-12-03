@@ -7,7 +7,6 @@ import adminImage from './images/admin-new.webp'
 import newImage from './images/new.png'
 import qrcodeImage from './images/qrcode.png'
 import bulleImage from './images/bulle.png'
-import hoverboard from './images/hoverboard.png'
 import { useTranslation } from 'react-i18next'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -64,15 +63,6 @@ const List = styled.ul`
     }
 `
 
-const CompatibilityText = styled(Box)`
-    margin-top: 20px;
-    color: ${COLORS.GRAY};
-
-    img {
-        margin: 0 5px;
-    }
-`
-
 const Header = () => {
     const { t } = useTranslation()
 
@@ -103,15 +93,6 @@ const Header = () => {
                             {t('home.vote')}
                         </li>
                     </List>
-
-                    <CompatibilityText display="flex" alignItems="center">
-                        {t('home.compatibleHoverboard')}
-                        <img
-                            height="40"
-                            src={hoverboard}
-                            alt="hoverboard"
-                        />
-                    </CompatibilityText>
                 </BoxRight>
             </InnerWrapperResponsive>
         </Box>
