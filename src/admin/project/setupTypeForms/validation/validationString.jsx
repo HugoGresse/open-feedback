@@ -30,7 +30,7 @@ const validationText = {
             connecting: 'We are fetching your json.',
             connected: 'We received your data.',
             error:
-                'We failed to get your data, they server may be offline, or the url may be wrong.',
+                'We failed to get your data, the server may be offline, or the url may be wrong.',
         },
         [PROJECT_TYPE_HOVERBOARDV2]: {
             connecting: 'We are connecting to your Firestore database.',
