@@ -1,6 +1,6 @@
 {
     "auth": {
-        "emailNotVerified": "Vous devez vérifier vote adresse email en utilisant le lien que vous avez reçu dans votre boîte email.",
+        "emailNotVerified": "Vous devez vérifier votre adresse email en utilisant le lien que vous avez reçu dans votre boîte email.",
         "retry": "Réessayez",
         "errorLogin": "Erreur lors de l'authentification anonyme.",
         "errorAnonymous": "Vous ne pouvez pas utiliser l'admin en mode anonyme"
