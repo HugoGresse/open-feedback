@@ -14,6 +14,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { useTheme } from '@mui/material'
 import { Link } from 'react-router-dom'
 import RoutingMap, { ROUTE_EVENT_BASE } from '../RoutingMap'
+import { DateTime } from 'luxon'
 
 const useStyles = makeStyles((theme) => ({
     newEventCard: {
@@ -77,11 +78,15 @@ const ProjectList = ({
             </Grid>
 
             {displayedProjects.map((project) => {
-                const voteStartYear = project.voteStartTime
-                    ? new Date(project.voteStartTime).getFullYear()
+                const voteStartDay = project.voteStartTime
+                    ? DateTime.fromJSDate(
+                          new Date(project.voteStartTime)
+                      ).toLocaleString({ day: 'numeric', month: 'short' })
                     : null
-                const voteEndYear = project.voteEndTime
-                    ? new Date(project.voteEndTime).getFullYear()
+                const voteEndDay = project.voteEndTime
+                    ? DateTime.fromJSDate(
+                          new Date(project.voteEndTime)
+                      ).toLocaleString({ day: 'numeric', month: 'short' })
                     : null
                 return (
                     <Grid
@@ -102,17 +107,21 @@ const ProjectList = ({
                                         <Typography variant="h6">
                                             {project.name}
                                         </Typography>
-                                        {voteStartYear && voteEndYear && (
+                                        {voteStartDay && voteEndDay && (
                                             <Typography
                                                 variant="caption"
                                                 color="textSecondary">
-                                                {`${voteStartYear} → ${voteEndYear}`}
+                                                {`${voteStartDay} → ${voteEndDay}`}
                                                 <br />
                                             </Typography>
                                         )}
                                         <Typography
                                             variant="caption"
                                             color="textSecondary">
+                                            {DateTime.fromMillis(
+                                                project.createdAt.toMillis()
+                                            ).toLocaleString(DateTime.DATE_MED)}
+                                            <br />
                                             {project.id}
                                         </Typography>
                                     </CardContent>
