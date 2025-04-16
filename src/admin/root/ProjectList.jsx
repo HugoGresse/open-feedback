@@ -76,28 +76,52 @@ const ProjectList = ({
                 </Card>
             </Grid>
 
-            {displayedProjects.map((project) => (
-                <Grid item xs={6} sm={6} md={4} key={project.id} component="li">
-                    <Card>
-                        <Link
-                            to={`${ROUTE_EVENT_BASE}/${project.id}${RoutingMap.dashboard.url}`}
-                            title={`${t('root.selectEvent')}${project.name}`}>
-                            <CardActionArea className={classes.cardActionArea}>
-                                <CardContent className={classes.cardContent}>
-                                    <Typography variant="h6">
-                                        {project.name}
-                                    </Typography>
-                                    <Typography
-                                        variant="caption"
-                                        color="textSecondary">
-                                        {project.id}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Link>
-                    </Card>
-                </Grid>
-            ))}
+            {displayedProjects.map((project) => {
+                const voteStartYear = project.voteStartTime
+                    ? new Date(project.voteStartTime).getFullYear()
+                    : null
+                const voteEndYear = project.voteEndTime
+                    ? new Date(project.voteEndTime).getFullYear()
+                    : null
+                return (
+                    <Grid
+                        item
+                        xs={6}
+                        sm={6}
+                        md={4}
+                        key={project.id}
+                        component="li">
+                        <Card>
+                            <Link
+                                to={`${ROUTE_EVENT_BASE}/${project.id}${RoutingMap.dashboard.url}`}
+                                title={`${t('root.selectEvent')}${project.name}`}>
+                                <CardActionArea
+                                    className={classes.cardActionArea}>
+                                    <CardContent
+                                        className={classes.cardContent}>
+                                        <Typography variant="h6">
+                                            {project.name}
+                                        </Typography>
+                                        {voteStartYear && voteEndYear && (
+                                            <Typography
+                                                variant="caption"
+                                                color="textSecondary">
+                                                {`${voteStartYear} → ${voteEndYear}`}
+                                                <br />
+                                            </Typography>
+                                        )}
+                                        <Typography
+                                            variant="caption"
+                                            color="textSecondary">
+                                            {project.id}
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Link>
+                        </Card>
+                    </Grid>
+                )
+            })}
 
             {showHideAllProject && (
                 <Grid item xs={12} key="show-all" component="li">
