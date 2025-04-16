@@ -11,22 +11,29 @@ import { ROUTE_ADMIN, ROUTE_ORGANIZATION_SEGMENT } from '../RoutingMap'
 
 export const OrganizationHeader = ({
     title,
-    isOrganization,
-    organizationId,
+    isOrganization = false,
+    organizationId = null,
 }) => {
     const { t } = useTranslation()
     const theme = useTheme()
 
     return (
         <>
-            <Grid item xs={12} component="li" marginTop={isOrganization ? 4 : 10}>
+            <Grid
+                item
+                xs={12}
+                component="li"
+                marginTop={isOrganization ? 4 : 10}>
                 <Grid container>
                     <Grid item xs={12} md={isOrganization ? 8 : 12}>
                         <Typography
                             variant="h2"
                             component="h1"
-                            sx={{color: isOrganization ? theme.palette.secondary.main : COLORS.WHITE}}
-                        >
+                            sx={{
+                                color: isOrganization
+                                    ? theme.palette.secondary.main
+                                    : COLORS.WHITE,
+                            }}>
                             {title}
                         </Typography>
                     </Grid>

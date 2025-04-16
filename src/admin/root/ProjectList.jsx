@@ -14,6 +14,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { useTheme } from '@mui/material'
 import { Link } from 'react-router-dom'
 import RoutingMap, { ROUTE_EVENT_BASE } from '../RoutingMap'
+import { DateTime } from 'luxon'
 
 const useStyles = makeStyles((theme) => ({
     newEventCard: {
@@ -76,28 +77,60 @@ const ProjectList = ({
                 </Card>
             </Grid>
 
-            {displayedProjects.map((project) => (
-                <Grid item xs={6} sm={6} md={4} key={project.id} component="li">
-                    <Card>
-                        <Link
-                            to={`${ROUTE_EVENT_BASE}/${project.id}${RoutingMap.dashboard.url}`}
-                            title={`${t('root.selectEvent')}${project.name}`}>
-                            <CardActionArea className={classes.cardActionArea}>
-                                <CardContent className={classes.cardContent}>
-                                    <Typography variant="h6">
-                                        {project.name}
-                                    </Typography>
-                                    <Typography
-                                        variant="caption"
-                                        color="textSecondary">
-                                        {project.id}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Link>
-                    </Card>
-                </Grid>
-            ))}
+            {displayedProjects.map((project) => {
+                const voteStartDay = project.voteStartTime
+                    ? DateTime.fromJSDate(
+                          new Date(project.voteStartTime)
+                      ).toLocaleString({ day: 'numeric', month: 'short' })
+                    : null
+                const voteEndDay = project.voteEndTime
+                    ? DateTime.fromJSDate(
+                          new Date(project.voteEndTime)
+                      ).toLocaleString({ day: 'numeric', month: 'short' })
+                    : null
+                return (
+                    <Grid
+                        item
+                        xs={6}
+                        sm={6}
+                        md={4}
+                        key={project.id}
+                        component="li">
+                        <Card>
+                            <Link
+                                to={`${ROUTE_EVENT_BASE}/${project.id}${RoutingMap.dashboard.url}`}
+                                title={`${t('root.selectEvent')}${project.name}`}>
+                                <CardActionArea
+                                    className={classes.cardActionArea}>
+                                    <CardContent
+                                        className={classes.cardContent}>
+                                        <Typography variant="h6">
+                                            {project.name}
+                                        </Typography>
+                                        {voteStartDay && voteEndDay && (
+                                            <Typography
+                                                variant="caption"
+                                                color="textSecondary">
+                                                {`${voteStartDay} → ${voteEndDay}`}
+                                                <br />
+                                            </Typography>
+                                        )}
+                                        <Typography
+                                            variant="caption"
+                                            color="textSecondary">
+                                            {DateTime.fromMillis(
+                                                project.createdAt.toMillis()
+                                            ).toLocaleString(DateTime.DATE_MED)}
+                                            <br />
+                                            {project.id}
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Link>
+                        </Card>
+                    </Grid>
+                )
+            })}
 
             {showHideAllProject && (
                 <Grid item xs={12} key="show-all" component="li">

@@ -1,110 +1,124 @@
-import React, { Component } from 'react'
+import React, { useRef, useEffect, useCallback } from 'react'
 import { getRandomArbitrary } from '../../utils/Random'
 import Box from '@mui/material/Box'
 
 const circleRadius = 15
 
-class TalkItemVoteBackground extends Component {
-    constructor(props) {
-        super(props)
-        this.refElement = React.createRef()
-        this.canvasRef = React.createRef()
-        this.canvasState = {
-            isDrawn: false,
-            circles: [],
-        }
-    }
+const TalkItemVoteBackground = ({ count = 0, colors }) => {
+    const refElement = useRef(null)
+    const canvasRef = useRef(null)
+    const canvasState = useRef({
+        circles: [],
+    })
 
-    componentDidMount() {
-        if (this.canvasRef.current) {
-            this.createRandomCircle(
-                this.canvasRef.current.getContext('2d'),
-                this.props.count || 0
-            )
-        }
-    }
+    const createRandomCircle = useCallback(
+        (ctx, count) => {
+            if (count === undefined || !ctx) {
+                return
+            }
 
-    componentDidUpdate(prevProps) {
-        if (this.canvasRef.current) {
-            const count = this.props.count || 0
-            if (count !== prevProps.count) {
-                this.canvasState = {
-                    ...this.canvasState,
-                    isDrawn: false,
+            if (!refElement.current || !canvasRef.current) return
+
+            const width = refElement.current.clientWidth
+            const height = refElement.current.clientHeight
+            const scale = window.devicePixelRatio
+
+            canvasRef.current.style.width = `${width}px`
+            canvasRef.current.style.height = `${height}px`
+            canvasRef.current.width = width * scale
+            canvasRef.current.height = height * scale
+
+            // Scale for high DPI displays
+            ctx.scale(scale, scale)
+
+            const circles = canvasState.current.circles
+            const currentLength = circles.length
+
+            // Only update circles if count has changed
+            if (count !== currentLength) {
+                if (count > currentLength) {
+                    // Add new circles
+                    const newCircles = Array(count - currentLength)
+                        .fill(null)
+                        .map(() => ({
+                            x: getRandomArbitrary(0, width),
+                            y: getRandomArbitrary(0, height),
+                            opacity: Math.floor(Math.random() * 80) + 20,
+                        }))
+                    circles.push(...newCircles)
+                } else {
+                    // Remove excess circles
+                    circles.length = count
                 }
             }
-            this.createRandomCircle(
-                this.canvasRef.current.getContext('2d'),
-                count
-            )
-        }
-    }
 
-    createRandomCircle(ctx, count) {
-        if (count === undefined || this.canvasState.isDrawn) {
-            return
-        }
+            ctx.clearRect(0, 0, width, height)
 
-        this.canvasRef.current.style.width =
-            this.refElement.current.clientWidth + 'px'
-        this.canvasRef.current.style.height =
-            this.refElement.current.clientHeight + 'px'
-        const scale = window.devicePixelRatio
-        const width = this.refElement.current.clientWidth
-        const height = this.refElement.current.clientHeight
-        this.canvasRef.current.width = width * scale
-        this.canvasRef.current.height = height * scale
-
-        ctx.scale(scale, scale)
-
-        const circles = this.canvasState.circles
-        if (count > circles.length) {
-            const diff = count - circles.length
-            for (let i = 0; i < diff; i++) {
-                circles.push({
-                    x: getRandomArbitrary(0, width),
-                    y: getRandomArbitrary(0, height),
-                })
-            }
-        } else if (count < circles.length) {
-            const diff = circles.length - count
-            for (let i = 0; i < diff; i++) {
-                circles.pop()
-            }
-        }
-
-        ctx.clearRect(0, 0, width, height)
-
-        circles.forEach((circle, index) => {
-            const randomOpacity = parseInt(Math.random() * 80) + 20
-            let fillStyle = '#' + this.props.colors[0] + randomOpacity
-            if (this.props.colors.length > 1) {
-                fillStyle =
+            circles.forEach((circle, index) => {
+                let fillStyle =
                     '#' +
-                    this.props.colors[index % this.props.colors.length] +
-                    '60'
+                    colors[0] +
+                    circle.opacity.toString(16).padStart(2, '0')
+                if (colors.length > 1) {
+                    fillStyle = '#' + colors[index % colors.length] + '60'
+                }
+                ctx.fillStyle = fillStyle
+                ctx.beginPath()
+                ctx.arc(circle.x, circle.y, circleRadius, 0, 2 * Math.PI)
+                ctx.fill()
+            })
+
+            // Only update state if circles array has changed
+            if (count !== currentLength) {
+                canvasState.current = {
+                    circles: circles,
+                }
             }
-            ctx.fillStyle = fillStyle
-            ctx.beginPath()
-            ctx.arc(circle.x, circle.y, circleRadius, 0, 2 * Math.PI)
-            ctx.fill()
-        })
+        },
+        [colors]
+    )
 
-        this.canvasState = {
-            ...this.canvasState,
-            circles: circles,
-            isDrawn: true,
+    useEffect(() => {
+        if (canvasRef.current) {
+            const ctx = canvasRef.current.getContext('2d')
+            createRandomCircle(ctx, count)
         }
-    }
 
-    render() {
-        return (
-            <>
-                <Box ref={this.refElement} position="absolute" width="100%" height="100%" />
-                <canvas ref={this.canvasRef} style={{position: 'absolute'}} />
-            </>
-        )
-    }
+        return () => {
+            if (canvasRef.current) {
+                const ctx = canvasRef.current.getContext('2d')
+                if (ctx) {
+                    ctx.clearRect(
+                        0,
+                        0,
+                        canvasRef.current.width,
+                        canvasRef.current.height
+                    )
+                }
+            }
+        }
+    }, [count, createRandomCircle])
+
+    return (
+        <>
+            <Box
+                ref={refElement}
+                position="absolute"
+                width="100%"
+                height="100%"
+            />
+            <canvas
+                ref={canvasRef}
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                }}
+            />
+        </>
+    )
 }
 
-export default TalkItemVoteBackground
+export default React.memo(TalkItemVoteBackground)
