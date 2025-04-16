@@ -2,7 +2,7 @@
   <img src="/public/static/logos/openfeedback%20black%20orange-3x.png" alt="OpenFeedback logo" />
 </p>
 <p align="center">
-  <strong>Collectez des feedbacks facilement</strong>
+  <strong>Collect feedback easily</strong>
 </p>
 
 <h3 align="center">
@@ -25,12 +25,11 @@
 -   List all sessions, search by tag, speakers, tracks
 -   User give feedback (not a rate) on any sessions anonymously (it use Firebase anonymous login)
 -   Voting form are 100% customizable and can be translated to any languages
--   Display users feedback
+-   Display users feedback, with live feedback in option
 -   Full dashboard statistics & admin interface
 -   Comments moderation
 -   Admin editors management
--   Organization: manage users, voting form and logos
--   TODO: live votes reflected on all clients
+-   Organization: manage users, rights, voting form and logos
 
 ## You want to contribute ?
 
