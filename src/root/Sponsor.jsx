@@ -41,6 +41,9 @@ export const Sponsor = () => {
                         component="a"
                         href={sponsor.website}
                         target="_blank"
+                        onClick={() => {
+                            fetch(sponsor.tracking)
+                        }}
                         key={sponsor.name}
                         sx={{ ':hover': { opacity: 0.4 } }}>
                         <img

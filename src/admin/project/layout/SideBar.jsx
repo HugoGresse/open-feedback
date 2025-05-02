@@ -230,6 +230,9 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                                             href={sponsor.website}
                                             target="_blank"
                                             key={sponsor.name}
+                                            onClick={() => {
+                                                fetch(sponsor.tracking)
+                                            }}
                                             sx={{
                                                 ':hover': { opacity: 0.4 },
                                             }}>
