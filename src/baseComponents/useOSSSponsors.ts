@@ -3,7 +3,13 @@ import { OpenSponsorsUrl } from '../env.ts'
 
 export const useOSSSponsors = () => {
     const [sponsors, setSponsors] = useState<
-        { name: string; website: string; logo: string; logoDark: string }[]
+        {
+            name: string
+            website: string
+            logo: string
+            logoDark: string
+            tracking: string
+        }[]
     >([])
 
     useEffect(() => {
