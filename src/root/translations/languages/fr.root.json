@@ -23,7 +23,7 @@
         "price": "Combien ça coûte ?",
         "priceAnswer": "Open Feedback est pour l'instant gratuit pour tout le monde. <br/><br/>Quand le service sera plus utilisé, il y aura peut-être un plan payant mais il sera toujours gratuit pour les associations ou organisations à but non-lucratif.",
         "voteIncrease": "Comment augmenter le nombre de vote ?",
-        "voteIncreaseAnswer": "La communication est la clé pour récolter beaucoup de votes. <br/> <br/> <strong>Voici quelques astuces :</strong><br/> - affichez un QR Code sur les mûrs, votre site internet, un plan/flyer<br/> - prevenez les participants de voter après l'évènement. N'oubliez pas de retarder la fermeture des votes en fonction. <br/> - promouvoir OpenFeedback à tous les orat·eurs·rices pour qu'ils affichent un QRCode allant directement sur leur page pendant leur Q&A.",
+        "voteIncreaseAnswer": "La communication est la clé pour récolter beaucoup de votes. <br/> <br/> <strong>Voici quelques astuces :</strong><br/> - affichez un QR Code sur les murs, votre site internet, un plan/flyer<br/> - prévenez les participants de voter après l'évènement. N'oubliez pas de retarder la fermeture des votes en fonction. <br/> - promouvoir OpenFeedback à tous les orat·eurs·rices pour qu'ils affichent un QRCode allant directement sur leur page pendant leur Q&A.",
         "private": "Est-ce que les évènements sont privés ?",
         "privateAnswser": "Pour l'instant tous les évènements ont un identifiant unique qui n'est pas facile à trouver/deviner. Il ne dépend que de vous de le garder privé si besoin.",
         "newFeature": "Comment demander une nouvelle fonctionalité ?",
@@ -32,7 +32,7 @@
         "newFeatureAnwserBisHere": "ici",
         "additionalSupport": "Une autre question ? Contactez {{adminEmail}}",
         "custom": "Intégration d'OpenFeedback dans vos apps ? (API access)",
-        "customAnswer": "N'importe qui peut ajouter OpenFeedback dans ses applications. Vous pouvez créer votre propre instance d'OpenFeedback sur Firebase et utiliser Firestore SDK (android/ios/web) pour faire l'intégration. <br/><br/> Sur demande, une documentation pour l'intégration peut être envoyé. L'équipe d'OpenFeedback devrait valider l'intégration pour s'assurer que tout marchera comme prévut le jour J. <br/> <br/> Vous pouvez trouver des SDK Open Source réalisé par la communauté sur ",
+        "customAnswer": "N'importe qui peut ajouter OpenFeedback dans ses applications. Vous pouvez créer votre propre instance d'OpenFeedback sur Firebase et utiliser Firestore SDK (android/ios/web) pour faire l'intégration. <br/><br/> Sur demande, une documentation pour l'intégration peut être envoyée. L'équipe d'OpenFeedback devrait valider l'intégration pour s'assurer que tout marchera comme prévu le jour J. <br/> <br/> Vous pouvez trouver des SDK Open Source réalisé par la communauté sur ",
         "customAnswerSDKLink": "la page GitHub."
     },
     "contact": {
