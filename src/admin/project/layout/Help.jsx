@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import HelpIcon from '@mui/icons-material/HelpOutline'
-import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useTranslation } from 'react-i18next'
@@ -34,11 +34,11 @@ const Help = ({ buttonClass }) => {
 
     return (
         <>
-            <Button
+            <IconButton
                 className={buttonClass}
                 onClick={(event) => setAnchorEl(event.currentTarget)}>
                 <HelpIcon />
-            </Button>
+            </IconButton>
             <Menu
                 anchorEl={anchorEl}
                 keepMounted

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { COLORS } from '../../../constants/colors'
 import { useDispatch, useSelector } from 'react-redux'
-import { createTheme, Grid } from '@mui/material';
-import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
+import { createTheme, Grid } from '@mui/material'
+import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
@@ -23,9 +23,7 @@ import Hidden from '@mui/material/Hidden'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
 import { useTranslation } from 'react-i18next'
-import QRCode from './svg/qrcode.svg'
 import Icon from '@mui/material/Icon'
-import QRCodeDialog from './QRCodeDialog.jsx'
 import { redirectToProject } from '../utils/redirectToProject'
 import useScrollTrigger from '@mui/material/useScrollTrigger'
 import Translate from './Translate.jsx'
@@ -33,6 +31,8 @@ import Help from './Help.jsx'
 import { getProjects } from '../core/actions/getProjects'
 import { getOrganizations } from '../../organization/core/actions/getOrganizations'
 import { getSelectedOrganizationSelector } from '../../organization/core/organizationSelectors'
+import { QRCodeDialog } from '../../../baseComponents/QRCodeDialog'
+import QrCodeIcon from '@mui/icons-material/QrCode'
 
 const innerTheme = createTheme({
     palette: {
@@ -40,7 +40,7 @@ const innerTheme = createTheme({
         primary: {
             main: '#fff',
             contrastText: '#fff',
-        }
+        },
     },
 })
 
@@ -80,7 +80,7 @@ const useStyles = makeStyles({
     },
     changeEventButton: {
         textTransform: 'none',
-        color: COLORS.WHITE
+        color: COLORS.WHITE,
     },
     title: {
         marginTop: 20,
@@ -130,160 +130,157 @@ const Header = ({ refTarget, toggleDrawer }) => {
 
     const menuId = 'primary-project-selection-menu'
 
-    return <>
-        <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={innerTheme}>
-                <Translate in={!trigger}>
-                    <AppBar position="sticky" className={classes.appbar}>
-                        <Toolbar>
-                            <Grid container>
-                                <Grid
-                                    item
-                                    xs={12}
-                                    className={classes.topHeader}
-                                >
+    return (
+        <>
+            <StyledEngineProvider injectFirst>
+                <ThemeProvider theme={innerTheme}>
+                    <Translate in={!trigger}>
+                        <AppBar position="sticky" className={classes.appbar}>
+                            <Toolbar>
+                                <Grid container>
                                     <Grid
-                                        container
-                                        justifyContent="space-between"
-                                    >
-                                        <Grid item xs={12} sm={7}>
-                                            <Hidden mdUp>
-                                                <IconButton
-                                                    onClick={(event) =>
-                                                        toggleDrawer(event)
-                                                    }
-                                                    size="large">
-                                                    <MenuIcon />
-                                                </IconButton>
-                                            </Hidden>
-
-                                            {selectedProject && (
-                                                <Button
-                                                    aria-label="change event"
-                                                    aria-controls={menuId}
-                                                    aria-haspopup="true"
-                                                    className={
-                                                        classes.changeEventButton
-                                                    }
-                                                    onClick={(event) =>
-                                                        handleChangeEventMenuOpen(
-                                                            event
-                                                        )
-                                                    }
-                                                >
-                                                    {selectedProject.name}
-                                                    {selectedOrganization &&
-                                                        ` (${selectedOrganization.name})`}
-                                                    <ArrowDownIcon
-                                                        className={
-                                                            classes.selectIcon
-                                                        }
-                                                    />
-                                                </Button>
-                                            )}
-                                        </Grid>
+                                        item
+                                        xs={12}
+                                        className={classes.topHeader}>
                                         <Grid
-                                            item
-                                            xs={12}
-                                            sm={5}
-                                            className={classes.topRight}
-                                        >
-                                            <Help
-                                                buttonClass={
-                                                    classes.topRightButtonLight
-                                                }
-                                            />
+                                            container
+                                            justifyContent="space-between">
+                                            <Grid item xs={12} sm={7}>
+                                                <Hidden mdUp>
+                                                    <IconButton
+                                                        onClick={(event) =>
+                                                            toggleDrawer(event)
+                                                        }
+                                                        size="large">
+                                                        <MenuIcon />
+                                                    </IconButton>
+                                                </Hidden>
 
-                                            {selectedProject && (
-                                                <Button
-                                                    className={
+                                                {selectedProject && (
+                                                    <Button
+                                                        aria-label="change event"
+                                                        aria-controls={menuId}
+                                                        aria-haspopup="true"
+                                                        className={
+                                                            classes.changeEventButton
+                                                        }
+                                                        onClick={(event) =>
+                                                            handleChangeEventMenuOpen(
+                                                                event
+                                                            )
+                                                        }>
+                                                        {selectedProject.name}
+                                                        {selectedOrganization &&
+                                                            ` (${selectedOrganization.name})`}
+                                                        <ArrowDownIcon
+                                                            className={
+                                                                classes.selectIcon
+                                                            }
+                                                        />
+                                                    </Button>
+                                                )}
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                xs={12}
+                                                sm={5}
+                                                className={classes.topRight}>
+                                                <Help
+                                                    buttonClass={
                                                         classes.topRightButtonLight
                                                     }
-                                                    onClick={() =>
-                                                        setQRCodeDialogOpen(
-                                                            true
-                                                        )
-                                                    }
-                                                >
-                                                    <Icon>
-                                                        <img
-                                                            src={QRCode}
-                                                            alt="QRCode generator"
-                                                        />
-                                                    </Icon>
-                                                </Button>
-                                            )}
+                                                />
 
-                                            {selectedProject && (
-                                                <Button
-                                                    className={
-                                                        classes.topRightButton
-                                                    }
-                                                    target="_blank"
-                                                    title={t('layout.seeEvent')}
-                                                    href={`/${selectedProjectId}`}
-                                                >
-                                                    <EyeIcon
+                                                {selectedProject && (
+                                                    <IconButton
                                                         className={
-                                                            classes.topRightIcon
+                                                            classes.topRightButtonLight
                                                         }
-                                                    />
-                                                    {t('layout.seeEvent')}
-                                                </Button>
-                                            )}
+                                                        onClick={() =>
+                                                            setQRCodeDialogOpen(
+                                                                true
+                                                            )
+                                                        }>
+                                                        <QrCodeIcon />
+                                                    </IconButton>
+                                                )}
+
+                                                {selectedProject && (
+                                                    <Button
+                                                        className={
+                                                            classes.topRightButton
+                                                        }
+                                                        target="_blank"
+                                                        title={t(
+                                                            'layout.seeEvent'
+                                                        )}
+                                                        href={`/${selectedProjectId}`}>
+                                                        <EyeIcon
+                                                            className={
+                                                                classes.topRightIcon
+                                                            }
+                                                        />
+                                                        {t('layout.seeEvent')}
+                                                    </Button>
+                                                )}
+                                            </Grid>
                                         </Grid>
                                     </Grid>
+                                    <Grid item xs={12}>
+                                        <Typography
+                                            variant="h5"
+                                            component="h2"
+                                            className={classes.title}>
+                                            {getTitle(location)}
+                                        </Typography>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <Typography
-                                        variant="h5"
-                                        component="h2"
-                                        className={classes.title}
-                                    >
-                                        {getTitle(location)}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </Toolbar>
-                    </AppBar>
-                </Translate>
-                <Menu
-                    anchorEl={anchorEventSelect}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-                    id={menuId}
-                    keepMounted
-                    transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-                    open={!!anchorEventSelect}
-                    onClose={() => handleMenuClose()}
-                    TransitionProps={{
-                        onEnter: () => {
-                            if (projects.length === 1) {
-                                dispatch(getProjects())
-                                dispatch(getOrganizations())
-                            }
-                        },
-                    }}
-                >
-                    {projects.map((project) => (
-                        <MenuItem
-                            key={project.id}
-                            onClick={() => onProjectSelectedChange(project.id)}
-                        >
-                            {project.name}{' '}
-                            {project.organizationId &&
-                                `(${project.organizationName})`}
-                        </MenuItem>
-                    ))}
-                </Menu>
-            </ThemeProvider>
-        </StyledEngineProvider>
-        <QRCodeDialog
-            open={qrCodeDialogOpen}
-            handleClose={() => setQRCodeDialogOpen(false)}
-            name={selectedProject.name}
-            data={`${window.location.origin}/${selectedProjectId}`}
-        />
-    </>;
+                            </Toolbar>
+                        </AppBar>
+                    </Translate>
+                    <Menu
+                        anchorEl={anchorEventSelect}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                        id={menuId}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'left',
+                        }}
+                        open={!!anchorEventSelect}
+                        onClose={() => handleMenuClose()}
+                        TransitionProps={{
+                            onEnter: () => {
+                                if (projects.length === 1) {
+                                    dispatch(getProjects())
+                                    dispatch(getOrganizations())
+                                }
+                            },
+                        }}>
+                        {projects.map((project) => (
+                            <MenuItem
+                                key={project.id}
+                                onClick={() =>
+                                    onProjectSelectedChange(project.id)
+                                }>
+                                {project.name}{' '}
+                                {project.organizationId &&
+                                    `(${project.organizationName})`}
+                            </MenuItem>
+                        ))}
+                    </Menu>
+                </ThemeProvider>
+            </StyledEngineProvider>
+            <QRCodeDialog
+                open={qrCodeDialogOpen}
+                onClose={() => setQRCodeDialogOpen(false)}
+                title={selectedProject.name}
+                value={`${window.location.origin}/${selectedProjectId}`}
+                fileName={selectedProject.name.trim() + '-qr-code-openfeedback'}
+                logo={selectedProject.logoSmall}
+            />
+        </>
+    )
 }
 
 export default Header

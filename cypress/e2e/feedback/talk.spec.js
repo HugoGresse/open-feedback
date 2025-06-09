@@ -109,12 +109,7 @@ describe('Single talk', function () {
                 )
             })
             // new text up vote
-            cy.contains(inputText)
-                .parent()
-                .parent()
-                .get('button')
-                .first()
-                .click()
+            cy.contains(inputText).parent().parent().get('button').eq(1).click()
             cy.contains(inputText)
                 .parent()
                 .parent()

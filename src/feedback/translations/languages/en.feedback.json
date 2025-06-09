@@ -39,5 +39,12 @@
     },
     "auth": {
         "errorLogin": "Unable to identify you as guest"
+    },
+    "qrCode": {
+        "switchToLightMode": "Switch to Light Mode",
+        "switchToDarkMode": "Switch to Dark Mode",
+        "downloadPng": "Download PNG",
+        "downloadSvg": "Download SVG",
+        "close": "Close"
     }
 }

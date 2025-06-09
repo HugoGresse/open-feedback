@@ -6,7 +6,11 @@ import { useTheme } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import useQuery from '../../utils/useQuery'
 import { useSelector } from 'react-redux'
-import { isFullDatesDisplayedSelector } from '../project/projectSelectors'
+import {
+    getProjectSelector,
+    isFullDatesDisplayedSelector,
+} from '../project/projectSelectors'
+import { QRCodeButton } from '../../baseComponents/QRCodeButton'
 
 const DATE_FORMAT = {
     weekday: 'long',
@@ -40,9 +44,9 @@ const formatTalkDateTime = (talk, displayFullDates = false) => {
     return `${startDate} / ${startTime}${endTime}`
 }
 
-
 export const TalkHeader = ({ talk, speakers }) => {
     const theme = useTheme()
+    const project = useSelector(getProjectSelector)
     const hideHeader = useQuery().get('hideHeader')
     const displayFullDates = useSelector(isFullDatesDisplayedSelector)
 
@@ -51,33 +55,43 @@ export const TalkHeader = ({ talk, speakers }) => {
     }
 
     return (
-        <Box marginBottom={4}>
-            <Typography
-                variant="h2"
-                color="textPrimary"
-                sx={{wordBreak: 'break-word'}}
-            >
-                {talk.title}
+        <Box
+            display="flex"
+            gap={2}
+            marginBottom={4}
+            justifyContent="space-between"
+            alignItems="flex-start">
+            <Box>
+                <Typography
+                    variant="h2"
+                    color="textPrimary"
+                    sx={{ wordBreak: 'break-word' }}>
+                    {talk.title}
+                    <Box
+                        color={theme.palette.textDimmed}
+                        fontSize={20}
+                        marginLeft={1}
+                        component="span">
+                        {talk.tags &&
+                            talk.tags.map((tag, key) => (
+                                <span key={key}>#{tag} </span>
+                            ))}
+                    </Box>
+                </Typography>
                 <Box
+                    fontSize={16}
                     color={theme.palette.textDimmed}
-                    fontSize={20}
-                    marginLeft={1}
-                    component="span"
-                >
-                    {talk.tags &&
-                        talk.tags.map((tag, key) => (
-                            <span key={key}>#{tag} </span>
-                        ))}
+                    marginBottom={2}>
+                    {talk.startTime &&
+                        formatTalkDateTime(talk, displayFullDates)}
                 </Box>
-            </Typography>
-            <Box
-                fontSize={16}
-                color={theme.palette.textDimmed}
-                marginBottom={2}
-            >
-                {talk.startTime && formatTalkDateTime(talk, displayFullDates)}
+                <SpeakerList speakers={speakers} />
             </Box>
-            <SpeakerList speakers={speakers} />
+            <QRCodeButton
+                url={document.location.href}
+                fileName={talk.title.trim() + '-qr-code-openfeedback'}
+                logo={project.logoSmall}
+            />
         </Box>
     )
 }

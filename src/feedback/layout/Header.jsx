@@ -4,7 +4,7 @@ import SearchBar from './SearchBar.jsx'
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import CalendarToday from '@mui/icons-material/CalendarToday'
 import { grey } from '@mui/material/colors'
-import { darken } from '@mui/material/styles';
+import { darken } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '@mui/material'
@@ -38,9 +38,24 @@ const useStyles = makeStyles((theme) => ({
         minWidth: 28,
         position: 'absolute',
         right: 20,
+        display: 'flex',
+        gap: 10,
+        alignItems: 'center',
 
         '& svg': {
             color: grey[600],
+        },
+        '& a': {
+            padding: 8,
+        },
+        '& > *:hover': {
+            backgroundColor: darken(theme.palette.pageBackground, 0.2),
+        },
+        '& > *': {
+            borderRadius: 10,
+            '&:hover': {
+                backgroundColor: darken(theme.palette.pageBackground, 0.2),
+            },
         },
     },
     boxCenter: {
@@ -94,24 +109,22 @@ export const Header = ({ project }) => {
                     {matchParams.talkId && (
                         <Link
                             title={t('talks.list')}
-                            to={`/${matchParams.projectId}/${matchParams.date}`}
-                        >
+                            to={`/${matchParams.projectId}/${matchParams.date}`}>
                             <ArrowBack color="primary" />
                         </Link>
                     )}
                 </div>
-                {project.scheduleLink && (
-                    <div className={classes.iconRight}>
+                <div className={classes.iconRight}>
+                    {project.scheduleLink && (
                         <a
                             href={project.scheduleLink}
                             target="_blank"
                             title={`${project.name} website`}
-                            rel="noopener noreferrer"
-                        >
+                            rel="noopener noreferrer">
                             <CalendarToday />
                         </a>
-                    </div>
-                )}
+                    )}
+                </div>
                 <div className={classes.boxCenter}>
                     <img
                         className={classes.logo}
@@ -122,8 +135,7 @@ export const Header = ({ project }) => {
                         <Typography
                             variant="h1"
                             color="textPrimary"
-                            aria-label={project.hideEventName && project.name}
-                        >
+                            aria-label={project.hideEventName && project.name}>
                             {!project.hideEventName && project.name}
                         </Typography>
                     </Hidden>
@@ -131,5 +143,5 @@ export const Header = ({ project }) => {
             </div>
             {!matchParams.talkId && <SearchBar />}
         </header>
-    );
+    )
 }
