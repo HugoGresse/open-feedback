@@ -47,6 +47,7 @@ export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({
     }
 
     const currentColor = isDarkMode ? invertColor(color) : color
+    const bgColor = isDarkMode ? 'transparent' : invertColor(color)
 
     return (
         <Dialog
@@ -83,6 +84,7 @@ export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({
                     sx={{
                         borderRadius: 1,
                         padding: 2,
+                        backgroundColor: bgColor,
                     }}>
                     {open && (
                         <Suspense
