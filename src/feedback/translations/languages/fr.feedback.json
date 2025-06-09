@@ -39,5 +39,12 @@
     },
     "auth": {
         "errorLogin": "Erreur lors de l'identification en invité"
+    },
+    "qrCode": {
+        "switchToLightMode": "Mode clair qui illumine vos yeux",
+        "switchToDarkMode": "Mode sombre qui fait mal aux yeux",
+        "downloadPng": "Télécharger en PNG",
+        "downloadSvg": "Télécharger en SVG",
+        "close": "Fermer"
     }
 }
