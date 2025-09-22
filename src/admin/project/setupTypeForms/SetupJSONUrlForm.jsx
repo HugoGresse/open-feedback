@@ -7,7 +7,7 @@ import Collapse from '@mui/material/Collapse'
 import { makeStyles } from '@mui/styles'
 import ArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import Box from '@mui/material/Box'
-import { FormikObserver } from '../../baseComponents/form/formik/FormikObserver'
+import { FormikObserver } from '../../baseComponents/form/formik/FormikObserver.js'
 import jsonModel from './jsonmodel'
 import clipboardCopy from 'clipboard-copy'
 import Button from '@mui/material/Button'
@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-const SetupJSONForm = ({
+const SetupJSONUrlForm = ({
     onBack,
     onSubmit,
     submitText,
@@ -51,7 +51,8 @@ const SetupJSONForm = ({
         <Formik
             validationSchema={object().shape({
                 jsonUrl: string()
-                    .required(t('settingsSetup.json.jsonRequired')),
+                    .url(t('settingsSetup.jsonUrl.jsonUrlValid'))
+                    .required(t('settingsSetup.jsonUrl.jsonUrlRequired')),
             })}
             initialValues={initialValues}
             onSubmit={(values) =>
@@ -68,9 +69,9 @@ const SetupJSONForm = ({
                         />
                     )}
                     <OFFormControlInputFormiked
-                        name={t('settingsSetup.json.fieldJson')}
-                        fieldName="json"
-                        type="textarea"
+                        name={t('settingsSetup.jsonUrl.fieldJsonUrl')}
+                        fieldName="jsonUrl"
+                        type="text"
                         isSubmitting={isSubmitting}
                     />
 
@@ -78,7 +79,7 @@ const SetupJSONForm = ({
                         <Button
                             className={classes.jsonShowButton}
                             onClick={() => setExampleOpen(!isExampleOpen)}>
-                            {t('settingsSetup.json.showJsonModel')}{' '}
+                            {t('settingsSetup.jsonUrl.showJsonModel')}{' '}
                             <ArrowDownIcon />
                         </Button>
                         <Collapse
@@ -139,4 +140,4 @@ const SetupJSONForm = ({
     )
 }
 
-export default SetupJSONForm
+export default SetupJSONUrlForm

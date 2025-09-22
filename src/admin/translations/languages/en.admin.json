@@ -106,6 +106,8 @@
             "create": "Create event",
             "projectTypeHoverboard": "Hoverboard v2 Firestore",
             "projectTypeHoverboardDetail": "The talks/speakers/schedule will be retrieved directly on page load from your own Firestore database that follow Hoverboard v2 model.",
+            "projectTypeJson": "JSON",
+            "projectTypeJsonDetail": "Provide a JSON. The json model will need to match OpenFeedback one, you’ll be able to check it on the next screen.",
             "projectTypeJsonurl": "JSON API URL",
             "projectTypeJsonurlDetail": "Provide an url to a .json that you’ll either host (on gist.github.com or another static server) or a dynamic answer from your own database/api. The json model will need to match OpenFeedback one, you’ll be able to check it on the next screen.",
             "projectTypeOpenfeedback": "OpenFeedback Database (default)",
@@ -119,6 +121,7 @@
         "step3": {
             "back": "Back",
             "firebaseCredentials": "Enter your Firebase credentials",
+            "json": "What's your JSON file?",
             "jsonurl": "What's the URL of the API or JSON file?",
             "notManaged": "This project type is not managed, this should not happen, either your not a good dev, or ¯\\_(ツ)_/¯",
             "stepTitle": "Create a new event (step 3/3)",
@@ -208,6 +211,11 @@
             "projectIdRequired": "The Firebase project ID is required"
         },
         "json": {
+            "fieldJson": "JSON",
+            "jsonRequired": "The JSON is required",
+            "showJsonModel": "Show JSON model"
+        },
+        "jsonUrl": {
             "fieldJsonUrl": "JSON API URL",
             "jsonUrlRequired": "The API URL is required",
             "jsonUrlValid": "The API URL must be a valid url",

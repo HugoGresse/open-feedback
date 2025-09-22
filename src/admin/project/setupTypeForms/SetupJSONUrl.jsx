@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
 import Grid from '@mui/material/Grid'
-import SetupJSONForm from './SetupJSONForm.jsx'
+import SetupJSONUrlForm from './SetupJSONUrlForm.jsx'
 import {Typography} from '@mui/material'
 import SetupValidationContainer from './validation/SetupValidationContainer.jsx'
-import {PROJECT_TYPE_JSON} from '../../../core/setupType/projectApi'
-import Json from '../../../core/setupType/json/Json.js'
+import {PROJECT_TYPE_JSONURL} from '../../../core/setupType/projectApi.js'
+import JsonUrlApi from '../../../core/setupType/jsonurl/JsonUrlApi.js'
 
-const SetupJSON = ({
+const SetupJSONUrl = ({
                        submitText,
                        leftColumnTitle,
                        rightColumnTitle,
@@ -26,7 +26,7 @@ const SetupJSON = ({
                 <Typography variant="h5">
                     {leftColumnTitle}
                 </Typography>
-                <SetupJSONForm
+                <SetupJSONUrlForm
                     submitText={submitText}
                     backText={backText}
                     onSubmit={onSubmit}
@@ -41,11 +41,11 @@ const SetupJSON = ({
                 <Typography variant="h5" gutterBottom>
                     {rightColumnTitle}
                 </Typography>
-                <SetupValidationContainer setupType={PROJECT_TYPE_JSON}
-                                          api={new Json(formValues)}/>
+                <SetupValidationContainer setupType={PROJECT_TYPE_JSONURL}
+                                          api={new JsonUrlApi(formValues)}/>
             </Grid>}
         </Grid>
     )
 }
 
-export default SetupJSON
+export default SetupJSONUrl

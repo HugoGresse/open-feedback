@@ -3,7 +3,7 @@ import NewProjectLayout from './NewProjectLayout.jsx'
 import SetupJSON from '../setupTypeForms/SetupJSON.jsx'
 import { useTranslation } from 'react-i18next'
 
-const Step3JSON = ({
+const Step3JSONUrl = ({
     onCancel,
     onBack,
     onSubmit,
@@ -17,7 +17,7 @@ const Step3JSON = ({
     return (
         <NewProjectLayout
             stepTitle={stepTitle}
-            title={t('newEvent.step3.json')}
+            title={t('newEvent.step3.jsonurl')}
             onCancel={onCancel}>
             <SetupJSON
                 initialValues={initialValues}
@@ -27,7 +27,7 @@ const Step3JSON = ({
                 rightColumnTitle={rightColumnTitle}
                 onSubmit={values =>
                     onSubmit({
-                        json: values.json,
+                        jsonUrl: values.jsonUrl,
                     })
                 }
             />
@@ -35,4 +35,4 @@ const Step3JSON = ({
     )
 }
 
-export default Step3JSON
+export default Step3JSONUrl
