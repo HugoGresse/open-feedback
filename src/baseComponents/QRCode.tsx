@@ -57,7 +57,7 @@ export const QRCode: React.FC<QRCodeProps> = ({
                 margin: 5,
             },
         }),
-        [size, data, selectedColor, eventColor, logo]
+        [size, data, selectedColor, logo]
     )
 
     const handleDownload = (format: 'png' | 'svg' = 'png') => {

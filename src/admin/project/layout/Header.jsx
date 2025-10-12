@@ -277,7 +277,11 @@ const Header = ({ refTarget, toggleDrawer }) => {
                 value={`${window.location.origin}/${selectedProjectId}`}
                 fileName={selectedProject.name.trim() + '-qr-code-openfeedback'}
                 logo={selectedProject.logoSmall}
-                eventColor={selectedProject.chipColors[0]}
+                eventColor={
+                    selectedProject.chipColors
+                        ? selectedProject.chipColors[0]
+                        : undefined
+                }
             />
         </>
     )
