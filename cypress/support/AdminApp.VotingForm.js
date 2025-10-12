@@ -94,7 +94,7 @@ export class VotingForm {
                     })
                     .trigger('pointermove', {
                         clientX: 0,
-                        clientY: toBelow ? -400 : 0, // not working
+                        clientY: toBelow ? 400 : -400, // not working
                     })
                     .trigger('pointerup', { force: true })
             })
