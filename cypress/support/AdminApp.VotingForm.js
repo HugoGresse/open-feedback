@@ -83,10 +83,17 @@ export class VotingForm {
     }
 
     moveVoteItem(itemToMove, toBelow) {
-        cy.get('li[data-testid=VoteItem]')
+        cy.get('#root')
+            .get('li[data-testid=VoteItem]')
             .eq(itemToMove)
             .within(() => {
+                // eslint-disable-next-line cypress/no-unnecessary-waiting
                 cy.get(`button[aria-label="drag to reorder"]`)
+                    .focus()
+                    .scrollTo(0, -1000, {
+                        ensureScrollable: false,
+                    })
+                    .wait(1000)
                     .trigger('pointerdown', {
                         force: true,
                         isPrimary: true,
