@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import AddIcon from '@mui/icons-material/AddCircleOutline'
-// @ts-expect-error - JS module without types
-import VoteItem from './VoteItem'
+import VoteItem, { VoteItemType } from './VoteItem.tsx'
 import { useDispatch, useSelector } from 'react-redux'
 import {
     getSortedVoteItemsSelector,
@@ -13,18 +12,32 @@ import {
     addVoteItem,
     onVoteItemChange,
     onVoteItemDelete,
-    onVoteItemMoveDown,
-    onVoteItemMoveUp,
     onVoteItemSaveConfirmed,
+    onVoteItemsReorder,
     saveVoteItems,
     // @ts-expect-error - JS module without types
 } from './votingFormActions'
+import {
+    DndContext,
+    DragEndEvent,
+    DragOverlay,
+    DragStartEvent,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    closestCenter,
+    KeyboardSensor,
+} from '@dnd-kit/core'
+import {
+    SortableContext,
+    verticalListSortingStrategy,
+    sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 // @ts-expect-error - JS module without types
 import OFListHeader from '../../../baseComponents/layouts/OFListHeader'
-// @ts-expect-error - JS module without types
-import OFListItem from '../../../baseComponents/layouts/OFListItem'
+import OFListItem from '../../../baseComponents/layouts/OFListItem.tsx'
 import { useTranslation } from 'react-i18next'
 // @ts-expect-error - JS module without types
 import { VOTE_TYPE_BOOLEAN } from '../../../../core/contants'
@@ -36,17 +49,6 @@ import { useHotkeys } from 'react-hotkeys-hook'
 // @ts-expect-error - JS module without types
 import OFButton from '../../../baseComponents/button/OFButton'
 
-// Types
-export interface VoteItem {
-    id: string
-    name: string | null
-    position: number
-    type: string
-    local?: boolean
-    oldId?: string
-    languages?: Record<string, string>
-}
-
 export interface VoteItemListProps {
     languages: string[]
 }
@@ -54,12 +56,20 @@ export interface VoteItemListProps {
 const VoteItemList: React.FC<VoteItemListProps> = ({ languages }) => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
-    const voteItems: VoteItem[] = useSelector(getSortedVoteItemsSelector)
+    const voteItems: VoteItemType[] = useSelector(getSortedVoteItemsSelector)
     const isSaving: boolean = useSelector(isSavingVotingFormSelector)
     const shouldConfirmSave: boolean = useSelector(shouldConfirmSaveSelector)
     const [focusId, setFocusId] = useState<string | undefined>()
     const [isTypeChangeDialogOpen, setTypeChangedDialog] =
         useState<boolean>(false)
+    const [activeId, setActiveId] = useState<string | null>(null)
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    )
     useHotkeys('ctrl+s, command+s', (event) => {
         event.preventDefault()
         save()
@@ -74,6 +84,22 @@ const VoteItemList: React.FC<VoteItemListProps> = ({ languages }) => {
         setFocusId(undefined)
     }
 
+    const handleDragStart = (event: DragStartEvent) => {
+        setActiveId(event.active.id as string)
+    }
+
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event
+
+        if (active.id !== over?.id) {
+            dispatch(
+                onVoteItemsReorder(active.id as string, over?.id as string)
+            )
+        }
+
+        setActiveId(null)
+    }
+
     return (
         <>
             <OFListHeader
@@ -85,54 +111,93 @@ const VoteItemList: React.FC<VoteItemListProps> = ({ languages }) => {
             />
 
             <Grid container component="ul" spacing={1}>
-                {voteItems.map((item, index) => (
-                    <VoteItem
-                        key={item.id}
-                        item={item}
-                        languages={languages}
-                        onChange={(newValue: string) =>
-                            dispatch(
-                                onVoteItemChange({
-                                    ...item,
-                                    name: newValue,
-                                })
-                            )
-                        }
-                        onLanguagesChange={(langTag: string, value: string) => {
-                            dispatch(
-                                onVoteItemChange({
-                                    ...item,
-                                    languages: {
-                                        ...item.languages,
-                                        [langTag]: value,
-                                    },
-                                })
-                            )
-                        }}
-                        onTypeChange={(type: string) =>
-                            dispatch(
-                                onVoteItemChange({
-                                    ...item,
-                                    type,
-                                })
-                            )
-                        }
-                        onMoveUp={() => dispatch(onVoteItemMoveUp(item))}
-                        onMoveDown={() => dispatch(onVoteItemMoveDown(item))}
-                        onDelete={() => dispatch(onVoteItemDelete(item))}
-                        onFocus={() => setFocusId(item.id)}
-                        focusId={focusId}
-                        onEnterPressed={() => {
-                            if (index >= voteItems.length - 1) {
-                                dispatch(
-                                    addVoteItem(undefined, VOTE_TYPE_BOOLEAN)
-                                )
-                            } else {
-                                setFocusId(voteItems[index + 1].id)
-                            }
-                        }}
-                    />
-                ))}
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragStart={handleDragStart}
+                    onDragEnd={handleDragEnd}>
+                    <SortableContext
+                        items={voteItems.map((item) => item.id)}
+                        strategy={verticalListSortingStrategy}>
+                        {voteItems.map((item, index) => (
+                            <VoteItem
+                                key={item.id}
+                                id={item.id}
+                                item={item}
+                                languages={languages}
+                                onChange={(newValue: string) =>
+                                    dispatch(
+                                        onVoteItemChange({
+                                            ...item,
+                                            name: newValue,
+                                        })
+                                    )
+                                }
+                                onLanguagesChange={(
+                                    langTag: string,
+                                    value: string
+                                ) => {
+                                    dispatch(
+                                        onVoteItemChange({
+                                            ...item,
+                                            languages: {
+                                                ...item.languages,
+                                                [langTag]: value,
+                                            },
+                                        })
+                                    )
+                                }}
+                                onTypeChange={(type: string) =>
+                                    dispatch(
+                                        onVoteItemChange({
+                                            ...item,
+                                            type,
+                                        })
+                                    )
+                                }
+                                onDelete={() =>
+                                    dispatch(onVoteItemDelete(item))
+                                }
+                                onFocus={() => setFocusId(item.id)}
+                                focusId={focusId}
+                                onEnterPressed={() => {
+                                    if (index >= voteItems.length - 1) {
+                                        dispatch(
+                                            addVoteItem(
+                                                undefined,
+                                                VOTE_TYPE_BOOLEAN
+                                            )
+                                        )
+                                    } else {
+                                        setFocusId(voteItems[index + 1].id)
+                                    }
+                                }}
+                            />
+                        ))}
+                    </SortableContext>
+                    <DragOverlay>
+                        {activeId ? (
+                            <VoteItem
+                                id={activeId}
+                                item={
+                                    voteItems.find(
+                                        (item) => item.id === activeId
+                                    )!
+                                }
+                                languages={languages}
+                                onChange={() => {}}
+                                onLanguagesChange={() => {}}
+                                onTypeChange={() => {}}
+                                onDelete={() => {}}
+                                onFocus={() => {}}
+                                focusId={undefined}
+                                onEnterPressed={() => {}}
+                                noBorderBottom={true}
+                            />
+                        ) : null}
+                    </DragOverlay>
+                </DndContext>
+
                 <OFListItem
                     style={{
                         paddingLeft: 20,

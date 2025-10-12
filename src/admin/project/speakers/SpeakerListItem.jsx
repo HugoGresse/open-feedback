@@ -2,14 +2,14 @@ import React from 'react'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import IconButton from '@mui/material/IconButton'
-import OFListItem from '../../baseComponents/layouts/OFListItem.jsx'
+import OFListItem from '../../baseComponents/layouts/OFListItem.tsx'
 import Grid from '@mui/material/Grid'
 import { makeStyles } from '@mui/styles'
 import Avatar from '@mui/material/Avatar'
 import { Box } from '@mui/material'
 import Typography from '@mui/material/Typography'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     cell: {
         paddingRight: 12,
         [theme.breakpoints.down('xl')]: {
@@ -43,16 +43,22 @@ const SpeakerListItem = ({ speaker, onEdit, onRemove }) => {
                 </Typography>
             </Grid>
             <Grid item xs={12} sm={2} className={classes.buttonCell}>
-                <IconButton aria-label="edit" onClick={() => onEdit(speaker)} size="large">
+                <IconButton
+                    aria-label="edit"
+                    onClick={() => onEdit(speaker)}
+                    size="large">
                     <EditIcon />
                 </IconButton>
 
-                <IconButton aria-label="delete" onClick={() => onRemove(speaker)} size="large">
+                <IconButton
+                    aria-label="delete"
+                    onClick={() => onRemove(speaker)}
+                    size="large">
                     <DeleteIcon />
                 </IconButton>
             </Grid>
         </OFListItem>
-    );
+    )
 }
 
 export default SpeakerListItem
