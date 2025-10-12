@@ -104,6 +104,7 @@ export class VotingForm {
                     })
                     .wait(200)
                     .trigger('mouseup', { force: true })
+                    .wait(200)
             })
     }
 
