@@ -94,16 +94,16 @@ export class VotingForm {
                         ensureScrollable: false,
                     })
                     .wait(1000)
-                    .trigger('pointerdown', {
+                    .trigger('mousedown', {
                         force: true,
                         isPrimary: true,
                         button: 0,
                     })
-                    .trigger('pointermove', {
+                    .trigger('mousemove', {
                         clientX: 0,
                         clientY: toBelow ? 400 : -400, // not working
                     })
-                    .trigger('pointerup', { force: true })
+                    .trigger('mouseup', { force: true })
             })
     }
 

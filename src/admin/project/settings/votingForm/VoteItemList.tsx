@@ -27,6 +27,7 @@ import {
     useSensors,
     closestCenter,
     KeyboardSensor,
+    MouseSensor,
 } from '@dnd-kit/core'
 import {
     SortableContext,
@@ -66,6 +67,7 @@ const VoteItemList: React.FC<VoteItemListProps> = ({ languages }) => {
 
     const sensors = useSensors(
         useSensor(PointerSensor),
+        useSensor(MouseSensor),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
         })
