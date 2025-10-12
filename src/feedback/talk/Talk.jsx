@@ -51,9 +51,11 @@ export const Talk = () => {
     const talk = useSelector(getSelectedTalkSelector)
     const speakers = useSelector(getSpeakersForSelectedTalkSelector)
     const voteItems = useSelector(getProjectVoteItemsOrderedSelector)
-    const userVotes = useSelector(state => getActiveUserVotesByTalkAndVoteItemSelector(state, talkId))
+    const userVotes = useSelector((state) =>
+        getActiveUserVotesByTalkAndVoteItemSelector(state, talkId)
+    )
     const voteResults = useSelector((state) =>
-        getVoteResultSelectorSelector(state, displayVotes),
+        getVoteResultSelectorSelector(state, displayVotes)
     )
     const errorTalkLoad = useSelector(getTalkLoadErrorSelector)
     const errorVotePost = useSelector(getErrorVotePostSelector)
@@ -144,7 +146,7 @@ export const Talk = () => {
     return (
         <div>
             <TalkHeader talk={talk} speakers={speakers} />
-            <Grid container spacing={SPACING.LAYOUT}>
+            <Grid container spacing={SPACING.LAYOUT} sx={{ marginBottom: 6 }}>
                 {voteItems.map((voteItem, key) => (
                     <TalkVote
                         key={key}
