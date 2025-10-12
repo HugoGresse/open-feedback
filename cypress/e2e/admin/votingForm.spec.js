@@ -46,7 +46,7 @@ describe('Test voting form edition', function () {
 
         app.votingForm.assertVoteItem(0, 'Fun 😃', VOTE_ITEM_TYPES.chip)
         app.votingForm.moveVoteItem(0, true)
-        const newFunItemPosition = 4
+        const newFunItemPosition = 2
         app.votingForm.assertVoteItem(
             0,
             "I've learned a lot 🤓",

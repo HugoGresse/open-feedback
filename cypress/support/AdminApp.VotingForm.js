@@ -89,7 +89,7 @@ export class VotingForm {
             .within(() => {
                 // eslint-disable-next-line cypress/no-unnecessary-waiting
                 cy.get(`button[aria-label="drag to reorder"]`)
-                    .focus()
+                    .click()
                     .scrollTo(0, -1000, {
                         ensureScrollable: false,
                     })
