@@ -93,14 +93,16 @@ export class VotingForm {
                     .scrollTo(0, -1000, {
                         ensureScrollable: false,
                     })
-                    .wait(1000)
+                    .wait(200)
                     .trigger('mousedown', {
                         which: 1,
                     })
+                    .wait(200)
                     .trigger('mousemove', {
                         clientX: 0,
-                        clientY: toBelow ? 400 : -400, // not working
+                        clientY: toBelow ? -400 : 400, // not working
                     })
+                    .wait(200)
                     .trigger('mouseup', { force: true })
             })
     }
