@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import AddIcon from '@mui/icons-material/AddCircleOutline'
-import VoteItem from './VoteItem.jsx'
+// @ts-expect-error - JS module without types
+import VoteItem from './VoteItem'
 import { useDispatch, useSelector } from 'react-redux'
 import {
     getSortedVoteItemsSelector,
     shouldConfirmSaveSelector,
     isSavingVotingFormSelector,
+    // @ts-expect-error - JS module without types
 } from './votingFormSelectors'
 import {
     addVoteItem,
@@ -15,38 +17,61 @@ import {
     onVoteItemMoveUp,
     onVoteItemSaveConfirmed,
     saveVoteItems,
-} from './votingFormActions.jsx'
+    // @ts-expect-error - JS module without types
+} from './votingFormActions'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
-import OFListHeader from '../../../baseComponents/layouts/OFListHeader.jsx'
-import OFListItem from '../../../baseComponents/layouts/OFListItem.jsx'
+// @ts-expect-error - JS module without types
+import OFListHeader from '../../../baseComponents/layouts/OFListHeader'
+// @ts-expect-error - JS module without types
+import OFListItem from '../../../baseComponents/layouts/OFListItem'
 import { useTranslation } from 'react-i18next'
+// @ts-expect-error - JS module without types
 import { VOTE_TYPE_BOOLEAN } from '../../../../core/contants'
-import SimpleDialog from '../../../baseComponents/layouts/SimpleDialog.jsx'
-import TranslatedTypography from '../../../baseComponents/TranslatedTypography.jsx'
+// @ts-expect-error - JS module without types
+import SimpleDialog from '../../../baseComponents/layouts/SimpleDialog'
+// @ts-expect-error - JS module without types
+import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
 import { useHotkeys } from 'react-hotkeys-hook'
-import OFButton from '../../../baseComponents/button/OFButton.jsx'
+// @ts-expect-error - JS module without types
+import OFButton from '../../../baseComponents/button/OFButton'
 
-const VoteItemList = ({ languages, selectedProjectOrOrganizationId }) => {
+// Types
+export interface VoteItem {
+    id: string
+    name: string | null
+    position: number
+    type: string
+    local?: boolean
+    oldId?: string
+    languages?: Record<string, string>
+}
+
+export interface VoteItemListProps {
+    languages: string[]
+}
+
+const VoteItemList: React.FC<VoteItemListProps> = ({ languages }) => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
-    const voteItems = useSelector(getSortedVoteItemsSelector)
-    const isSaving = useSelector(isSavingVotingFormSelector)
-    const shouldConfirmSave = useSelector(shouldConfirmSaveSelector)
-    const [focusId, setFocusId] = useState()
-    const [isTypeChangeDialogOpen, setTypeChangedDialog] = useState(false)
+    const voteItems: VoteItem[] = useSelector(getSortedVoteItemsSelector)
+    const isSaving: boolean = useSelector(isSavingVotingFormSelector)
+    const shouldConfirmSave: boolean = useSelector(shouldConfirmSaveSelector)
+    const [focusId, setFocusId] = useState<string | undefined>()
+    const [isTypeChangeDialogOpen, setTypeChangedDialog] =
+        useState<boolean>(false)
     useHotkeys('ctrl+s, command+s', (event) => {
         event.preventDefault()
         save()
     })
 
-    const save = (bypassConfirm) => {
+    const save = (bypassConfirm?: boolean): void => {
         if (shouldConfirmSave && !bypassConfirm) {
             setTypeChangedDialog(true)
             return
         }
-        dispatch(saveVoteItems(selectedProjectOrOrganizationId))
-        setFocusId()
+        dispatch(saveVoteItems())
+        setFocusId(undefined)
     }
 
     return (
@@ -65,7 +90,7 @@ const VoteItemList = ({ languages, selectedProjectOrOrganizationId }) => {
                         key={item.id}
                         item={item}
                         languages={languages}
-                        onChange={(newValue) =>
+                        onChange={(newValue: string) =>
                             dispatch(
                                 onVoteItemChange({
                                     ...item,
@@ -73,7 +98,7 @@ const VoteItemList = ({ languages, selectedProjectOrOrganizationId }) => {
                                 })
                             )
                         }
-                        onLanguagesChange={(langTag, value) => {
+                        onLanguagesChange={(langTag: string, value: string) => {
                             dispatch(
                                 onVoteItemChange({
                                     ...item,
@@ -84,7 +109,7 @@ const VoteItemList = ({ languages, selectedProjectOrOrganizationId }) => {
                                 })
                             )
                         }}
-                        onTypeChange={(type) =>
+                        onTypeChange={(type: string) =>
                             dispatch(
                                 onVoteItemChange({
                                     ...item,
