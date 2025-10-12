@@ -4,7 +4,7 @@ import RemoveButton from '@mui/icons-material/RemoveCircle'
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
 import { makeStyles } from '@mui/styles'
-import OFListItem from '../baseComponents/layouts/OFListItem.jsx'
+import OFListItem from '../baseComponents/layouts/OFListItem.tsx'
 import { Box } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
@@ -75,7 +75,7 @@ const UserInviteItem = ({ invite, cancelInvite }) => {
                 </IconButton>
             </Grid>
         </OFListItem>
-    );
+    )
 }
 
 export default UserInviteItem

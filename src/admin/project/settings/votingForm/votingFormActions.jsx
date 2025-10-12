@@ -4,8 +4,7 @@ import {
     DELETE_VOTEITEM,
     EDIT_VOTEITEM,
     GET_VOTEITEMS_SUCCESS,
-    MOVE_DOWN_VOTEITEM,
-    MOVE_UP_VOTEITEM,
+    REORDER_VOTEITEMS,
     SAVE_VOTEITEM_CONFIRM,
     SAVE_VOTEITEMS_ERROR,
     SAVE_VOTEITEMS_ONGOING,
@@ -21,7 +20,11 @@ import {
     isSavingVotingFormSelector,
 } from './votingFormSelectors'
 import { newId } from '../../../../utils/stringUtils'
-import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_SEPARATOR, VOTE_TYPE_TEXT } from '../../../../core/contants'
+import {
+    VOTE_TYPE_BOOLEAN,
+    VOTE_TYPE_SEPARATOR,
+    VOTE_TYPE_TEXT,
+} from '../../../../core/contants'
 import { filterMap } from '../../../../utils/mapUtils'
 import { addNotification } from '../../../notification/notifcationActions'
 import {
@@ -38,8 +41,8 @@ export const getVoteItems = () => (dispatch, getState) => {
     let voteItems = selectedProjectId
         ? getSelectedProjectSelector(state).voteItems
         : selectedOrganizationId
-        ? getSelectedOrganizationSelector(state).voteItems
-        : []
+          ? getSelectedOrganizationSelector(state).voteItems
+          : []
 
     dispatch({
         type: GET_VOTEITEMS_SUCCESS,
@@ -72,14 +75,9 @@ export const onVoteItemChange = (voteItem) => (dispatch, getState) => {
     })
 }
 
-export const onVoteItemMoveUp = (voteItem) => ({
-    type: MOVE_UP_VOTEITEM,
-    payload: voteItem,
-})
-
-export const onVoteItemMoveDown = (voteItem) => ({
-    type: MOVE_DOWN_VOTEITEM,
-    payload: voteItem,
+export const onVoteItemsReorder = (activeId, overId) => ({
+    type: REORDER_VOTEITEMS,
+    payload: { activeId, overId },
 })
 
 export const onVoteItemDelete = (voteItem) => ({

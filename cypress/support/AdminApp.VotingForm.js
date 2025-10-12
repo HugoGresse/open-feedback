@@ -83,11 +83,28 @@ export class VotingForm {
     }
 
     moveVoteItem(itemToMove, toBelow) {
-        const label = toBelow ? 'move down' : 'move up'
-        cy.get('li[data-testid=VoteItem]')
+        cy.get('#root')
+            .get('li[data-testid=VoteItem]')
             .eq(itemToMove)
             .within(() => {
-                cy.get(`button[aria-label="${label}"]`).click()
+                // eslint-disable-next-line cypress/no-unnecessary-waiting
+                cy.get(`button[aria-label="drag to reorder"]`)
+                    .click()
+                    .scrollTo(0, -1000, {
+                        ensureScrollable: false,
+                    })
+                    .wait(200)
+                    .trigger('mousedown', {
+                        which: 1,
+                    })
+                    .wait(200)
+                    .trigger('mousemove', {
+                        clientX: 0,
+                        clientY: toBelow ? 400 : -400, // not working
+                    })
+                    .wait(200)
+                    .trigger('mouseup', { force: true })
+                    .wait(200)
             })
     }
 

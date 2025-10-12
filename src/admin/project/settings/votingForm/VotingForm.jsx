@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import VoteItemList from './VoteItemList.jsx'
+import VoteItemList from './VoteItemList'
 import {
     fillDefaultVotingForm,
     getVoteItems,

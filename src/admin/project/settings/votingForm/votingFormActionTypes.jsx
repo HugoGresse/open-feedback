@@ -1,7 +1,6 @@
 export const GET_VOTEITEMS_SUCCESS = 'admin/voteItems/get/success'
 export const EDIT_VOTEITEM = 'admin/voteItems/edit'
-export const MOVE_UP_VOTEITEM = 'admin/voteItems/moveUp'
-export const MOVE_DOWN_VOTEITEM = 'admin/voteItems/moveDown'
+export const REORDER_VOTEITEMS = 'admin/voteItems/reorder'
 export const DELETE_VOTEITEM = 'admin/voteItems/delete'
 export const DELETE_ALL_VOTEITEMS = 'admin/voteItems/deleteAll'
 export const ADD_VOTEITEM = 'admin/voteItems/add'

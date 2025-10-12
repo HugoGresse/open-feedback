@@ -46,18 +46,23 @@ describe('Test voting form edition', function () {
 
         app.votingForm.assertVoteItem(0, 'Fun 😃', VOTE_ITEM_TYPES.chip)
         app.votingForm.moveVoteItem(0, true)
+        const newFunItemPosition = 2
         app.votingForm.assertVoteItem(
             0,
             "I've learned a lot 🤓",
             VOTE_ITEM_TYPES.chip
         )
-        app.votingForm.assertVoteItem(1, 'Fun 😃', VOTE_ITEM_TYPES.chip)
+        app.votingForm.assertVoteItem(
+            newFunItemPosition,
+            'Fun 😃',
+            VOTE_ITEM_TYPES.chip
+        )
         app.votingForm.changeVoteItemType(
             0,
             VOTE_ITEM_TYPES.chip,
             VOTE_ITEM_TYPES.text
         )
-        app.votingForm.removeVoteItem(5)
+        app.votingForm.removeVoteItem(6)
 
         app.votingForm.save(true)
 
@@ -69,7 +74,11 @@ describe('Test voting form edition', function () {
             "I've learned a lot 🤓",
             VOTE_ITEM_TYPES.text
         )
-        feedback.assertVoteItem(1, 'Fun 😃', VOTE_ITEM_TYPES.chip)
+        feedback.assertVoteItem(
+            newFunItemPosition,
+            'Fun 😃',
+            VOTE_ITEM_TYPES.chip
+        )
         feedback.assertVoteItem(8, data.voteItem1, VOTE_ITEM_TYPES.chip)
         feedback.assertVoteItem(9, data.voteItemTitle, VOTE_ITEM_TYPES.title)
         feedback.assertVoteItem(10, null, VOTE_ITEM_TYPES.separator)

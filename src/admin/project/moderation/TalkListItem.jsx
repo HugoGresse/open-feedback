@@ -1,5 +1,5 @@
 import React from 'react'
-import OFListItem from '../../baseComponents/layouts/OFListItem.jsx'
+import OFListItem from '../../baseComponents/layouts/OFListItem.tsx'
 import Grid from '@mui/material/Grid'
 import { makeStyles } from '@mui/styles'
 import Typography from '@mui/material/Typography'

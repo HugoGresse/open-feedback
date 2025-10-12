@@ -64,6 +64,9 @@
         "vitest": "^1.6.0"
     },
     "dependencies": {
+        "@dnd-kit/core": "^6.3.1",
+        "@dnd-kit/sortable": "^10.0.0",
+        "@dnd-kit/utilities": "^3.2.2",
         "@emotion/styled": "^11.11.0",
         "@mdi/js": "^7.3.67",
         "@mdi/react": "^1.6.1",
