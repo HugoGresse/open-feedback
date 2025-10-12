@@ -45,13 +45,14 @@ describe('Test voting form edition', function () {
         )
 
         app.votingForm.assertVoteItem(0, 'Fun 😃', VOTE_ITEM_TYPES.chip)
+        cy.get('#content').scrollTo(0, -1000)
         app.votingForm.moveVoteItem(0, true)
         app.votingForm.assertVoteItem(
             0,
             "I've learned a lot 🤓",
             VOTE_ITEM_TYPES.chip
         )
-        app.votingForm.assertVoteItem(1, 'Fun 😃', VOTE_ITEM_TYPES.chip)
+        app.votingForm.assertVoteItem(4, 'Fun 😃', VOTE_ITEM_TYPES.chip)
         app.votingForm.changeVoteItemType(
             0,
             VOTE_ITEM_TYPES.chip,
@@ -69,7 +70,7 @@ describe('Test voting form edition', function () {
             "I've learned a lot 🤓",
             VOTE_ITEM_TYPES.text
         )
-        feedback.assertVoteItem(1, 'Fun 😃', VOTE_ITEM_TYPES.chip)
+        feedback.assertVoteItem(4, 'Fun 😃', VOTE_ITEM_TYPES.chip)
         feedback.assertVoteItem(8, data.voteItem1, VOTE_ITEM_TYPES.chip)
         feedback.assertVoteItem(9, data.voteItemTitle, VOTE_ITEM_TYPES.title)
         feedback.assertVoteItem(10, null, VOTE_ITEM_TYPES.separator)

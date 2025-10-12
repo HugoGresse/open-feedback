@@ -83,11 +83,20 @@ export class VotingForm {
     }
 
     moveVoteItem(itemToMove, toBelow) {
-        const label = toBelow ? 'move down' : 'move up'
         cy.get('li[data-testid=VoteItem]')
             .eq(itemToMove)
             .within(() => {
-                cy.get(`button[aria-label="${label}"]`).click()
+                cy.get(`button[aria-label="drag to reorder"]`)
+                    .trigger('pointerdown', {
+                        force: true,
+                        isPrimary: true,
+                        button: 0,
+                    })
+                    .trigger('pointermove', {
+                        clientX: 0,
+                        clientY: toBelow ? -400 : 0, // not working
+                    })
+                    .trigger('pointerup', { force: true })
             })
     }
 
