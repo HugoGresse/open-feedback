@@ -6,32 +6,30 @@ import { darken, lighten } from '@mui/material/styles'
 
 interface QRCodeButtonProps {
     url: string
-    color?: string
     title?: string
     tooltipTitle?: string
     size?: 'small' | 'medium' | 'large'
     fileName?: string
     logo?: string
+    eventColor?: string
 }
 
 export const QRCodeButton: React.FC<QRCodeButtonProps> = ({
     url,
-    color,
     title = 'QR Code',
     tooltipTitle = 'Show QR Code',
     size = 'medium',
     fileName = 'qr-code',
     logo,
+    eventColor,
 }) => {
     const [dialogOpen, setDialogOpen] = useState(false)
     const theme = useTheme()
 
-    // Use the provided color or adapt to theme
     const iconColor =
-        color ||
-        (theme.palette.mode === 'dark'
+        theme.palette.mode === 'dark'
             ? lighten(theme.palette.pageBackground, 0.5)
-            : darken(theme.palette.pageBackground, 0.5))
+            : darken(theme.palette.pageBackground, 0.5)
 
     return (
         <>
@@ -57,6 +55,7 @@ export const QRCodeButton: React.FC<QRCodeButtonProps> = ({
                 title={title}
                 fileName={fileName}
                 logo={logo}
+                eventColor={eventColor}
             />
         </>
     )

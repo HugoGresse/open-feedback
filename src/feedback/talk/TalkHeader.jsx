@@ -91,6 +91,9 @@ export const TalkHeader = ({ talk, speakers }) => {
                 url={document.location.href}
                 fileName={talk.title.trim() + '-qr-code-openfeedback'}
                 logo={project.logoSmall}
+                eventColor={
+                    project.chipColors ? project.chipColors[0] : undefined
+                }
             />
         </Box>
     )

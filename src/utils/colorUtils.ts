@@ -1,15 +1,32 @@
 /**
  * Inverts a hex color value
  * @param hex - Hex color string (e.g., '#000000' or '000000')
+ * @param blackWhiteOnly - If true, returns only black or white based on luminance (default: false)
  * @returns Inverted hex color string
  */
-export const invertColor = (hex: string): string => {
+export const invertColor = (
+    hex: string,
+    blackWhiteOnly: boolean = false
+): string => {
     // Remove hash if present
     const cleanHex = hex.replace('#', '')
 
     // Validate hex color
     if (!/^[0-9A-F]{6}$/i.test(cleanHex)) {
         throw new Error('Invalid hex color format')
+    }
+
+    // If blackWhiteOnly is true, return black or white based on luminance
+    if (blackWhiteOnly) {
+        const r = parseInt(cleanHex.slice(0, 2), 16)
+        const g = parseInt(cleanHex.slice(2, 4), 16)
+        const b = parseInt(cleanHex.slice(4, 6), 16)
+
+        // Calculate relative luminance using standard formula
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+
+        // Return black for light colors, white for dark colors
+        return luminance > 0.5 ? '#000000' : '#ffffff'
     }
 
     // Convert hex to RGB, invert, and convert back to hex

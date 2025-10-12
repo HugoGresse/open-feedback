@@ -1,0 +1,10 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "start:local",
+            "command": "npm",
+            "args": ["run", "start:local"]
+        }
+    ]
+}

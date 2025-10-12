@@ -23,7 +23,6 @@ import Hidden from '@mui/material/Hidden'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
 import { useTranslation } from 'react-i18next'
-import Icon from '@mui/material/Icon'
 import { redirectToProject } from '../utils/redirectToProject'
 import useScrollTrigger from '@mui/material/useScrollTrigger'
 import Translate from './Translate.jsx'
@@ -278,6 +277,11 @@ const Header = ({ refTarget, toggleDrawer }) => {
                 value={`${window.location.origin}/${selectedProjectId}`}
                 fileName={selectedProject.name.trim() + '-qr-code-openfeedback'}
                 logo={selectedProject.logoSmall}
+                eventColor={
+                    selectedProject.chipColors
+                        ? selectedProject.chipColors[0]
+                        : undefined
+                }
             />
         </>
     )
