@@ -100,7 +100,7 @@ export class VotingForm {
                     .wait(200)
                     .trigger('mousemove', {
                         clientX: 0,
-                        clientY: toBelow ? -400 : 400, // not working
+                        clientY: toBelow ? 400 : -400, // not working
                     })
                     .wait(200)
                     .trigger('mouseup', { force: true })
