@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import AddIcon from '@mui/icons-material/AddCircleOutline'
 import VoteItem, { VoteItemType } from './VoteItem.tsx'
 import { useDispatch, useSelector } from 'react-redux'
@@ -91,7 +91,7 @@ const VoteItemList: React.FC<VoteItemListProps> = ({ languages }) => {
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
 
-        if (active.id !== over?.id) {
+        if (active.id !== over?.id && over) {
             dispatch(
                 onVoteItemsReorder(active.id as string, over?.id as string)
             )
@@ -99,6 +99,13 @@ const VoteItemList: React.FC<VoteItemListProps> = ({ languages }) => {
 
         setActiveId(null)
     }
+
+    const activeVoteItem = useMemo(() => {
+        if (!activeId) {
+            return undefined
+        }
+        return voteItems.find((item) => item.id === activeId)
+    }, [voteItems, activeId])
 
     return (
         <>
@@ -176,14 +183,10 @@ const VoteItemList: React.FC<VoteItemListProps> = ({ languages }) => {
                         ))}
                     </SortableContext>
                     <DragOverlay>
-                        {activeId ? (
+                        {activeVoteItem && activeId ? (
                             <VoteItem
                                 id={activeId}
-                                item={
-                                    voteItems.find(
-                                        (item) => item.id === activeId
-                                    )!
-                                }
+                                item={activeVoteItem}
                                 languages={languages}
                                 onChange={() => {}}
                                 onLanguagesChange={() => {}}
