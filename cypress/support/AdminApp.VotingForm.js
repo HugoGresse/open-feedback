@@ -95,9 +95,7 @@ export class VotingForm {
                     })
                     .wait(1000)
                     .trigger('mousedown', {
-                        force: true,
-                        isPrimary: true,
-                        button: 0,
+                        which: 1,
                     })
                     .trigger('mousemove', {
                         clientX: 0,
