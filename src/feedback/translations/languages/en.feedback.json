@@ -45,6 +45,11 @@
         "switchToDarkMode": "Switch to Dark Mode",
         "downloadPng": "Download PNG",
         "downloadSvg": "Download SVG",
-        "close": "Close"
+        "close": "Close",
+        "colorSelection": "QR Code Color",
+        "colorBlack": "Black",
+        "colorWhite": "White",
+        "colorEvent": "Event Color",
+        "colorCustom": "Custom Color"
     }
 }

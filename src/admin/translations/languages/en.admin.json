@@ -335,5 +335,17 @@
         "unhideDialogConfirm": "Unhide the vote",
         "hideVoteFail": "Failed to hide the vote, ",
         "unhideVoteFail": "Failed to unhide the vote, "
+    },
+    "qrCode": {
+        "switchToLightMode": "Switch to Light Mode",
+        "switchToDarkMode": "Switch to Dark Mode",
+        "downloadPng": "Download PNG",
+        "downloadSvg": "Download SVG",
+        "close": "Close",
+        "colorSelection": "QR Code Color",
+        "colorBlack": "Black",
+        "colorWhite": "White",
+        "colorEvent": "Event Color",
+        "colorCustom": "Custom Color"
     }
 }

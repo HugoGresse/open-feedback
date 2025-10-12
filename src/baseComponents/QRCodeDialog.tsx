@@ -1,17 +1,9 @@
-import React, { lazy, Suspense, useState } from 'react'
+import React, { lazy, Suspense } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
-import {
-    CircularProgress,
-    Box,
-    Button,
-    IconButton,
-    Tooltip,
-} from '@mui/material'
-import { LightMode, DarkMode } from '@mui/icons-material'
-import { invertColor } from '../utils/colorUtils'
+import { CircularProgress, Box, Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 const QRCode = lazy(() =>
@@ -22,7 +14,7 @@ interface QRCodeDialogProps {
     open: boolean
     onClose: () => void
     value: string
-    color?: string
+    eventColor?: string
     title?: string
     size?: number
     fileName?: string
@@ -33,21 +25,13 @@ export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({
     open,
     onClose,
     value,
-    color = '#000000',
+    eventColor = '#000000',
     title = 'QR Code',
     fileName = 'qr-code',
     size = 300,
     logo,
 }) => {
-    const [isDarkMode, setIsDarkMode] = useState(false)
     const { t } = useTranslation()
-
-    const toggleMode = () => {
-        setIsDarkMode(!isDarkMode)
-    }
-
-    const currentColor = isDarkMode ? invertColor(color) : color
-    const bgColor = isDarkMode ? 'transparent' : invertColor(color)
 
     return (
         <Dialog
@@ -64,16 +48,6 @@ export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({
                     alignItems: 'center',
                 }}>
                 {title}
-                <Tooltip
-                    title={
-                        isDarkMode
-                            ? t('qrCode.switchToLightMode')
-                            : t('qrCode.switchToDarkMode')
-                    }>
-                    <IconButton onClick={toggleMode} size="small">
-                        {isDarkMode ? <LightMode /> : <DarkMode />}
-                    </IconButton>
-                </Tooltip>
             </DialogTitle>
             <DialogContent>
                 <Box
@@ -84,7 +58,6 @@ export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({
                     sx={{
                         borderRadius: 1,
                         padding: 2,
-                        backgroundColor: bgColor,
                     }}>
                     {open && (
                         <Suspense
@@ -101,7 +74,13 @@ export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({
                             <QRCode
                                 data={value}
                                 size={size}
-                                color={currentColor}
+                                eventColor={
+                                    eventColor
+                                        ? eventColor.startsWith('#')
+                                            ? eventColor
+                                            : `#${eventColor}`
+                                        : undefined
+                                }
                                 className="qr-code-dialog-qr"
                                 showDownload
                                 downloadFileName={fileName}

@@ -45,6 +45,11 @@
         "switchToDarkMode": "Mode sombre qui fait mal aux yeux",
         "downloadPng": "Télécharger en PNG",
         "downloadSvg": "Télécharger en SVG",
-        "close": "Fermer"
+        "close": "Fermer",
+        "colorSelection": "Couleur du QR Code",
+        "colorBlack": "Noir",
+        "colorWhite": "Blanc",
+        "colorEvent": "Couleur de l'événement",
+        "colorCustom": "Couleur personnalisée"
     }
 }
