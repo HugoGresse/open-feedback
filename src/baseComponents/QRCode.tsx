@@ -69,6 +69,9 @@ export const QRCode: React.FC<QRCodeProps> = ({
                 ...qrCodeConfig,
                 width: downloadSize,
                 height: downloadSize,
+                backgroundOptions: {
+                    color: 'transparent',
+                },
             }
 
             qrCode.current.update(downloadConfig)
