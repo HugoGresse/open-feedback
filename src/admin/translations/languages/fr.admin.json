@@ -196,7 +196,9 @@
         "fieldVoteRange": "Restreindre la date de début/fin des votes",
         "pick": "Choisir",
         "save": "Sauvegarder",
-        "hideEventName": "Ne pas afficher le nom de l'évènement dans les feedbacks (uniquement le logo)"
+        "hideEventName": "Ne pas afficher le nom de l'évènement dans les feedbacks (uniquement le logo)",
+        "chipColorsPreview": "Aperçu",
+        "previewVoteTitle": "Vote d'exemple"
     },
     "settingsSetup": {
         "cannotChange": "Vous ne pouvez pas changer le mode de configuration après avoir créé l'évènement.",

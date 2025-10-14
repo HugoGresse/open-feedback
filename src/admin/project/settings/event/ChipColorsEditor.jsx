@@ -5,6 +5,7 @@ import ColorBlock from './ColorBlock.jsx'
 import IconButton from '@mui/material/IconButton'
 import { newRandomHexColor } from '../../../../utils/colorsUtils'
 import { useTranslation } from 'react-i18next'
+import VotePreview from './VotePreview.jsx'
 
 const useStyles = makeStyles(() => ({
     colorBlock: {
@@ -70,6 +71,7 @@ const ChipColorsEditor = ({ field, form }) => {
                 size="large">
                 <AddIcon />
             </IconButton>
+            <VotePreview chipColors={field.value} />
         </div>
     );
 }
