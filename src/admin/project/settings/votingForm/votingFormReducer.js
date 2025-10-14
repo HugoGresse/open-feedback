@@ -4,8 +4,7 @@ import {
     DELETE_VOTEITEM,
     EDIT_VOTEITEM,
     GET_VOTEITEMS_SUCCESS,
-    MOVE_DOWN_VOTEITEM,
-    MOVE_UP_VOTEITEM,
+    REORDER_VOTEITEMS,
     SAVE_VOTEITEM_CONFIRM,
     SAVE_VOTEITEMS_ERROR,
     SAVE_VOTEITEMS_ONGOING,
@@ -51,52 +50,37 @@ const votingFormReducer = (state = initState, { payload, type }) => {
             }
         }
 
-        case MOVE_UP_VOTEITEM: {
-            const newPosition = payload.position > 1 ? payload.position - 1 : 0
+        case REORDER_VOTEITEMS: {
+            const { activeId, overId } = payload
+            const voteItems = [...state.voteItems]
 
-            const voteItems = state.voteItems.map((item) => {
-                if (item.id === payload.id) {
-                    return {
-                        ...item,
-                        position: newPosition,
-                    }
-                } else if (item.position === newPosition) {
-                    return {
-                        ...item,
-                        position: item.position + 1,
-                    }
+            const activeIndex = voteItems.findIndex(
+                (item) => item.id === activeId
+            )
+            const overIndex = voteItems.findIndex((item) => item.id === overId)
+
+            if (
+                activeIndex !== -1 &&
+                overIndex !== -1 &&
+                activeIndex !== overIndex
+            ) {
+                // Move the item from activeIndex to overIndex
+                const [movedItem] = voteItems.splice(activeIndex, 1)
+                voteItems.splice(overIndex, 0, movedItem)
+
+                // Update positions based on new order
+                const reorderedItems = voteItems.map((item, index) => ({
+                    ...item,
+                    position: index,
+                }))
+
+                return {
+                    ...state,
+                    voteItems: reorderedItems,
                 }
-                return item
-            })
-
-            return {
-                ...state,
-                voteItems: voteItems,
             }
-        }
 
-        case MOVE_DOWN_VOTEITEM: {
-            const newPosition = payload.position + 1
-
-            const voteItems = state.voteItems.map((item) => {
-                if (item.id === payload.id) {
-                    return {
-                        ...item,
-                        position: newPosition,
-                    }
-                } else if (item.position === newPosition) {
-                    return {
-                        ...item,
-                        position: item.position - 1,
-                    }
-                }
-                return item
-            })
-
-            return {
-                ...state,
-                voteItems: voteItems,
-            }
+            return state
         }
         case DELETE_VOTEITEM: {
             const indexToRemove = state.voteItems.findIndex(

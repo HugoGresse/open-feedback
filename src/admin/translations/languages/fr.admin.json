@@ -335,5 +335,17 @@
         "unhideDialogConfirm": "Décacher le vote",
         "hideVoteFail": "Échec du cachage du vote, ",
         "unhideVoteFail": "Échec du décachage du vote, "
+    },
+    "qrCode": {
+        "switchToLightMode": "Mode clair qui illumine vos yeux",
+        "switchToDarkMode": "Mode sombre qui fait mal aux yeux",
+        "downloadPng": "Télécharger en PNG",
+        "downloadSvg": "Télécharger en SVG",
+        "close": "Fermer",
+        "colorSelection": "Couleur du QR Code",
+        "colorBlack": "Noir",
+        "colorWhite": "Blanc",
+        "colorEvent": "Couleur de l'événement",
+        "colorCustom": "Couleur personnalisée"
     }
 }

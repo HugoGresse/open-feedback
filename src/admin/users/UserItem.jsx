@@ -10,7 +10,7 @@ import {
     removeUser,
 } from './core/actions/usersActions'
 import { getFilteredUsersSelector } from './core/usersSelectors'
-import OFListItem from '../baseComponents/layouts/OFListItem.jsx'
+import OFListItem from '../baseComponents/layouts/OFListItem.tsx'
 import Avatar from '@mui/material/Avatar'
 import { Box } from '@mui/material'
 import Typography from '@mui/material/Typography'
@@ -125,7 +125,7 @@ const UserItem = ({ userId, ownerId, currentUserId, role, userTypes }) => {
                 </SimpleDialog>
             )}
         </OFListItem>
-    );
+    )
 }
 
 export default UserItem

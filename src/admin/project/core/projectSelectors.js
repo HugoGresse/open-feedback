@@ -21,9 +21,6 @@ export const isProjectApiInitSelector = (state) =>
 
 export const getOwnerId = (state) => getSelectedProjectSelector(state).owner
 
-export const getLanguagesSelector = (state) =>
-    getSelectedProjectSelector(state).languages || []
-
 export const getStartTimeSelector = (state) =>
     getSelectedProjectSelector(state).voteStartTime
 
@@ -39,6 +36,11 @@ export const getSelectedProjectSelector = createSelector(
         }
         return projects.filter((project) => project.id === selectedProjectId)[0]
     }
+)
+
+export const getLanguagesSelector = createSelector(
+    getSelectedProjectSelector,
+    (project) => (project && project.languages) || []
 )
 
 export const getMemberIds = createSelector(

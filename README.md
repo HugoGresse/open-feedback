@@ -8,7 +8,7 @@
 <h3 align="center">
   <a href="https://gitter.im/open-feedback/community">Community</a>
   <span> · </span>
-  <a href="https://contribute-open-feedback.netlify.com/">Documentation</a>
+  <a href="https://contribute-open-feedback.netlify.app/">Documentation</a>
 </h3>
 
 <p align="center"><b>https://openfeedback.io/</b></p>
@@ -35,7 +35,7 @@
 
 You want to contribute and keep Open Feedback in a good shape, go there:
 
-[contribute-open-feedback.netlify.com](https://contribute-open-feedback.netlify.com)
+[contribute-open-feedback.netlify.app](https://contribute-open-feedback.netlify.app)
 
 ## Community SDK
 

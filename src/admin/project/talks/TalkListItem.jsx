@@ -6,7 +6,7 @@ import CalendarIcon from '@mui/icons-material/CalendarToday'
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
 import { makeStyles } from '@mui/styles'
-import OFListItem from '../../baseComponents/layouts/OFListItem.jsx'
+import OFListItem from '../../baseComponents/layouts/OFListItem.tsx'
 import TalkListItemSpeakerList from './TalkListItemSpeakerList.jsx'
 import Chip from '@mui/material/Chip'
 import { DateTime } from 'luxon'
@@ -29,12 +29,12 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const TalkListItem = ({
-                          item,
-                          speakers,
-                          onEdit,
-                          onRemove,
-                          onSpeakerClicked,
-                      }) => {
+    item,
+    speakers,
+    onEdit,
+    onRemove,
+    onSpeakerClicked,
+}) => {
     const classes = useStyles()
 
     return (
@@ -66,20 +66,26 @@ const TalkListItem = ({
                     <Chip
                         icon={<CalendarIcon />}
                         size="small"
-                        label={DateTime.fromISO(
-                            item.startTime,
-                        ).toFormat("t, cccc d")}
+                        label={DateTime.fromISO(item.startTime).toFormat(
+                            't, cccc d'
+                        )}
                         style={{ marginBottom: item.startTime ? 5 : 0 }}
                         variant="outlined"
                     />
                 )}
             </Grid>
             <Grid item xs={12} sm={2} lg={2} className={classes.buttonCell}>
-                <IconButton aria-label="edit" onClick={() => onEdit(item)} size="large">
+                <IconButton
+                    aria-label="edit"
+                    onClick={() => onEdit(item)}
+                    size="large">
                     <EditIcon />
                 </IconButton>
 
-                <IconButton aria-label="delete" onClick={() => onRemove(item)} size="large">
+                <IconButton
+                    aria-label="delete"
+                    onClick={() => onRemove(item)}
+                    size="large">
                     <DeleteIcon />
                 </IconButton>
             </Grid>

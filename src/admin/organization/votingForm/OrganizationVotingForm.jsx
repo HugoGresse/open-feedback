@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import VoteItemList from '../../project/settings/votingForm/VoteItemList.jsx'
+import VoteItemList from '../../project/settings/votingForm/VoteItemList'
 import VotingFormFooter from '../../project/settings/votingForm/VotingFormFooter.jsx'
 import { OrganizationVotingFormSettings } from './OrganizationVotingFormSettings.jsx'
 import { useDispatch, useSelector } from 'react-redux'
