@@ -5,7 +5,7 @@ import ColorBlock from './ColorBlock.jsx'
 import IconButton from '@mui/material/IconButton'
 import { newRandomHexColor } from '../../../../utils/colorsUtils'
 import { useTranslation } from 'react-i18next'
-import VotePreview from './VotePreview.jsx'
+import VotePreview from './VotePreview.tsx'
 
 const useStyles = makeStyles(() => ({
     colorBlock: {

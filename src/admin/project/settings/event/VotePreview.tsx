@@ -2,9 +2,9 @@ import React from 'react'
 import { makeStyles } from '@mui/styles'
 import { VoteButton } from '../../../../feedback/talk/components/VoteButton.jsx'
 import { useTranslation } from 'react-i18next'
-import { Typography } from '@mui/material'
+import { Typography, Theme } from '@mui/material'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     previewContainer: {
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(1),
@@ -26,7 +26,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const VotePreview = ({ chipColors }) => {
+interface VotePreviewProps {
+    /** Array of hex color codes (without # prefix) for chip colors */
+    chipColors?: string[]
+}
+
+const VotePreview: React.FC<VotePreviewProps> = ({ chipColors }) => {
     const classes = useStyles()
     const { t } = useTranslation()
 
