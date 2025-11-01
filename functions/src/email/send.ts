@@ -1,6 +1,4 @@
 import { isEmpty } from 'lodash'
-import FormData from 'form-data'
-import fetch, { Response } from 'node-fetch'
 import { MailgunEnv } from '../types/MailgunEnv'
 
 export interface EmailData {

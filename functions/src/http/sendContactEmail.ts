@@ -1,6 +1,5 @@
 import * as functions from 'firebase-functions'
 import { getAppEnv, getMailgunEnv } from '../helpers/env'
-import fetch, { Response } from 'node-fetch'
 import send from '../email/send'
 
 export const sendContactEmail = functions.https.onRequest(async (req, res) => {
@@ -58,11 +57,11 @@ const isRecaptchaV3Valid = async (recaptchaV3Value: string) => {
     return fetch(
         `https://www.google.com/recaptcha/api/siteverify?secret=${appEnv.recaptchaV3Secret}&response=${recaptchaV3Value}`
     )
-        .then((response) => response.json())
-        .then((response) => {
+        .then((response: Response) => response.json())
+        .then((response: { success: boolean; score: number }) => {
             return response.success && response.score > 0.5
         })
-        .catch((error) => {
+        .catch((error: Error) => {
             console.error(error)
             return false
         })

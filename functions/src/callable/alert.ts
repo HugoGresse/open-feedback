@@ -1,5 +1,4 @@
 import * as functions from 'firebase-functions'
-import fetch from 'node-fetch'
 import { isEmpty } from 'lodash'
 import { getOpsGenieEnv } from '../helpers/env'
 

@@ -1,5 +1,5 @@
 import { onRequest } from 'firebase-functions/v2/https'
-import { createApiServer } from '../api/api'
+import { createFastifyAPI } from '../api/api'
 
 // Export the API as a Firebase HTTP function
 export const api = onRequest(
@@ -13,7 +13,7 @@ export const api = onRequest(
     async (request, response) => {
         try {
             // Create and start the Fastify server
-            const server = await createApiServer()
+            const server = await createFastifyAPI()
 
             // Use Fastify's built-in adapter for Firebase Functions
             await server.ready()
