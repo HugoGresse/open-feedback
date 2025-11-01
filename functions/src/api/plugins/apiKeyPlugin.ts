@@ -44,7 +44,7 @@ const authenticateRequest = async (
             request.setDecorator('project', project || undefined)
             return
         }
-        throw new BadRequestError('Unknown API key type!')
+        throw new BadRequestError('Invalid API key')
     } catch (error) {
         if (error instanceof NotFoundError) {
             reply

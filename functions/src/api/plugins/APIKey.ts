@@ -1,7 +1,15 @@
 import crypto from 'crypto'
+import { BadRequestError } from '../others/Errors'
 
 export class APIKey {
-    constructor(public readonly apiKey: string) {}
+    constructor(public readonly apiKey: string) {
+        if (
+            !this.apiKey.startsWith('oforg_') &&
+            !this.apiKey.startsWith('ofproj_')
+        ) {
+            throw new BadRequestError('Invalid API key')
+        }
+    }
 
     public async areApiKeysEqual(storedKey: string): Promise<boolean> {
         const providedBuffer = Buffer.from(storedKey)

@@ -24,14 +24,15 @@ export async function createFastifyAPI() {
     }).withTypeProvider<TypeBoxTypeProvider>()
     addContentTypeParserForServerless(fastify)
 
+    fastify.setErrorHandler(fastifyErrorHandler)
+    fastify.setNotFoundHandler(fastifyNotFoundHandler)
+
     fastify.register(firebasePlugin)
     fastify.register(apiKeyPlugin)
     fastify.register(cors, {
         origin: '*',
     })
     fastify.register(swaggerPlugin)
-    fastify.setErrorHandler(fastifyErrorHandler)
-    fastify.setNotFoundHandler(fastifyNotFoundHandler)
 
     fastify.addHook('onSend', (_, reply, _2, done: () => void) => {
         reply.header('Cache-Control', 'must-revalidate,no-cache,no-store')

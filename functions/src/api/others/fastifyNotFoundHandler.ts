@@ -5,5 +5,5 @@ export const fastifyNotFoundHandler = async function (
     request: FastifyRequest,
     reply: FastifyReply
 ) {
-    reply.status(404).send({ error: 'Not Found', success: false })
+    reply.status(404).send({ error: 'Route not Found', success: false })
 }
