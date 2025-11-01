@@ -11,21 +11,32 @@ export const ErrorSchema = Type.Object({
     success: Type.Boolean(),
 })
 
+export const UserSchema = Type.Object({
+    id: IdSchema,
+    displayName: Type.Optional(Type.String()),
+    email: Type.Optional(Type.String({ format: 'email' })),
+    photoUrl: Type.Optional(Type.String({ format: 'uri' })),
+    createdAt: Type.Optional(Type.String({ format: 'date-time' })),
+    updatedAt: Type.Optional(Type.String({ format: 'date-time' })),
+})
+
 export const OrganizationSchema = Type.Object({
     id: IdSchema,
     name: Type.String({ minLength: 1, maxLength: 100 }),
-    favicon: Type.String({ format: 'uri' }),
-    logoSmall: Type.String({ format: 'uri' }),
-    languages: Type.Array(Type.String({ minLength: 2, maxLength: 5 })),
-    ownerUserId: IdSchema,
-    adminUserIds: Type.Array(IdSchema),
-    editorUserIds: Type.Array(IdSchema),
-    viewerUserIds: Type.Array(IdSchema),
-    disableSoloTalkRedirect: Type.Boolean(),
-    hideVotesUntilUserVote: Type.Boolean(),
-    chipColors: Type.Array(Type.String({ format: 'color' })),
-    createdAt: Type.String({ format: 'date-time' }),
-    updatedAt: Type.String({ format: 'date-time' }),
+    favicon: Type.Optional(Type.String({ format: 'uri' })),
+    logoSmall: Type.Optional(Type.String({ format: 'uri' })),
+    languages: Type.Optional(
+        Type.Array(Type.String({ minLength: 2, maxLength: 5 }))
+    ),
+    ownerUser: UserSchema,
+    adminUsers: Type.Array(UserSchema),
+    editorUsers: Type.Array(UserSchema),
+    viewerUsers: Type.Array(UserSchema),
+    disableSoloTalkRedirect: Type.Optional(Type.Boolean()),
+    hideVotesUntilUserVote: Type.Optional(Type.Boolean()),
+    chipColors: Type.Optional(Type.Array(Type.String({ format: 'color' }))),
+    createdAt: Type.Optional(Type.String({ format: 'date-time' })),
+    updatedAt: Type.Optional(Type.String({ format: 'date-time' })),
 })
 
 export const PaginationQuerySchema = Type.Object({

@@ -1,5 +1,6 @@
 import { FastifyPluginAsync } from 'fastify'
 import { OrganizationSchema, ErrorSchema } from '../../schemas'
+import { OrganizationDao } from '../../dao/OrganizationDao'
 
 export const getOrganizationByApiKeyRoute: FastifyPluginAsync = async (
     server
@@ -18,7 +19,6 @@ export const getOrganizationByApiKeyRoute: FastifyPluginAsync = async (
             },
         },
         async (request, reply) => {
-            // The organization is already hydrated by the API key plugin
             if (!request.organization) {
                 return reply.code(404).send({
                     error: 'Organization not found',
@@ -26,7 +26,13 @@ export const getOrganizationByApiKeyRoute: FastifyPluginAsync = async (
                 })
             }
 
-            return request.organization
+            const hydratedOrganization =
+                await OrganizationDao.hydrateOrganization(
+                    server.firebase,
+                    request.organization
+                )
+
+            return hydratedOrganization
         }
     )
 }

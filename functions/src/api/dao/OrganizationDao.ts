@@ -1,8 +1,10 @@
 import { App as FirebaseApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
-import { Organization } from '../../types/Organization'
+import { Organization, HydratedOrganization } from '../../types/Organization'
 import { NotFoundError } from '../others/Errors'
 import { APIKey } from '../plugins/APIKey'
+import { UserDao } from './UserDao'
+import { User } from '../../types/User'
 
 const ORGANIZATION_COLLECTION = 'organizations'
 
@@ -46,5 +48,48 @@ export class OrganizationDao {
             id: doc.docs[0].id,
             ...doc.docs[0].data(),
         } as Organization
+    }
+
+    public static async hydrateOrganization(
+        firebaseApp: FirebaseApp,
+        organization: Organization
+    ): Promise<HydratedOrganization> {
+        const allUserIds = [
+            organization.ownerUserId,
+            ...(organization.adminUserIds || []),
+            ...(organization.editorUserIds || []),
+            ...(organization.viewerUserIds || []),
+        ]
+
+        const usersMap = await UserDao.getUsersByIds(firebaseApp, allUserIds)
+
+        const getUser = (userId: string): User => {
+            return (
+                usersMap.get(userId) || {
+                    id: userId,
+                    displayName: undefined,
+                    email: undefined,
+                    photoUrl: undefined,
+                    createdAt: undefined,
+                    updatedAt: undefined,
+                }
+            )
+        }
+
+        const {
+            ownerUserId,
+            adminUserIds,
+            editorUserIds,
+            viewerUserIds,
+            ...rest
+        } = organization
+
+        return {
+            ...rest,
+            ownerUser: getUser(ownerUserId),
+            adminUsers: (adminUserIds || []).map(getUser),
+            editorUsers: (editorUserIds || []).map(getUser),
+            viewerUsers: (viewerUserIds || []).map(getUser),
+        }
     }
 }

@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import firebaseFunctionsTest from 'firebase-functions-test'
 import {
     checkPendingInviteAndProcessThem,
@@ -8,7 +9,6 @@ import {
     makeDocumentSnapshot,
 } from '../../testUtils/firestoreStub'
 import * as admin from 'firebase-admin'
-import { Response } from 'node-fetch'
 import { vi } from 'vitest'
 
 vi.mock('../../email/send')

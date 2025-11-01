@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import { applyInvites } from './applyInvites'
 import { getFirestoreMocksAndInit } from '../../testUtils/firestoreStub'
 import { InvitationType } from '../../types/InvitationType'
