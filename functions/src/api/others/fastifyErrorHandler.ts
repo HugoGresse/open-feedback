@@ -13,13 +13,13 @@ export const fastifyErrorHandler = async function (
     request: FastifyRequest,
     reply: FastifyReply
 ) {
-    console.error(request.originalUrl, error)
     if (error instanceof HttpError) {
         reply.header('content-type', 'application/json')
         reply
             .status(error.statusCode)
             .send(JSON.stringify({ error: error.message, success: false }))
     } else {
+        console.error(request.originalUrl, error)
         reply.header('content-type', 'application/json')
         if (error.code && error.statusCode) {
             reply.status(error.statusCode).send(

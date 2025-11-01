@@ -52,7 +52,6 @@ const authenticateRequest = async (
                 .send({ error: 'Unauthorized! Du balai !', success: false })
             return
         }
-        console.error('authenticateRequest', error)
         throw error
     }
 }
