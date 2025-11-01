@@ -5,11 +5,11 @@
  * Run with: npm run dev:api
  */
 
-import { createApiServer } from './api'
+import { createFastifyAPI } from './api'
 
 async function start() {
     try {
-        const server = await createApiServer()
+        const server = await createFastifyAPI()
 
         const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000
         const host = process.env.HOST || '0.0.0.0'

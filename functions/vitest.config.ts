@@ -1,10 +1,11 @@
-import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
-    plugins: [react()],
+    plugins: [],
     test: {
-        include: ['config/*.spec.js'],
+        include: ['src/api/**/*.spec.ts'],
         globals: true,
+        testTimeout: 1000,
+        hookTimeout: 1000,
     },
 })

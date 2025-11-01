@@ -1,5 +1,10 @@
 import fp from 'fastify-plugin'
-import fb, { credential } from 'firebase-admin'
+import {
+    applicationDefault,
+    cert,
+    getApps,
+    initializeApp,
+} from 'firebase-admin/app'
 import { FastifyInstance } from 'fastify'
 
 export function setupFirebase(
@@ -7,23 +12,21 @@ export function setupFirebase(
     options: any,
     next: () => void
 ) {
-    const cert = process.env.FIREBASE_SERVICE_ACCOUNT
+    const serrviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
         ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT as string)
         : undefined
 
     const appConfig = {
-        credential: cert
-            ? credential.cert(cert)
-            : fb.credential.applicationDefault(),
+        credential: serrviceAccount
+            ? cert(serrviceAccount)
+            : applicationDefault(),
     }
 
-    const firebaseApp = fb.initializeApp(appConfig)
-
-    if (!fastify.firebase) {
-        fastify.decorate('firebase', firebaseApp)
+    let existingApps = getApps()
+    if (!existingApps[0]) {
+        existingApps[0] = initializeApp(appConfig)
     }
-
-    fastify.firebase = firebaseApp
+    fastify.decorate('firebase', existingApps[0])
     next()
 }
 

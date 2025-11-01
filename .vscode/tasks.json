@@ -5,6 +5,14 @@
             "label": "start:local",
             "command": "npm",
             "args": ["run", "start:local"]
+        },
+        {
+            "label": "test:functions",
+            "command": "npm",
+            "options": {
+                "cwd": "${workspaceFolder}/functions"
+            },
+            "args": ["run", "test"]
         }
     ]
 }

@@ -1,6 +1,5 @@
 import fastifyPlugin from 'fastify-plugin'
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
-import { FastifyAuthFunction } from '@fastify/auth'
 import { Static, Type } from '@sinclair/typebox'
 import {
     BadRequestError,
@@ -10,14 +9,12 @@ import {
 import { APIKey } from './APIKey'
 import { OrganizationDao } from '../dao/OrganizationDao'
 import { ProjectDao } from '../dao/ProjectDao'
-import { Organization } from '../../types/Organization'
-import { Project } from '../../types/Project'
 
-const verifyRequest = async (
+const authenticateRequest = async (
     fastify: FastifyInstance,
     request: FastifyRequest,
     reply: FastifyReply
-): Promise<Organization | Project | null> => {
+): Promise<void> => {
     // Get API key from query param or header
     // @ts-expect-error just dont careeee
     const apiKeyQuery = request.query?.apiKey
@@ -31,16 +28,21 @@ const verifyRequest = async (
         const apiKey = new APIKey(apiKeyParam)
 
         if (apiKey.isOrganizationAPIKey()) {
-            return await OrganizationDao.getOrganizationFromApiKey(
-                fastify.firebase,
-                apiKey
-            )
+            const organization =
+                await OrganizationDao.getOrganizationFromApiKey(
+                    fastify.firebase,
+                    apiKey
+                )
+            request.setDecorator('organization', organization || undefined)
+            return
         }
         if (apiKey.isProjectAPIKey()) {
-            return await ProjectDao.getProjectFromApiKey(
+            const project = await ProjectDao.getProjectFromApiKey(
                 fastify.firebase,
                 apiKey
             )
+            request.setDecorator('project', project || undefined)
+            return
         }
         throw new BadRequestError('Unknown API key type!')
     } catch (error) {
@@ -48,9 +50,9 @@ const verifyRequest = async (
             reply
                 .code(401)
                 .send({ error: 'Unauthorized! Du balai !', success: false })
-            return null
+            return
         }
-        console.error('verifyRequest', error)
+        console.error('authenticateRequest', error)
         throw error
     }
 }
@@ -65,16 +67,30 @@ export type Error400_401_VerifyRequestType = Static<
 
 export const apiKeyPlugin = fastifyPlugin(
     (fastify: FastifyInstance, options: unknown, next: () => void) => {
-        fastify.decorate<FastifyAuthFunction>(
-            'verifyApiKey',
+        // Decorate request with organization and project properties
+        fastify.decorateRequest('organization', null)
+        fastify.decorateRequest('project', null)
+
+        // Register the authentication decorator
+        fastify.decorate(
+            'authenticateRequest',
             async (request: FastifyRequest, reply: FastifyReply) => {
-                await verifyRequest(fastify, request, reply)
+                await authenticateRequest(fastify, request, reply)
             }
         )
+
+        // Add onRequest hook to authenticate all requests
+        fastify.addHook(
+            'onRequest',
+            async (request: FastifyRequest, reply: FastifyReply) => {
+                await authenticateRequest(fastify, request, reply)
+            }
+        )
+
         next()
     },
     {
         fastify: '>=3.x',
-        name: 'verifyApiKey', // this is used by fastify-plugin to derive the property name
+        name: 'apiKeyPlugin',
     }
 )

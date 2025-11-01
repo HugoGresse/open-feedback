@@ -1,4 +1,5 @@
-import firebase from 'firebase-admin'
+import { App as FirebaseApp } from 'firebase-admin/app'
+import { getFirestore } from 'firebase-admin/firestore'
 import { Project } from '../../types/Project'
 import { NotFoundError } from '../others/Errors'
 import { APIKey } from '../plugins/APIKey'
@@ -7,10 +8,10 @@ const PROJECT_COLLECTION = 'projects'
 
 export class ProjectDao {
     public static async getProjectFromId(
-        firebaseApp: firebase.app.App,
+        firebaseApp: FirebaseApp,
         projectId: string
     ): Promise<Project> {
-        const db = firebaseApp.firestore()
+        const db = getFirestore(firebaseApp)
         const doc = await db.collection(PROJECT_COLLECTION).doc(projectId).get()
 
         if (!doc.exists) {
@@ -24,10 +25,10 @@ export class ProjectDao {
     }
 
     public static async getProjectFromApiKey(
-        firebaseApp: firebase.app.App,
+        firebaseApp: FirebaseApp,
         apiKey: APIKey
     ): Promise<Project | null> {
-        const db = firebaseApp.firestore()
+        const db = getFirestore(firebaseApp)
         const doc = await db
             .collection(PROJECT_COLLECTION)
             .where('apiKey', '==', apiKey.apiKey)

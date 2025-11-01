@@ -1,4 +1,5 @@
-import firebase from 'firebase-admin'
+import { App as FirebaseApp } from 'firebase-admin/app'
+import { getFirestore } from 'firebase-admin/firestore'
 import { Organization } from '../../types/Organization'
 import { NotFoundError } from '../others/Errors'
 import { APIKey } from '../plugins/APIKey'
@@ -7,10 +8,10 @@ const ORGANIZATION_COLLECTION = 'organizations'
 
 export class OrganizationDao {
     public static async getOrganizationFromId(
-        firebaseApp: firebase.app.App,
+        firebaseApp: FirebaseApp,
         organizationId: string
     ): Promise<Organization> {
-        const db = firebaseApp.firestore()
+        const db = getFirestore(firebaseApp)
         const organizationDoc = await db
             .collection(ORGANIZATION_COLLECTION)
             .doc(organizationId)
@@ -27,10 +28,11 @@ export class OrganizationDao {
     }
 
     public static async getOrganizationFromApiKey(
-        firebaseApp: firebase.app.App,
+        firebaseApp: FirebaseApp,
         apiKey: APIKey
     ): Promise<Organization | null> {
-        const db = firebaseApp.firestore()
+        const db = getFirestore(firebaseApp)
+
         const doc = await db
             .collection(ORGANIZATION_COLLECTION)
             .where('apiKey', '==', apiKey.apiKey)
