@@ -108,6 +108,12 @@
         "yup": "^0.32.9"
     },
     "overrides": {
+        "@storybook/csf-plugin": {
+            "esbuild": "0.25.12"
+        },
+        "storybook": {
+            "esbuild": "0.25.12"
+        },
         "@mui/styles": {
             "react": "react"
         }
