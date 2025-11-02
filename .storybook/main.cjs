@@ -6,7 +6,7 @@ module.exports = {
         '**/*.md',
     ],
 
-    addons: ['@storybook/addon-essentials', '@chromatic-com/storybook'],
+    addons: ['@chromatic-com/storybook', '@storybook/addon-docs'],
     staticDirs: ['../public'],
     framework: '@storybook/react-vite',
 
