@@ -71,7 +71,10 @@ describe('/organizations/me', () => {
             })
             const response = await fastify.inject({
                 method: 'GET',
-                url: `/me?apiKey='org_test-key-123'`,
+                url: `/me`,
+                headers: {
+                    'x-api-key': 'org_test-key-123',
+                },
             })
 
             expect(response.statusCode).toBe(400)
@@ -96,7 +99,10 @@ describe('/organizations/me', () => {
 
             const response = await fastify.inject({
                 method: 'GET',
-                url: `/organizations/me?apiKey=oforg_unknown-key`,
+                url: `/organizations/me`,
+                headers: {
+                    'x-api-key': 'oforg_unknown-key',
+                },
             })
 
             expect(mockWhere).toHaveBeenCalledWith(
@@ -150,7 +156,10 @@ describe('/organizations/me', () => {
 
             const response = await fastify.inject({
                 method: 'GET',
-                url: `/organizations/me?apiKey=oforg_test-key-123`,
+                url: `/organizations/me`,
+                headers: {
+                    'x-api-key': 'oforg_test-key-123',
+                },
             })
 
             expect(response.statusCode).toBe(200)
@@ -232,7 +241,10 @@ describe('/organizations/me', () => {
 
             const response = await fastify.inject({
                 method: 'GET',
-                url: `/organizations/me?apiKey=oforg_test-key-123`,
+                url: `/organizations/me`,
+                headers: {
+                    'x-api-key': 'oforg_test-key-123',
+                },
             })
 
             expect(response.statusCode).toBe(200)

@@ -13,6 +13,14 @@
                 "cwd": "${workspaceFolder}/functions"
             },
             "args": ["run", "test"]
+        },
+        {
+            "label": "serve:functions",
+            "command": "npm",
+            "options": {
+                "cwd": "${workspaceFolder}/functions"
+            },
+            "args": ["run", "serve"]
         }
     ]
 }

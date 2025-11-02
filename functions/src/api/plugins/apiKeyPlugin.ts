@@ -15,10 +15,10 @@ const authenticateRequest = async (
     request: FastifyRequest,
     reply: FastifyReply
 ): Promise<void> => {
-    // Get API key from query param or header
-    // @ts-expect-error just dont careeee
-    const apiKeyQuery = request.query?.apiKey
-    const apiKeyParam = apiKeyQuery
+    // Get API key from header
+    const apiKeyHeader = request.headers['x-api-key']
+    const apiKeyParam =
+        typeof apiKeyHeader === 'string' ? apiKeyHeader : apiKeyHeader?.[0]
 
     if (!apiKeyParam || apiKeyParam.length === 0) {
         throw new UnauthorizedError('Unauthorized! Du balai !')
