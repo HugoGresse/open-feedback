@@ -109,10 +109,13 @@
     },
     "overrides": {
         "@storybook/csf-plugin": {
-            "esbuild": "0.25.12"
+            "esbuild": "0.25.11"
         },
         "storybook": {
-            "esbuild": "0.25.12"
+            "esbuild": "0.25.11"
+        },
+        "vite": {
+            "esbuild": "0.25.11"
         },
         "@mui/styles": {
             "react": "react"

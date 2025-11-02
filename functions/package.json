@@ -47,5 +47,10 @@
         "typescript-eslint": "^8.46.2",
         "vitest": "^4.0.4"
     },
+    "overrides": {
+        "vitest": {
+            "esbuild": "0.25.12"
+        }
+    },
     "private": true
 }
