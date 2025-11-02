@@ -66,12 +66,9 @@ describe('/organizations/me', () => {
 
     describe('GET /organizations/me', () => {
         it('should return bad request with an unknown API key type', async () => {
-            mockOrganization({
-                apiKey: 'org_test-key-123',
-            })
             const response = await fastify.inject({
                 method: 'GET',
-                url: `/me`,
+                url: `/organizations/me`,
                 headers: {
                     'x-api-key': 'org_test-key-123',
                 },
@@ -126,7 +123,7 @@ describe('/organizations/me', () => {
         it('should return 401 when no API key is provided', async () => {
             const response = await fastify.inject({
                 method: 'GET',
-                url: '/me',
+                url: '/organizations/me',
             })
 
             expect(response.statusCode).toBe(401)

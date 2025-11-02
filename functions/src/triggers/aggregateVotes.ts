@@ -1,24 +1,37 @@
-import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 import { Vote, VoteData } from './models/vote'
+import {
+    onDocumentCreated,
+    onDocumentUpdated,
+} from 'firebase-functions/v2/firestore'
 
-export const aggregateVotesCreate = functions.firestore
-    .document('/projects/{projectId}/userVotes/{voteId}')
-    .onCreate((snapshot) => {
+export const aggregateVotesCreate = onDocumentCreated(
+    '/projects/{projectId}/userVotes/{voteId}',
+    (event) => {
+        const snapshot = event.data
+        if (!snapshot) {
+            return
+        }
         return incrementVoteAggregate(
             admin.firestore(),
             new Vote(snapshot.id, snapshot.data() as VoteData)
         )
-    })
+    }
+)
 
-export const aggregateVotesUpdate = functions.firestore
-    .document('/projects/{projectId}/userVotes/{voteId}')
-    .onUpdate((change) => {
+export const aggregateVotesUpdate = onDocumentUpdated(
+    '/projects/{projectId}/userVotes/{voteId}',
+    (event) => {
+        const change = event.data
+        if (!change) {
+            return
+        }
         return incrementVoteAggregate(
             admin.firestore(),
             new Vote(change.after.id, change.after.data() as VoteData)
         )
-    })
+    }
+)
 
 export const incrementVoteAggregate = (
     firestoreDb: FirebaseFirestore.Firestore,

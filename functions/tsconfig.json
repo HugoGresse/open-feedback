@@ -1,13 +1,14 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "NodeNext",
         "target": "es2022",
+        "moduleResolution": "nodenext",
+        "esModuleInterop": true,
         "noImplicitReturns": true,
         "noUnusedLocals": true,
         "outDir": "lib",
         "sourceMap": true,
         "strict": true,
-        "esModuleInterop": true,
         "resolveJsonModule": true,
         "typeRoots": ["./node_modules/@types"]
     },

@@ -1,6 +1,7 @@
 import { FastifyPluginAsync } from 'fastify'
 import { OrganizationSchema, ErrorSchema } from '../../schemas'
 import { OrganizationDao } from '../../dao/OrganizationDao'
+import { authenticateRequest } from '../../plugins/apiKeyPlugin'
 
 export const getOrganizationByApiKeyRoute: FastifyPluginAsync = async (
     server
@@ -17,6 +18,7 @@ export const getOrganizationByApiKeyRoute: FastifyPluginAsync = async (
                     404: ErrorSchema,
                 },
             },
+            preHandler: authenticateRequest,
         },
         async (request, reply) => {
             if (!request.organization) {

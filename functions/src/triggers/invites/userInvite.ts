@@ -1,4 +1,3 @@
-import * as functions from 'firebase-functions'
 import admin from 'firebase-admin'
 import send from '../../email/send'
 import { isEmpty } from 'lodash'
@@ -7,6 +6,7 @@ import { generateInviteEmail } from './generateInviteEmail'
 import { applyInvites } from './applyInvites'
 import { InvitationType } from '../../types/InvitationType'
 import { EmailInvite } from '../../types/EmailInvite'
+import { onDocumentCreated } from 'firebase-functions/v2/firestore'
 
 // userInviteCreated is called when an user as been invited to a project or an organization.
 // An email is sent to him with the invitation link.
@@ -17,9 +17,13 @@ import { EmailInvite } from '../../types/EmailInvite'
 // > userInviteCreated({projectId: "", projectName: "", originUserName: "", destinationUserInfo: ""})
 // - for organization
 // > userInviteCreated({organizationId: "", organizationName: "", originUserName: "", destinationUserInfo: ""})
-export const userInviteCreated = functions.firestore
-    .document('/invites/{inviteId}')
-    .onCreate(async (snapshot) => {
+export const userInviteCreated = onDocumentCreated(
+    '/invites/{inviteId}',
+    async (event) => {
+        const snapshot = event.data
+        if (!snapshot) {
+            return
+        }
         const appEnv = getAppEnv()
         const mailgunEnv = getMailgunEnv()
         const inviteId = snapshot.id
@@ -89,7 +93,8 @@ export const userInviteCreated = functions.firestore
         return Promise.reject(
             'Function failed due to not successful email send'
         )
-    })
+    }
+)
 
 // From a given user, it check if the user has pending invite for him, if so process it, add it to the linked project or
 // organization and complete the invite after

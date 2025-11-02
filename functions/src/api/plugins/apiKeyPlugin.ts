@@ -10,11 +10,12 @@ import { APIKey } from './APIKey'
 import { OrganizationDao } from '../dao/OrganizationDao'
 import { ProjectDao } from '../dao/ProjectDao'
 
-const authenticateRequest = async (
-    fastify: FastifyInstance,
+export const authenticateRequest = async (
     request: FastifyRequest,
     reply: FastifyReply
 ): Promise<void> => {
+    const fastify = request.server
+
     // Get API key from header
     const apiKeyHeader = request.headers['x-api-key']
     const apiKeyParam =
@@ -69,22 +70,6 @@ export const apiKeyPlugin = fastifyPlugin(
         // Decorate request with organization and project properties
         fastify.decorateRequest('organization', null)
         fastify.decorateRequest('project', null)
-
-        // Register the authentication decorator
-        fastify.decorate(
-            'authenticateRequest',
-            async (request: FastifyRequest, reply: FastifyReply) => {
-                await authenticateRequest(fastify, request, reply)
-            }
-        )
-
-        // Add onRequest hook to authenticate all requests
-        fastify.addHook(
-            'onRequest',
-            async (request: FastifyRequest, reply: FastifyReply) => {
-                await authenticateRequest(fastify, request, reply)
-            }
-        )
 
         next()
     },

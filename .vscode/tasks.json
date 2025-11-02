@@ -21,6 +21,14 @@
                 "cwd": "${workspaceFolder}/functions"
             },
             "args": ["run", "serve"]
+        },
+        {
+            "label": "build:functions",
+            "command": "npm",
+            "options": {
+                "cwd": "${workspaceFolder}/functions"
+            },
+            "args": ["run", "build"]
         }
     ]
 }

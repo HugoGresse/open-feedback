@@ -9,9 +9,7 @@
         "start": "npm run shell",
         "deploy": "firebase deploy --only functions",
         "logs": "firebase functions:log",
-        "test": "vitest",
-        "dev:api": "npm run build && node lib/api/standalone.js",
-        "dev:api:watch": "npm run build:watch & nodemon lib/api/standalone.js"
+        "test": "vitest"
     },
     "engines": {
         "node": "20"
@@ -24,29 +22,29 @@
         "@fastify/swagger-ui": "^5.2.3",
         "@fastify/type-provider-typebox": "^6.0.0",
         "@google-cloud/storage": "^5.11.1",
+        "@scalar/fastify-api-reference": "^1.38.1",
         "@sinclair/typebox": "^0.34.41",
         "@types/jest": "^27.4.0",
         "@types/jest-expect-message": "^1.0.3",
         "fastify": "^5.6.1",
         "fastify-plugin": "^5.1.0",
         "firebase": "^8.8.1",
-        "firebase-admin": "^12.1.0",
-        "firebase-functions": "^5.0.1",
-        "firebase-functions-test": "^3.2.0",
-        "firebase-tools": "13.6.0",
-        "form-data": "^3.0.1",
+        "firebase-admin": "^13.5.0",
+        "firebase-functions": "^6.6.0",
+        "firebase-functions-test": "^3.2.1",
+        "firebase-tools": "14.23.0",
         "lodash": "^4.17.21",
         "ts-custom-error": "^3.3.1"
     },
     "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^5.12.0",
-        "@typescript-eslint/parser": "^5.12.0",
-        "eslint": "^8.9.0",
+        "@eslint/js": "^9.39.0",
+        "eslint": "^9.39.0",
         "eslint-config-google": "^0.14.0",
-        "eslint-plugin-import": "^2.25.4",
+        "eslint-plugin-import": "^2.32.0",
         "firestore-vitest": "^0.20.2",
         "jest-expect-message": "^1.0.2",
         "typescript": "^5.9.3",
+        "typescript-eslint": "^8.46.2",
         "vitest": "^4.0.4"
     },
     "private": true
