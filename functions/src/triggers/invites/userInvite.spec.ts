@@ -7,6 +7,7 @@ import {
 import {
     getFirestoreMocksAndInit,
     makeDocumentSnapshot,
+    makeDocumentSnapshot2,
 } from '../../testUtils/firestoreStub'
 import * as admin from 'firebase-admin'
 import { vi } from 'vitest'
@@ -43,6 +44,7 @@ describe('userInviteCreated', () => {
     afterEach(() => {
         vi.clearAllMocks()
         vi.resetModules()
+        test.cleanup()
         process.env = { ...OLD_ENV }
         delete process.env.NODE_ENV
     })
@@ -66,7 +68,7 @@ describe('userInviteCreated', () => {
 
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
-        const snapshot = makeDocumentSnapshot(invite, `invites/${invite.id}`)
+        const snapshot = makeDocumentSnapshot2(invite, `invites/${invite.id}`)
         await expect(userInviteCreatedWrapped(snapshot)).rejects.toEqual(
             'firestore update failed'
         )
@@ -106,7 +108,7 @@ describe('userInviteCreated', () => {
 
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
-        const snapshot = makeDocumentSnapshot(invite, `invites/${invite.id}`)
+        const snapshot = makeDocumentSnapshot2(invite, `invites/${invite.id}`)
         await expect(userInviteCreatedWrapped(snapshot)).resolves.toEqual(
             'forEach not implemented or firebase issue'
         )

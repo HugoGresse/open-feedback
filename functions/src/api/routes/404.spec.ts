@@ -49,7 +49,7 @@ describe('/organizations/me', () => {
                 'text/html; charset=utf-8'
             )
 
-            expect(response.body).toContain('<title>OpenFeedback API</title>')
+            expect(response.body).toContain('"title": "OpenFeedback API"')
         })
     })
 })
