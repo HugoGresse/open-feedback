@@ -126,10 +126,14 @@ export const Header = ({ project }) => {
                     )}
                 </div>
                 <div className={classes.boxCenter}>
-                    <img className={classes.logo} src={project.logoSmall} />
+                    <img
+                        className={classes.logo}
+                        src={project.logoSmall}
+                        alt={`logo ${project.name}`}
+                    />
                     <Hidden lgDown>
                         <Typography
-                            variant="h2"
+                            variant="h1"
                             color="textPrimary"
                             aria-label={project.hideEventName && project.name}>
                             {!project.hideEventName && project.name}
