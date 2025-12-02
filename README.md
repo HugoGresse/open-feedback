@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=HugoGresse&project=open-feedback&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 <p align="center">
   <img src="/public/static/logos/openfeedback%20black%20orange-3x.png" alt="OpenFeedback logo" />
 </p>
