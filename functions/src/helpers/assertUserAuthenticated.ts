@@ -1,12 +1,8 @@
-import * as functions from 'firebase-functions'
-import { CallableContext } from 'firebase-functions/lib/common/providers/https'
+import { CallableRequest, HttpsError } from 'firebase-functions/v2/https'
 
-export const assertUserAuthenticated = (context: CallableContext): string => {
-    if (!(context.auth && context.auth.token)) {
-        throw new functions.https.HttpsError(
-            'unauthenticated',
-            'User not authentificated.'
-        )
+export const assertUserAuthenticated = (request: CallableRequest): string => {
+    if (!(request.auth && request.auth.token)) {
+        throw new HttpsError('unauthenticated', 'User not authenticated.')
     }
-    return context.auth.uid
+    return request.auth.uid
 }

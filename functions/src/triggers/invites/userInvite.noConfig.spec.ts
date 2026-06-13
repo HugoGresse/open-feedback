@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import firebaseFunctionsTest from 'firebase-functions-test'
 import { userInviteCreated } from './userInvite'
 import { makeDocumentSnapshot } from '../../testUtils/firestoreStub'

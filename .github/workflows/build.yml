@@ -3,39 +3,36 @@ name: Build project + unit test
 on: [push]
 
 jobs:
-  build:
+    build:
+        runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-node@v4
-      with:
-        node-version-file: .nvmrc
-        cache: 'npm'
-    - name: npm install (ci)
-      run: |
-        npm ci
-    - name: npm build
-      run: |
-        npm run build
-    - name: npm lint:i18n
-      run: |
-        npm run lint:i18n
-    - name: functions npm install (ci)
-      run: |
-          cd functions
-          npm ci
-    - name: npm test (Firestore rules and functions/)
-      run: |
-        npm run test
-    - name: build functions/
-      run: |
-        cd functions
-        npm run build
-    - name: run lighthouse ci
-      run: |
-          npm install -g @lhci/cli@0.14.x
-          lhci autorun --config=./lighthouse/lighthouserc.json
-      env:
-        LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: 'npm'
+            - name: npm install (ci)
+              run: |
+                  npm ci
+            - name: npm build
+              run: |
+                  npm run build
+            - name: npm lint:i18n
+              run: |
+                  npm run lint:i18n
+            - name: functions npm install (ci)
+              working-directory: ./functions
+              run: npm ci
+            - name: npm test (Firestore rules and functions/)
+              run: |
+                  npm run test
+            - name: build functions/
+              working-directory: ./functions
+              run: npm run build
+            - name: run lighthouse ci
+              run: |
+                  npm install -g @lhci/cli@0.14.x
+                  lhci autorun --config=./lighthouse/lighthouserc.json
+              env:
+                  LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

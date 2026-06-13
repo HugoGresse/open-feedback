@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions'
+import { onCall, HttpsError } from 'firebase-functions/v2/https'
 // @ts-ignore: no type declaration for firebase tools
 import firebaseTools from 'firebase-tools'
 import * as admin from 'firebase-admin'
@@ -7,13 +7,14 @@ import { getProject } from '../helpers/getProject'
 import { Project } from '../types/Project'
 import { getOrganization } from '../helpers/getOrganization'
 
-export const deleteProject = functions
-    .runWith({
+export const deleteProject = onCall(
+    {
         timeoutSeconds: 540,
-        memory: '2GB',
-    })
-    .https.onCall(async (data, context) => {
-        const uid = assertUserAuthenticated(context)
+        memory: '2GiB',
+    },
+    async (request) => {
+        const data = request.data
+        const uid = assertUserAuthenticated(request)
         const project = await getProject(data.projectId)
 
         console.log(
@@ -33,7 +34,8 @@ export const deleteProject = functions
             .then(() => {
                 return 'Delete successful'
             })
-    })
+    }
+)
 
 const deleteProjectStorage = async (projectId: string) => {
     await admin
@@ -82,5 +84,5 @@ const assertProjectDeletionGranted = async (project: Project, uid: string) => {
             'Only the event owner or an organization editor/admin/owner can delete this event.'
     }
 
-    throw new functions.https.HttpsError('permission-denied', message)
+    throw new HttpsError('permission-denied', message)
 }

@@ -12,11 +12,17 @@ export const makeDocumentSnapshot = (
     }
 }
 
-export const getFirestoreMocksAndInit = () => {
-    const firestoreStub = vi.fn(() => ({
-        collection,
-    }))
+// Used for specific event ... in tests
+export const makeDocumentSnapshot2 = (
+    data: Record<any, any> | null,
+    path: string
+): any => {
+    return {
+        data: data,
+    }
+}
 
+export const getFirestoreMocksAndInit = () => {
     const collection = vi.fn((path) => {
         return {
             where,
@@ -67,6 +73,23 @@ export const getFirestoreMocksAndInit = () => {
     const set = vi.fn((): Promise<any> => Promise.resolve(true))
     const update = vi.fn((): Promise<any> => Promise.resolve(true))
     const onSnapshot = vi.fn((): Promise<any> => Promise.resolve(true))
+
+    const firestoreStub = vi.fn(() => ({
+        collection,
+        snapshot_: (a, b, c, d) => {
+            return {
+                data: () => {
+                    const newObj = {}
+                    Object.keys(a.fields).forEach((key: string) => {
+                        const field = a.fields[key]
+                        newObj[key] = field.stringValue
+                    })
+
+                    return newObj
+                },
+            }
+        },
+    }))
 
     replaceFirestoreByStub(firestoreStub)
 

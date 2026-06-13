@@ -5,6 +5,30 @@
             "label": "start:local",
             "command": "npm",
             "args": ["run", "start:local"]
+        },
+        {
+            "label": "test:functions",
+            "command": "npm",
+            "options": {
+                "cwd": "${workspaceFolder}/functions"
+            },
+            "args": ["run", "test"]
+        },
+        {
+            "label": "serve:functions",
+            "command": "npm",
+            "options": {
+                "cwd": "${workspaceFolder}/functions"
+            },
+            "args": ["run", "serve"]
+        },
+        {
+            "label": "build:functions",
+            "command": "npm",
+            "options": {
+                "cwd": "${workspaceFolder}/functions"
+            },
+            "args": ["run", "build"]
         }
     ]
 }

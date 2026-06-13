@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import { incrementVoteAggregate } from './aggregateVotes'
 import {
     Vote,
