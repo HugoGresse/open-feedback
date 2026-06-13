@@ -71,9 +71,17 @@ describe('authenticateRequest setDecorator', () => {
             id: 'proj_123',
             data: () => ({ id: 'proj_123' }),
         }
+        // projects/{projectId}/private/integration: the ref must look like a
+        // real project-owned doc to pass the path guard.
+        const projectRef = {
+            id: 'proj_123',
+            parent: { id: 'projects' },
+            get: () => projectDoc,
+        }
         const integrationDoc = {
             ref: {
-                parent: { parent: { get: () => projectDoc } },
+                id: 'integration',
+                parent: { parent: projectRef },
                 set: () => Promise.resolve(),
             },
         }
