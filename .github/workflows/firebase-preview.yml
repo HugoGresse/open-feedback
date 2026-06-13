@@ -16,6 +16,8 @@ jobs:
             checks: write
             contents: read
             pull-requests: write
+        env:
+            FIREBASE_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_OPEN_FEEDBACK_42 }}
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
@@ -26,10 +28,13 @@ jobs:
               run: npm ci
             - name: npm build
               run: npm run build
+            # Skip the deploy (don't fail the job) until the service-account
+            # secret is configured in the repo settings.
             - name: Deploy to Firebase Hosting preview channel
+              if: ${{ env.FIREBASE_SA != '' }}
               uses: FirebaseExtended/action-hosting-deploy@v0
               with:
                   repoToken: ${{ secrets.GITHUB_TOKEN }}
-                  firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_OPEN_FEEDBACK_42 }}
+                  firebaseServiceAccount: ${{ env.FIREBASE_SA }}
                   projectId: open-feedback-42
                   expires: 7d

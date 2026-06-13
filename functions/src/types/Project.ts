@@ -4,9 +4,15 @@ export interface Project {
     owner: string
     members: string[]
     organizationId?: string
-    // API key granting access to this event through the public API.
-    apiKey?: string
-    // Last time the API key was used to authenticate a request (ISO string or
-    // Firestore Timestamp). Written by the API auth layer when a key is used.
+}
+
+/**
+ * Member-only integration data for a project, stored in the private subcollection
+ * `projects/{projectId}/private/integration` (NOT on the world-readable project
+ * doc). The API auth layer resolves a key to its project and stamps
+ * `apiKeyLastUsedAt` (ISO 8601 string) on use.
+ */
+export interface ProjectIntegration {
+    apiKey: string
     apiKeyLastUsedAt?: string
 }

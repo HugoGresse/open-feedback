@@ -27,7 +27,6 @@ export const newProject =
         projectData.logoSmall = `${window.location.protocol}//${window.location.host}/android-chrome-192x192.png`
         projectData.hideVotesUntilUserVote = false
         projectData.displayFullDates = false
-        projectData.apiKey = generateProjectApiKey()
 
         if (
             organizationId !== NO_ORGANIZATION_FAKE_ID &&
@@ -50,10 +49,20 @@ export const newProject =
             }
         }
 
-        return await fireStoreMainInstance
+        // Write the project doc and its (member-only) API key atomically. The
+        // key goes in a private subcollection, never on the world-readable
+        // project doc.
+        const projectRef = fireStoreMainInstance
             .collection('projects')
             .doc(projectId)
-            .set(projectData)
+        const batch = fireStoreMainInstance.batch()
+        batch.set(projectRef, projectData)
+        batch.set(projectRef.collection('private').doc('integration'), {
+            apiKey: generateProjectApiKey(),
+        })
+
+        return await batch
+            .commit()
             .then(() => {
                 dispatch(
                     addNotification({

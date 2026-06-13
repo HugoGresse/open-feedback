@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import clipboardCopy from 'clipboard-copy'
@@ -20,21 +20,21 @@ import OFButton from '../../../baseComponents/button/OFButton.jsx'
 import SimpleDialog from '../../../baseComponents/layouts/SimpleDialog.jsx'
 import LoaderMatchParent from '../../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import { getSelectedProjectSelector } from '../../core/projectSelectors'
-import { updateProjectApiKey } from '../../core/actions/updateProjectApiKey'
+import {
+    fetchProjectIntegration,
+    updateProjectApiKey,
+} from '../../core/actions/updateProjectApiKey'
 import { addNotification } from '../../../notification/notifcationActions'
 
-export const API_DOCS_URL = 'https://api-open-feedback-42-ew.a.run.app/'
+export const API_DOCS_URL =
+    import.meta.env.VITE_API_DOCS_URL ||
+    'https://api-open-feedback-42-ew.a.run.app/'
 
 interface FirestoreTimestamp {
     toDate: () => Date
 }
 
 type LastUsedValue = FirestoreTimestamp | string | number | null | undefined
-
-interface ProjectWithApiKey {
-    apiKey?: string
-    apiKeyLastUsedAt?: LastUsedValue
-}
 
 const hasToDate = (value: unknown): value is FirestoreTimestamp =>
     typeof (value as FirestoreTimestamp)?.toDate === 'function'
@@ -55,27 +55,60 @@ const Integration: React.FC = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const project = useSelector(getSelectedProjectSelector) as
-        | ProjectWithApiKey
+        | { id: string }
         | null
         | undefined
+    const projectId = project?.id
 
+    const [loaded, setLoaded] = useState(false)
+    const [apiKey, setApiKey] = useState<string | undefined>()
+    const [lastUsedRaw, setLastUsedRaw] = useState<LastUsedValue>()
     const [revealed, setRevealed] = useState(false)
     const [rotateOpen, setRotateOpen] = useState(false)
     const [loading, setLoading] = useState(false)
 
-    if (!project) {
+    useEffect(() => {
+        if (!projectId) {
+            return
+        }
+        let cancelled = false
+        setLoaded(false)
+        fetchProjectIntegration(projectId)
+            .then((integration) => {
+                if (cancelled) {
+                    return
+                }
+                setApiKey(integration?.apiKey)
+                setLastUsedRaw(integration?.apiKeyLastUsedAt as LastUsedValue)
+            })
+            .finally(() => {
+                if (!cancelled) {
+                    setLoaded(true)
+                }
+            })
+        return () => {
+            cancelled = true
+        }
+    }, [projectId])
+
+    if (!project || !loaded) {
         return <LoaderMatchParent />
     }
 
-    const apiKey = project.apiKey
-    const lastUsed = formatLastUsed(project.apiKeyLastUsedAt)
+    const lastUsed = formatLastUsed(lastUsedRaw)
 
     const generateOrRotate = async () => {
         setLoading(true)
-        await dispatch(updateProjectApiKey() as never)
+        const newKey = (await dispatch(
+            updateProjectApiKey() as never
+        )) as unknown as string | void
         setLoading(false)
         setRotateOpen(false)
-        setRevealed(true)
+        if (newKey) {
+            setApiKey(newKey)
+            setLastUsedRaw(null)
+            setRevealed(true)
+        }
     }
 
     const copyKey = () => {
