@@ -28,10 +28,12 @@ jobs:
               run: npm ci
             - name: npm build
               run: npm run build
-            # Skip the deploy (don't fail the job) until the service-account
-            # secret is configured in the repo settings.
+            # Skip the deploy when the service-account secret is absent.
+            # Best-effort: a deploy failure (e.g. the Firebase Hosting API not
+            # yet enabled on the project) must not fail the PR check.
             - name: Deploy to Firebase Hosting preview channel
               if: ${{ env.FIREBASE_SA != '' }}
+              continue-on-error: true
               uses: FirebaseExtended/action-hosting-deploy@v0
               with:
                   repoToken: ${{ secrets.GITHUB_TOKEN }}
