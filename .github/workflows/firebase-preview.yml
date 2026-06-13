@@ -1,0 +1,35 @@
+name: Deploy PR preview to Firebase Hosting
+
+on: pull_request
+
+# A newer push to the same PR cancels the previous preview build.
+concurrency:
+    group: preview-${{ github.event.pull_request.number }}
+    cancel-in-progress: true
+
+jobs:
+    preview:
+        runs-on: ubuntu-latest
+        # Secrets are not available to PRs from forks, so skip those.
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+        permissions:
+            checks: write
+            contents: read
+            pull-requests: write
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: 'npm'
+            - name: npm install (ci)
+              run: npm ci
+            - name: npm build
+              run: npm run build
+            - name: Deploy to Firebase Hosting preview channel
+              uses: FirebaseExtended/action-hosting-deploy@v0
+              with:
+                  repoToken: ${{ secrets.GITHUB_TOKEN }}
+                  firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_OPEN_FEEDBACK_42 }}
+                  projectId: open-feedback-42
+                  expires: 7d
