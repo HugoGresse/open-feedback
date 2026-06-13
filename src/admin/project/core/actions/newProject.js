@@ -6,6 +6,7 @@ import {
 import { getUserSelector } from '../../../auth/authSelectors'
 import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase.ts'
 import { newRandomHexColor } from '../../../../utils/colorsUtils'
+import { generateProjectApiKey } from '../../../../utils/generateProjectApiKey'
 import { addNotification } from '../../../notification/notifcationActions'
 import { trackNewProject } from '../../../utils/track'
 import { NO_ORGANIZATION_FAKE_ID } from '../../../organization/core/organizationConstants'
@@ -26,6 +27,7 @@ export const newProject =
         projectData.logoSmall = `${window.location.protocol}//${window.location.host}/android-chrome-192x192.png`
         projectData.hideVotesUntilUserVote = false
         projectData.displayFullDates = false
+        projectData.apiKey = generateProjectApiKey()
 
         if (
             organizationId !== NO_ORGANIZATION_FAKE_ID &&

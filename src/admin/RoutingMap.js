@@ -31,6 +31,10 @@ const RoutingMap = {
         i18key: 'rooting.settingUsers',
         url: '/setting/users/',
     },
+    settingIntegration: {
+        i18key: 'rooting.settingIntegration',
+        url: '/setting/integration/',
+    },
 }
 export default RoutingMap
 
