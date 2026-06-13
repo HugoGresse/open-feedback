@@ -49,20 +49,23 @@ export const newProject =
             }
         }
 
-        // Write the project doc and its (member-only) API key atomically. The
-        // key goes in a private subcollection, never on the world-readable
-        // project doc.
+        // Create the project doc first, then its (member-only) API key in a
+        // private subcollection — never on the world-readable project doc. The
+        // writes must be sequential, not batched: the private-doc create rule
+        // does get(project), which in a batch would see the project as
+        // not-yet-created and fail.
         const projectRef = fireStoreMainInstance
             .collection('projects')
             .doc(projectId)
-        const batch = fireStoreMainInstance.batch()
-        batch.set(projectRef, projectData)
-        batch.set(projectRef.collection('private').doc('integration'), {
-            apiKey: generateProjectApiKey(),
-        })
 
-        return await batch
-            .commit()
+        return await projectRef
+            .set(projectData)
+            .then(() =>
+                projectRef
+                    .collection('private')
+                    .doc('integration')
+                    .set({ apiKey: generateProjectApiKey() })
+            )
             .then(() => {
                 dispatch(
                     addNotification({
