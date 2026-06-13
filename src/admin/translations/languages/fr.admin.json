@@ -172,7 +172,24 @@
         "settingEvent": "Évènement & thème",
         "settingVotingform": "Bulletin de vote",
         "settingSetup": "Paramètres",
-        "settingUsers": "Utilisateurs"
+        "settingUsers": "Utilisateurs",
+        "settingIntegration": "Intégration"
+    },
+    "settingsIntegration": {
+        "title": "Intégration API",
+        "description": "Utilisez une clé API pour accéder aux données de cet évènement via l'API OpenFeedback.",
+        "documentationLink": "Consulter la documentation de l'API",
+        "apiKey": "Clé API",
+        "noKey": "Aucune clé API n'a encore été générée pour cet évènement.",
+        "generateKey": "Générer une clé API",
+        "rotateKey": "Renouveler la clé",
+        "rotateConfirmTitle": "Renouveler la clé API ?",
+        "rotateConfirmBody": "La clé actuelle cessera immédiatement de fonctionner et toute intégration l'utilisant sera interrompue. Une nouvelle clé sera générée.",
+        "toggleVisibility": "Afficher ou masquer la clé API",
+        "lastUsed": "Dernière utilisation : {{date}}",
+        "neverUsed": "Jamais utilisée",
+        "keyUpdated": "Clé API mise à jour",
+        "keyCopied": "Clé API copiée dans le presse-papier"
     },
     "settingsEvent": {
         "cancel": "Annuler",

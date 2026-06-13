@@ -24,6 +24,7 @@ import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver'
 import SettingsIcon from '@mui/icons-material/Settings'
 import SlideshowIcon from '@mui/icons-material/Slideshow'
 import CommentIcon from '@mui/icons-material/Comment'
+import ExtensionIcon from '@mui/icons-material/Extension'
 import IconButton from '@mui/material/IconButton'
 import OFMenuItem from './OFMenuItem.jsx'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
@@ -192,6 +193,12 @@ const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                                 iconClassName={classes.listItemIcon}
                                 icon={<PeopleIcon />}
                                 to={`${baseUrl}/${selectedProjectId}${RoutingMap.settingUsers.url}`}
+                            />
+                            <OFMenuItem
+                                text={t(RoutingMap.settingIntegration.i18key)}
+                                iconClassName={classes.listItemIcon}
+                                icon={<ExtensionIcon />}
+                                to={`${baseUrl}/${selectedProjectId}${RoutingMap.settingIntegration.url}`}
                             />
                         </List>
                         <Divider />

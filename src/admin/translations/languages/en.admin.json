@@ -172,7 +172,24 @@
         "settingEvent": "Event & Theme",
         "settingVotingform": "Voting Form",
         "settingSetup": "Settings",
-        "settingUsers": "Users"
+        "settingUsers": "Users",
+        "settingIntegration": "Integration"
+    },
+    "settingsIntegration": {
+        "title": "API integration",
+        "description": "Use an API key to access this event's data through the OpenFeedback API.",
+        "documentationLink": "Read the API documentation",
+        "apiKey": "API key",
+        "noKey": "No API key has been generated for this event yet.",
+        "generateKey": "Generate API key",
+        "rotateKey": "Rotate key",
+        "rotateConfirmTitle": "Rotate API key?",
+        "rotateConfirmBody": "The current key will stop working immediately and any integration using it will break. A new key will be generated.",
+        "toggleVisibility": "Toggle API key visibility",
+        "lastUsed": "Last used: {{date}}",
+        "neverUsed": "Never used yet",
+        "keyUpdated": "API key updated",
+        "keyCopied": "API key copied to clipboard"
     },
     "settingsEvent": {
         "cancel": "Cancel",
