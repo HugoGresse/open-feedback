@@ -60,11 +60,13 @@ jobs:
             echo "VITE_DATABASE_URL=$CYPRESS_VITE_DATABASE_URL" >> .env.test.local
             echo "VITE_PROJECT_ID=$CYPRESS_VITE_PROJECT_ID" >> .env.test.local
             echo "VITE_STORAGE_BUCKET=$CYPRESS_VITE_STORAGE_BUCKET" >> .env.test.local
-            echo "VITE_EMULATORS=true" >> .env.test.local
+            VITE_EMULATORS_VALUE="$(grep '^VITE_EMULATORS=' .env | cut -d'=' -f2-)"
+            if [ -z "$VITE_EMULATORS_VALUE" ]; then VITE_EMULATORS_VALUE=false; fi
+            echo "VITE_EMULATORS=$VITE_EMULATORS_VALUE" >> .env.test.local
+            echo "VITE_EMULATORS=$VITE_EMULATORS_VALUE" >> "$GITHUB_ENV"
             cat .env.test.local
       env:
 #          GOOGLE_APPLICATION_CREDENTIALS: serviceAccount.json
-          VITE_EMULATORS: true
           CYPRESS_VITE_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
           CYPRESS_VITE_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
           CYPRESS_VITE_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
@@ -84,6 +86,6 @@ jobs:
         parallel: true
       env:
 #        GOOGLE_APPLICATION_CREDENTIALS: serviceAccount.json
-        VITE_EMULATORS: true
+        VITE_EMULATORS: ${{ env.VITE_EMULATORS }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_DASHBOARD_KEY }}
