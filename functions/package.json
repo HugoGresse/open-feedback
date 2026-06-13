@@ -4,6 +4,7 @@
         "lint": "",
         "build": "tsc",
         "build:watch": "tsc --watch",
+        "dev:api": "npm run build && node lib/api/standalone.js",
         "serve": "npm run build && firebase emulators:start --only functions",
         "shell": "npm run build && firebase functions:shell",
         "start": "npm run shell",

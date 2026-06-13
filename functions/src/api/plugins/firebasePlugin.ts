@@ -12,13 +12,13 @@ export function setupFirebase(
     options: any,
     next: () => void
 ) {
-    const serrviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
+    const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
         ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT as string)
         : undefined
 
     const appConfig = {
-        credential: serrviceAccount
-            ? cert(serrviceAccount)
+        credential: serviceAccount
+            ? cert(serviceAccount)
             : applicationDefault(),
     }
 

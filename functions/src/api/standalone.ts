@@ -19,10 +19,7 @@ async function start() {
         console.log(
             `🚀 OpenFeedback API Server running at http://${host}:${port}`
         )
-        console.log(
-            `📚 API Documentation available at http://${host}:${port}/docs`
-        )
-        console.log(`❤️  Health check at http://${host}:${port}/health`)
+        console.log(`📚 API Documentation available at http://${host}:${port}/`)
 
         // Graceful shutdown
         const signals = ['SIGINT', 'SIGTERM']
