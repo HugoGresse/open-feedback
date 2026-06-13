@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux'
 import Layout404 from '../baseComponents/Layout404.jsx'
 import Moderation from './moderation/Moderation.jsx'
 import ProjectUsers from './settings/users/ProjectUsers.jsx'
-import Integration from './settings/integration/Integration.jsx'
+import Integration from './settings/integration/Integration.tsx'
 import { getProject } from './core/actions/getProject'
 
 const ProjectApp = () => {

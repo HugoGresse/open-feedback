@@ -25,23 +25,39 @@ import { addNotification } from '../../../notification/notifcationActions'
 
 export const API_DOCS_URL = 'https://api-open-feedback-42-ew.a.run.app/'
 
-const formatLastUsed = (value) => {
+interface FirestoreTimestamp {
+    toDate: () => Date
+}
+
+type LastUsedValue = FirestoreTimestamp | string | number | null | undefined
+
+interface ProjectWithApiKey {
+    apiKey?: string
+    apiKeyLastUsedAt?: LastUsedValue
+}
+
+const hasToDate = (value: unknown): value is FirestoreTimestamp =>
+    typeof (value as FirestoreTimestamp)?.toDate === 'function'
+
+const formatLastUsed = (value: LastUsedValue): string | null => {
     if (!value) {
         return null
     }
     // Firestore Timestamp -> Date, otherwise assume a parseable string/number.
-    const date =
-        typeof value.toDate === 'function' ? value.toDate() : new Date(value)
+    const date = hasToDate(value) ? value.toDate() : new Date(value)
     if (Number.isNaN(date.getTime())) {
         return null
     }
     return date.toLocaleString()
 }
 
-const Integration = () => {
+const Integration: React.FC = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
-    const project = useSelector(getSelectedProjectSelector)
+    const project = useSelector(getSelectedProjectSelector) as
+        | ProjectWithApiKey
+        | null
+        | undefined
 
     const [revealed, setRevealed] = useState(false)
     const [rotateOpen, setRotateOpen] = useState(false)
@@ -56,13 +72,16 @@ const Integration = () => {
 
     const generateOrRotate = async () => {
         setLoading(true)
-        await dispatch(updateProjectApiKey())
+        await dispatch(updateProjectApiKey() as never)
         setLoading(false)
         setRotateOpen(false)
         setRevealed(true)
     }
 
     const copyKey = () => {
+        if (!apiKey) {
+            return
+        }
         clipboardCopy(apiKey)
         dispatch(
             addNotification({
