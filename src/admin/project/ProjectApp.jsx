@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux'
 import Layout404 from '../baseComponents/Layout404.jsx'
 import Moderation from './moderation/Moderation.jsx'
 import ProjectUsers from './settings/users/ProjectUsers.jsx'
+import Integration from './settings/integration/Integration.tsx'
 import { getProject } from './core/actions/getProject'
 
 const ProjectApp = () => {
@@ -78,6 +79,12 @@ const ProjectApp = () => {
                         exact
                         path={RoutingMap.settingUsers.url}
                         element={<ProjectUsers/>}
+                    />
+
+                    <Route
+                        exact
+                        path={RoutingMap.settingIntegration.url}
+                        element={<Integration/>}
                     />
 
                     <Route component={Layout404} />
