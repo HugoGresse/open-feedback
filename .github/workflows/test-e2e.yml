@@ -60,7 +60,7 @@ jobs:
             echo "VITE_DATABASE_URL=$CYPRESS_VITE_DATABASE_URL" >> .env.test.local
             echo "VITE_PROJECT_ID=$CYPRESS_VITE_PROJECT_ID" >> .env.test.local
             echo "VITE_STORAGE_BUCKET=$CYPRESS_VITE_STORAGE_BUCKET" >> .env.test.local
-            VITE_EMULATORS_VALUE="$(grep '^VITE_EMULATORS=' .env | cut -d'=' -f2-)"
+            VITE_EMULATORS_VALUE="$(grep -s '^VITE_EMULATORS=' .env | cut -d'=' -f2-)"
             if [ -z "$VITE_EMULATORS_VALUE" ]; then VITE_EMULATORS_VALUE=false; fi
             echo "VITE_EMULATORS=$VITE_EMULATORS_VALUE" >> .env.test.local
             echo "VITE_EMULATORS=$VITE_EMULATORS_VALUE" >> "$GITHUB_ENV"
