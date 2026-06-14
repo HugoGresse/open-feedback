@@ -23,18 +23,35 @@ jobs:
           node-version-file: .nvmrc
           cache: 'npm'
 
+    # firebase-tools 15.x requires JDK 21+ to run the Firestore/Auth emulators.
+    - uses: actions/setup-java@v4
+      with:
+          distribution: temurin
+          java-version: '21'
+
     - uses: 'google-github-actions/auth@v2'
       with:
           credentials_json: '${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}'
 
-    - name: "Create .runtimeconfig.json"
-      run: 'echo "$RUNTIME_CONFIG_TEST" > functions/.runtimeconfig.json'
+    # Functions now read config from process.env (functions/.env*), not the
+    # deprecated functions.config()/.runtimeconfig.json. Convert the legacy
+    # nested config secret into the dotenv the emulator loads (.env.local).
+    - name: "Create functions/.env.local"
+      run: |
+            echo "$RUNTIME_CONFIG_TEST" | jq -r '
+              "APP_ENV=\(.app.env // "test")",
+              "APP_URL=\(.app.url // "")",
+              "APP_CONTACTEMAIL=\(.app.contactemail // "")",
+              "APP_RECAPTCHAV3SECRET=\(.app.recaptchav3secret // "")",
+              "MAILGUN_DOMAIN=\(.mailgun.domain // "")",
+              "MAILGUN_KEY=\(.mailgun.key // "")",
+              "MAILGUN_API=\(.mailgun.api // "")",
+              "OPSGENIE_KEY=\(.opsgenie.key // "")",
+              "OPSGENIE_API=\(.opsgenie.api // "")"
+            ' > functions/.env.local
       shell: bash
       env:
           RUNTIME_CONFIG_TEST: ${{secrets.RUNTIME_CONFIG_TEST}}
-    - name: "test"
-      run: 'cat functions/.runtimeconfig.json'
-      shell: bash
 
     - name: Install functions dependencies
       run: |

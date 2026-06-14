@@ -12,6 +12,12 @@ jobs:
               with:
                   node-version-file: .nvmrc
                   cache: 'npm'
+            # firebase-tools 15.x requires JDK 21+ to run the Firestore emulator
+            # used by `npm test`.
+            - uses: actions/setup-java@v4
+              with:
+                  distribution: temurin
+                  java-version: '21'
             - name: npm install (ci)
               run: |
                   npm ci

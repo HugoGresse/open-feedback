@@ -10,8 +10,8 @@ import { onDocumentCreated } from 'firebase-functions/v2/firestore'
 
 // userInviteCreated is called when an user as been invited to a project or an organization.
 // An email is sent to him with the invitation link.
-// To test
-// > firebase functions:config:get > .runtimeconfig.json
+// To test (config comes from functions/.env* via process.env, not the
+// deprecated functions.config()):
 // > firebase functions:shell
 // - for event/project
 // > userInviteCreated({projectId: "", projectName: "", originUserName: "", destinationUserInfo: ""})
