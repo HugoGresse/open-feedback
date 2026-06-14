@@ -4,6 +4,7 @@ import OpenfeedbackApi from './openfeedback/OpefeedbackApi'
 
 export const PROJECT_TYPE_HOVERBOARDV2 = 'hoverboardv2'
 export const PROJECT_TYPE_JSONURL = 'jsonurl'
+export const PROJECT_TYPE_JSON = 'json'
 export const PROJECT_TYPE_OPENFEEDBACK = 'openfeedbackv1'
 
 const notImplementApi = {
