@@ -83,9 +83,14 @@ export class OrganizationDao {
             throw new NotFoundError('Organization not found')
         }
 
+        // Strip the deprecated org-doc apiKey so a legacy value can never be
+        // spread into the hydrated response and leaked through /organizations/me.
+        const { apiKey: _legacyApiKey, ...organizationData } =
+            organizationDoc.data() || {}
+
         return {
             id: organizationDoc.id,
-            ...organizationDoc.data(),
+            ...organizationData,
         } as Organization
     }
 

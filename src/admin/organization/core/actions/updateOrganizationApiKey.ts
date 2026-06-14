@@ -37,6 +37,15 @@ export const updateOrganizationApiKey =
     () =>
     (dispatch: Dispatch, getState: () => unknown): Promise<string | void> => {
         const organizationId = getSelectedOrganizationIdSelector(getState())
+        if (!organizationId) {
+            dispatch(
+                addNotification({
+                    type: 'error',
+                    i18nkey: 'organization.saveFail',
+                })
+            )
+            return Promise.resolve()
+        }
         const apiKey = generateOrgApiKey()
 
         return integrationDocRef(organizationId)

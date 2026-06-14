@@ -194,6 +194,26 @@ describe('/organizations/me', () => {
         expect(body.name).toBe('Test Organization')
     })
 
+    it('never leaks a legacy apiKey stored on the org doc', async () => {
+        mockOrgKeyResolves({
+            ...baseOrganization,
+            apiKey: 'oforg_legacy-should-not-leak',
+        })
+
+        const response = await fastify.inject({
+            method: 'GET',
+            url: `/organizations/me`,
+            headers: {
+                'x-api-key': 'oforg_test-key-123',
+            },
+        })
+
+        expect(response.statusCode).toBe(200)
+        expect(JSON.parse(response.body)).not.toHaveProperty('apiKey')
+        // Defense in depth: the secret must not appear anywhere in the payload.
+        expect(response.body).not.toContain('oforg_legacy-should-not-leak')
+    })
+
     it('should handle missing users gracefully', async () => {
         mockOrganization(
             {
