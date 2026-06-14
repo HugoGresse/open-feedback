@@ -14,6 +14,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci && npm run build
+        # Vite inlines these into the client bundle at build time, so they are
+        # PUBLIC in the deployed preview — never put server-only secrets here.
+        # Without them the preview app ships an empty Firebase/runtime config.
+        # Previews use the development config (OF_DEV_VITE_*); emulators are
+        # forced off because a deployed cloud preview cannot reach a local
+        # emulator suite.
+        env:
+          VITE_ADMIN_EMAIL: ${{ secrets.OF_DEV_VITE_ADMIN_EMAIL }}
+          VITE_RECAPTCHAV3_SITE_KEY: ${{ secrets.OF_DEV_VITE_RECAPTCHAV3_SITE_KEY }}
+          VITE_APPID: ${{ secrets.OF_DEV_VITE_APPID }}
+          VITE_API_KEY: ${{ secrets.OF_DEV_VITE_API_KEY }}
+          VITE_AUTH_DOMAIN: ${{ secrets.OF_DEV_VITE_AUTH_DOMAIN }}
+          VITE_DATABASE_URL: ${{ secrets.OF_DEV_VITE_DATABASE_URL }}
+          VITE_PROJECT_ID: ${{ secrets.OF_DEV_VITE_PROJECT_ID }}
+          VITE_STORAGE_BUCKET: ${{ secrets.OF_DEV_VITE_STORAGE_BUCKET }}
+          VITE_MEASUREMENT_ID: ${{ secrets.OF_DEV_VITE_MEASUREMENT_ID }}
+          VITE_SMALL_CHAT: ${{ secrets.OF_DEV_VITE_SMALL_CHAT }}
+          VITE_OPEN_SPONSORS: ${{ secrets.OF_DEV_VITE_OPEN_SPONSORS }}
+          VITE_EMULATORS: 'false'
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
