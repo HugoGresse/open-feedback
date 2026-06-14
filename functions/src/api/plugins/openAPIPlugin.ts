@@ -18,7 +18,7 @@ export const openAPIPlugin = fastifyPlugin(async (fastify: FastifyInstance) => {
                 {
                     url: isNodeEnvDev
                         ? 'http://127.0.0.1:5001/open-feedback-42/us-central1/api/'
-                        : 'https://api-open-feedback-42-ew.a.run.app/',
+                        : 'https://api.openfeedback.io/',
                     description: isNodeEnvDev
                         ? 'Local development'
                         : 'Production',
