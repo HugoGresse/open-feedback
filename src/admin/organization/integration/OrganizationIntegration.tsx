@@ -1,40 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import LoaderMatchParent from '../../../../baseComponents/customComponent/LoaderMatchParent.tsx'
+import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import ApiKeyIntegrationCard, {
-    API_DOCS_URL,
     LastUsedValue,
-} from '../../../baseComponents/ApiKeyIntegrationCard.tsx'
-import { getSelectedProjectSelector } from '../../core/projectSelectors'
+} from '../../baseComponents/ApiKeyIntegrationCard.tsx'
+import { getSelectedOrganizationIdSelector } from '../core/organizationSelectors'
 import {
-    fetchProjectIntegration,
-    updateProjectApiKey,
-} from '../../core/actions/updateProjectApiKey'
+    fetchOrganizationIntegration,
+    updateOrganizationApiKey,
+} from '../core/actions/updateOrganizationApiKey'
 
-// Re-exported for callers that imported the docs URL from here historically.
-export { API_DOCS_URL }
-
-const Integration: React.FC = () => {
+export const OrganizationIntegration: React.FC = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
-    const project = useSelector(getSelectedProjectSelector) as
-        | { id: string }
-        | null
+    const organizationId = useSelector(getSelectedOrganizationIdSelector) as
+        | string
         | undefined
-    const projectId = project?.id
 
     const [loaded, setLoaded] = useState(false)
     const [apiKey, setApiKey] = useState<string | undefined>()
     const [lastUsedRaw, setLastUsedRaw] = useState<LastUsedValue>()
 
     useEffect(() => {
-        if (!projectId) {
+        if (!organizationId) {
             return
         }
         let cancelled = false
         setLoaded(false)
-        fetchProjectIntegration(projectId)
+        fetchOrganizationIntegration(organizationId)
             .then((integration) => {
                 if (cancelled) {
                     return
@@ -50,15 +44,15 @@ const Integration: React.FC = () => {
         return () => {
             cancelled = true
         }
-    }, [projectId])
+    }, [organizationId])
 
-    if (!project || !loaded) {
+    if (!organizationId || !loaded) {
         return <LoaderMatchParent />
     }
 
     const generateOrRotate = async (): Promise<string | void> => {
         const newKey = (await dispatch(
-            updateProjectApiKey() as never
+            updateOrganizationApiKey() as never
         )) as unknown as string | void
         if (newKey) {
             setApiKey(newKey)
@@ -69,8 +63,8 @@ const Integration: React.FC = () => {
 
     return (
         <ApiKeyIntegrationCard
-            description={t('settingsIntegration.description')}
-            noKeyText={t('settingsIntegration.noKey')}
+            description={t('settingsIntegration.descriptionOrganization')}
+            noKeyText={t('settingsIntegration.noKeyOrganization')}
             apiKey={apiKey}
             lastUsedRaw={lastUsedRaw}
             onGenerateOrRotate={generateOrRotate}
@@ -78,4 +72,4 @@ const Integration: React.FC = () => {
     )
 }
 
-export default Integration
+export default OrganizationIntegration

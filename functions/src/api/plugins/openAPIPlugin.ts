@@ -24,6 +24,18 @@ export const openAPIPlugin = fastifyPlugin(async (fastify: FastifyInstance) => {
                         : 'Production',
                 },
             ],
+            components: {
+                securitySchemes: {
+                    apiKey: {
+                        type: 'apiKey',
+                        in: 'header',
+                        name: 'x-api-key',
+                        description:
+                            'Project (ofproj_) or organization (oforg_) API key',
+                    },
+                },
+            },
+            security: [{ apiKey: [] }],
         },
     })
 

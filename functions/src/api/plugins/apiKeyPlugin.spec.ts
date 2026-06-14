@@ -41,10 +41,29 @@ describe('authenticateRequest setDecorator', () => {
     })
 
     it('sets request.organization for a valid organization key (does not throw)', async () => {
+        // The org key is resolved via
+        // collectionGroup('private').where(...).limit(1).get(); the matched
+        // doc's grandparent is the organization. Stub the chain + path guard.
+        const organizationDoc = {
+            exists: true,
+            id: 'org_123',
+            data: () => ({ id: 'org_123' }),
+        }
+        const organizationRef = {
+            id: 'org_123',
+            parent: { id: 'organizations' },
+            get: () => organizationDoc,
+        }
+        const integrationDoc = {
+            ref: {
+                id: 'integration',
+                parent: { parent: organizationRef },
+                set: () => Promise.resolve(),
+            },
+        }
         mockWhere.mockImplementation(() => ({
-            get: () => ({
-                empty: false,
-                docs: [{ id: 'org_123', data: () => ({ id: 'org_123' }) }],
+            limit: () => ({
+                get: () => ({ empty: false, docs: [integrationDoc] }),
             }),
         }))
         fastify = await buildApp()

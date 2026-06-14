@@ -8,6 +8,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { OrganizationUsers } from './users/OrganizationUsers.jsx'
 import { OrganizationTheme } from './theme/OrganizationTheme.jsx'
 import { OrganizationVotingForm } from './votingForm/OrganizationVotingForm.jsx'
+import { OrganizationIntegration } from './integration/OrganizationIntegration.tsx'
 
 const createOrganizationTheme = (parentTheme) =>
     createTheme({
@@ -48,6 +49,10 @@ export const OrganizationApp = ({ match, onClose }) => {
                             <Route
                                 path={`${baseUrl}/votingForm`}
                                 element={<OrganizationVotingForm />}
+                            />
+                            <Route
+                                path={`${baseUrl}/integration`}
+                                element={<OrganizationIntegration />}
                             />
                             <Route
                                 path={`${baseUrl}`}

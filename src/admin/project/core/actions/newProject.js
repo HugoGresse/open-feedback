@@ -6,7 +6,7 @@ import {
 import { getUserSelector } from '../../../auth/authSelectors'
 import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase.ts'
 import { newRandomHexColor } from '../../../../utils/colorsUtils'
-import { generateProjectApiKey } from '../../../../utils/generateProjectApiKey'
+import { generateProjectApiKey } from '../../../../utils/generateApiKey'
 import { addNotification } from '../../../notification/notifcationActions'
 import { trackNewProject } from '../../../utils/track'
 import { NO_ORGANIZATION_FAKE_ID } from '../../../organization/core/organizationConstants'

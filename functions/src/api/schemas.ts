@@ -39,6 +39,12 @@ export const OrganizationSchema = Type.Object({
     updatedAt: Type.Optional(Type.String({ format: 'date-time' })),
 })
 
+export const EventSchema = Type.Object({
+    id: IdSchema,
+    name: Type.String({ minLength: 1, maxLength: 100 }),
+    organizationId: Type.Optional(IdSchema),
+})
+
 export const PaginationQuerySchema = Type.Object({
     page: Type.Optional(Type.Integer({ minimum: 1, default: 1 })),
     limit: Type.Optional(

@@ -10,7 +10,10 @@ export const getOrganizationByApiKeyRoute: FastifyPluginAsync = async (
         '/me',
         {
             schema: {
-                description: 'Get organization linked to the API key',
+                description:
+                    'Get organization linked to the API key. ' +
+                    'Requires an organization API key (prefix `oforg_`); an ' +
+                    'event key (`ofproj_`) returns 404.',
                 tags: ['Organizations'],
                 response: {
                     200: OrganizationSchema,

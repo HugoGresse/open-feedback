@@ -107,6 +107,13 @@ service cloud.firestore {
             allow create: if authenticated();
             allow update: if authenticated() && ((isAnOrgAdmin(resource.data) && request.resource.data.ownerUserId == resource.data.ownerUserId) || isOrgOwner(resource.data) );
             allow delete: if authenticated() && isOrgOwner(resource.data);
+
+            // Private, member-only data (e.g. the organization API key). Never
+            // exposed on the org doc itself. Mirrors projects/{id}/private.
+            match /private/{document} {
+                allow get, list: if authenticated() && isAnOrgViewer(getOrganization(organizationId));
+                allow write: if authenticated() && isAnOrgEditor(getOrganization(organizationId));
+            }
         }
 
         // SUPER ADMIN
