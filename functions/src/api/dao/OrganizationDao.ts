@@ -7,6 +7,11 @@ import { UserDao } from './UserDao'
 import { User } from '../../types/User'
 
 const ORGANIZATION_COLLECTION = 'organizations'
+// The API key lives in a member-only private subcollection
+// (organizations/{orgId}/private/integration), never on the org doc.
+// Mirrors the project (event) integration.
+const ORGANIZATION_PRIVATE_COLLECTION = 'private'
+const ORGANIZATION_INTEGRATION_DOC = 'integration'
 
 export class OrganizationDao {
     public static async getOrganizationFromId(
@@ -35,18 +40,57 @@ export class OrganizationDao {
     ): Promise<Organization | null> {
         const db = getFirestore(firebaseApp)
 
-        const doc = await db
-            .collection(ORGANIZATION_COLLECTION)
+        // Resolve the key from the private subcollection across all orgs.
+        const snapshot = await db
+            .collectionGroup(ORGANIZATION_PRIVATE_COLLECTION)
             .where('apiKey', '==', apiKey.apiKey)
+            .limit(1)
             .get()
 
-        if (!doc || doc.empty || doc.docs.length === 0) {
+        if (snapshot.empty) {
             throw new NotFoundError('Organization not found')
         }
 
+        const integrationDoc = snapshot.docs[0]
+        // collectionGroup('private') also matches projects/{id}/private. Make
+        // sure the hit is exactly organizations/{orgId}/private/integration
+        // before trusting it as an organization credential.
+        const organizationRef = integrationDoc.ref.parent.parent
+        if (
+            !organizationRef ||
+            integrationDoc.ref.id !== ORGANIZATION_INTEGRATION_DOC ||
+            organizationRef.parent.id !== ORGANIZATION_COLLECTION
+        ) {
+            throw new NotFoundError('Organization not found')
+        }
+
+        // Stamp last-used time (best effort: never fail auth on this write,
+        // but surface persistent failures via a warning).
+        await integrationDoc.ref
+            .set(
+                { apiKeyLastUsedAt: new Date().toISOString() },
+                { merge: true }
+            )
+            .catch((error: unknown) => {
+                console.warn(
+                    `Failed to update apiKeyLastUsedAt for organization ${organizationRef.id}:`,
+                    error
+                )
+            })
+
+        const organizationDoc = await organizationRef.get()
+        if (!organizationDoc.exists) {
+            throw new NotFoundError('Organization not found')
+        }
+
+        // Strip the deprecated org-doc apiKey so a legacy value can never be
+        // spread into the hydrated response and leaked through /organizations/me.
+        const { apiKey: _legacyApiKey, ...organizationData } =
+            organizationDoc.data() || {}
+
         return {
-            id: doc.docs[0].id,
-            ...doc.docs[0].data(),
+            id: organizationDoc.id,
+            ...organizationData,
         } as Organization
     }
 

@@ -9,6 +9,7 @@ import { openAPIPlugin } from './plugins/openAPIPlugin'
 import { fastifyErrorHandler } from './others/fastifyErrorHandler'
 import { fastifyNotFoundHandler } from './others/fastifyNotFoundHandler'
 import { organizationsRoutes } from './routes/organizations'
+import { eventsRoutes } from './routes/events'
 
 type Firebase = FirebaseApp
 declare module 'fastify' {
@@ -38,6 +39,7 @@ export async function createFastifyAPI() {
     })
 
     fastify.register(organizationsRoutes, { prefix: '/organizations' })
+    fastify.register(eventsRoutes, { prefix: '/events' })
 
     return fastify
 }

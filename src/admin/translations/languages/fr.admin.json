@@ -178,9 +178,11 @@
     "settingsIntegration": {
         "title": "Intégration API",
         "description": "Utilisez une clé API pour accéder aux données de cet évènement via l'API OpenFeedback.",
+        "descriptionOrganization": "Utilisez une clé API pour accéder aux données de cette organisation via l'API OpenFeedback.",
         "documentationLink": "Consulter la documentation de l'API",
         "apiKey": "Clé API",
         "noKey": "Aucune clé API n'a encore été générée pour cet évènement.",
+        "noKeyOrganization": "Aucune clé API n'a encore été générée pour cette organisation.",
         "generateKey": "Générer une clé API",
         "rotateKey": "Renouveler la clé",
         "rotateConfirmTitle": "Renouveler la clé API ?",

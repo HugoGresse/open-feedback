@@ -178,9 +178,11 @@
     "settingsIntegration": {
         "title": "API integration",
         "description": "Use an API key to access this event's data through the OpenFeedback API.",
+        "descriptionOrganization": "Use an API key to access this organization's data through the OpenFeedback API.",
         "documentationLink": "Read the API documentation",
         "apiKey": "API key",
         "noKey": "No API key has been generated for this event yet.",
+        "noKeyOrganization": "No API key has been generated for this organization yet.",
         "generateKey": "Generate API key",
         "rotateKey": "Rotate key",
         "rotateConfirmTitle": "Rotate API key?",

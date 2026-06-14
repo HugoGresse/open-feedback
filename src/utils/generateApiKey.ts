@@ -2,15 +2,16 @@ const CHARACTERS =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
 export const PROJECT_API_KEY_PREFIX = 'ofproj_'
+export const ORG_API_KEY_PREFIX = 'oforg_'
 
 /**
- * Generate a project API key using the browser CSPRNG (Web Crypto).
+ * Generate an API key using the browser CSPRNG (Web Crypto).
  *
- * Format matches the backend generator (`ofproj_` + alphanumeric string).
+ * Format matches the backend generator (`<prefix>` + alphanumeric string).
  * Uses rejection sampling so each character is uniformly distributed (no
  * modulo bias). Never use Math.random() for credentials.
  */
-export const generateProjectApiKey = (length = 48): string => {
+export const generateApiKey = (prefix: string, length = 48): string => {
     const max = 256 - (256 % CHARACTERS.length)
     const result: string[] = []
 
@@ -25,5 +26,13 @@ export const generateProjectApiKey = (length = 48): string => {
         }
     }
 
-    return PROJECT_API_KEY_PREFIX + result.join('')
+    return prefix + result.join('')
 }
+
+/** Project (event) API key: `ofproj_` + alphanumeric. */
+export const generateProjectApiKey = (length = 48): string =>
+    generateApiKey(PROJECT_API_KEY_PREFIX, length)
+
+/** Organization API key: `oforg_` + alphanumeric. */
+export const generateOrgApiKey = (length = 48): string =>
+    generateApiKey(ORG_API_KEY_PREFIX, length)

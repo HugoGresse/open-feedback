@@ -54,4 +54,7 @@ export const ORGANIZATION_ROUTES = {
     theme: {
         url: '/theme',
     },
+    integration: {
+        url: '/integration',
+    },
 }

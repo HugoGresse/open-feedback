@@ -2,7 +2,7 @@ import type { Dispatch } from 'redux'
 import { getSelectedProjectIdSelector } from '../projectSelectors'
 import { deleteField, fireStoreMainInstance } from '../../../../firebase.ts'
 import { addNotification } from '../../../notification/notifcationActions'
-import { generateProjectApiKey } from '../../../../utils/generateProjectApiKey'
+import { generateProjectApiKey } from '../../../../utils/generateApiKey'
 
 // The API key lives in a member-only private subcollection, NOT on the project
 // doc (which is world-readable: `allow get: if true` in firestore.rules).

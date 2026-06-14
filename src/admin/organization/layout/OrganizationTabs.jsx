@@ -28,6 +28,7 @@ export const OrganizationTabs = ({ baseUrl }) => {
     const userPath = `${baseUrl}${ORGANIZATION_ROUTES.users.url}`
     const votingFormPath = `${baseUrl}${ORGANIZATION_ROUTES.votingForm.url}`
     const themePath = `${baseUrl}${ORGANIZATION_ROUTES.theme.url}`
+    const integrationPath = `${baseUrl}${ORGANIZATION_ROUTES.integration.url}`
 
     const matchUsers = useMatch({
         path: userPath,
@@ -41,6 +42,10 @@ export const OrganizationTabs = ({ baseUrl }) => {
         path: themePath,
         exact: true,
     })
+    const matchIntegration = useMatch({
+        path: integrationPath,
+        exact: true,
+    })
 
     const selectedTab = matchUsers
         ? 0
@@ -48,6 +53,8 @@ export const OrganizationTabs = ({ baseUrl }) => {
         ? 1
         : matchTheme
         ? 2
+        : matchIntegration
+        ? 3
         : 0
 
     return (
@@ -70,6 +77,12 @@ export const OrganizationTabs = ({ baseUrl }) => {
                     {...a11yProps(2)}
                     component={Link}
                     to={themePath}
+                />
+                <Tab
+                    label={t('rooting.settingIntegration')}
+                    {...a11yProps(3)}
+                    component={Link}
+                    to={integrationPath}
                 />
             </OFTabs>
         </Box>
