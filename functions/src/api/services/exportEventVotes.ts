@@ -22,8 +22,9 @@ export interface EventVoteRow {
     speakersName?: string
     tags?: string
     trackTitle?: string
-    // One extra column per vote item, keyed by the vote item name.
-    [voteColumn: string]: string | undefined
+    // One extra column per vote item, keyed by the vote item name. Count-type
+    // votes (boolean/rating tallies) are numbers; text votes are strings.
+    [voteColumn: string]: string | number | undefined
 }
 
 interface OpenFeedbackData {
@@ -38,9 +39,13 @@ interface Session {
     trackTitle?: string
 }
 
-// Turn a single sessionVotes value into a flat string. A value is either a
-// scalar or a map of vote entries shaped like { text, plus }.
-const voteValueToString = (voteResult: unknown): string => {
+// Turn a single sessionVotes value into a column value. Count-type votes are
+// numeric tallies (kept as numbers); text votes are a map of { text, plus }
+// entries (flattened to a string).
+const voteValueToColumn = (voteResult: unknown): string | number => {
+    if (typeof voteResult === 'number') {
+        return voteResult
+    }
     if (typeof voteResult !== 'object' || voteResult === null) {
         return String(voteResult)
     }
@@ -105,11 +110,11 @@ export const buildEventVotesExport = async (
                 .join(', ')
 
             const voteColumns = Object.keys(sessionVotes || {}).reduce<
-                Record<string, string>
+                Record<string, string | number>
             >((acc, key) => {
                 const voteItem = voteItemsById.get(key)
                 if (voteItem?.name) {
-                    acc[voteItem.name] = voteValueToString(sessionVotes![key])
+                    acc[voteItem.name] = voteValueToColumn(sessionVotes![key])
                 }
                 return acc
             }, {})
