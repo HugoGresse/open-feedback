@@ -6,6 +6,20 @@ import { APIKey } from '../plugins/APIKey'
 import { UserDao } from './UserDao'
 import { User } from '../../types/User'
 
+// Firestore stores createdAt/updatedAt as Timestamp objects, but the API
+// schema declares them as date-time strings. Normalize so the response
+// serializer doesn't choke on "[object Object]".
+const toIsoDate = (value: unknown): string | undefined => {
+    if (!value) {
+        return undefined
+    }
+    const maybeTimestamp = value as { toDate?: () => Date }
+    if (typeof maybeTimestamp.toDate === 'function') {
+        return maybeTimestamp.toDate().toISOString()
+    }
+    return typeof value === 'string' ? value : undefined
+}
+
 const ORGANIZATION_COLLECTION = 'organizations'
 // The API key lives in a member-only private subcollection
 // (organizations/{orgId}/private/integration), never on the org doc.
@@ -91,6 +105,8 @@ export class OrganizationDao {
         return {
             id: organizationDoc.id,
             ...organizationData,
+            createdAt: toIsoDate(organizationData.createdAt),
+            updatedAt: toIsoDate(organizationData.updatedAt),
         } as Organization
     }
 

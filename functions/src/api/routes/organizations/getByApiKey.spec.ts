@@ -194,6 +194,29 @@ describe('/organizations/me', () => {
         expect(body.name).toBe('Test Organization')
     })
 
+    it('serializes Firestore Timestamp dates as ISO strings', async () => {
+        const iso = '2026-01-02T03:04:05.000Z'
+        const asTimestamp = { toDate: () => new Date(iso) }
+        mockOrgKeyResolves({
+            ...baseOrganization,
+            createdAt: asTimestamp,
+            updatedAt: asTimestamp,
+        })
+
+        const response = await fastify.inject({
+            method: 'GET',
+            url: `/organizations/me`,
+            headers: {
+                'x-api-key': 'oforg_test-key-123',
+            },
+        })
+
+        expect(response.statusCode).toBe(200)
+        const body = JSON.parse(response.body)
+        expect(body.createdAt).toBe(iso)
+        expect(body.updatedAt).toBe(iso)
+    })
+
     it('never leaks a legacy apiKey stored on the org doc', async () => {
         mockOrgKeyResolves({
             ...baseOrganization,
