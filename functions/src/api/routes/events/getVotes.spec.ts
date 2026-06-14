@@ -11,7 +11,10 @@ const seededProject = {
     members: ['user_123'],
     organizationId: 'org_123',
     config: { jsonUrl: 'https://data.example.test/openfeedback.json' },
-    voteItems: [{ id: 'q1', name: 'Quality' }],
+    voteItems: [
+        { id: 'q1', name: 'Quality' },
+        { id: 'q2', name: 'Score' },
+    ],
     _collections: {
         sessionVotes: [
             {
@@ -21,6 +24,8 @@ const seededProject = {
                     uidA: { text: 'Great talk', plus: 2 },
                     uidB: { text: 'Loved it' },
                 },
+                // Count-type vote: a numeric tally, must stay a number.
+                q2: 22,
             },
         ],
     },
@@ -84,6 +89,7 @@ const expectedRow = {
     tags: 'frontend',
     trackTitle: 'Track A',
     Quality: 'Great talk (2), Loved it (0)',
+    Score: 22,
 }
 
 describe('/events/:projectId/votes', () => {
@@ -126,6 +132,9 @@ describe('/events/:projectId/votes', () => {
         expect(body.projectId).toBe('proj_123')
         expect(body.sessionsCount).toBe(1)
         expect(body.sessions[0]).toEqual(expectedRow)
+        // Count-type votes serialize as JSON numbers, not strings.
+        expect(typeof body.sessions[0].Score).toBe('number')
+        expect(typeof body.sessions[0].Quality).toBe('string')
     })
 
     it('rejects a project key for a different event with 404', async () => {
