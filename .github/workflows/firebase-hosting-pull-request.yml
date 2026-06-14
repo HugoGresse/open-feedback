@@ -14,10 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci && npm run build
-        # Vite inlines these at build time; without them the preview app
-        # ships an empty Firebase/runtime config. Previews use the development
-        # config (OF_DEV_VITE_*); emulators are forced off because a deployed
-        # cloud preview cannot reach a local emulator suite.
+        # Vite inlines these into the client bundle at build time, so they are
+        # PUBLIC in the deployed preview — never put server-only secrets here.
+        # Without them the preview app ships an empty Firebase/runtime config.
+        # Previews use the development config (OF_DEV_VITE_*); emulators are
+        # forced off because a deployed cloud preview cannot reach a local
+        # emulator suite.
         env:
           VITE_ADMIN_EMAIL: ${{ secrets.OF_DEV_VITE_ADMIN_EMAIL }}
           VITE_RECAPTCHAV3_SITE_KEY: ${{ secrets.OF_DEV_VITE_RECAPTCHAV3_SITE_KEY }}

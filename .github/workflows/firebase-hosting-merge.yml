@@ -12,8 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci && npm run build
-        # Vite inlines these at build time; without them the deployed app
-        # ships an empty Firebase/runtime config.
+        # Vite inlines these into the client bundle at build time, so they are
+        # PUBLIC in the deployed app — never put server-only secrets here.
+        # Without them the deployed app ships an empty Firebase/runtime config.
         env:
           VITE_ADMIN_EMAIL: ${{ secrets.OF_VITE_ADMIN_EMAIL }}
           VITE_RECAPTCHAV3_SITE_KEY: ${{ secrets.OF_VITE_RECAPTCHAV3_SITE_KEY }}
