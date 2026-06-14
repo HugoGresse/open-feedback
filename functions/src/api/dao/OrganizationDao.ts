@@ -20,6 +20,28 @@ const toIsoDate = (value: unknown): string | undefined => {
     return typeof value === 'string' ? value : undefined
 }
 
+/**
+ * Single mapping point from a raw Firestore org doc to the API Organization
+ * shape. Centralized so every read path is safe by construction:
+ *  - strips the deprecated `apiKey` field so a legacy org-doc key can never be
+ *    hydrated and leaked through the API,
+ *  - normalizes Timestamp `createdAt`/`updatedAt` to the ISO strings the
+ *    response schema expects (otherwise the serializer throws on "[object
+ *    Object]").
+ */
+const mapOrganizationDoc = (
+    id: string,
+    data: Record<string, unknown> = {}
+): Organization => {
+    const { apiKey: _legacyApiKey, ...rest } = data
+    return {
+        ...rest,
+        id,
+        createdAt: toIsoDate(rest.createdAt),
+        updatedAt: toIsoDate(rest.updatedAt),
+    } as Organization
+}
+
 const ORGANIZATION_COLLECTION = 'organizations'
 // The API key lives in a member-only private subcollection
 // (organizations/{orgId}/private/integration), never on the org doc.
@@ -42,10 +64,7 @@ export class OrganizationDao {
             throw new NotFoundError('Organization not found')
         }
 
-        return {
-            id: organizationDoc.id,
-            ...organizationDoc.data(),
-        } as Organization
+        return mapOrganizationDoc(organizationDoc.id, organizationDoc.data())
     }
 
     public static async getOrganizationFromApiKey(
@@ -97,17 +116,7 @@ export class OrganizationDao {
             throw new NotFoundError('Organization not found')
         }
 
-        // Strip the deprecated org-doc apiKey so a legacy value can never be
-        // spread into the hydrated response and leaked through /organizations/me.
-        const { apiKey: _legacyApiKey, ...organizationData } =
-            organizationDoc.data() || {}
-
-        return {
-            id: organizationDoc.id,
-            ...organizationData,
-            createdAt: toIsoDate(organizationData.createdAt),
-            updatedAt: toIsoDate(organizationData.updatedAt),
-        } as Organization
+        return mapOrganizationDoc(organizationDoc.id, organizationDoc.data())
     }
 
     public static async hydrateOrganization(
