@@ -13,7 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci && npm run build
+      - run: npm ci
+      - run: npm run build
         # Vite inlines these into the client bundle at build time, so they are
         # PUBLIC in the deployed app — never put server-only secrets here.
         # Without them the deployed app ships an empty Firebase/runtime config.
@@ -30,6 +31,7 @@ jobs:
           VITE_SMALL_CHAT: ${{ secrets.OF_VITE_SMALL_CHAT }}
           VITE_OPEN_SPONSORS: ${{ secrets.OF_VITE_OPEN_SPONSORS }}
           VITE_EMULATORS: ${{ secrets.OF_VITE_EMULATORS }}
+          VITE_API_DOCS_URL: ${{ secrets.OF_VITE_API_DOCS_URL }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

@@ -10,3 +10,4 @@ node_modules/
 
 .env
 .env.*.local
+.env.open-feedback-42
