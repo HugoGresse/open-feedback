@@ -54,10 +54,21 @@ export const getEventVotesRoute: FastifyPluginAsync = async (server) => {
                 }
                 project = request.project as unknown as ExportableProject
             } else if (request.organization) {
-                const resolved = await ProjectDao.getProjectFromId(
-                    server.firebase,
-                    projectId
-                )
+                // Resolve the event and confirm it belongs to this org. A
+                // missing project and a wrong-org project must look identical
+                // (same 404 message) so event ids stay non-enumerable.
+                let resolved
+                try {
+                    resolved = await ProjectDao.getProjectFromId(
+                        server.firebase,
+                        projectId
+                    )
+                } catch (error) {
+                    if (error instanceof NotFoundError) {
+                        throw new NotFoundError('Event not found')
+                    }
+                    throw error
+                }
                 if (resolved.organizationId !== request.organization.id) {
                     throw new NotFoundError('Event not found')
                 }

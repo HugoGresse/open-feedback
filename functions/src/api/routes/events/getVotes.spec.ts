@@ -14,7 +14,14 @@ const seededProject = {
     voteItems: [{ id: 'q1', name: 'Quality' }],
     _collections: {
         sessionVotes: [
-            { id: 'session1', q1: { uidA: { text: 'Great talk', plus: 2 } } },
+            {
+                id: 'session1',
+                // uidB has no `plus` — must default to 0, not "(undefined)".
+                q1: {
+                    uidA: { text: 'Great talk', plus: 2 },
+                    uidB: { text: 'Loved it' },
+                },
+            },
         ],
     },
 }
@@ -32,10 +39,10 @@ const openFeedbackJson = {
     speakers: { spk1: { name: 'Alice' } },
 }
 
-const stubFetch = (json: unknown = openFeedbackJson) =>
+const stubFetch = (json: unknown = openFeedbackJson, ok = true, status = 200) =>
     vi.stubGlobal(
         'fetch',
-        vi.fn(async () => ({ json: async () => json }))
+        vi.fn(async () => ({ ok, status, json: async () => json }))
     )
 
 // Stub the private-subcollection key resolution used by authenticateRequest:
@@ -76,7 +83,7 @@ const expectedRow = {
     speakersName: 'Alice',
     tags: 'frontend',
     trackTitle: 'Track A',
-    Quality: 'Great talk (2)',
+    Quality: 'Great talk (2), Loved it (0)',
 }
 
 describe('/events/:projectId/votes', () => {
@@ -158,6 +165,34 @@ describe('/events/:projectId/votes', () => {
         })
 
         expect(response.statusCode).toBe(404)
+        expect(JSON.parse(response.body).error).toBe('Event not found')
+    })
+
+    it('returns the same 404 for a non-existent event (not enumerable)', async () => {
+        mockOrgKey({ id: 'org_123' })
+
+        const response = await fastify.inject({
+            method: 'GET',
+            url: '/events/proj_missing/votes',
+            headers: { 'x-api-key': 'oforg_test-key' },
+        })
+
+        expect(response.statusCode).toBe(404)
+        // Identical message to the wrong-org case above: ids stay opaque.
+        expect(JSON.parse(response.body).error).toBe('Event not found')
+    })
+
+    it('returns 400 when the public data URL responds with an error', async () => {
+        stubFetch(openFeedbackJson, false, 502)
+        mockProjectKey()
+
+        const response = await fastify.inject({
+            method: 'GET',
+            url: '/events/proj_123/votes',
+            headers: { 'x-api-key': 'ofproj_test-key' },
+        })
+
+        expect(response.statusCode).toBe(400)
     })
 
     it('returns 400 when the event has no public data URL', async () => {

@@ -48,7 +48,7 @@ const voteValueToString = (voteResult: unknown): string => {
         voteResult as Record<string, { text?: string; plus?: number }>
     )
         .filter((v) => !!v?.text)
-        .map((v) => `${v.text} (${v.plus})`)
+        .map((v) => `${v.text} (${v.plus ?? 0})`)
         .join(', ')
         .replaceAll('\n', ' ')
 }
@@ -73,51 +73,81 @@ export const buildEventVotesExport = async (
     }
 
     const db = getFirestore(firebaseApp)
-    const data = (await fetch(jsonUrl).then((res) =>
-        res.json()
-    )) as OpenFeedbackData
+    const data = await fetchEventData(jsonUrl)
 
     const sessions = Object.keys(data.sessions || {}).map((id) => ({
         id,
         ...data.sessions[id],
     }))
-    const voteItems = project.voteItems || []
+    // Index vote items by id once instead of re-scanning per session.
+    const voteItemsById = new Map(
+        (project.voteItems || []).map((item) => [item.id, item])
+    )
 
-    const rows: EventVoteRow[] = []
-    for (const session of sessions) {
-        const sessionVotes = (await db
-            .collection('projects')
-            .doc(project.id)
-            .collection('sessionVotes')
-            .doc(session.id)
-            .get()
-            .then((doc) => doc.data())) as Record<string, unknown> | undefined
+    // Fetch every session's votes concurrently; sequential awaits would be slow
+    // and risk route timeouts on events with many sessions. Promise.all keeps
+    // the original session order.
+    return Promise.all(
+        sessions.map(async (session) => {
+            const sessionVotes = (await db
+                .collection('projects')
+                .doc(project.id)
+                .collection('sessionVotes')
+                .doc(session.id)
+                .get()
+                .then((doc) => doc.data())) as
+                | Record<string, unknown>
+                | undefined
 
-        const speakersName = (session.speakers || [])
-            .map((speakerId) => data.speakers?.[speakerId]?.name)
-            .filter((name): name is string => !!name)
-            .join(', ')
+            const speakersName = (session.speakers || [])
+                .map((speakerId) => data.speakers?.[speakerId]?.name)
+                .filter((name): name is string => !!name)
+                .join(', ')
 
-        const voteColumns = Object.keys(sessionVotes || {}).reduce<
-            Record<string, string>
-        >((acc, key) => {
-            const voteItem = voteItems.find((item) => item.id === key)
-            if (voteItem?.name) {
-                acc[voteItem.name] = voteValueToString(sessionVotes![key])
+            const voteColumns = Object.keys(sessionVotes || {}).reduce<
+                Record<string, string>
+            >((acc, key) => {
+                const voteItem = voteItemsById.get(key)
+                if (voteItem?.name) {
+                    acc[voteItem.name] = voteValueToString(sessionVotes![key])
+                }
+                return acc
+            }, {})
+
+            return {
+                sessionId: session.id,
+                title: session.title,
+                speakers: (session.speakers || []).join(', '),
+                speakersName,
+                tags: (session.tags || []).join(', '),
+                trackTitle: session.trackTitle,
+                ...voteColumns,
             }
-            return acc
-        }, {})
-
-        rows.push({
-            sessionId: session.id,
-            title: session.title,
-            speakers: (session.speakers || []).join(', '),
-            speakersName,
-            tags: (session.tags || []).join(', '),
-            trackTitle: session.trackTitle,
-            ...voteColumns,
         })
-    }
+    )
+}
 
-    return rows
+// Load the event's public sessions/speakers JSON, turning a bad/expired URL or
+// unparseable body into a 400 instead of an opaque 500.
+const fetchEventData = async (jsonUrl: string): Promise<OpenFeedbackData> => {
+    let response: Response
+    try {
+        response = await fetch(jsonUrl)
+    } catch {
+        throw new BadRequestError(
+            'Could not reach the event public data URL (config.jsonUrl).'
+        )
+    }
+    if (!response.ok) {
+        throw new BadRequestError(
+            `The event public data URL returned ${response.status}.`
+        )
+    }
+    try {
+        return (await response.json()) as OpenFeedbackData
+    } catch {
+        throw new BadRequestError(
+            'The event public data URL did not return valid JSON.'
+        )
+    }
 }
