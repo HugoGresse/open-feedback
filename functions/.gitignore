@@ -8,6 +8,9 @@ typings/
 
 node_modules/
 
+# Env / config files may hold secrets. Ignore them all (including the
+# per-project `.env.<project-id>` and emulator `.env*.local`) except the
+# tracked placeholder `.env.default`.
 .env
-.env.*.local
-.env.open-feedback-42
+.env.*
+!.env.default

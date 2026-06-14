@@ -47,7 +47,9 @@ variables to a dotenv file under `functions/`:
 
 Firebase loads `functions/.env` (all projects), `functions/.env.<project-id>`
 (per project, used on deploy), and `functions/.env.local` (used by the
-emulator only). Example `functions/.env.local`:
+emulator only). These files hold secrets — the repo `.gitignore` ignores every
+`functions/.env*` except the `.env.default` placeholder, so create them
+locally and never commit real values. Example `functions/.env.local`:
 
     APP_ENV=development
     APP_URL=https://myserver.com
@@ -105,8 +107,9 @@ Cloud functions uses its own `package.json`, first install dependencies. From th
 npm i
 ```
 
-And then add the admin contact email to `functions/.env.<your-project-id>`
-(created automatically on first deploy if missing):
+And then create `functions/.env.<your-project-id>` yourself (the functions
+read directly from `process.env`, so the Firebase CLI will not generate it for
+you) and add the admin contact email:
 
 ```
 APP_CONTACTEMAIL=<ADMIN_EMAIL>
