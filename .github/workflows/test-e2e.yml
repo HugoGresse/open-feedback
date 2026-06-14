@@ -23,6 +23,13 @@ jobs:
           node-version-file: .nvmrc
           cache: 'npm'
 
+    # The firebase-tools build with nodejs24 support requires JDK 21+ to run
+    # the Firestore/Auth emulators.
+    - uses: actions/setup-java@v4
+      with:
+          distribution: temurin
+          java-version: '21'
+
     - uses: 'google-github-actions/auth@v2'
       with:
           credentials_json: '${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}'
