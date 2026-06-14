@@ -63,10 +63,31 @@ describe('authenticateRequest setDecorator', () => {
     })
 
     it('sets request.project for a valid project key (does not throw)', async () => {
+        // The project key is resolved via
+        // collectionGroup('private').where(...).limit(1).get(); the matched
+        // doc's grandparent is the project. Stub the where->limit->get chain.
+        const projectDoc = {
+            exists: true,
+            id: 'proj_123',
+            data: () => ({ id: 'proj_123' }),
+        }
+        // projects/{projectId}/private/integration: the ref must look like a
+        // real project-owned doc to pass the path guard.
+        const projectRef = {
+            id: 'proj_123',
+            parent: { id: 'projects' },
+            get: () => projectDoc,
+        }
+        const integrationDoc = {
+            ref: {
+                id: 'integration',
+                parent: { parent: projectRef },
+                set: () => Promise.resolve(),
+            },
+        }
         mockWhere.mockImplementation(() => ({
-            get: () => ({
-                empty: false,
-                docs: [{ id: 'proj_123', data: () => ({ id: 'proj_123' }) }],
+            limit: () => ({
+                get: () => ({ empty: false, docs: [integrationDoc] }),
             }),
         }))
         fastify = await buildApp()
