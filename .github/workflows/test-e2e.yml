@@ -23,8 +23,7 @@ jobs:
           node-version-file: .nvmrc
           cache: 'npm'
 
-    # The firebase-tools build with nodejs24 support requires JDK 21+ to run
-    # the Firestore/Auth emulators.
+    # firebase-tools 15.x requires JDK 21+ to run the Firestore/Auth emulators.
     - uses: actions/setup-java@v4
       with:
           distribution: temurin
@@ -91,20 +90,9 @@ jobs:
           CYPRESS_VITE_STORAGE_BUCKET: ${{ secrets.E2E_FIREBASE_BUCKET }}
           FIREBASE_STORAGE_EMULATOR_HOST: 127.0.0.1:9199
 
-    # The published firebase-tools (<= 15.20.0) rejects the functions nodejs24
-    # runtime in the emulator ("Valid versions are 20, 22"). Overlay a build
-    # from firebase-tools main (which has nodejs24) so the functions emulator
-    # loads. Drop this once a firebase-tools release ships nodejs24 support.
-    - name: Install root deps + firebase-tools with nodejs24
-      run: |
-            npm ci
-            npm install --no-save git+https://github.com/firebase/firebase-tools.git#b3be5935533c90c83a128d629e797fcc35b85078
-            npx firebase --version
-
     - name: Run Cypress E2E test
       uses: cypress-io/github-action@v6
       with:
-        install: false
         browser: chrome
         build: npm run build
         start: npm run cy:start
