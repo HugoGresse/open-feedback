@@ -12,6 +12,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci && npm run build
+        # Vite inlines these at build time; without them the deployed app
+        # ships an empty Firebase/runtime config.
+        env:
+          VITE_ADMIN_EMAIL: ${{ secrets.OF_VITE_ADMIN_EMAIL }}
+          VITE_RECAPTCHAV3_SITE_KEY: ${{ secrets.OF_VITE_RECAPTCHAV3_SITE_KEY }}
+          VITE_APPID: ${{ secrets.OF_VITE_APPID }}
+          VITE_API_KEY: ${{ secrets.OF_VITE_API_KEY }}
+          VITE_AUTH_DOMAIN: ${{ secrets.OF_VITE_AUTH_DOMAIN }}
+          VITE_DATABASE_URL: ${{ secrets.OF_VITE_DATABASE_URL }}
+          VITE_PROJECT_ID: ${{ secrets.OF_VITE_PROJECT_ID }}
+          VITE_STORAGE_BUCKET: ${{ secrets.OF_VITE_STORAGE_BUCKET }}
+          VITE_MEASUREMENT_ID: ${{ secrets.OF_VITE_MEASUREMENT_ID }}
+          VITE_SMALL_CHAT: ${{ secrets.OF_VITE_SMALL_CHAT }}
+          VITE_OPEN_SPONSORS: ${{ secrets.OF_VITE_OPEN_SPONSORS }}
+          VITE_EMULATORS: ${{ secrets.OF_VITE_EMULATORS }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
