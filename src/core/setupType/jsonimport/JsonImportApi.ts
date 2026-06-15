@@ -1,9 +1,10 @@
 import { EventData } from '../eventDataNormalization'
 
-// Read-only API over an in-memory, already-normalized JSON event blob.
-// Exposes the same getTalks()/getSpeakers() surface the setup validation
-// (src/core/setupType/validation.js) expects, so an uploaded/pasted JSON
-// file can be validated exactly like a fetched JSON URL.
+// Thin API over an in-memory, already-normalized JSON event blob. Exposes the
+// getTalks()/getSpeakers() surface the setup validation
+// (src/core/setupType/validation.js) expects, so an uploaded/pasted JSON file
+// can be validated exactly like a fetched JSON URL. isReadOnly() returns false
+// because the import produces a normal, editable openfeedbackv1 event.
 class JsonImportApi {
     data: EventData
 

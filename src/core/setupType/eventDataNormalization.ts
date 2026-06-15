@@ -24,6 +24,9 @@ export interface EventData {
 
 const isString = (value: unknown): value is string => typeof value === 'string'
 
+const isObject = (value: unknown): value is Record<string, unknown> =>
+    typeof value === 'object' && value !== null && !Array.isArray(value)
+
 const filterStrings = (value: unknown): unknown =>
     Array.isArray(value) ? value.filter(isString) : value
 
@@ -32,6 +35,11 @@ export const normalizeEventData = (
 ): EventData => {
     const sessions: Record<string, SessionData> = {}
     Object.values(data?.sessions || {}).forEach((session) => {
+        // Skip non-object entries (e.g. a stray string/number/null) so a
+        // malformed paste surfaces as a validation result, not a crash.
+        if (!isObject(session)) {
+            return
+        }
         const id = '' + session.id
         sessions[id] = {
             ...session,
@@ -43,6 +51,9 @@ export const normalizeEventData = (
 
     const speakers: Record<string, SpeakerData> = {}
     Object.values(data?.speakers || {}).forEach((speaker) => {
+        if (!isObject(speaker)) {
+            return
+        }
         const id = '' + speaker.id
         speakers[id] = {
             ...speaker,
@@ -75,14 +86,10 @@ export const parseEventJson = (text: string): ParseResult => {
     } catch (e) {
         return { data: null, error: (e as Error).message }
     }
-    if (
-        typeof parsed !== 'object' ||
-        parsed === null ||
-        Array.isArray(parsed)
-    ) {
+    if (!isObject(parsed)) {
         return {
             data: null,
-            error: 'The JSON must be an object with "sessions" and "speakers" keys.',
+            error: 'The JSON must be an object (with "sessions" and "speakers" keys).',
         }
     }
     return { data: normalizeEventData(parsed as EventData), error: null }

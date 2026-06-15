@@ -3,12 +3,11 @@ import { normalizeEventData, parseEventJson } from './eventDataNormalization'
 
 describe('normalizeEventData', () => {
     it('coerces numeric session and speaker ids to strings', () => {
+        // Numeric ids are common in real exports; cast to feed bad input.
         const result = normalizeEventData({
-            // @ts-expect-error - numeric ids are common in real data
             sessions: { 2: { id: 2, title: 'Talk', speakers: ['s1'] } },
-            // @ts-expect-error - numeric ids are common in real data
             speakers: { s1: { id: 's1', name: 'Jane' } },
-        })
+        } as never)
 
         expect(result.sessions?.['2'].id).toBe('2')
         expect(typeof result.sessions?.['2'].id).toBe('string')
@@ -20,9 +19,7 @@ describe('normalizeEventData', () => {
             sessions: {
                 t1: {
                     id: 't1',
-                    // @ts-expect-error - mixed array on purpose
                     speakers: ['s1', 42, null, 's2'],
-                    // @ts-expect-error - mixed array on purpose
                     tags: ['a', {}, 'b'],
                 },
             },

@@ -48,7 +48,8 @@
         "saveSuccess": "Event saved",
         "saveFail": "Failed to save the event",
         "newSuccess": "New event created! Redirecting you now...",
-        "newFail": "Fail to create a new event, "
+        "newFail": "Fail to create a new event, ",
+        "importFail": "The event was created but importing the JSON failed, "
     },
     "dashboard": {
         "comments": "Comments",

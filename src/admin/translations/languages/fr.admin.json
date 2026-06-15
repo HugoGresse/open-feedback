@@ -48,7 +48,8 @@
         "saveSuccess": "Évènement sauvegardé",
         "saveFail": "Erreur lors de la sauvegarde de l'évènement",
         "newSuccess": "Nouvel évènement créé! Redirection en cours...",
-        "newFail": "Erreur lors de la création de l'évènement, "
+        "newFail": "Erreur lors de la création de l'évènement, ",
+        "importFail": "L'évènement a été créé mais l'import du JSON a échoué, "
     },
     "dashboard": {
         "comments": "Commentaires",

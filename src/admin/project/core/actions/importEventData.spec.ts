@@ -16,6 +16,10 @@ const makeCollection = (collectionName: string) => ({
     doc: (docId: string) => ({ __collection: collectionName, __docId: docId }),
 })
 
+vi.mock('../../../notification/notifcationActions', () => ({
+    addNotification: (payload: unknown) => ({ type: 'NOTIFY', payload }),
+}))
+
 vi.mock('../../../../firebase', () => ({
     serverTimestamp: () => 'SERVER_TS',
     fireStoreMainInstance: {
@@ -51,13 +55,12 @@ vi.mock('../../../../firebase', () => ({
 
 import { importEventData } from './importEventData'
 
-const run = (projectId: string, data: unknown) =>
-    // The thunk ignores dispatch/getState; call with no-op deps.
+const run = (projectId: string, data: unknown, dispatch: unknown = () => {}) =>
     (
         importEventData(projectId, data as never) as (
             d: unknown
         ) => Promise<unknown>
-    )(() => {})
+    )(dispatch)
 
 describe('importEventData', () => {
     beforeEach(() => {
@@ -120,5 +123,25 @@ describe('importEventData', () => {
         expect(summary).toEqual({ talkCount: 0, speakerCount: 0 })
         expect(recordedOps).toHaveLength(0)
         expect(committedBatches).toBe(0)
+    })
+
+    it('rejects ids containing a slash and notifies, without writing', async () => {
+        const dispatch = vi.fn()
+        await expect(
+            run(
+                'proj1',
+                {
+                    sessions: { 'a/b': { id: 'a/b', title: 'Bad' } },
+                    speakers: {},
+                },
+                dispatch
+            )
+        ).rejects.toThrow(/Invalid talk id/)
+
+        // No partial write happened and the user was notified.
+        expect(recordedOps).toHaveLength(0)
+        expect(dispatch).toHaveBeenCalledWith(
+            expect.objectContaining({ type: 'NOTIFY' })
+        )
     })
 })
