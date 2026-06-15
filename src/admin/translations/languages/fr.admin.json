@@ -108,6 +108,8 @@
             "projectTypeHoverboardDetail": "Les présentations / orateurs / calendrier seront récupérés directement au chargement de la page à partir de votre propre base de données Firestore en suivant le modèle de Hoverboard v2.",
             "projectTypeJsonurl": "JSON API URL",
             "projectTypeJsonurlDetail": "Vous fournissez une URL vers un .json que vous hébergerez (sur gist.github.com ou un autre serveur statique) ou une API pour votre propre base de donnée. Le modèle du .json devra correspondre à celui d'OpenFeedback, vous pourrez le vérifier sur l'écran suivant. ",
+            "projectTypeJsonimport": "Importer un fichier JSON",
+            "projectTypeJsonimportDetail": "Téléversez ou collez un fichier .json correspondant au modèle OpenFeedback. Les présentations et orateurs sont importés une fois dans OpenFeedback, vous pourrez ensuite les modifier comme un évènement classique.",
             "projectTypeOpenfeedback": "Base de donnée OpenFeedback (par défaut)",
             "projectTypeOpenfeedbackDetail": "Vous pouvez saisir manuellement les présentations / orateurs / calendrier sur OpenFeedback. Ils ne seront pas synchronisés avec un autre service. Aucune configuration supplémentaire n'est requise.",
             "projectTypeRequired": "Vous devez choisir la façon dont vous souhaitez configurer l'évènement",
@@ -120,6 +122,7 @@
             "back": "Retour",
             "firebaseCredentials": "Entrez vos informations d'identification Firebase",
             "jsonurl": "Quelle est l'URL de votre API ou du JSON ?",
+            "jsonImport": "Téléversez ou collez votre fichier JSON",
             "notManaged": "Ce type de projet n'est pas géré, cela ne devrait pas se produire, soit vous n'êtes pas un bon développeur, soit ¯ \\ _ (ツ) _ / ¯",
             "stepTitle": "Créer un nouvel événement (étape 3/3)",
             "submit": "Créer l'événement",
@@ -231,6 +234,12 @@
             "jsonUrlRequired": "L'URL de l'API est obligatoire",
             "jsonUrlValid": "L'URL de l'API doit être une URL valide",
             "showJsonModel": "Afficher le modèle JSON"
+        },
+        "jsonImport": {
+            "uploadFile": "Téléverser un fichier JSON",
+            "orPaste": "ou collez le JSON ci-dessous",
+            "required": "Téléversez un fichier ou collez votre JSON.",
+            "invalidJson": "Le JSON n'a pas pu être analysé : {{error}}"
         },
         "setupMode": "Mode de configuration",
         "validateConfig": "VALIDER LA CONFIG",

@@ -5,6 +5,10 @@ import OpenfeedbackApi from './openfeedback/OpefeedbackApi'
 export const PROJECT_TYPE_HOVERBOARDV2 = 'hoverboardv2'
 export const PROJECT_TYPE_JSONURL = 'jsonurl'
 export const PROJECT_TYPE_OPENFEEDBACK = 'openfeedbackv1'
+// Wizard-only pseudo type: importing a JSON file creates a regular,
+// editable openfeedbackv1 event (talks/speakers written to Firestore),
+// so it never reaches getProjectApi / is never persisted as a setupType.
+export const PROJECT_TYPE_JSONIMPORT = 'jsonimport'
 
 const notImplementApi = {
     // eslint-disable-next-line no-unused-vars
