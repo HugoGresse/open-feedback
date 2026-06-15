@@ -8,7 +8,10 @@ import Step2 from './Step2.jsx'
 import Step3 from './Step3.jsx'
 import { useDispatch } from 'react-redux'
 import { getNewProjectId } from '../core/projectUtils'
-import { PROJECT_TYPE_OPENFEEDBACK } from '../../../core/setupType/projectApi'
+import {
+    PROJECT_TYPE_JSONIMPORT,
+    PROJECT_TYPE_OPENFEEDBACK,
+} from '../../../core/setupType/projectApi'
 import { useTranslation } from 'react-i18next'
 import { sleep } from '../../../utils/sleep'
 import {
@@ -22,6 +25,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { DialogContent } from '@mui/material'
 import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import { newProject } from '../core/actions/newProject'
+import { importEventData } from '../core/actions/importEventData'
 import { selectProject } from '../core/actions/selectUnselectProject'
 import { getProject } from '../core/actions/getProject'
 import { NO_ORGANIZATION_FAKE_ID } from '../../organization/core/organizationConstants'
@@ -57,7 +61,12 @@ const NewProject = ({ organizationId, onCancel }) => {
     const [step3Data, setStep3Data] = useState()
     const [isCreatingEvent, setCreatingEvent] = useState(false)
 
-    const createEvent = (projectId, useOrganizationSettings, data) => {
+    const createEvent = (
+        projectId,
+        useOrganizationSettings,
+        data,
+        importData
+    ) => {
         setCreatingEvent(true)
         return dispatch(
             newProject(organizationId, projectId, data, useOrganizationSettings)
@@ -72,6 +81,9 @@ const NewProject = ({ organizationId, onCancel }) => {
                 ])
             })
             .then(async () => {
+                if (importData) {
+                    await dispatch(importEventData(projectId, importData))
+                }
                 if (!useOrganizationSettings) {
                     await dispatch(fillDefaultVotingForm(t))
                     await dispatch(saveVoteItems(true))
@@ -148,13 +160,32 @@ const NewProject = ({ organizationId, onCancel }) => {
                         }}
                         initialValues={step3Data}
                         projectType={projectType}
-                        onSubmit={(config) =>
-                            createEvent(projectId, useOrganizationSettings, {
-                                name: projectName,
-                                setupType: projectType,
-                                config: config,
-                            })
-                        }
+                        onSubmit={(config) => {
+                            // Importing a JSON file creates a regular,
+                            // editable openfeedbackv1 event: the talks and
+                            // speakers are written to Firestore rather than
+                            // proxied like the JSON URL setup.
+                            if (projectType === PROJECT_TYPE_JSONIMPORT) {
+                                return createEvent(
+                                    projectId,
+                                    useOrganizationSettings,
+                                    {
+                                        name: projectName,
+                                        setupType: PROJECT_TYPE_OPENFEEDBACK,
+                                    },
+                                    config.jsonData
+                                )
+                            }
+                            return createEvent(
+                                projectId,
+                                useOrganizationSettings,
+                                {
+                                    name: projectName,
+                                    setupType: projectType,
+                                    config: config,
+                                }
+                            )
+                        }}
                     />
                 )}
             </Grid>

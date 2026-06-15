@@ -7,6 +7,7 @@ import RadioButtonGroup from '../../baseComponents/form/radioButton/RadioButtonG
 import OFRadioButton from '../../baseComponents/form/radioButton/OFRadioButton.jsx'
 import {
     PROJECT_TYPE_HOVERBOARDV2,
+    PROJECT_TYPE_JSONIMPORT,
     PROJECT_TYPE_JSONURL,
     PROJECT_TYPE_OPENFEEDBACK,
 } from '../../../core/setupType/projectApi'
@@ -108,6 +109,28 @@ const Step2 = ({
                                         </TranslatedTypography>
                                         <TranslatedTypography
                                             i18nKey="newEvent.step2.projectTypeJsonurlDetail"
+                                            component="p"
+                                            variant="subtitle1">
+                                            detail
+                                        </TranslatedTypography>
+                                    </div>
+                                }
+                            />
+
+                            <Field
+                                component={OFRadioButton}
+                                name="projectType"
+                                id={PROJECT_TYPE_JSONIMPORT}
+                                label={
+                                    <div>
+                                        <TranslatedTypography
+                                            i18nKey="newEvent.step2.projectTypeJsonimport"
+                                            component="h4"
+                                            variant="h6">
+                                            title
+                                        </TranslatedTypography>
+                                        <TranslatedTypography
+                                            i18nKey="newEvent.step2.projectTypeJsonimportDetail"
                                             component="p"
                                             variant="subtitle1">
                                             detail
