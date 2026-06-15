@@ -62,10 +62,23 @@ export const getVoteResultSelectorSelector = createSelector(
                         // Empty object due to deletion
                         return
                     }
+                    // A regression (Gen2 trigger migration) wrote some
+                    // aggregated votes with null createdAt/updatedAt. Guard
+                    // the .toDate() calls so one bad entry can't crash the
+                    // whole results view; fall back to whichever date exists.
+                    const updatedAt =
+                        value2.updatedAt?.toDate?.() ??
+                        value2.createdAt?.toDate?.() ??
+                        null
+                    const createdAt = value2.createdAt?.toDate?.() ?? updatedAt
+                    if (!updatedAt) {
+                        // No usable timestamp, skip this corrupted entry
+                        return
+                    }
                     transformResult[key].push({
                         ...value2,
-                        updatedAt: value2.updatedAt.toDate(),
-                        createdAt: value2.createdAt.toDate(),
+                        updatedAt,
+                        createdAt,
                     })
                 })
                 transformResult[key] = transformResult[key].sort(
