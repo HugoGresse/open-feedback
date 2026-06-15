@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { incrementVoteAggregate } from './aggregateVotes'
+import {
+    incrementVoteAggregate,
+    normalizeVoteTimestamps,
+} from './aggregateVotes'
 import {
     Vote,
     VOTE_STATUS_DELETED,
@@ -315,5 +318,67 @@ describe('incrementVoteAggregate', () => {
                 },
             },
         })
+    })
+})
+
+describe('normalizeVoteTimestamps', () => {
+    const makeSnapshot = (
+        data: Record<string, unknown>,
+        createTime: unknown,
+        updateTime: unknown
+    ) =>
+        ({
+            data: () => data,
+            createTime,
+            updateTime,
+        }) as unknown as FirebaseFirestore.DocumentSnapshot
+
+    const baseData = {
+        projectId: 'p1',
+        talkId: 's1',
+        voteItemId: 'vi1',
+        userId: 'u1',
+        status: VOTE_STATUS_ACTIVE,
+    }
+
+    it('fills createdAt/updatedAt from createTime/updateTime when null', () => {
+        const createTime = { _label: 'createTime' }
+        const updateTime = { _label: 'updateTime' }
+        const result = normalizeVoteTimestamps(
+            makeSnapshot(
+                { ...baseData, createdAt: null, updatedAt: null },
+                createTime,
+                updateTime
+            )
+        )
+
+        expect(result.createdAt).toBe(createTime)
+        expect(result.updatedAt).toBe(updateTime)
+    })
+
+    it('fills createdAt/updatedAt when fields are undefined', () => {
+        const createTime = { _label: 'createTime' }
+        const updateTime = { _label: 'updateTime' }
+        const result = normalizeVoteTimestamps(
+            makeSnapshot({ ...baseData }, createTime, updateTime)
+        )
+
+        expect(result.createdAt).toBe(createTime)
+        expect(result.updatedAt).toBe(updateTime)
+    })
+
+    it('keeps existing timestamps untouched', () => {
+        const createdAt = { _label: 'voteCreatedAt' }
+        const updatedAt = { _label: 'voteUpdatedAt' }
+        const result = normalizeVoteTimestamps(
+            makeSnapshot(
+                { ...baseData, createdAt, updatedAt },
+                { _label: 'createTime' },
+                { _label: 'updateTime' }
+            )
+        )
+
+        expect(result.createdAt).toBe(createdAt)
+        expect(result.updatedAt).toBe(updatedAt)
     })
 })

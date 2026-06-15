@@ -14,7 +14,7 @@ export const aggregateVotesCreate = onDocumentCreated(
         }
         return incrementVoteAggregate(
             admin.firestore(),
-            new Vote(snapshot.id, snapshot.data() as VoteData)
+            new Vote(snapshot.id, normalizeVoteTimestamps(snapshot))
         )
     }
 )
@@ -28,10 +28,26 @@ export const aggregateVotesUpdate = onDocumentUpdated(
         }
         return incrementVoteAggregate(
             admin.firestore(),
-            new Vote(change.after.id, change.after.data() as VoteData)
+            new Vote(change.after.id, normalizeVoteTimestamps(change.after))
         )
     }
 )
+
+// Gen2 (Eventarc) triggers can fire before a serverTimestamp() sentinel
+// resolves, leaving createdAt/updatedAt null in the snapshot. The Gen1 API
+// hid that intermediate write. Fall back to the snapshot's server-assigned
+// createTime/updateTime so the aggregated sessionVotes doc never stores a
+// null timestamp (which crashes the Feedback app's .toDate() calls).
+export const normalizeVoteTimestamps = (
+    snapshot: FirebaseFirestore.DocumentSnapshot
+): VoteData => {
+    const data = snapshot.data() as VoteData
+    return {
+        ...data,
+        createdAt: data.createdAt ?? snapshot.createTime ?? snapshot.updateTime,
+        updatedAt: data.updatedAt ?? snapshot.updateTime ?? snapshot.createTime,
+    }
+}
 
 export const incrementVoteAggregate = (
     firestoreDb: FirebaseFirestore.Firestore,
