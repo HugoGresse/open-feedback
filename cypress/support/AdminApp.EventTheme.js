@@ -64,9 +64,18 @@ export class EventTheme {
     ) {
         cy.get(`input[name="${selector}"`).click()
 
+        // Match the day cell by exact text rather than tabindex: MUI gives
+        // today's cell tabindex=0 and the rest tabindex=-1, so a tabindex=-1
+        // selector fails whenever dayToSelect happens to be today.
         cy.get('div[role=dialog]')
             .parent()
-            .contains('button[tabindex=-1]', dayToSelect)
+            .find('button')
+            .filter(
+                (_, el) =>
+                    !el.disabled &&
+                    el.textContent.trim() === String(dayToSelect)
+            )
+            .first()
             .click()
 
         // We force it as the element is not visible (need to scroll) and the scroll don't work...
