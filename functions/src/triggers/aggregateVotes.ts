@@ -38,7 +38,7 @@ export const aggregateVotesUpdate = onDocumentUpdated(
 // hid that intermediate write. Fall back to the snapshot's server-assigned
 // createTime/updateTime so the aggregated sessionVotes doc never stores a
 // null timestamp (which crashes the Feedback app's .toDate() calls).
-const normalizeVoteTimestamps = (
+export const normalizeVoteTimestamps = (
     snapshot: FirebaseFirestore.DocumentSnapshot
 ): VoteData => {
     const data = snapshot.data() as VoteData
