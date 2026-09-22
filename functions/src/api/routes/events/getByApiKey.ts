@@ -1,6 +1,7 @@
 import { FastifyPluginAsync } from 'fastify'
 import { EventSchema, ErrorSchema } from '../../schemas'
 import { authenticateRequest } from '../../plugins/apiKeyPlugin'
+import { publicEvent } from '../../services/eventSettings'
 
 export const getEventByApiKeyRoute: FastifyPluginAsync = async (server) => {
     server.get(
@@ -30,11 +31,7 @@ export const getEventByApiKeyRoute: FastifyPluginAsync = async (server) => {
 
             // Only expose public event fields. owner/members are internal user
             // ids and must never leak through the API.
-            return {
-                id: request.project.id,
-                name: request.project.name,
-                organizationId: request.project.organizationId,
-            }
+            return publicEvent(request.project)
         }
     )
 }

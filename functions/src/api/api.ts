@@ -21,6 +21,7 @@ declare module 'fastify' {
 export async function createFastifyAPI() {
     const fastify = Fastify({
         logger: true, // always enable full log
+        ajv: { customOptions: { removeAdditional: false } },
     }).withTypeProvider<TypeBoxTypeProvider>()
     addContentTypeParserForServerless(fastify)
 
@@ -28,6 +29,7 @@ export async function createFastifyAPI() {
     fastify.register(apiKeyPlugin)
     fastify.register(cors, {
         origin: '*',
+        methods: ['GET', 'HEAD', 'POST', 'PATCH'],
     })
     fastify.register(openAPIPlugin)
     fastify.setErrorHandler(fastifyErrorHandler)
