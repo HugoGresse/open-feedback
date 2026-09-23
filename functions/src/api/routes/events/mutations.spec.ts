@@ -41,6 +41,7 @@ describe('event mutations', () => {
     let db: FakeFirestore
     let create: ReturnType<typeof vi.fn>
     let commit: ReturnType<typeof vi.fn>
+    let deleteFile: ReturnType<typeof vi.fn>
     const orgHeaders = { 'x-api-key': 'oforg_valid' }
     const eventHeaders = { 'x-api-key': 'ofproj_valid' }
 
@@ -53,6 +54,17 @@ describe('event mutations', () => {
         vi.doMock('firebase-admin/firestore', () => ({
             getFirestore: () => db,
             FieldValue: FakeFirestore.FieldValue,
+        }))
+        deleteFile = vi.fn().mockResolvedValue([])
+        vi.doMock('firebase-admin/storage', () => ({
+            getStorage: () => ({
+                bucket: () => ({
+                    name: 'test-bucket',
+                    file: (path: string) => ({
+                        delete: (options: unknown) => deleteFile(path, options),
+                    }),
+                }),
+            }),
         }))
         // firestore-vitest does not implement WriteBatch.create. Capture its
         // writes while using the existing fake for document/transaction reads.
@@ -646,6 +658,58 @@ describe('event mutations', () => {
                 { id: 'b', name: 'Clear' },
                 { id: 'c', name: 'Plain' },
             ])
+        })
+
+        describe('replaced images', () => {
+            const url = (path: string) =>
+                `https://storage.googleapis.com/test-bucket/${path}`
+
+            beforeEach(async () => {
+                await eventRef().update({
+                    favicon: url(`projects/${project.id}/old_favicon.png`),
+                    logoSmall: url('organizations/org_123/logo.png'),
+                })
+            })
+
+            it('deletes the replaced event favicon after the update', async () => {
+                const response = await patch({
+                    favicon: url(`projects/${project.id}/new_favicon.png`),
+                })
+                expect(response.statusCode).toBe(200)
+                expect(deleteFile).toHaveBeenCalledOnce()
+                expect(deleteFile).toHaveBeenCalledWith(
+                    `projects/${project.id}/old_favicon.png`,
+                    { ignoreNotFound: true }
+                )
+            })
+
+            it('never deletes an inherited organization image', async () => {
+                const response = await patch({
+                    logoSmall: url(`projects/${project.id}/new_logo.png`),
+                })
+                expect(response.statusCode).toBe(200)
+                expect(deleteFile).not.toHaveBeenCalled()
+            })
+
+            it('keeps images when the update is rejected', async () => {
+                const response = await patch({
+                    favicon: url(`projects/${project.id}/new.png`),
+                    voteStartTime: '2026-09-21T10:00:00Z',
+                })
+                expect(response.statusCode).toBe(400)
+                expect(deleteFile).not.toHaveBeenCalled()
+            })
+
+            it('still succeeds when the storage delete fails', async () => {
+                deleteFile.mockRejectedValueOnce(new Error('Storage down'))
+                const response = await patch({
+                    favicon: url(`projects/${project.id}/new.png`),
+                })
+                expect(response.statusCode).toBe(200)
+                expect((await eventRef().get()).data()?.favicon).toBe(
+                    url(`projects/${project.id}/new.png`)
+                )
+            })
         })
     })
 })

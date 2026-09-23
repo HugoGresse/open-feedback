@@ -11,6 +11,7 @@ import {
     pruneVoteItemLanguages,
     validateEventSettings,
 } from '../services/eventSettings'
+import { deleteReplacedEventImages } from '../services/eventImages'
 
 const PROJECT_COLLECTION = 'projects'
 // The API key lives in a member-only private subcollection
@@ -122,38 +123,51 @@ export class ProjectDao {
         }
         const db = getFirestore(firebaseApp)
         const ref = db.collection(PROJECT_COLLECTION).doc(projectId)
-        return db.runTransaction(async (transaction) => {
-            const doc = await transaction.get(ref)
-            const current = doc.data()
-            // Check membership inside the transaction so moving or deleting an
-            // event concurrently cannot authorize a write against stale data.
-            if (
-                !current ||
-                ('organizationId' in access &&
-                    current.organizationId !== access.organizationId)
-            ) {
-                throw new NotFoundError('Event not found')
-            }
-            const changes: Record<string, unknown> = { ...settings }
-            if (settings.languages) {
-                const voteItems = pruneVoteItemLanguages(
-                    current.voteItems,
-                    settings.languages
-                )
-                if (voteItems) {
-                    changes.voteItems = voteItems
+        const { project, previous } = await db.runTransaction(
+            async (transaction) => {
+                const doc = await transaction.get(ref)
+                const current = doc.data()
+                // Check membership inside the transaction so moving or deleting an
+                // event concurrently cannot authorize a write against stale data.
+                if (
+                    !current ||
+                    ('organizationId' in access &&
+                        current.organizationId !== access.organizationId)
+                ) {
+                    throw new NotFoundError('Event not found')
                 }
+                const changes: Record<string, unknown> = { ...settings }
+                if (settings.languages) {
+                    const voteItems = pruneVoteItemLanguages(
+                        current.voteItems,
+                        settings.languages
+                    )
+                    if (voteItems) {
+                        changes.voteItems = voteItems
+                    }
+                }
+                const project = mapProjectDoc(doc.id, {
+                    ...current,
+                    ...changes,
+                })
+                // Only re-check invariants the request touches: legacy values it
+                // leaves alone must not block an unrelated update.
+                validateEventSettings(project, settings)
+                transaction.update(ref, {
+                    ...changes,
+                    updatedAt: FieldValue.serverTimestamp(),
+                })
+                return { project, previous: current }
             }
-            const project = mapProjectDoc(doc.id, { ...current, ...changes })
-            // Only re-check invariants the request touches: legacy values it
-            // leaves alone must not block an unrelated update.
-            validateEventSettings(project, settings)
-            transaction.update(ref, {
-                ...changes,
-                updatedAt: FieldValue.serverTimestamp(),
-            })
-            return project
-        })
+        )
+        // After the commit only: a rolled-back update must keep its images.
+        await deleteReplacedEventImages(
+            firebaseApp,
+            projectId,
+            previous,
+            project as unknown as Record<string, unknown>
+        )
+        return project
     }
 
     public static async getProjectFromId(
