@@ -2,8 +2,8 @@ import { FastifyPluginAsync } from 'fastify'
 import { Type } from '@sinclair/typebox'
 import {
     ErrorSchema,
+    EventIdSchema,
     EventSchema,
-    IdSchema,
     UpdateEvent,
     UpdateEventSchema,
 } from '../../schemas'
@@ -23,7 +23,7 @@ export const updateEventRoute: FastifyPluginAsync = async (server) => {
                     'Set both voteStartTime and voteEndTime to null to remove voting restrictions. ' +
                     'Ownership, organization, members and API keys cannot be changed.',
                 tags: ['Events'],
-                params: Type.Object({ projectId: IdSchema }),
+                params: Type.Object({ projectId: EventIdSchema }),
                 body: UpdateEventSchema,
                 response: {
                     200: EventSchema,

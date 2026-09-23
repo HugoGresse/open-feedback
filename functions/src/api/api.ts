@@ -21,7 +21,10 @@ declare module 'fastify' {
 export async function createFastifyAPI() {
     const fastify = Fastify({
         logger: true, // always enable full log
-        ajv: { customOptions: { removeAdditional: false } },
+        // Reject unknown fields and wrong types instead of silently stripping
+        // or coercing them (e.g. `name: 123` -> "123"). Note: querystring
+        // integers therefore need explicit parsing if a route ever uses them.
+        ajv: { customOptions: { removeAdditional: false, coerceTypes: false } },
     }).withTypeProvider<TypeBoxTypeProvider>()
     addContentTypeParserForServerless(fastify)
 

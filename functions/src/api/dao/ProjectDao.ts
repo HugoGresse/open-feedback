@@ -5,7 +5,12 @@ import { Organization } from '../../types/Organization'
 import { HttpError, NotFoundError } from '../others/Errors'
 import { APIKey } from '../plugins/APIKey'
 import { CreateEvent, UpdateEvent } from '../schemas'
-import { validateEventSettings } from '../services/eventSettings'
+import {
+    assertEventIdAllowed,
+    defaultVoteItems,
+    pruneVoteItemLanguages,
+    validateEventSettings,
+} from '../services/eventSettings'
 
 const PROJECT_COLLECTION = 'projects'
 // The API key lives in a member-only private subcollection
@@ -13,6 +18,35 @@ const PROJECT_COLLECTION = 'projects'
 // project doc. Mirrors the admin client write path.
 const PROJECT_PRIVATE_COLLECTION = 'private'
 const PROJECT_INTEGRATION_DOC = 'integration'
+
+// Firestore Timestamps (legacy vote windows) become ISO strings so the
+// response serializer never has to guess.
+const toIsoDate = (value: unknown) => {
+    const maybeTimestamp = value as { toDate?: () => Date } | null | undefined
+    return typeof maybeTimestamp?.toDate === 'function'
+        ? maybeTimestamp.toDate().toISOString()
+        : value
+}
+
+/**
+ * Single mapping point from a raw Firestore project doc to the API Project
+ * shape (mirrors OrganizationDao.mapOrganizationDoc): the document ID always
+ * wins over a stored `id`, the deprecated project-doc `apiKey` is dropped and
+ * vote window timestamps are normalized.
+ */
+const mapProjectDoc = (
+    id: string,
+    data: Record<string, unknown> = {}
+): Project => {
+    const { apiKey: _legacyApiKey, ...rest } = data
+    const project: Record<string, unknown> = { ...rest, id }
+    for (const key of ['voteStartTime', 'voteEndTime']) {
+        if (key in project) {
+            project[key] = toIsoDate(project[key])
+        }
+    }
+    return project as unknown as Project
+}
 
 export class ProjectDao {
     public static async createProject(
@@ -22,6 +56,9 @@ export class ProjectDao {
     ): Promise<Project> {
         const db = getFirestore(firebaseApp)
         const { id, ...settings } = input
+        if (id) {
+            assertEventIdAllowed(id)
+        }
         const collection = db.collection(PROJECT_COLLECTION)
         const ref = id ? collection.doc(id) : collection.doc()
         const project = {
@@ -34,7 +71,11 @@ export class ProjectDao {
                 organization.logoSmall ??
                 'https://openfeedback.io/android-chrome-192x192.png',
             languages: organization.languages ?? [],
-            voteItems: organization.voteItems ?? [],
+            // Same fallback as the admin UI when no voting form is inherited:
+            // an event without vote items would have nothing to vote on.
+            voteItems: organization.voteItems?.length
+                ? organization.voteItems
+                : defaultVoteItems(),
             disableSoloTalkRedirect:
                 organization.disableSoloTalkRedirect ?? false,
             hideVotesUntilUserVote:
@@ -93,10 +134,22 @@ export class ProjectDao {
             ) {
                 throw new NotFoundError('Event not found')
             }
-            const project = { ...current, ...settings, id: doc.id } as Project
-            validateEventSettings(project)
+            const changes: Record<string, unknown> = { ...settings }
+            if (settings.languages) {
+                const voteItems = pruneVoteItemLanguages(
+                    current.voteItems,
+                    settings.languages
+                )
+                if (voteItems) {
+                    changes.voteItems = voteItems
+                }
+            }
+            const project = mapProjectDoc(doc.id, { ...current, ...changes })
+            // Only re-check invariants the request touches: legacy values it
+            // leaves alone must not block an unrelated update.
+            validateEventSettings(project, settings)
             transaction.update(ref, {
-                ...settings,
+                ...changes,
                 updatedAt: FieldValue.serverTimestamp(),
             })
             return project
@@ -114,10 +167,7 @@ export class ProjectDao {
             throw new NotFoundError('Project not found')
         }
 
-        return {
-            ...doc.data(),
-            id: doc.id,
-        } as Project
+        return mapProjectDoc(doc.id, doc.data())
     }
 
     public static async getProjectFromApiKey(
@@ -170,9 +220,6 @@ export class ProjectDao {
             throw new NotFoundError('Project not found')
         }
 
-        return {
-            ...projectDoc.data(),
-            id: projectDoc.id,
-        } as Project
+        return mapProjectDoc(projectDoc.id, projectDoc.data())
     }
 }

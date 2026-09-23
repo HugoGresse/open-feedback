@@ -173,7 +173,7 @@ describe('event mutations', () => {
             method: 'POST',
             url: '/events',
             headers: orgHeaders,
-            payload: { id: project.id, name: 'Duplicate' },
+            payload: { id: 'existing-event', name: 'Duplicate' },
         })
         expect(response.statusCode).toBe(409)
         expect(response.json()).toEqual({
@@ -463,5 +463,189 @@ describe('event mutations', () => {
         expect(response.headers['access-control-allow-methods']).toContain(
             'PATCH'
         )
+    })
+
+    describe('review regressions', () => {
+        const patch = (payload: object, headers = orgHeaders) =>
+            fastify.inject({
+                method: 'PATCH',
+                url: `/events/${project.id}`,
+                headers,
+                payload,
+            })
+        const eventRef = () => db.collection('projects').doc(project.id)
+
+        it('serializes legacy values the write schema would reject', async () => {
+            const { ProjectDao } = await import('../../dao/ProjectDao')
+            vi.mocked(ProjectDao.getProjectFromApiKey).mockResolvedValueOnce({
+                ...project,
+                setupType: 'legacy',
+                scheduleLink: 'ftp://example.com/schedule',
+                voteStartTime: null,
+            } as never)
+            const response = await fastify.inject({
+                method: 'GET',
+                url: '/events/me',
+                headers: eventHeaders,
+            })
+            expect(response.statusCode).toBe(200)
+            expect(response.json()).toMatchObject({
+                setupType: 'legacy',
+                scheduleLink: 'ftp://example.com/schedule',
+                voteStartTime: null,
+            })
+        })
+
+        it('does not answer 500 after committing an update on legacy data', async () => {
+            await eventRef().update({ scheduleLink: 'ftp://example.com/s' })
+            const response = await patch({ name: 'Committed' })
+            expect(response.statusCode).toBe(200)
+            expect(response.json().scheduleLink).toBe('ftp://example.com/s')
+            expect((await eventRef().get()).data()?.name).toBe('Committed')
+        })
+
+        it('normalizes Firestore timestamps in vote windows', async () => {
+            const { ProjectDao } = await import('../../dao/ProjectDao')
+            const start = new Date('2026-09-21T10:00:00.000Z')
+            await eventRef().update({
+                voteStartTime: { toDate: () => start },
+                voteEndTime: '2026-09-22T10:00:00.000Z',
+            })
+            const read = await ProjectDao.getProjectFromId(
+                {} as never,
+                project.id
+            )
+            expect(read).toMatchObject({
+                voteStartTime: start.toISOString(),
+            })
+            expect(read).not.toHaveProperty('apiKey')
+        })
+
+        it('does not re-validate untouched legacy fields', async () => {
+            // The admin UI copies the start into the end when only the start
+            // is edited, so equal bounds exist in production data.
+            await eventRef().update({
+                voteStartTime: '2026-09-21T10:00:00.000+02:00',
+                voteEndTime: '2026-09-21T10:00:00.000+02:00',
+                setupType: 'hoverboardv2',
+                config: { projectId: 'p', apiKey: 'k' },
+            })
+            const renamed = await patch({ name: 'Renamed' })
+            expect(renamed.statusCode).toBe(200)
+            expect(
+                (await patch({ voteEndTime: '2026-09-21T07:00:00.000Z' }))
+                    .statusCode
+            ).toBe(400)
+            expect(
+                (await patch({ config: { projectId: 'p', apiKey: 'k' } }))
+                    .statusCode
+            ).toBe(400)
+        })
+
+        it.each(['admin', 'Admin', 'superadmin', 'l', 'LEGAL'])(
+            'rejects the reserved or non-canonical event ID %s',
+            async (id) => {
+                const response = await fastify.inject({
+                    method: 'POST',
+                    url: '/events',
+                    headers: orgHeaders,
+                    payload: { id, name: 'Test' },
+                })
+                expect(response.statusCode).toBe(400)
+                expect(commit).not.toHaveBeenCalled()
+            }
+        )
+
+        it.each(['My-Event', 'my_event', 'ab'])(
+            'applies the admin UI ID rules to %s',
+            async (id) => {
+                const response = await fastify.inject({
+                    method: 'POST',
+                    url: '/events',
+                    headers: orgHeaders,
+                    payload: { id, name: 'Test' },
+                })
+                expect(response.statusCode).toBe(400)
+            }
+        )
+
+        it.each([
+            { name: 12345 },
+            { name: 'Test', hideEventName: 'false' },
+            { name: 'Test', chipColors: 'aabbcc' },
+            { name: 'Test', languages: 'en' },
+            { name: 'Test', hideEventName: null },
+        ])(
+            'rejects wrongly typed values instead of coercing: %j',
+            async (payload) => {
+                const response = await fastify.inject({
+                    method: 'POST',
+                    url: '/events',
+                    headers: orgHeaders,
+                    payload,
+                })
+                expect(response.statusCode).toBe(400)
+                expect(commit).not.toHaveBeenCalled()
+            }
+        )
+
+        it('returns 400 for Firestore-reserved IDs on PATCH', async () => {
+            const response = await fastify.inject({
+                method: 'PATCH',
+                url: '/events/__reserved__',
+                headers: orgHeaders,
+                payload: { name: 'Test' },
+            })
+            expect(response.statusCode).toBe(400)
+        })
+
+        it('fills the default voting form when the organization has none', async () => {
+            const { OrganizationDao } = await import(
+                '../../dao/OrganizationDao'
+            )
+            vi.mocked(
+                OrganizationDao.getOrganizationFromApiKey
+            ).mockResolvedValueOnce({ ...organization, voteItems: [] })
+            const response = await fastify.inject({
+                method: 'POST',
+                url: '/events',
+                headers: orgHeaders,
+                payload: { name: 'No Form' },
+            })
+            expect(response.statusCode).toBe(201)
+            const voteItems = create.mock.calls[0][1].voteItems
+            expect(voteItems).toHaveLength(9)
+            expect(voteItems[0]).toMatchObject({
+                name: 'Fun 😃',
+                type: 'boolean',
+                position: 0,
+            })
+            expect(voteItems.at(-1)).toMatchObject({ type: 'text' })
+            expect(
+                new Set(voteItems.map((i: { id: string }) => i.id)).size
+            ).toBe(9)
+        })
+
+        it('drops vote item translations of removed languages', async () => {
+            await eventRef().update({
+                languages: ['en', 'fr'],
+                voteItems: [
+                    {
+                        id: 'a',
+                        name: 'Fun',
+                        languages: { en: 'Fun', fr: 'Drôle' },
+                    },
+                    { id: 'b', name: 'Clear', languages: { fr: 'Clair' } },
+                    { id: 'c', name: 'Plain' },
+                ],
+            })
+            const response = await patch({ languages: ['en'] })
+            expect(response.statusCode).toBe(200)
+            expect((await eventRef().get()).data()?.voteItems).toEqual([
+                { id: 'a', name: 'Fun', languages: { en: 'Fun' } },
+                { id: 'b', name: 'Clear' },
+                { id: 'c', name: 'Plain' },
+            ])
+        })
     })
 })

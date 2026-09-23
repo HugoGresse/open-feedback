@@ -90,10 +90,14 @@ export const CreateEventSchema = Type.Object(
     {
         ...EventSettingsSchema.properties,
         id: Type.Optional(
+            // Same rules as the admin UI: lowercase, URL-safe and at least 3
+            // characters. Reserved app routes are rejected by the service.
             Type.String({
-                ...IdSchema,
-                pattern: '^(?!__.*__$)[a-zA-Z0-9_-]+$',
-                description: 'Event ID. Generated automatically when omitted.',
+                pattern: '^[a-z0-9-]+$',
+                minLength: 3,
+                maxLength: 100,
+                description:
+                    'Event ID (lowercase letters, digits and dashes). Generated automatically when omitted.',
             })
         ),
     },
@@ -109,10 +113,44 @@ export type EventSettings = Static<typeof EventSettingsSchema>
 export type CreateEvent = Static<typeof CreateEventSchema>
 export type UpdateEvent = Static<typeof UpdateEventSchema>
 
+// Firestore rejects IDs matching __.*__, so refuse them before any read.
+export const EventIdSchema = Type.String({
+    ...IdSchema,
+    pattern: '^(?!__.*__$)[a-zA-Z0-9_-]+$',
+})
+
+const NullableStringSchema = Type.Unsafe<string | null>({
+    type: ['string', 'null'],
+})
+
+// Response schema. Deliberately looser than the write schemas: events saved
+// by the admin UI (or older versions) may hold values the API would now
+// reject (e.g. an ftp:// schedule link). The serializer validates anyOf
+// branches at runtime, so strict unions here would turn a read into a 500.
 export const EventSchema = Type.Object({
-    ...EventSettingsSchema.properties,
     id: IdSchema,
+    name: Type.String(),
     organizationId: Type.Optional(IdSchema),
+    setupType: Type.Optional(Type.String()),
+    config: Type.Optional(
+        Type.Object({
+            jsonUrl: Type.Optional(Type.String()),
+            projectId: Type.Optional(Type.String()),
+            apiKey: Type.Optional(Type.String()),
+            databaseURL: Type.Optional(Type.String()),
+        })
+    ),
+    scheduleLink: Type.Optional(Type.String()),
+    favicon: Type.Optional(Type.String()),
+    logoSmall: Type.Optional(Type.String()),
+    languages: Type.Optional(Type.Array(Type.String())),
+    chipColors: Type.Optional(Type.Array(Type.String())),
+    hideEventName: Type.Optional(Type.Boolean()),
+    disableSoloTalkRedirect: Type.Optional(Type.Boolean()),
+    hideVotesUntilUserVote: Type.Optional(Type.Boolean()),
+    displayFullDates: Type.Optional(Type.Boolean()),
+    voteStartTime: Type.Optional(NullableStringSchema),
+    voteEndTime: Type.Optional(NullableStringSchema),
 })
 
 export const PaginationQuerySchema = Type.Object({

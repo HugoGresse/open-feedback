@@ -79,4 +79,20 @@ describe('JSON bodies', () => {
             expect(response.statusCode).toBe(413)
         }
     )
+
+    it('replays a body the platform already decompressed', async () => {
+        const rawBody = JSON.stringify({ name: 'Gzipped Event' })
+        const response = await buildApp(rawBody).inject({
+            method: 'POST',
+            url: '/',
+            headers: {
+                'content-type': 'application/json',
+                'content-encoding': 'gzip',
+                // Compressed size sent by the client, smaller than rawBody.
+                'content-length': '20',
+            },
+        })
+        expect(response.statusCode).toBe(200)
+        expect(response.json()).toEqual({ name: 'Gzipped Event' })
+    })
 })
