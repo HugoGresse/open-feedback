@@ -146,12 +146,13 @@ jobs:
 
     # Cypress Cloud refuses parallel containers with different browser
     # versions, and runner images roll out new Chrome majors gradually: pin
-    # every container to the same freshly installed stable Chrome.
+    # every container to the same Chrome major. 153 never connects to
+    # Cypress 13.7.1; bump this together with Cypress.
     - name: set up Chrome
       id: setup-chrome
       uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2.2.0
       with:
-        chrome-version: stable
+        chrome-version: 152
 
     - name: run Cypress E2E test
       uses: cypress-io/github-action@01e3b659a495b41649cdd0aa82e1d1624e26520b # v7.4.4
