@@ -1,9 +1,21 @@
 name: Build project + unit test
 
-on: [push]
+# Branches of this repository are tested on push. Pull requests from forks
+# never trigger `push` here, so they are tested through `pull_request`: the
+# job then runs with a read-only token and no secrets, and GitHub holds each
+# run until a maintainer approves it (repository setting "Require approval
+# for all external contributors").
+on:
+    push:
+    pull_request:
+
+permissions:
+    contents: read
 
 jobs:
     build:
+        # Same-repository PRs are already covered by the push run.
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
         runs-on: ubuntu-latest
 
         steps:

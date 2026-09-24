@@ -1,10 +1,37 @@
 name: Run End to End test using Cypress
 
-on: [push]
+# Branches of this repository run on push. Pull requests from forks need the
+# E2E secrets, so they run through `pull_request_target` (secrets available)
+# and wait for a maintainer to approve the `external-contributors`
+# environment before any fork code is checked out. Every new push to the PR
+# starts a new run that needs a new approval: review the diff first.
+on:
+  push:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
 
 jobs:
+  approve-fork:
+    name: Approve E2E for fork pull request
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    environment: external-contributors
+    steps:
+      - run: echo "Approved E2E run for ${{ github.event.pull_request.head.sha }}"
+
   cypress-run:
     name: Run End to end test using Cypress
+    needs: approve-fork
+    # Pushes skip the approval job; fork PRs only continue once approved.
+    # Same-repository PRs are already covered by the push run.
+    if: >-
+      always() && (
+        (github.event_name == 'push' && needs.approve-fork.result == 'skipped') ||
+        needs.approve-fork.result == 'success'
+      )
     runs-on: ubuntu-latest
     strategy:
         # when one test fails, DO NOT cancel the other
@@ -18,6 +45,11 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        # pull_request_target checks out the base branch by default: test
+        # the exact fork commit that was approved instead.
+        ref: ${{ github.event.pull_request.head.sha || github.sha }}
+        persist-credentials: false
     - uses: actions/setup-node@v4
       with:
           node-version-file: .nvmrc
