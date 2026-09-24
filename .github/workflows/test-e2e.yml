@@ -13,6 +13,12 @@ on:
 permissions:
   contents: read
 
+# pull_request_target runs on the base ref, so key fork PRs on their number:
+# otherwise every fork PR would share (and cancel) the same group.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   approve-fork:
     name: Approve E2E for fork pull request
@@ -20,7 +26,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: external-contributors
     steps:
-      - run: echo "Approved E2E run for ${{ github.event.pull_request.head.sha }}"
+      - name: record the approved commit
+        run: echo "Approved E2E run for $HEAD_SHA"
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
 
   cypress-run:
     name: Run End to end test using Cypress
@@ -43,32 +52,41 @@ jobs:
             # run 3 copies of the current job in parallel
             containers: [1, 2, 3]
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+    - name: check out the repository
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         # pull_request_target checks out the base branch by default: test
-        # the exact fork commit that was approved instead.
+        # the exact fork commit that was approved instead. Checkout v7
+        # refuses this unless explicitly allowed; the approve-fork gate above
+        # is what makes it acceptable.
         ref: ${{ github.event.pull_request.head.sha || github.sha }}
+        allow-unsafe-pr-checkout: ${{ github.event_name == 'pull_request_target' }}
         persist-credentials: false
-    - uses: actions/setup-node@v4
+    # Fork runs execute in the base repository's cache scope: never let them
+    # write caches (npm, Cypress binary) that later main runs would restore.
+    - name: set up Node.js
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
           node-version-file: .nvmrc
-          cache: 'npm'
+          cache: ${{ github.event_name == 'push' && 'npm' || '' }}
+          package-manager-cache: ${{ github.event_name == 'push' }}
 
     # firebase-tools 15.x requires JDK 21+ to run the Firestore/Auth emulators.
-    - uses: actions/setup-java@v4
+    - name: set up Java
+      uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
       with:
           distribution: temurin
           java-version: '21'
 
-    - uses: 'google-github-actions/auth@v2'
+    - name: authenticate to Google Cloud
+      uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
       with:
           credentials_json: '${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}'
 
     # Functions now read config from process.env (functions/.env*), not the
     # deprecated functions.config()/.runtimeconfig.json. Convert the legacy
     # nested config secret into the dotenv the emulator loads (.env.local).
-    - name: "Create functions/.env.local"
+    - name: create functions/.env.local
       run: |
             echo "$RUNTIME_CONFIG_TEST" | jq -r '
               "APP_ENV=\(.app.env // "test")",
@@ -85,13 +103,13 @@ jobs:
       env:
           RUNTIME_CONFIG_TEST: ${{secrets.RUNTIME_CONFIG_TEST}}
 
-    - name: Install functions dependencies
+    - name: install functions dependencies
       run: |
             cd functions
             npm ci
             npm run build
 
-    - name: Change .firebaserc file to use open-feedback-cypress project ID
+    - name: use the open-feedback-cypress project in .firebaserc
       run: |
                 sed -i 's/open-feedback-42/open-feedback-cypress/g' .firebaserc
                 cat .firebaserc
@@ -101,7 +119,7 @@ jobs:
 #      env:
 #          SERVICE_ACCOUNT_JSON: ${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}
 
-    - name: Create .env.test.local
+    - name: create .env.test.local
       run: |
             echo "VITE_APPID=$CYPRESS_VITE_APPID" > .env.test.local
             echo "VITE_API_KEY=$CYPRESS_VITE_API_KEY" >> .env.test.local
@@ -122,9 +140,14 @@ jobs:
           CYPRESS_VITE_STORAGE_BUCKET: ${{ secrets.E2E_FIREBASE_BUCKET }}
           FIREBASE_STORAGE_EMULATOR_HOST: 127.0.0.1:9199
 
-    - name: Run Cypress E2E test
-      uses: cypress-io/github-action@v6
+    - name: install dependencies without cache (fork pull request)
+      if: github.event_name != 'push'
+      run: npm ci
+
+    - name: run Cypress E2E test
+      uses: cypress-io/github-action@01e3b659a495b41649cdd0aa82e1d1624e26520b # v7.4.4
       with:
+        install: ${{ github.event_name == 'push' }}
         browser: chrome
         build: npm run build
         start: npm run cy:start

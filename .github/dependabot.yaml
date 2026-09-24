@@ -1,0 +1,14 @@
+version: 2
+updates:
+  # Keeps the SHA-pinned actions (and their version comments) up to date.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    # Let new releases age a week before adopting them (supply-chain safety).
+    cooldown:
+      default-days: 7
+    groups:
+      github-actions:
+        patterns:
+          - '*'
