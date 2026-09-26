@@ -2,7 +2,11 @@ import { describe, it, expect, vi } from 'vitest'
 
 vi.mock('../../../firebase.ts', () => ({ fireStoreMainInstance: {} }))
 
-import { countTalkVotes } from './talkVoteCount'
+import {
+    countTalkVotes,
+    countTalkVotesAndComments,
+    shouldConfirmTalkRemoval,
+} from './talkVoteCount'
 
 describe('countTalkVotes', () => {
     it('returns 0 when the talk has no vote document', () => {
@@ -24,7 +28,30 @@ describe('countTalkVotes', () => {
         ).toBe(3)
     })
 
+    it('ignores deleted text votes left as empty objects', () => {
+        expect(countTalkVotes({ comment: { a: {}, b: { text: 'ok' } } })).toBe(
+            1
+        )
+    })
+
+    it('reports comments separately', () => {
+        expect(
+            countTalkVotesAndComments({ fun: 2, comment: { a: { text: 'x' } } })
+        ).toEqual({ votes: 3, comments: 1 })
+    })
+
     it('ignores counters that were decremented below zero', () => {
         expect(countTalkVotes({ fun: 0, clear: -1 })).toBe(0)
+    })
+})
+
+describe('shouldConfirmTalkRemoval', () => {
+    it('deletes directly only when the talk has no vote', () => {
+        expect(shouldConfirmTalkRemoval(0)).toBe(false)
+        expect(shouldConfirmTalkRemoval(2)).toBe(true)
+    })
+
+    it('asks for confirmation when the vote count is unknown', () => {
+        expect(shouldConfirmTalkRemoval(null)).toBe(true)
     })
 })

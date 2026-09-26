@@ -13,6 +13,7 @@ import { round1Decimals, twoDigits } from '../../../utils/numberUtils'
 import { VOTE_STATUS_ACTIVE } from '../../../core/contants'
 import { getSpeakersListSelector } from '../../../core/speakers/speakerSelectors'
 import { DateTime } from 'luxon'
+import { countTalkVotesAndComments } from '../talks/talkVoteCount'
 
 const getDashboard = (state) => getAdminStateSelector(state).adminDashboard
 const getDashboardData = (state) => getDashboard(state).data
@@ -37,36 +38,9 @@ export const getTalksWithVotesSelector = createSelector(
             return []
         }
 
-        let votes
-        let voteObject
-        let voteItemObject
-        let commentCount
         return talkList.reduce((acc, talk) => {
-            voteObject = talkVotes[talk.id]
-
-            if (!voteObject) {
-                votes = {}
-            } else {
-                votes = voteObject.votes
-            }
-
-            const voteCounts = Object.keys(votes).reduce(
-                (acc, id) => {
-                    voteItemObject = votes[id]
-                    if (Number.isInteger(voteItemObject)) {
-                        return {
-                            ...acc,
-                            votes: acc.votes + voteItemObject,
-                        }
-                    }
-                    commentCount = Object.keys(voteItemObject).length
-                    return {
-                        ...acc,
-                        votes: acc.votes + commentCount,
-                        comments: acc.comments + commentCount,
-                    }
-                },
-                { votes: 0, comments: 0 }
+            const voteCounts = countTalkVotesAndComments(
+                talkVotes[talk.id]?.votes
             )
 
             acc.push({
