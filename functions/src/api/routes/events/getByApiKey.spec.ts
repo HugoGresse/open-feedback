@@ -15,14 +15,17 @@ const baseProject = {
 // Stub the project-key resolution chain used by ProjectDao.getProjectFromApiKey:
 // collectionGroup('private').where(...).limit(1).get(), whose matched doc's
 // grandparent is the project doc.
-const mockProjectKeyResolves = (project = baseProject) => {
+const mockProjectKeyResolves = (
+    project = baseProject,
+    documentId = project.id
+) => {
     const projectDoc = {
         exists: true,
-        id: project.id,
+        id: documentId,
         data: () => project,
     }
     const projectRef = {
-        id: project.id,
+        id: documentId,
         parent: { id: 'projects' },
         get: () => projectDoc,
     }
@@ -112,5 +115,19 @@ describe('/events/me', () => {
         // Security: internal user ids must not be exposed.
         expect(body).not.toHaveProperty('owner')
         expect(body).not.toHaveProperty('members')
+    })
+
+    it('uses the document ID even if stored data contains another event ID', async () => {
+        mockProjectKeyResolves(
+            { ...baseProject, id: 'unrelated-event' },
+            'proj_123'
+        )
+        const response = await fastify.inject({
+            method: 'GET',
+            url: '/events/me',
+            headers: { 'x-api-key': 'ofproj_test-key-123' },
+        })
+        expect(response.statusCode).toBe(200)
+        expect(response.json().id).toBe('proj_123')
     })
 })

@@ -7,14 +7,26 @@ on:
     branches:
       - main
   workflow_dispatch:
- 
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: npm ci
-      - run: npm run build
+      - name: check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: install dependencies
+        run: npm ci
+      - name: build the app
+        run: npm run build
         # Vite inlines these into the client bundle at build time, so they are
         # PUBLIC in the deployed app — never put server-only secrets here.
         # Without them the deployed app ships an empty Firebase/runtime config.
@@ -32,7 +44,8 @@ jobs:
           VITE_OPEN_SPONSORS: ${{ secrets.OF_VITE_OPEN_SPONSORS }}
           VITE_EMULATORS: ${{ secrets.OF_VITE_EMULATORS }}
           VITE_API_DOCS_URL: ${{ secrets.OF_VITE_API_DOCS_URL }}
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@500ac625ca2dd40cbd15f7659af953801858032a # v0.11.0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_OPEN_FEEDBACK_42 }}
