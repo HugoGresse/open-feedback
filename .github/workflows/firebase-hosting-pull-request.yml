@@ -14,7 +14,9 @@ concurrency:
 
 jobs:
   build_and_preview:
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    # Deploying needs the Firebase service account: never for forks, and not
+    # for Dependabot runs, which only receive Dependabot secrets.
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     steps:
       - name: check out the repository
