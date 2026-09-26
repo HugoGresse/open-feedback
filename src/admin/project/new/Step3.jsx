@@ -1,8 +1,10 @@
 import React from 'react'
 import Step3Hoverboardv2 from './Step3Hoverboardv2.jsx'
 import Step3JSON from './Step3JSON.jsx'
+import Step3JSONImport from './Step3JSONImport.tsx'
 import {
     PROJECT_TYPE_HOVERBOARDV2,
+    PROJECT_TYPE_JSONIMPORT,
     PROJECT_TYPE_JSONURL,
 } from '../../../core/setupType/projectApi'
 import { useTranslation } from 'react-i18next'
@@ -47,6 +49,23 @@ const Step3 = ({ onCancel, onBack, onSubmit, projectType, initialValues }) => {
                     initialValues={
                         initialValues || {
                             jsonUrl: '',
+                        }
+                    }
+                />
+            )
+        case PROJECT_TYPE_JSONIMPORT:
+            return (
+                <Step3JSONImport
+                    stepTitle={stepTitle}
+                    submitText={submitText}
+                    backText={backText}
+                    onCancel={onCancel}
+                    onBack={onBack}
+                    onSubmit={onSubmit}
+                    rightColumnTitle={rightColumnTitle}
+                    initialValues={
+                        initialValues || {
+                            jsonText: '',
                         }
                     }
                 />

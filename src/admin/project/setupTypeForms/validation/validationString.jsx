@@ -1,5 +1,6 @@
 import {
     PROJECT_TYPE_HOVERBOARDV2,
+    PROJECT_TYPE_JSONIMPORT,
     PROJECT_TYPE_JSONURL,
 } from '../../../../core/setupType/projectApi'
 
@@ -24,6 +25,26 @@ const speakerNameValid =
 const speakerPhotoUrlValid =
     'Some speaker photo urls are not valid (empty string, not http(s) url or no data).'
 
+const talkModel = {
+    idValid: talkIdValid,
+    titleValid: talkTitleValid,
+    startEndTimeValid:
+        talkStartEndValid +
+        ' The date formatting should match this format: 2019-06-27T16:20:00+02:00',
+    trackTitleValid: talkTrackTitleValid,
+    speakersValid: talkSpeakersValid,
+    noSpeakers: noSpeaker,
+    speakersMissing: speakersMissing,
+    talkCount: talkPlusSpeakerCount,
+    tagsValid: talkTagsValid,
+}
+
+const speakerModel = {
+    idValid: speakerIdValid,
+    nameValid: speakerNameValid,
+    photoUrlValid: speakerPhotoUrlValid,
+}
+
 const validationText = {
     connection: {
         [PROJECT_TYPE_JSONURL]: {
@@ -31,6 +52,12 @@ const validationText = {
             connected: 'We received your data.',
             error:
                 'We failed to get your data, the server may be offline, or the url may be wrong.',
+        },
+        [PROJECT_TYPE_JSONIMPORT]: {
+            connecting: 'We are reading your JSON.',
+            connected: 'We parsed your data.',
+            error:
+                'We could not read your data. Is the JSON valid and shaped like the model?',
         },
         [PROJECT_TYPE_HOVERBOARDV2]: {
             connecting: 'We are connecting to your Firestore database.',
@@ -45,24 +72,14 @@ const validationText = {
         [PROJECT_TYPE_JSONURL]: {
             speakersOrTalksObjectFound:
                 'We did not found the %s object(s) in your json. It may be missing, may not be an object with key:value inside or be empty. Check the json model for more information.',
-            talk: {
-                idValid: talkIdValid,
-                titleValid: talkTitleValid,
-                startEndTimeValid:
-                    talkStartEndValid +
-                    ' The date formatting should match this format: 2019-06-27T16:20:00+02:00',
-                trackTitleValid: talkTrackTitleValid,
-                speakersValid: talkSpeakersValid,
-                noSpeakers: noSpeaker,
-                speakersMissing: speakersMissing,
-                talkCount: talkPlusSpeakerCount,
-                tagsValid: talkTagsValid,
-            },
-            speaker: {
-                idValid: speakerIdValid,
-                nameValid: speakerNameValid,
-                photoUrlValid: speakerPhotoUrlValid,
-            },
+            talk: talkModel,
+            speaker: speakerModel,
+        },
+        [PROJECT_TYPE_JSONIMPORT]: {
+            speakersOrTalksObjectFound:
+                'We did not found the %s object(s) in your json. It may be missing, may not be an object with key:value inside or be empty. Check the json model for more information.',
+            talk: talkModel,
+            speaker: speakerModel,
         },
         [PROJECT_TYPE_HOVERBOARDV2]: {
             speakersOrTalksObjectFound:

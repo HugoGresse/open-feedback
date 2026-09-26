@@ -48,7 +48,8 @@
         "saveSuccess": "Event saved",
         "saveFail": "Failed to save the event",
         "newSuccess": "New event created! Redirecting you now...",
-        "newFail": "Fail to create a new event, "
+        "newFail": "Fail to create a new event, ",
+        "importFail": "The event was created but importing the JSON failed, "
     },
     "dashboard": {
         "comments": "Comments",
@@ -108,6 +109,8 @@
             "projectTypeHoverboardDetail": "The talks/speakers/schedule will be retrieved directly on page load from your own Firestore database that follow Hoverboard v2 model.",
             "projectTypeJsonurl": "JSON API URL",
             "projectTypeJsonurlDetail": "Provide an url to a .json that you’ll either host (on gist.github.com or another static server) or a dynamic answer from your own database/api. The json model will need to match OpenFeedback one, you’ll be able to check it on the next screen.",
+            "projectTypeJsonimport": "Import a JSON file",
+            "projectTypeJsonimportDetail": "Upload or paste a .json file matching the OpenFeedback model. The talks and speakers are imported once into OpenFeedback, so you can edit them afterwards like a regular event.",
             "projectTypeOpenfeedback": "OpenFeedback Database (default)",
             "projectTypeOpenfeedbackDetail": "You can manually enter the talks/speakers/schedule on OpenFeedback. It will not be in sync with another service if you are using one. No additional configuration is required.",
             "projectTypeRequired": "You need to choose how you want to setup the event.",
@@ -120,6 +123,7 @@
             "back": "Back",
             "firebaseCredentials": "Enter your Firebase credentials",
             "jsonurl": "What's the URL of the API or JSON file?",
+            "jsonImport": "Upload or paste your JSON file",
             "notManaged": "This project type is not managed, this should not happen, either your not a good dev, or ¯\\_(ツ)_/¯",
             "stepTitle": "Create a new event (step 3/3)",
             "submit": "Create event",
@@ -231,6 +235,12 @@
             "jsonUrlRequired": "The API URL is required",
             "jsonUrlValid": "The API URL must be a valid url",
             "showJsonModel": "Show JSON model"
+        },
+        "jsonImport": {
+            "uploadFile": "Upload a JSON file",
+            "orPaste": "or paste the JSON below",
+            "required": "Upload a file or paste your JSON.",
+            "invalidJson": "The JSON could not be parsed: {{error}}"
         },
         "setupMode": "Setup Mode",
         "validateConfig": "VALIDATE CONFIG",
