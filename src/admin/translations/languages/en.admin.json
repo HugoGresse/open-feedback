@@ -351,7 +351,12 @@
         "submitContinue": "Add talk & add another one",
         "titleAdd": "Add a new talk to the event",
         "titleEdit": "Edit a talk",
-        "addNewSpeaker": "Add a speaker to the talk"
+        "addNewSpeaker": "Add a speaker to the talk",
+        "removeConfirmTitle": "Delete this talk?",
+        "removeConfirmDesc": "\"{{title}}\" has {{count}} vote attached. Deleting the talk will make this vote inaccessible. Are you sure?",
+        "removeConfirmDesc_plural": "\"{{title}}\" has {{count}} votes attached. Deleting the talk will make these votes inaccessible. Are you sure?",
+        "removeConfirmDescUnknown": "We could not check whether \"{{title}}\" has votes attached. Deleting the talk will make any existing vote inaccessible. Are you sure?",
+        "removeConfirmButton": "Delete talk"
     },
     "moderation": {
         "open": "Open talk",

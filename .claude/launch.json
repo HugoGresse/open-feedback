@@ -1,0 +1,24 @@
+{
+    "version": "0.0.1",
+    "configurations": [
+        {
+            "name": "emulators-demo",
+            "runtimeExecutable": "bash",
+            "runtimeArgs": [
+                "-lc",
+                "cd \"$(git rev-parse --show-toplevel)\" && npx -y node@22 node_modules/.bin/firebase emulators:start --project demo-open-feedback --only firestore,auth,functions,storage --import=./cypress/fixtures/firebase-emulators-data"
+            ],
+            "port": 4100
+        },
+        {
+            "name": "web-demo",
+            "runtimeExecutable": "bash",
+            "runtimeArgs": [
+                "-lc",
+                "cd \"$(git rev-parse --show-toplevel)\" && VITE_APPID=1:000000000000:web:0000000000000000 VITE_API_KEY=demo-api-key VITE_AUTH_DOMAIN=demo-open-feedback.firebaseapp.com VITE_PROJECT_ID=demo-open-feedback VITE_STORAGE_BUCKET=demo-open-feedback.appspot.com VITE_EMULATORS=true npx -y node@22 node_modules/.bin/vite --port \"${PORT:-3100}\" --strictPort"
+            ],
+            "port": 3100,
+            "autoPort": true
+        }
+    ]
+}
