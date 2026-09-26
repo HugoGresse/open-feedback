@@ -7,13 +7,24 @@ permissions:
   checks: write
   contents: read
   pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build_and_preview:
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    # Deploying needs the Firebase service account: never for forks, and not
+    # for Dependabot runs, which only receive Dependabot secrets.
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: npm ci && npm run build
+      - name: check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: install dependencies and build the app
+        run: npm ci && npm run build
         # Vite inlines these into the client bundle at build time, so they are
         # PUBLIC in the deployed preview — never put server-only secrets here.
         # Without them the preview app ships an empty Firebase/runtime config.
@@ -33,7 +44,8 @@ jobs:
           VITE_SMALL_CHAT: ${{ secrets.OF_DEV_VITE_SMALL_CHAT }}
           VITE_OPEN_SPONSORS: ${{ secrets.OF_DEV_VITE_OPEN_SPONSORS }}
           VITE_EMULATORS: 'false'
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: deploy a Firebase Hosting preview
+        uses: FirebaseExtended/action-hosting-deploy@500ac625ca2dd40cbd15f7659af953801858032a # v0.11.0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_OPEN_FEEDBACK_42 }}
