@@ -4,7 +4,7 @@ import COLORS from '../../../constants/colors'
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { animated } from 'react-spring'
 import { useTheme as useMuiTheme } from '@mui/material'
-import { useTheme as useNivoTheme} from '@nivo/core'
+import { useTheme as useNivoTheme } from '@nivo/theming'
 
 const VoteTimelineGraph = ({ votes }) => {
     const theme = useMuiTheme()
@@ -38,8 +38,7 @@ const VoteTimelineGraph = ({ votes }) => {
             enableSlices="x"
             useMesh={true}
             colors={COLORS.RED_ORANGE}
-            motionStiffness={300}
-            motionDamping={40}
+            motionConfig={{ tension: 300, friction: 40 }}
         />
     )
 }
@@ -118,7 +117,7 @@ const Tooltip = ({ slice }) => {
                 <div
                     key={point.id}
                     style={{
-                        color: point.serieColor,
+                        color: point.seriesColor,
                     }}>
                     <strong>{point.data.yFormatted} vote(s)</strong> <br />
                     {point.data.dateTime.toLocaleString({
