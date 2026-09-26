@@ -1,8 +1,17 @@
 import { App as FirebaseApp } from 'firebase-admin/app'
-import { getFirestore } from 'firebase-admin/firestore'
+import { FieldValue, getFirestore } from 'firebase-admin/firestore'
 import { Project } from '../../types/Project'
-import { NotFoundError } from '../others/Errors'
+import { Organization } from '../../types/Organization'
+import { HttpError, NotFoundError } from '../others/Errors'
 import { APIKey } from '../plugins/APIKey'
+import { CreateEvent, UpdateEvent } from '../schemas'
+import {
+    assertEventIdAllowed,
+    defaultVoteItems,
+    pruneVoteItemLanguages,
+    validateEventSettings,
+} from '../services/eventSettings'
+import { deleteReplacedEventImages } from '../services/eventImages'
 
 const PROJECT_COLLECTION = 'projects'
 // The API key lives in a member-only private subcollection
@@ -11,7 +20,156 @@ const PROJECT_COLLECTION = 'projects'
 const PROJECT_PRIVATE_COLLECTION = 'private'
 const PROJECT_INTEGRATION_DOC = 'integration'
 
+// Firestore Timestamps (legacy vote windows) become ISO strings so the
+// response serializer never has to guess.
+const toIsoDate = (value: unknown) => {
+    const maybeTimestamp = value as { toDate?: () => Date } | null | undefined
+    return typeof maybeTimestamp?.toDate === 'function'
+        ? maybeTimestamp.toDate().toISOString()
+        : value
+}
+
+/**
+ * Single mapping point from a raw Firestore project doc to the API Project
+ * shape (mirrors OrganizationDao.mapOrganizationDoc): the document ID always
+ * wins over a stored `id`, the deprecated project-doc `apiKey` is dropped and
+ * vote window timestamps are normalized.
+ */
+const mapProjectDoc = (
+    id: string,
+    data: Record<string, unknown> = {}
+): Project => {
+    const { apiKey: _legacyApiKey, ...rest } = data
+    const project: Record<string, unknown> = { ...rest, id }
+    for (const key of ['voteStartTime', 'voteEndTime']) {
+        if (key in project) {
+            project[key] = toIsoDate(project[key])
+        }
+    }
+    return project as unknown as Project
+}
+
 export class ProjectDao {
+    public static async createProject(
+        firebaseApp: FirebaseApp,
+        organization: Organization,
+        input: CreateEvent
+    ): Promise<Project> {
+        const db = getFirestore(firebaseApp)
+        const { id, ...settings } = input
+        if (id) {
+            assertEventIdAllowed(id)
+        }
+        const collection = db.collection(PROJECT_COLLECTION)
+        const ref = id ? collection.doc(id) : collection.doc()
+        const project = {
+            setupType: 'openfeedbackv1' as const,
+            chipColors: organization.chipColors ?? ['ff5000'],
+            favicon:
+                organization.favicon ??
+                'https://openfeedback.io/favicon-32x32.png',
+            logoSmall:
+                organization.logoSmall ??
+                'https://openfeedback.io/android-chrome-192x192.png',
+            languages: organization.languages ?? [],
+            // Same fallback as the admin UI when no voting form is inherited:
+            // an event without vote items would have nothing to vote on.
+            voteItems: organization.voteItems?.length
+                ? organization.voteItems
+                : defaultVoteItems(),
+            disableSoloTalkRedirect:
+                organization.disableSoloTalkRedirect ?? false,
+            hideVotesUntilUserVote:
+                organization.hideVotesUntilUserVote ?? false,
+            displayFullDates: organization.displayFullDates ?? false,
+            ...settings,
+            organizationId: organization.id,
+            owner: organization.ownerUserId,
+            members: [organization.ownerUserId],
+            createdAt: FieldValue.serverTimestamp(),
+            updatedAt: FieldValue.serverTimestamp(),
+        }
+        validateEventSettings(project)
+
+        // Admin SDK writes bypass client rules, so both documents can be
+        // created atomically. create() also prevents overwriting an existing ID.
+        const batch = db.batch()
+        batch.create(ref, project)
+        batch.create(
+            ref
+                .collection(PROJECT_PRIVATE_COLLECTION)
+                .doc(PROJECT_INTEGRATION_DOC),
+            { apiKey: APIKey.generateProjectApiKey() }
+        )
+        try {
+            await batch.commit()
+        } catch (error) {
+            if ((error as { code?: number }).code === 6) {
+                throw new HttpError(409, 'Event ID is already in use')
+            }
+            throw error
+        }
+        return { ...project, id: ref.id }
+    }
+
+    public static async updateProject(
+        firebaseApp: FirebaseApp,
+        projectId: string,
+        access: { projectId: string } | { organizationId: string },
+        settings: UpdateEvent
+    ): Promise<Project> {
+        if ('projectId' in access && access.projectId !== projectId) {
+            throw new NotFoundError('Event not found')
+        }
+        const db = getFirestore(firebaseApp)
+        const ref = db.collection(PROJECT_COLLECTION).doc(projectId)
+        const { project, previous } = await db.runTransaction(
+            async (transaction) => {
+                const doc = await transaction.get(ref)
+                const current = doc.data()
+                // Check membership inside the transaction so moving or deleting an
+                // event concurrently cannot authorize a write against stale data.
+                if (
+                    !current ||
+                    ('organizationId' in access &&
+                        current.organizationId !== access.organizationId)
+                ) {
+                    throw new NotFoundError('Event not found')
+                }
+                const changes: Record<string, unknown> = { ...settings }
+                if (settings.languages) {
+                    const voteItems = pruneVoteItemLanguages(
+                        current.voteItems,
+                        settings.languages
+                    )
+                    if (voteItems) {
+                        changes.voteItems = voteItems
+                    }
+                }
+                const project = mapProjectDoc(doc.id, {
+                    ...current,
+                    ...changes,
+                })
+                // Only re-check invariants the request touches: legacy values it
+                // leaves alone must not block an unrelated update.
+                validateEventSettings(project, settings)
+                transaction.update(ref, {
+                    ...changes,
+                    updatedAt: FieldValue.serverTimestamp(),
+                })
+                return { project, previous: current }
+            }
+        )
+        // After the commit only: a rolled-back update must keep its images.
+        await deleteReplacedEventImages(
+            firebaseApp,
+            projectId,
+            previous,
+            project as unknown as Record<string, unknown>
+        )
+        return project
+    }
+
     public static async getProjectFromId(
         firebaseApp: FirebaseApp,
         projectId: string
@@ -23,10 +181,7 @@ export class ProjectDao {
             throw new NotFoundError('Project not found')
         }
 
-        return {
-            id: doc.id,
-            ...doc.data(),
-        } as Project
+        return mapProjectDoc(doc.id, doc.data())
     }
 
     public static async getProjectFromApiKey(
@@ -79,9 +234,6 @@ export class ProjectDao {
             throw new NotFoundError('Project not found')
         }
 
-        return {
-            id: projectDoc.id,
-            ...projectDoc.data(),
-        } as Project
+        return mapProjectDoc(projectDoc.id, projectDoc.data())
     }
 }

@@ -12,6 +12,8 @@ export interface Organization {
     languages?: string[]
     disableSoloTalkRedirect?: boolean
     hideVotesUntilUserVote?: boolean
+    displayFullDates?: boolean
+    voteItems?: Record<string, unknown>[]
     chipColors?: string[]
     createdAt?: string
     updatedAt?: string
