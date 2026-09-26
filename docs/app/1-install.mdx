@@ -37,7 +37,9 @@ You have to create a Mailgun account if you want to send those emails, if not th
 
 Mailgun API is used to send email through Cloud Functions. Configuration uses
 environment variables (the [Firebase params/env approach](https://firebase.google.com/docs/functions/config-env);
-the legacy `functions.config()` / Runtime Config is deprecated). Add the
+the legacy `functions.config()` / Runtime Config is deprecated and is not read:
+`firebase.json` sets `disallowLegacyRuntimeConfig`, so values set with
+`firebase functions:config:set` are ignored). Add the
 variables to a dotenv file under `functions/`:
 
 - The application URL: `APP_URL` (ex: `http://localhost:3000`)
