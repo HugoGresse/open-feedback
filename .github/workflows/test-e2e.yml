@@ -1,10 +1,30 @@
 name: Run End to End test using Cypress
 
-on: [push]
+# The E2E suite runs entirely against the Firebase emulators under a `demo-*`
+# project ID: the emulators need no Google credentials and refuse to reach any
+# real Google service, so this workflow uses no cloud secret. That makes it
+# safe to run for fork pull requests through plain `pull_request` (read-only
+# token, no secrets, PR-scoped cache), held for maintainer approval by the
+# repository's fork approval policy, exactly like the unit tests.
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  E2E_PROJECT_ID: demo-open-feedback
 
 jobs:
   cypress-run:
     name: Run End to end test using Cypress
+    # Same-repository PRs are already covered by the push run.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     strategy:
         # when one test fails, DO NOT cancel the other
@@ -13,94 +33,94 @@ jobs:
         # https://github.com/cypress-io/github-action/issues/48
         fail-fast: false
         matrix:
-            # run 3 copies of the current job in parallel
-            containers: [1, 2, 3]
+            # Runs without the Cypress Cloud record key (fork PRs, Dependabot)
+            # cannot record, and parallelization needs recording: they run the
+            # whole suite once. Other runs split it over 3 recorded containers.
+            include: ${{ fromJSON((github.event_name == 'pull_request' || github.actor == 'dependabot[bot]') && '[{"container":1,"record":false}]' || '[{"container":1,"record":true},{"container":2,"record":true},{"container":3,"record":true}]') }}
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - name: check out the repository
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
+    - name: set up Node.js
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
           node-version-file: .nvmrc
           cache: 'npm'
 
     # firebase-tools 15.x requires JDK 21+ to run the Firestore/Auth emulators.
-    - uses: actions/setup-java@v4
+    - name: set up Java
+      uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
       with:
           distribution: temurin
           java-version: '21'
 
-    - uses: 'google-github-actions/auth@v2'
-      with:
-          credentials_json: '${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}'
-
-    # Functions now read config from process.env (functions/.env*), not the
-    # deprecated functions.config()/.runtimeconfig.json. Convert the legacy
-    # nested config secret into the dotenv the emulator loads (.env.local).
-    - name: "Create functions/.env.local"
+    # Placeholder values only: the emulated functions never reach Mailgun
+    # (unroutable local URL) and Opsgenie alerts stay disabled (unset).
+    - name: create functions/.env.local
       run: |
-            echo "$RUNTIME_CONFIG_TEST" | jq -r '
-              "APP_ENV=\(.app.env // "test")",
-              "APP_URL=\(.app.url // "")",
-              "APP_CONTACTEMAIL=\(.app.contactemail // "")",
-              "APP_RECAPTCHAV3SECRET=\(.app.recaptchav3secret // "")",
-              "MAILGUN_DOMAIN=\(.mailgun.domain // "")",
-              "MAILGUN_KEY=\(.mailgun.key // "")",
-              "MAILGUN_API=\(.mailgun.api // "")",
-              "OPSGENIE_KEY=\(.opsgenie.key // "")",
-              "OPSGENIE_API=\(.opsgenie.api // "")"
-            ' > functions/.env.local
-      shell: bash
-      env:
-          RUNTIME_CONFIG_TEST: ${{secrets.RUNTIME_CONFIG_TEST}}
+            cat > functions/.env.local <<'EOF'
+            APP_ENV=test
+            APP_URL=http://127.0.0.1:3000
+            APP_CONTACTEMAIL=e2e@example.com
+            APP_RECAPTCHAV3SECRET=e2e-placeholder
+            MAILGUN_DOMAIN=example.com
+            MAILGUN_KEY=e2e-placeholder
+            MAILGUN_API=http://127.0.0.1:9/messages
+            EOF
 
-    - name: Install functions dependencies
+    - name: install functions dependencies
       run: |
             cd functions
             npm ci
             npm run build
 
-    - name: Change .firebaserc file to use open-feedback-cypress project ID
+    - name: use the demo project in .firebaserc
       run: |
-                sed -i 's/open-feedback-42/open-feedback-cypress/g' .firebaserc
-                cat .firebaserc
-#    - name: Create serviceAccount.json
-#      run: |
-#            echo "$SERVICE_ACCOUNT_JSON" > serviceAccount.json
-#      env:
-#          SERVICE_ACCOUNT_JSON: ${{ secrets.E2E_GCLOUD_CREDENTIAL_OPEN_FEEDBACK_CYPRESS }}
+            sed -i "s/open-feedback-42/$E2E_PROJECT_ID/g" .firebaserc
+            cat .firebaserc
 
-    - name: Create .env.test.local
+    # A demo project's web config is never checked against a real project:
+    # any API key / app ID works against the emulators.
+    - name: create .env.test.local
       run: |
-            echo "VITE_APPID=$CYPRESS_VITE_APPID" > .env.test.local
-            echo "VITE_API_KEY=$CYPRESS_VITE_API_KEY" >> .env.test.local
-            echo "VITE_AUTH_DOMAIN=$CYPRESS_VITE_AUTH_DOMAIN" >> .env.test.local
-            echo "VITE_DATABASE_URL=$CYPRESS_VITE_DATABASE_URL" >> .env.test.local
-            echo "VITE_PROJECT_ID=$CYPRESS_VITE_PROJECT_ID" >> .env.test.local
-            echo "VITE_STORAGE_BUCKET=$CYPRESS_VITE_STORAGE_BUCKET" >> .env.test.local
-            echo "VITE_EMULATORS=true" >> .env.test.local
+            cat > .env.test.local <<EOF
+            VITE_APPID=1:000000000000:web:0000000000000000
+            VITE_API_KEY=demo-api-key
+            VITE_AUTH_DOMAIN=$E2E_PROJECT_ID.firebaseapp.com
+            VITE_PROJECT_ID=$E2E_PROJECT_ID
+            VITE_STORAGE_BUCKET=$E2E_PROJECT_ID.appspot.com
+            VITE_EMULATORS=true
+            EOF
             cat .env.test.local
-      env:
-#          GOOGLE_APPLICATION_CREDENTIALS: serviceAccount.json
-          VITE_EMULATORS: true
-          CYPRESS_VITE_APPID: ${{ secrets.E2E_FIREBASE_APPID }}
-          CYPRESS_VITE_API_KEY: ${{ secrets.E2E_FIREBASE_API_KEY }}
-          CYPRESS_VITE_AUTH_DOMAIN: ${{ secrets.E2E_FIREBASE_AUTH_DOMAIN }}
-          CYPRESS_VITE_DATABASE_URL: ${{ secrets.E2E_FIREBASE_DATABASE_URL }}
-          CYPRESS_VITE_PROJECT_ID: ${{ secrets.E2E_FIREBASE_PROJECT_ID }}
-          CYPRESS_VITE_STORAGE_BUCKET: ${{ secrets.E2E_FIREBASE_BUCKET }}
-          FIREBASE_STORAGE_EMULATOR_HOST: 127.0.0.1:9199
 
-    - name: Run Cypress E2E test
-      uses: cypress-io/github-action@v6
+    - name: run Cypress E2E test
+      uses: cypress-io/github-action@01e3b659a495b41649cdd0aa82e1d1624e26520b # v7.4.4
       with:
         browser: chrome
         build: npm run build
         start: npm run cy:start
         wait-on: 'http://127.0.0.1:3000, http://127.0.0.1:8080, http://127.0.0.1:9099'
-        record: true
-        parallel: true
+        record: ${{ matrix.record }}
+        parallel: ${{ matrix.record }}
+        # Explicit per attempt, so "re-run failed jobs" opens a new Cypress
+        # Cloud run instead of reusing the completed one.
+        ci-build-id: ${{ github.run_id }}-${{ github.run_attempt }}
       env:
-#        GOOGLE_APPLICATION_CREDENTIALS: serviceAccount.json
         VITE_EMULATORS: true
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_DASHBOARD_KEY }}
+
+  # Stable check to require in branch protection. Unlike the Cypress Cloud
+  # status (`cypress: default-group`), it is reported for unrecorded runs too
+  # (fork PRs), and its name doesn't change with the matrix.
+  e2e:
+    name: E2E result
+    needs: cypress-run
+    if: ${{ !cancelled() && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: fail unless every E2E container passed
+        env:
+          RESULT: ${{ needs.cypress-run.result }}
+        run: '[[ "$RESULT" == success ]]'

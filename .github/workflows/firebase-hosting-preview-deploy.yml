@@ -1,0 +1,191 @@
+name: Deploy PR preview
+run-name: Preview ${{ github.event.workflow_run.head_repository.full_name }}@${{ github.event.workflow_run.head_branch }} (${{ github.event.workflow_run.head_sha }})
+
+# Step 2 of 2 for PR previews. Runs from the default branch (trusted code)
+# after "Build PR preview" succeeds, and deploys the built site to a Firebase
+# Hosting preview channel on the sandbox project:
+#  - no pull request code runs here: the artifact is only handled as data;
+#  - Google access is keyless (Workload Identity Federation). The provider only
+#    accepts this workflow, on main, triggered by workflow_run, for this repo,
+#    and the service account can only deploy Hosting on the sandbox project;
+#  - fork previews wait for a maintainer to approve the
+#    `external-contributors` environment. The run name above and the pending
+#    "Firebase preview" commit status tell the approver which fork, branch
+#    and commit they are approving.
+on:
+  workflow_run:
+    workflows: [Build PR preview]
+    types: [completed]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_repository.full_name }}-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+# Sandbox identity for the deploy side. The build side (web app config) is in
+# .env.preview; keep both in sync when changing the sandbox project.
+env:
+  PREVIEW_PROJECT_ID: open-feedback-hugo
+  PREVIEW_WIF_PROVIDER: projects/751966180641/locations/global/workloadIdentityPools/github/providers/open-feedback-repo
+  PREVIEW_SERVICE_ACCOUNT: gh-preview-deploy@open-feedback-hugo.iam.gserviceaccount.com
+  STATUS_CONTEXT: Firebase preview
+
+jobs:
+  # Unapproved and credential-free: only decides whether there is a live PR
+  # to deploy, so approvals are only ever requested for real, current PRs.
+  resolve:
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+      statuses: write
+    outputs:
+      number: ${{ steps.pr.outputs.number }}
+    steps:
+      # workflow_run.pull_requests is empty for forks: resolve the PR from the
+      # head branch and only accept it if it still points at the built commit.
+      - name: find the pull request
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          HEAD_OWNER: ${{ github.event.workflow_run.head_repository.owner.login }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          number=$(gh api -X GET "repos/$REPO/pulls" -f state=open -f head="$HEAD_OWNER:$HEAD_BRANCH" \
+            --jq "map(select(.head.sha == \"$HEAD_SHA\")) | .[0].number // empty")
+          if [[ ! "$number" =~ ^[0-9]+$ ]]; then
+            echo "::notice::No open pull request at $HEAD_SHA (closed or updated since the build); skipping."
+            exit 0
+          fi
+          echo "number=$number" >> "$GITHUB_OUTPUT"
+      - name: mark the preview as pending on the commit
+        if: steps.pr.outputs.number
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh api -X POST "repos/$REPO/statuses/$HEAD_SHA" -f state=pending -f context="$STATUS_CONTEXT" \
+            -f target_url="$RUN_URL" -f description="Deploying (fork previews wait for maintainer approval)" >/dev/null
+
+  deploy:
+    needs: resolve
+    if: needs.resolve.outputs.number
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.workflow_run.head_repository.full_name != github.repository && 'external-contributors' || '' }}
+    permissions:
+      contents: read
+      actions: read # download the artifact of the build run
+      id-token: write # Workload Identity Federation
+      pull-requests: write # comment the preview URL
+      statuses: write # report the result on the commit
+    env:
+      PR_NUMBER: ${{ needs.resolve.outputs.number }}
+    steps:
+      - name: check out the default branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+          cache-dependency-path: .github/preview-deploy/package-lock.json
+      # Only firebase-tools, pinned by its own lockfile, without install
+      # scripts: the app's dependency tree never runs in this job.
+      - name: install firebase-tools
+        run: npm ci --prefix .github/preview-deploy --ignore-scripts
+
+      # Extracted outside the workspace, so even an extractor path-traversal
+      # bug could not reach the checkout, node_modules or credentials.
+      - name: download the built site
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: preview-dist
+          path: ${{ runner.temp }}/preview-artifact
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      # The PR's firebase.json is data too: keep only its hosting routing
+      # fields (so previews reflect rewrites/headers/redirects changes) and
+      # drop anything that could run code (predeploy hooks, framework builds).
+      - name: stage the site and its hosting routing
+        run: |
+          ARTIFACT_DIR="$RUNNER_TEMP/preview-artifact"
+          if find "$ARTIFACT_DIR" -type l | grep -q .; then
+            echo "::error::The preview artifact contains symbolic links"; exit 1
+          fi
+          test -d "$ARTIFACT_DIR/dist"
+          rm -rf dist && cp -R "$ARTIFACT_DIR/dist" dist
+          jq --slurpfile pr "$ARTIFACT_DIR/firebase.json" '{hosting: (
+            {public: "dist", ignore: .hosting.ignore}
+            + ($pr[0].hosting // {} | with_entries(select(.key | IN(
+                "rewrites", "redirects", "headers", "cleanUrls", "trailingSlash", "i18n", "appAssociation"
+              ))))
+          )}' firebase.json > firebase.preview.json
+          mv firebase.preview.json firebase.json
+
+      - name: inject the preview web API key
+        env:
+          API_KEY: ${{ vars.PREVIEW_FIREBASE_API_KEY }}
+        run: |
+          [[ "$API_KEY" =~ ^[A-Za-z0-9_-]+$ ]] || { echo "::error::PREVIEW_FIREBASE_API_KEY variable is missing or invalid"; exit 1; }
+          grep -rlF --include='*.js' '__PREVIEW_FIREBASE_API_KEY__' dist | xargs -r sed -i "s/__PREVIEW_FIREBASE_API_KEY__/$API_KEY/g"
+
+      - name: authenticate to Google Cloud
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        with:
+          workload_identity_provider: ${{ env.PREVIEW_WIF_PROVIDER }}
+          service_account: ${{ env.PREVIEW_SERVICE_ACCOUNT }}
+
+      - name: deploy the preview channel
+        id: deploy
+        run: |
+          .github/preview-deploy/node_modules/.bin/firebase hosting:channel:deploy "pr-$PR_NUMBER" \
+            --project "$PREVIEW_PROJECT_ID" --expires 7d --json > deploy.json
+          url=$(jq -r '[.result[]?.url] | first // empty' deploy.json)
+          [[ -n "$url" ]] || { cat deploy.json; exit 1; }
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: comment the preview URL on the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          URL: ${{ steps.deploy.outputs.url }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          marker='<!-- firebase-preview -->'
+          body=$(printf '%s\nPreview for %s (sandbox project %s, expires in 7 days): %s' \
+            "$marker" "${HEAD_SHA:0:7}" "$PREVIEW_PROJECT_ID" "$URL")
+          id=$(gh api "repos/$REPO/issues/$PR_NUMBER/comments" --paginate \
+            --jq "map(select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"$marker\")))) | .[0].id // empty" | head -n1)
+          if [[ -n "$id" ]]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$id" -f body="$body" >/dev/null
+          else
+            gh api -X POST "repos/$REPO/issues/$PR_NUMBER/comments" -f body="$body" >/dev/null
+          fi
+
+      # workflow_run jobs don't show up in the PR's checks: report the outcome
+      # as a commit status so a failed deploy is visible on the PR.
+      - name: report the result on the commit
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          URL: ${{ steps.deploy.outputs.url }}
+          JOB_STATUS: ${{ job.status }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [[ "$JOB_STATUS" == success && -n "$URL" ]]; then
+            state=success target="$URL" description="Preview deployed (expires in 7 days)"
+          else
+            state=failure target="$RUN_URL" description="Preview deploy failed"
+          fi
+          gh api -X POST "repos/$REPO/statuses/$HEAD_SHA" -f state="$state" -f context="$STATUS_CONTEXT" \
+            -f target_url="$target" -f description="$description" >/dev/null

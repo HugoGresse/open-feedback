@@ -1,0 +1,48 @@
+version: 2
+
+# One pull request per month bumping every dependency: GitHub Actions (SHA
+# pins and their version comments) and npm in both the app and functions/.
+# Minor and patch versions only: major upgrades are done deliberately.
+multi-ecosystem-groups:
+  all-dependencies:
+    schedule:
+      interval: monthly
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    patterns: ['*']
+    multi-ecosystem-group: all-dependencies
+    # Let new releases age a week before adopting them (supply-chain safety).
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+  - package-ecosystem: npm
+    directory: /
+    patterns: ['*']
+    multi-ecosystem-group: all-dependencies
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+  - package-ecosystem: npm
+    directory: /functions
+    patterns: ['*']
+    multi-ecosystem-group: all-dependencies
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+  - package-ecosystem: npm
+    directory: /.github/preview-deploy
+    patterns: ['*']
+    multi-ecosystem-group: all-dependencies
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
