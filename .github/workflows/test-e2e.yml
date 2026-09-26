@@ -110,3 +110,17 @@ jobs:
         VITE_EMULATORS: true
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_DASHBOARD_KEY }}
+
+  # Stable check to require in branch protection. Unlike the Cypress Cloud
+  # status (`cypress: default-group`), it is reported for unrecorded runs too
+  # (fork PRs), and its name doesn't change with the matrix.
+  e2e:
+    name: E2E result
+    needs: cypress-run
+    if: ${{ !cancelled() && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: fail unless every E2E container passed
+        env:
+          RESULT: ${{ needs.cypress-run.result }}
+        run: '[[ "$RESULT" == success ]]'

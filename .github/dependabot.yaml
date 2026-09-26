@@ -37,3 +37,12 @@ updates:
     ignore:
       - dependency-name: '*'
         update-types: ['version-update:semver-major']
+  - package-ecosystem: npm
+    directory: /.github/preview-deploy
+    patterns: ['*']
+    multi-ecosystem-group: all-dependencies
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
