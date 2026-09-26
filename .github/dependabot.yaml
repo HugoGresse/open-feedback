@@ -1,14 +1,29 @@
 version: 2
+
+# One pull request per month bumping every dependency: GitHub Actions (SHA
+# pins and their version comments) and npm in both the app and functions/.
+multi-ecosystem-groups:
+  all-dependencies:
+    schedule:
+      interval: monthly
+
 updates:
-  # Keeps the SHA-pinned actions (and their version comments) up to date.
   - package-ecosystem: github-actions
     directory: /
-    schedule:
-      interval: weekly
+    patterns: ['*']
+    multi-ecosystem-group: all-dependencies
     # Let new releases age a week before adopting them (supply-chain safety).
     cooldown:
       default-days: 7
-    groups:
-      github-actions:
-        patterns:
-          - '*'
+  - package-ecosystem: npm
+    directory: /
+    patterns: ['*']
+    multi-ecosystem-group: all-dependencies
+    cooldown:
+      default-days: 7
+  - package-ecosystem: npm
+    directory: /functions
+    patterns: ['*']
+    multi-ecosystem-group: all-dependencies
+    cooldown:
+      default-days: 7
