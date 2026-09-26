@@ -1,0 +1,8 @@
+{
+    "name": "open-feedback-preview-deploy",
+    "private": true,
+    "description": "firebase-tools only, for the PR preview deploy workflow (keeps the app's dependency tree and install scripts out of the job holding the deploy identity).",
+    "devDependencies": {
+        "firebase-tools": "15.20.0"
+    }
+}

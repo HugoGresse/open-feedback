@@ -33,11 +33,17 @@ jobs:
         run: npm ci
       # Uses .env.preview (sandbox project, public values only).
       - name: build the app for the preview project
-        run: npx vite build --mode preview
+        run: npm run build -- --mode preview
       - name: upload the built site
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: preview-dist
-          path: dist
+          # firebase.json travels as data: the deploy job only keeps its
+          # hosting routing fields (see firebase-hosting-preview-deploy.yml).
+          path: |
+            dist
+            firebase.json
           if-no-files-found: error
-          retention-days: 3
+          # Fork previews wait for a manual approval: keep the build long
+          # enough to survive a weekend or a holiday.
+          retention-days: 14
