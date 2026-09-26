@@ -6,7 +6,7 @@
             "runtimeExecutable": "bash",
             "runtimeArgs": [
                 "-lc",
-                "cd \"$(git rev-parse --show-toplevel)\" && npx -y node@22 node_modules/.bin/firebase emulators:start --project demo-open-feedback --only firestore,auth,functions,storage --import=./cypress/fixtures/firebase-emulators-data"
+                "cd \"$(git rev-parse --show-toplevel)\" && npm --prefix functions run build && npx -y node@22 node_modules/.bin/firebase emulators:start --project demo-open-feedback --only firestore,auth,functions,storage --import=./cypress/fixtures/firebase-emulators-data"
             ],
             "port": 4100
         },

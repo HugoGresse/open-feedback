@@ -1,6 +1,5 @@
 import React from 'react'
 import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
 import RoomIcon from '@mui/icons-material/Room'
 import CalendarIcon from '@mui/icons-material/CalendarToday'
 import IconButton from '@mui/material/IconButton'
@@ -11,6 +10,7 @@ import TalkListItemSpeakerList from './TalkListItemSpeakerList.jsx'
 import Chip from '@mui/material/Chip'
 import { DateTime } from 'luxon'
 import Typography from '@mui/material/Typography'
+import DeleteTalkButton from './DeleteTalkButton.tsx'
 
 const useStyles = makeStyles((theme) => ({
     cell: {
@@ -32,7 +32,7 @@ const TalkListItem = ({
     item,
     speakers,
     onEdit,
-    onRemove,
+    isRemoveBlocked,
     onSpeakerClicked,
 }) => {
     const classes = useStyles()
@@ -82,12 +82,10 @@ const TalkListItem = ({
                     <EditIcon />
                 </IconButton>
 
-                <IconButton
-                    aria-label="delete"
-                    onClick={() => onRemove(item)}
-                    size="large">
-                    <DeleteIcon />
-                </IconButton>
+                <DeleteTalkButton
+                    talk={item}
+                    isBlocked={isRemoveBlocked}
+                />
             </Grid>
         </OFListItem>
     )

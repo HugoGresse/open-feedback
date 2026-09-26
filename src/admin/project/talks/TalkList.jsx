@@ -15,24 +15,17 @@ import {
 } from '../../../core/speakers/speakerSelectors'
 import Grid from '@mui/material/Grid'
 import OFListHeader from '../../baseComponents/layouts/OFListHeader.jsx'
-import { addTalk, editTalk, removeTalk } from '../../../core/talks/talksActions'
+import { addTalk, editTalk } from '../../../core/talks/talksActions'
 import { projectApi } from '../../../core/setupType/projectApi'
 import { addNotification } from '../../notification/notifcationActions'
 import TalkAddEditPanel from './TalkAddEditPanel.jsx'
 import { addSpeaker } from '../../../core/speakers/speakerActions'
 import { useTranslation } from 'react-i18next'
-import {
-    getSelectedProjectIdSelector,
-    getStartTimeSelector,
-} from '../core/projectSelectors'
-import SimpleDialog from '../../baseComponents/layouts/SimpleDialog.jsx'
-import Typography from '@mui/material/Typography'
-import { getTalkVoteCount } from './talkVoteCount'
+import { getStartTimeSelector } from '../core/projectSelectors'
 
 const TalkList = () => {
     const dispatch = useDispatch()
     const projectVoteStartTime = useSelector(getStartTimeSelector)
-    const projectId = useSelector(getSelectedProjectIdSelector)
     const talks = useSelector(getFilteredTalksSelector)
     const speakersMap = useSelector(getSpeakersListSelector)
     const speakersArray = useSelector(getSpeakersAsArraySelector)
@@ -41,8 +34,6 @@ const TalkList = () => {
     const tracks = useSelector(getTracksSelector)
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
     const [editingTalk, setEditTalk] = useState(null)
-    const [talkToRemove, setTalkToRemove] = useState(null)
-    const [isRemovingTalk, setIsRemovingTalk] = useState(false)
     const { t } = useTranslation()
 
     useEffect(() => {
@@ -85,27 +76,6 @@ const TalkList = () => {
         setSidePanelOpen(true)
     }
 
-    const onRemoveTalkClicked = async (talk) => {
-        if (talkNotReadableCheck()) return
-        // Unknown vote count (read failed) still asks for confirmation.
-        const voteCount = await getTalkVoteCount(projectId, talk.id).catch(
-            () => null
-        )
-        if (voteCount === 0) {
-            dispatch(removeTalk(talk))
-            return
-        }
-        setTalkToRemove({ talk, voteCount })
-    }
-
-    const onRemoveTalkConfirmed = () => {
-        setIsRemovingTalk(true)
-        dispatch(removeTalk(talkToRemove.talk)).then(() => {
-            setIsRemovingTalk(false)
-            setTalkToRemove(null)
-        })
-    }
-
     const maybeCloseSidePanel = (shouldContinueAfterSubmit) => {
         if (shouldContinueAfterSubmit) {
             return
@@ -129,28 +99,6 @@ const TalkList = () => {
                 buttonClick={() => onAddTalkClicked()}
                 buttonText={t('talks.addTalks')}
             />
-
-            <SimpleDialog
-                onClose={() => setTalkToRemove(null)}
-                onConfirm={onRemoveTalkConfirmed}
-                title={t('talks.removeConfirmTitle')}
-                cancelText={t('common.cancel')}
-                confirmText={t('talks.removeConfirmButton')}
-                confirmLoading={isRemovingTalk}
-                open={!!talkToRemove}>
-                {talkToRemove && (
-                    <Typography>
-                        {talkToRemove.voteCount === null
-                            ? t('talks.removeConfirmDescUnknown', {
-                                  title: talkToRemove.talk.title,
-                              })
-                            : t('talks.removeConfirmDesc', {
-                                  title: talkToRemove.talk.title,
-                                  count: talkToRemove.voteCount,
-                              })}
-                    </Typography>
-                )}
-            </SimpleDialog>
 
             <Grid container component="ul">
                 <TalkAddEditPanel
@@ -181,7 +129,7 @@ const TalkList = () => {
                         key={talk.id}
                         speakers={speakersMap}
                         onEdit={onEditTalkClicked}
-                        onRemove={onRemoveTalkClicked}
+                        isRemoveBlocked={talkNotReadableCheck}
                         onSpeakerClicked={(speakerName) =>
                             dispatch(setTalksFilter(speakerName))
                         }
