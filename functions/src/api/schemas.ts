@@ -101,7 +101,26 @@ export const CreateEventSchema = Type.Object(
             })
         ),
     },
-    { additionalProperties: false }
+    {
+        additionalProperties: false,
+        // Shown as the request body example in the API reference (/docs).
+        examples: [
+            {
+                id: 'sunny-tech-2026',
+                name: 'Sunny Tech 2026',
+                setupType: 'openfeedbackv1',
+                scheduleLink: '',
+                favicon: 'https://sunny-tech.io/favicon.png',
+                logoSmall: 'https://sunny-tech.io/favicon.png',
+                languages: ['fr'],
+                chipColors: ['fff111'],
+                hideEventName: true,
+                disableSoloTalkRedirect: true,
+                hideVotesUntilUserVote: true,
+                displayFullDates: true,
+            },
+        ],
+    }
 )
 
 export const UpdateEventSchema = Type.Partial(EventSettingsSchema, {
