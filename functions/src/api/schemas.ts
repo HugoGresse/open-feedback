@@ -42,13 +42,26 @@ export const OrganizationSchema = Type.Object({
 const HttpUrlSchema = Type.String({ format: 'uri', pattern: '^https?://' })
 
 export const EventSettingsSchema = Type.Object({
-    name: Type.String({ minLength: 1, maxLength: 100, pattern: '\\S' }),
+    name: Type.String({
+        minLength: 1,
+        maxLength: 100,
+        pattern: '\\S',
+        description: 'Event name, shown in the feedback app header.',
+    }),
     setupType: Type.Optional(
-        Type.Union([
-            Type.Literal('openfeedbackv1'),
-            Type.Literal('jsonurl'),
-            Type.Literal('hoverboardv2'),
-        ])
+        Type.Union(
+            [
+                Type.Literal('openfeedbackv1'),
+                Type.Literal('jsonurl'),
+                Type.Literal('hoverboardv2'),
+            ],
+            {
+                description:
+                    'Where talks and speakers come from: `openfeedbackv1` (managed in OpenFeedback), ' +
+                    '`jsonurl` (read from `config.jsonUrl`) or `hoverboardv2` (read from a Hoverboard Firebase project, see `config`). ' +
+                    'Defaults to `openfeedbackv1` on creation.',
+            }
+        )
     ),
     config: Type.Optional(
         Type.Object(
@@ -58,31 +71,77 @@ export const EventSettingsSchema = Type.Object({
                 apiKey: Type.Optional(Type.String({ minLength: 1 })),
                 databaseURL: Type.Optional(HttpUrlSchema),
             },
-            { additionalProperties: false }
+            {
+                additionalProperties: false,
+                description:
+                    'Data source settings: `jsonUrl` for `jsonurl`; `projectId`, `apiKey` and `databaseURL` for `hoverboardv2`. Unused for `openfeedbackv1`.',
+            }
         )
     ),
-    scheduleLink: Type.Optional(Type.Union([HttpUrlSchema, Type.Literal('')])),
-    favicon: Type.Optional(HttpUrlSchema),
-    logoSmall: Type.Optional(HttpUrlSchema),
+    scheduleLink: Type.Optional(
+        Type.Union([HttpUrlSchema, Type.Literal('')], {
+            description:
+                'Link to the event schedule, shown in the feedback app header. Empty string for none.',
+        })
+    ),
+    favicon: Type.Optional({
+        ...HttpUrlSchema,
+        description: 'Favicon URL of the feedback app.',
+    }),
+    logoSmall: Type.Optional({
+        ...HttpUrlSchema,
+        description:
+            'Logo URL shown in the feedback app header and talk pages.',
+    }),
     languages: Type.Optional(
         Type.Array(Type.String({ minLength: 2, maxLength: 5 }), {
             uniqueItems: true,
+            description:
+                'Additional languages (e.g. `fr`, `en-US`) the voting form is translated into. Attendees see the translation matching their browser language.',
         })
     ),
     chipColors: Type.Optional(
         Type.Array(Type.String({ pattern: '^[a-fA-F0-9]{6}$' }), {
             minItems: 1,
+            description:
+                'Hex colors without `#` used for the vote buttons; the first one is also the accent color of talk pages.',
         })
     ),
-    hideEventName: Type.Optional(Type.Boolean()),
-    disableSoloTalkRedirect: Type.Optional(Type.Boolean()),
-    hideVotesUntilUserVote: Type.Optional(Type.Boolean()),
-    displayFullDates: Type.Optional(Type.Boolean()),
+    hideEventName: Type.Optional(
+        Type.Boolean({
+            description:
+                'Hide the event name in the feedback app header and show only the logo.',
+        })
+    ),
+    disableSoloTalkRedirect: Type.Optional(
+        Type.Boolean({
+            description:
+                'By default, a day with a single talk redirects straight to that talk. Set to true to show the talk list instead.',
+        })
+    ),
+    hideVotesUntilUserVote: Type.Optional(
+        Type.Boolean({
+            description:
+                'Hide vote results on a talk until the attendee has voted on it (or `?displayVotes=true` is in the URL).',
+        })
+    ),
+    displayFullDates: Type.Optional(
+        Type.Boolean({
+            description:
+                'Show full dates (weekday, day and month) in the talk list instead of only the weekday and day.',
+        })
+    ),
     voteStartTime: Type.Optional(
-        Type.Union([Type.String({ format: 'date-time' }), Type.Null()])
+        Type.Union([Type.String({ format: 'date-time' }), Type.Null()], {
+            description:
+                'ISO 8601 date-time when voting opens. Set together with `voteEndTime`, or both null for no restriction.',
+        })
     ),
     voteEndTime: Type.Optional(
-        Type.Union([Type.String({ format: 'date-time' }), Type.Null()])
+        Type.Union([Type.String({ format: 'date-time' }), Type.Null()], {
+            description:
+                'ISO 8601 date-time when voting closes. Must be after `voteStartTime`.',
+        })
     ),
 })
 
@@ -101,7 +160,26 @@ export const CreateEventSchema = Type.Object(
             })
         ),
     },
-    { additionalProperties: false }
+    {
+        additionalProperties: false,
+        // Shown as the request body example in the API reference (/docs).
+        examples: [
+            {
+                id: 'sunny-tech-2026',
+                name: 'Sunny Tech 2026',
+                setupType: 'openfeedbackv1',
+                scheduleLink: '',
+                favicon: 'https://sunny-tech.io/favicon.png',
+                logoSmall: 'https://sunny-tech.io/favicon.png',
+                languages: ['fr'],
+                chipColors: ['fff111'],
+                hideEventName: false,
+                disableSoloTalkRedirect: false,
+                hideVotesUntilUserVote: true,
+                displayFullDates: false,
+            },
+        ],
+    }
 )
 
 export const UpdateEventSchema = Type.Partial(EventSettingsSchema, {
