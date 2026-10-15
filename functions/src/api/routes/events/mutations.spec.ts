@@ -46,7 +46,7 @@ describe('event mutations', () => {
     const eventHeaders = { 'x-api-key': 'ofproj_valid' }
 
     beforeEach(async () => {
-        mockFirebaseAdminApp({})
+        mockFirebaseAdminApp({}, { firestore: false })
         db = new FakeFirestore(
             { projects: [structuredClone(project)] },
             { mutable: true }
@@ -612,9 +612,8 @@ describe('event mutations', () => {
         })
 
         it('fills the default voting form when the organization has none', async () => {
-            const { OrganizationDao } = await import(
-                '../../dao/OrganizationDao'
-            )
+            const { OrganizationDao } =
+                await import('../../dao/OrganizationDao')
             vi.mocked(
                 OrganizationDao.getOrganizationFromApiKey
             ).mockResolvedValueOnce({ ...organization, voteItems: [] })

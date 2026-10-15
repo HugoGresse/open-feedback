@@ -1,5 +1,7 @@
 import { Static, Type } from '@sinclair/typebox'
 
+// Shared by the event sub-resources (talks, speakers).
+
 export const ResourceRevisionSchema = Type.String({
     pattern: '^[a-f0-9]{64}$',
     description:
@@ -25,7 +27,14 @@ export const ResourceListQuerySchema = Type.Object(
     { additionalProperties: false }
 )
 
+// Loose on purpose: the serializer checks union branches at runtime, and
+// stored IDs vary.
+export const NextCursorSchema = Type.Union([Type.String(), Type.Null()])
+
+// Shared start of every talk and speaker route description.
+export const RESOURCE_ACCESS_NOTE =
+    'Requires the event key (`ofproj_`) or its organization key (`oforg_`), and an openfeedbackv1 event. '
+
+export const ResourceAcknowledgementSchema = Type.Object({ id: Type.String() })
+
 export type ResourceListQuery = Static<typeof ResourceListQuerySchema>
-export type EventResourceKind = 'talks' | 'speakers'
-export type EventResourceAccess =
-    { projectId: string } | { organizationId: string }

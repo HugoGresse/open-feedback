@@ -1,9 +1,6 @@
-import { Type } from '@sinclair/typebox'
-import { EventIdSchema } from './schemas'
-import {
-    ResourceIdSchema,
-    ResourceRevisionSchema,
-} from './eventResourceSchemas'
+import { Static, Type } from '@sinclair/typebox'
+import { EventIdSchema } from './common'
+import { ResourceIdSchema, ResourceRevisionSchema } from './resources'
 
 const fields = {
     title: Type.String({ minLength: 1, maxLength: 2000, pattern: '\\S' }),
@@ -36,3 +33,7 @@ export const TalkSchema = Type.Object({
     title: Type.Optional(Type.String()),
     speakers: Type.Array(Type.String()),
 })
+
+export type CreateTalk = Static<typeof CreateTalkSchema>
+export type UpdateTalk = Static<typeof UpdateTalkSchema>
+export type Talk = Static<typeof TalkSchema>

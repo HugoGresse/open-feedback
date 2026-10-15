@@ -47,7 +47,7 @@ describe.each(['talks', 'speakers'] as const)('%s API', (kind) => {
     let server: FastifyInstance
 
     beforeAll(() => {
-        mockFirebaseAdminApp({})
+        mockFirebaseAdminApp({}, { firestore: false })
         // Keep the API modules and their DAO spies in the same module graph.
         // Each test still receives a fresh database through this closure.
         vi.doMock('firebase-admin/firestore', () => ({
@@ -623,6 +623,61 @@ describe.each(['talks', 'speakers'] as const)('%s API', (kind) => {
             ...(kind === 'talks' ? { speakers: [] } : {}),
         })
         expect(page.statusCode).toBe(200)
+    })
+
+    it('reads records whose ID is longer than 100 characters', async () => {
+        // Arrange
+        const longId = 'l'.repeat(150)
+        await db
+            .collection('projects')
+            .doc(project.id)
+            .collection(kind)
+            .doc(longId)
+            .set({ [field]: 'Long' })
+
+        // Act
+        const response = await server.inject({
+            method: 'GET',
+            url: `${url}/${longId}`,
+            headers,
+        })
+
+        // Assert
+        expect(response.statusCode).toBe(200)
+        expect(response.json()).toMatchObject({ id: longId, [field]: 'Long' })
+    })
+
+    it('rejects a key for another event before any Firestore read', async () => {
+        // Arrange
+        const transaction = vi.spyOn(db, 'runTransaction')
+
+        // Act
+        const response = await server.inject({
+            method: 'GET',
+            url: `/events/other_event/${kind}`,
+            headers: { 'x-api-key': 'ofproj_valid' },
+        })
+
+        // Assert
+        expect(response.statusCode).toBe(404)
+        expect(transaction).not.toHaveBeenCalled()
+    })
+
+    it('returns 503 when the transaction gives up under contention', async () => {
+        // Arrange
+        vi.spyOn(db, 'runTransaction').mockRejectedValue(
+            Object.assign(new Error('10 ABORTED: contention'), { code: 10 })
+        )
+
+        // Act
+        const response = await server.inject({ method: 'GET', url, headers })
+
+        // Assert
+        expect(response.statusCode).toBe(503)
+        expect(response.json()).toEqual({
+            error: 'Too many concurrent changes; retry later',
+            success: false,
+        })
     })
 
     if (kind === 'talks') {
