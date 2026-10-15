@@ -1,19 +1,20 @@
-import * as functions from 'firebase-functions'
+import { onCall, HttpsError } from 'firebase-functions/v2/https'
 import { isEmpty } from 'lodash'
 import { getOpsGenieEnv } from '../helpers/env'
 
-export const alert = functions.https.onCall((data) => {
+export const alert = onCall((request) => {
+    const data = request.data
     const opsGenieEnv = getOpsGenieEnv()
 
     if (isEmpty(data)) {
-        throw new functions.https.HttpsError(
+        throw new HttpsError(
             'failed-precondition',
             'Input parameters are empty'
         )
     }
 
     if (opsGenieEnv === null) {
-        throw new functions.https.HttpsError(
+        throw new HttpsError(
             'failed-precondition',
             'Missing credentials for opsgenie'
         )
