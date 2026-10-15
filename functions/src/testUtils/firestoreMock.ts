@@ -24,7 +24,13 @@ const firestoreStub = (database: { [key: string]: any }) => {
     return firestoreConstructor
 }
 
-export const mockFirebaseAdminApp = (database: { [key: string]: any }) => {
+export const mockFirebaseAdminApp = (
+    database: { [key: string]: any },
+    // Pass false when the spec registers its own firebase-admin/firestore
+    // mock: vitest resolves queued doMocks in parallel, so two mocks of the
+    // same module race and the stub could win.
+    { firestore = true }: { firestore?: boolean } = {}
+) => {
     vi.mock(import('firebase-admin/app'), () => {
         return {
             initializeApp: vi.fn(),
@@ -49,6 +55,7 @@ export const mockFirebaseAdminApp = (database: { [key: string]: any }) => {
         }
     })
 
+    if (!firestore) return
     vi.doMock('firebase-admin/firestore', () => {
         return {
             getFirestore: firestoreStub(database),

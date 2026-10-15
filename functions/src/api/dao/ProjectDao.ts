@@ -12,8 +12,13 @@ import {
     validateEventSettings,
 } from '../services/eventSettings'
 import { deleteReplacedEventImages } from '../services/eventImages'
+import {
+    assertEventAccess,
+    assertKeyScope,
+    EventAccess,
+} from '../services/eventAccess'
 
-const PROJECT_COLLECTION = 'projects'
+export const PROJECT_COLLECTION = 'projects'
 // The API key lives in a member-only private subcollection
 // (projects/{projectId}/private/integration), never on the world-readable
 // project doc. Mirrors the admin client write path.
@@ -115,27 +120,17 @@ export class ProjectDao {
     public static async updateProject(
         firebaseApp: FirebaseApp,
         projectId: string,
-        access: { projectId: string } | { organizationId: string },
+        access: EventAccess,
         settings: UpdateEvent
     ): Promise<Project> {
-        if ('projectId' in access && access.projectId !== projectId) {
-            throw new NotFoundError('Event not found')
-        }
+        assertKeyScope(projectId, access)
         const db = getFirestore(firebaseApp)
         const ref = db.collection(PROJECT_COLLECTION).doc(projectId)
         const { project, previous } = await db.runTransaction(
             async (transaction) => {
                 const doc = await transaction.get(ref)
                 const current = doc.data()
-                // Check membership inside the transaction so moving or deleting an
-                // event concurrently cannot authorize a write against stale data.
-                if (
-                    !current ||
-                    ('organizationId' in access &&
-                        current.organizationId !== access.organizationId)
-                ) {
-                    throw new NotFoundError('Event not found')
-                }
+                assertEventAccess(projectId, access, current)
                 const changes: Record<string, unknown> = { ...settings }
                 if (settings.languages) {
                     const voteItems = pruneVoteItemLanguages(
