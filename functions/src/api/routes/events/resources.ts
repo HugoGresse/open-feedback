@@ -3,6 +3,7 @@ import { Type, TSchema } from '@sinclair/typebox'
 import {
     EventResourceAccess,
     EventResourceKind,
+    ResourceIdSchema,
     ResourceListQuery,
     ResourceListQuerySchema,
 } from '../../eventResourceSchemas'
@@ -19,10 +20,12 @@ const accessFor = (request: FastifyRequest): EventResourceAccess => {
 const errors = {
     400: ErrorSchema,
     401: ErrorSchema,
+    403: ErrorSchema,
     404: ErrorSchema,
     409: ErrorSchema,
+    503: ErrorSchema,
 }
-const acknowledgement = Type.Object({ id: EventIdSchema })
+const acknowledgement = Type.Object({ id: Type.String() })
 
 export const registerEventResourceRoutes = async (
     server: FastifyInstance,
@@ -34,7 +37,7 @@ export const registerEventResourceRoutes = async (
     const params = Type.Object({ projectId: EventIdSchema })
     const recordParams = Type.Object({
         ...params.properties,
-        [idParam]: EventIdSchema,
+        [idParam]: ResourceIdSchema,
     })
     const common = { tags: [kind === 'talks' ? 'Talks' : 'Speakers'] }
     const authorization =
@@ -59,7 +62,9 @@ export const registerEventResourceRoutes = async (
                     200: Type.Object({
                         id: EventIdSchema,
                         [kind]: Type.Array(schemas.read),
-                        nextCursor: Type.Union([EventIdSchema, Type.Null()]),
+                        // Loose on purpose: the serializer checks union
+                        // branches at runtime, and stored IDs vary.
+                        nextCursor: Type.Union([Type.String(), Type.Null()]),
                     }),
                 },
             },
@@ -111,7 +116,7 @@ export const registerEventResourceRoutes = async (
                 body: schemas.create,
                 description:
                     authorization +
-                    'Create one record. Supply a stable ID for retry recovery, or omit it to generate an ID. Existing IDs return 409. Talk speaker IDs must already exist in this event. Read the record before updating it.',
+                    'Create one record. Supply a stable ID for retry recovery, or omit it to generate an ID. Existing IDs, or talk IDs that still have votes from a deleted talk, return 409. Events managed by an external data source return 403. New talk speaker IDs must already exist in this event. Read the record before updating it.',
                 response: { ...errors, 201: acknowledgement },
             },
         },

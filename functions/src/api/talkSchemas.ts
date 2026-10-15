@@ -1,10 +1,16 @@
 import { Type } from '@sinclair/typebox'
 import { EventIdSchema } from './schemas'
-import { ResourceRevisionSchema } from './eventResourceSchemas'
+import {
+    ResourceIdSchema,
+    ResourceRevisionSchema,
+} from './eventResourceSchemas'
 
 const fields = {
     title: Type.String({ minLength: 1, maxLength: 2000, pattern: '\\S' }),
-    speakers: Type.Array(EventIdSchema, { maxItems: 100, uniqueItems: true }),
+    speakers: Type.Array(ResourceIdSchema, {
+        maxItems: 100,
+        uniqueItems: true,
+    }),
 }
 
 export const CreateTalkSchema = Type.Object(
@@ -22,9 +28,11 @@ export const UpdateTalkSchema = Type.Object(
     },
     { additionalProperties: false, minProperties: 2 }
 )
+// Response schema: looser than the write schemas so legacy or imported
+// records still serialize instead of failing the whole page.
 export const TalkSchema = Type.Object({
-    id: EventIdSchema,
+    id: Type.String(),
     revision: ResourceRevisionSchema,
-    title: Type.String(),
-    speakers: Type.Array(EventIdSchema),
+    title: Type.Optional(Type.String()),
+    speakers: Type.Array(Type.String()),
 })

@@ -439,7 +439,7 @@ describe.each(['talks', 'speakers'] as const)('%s API', (kind) => {
             })
 
             // Assert
-            expect(response.statusCode).toBe(409)
+            expect(response.statusCode).toBe(403)
         }
     )
 
@@ -592,6 +592,39 @@ describe.each(['talks', 'speakers'] as const)('%s API', (kind) => {
         expect(limit).toHaveBeenCalledWith(2)
     })
 
+    it('reads legacy records with loose IDs and missing fields', async () => {
+        // Arrange
+        await db
+            .collection('projects')
+            .doc(project.id)
+            .collection(kind)
+            .doc('legacy.1')
+            .set({ [field]: { en: 'Not a string' }, speakers: 'speaker_1' })
+
+        // Act
+        const list = await server.inject({ method: 'GET', url, headers })
+        const read = await server.inject({
+            method: 'GET',
+            url: `${url}/legacy.1`,
+            headers,
+        })
+        const page = await server.inject({
+            method: 'GET',
+            url: `${url}?after=legacy.1`,
+            headers,
+        })
+
+        // Assert
+        expect(list.statusCode).toBe(200)
+        expect(read.statusCode).toBe(200)
+        expect(read.json()).toEqual({
+            id: 'legacy.1',
+            revision: expect.stringMatching(/^[a-f0-9]{64}$/),
+            ...(kind === 'talks' ? { speakers: [] } : {}),
+        })
+        expect(page.statusCode).toBe(200)
+    })
+
     if (kind === 'talks') {
         it.each(['POST', 'PATCH'] as const)(
             'rejects unknown speaker references before writing: %s',
@@ -657,6 +690,77 @@ describe.each(['talks', 'speakers'] as const)('%s API', (kind) => {
             // Assert
             expect(response.statusCode).toBe(200)
             expect(after).toMatchObject({ title: original, speakers: [] })
+        })
+        it('stores the defaults the attendee app groups by', async () => {
+            // Act
+            const response = await server.inject({
+                method: 'POST',
+                url,
+                headers,
+                payload: { id: 'api_talk', title: 'From API' },
+            })
+            const stored = (
+                await db
+                    .collection('projects')
+                    .doc(project.id)
+                    .collection('talks')
+                    .doc('api_talk')
+                    .get()
+            ).data()
+
+            // Assert
+            expect(response.statusCode).toBe(201)
+            expect(stored).toMatchObject({ trackTitle: '', tags: [] })
+        })
+
+        it('keeps references to deleted speakers it already holds', async () => {
+            // Arrange
+            const ref = db
+                .collection('projects')
+                .doc(project.id)
+                .collection('talks')
+                .doc(recordId)
+            await ref.update({ speakers: ['deleted_speaker', 'speaker_1'] })
+            const snapshot = (
+                await server.inject({ method: 'GET', url: recordUrl, headers })
+            ).json()
+
+            // Act
+            const response = await server.inject({
+                method: 'PATCH',
+                url: recordUrl,
+                headers,
+                payload: {
+                    revision: snapshot.revision,
+                    title: 'Renamed',
+                    speakers: snapshot.speakers,
+                },
+            })
+
+            // Assert
+            expect(response.statusCode).toBe(200)
+            expect((await ref.get()).data()?.title).toBe('Renamed')
+        })
+
+        it('refuses a talk ID that still has votes from a deleted talk', async () => {
+            // Arrange
+            await db
+                .collection('projects')
+                .doc(project.id)
+                .collection('talks')
+                .doc(recordId)
+                .delete()
+
+            // Act
+            const response = await server.inject({
+                method: 'POST',
+                url,
+                headers,
+                payload: { id: recordId, title: 'Different talk' },
+            })
+
+            // Assert
+            expect(response.statusCode).toBe(409)
         })
     }
 })

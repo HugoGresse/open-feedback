@@ -14,8 +14,10 @@ export const UpdateSpeakerSchema = Type.Object(
     { revision: ResourceRevisionSchema, ...fields },
     { additionalProperties: false }
 )
+// Response schema: looser than the write schemas so legacy or imported
+// records still serialize instead of failing the whole page.
 export const SpeakerSchema = Type.Object({
-    id: EventIdSchema,
+    id: Type.String(),
     revision: ResourceRevisionSchema,
-    name: Type.String(),
+    name: Type.Optional(Type.String()),
 })
