@@ -5,7 +5,7 @@ import {
 } from '@nivo/line'
 import { HEX_COLORS } from '../../../constants/colors'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { animated } from 'react-spring'
+import { animated } from '@react-spring/web'
 import { useTheme as useMuiTheme } from '@mui/material'
 import { useTheme as useNivoTheme } from '@nivo/theming'
 import type { VoteTimelinePoint } from './dashboardSelectors'
