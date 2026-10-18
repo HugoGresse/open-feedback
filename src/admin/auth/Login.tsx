@@ -9,7 +9,6 @@ import { LoaderMatchParent } from '../../baseComponents/customComponent/LoaderMa
 import Box from '@mui/material/Box'
 import { HEX_COLORS } from '../../constants/colors'
 import { EmulatorLogin, setLoginCookie } from './EmulatorLogin.tsx'
-import { useNavigate } from 'react-router-dom'
 import { StyledFirebaseAuth } from '../../baseComponents/StyledFirebaseAuth.tsx'
 
 interface LoginProps {
@@ -17,7 +16,6 @@ interface LoginProps {
 }
 
 export const Login = memo(({ children }: LoginProps) => {
-    const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const isLoggedIn = useAppSelector(isLoggedSelector)
     const loginError = useAppSelector(getLoginErrorSelector)
@@ -41,7 +39,7 @@ export const Login = memo(({ children }: LoginProps) => {
                 if (user) {
                     if (user.isAnonymous) {
                         setTempUserIfNeeded(null)
-                        dispatch(signOut(navigate))
+                        dispatch(signOut())
                     } else {
                         setTempUserIfNeeded(user)
                         dispatch(didSignIn(user))
@@ -57,7 +55,7 @@ export const Login = memo(({ children }: LoginProps) => {
                     // Checking tempUser prevent signOut if the is no user to signOut currently.
                     // It may happen with the listener is first attached, no user is logged in, and this method is called.
                     // It also prevent the inviteId to be remove from the url.
-                    dispatch(signOut(navigate))
+                    dispatch(signOut())
                 }
             }
         )

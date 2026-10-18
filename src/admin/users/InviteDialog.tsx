@@ -24,9 +24,6 @@ export const InviteDialog = ({ inviteId }: InviteDialogProps) => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const invite = useAppSelector(getInviteSelector)
-    // Was the loaded users map (getUsersSelector), whose email/phoneNumber are
-    // always undefined: the dialog closed as soon as the invite was loaded,
-    // even for the invited user.
     const currentUser = useAppSelector(getUserSelector)
     const { t } = useTranslation()
 
@@ -42,6 +39,7 @@ export const InviteDialog = ({ inviteId }: InviteDialogProps) => {
     }
 
     let text = ''
+    let pending = true
     if (invite) {
         if (
             invite.destinationUserInfo &&
@@ -52,6 +50,9 @@ export const InviteDialog = ({ inviteId }: InviteDialogProps) => {
         }
         if (invite.status === 'emailSent') {
             text = t('users.inviteCompleted')
+        } else if (invite.status === 'error') {
+            text = t('users.inviteFailed')
+            pending = false
         }
     } else {
         text = t('users.inviteAlreadyUsed')
@@ -68,9 +69,11 @@ export const InviteDialog = ({ inviteId }: InviteDialogProps) => {
                 <DialogContentText id="alert-dialog-description">
                     {text}
                 </DialogContentText>
-                <Box margin={2}>
-                    <CircularProgress />
-                </Box>
+                {pending && (
+                    <Box margin={2}>
+                        <CircularProgress />
+                    </Box>
+                )}
             </DialogContent>
         </Dialog>
     )

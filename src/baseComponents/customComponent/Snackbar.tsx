@@ -2,15 +2,7 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import SnackbarMaterial from '@mui/material/Snackbar'
-import { makeStyles } from '@mui/styles'
-import type { Theme } from '@mui/material/styles'
 import type { ReactNode } from 'react'
-
-const useStyles = makeStyles((theme: Theme) => ({
-    close: {
-        padding: theme.spacing(0.5),
-    },
-}))
 
 interface SnackbarProps {
     text: ReactNode
@@ -25,8 +17,6 @@ export const Snackbar = ({
     actionCallback,
     closeCallback,
 }: SnackbarProps) => {
-    const classes = useStyles()
-
     return (
         <SnackbarMaterial
             anchorOrigin={{
@@ -55,7 +45,6 @@ export const Snackbar = ({
                         aria-label="Close"
                         color="inherit"
                         sx={{ padding: 1 }}
-                        className={classes ? classes.close : undefined}
                         onClick={closeCallback}
                         size="large"
                     >

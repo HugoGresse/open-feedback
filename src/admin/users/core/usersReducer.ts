@@ -9,7 +9,10 @@ import {
     type UsersAction,
     USERS_SET_FILTER,
 } from './usersActionTypes'
-import { SELECT_PROJECT } from '../../project/core/projectActionTypes'
+import {
+    SELECT_PROJECT,
+    type SelectProjectAction,
+} from '../../project/core/projectActionTypes'
 import {
     SELECT_ORGANIZATION,
     type SelectOrganizationAction,
@@ -24,9 +27,6 @@ export interface UsersState {
     pendingInvites: Invite[]
     filter: string
 }
-
-/** Only the type is read here; the project module owns the full action. */
-type SelectProjectAction = { type: typeof SELECT_PROJECT }
 
 const initState: UsersState = {
     usersData: {},

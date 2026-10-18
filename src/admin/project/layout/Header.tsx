@@ -32,12 +32,7 @@ import { getOrganizations } from '../../organization/core/actions/getOrganizatio
 import { getSelectedOrganizationSelector } from '../../organization/core/organizationSelectors'
 import { QRCodeDialog } from '../../../baseComponents/QRCodeDialog'
 import QrCodeIcon from '@mui/icons-material/QrCode'
-import type { Theme } from '@mui/material/styles'
 import type { DrawerToggleHandler } from './ProjectLayout.tsx'
-
-interface HeaderStyleProps {
-    shadow: boolean
-}
 
 const innerTheme = createTheme({
     palette: {
@@ -49,11 +44,13 @@ const innerTheme = createTheme({
     },
 })
 
-const useStyles = makeStyles<Theme, HeaderStyleProps>({
+const useStyles = makeStyles({
     appbar: {
         background: COLORS.RED_ORANGE,
-        // undefined removes the property, like null did
-        boxShadow: (props) => (props.shadow ? undefined : 'none'),
+    },
+    // Hides the AppBar elevation until the content is scrolled
+    noShadow: {
+        boxShadow: 'none',
     },
     topHeader: {
         marginTop: 20,
@@ -119,7 +116,7 @@ export const Header = ({ refTarget, toggleDrawer }: HeaderProps) => {
         target: refTarget || window,
         disableHysteresis: true,
     })
-    const classes = useStyles({ shadow: triggerScrollShadow })
+    const classes = useStyles()
 
     const onProjectSelectedChange = (projectId: string) => {
         redirectToProject(selectedProjectId, projectId, navigate)
@@ -152,7 +149,14 @@ export const Header = ({ refTarget, toggleDrawer }: HeaderProps) => {
             <StyledEngineProvider injectFirst>
                 <ThemeProvider theme={innerTheme}>
                     <Translate in={!trigger}>
-                        <AppBar position="sticky" className={classes.appbar}>
+                        <AppBar
+                            position="sticky"
+                            className={
+                                triggerScrollShadow
+                                    ? classes.appbar
+                                    : `${classes.appbar} ${classes.noShadow}`
+                            }
+                        >
                             <Toolbar>
                                 <Grid container>
                                     <Grid

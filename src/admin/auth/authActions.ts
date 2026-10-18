@@ -122,8 +122,13 @@ export const didSignIn = (
     }
 }
 
+/**
+ * Signs out and reloads the admin root. Pass `navigate` for an explicit logout
+ * to also leave the current page; the auth observer omits it so the login
+ * screen keeps the deep link the user opened.
+ */
 export const signOut =
-    (navigate: NavigateFunction): AppThunk =>
+    (navigate?: NavigateFunction): AppThunk =>
     (dispatch) => {
         authProvider.signOut().then(() => {
             dispatch({
@@ -131,7 +136,7 @@ export const signOut =
             })
             if (window.location.pathname === '/admin/') {
                 window.location.reload()
-            } else {
+            } else if (navigate) {
                 navigate('/admin/', { replace: true })
             }
         })

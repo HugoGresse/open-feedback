@@ -29,6 +29,7 @@ const useStyles = makeStyles({
     },
     count: {
         color: HEX_COLORS.RED_ORANGE,
+        textAlign: 'right',
         fontSize: 16,
         fontWeight: 'bold',
         '&:hover': {

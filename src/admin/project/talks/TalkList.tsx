@@ -22,7 +22,7 @@ import { TalkAddEditPanel } from './TalkAddEditPanel.tsx'
 import { addSpeaker } from '../../../core/speakers/speakerActions'
 import { useTranslation } from 'react-i18next'
 import { getStartTimeSelector } from '../core/projectSelectors'
-import type { NewTalk, Speaker, Talk } from '../../../core/models'
+import type { Speaker, Talk } from '../../../core/models'
 import type { TalkFormValues } from './TalkAddEditPanel.tsx'
 
 type EditedTalkFormValues = TalkFormValues & Pick<Talk, 'id'>
