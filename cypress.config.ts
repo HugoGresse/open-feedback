@@ -1,7 +1,7 @@
 import { defineConfig } from 'cypress'
 
 export default defineConfig({
-    env: {
+    expose: {
         firestoreTestProjectId: 'testprojectid',
     },
     viewportWidth: 1000,

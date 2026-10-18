@@ -1,7 +1,7 @@
 import { FeedbackApp } from '../../support/FeedbackApp'
 
 describe('Navigate on talk list', function () {
-    const testProjectId = Cypress.env('firestoreTestProjectId')
+    const testProjectId = Cypress.expose('firestoreTestProjectId')
     const feedback = new FeedbackApp()
 
     beforeEach(() => {

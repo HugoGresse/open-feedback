@@ -3,7 +3,7 @@ import { onBeforeLoadChangeNavigatorLanguages } from '../utils/onBeforeLoadChang
 
 export class FeedbackApp {
     open(talkId, options = {}) {
-        const rootUrl = `/${Cypress.env('firestoreTestProjectId')}`
+        const rootUrl = `/${Cypress.expose('firestoreTestProjectId')}`
         if (talkId) {
             cy.visit(`${rootUrl}/${talkId}`, {
                 ...onBeforeLoadChangeNavigatorLanguages,
