@@ -16,7 +16,6 @@ import {
     fireStoreMainInstance,
     serverTimestamp,
 } from '../../firebase.ts'
-import { isEmpty } from 'lodash'
 import {
     trackLogin,
     trackSignIn,
@@ -207,7 +206,7 @@ export const getDataFromProviderDataOrUser = <K extends UserDataKey>(
     if (userValue) {
         return userValue
     }
-    if (!user.providerData || isEmpty(user.providerData)) {
+    if (!user.providerData?.length) {
         return ''
     }
     const providerData = user.providerData.filter((data) => data[keyToGet])
