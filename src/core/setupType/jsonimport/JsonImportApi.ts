@@ -1,4 +1,4 @@
-import { EventData } from '../eventDataNormalization'
+import type { EventData } from '../eventDataNormalization'
 
 // Thin API over an in-memory, already-normalized JSON event blob. Exposes the
 // getTalks()/getSpeakers() surface the setup validation

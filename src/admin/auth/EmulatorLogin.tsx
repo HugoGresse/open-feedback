@@ -1,22 +1,34 @@
+import type firebase from 'firebase/compat/app'
 import { OFButton } from '../baseComponents/button/OFButton.tsx'
 import { authProvider } from '../../firebase.ts'
 import { didSignIn } from './authActions'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../../store'
+
+interface EmulatorOobCodesResponse {
+    oobCodes: { email: string; oobLink: string }[]
+}
 
 const EMAIL = 'hugo@example.com'
 const PASSWORD = 'azerty'
 export const EmulatorLogin = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const onLoginPress = async () => {
         const response = await login(EMAIL, PASSWORD)
         if (response) {
-            await verifyEmail(response.user)
+            const user = response.user
+            await verifyEmail(user)
             dispatch(
-                didSignIn({
-                    ...response.user,
-                    emailVerified: true,
-                })
+                didSignIn(
+                    user && {
+                        // A spread of the compat User drops its prototype
+                        // toJSON(), the only thing didSignIn reads.
+                        toJSON: () => ({
+                            ...user.toJSON(),
+                            emailVerified: true,
+                        }),
+                    }
+                )
             )
         }
     }
@@ -28,13 +40,18 @@ export const EmulatorLogin = () => {
     )
 }
 
-const login = async (email, password) => {
+const login = async (
+    email: string,
+    password: string
+): Promise<firebase.auth.UserCredential | undefined> => {
     try {
         return await authProvider.createUserWithEmailAndPassword(
             email,
             password
         )
-    } catch (error) {
+    } catch (caughtError) {
+        // Firebase Auth rejects with a firebase.auth.Error
+        const error = caughtError as firebase.auth.Error
         if (error.code === 'auth/email-already-in-use') {
             try {
                 return await authProvider.signInWithEmailAndPassword(
@@ -52,7 +69,7 @@ const login = async (email, password) => {
     }
 }
 
-const verifyEmail = async (user = null) => {
+const verifyEmail = async (user: firebase.User | null = null) => {
     if (!user || user.emailVerified) {
         return
     }
@@ -60,7 +77,7 @@ const verifyEmail = async (user = null) => {
     const response = await fetch(
         `http://localhost:9099/emulator/v1/projects/${import.meta.env.VITE_PROJECT_ID}/oobCodes`
     )
-    const responseJson = await response.json()
+    const responseJson = (await response.json()) as EmulatorOobCodesResponse
 
     for (const oobCodeObject of responseJson.oobCodes) {
         await fetch(oobCodeObject.oobLink.split('&continueUrl')[0])
@@ -69,6 +86,6 @@ const verifyEmail = async (user = null) => {
     }
 }
 
-export const setLoginCookie = (isLoggedIn) => {
+export const setLoginCookie = (isLoggedIn: boolean) => {
     document.cookie = 'isLoggedIn=' + !!isLoggedIn + '; path=/'
 }

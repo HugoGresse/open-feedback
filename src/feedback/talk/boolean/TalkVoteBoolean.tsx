@@ -1,9 +1,10 @@
 import Grid from '@mui/material/Grid'
-import PropTypes from 'prop-types'
+import type { Theme } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
 import { VoteButton } from '../components/VoteButton.tsx'
+import type { VoteItem } from '../../../core/models'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     itemContainer: {
         margin: -1,
     },
@@ -22,14 +23,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+interface TalkVoteBooleanProps {
+    voteItem: VoteItem
+    isSelected: boolean
+    /** Number of votes. */
+    voteResult?: number
+    onVoteChange: (voteItem: VoteItem) => void
+    chipColors?: string[]
+}
+
 export const TalkVoteBoolean = ({
     voteItem,
     isSelected,
     voteResult,
     onVoteChange,
     chipColors,
-}) => {
+}: TalkVoteBooleanProps) => {
     const classes = useStyles()
+    const hasVotes = voteResult !== undefined && voteResult > 0
 
     return (
         <Grid
@@ -38,7 +49,7 @@ export const TalkVoteBoolean = ({
             sm={4}
             md={3}
             className={classes.itemContainer}
-            aria-label={voteItem.name}
+            aria-label={voteItem.name ?? undefined}
             data-testid="VoteItem"
         >
             <VoteButton
@@ -46,10 +57,9 @@ export const TalkVoteBoolean = ({
                 chipColors={chipColors}
                 onClick={() => onVoteChange(voteItem)}
                 count={voteResult}
-                displayChildren={voteResult > 0}
             >
                 <span className={classes.voteTitle}>{voteItem.name}</span>
-                {voteResult > 0 && (
+                {hasVotes && (
                     <span className={classes.voteResult}>
                         {voteResult} {voteResult > 1 ? 'votes' : 'vote'}
                     </span>
@@ -57,11 +67,4 @@ export const TalkVoteBoolean = ({
             </VoteButton>
         </Grid>
     )
-}
-
-TalkVoteBoolean.propTypes = {
-    voteItem: PropTypes.object.isRequired,
-    isSelected: PropTypes.bool,
-    voteResult: PropTypes.number,
-    chipColors: PropTypes.array,
 }

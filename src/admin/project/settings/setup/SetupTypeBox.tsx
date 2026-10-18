@@ -2,7 +2,12 @@ import Box from '@mui/material/Box'
 import { Typography } from '@mui/material'
 import Radio from '@mui/material/Radio'
 
-export const SetupTypeBox = ({ title, isSelected }) => {
+interface SetupTypeBoxProps {
+    title: string
+    isSelected: boolean
+}
+
+export const SetupTypeBox = ({ title, isSelected }: SetupTypeBoxProps) => {
     return (
         <Box
             display="flex"

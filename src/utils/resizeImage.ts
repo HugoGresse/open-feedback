@@ -6,7 +6,7 @@ import imageBlobReduce from 'image-blob-reduce'
  * @param {number} maxSize - Max size in px
  * @returns {Promise<Blob>}
  */
-export const resizeImage = async (file, maxSize = 500) => {
+export const resizeImage = async (file: File, maxSize = 500): Promise<Blob> => {
     switch (file.type) {
         case 'image/svg+xml':
             return file

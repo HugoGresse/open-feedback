@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
+import type { User } from '../../core/models'
 import RemoveButton from '@mui/icons-material/RemoveCircle'
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
 import { makeStyles } from '@mui/styles'
-import { useDispatch, useSelector } from 'react-redux'
+import type { Theme } from '@mui/material/styles'
 import {
     changeUserRole,
     getUserDetails,
@@ -20,8 +21,9 @@ import { SimpleDialog } from '../baseComponents/layouts/SimpleDialog.tsx'
 import { TranslatedTypography } from '../baseComponents/TranslatedTypography.tsx'
 import { useTranslation } from 'react-i18next'
 import { OrganizationRoleInfo } from '../organization/users/OrganizationRoleInfos.tsx'
+import { useAppDispatch, useAppSelector } from '../../store'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     cell: {
         paddingRight: 12,
         [theme.breakpoints.down('xl')]: {
@@ -33,20 +35,29 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+export interface UserItemProps {
+    userId: string
+    ownerId: string
+    currentUserId: string
+    role: string
+    /** Roles that can be picked, empty when the role cannot be changed. */
+    userTypes: readonly string[]
+}
+
 export const UserItem = ({
     userId,
     ownerId,
     currentUserId,
     role,
     userTypes,
-}) => {
+}: UserItemProps) => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const usersDetails = useSelector(getFilteredUsersSelector)
-    const dispatch = useDispatch()
+    const usersDetails = useAppSelector(getFilteredUsersSelector)
+    const dispatch = useAppDispatch()
     const [confirmOwnerChange, setConfirmOwnerChange] = useState(false)
 
-    const user = usersDetails[userId]
+    const user: User | undefined = usersDetails[userId]
 
     const isOwner = userId === ownerId
     const isMe = currentUserId === userId
@@ -55,7 +66,11 @@ export const UserItem = ({
         dispatch(getUserDetails(userId))
     }, [dispatch, userId])
 
-    const onUserRoleValueChange = (userId, oldRole, newRole) => {
+    const onUserRoleValueChange = (
+        userId: string,
+        oldRole: string,
+        newRole: string
+    ) => {
         if (oldRole === newRole) {
             return
         }
@@ -75,8 +90,8 @@ export const UserItem = ({
             <Grid item xs={12} sm={7} className={classes.cell}>
                 <Box display="flex">
                     <Avatar
-                        alt={user.displayName}
-                        src={user.photoURL}
+                        alt={user.displayName ?? undefined}
+                        src={user.photoURL ?? undefined}
                         style={{ marginRight: 12, marginTop: 2 }}
                     />
                     <Box>

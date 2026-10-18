@@ -1,9 +1,15 @@
+import type { AppThunk } from '../../../../store'
 import { fireStoreMainInstance } from '../../../../firebase.ts'
 import {
+    getSelectedProjectIdOrThrowSelector,
     getSelectedProjectIdSelector,
     getSelectedProjectSelector,
 } from '../projectSelectors'
-import { GET_PROJECT_ERROR, GET_PROJECT_SUCCESS } from '../projectActionTypes'
+import {
+    type AdminProject,
+    GET_PROJECT_ERROR,
+    GET_PROJECT_SUCCESS,
+} from '../projectActionTypes'
 import { addNotification } from '../../../notification/notifcationActions'
 import { initProjectApiIfReady } from './initProjectApi'
 import { getSelectedOrganizationSelector } from '../../../organization/core/organizationSelectors'
@@ -11,18 +17,25 @@ import { getOrganization } from '../../../organization/core/actions/getOrganizat
 import { selectOrganization } from '../../../organization/core/actions/selectUnselectActions'
 
 export const getProject =
-    (selectedProjectId = null, initAPI) =>
+    (
+        selectedProjectId: string | null = null,
+        initAPI?: boolean
+    ): AppThunk<Promise<void>> =>
     (dispatch, getState) => {
         return fireStoreMainInstance
             .collection('projects')
-            .doc(selectedProjectId || getSelectedProjectIdSelector(getState()))
+            .doc(
+                selectedProjectId ||
+                    getSelectedProjectIdOrThrowSelector(getState())
+            )
             .get()
             .then((doc) => {
                 if (doc.exists) {
+                    // Firestore boundary
                     const project = {
                         id: doc.id,
                         ...doc.data(),
-                    }
+                    } as AdminProject
                     if (
                         project.organizationId &&
                         !getSelectedOrganizationSelector(getState())
@@ -31,7 +44,7 @@ export const getProject =
                         dispatch(getOrganization(project.organizationId))
                     }
 
-                    return dispatch({
+                    dispatch({
                         type: GET_PROJECT_SUCCESS,
                         payload: project,
                     })
@@ -53,10 +66,10 @@ export const getProject =
                     )
                 }
             })
-            .catch((err) => {
+            .catch((err: unknown) => {
                 dispatch({
                     type: GET_PROJECT_ERROR,
-                    payload: err.toString(),
+                    payload: String(err),
                 })
                 dispatch(
                     addNotification({

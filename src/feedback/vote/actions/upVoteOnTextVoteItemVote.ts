@@ -19,13 +19,22 @@ import {
 } from '../voteActionTypes'
 import { INCREMENT_VOTE_LOCALLY } from '../../project/projectActionTypes'
 import { getVoteId } from '../getVoteId'
+import type { TFunction } from 'react-i18next'
+import type { Vote, VoteItem } from '../../../core/models'
+import type { AppThunk } from '../../../store'
+import type { TextVoteResult } from '../../talk/core/getVoteResultSelectorSelector'
 
 /**
  The user want to "up" a message within a "text" vote items. Vote Items are the element in the form, the message is only
  one answers among others to this given voteItem. The message is thus considered as the vote below.
  */
 export const upVoteOnTextVoteItemVote =
-    (voteItem, vote, translate) => (dispatch, getState) => {
+    (
+        voteItem: VoteItem,
+        vote: TextVoteResult,
+        translate: TFunction
+    ): AppThunk =>
+    (dispatch, getState) => {
         if (!isVoteAllowed(dispatch, getState, translate)) {
             return
         }
@@ -33,14 +42,16 @@ export const upVoteOnTextVoteItemVote =
         const voteId = vote.id // This is the text vote the user up voted
 
         const state = getState()
-        const talkId = getSelectedTalkIdSelector(state)
+        // Text vote results are only displayed on the selected talk, once
+        // the project is loaded and the user logged in.
+        const talkId = getSelectedTalkIdSelector(state)!
 
-        const project = getProjectSelector(state)
+        const project = getProjectSelector(state)!
         const projectId = project.id
 
         const [id] = getVoteId(voteItem, projectId, getState)
 
-        const voteContent = {
+        const voteContent: Vote = {
             projectId: projectId,
             talkId: talkId,
             voteItemId: voteItem.id,
@@ -49,7 +60,7 @@ export const upVoteOnTextVoteItemVote =
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
             voteType: VOTE_TYPE_TEXT_PLUS,
-            userId: getUserSelector(state).uid,
+            userId: getUserSelector(state)!.uid,
             status: VOTE_STATUS_ACTIVE,
         }
 
@@ -91,7 +102,7 @@ export const upVoteOnTextVoteItemVote =
                 })
                 trackVote(project.name, projectId, voteItem.type)
             })
-            .catch((error) => {
+            .catch((error: unknown) => {
                 dispatch({
                     type: ADD_VOTE_ERROR,
                     payload: {
@@ -115,7 +126,8 @@ export const upVoteOnTextVoteItemVote =
     }
 
 export const removeUpVoteOnTextVoteItemVote =
-    (voteToDelete, translate) => (dispatch, getState) => {
+    (voteToDelete: Vote | null, translate: TFunction): AppThunk =>
+    (dispatch, getState) => {
         if (!isVoteAllowed(dispatch, getState, translate) || !voteToDelete) {
             // no voteToDelete if the user has written the initial text, the user need to delete it, not remove the up vote
             return
@@ -128,7 +140,9 @@ export const removeUpVoteOnTextVoteItemVote =
             return
         }
 
-        const project = getProjectSelector(getState())
+        const project = getProjectSelector(getState())!
+        // An up-vote always references the up-voted text vote
+        const upVotedVoteId = voteToDelete.voteId!
 
         dispatch({
             type: REMOVE_VOTE_BEFORE_SUCCESS,
@@ -140,7 +154,7 @@ export const removeUpVoteOnTextVoteItemVote =
             payload: {
                 vote: {
                     ...voteToDelete,
-                    id: voteToDelete.voteId,
+                    id: upVotedVoteId,
                     text: 'used only as type...',
                     plus: 1,
                 },
@@ -167,7 +181,7 @@ export const removeUpVoteOnTextVoteItemVote =
                 })
                 trackUnvote(project.name, project.id)
             })
-            .catch((error) => {
+            .catch((error: unknown) => {
                 dispatch({
                     type: ADD_VOTE_ERROR,
                     payload: {
@@ -181,7 +195,7 @@ export const removeUpVoteOnTextVoteItemVote =
                     payload: {
                         vote: {
                             ...voteToDelete,
-                            id: voteToDelete.voteId,
+                            id: upVotedVoteId,
                             text: 'used only as type...',
                             plus: 1,
                         },

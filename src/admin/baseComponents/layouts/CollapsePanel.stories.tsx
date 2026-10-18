@@ -1,9 +1,11 @@
+import type { Meta } from '@storybook/react-vite'
 import { CollapsePanel } from './CollapsePanel.tsx'
 
-export default {
+const meta = {
     component: CollapsePanel,
     title: 'Admin/CollapsePanel',
-}
+} satisfies Meta<typeof CollapsePanel>
+export default meta
 
 export const defaultUsage = () => (
     <CollapsePanel buttonText="Click me button">

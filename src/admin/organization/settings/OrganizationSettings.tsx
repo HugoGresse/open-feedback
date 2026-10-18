@@ -6,16 +6,22 @@ import { OFButton } from '../../baseComponents/button/OFButton.tsx'
 import { object, string } from 'yup'
 import { Form, Formik } from 'formik'
 import { getSelectedOrganizationSelector } from '../core/organizationSelectors'
-import { useDispatch, useSelector } from 'react-redux'
 import { OFFormControlInputFormiked } from '../../baseComponents/form/formControl/OFFormControlInputFormiked.tsx'
 import SaveIcon from '@mui/icons-material/Save'
 import Box from '@mui/material/Box'
 import { editOrganization } from '../core/actions/editOrganization'
+import { useAppDispatch, useAppSelector } from '../../../store'
 
-export const OrganizationSettings = ({ onClose }) => {
+export interface OrganizationSettingsProps {
+    onClose: () => void
+}
+
+export const OrganizationSettings = ({
+    onClose,
+}: OrganizationSettingsProps) => {
     const { t } = useTranslation()
-    const organization = useSelector(getSelectedOrganizationSelector)
-    const dispatch = useDispatch()
+    const organization = useAppSelector(getSelectedOrganizationSelector)
+    const dispatch = useAppDispatch()
 
     return (
         <Dialog
@@ -34,7 +40,8 @@ export const OrganizationSettings = ({ onClose }) => {
                         name: string().required(t('organization.nameRequired')),
                     })}
                     initialValues={{
-                        name: organization.name,
+                        // Only displayed while an organization is loaded.
+                        name: organization?.name ?? '',
                     }}
                     onSubmit={(values) => {
                         return dispatch(

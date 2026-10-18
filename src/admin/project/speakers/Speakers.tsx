@@ -2,13 +2,13 @@ import { useEffect } from 'react'
 import Grid from '@mui/material/Grid'
 import { OFPaper } from '../../baseComponents/OFPaper.tsx'
 import { SpeakerList } from './SpeakerList.tsx'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../store'
 import { getSpeakers } from '../../../core/speakers/speakerActions'
 import { isProjectApiInitSelector } from '../core/projectSelectors'
 
 export const Speakers = () => {
-    const dispatch = useDispatch()
-    const isProjectApiInit = useSelector(isProjectApiInitSelector)
+    const dispatch = useAppDispatch()
+    const isProjectApiInit = useAppSelector(isProjectApiInitSelector)
 
     useEffect(() => {
         if (isProjectApiInit) {

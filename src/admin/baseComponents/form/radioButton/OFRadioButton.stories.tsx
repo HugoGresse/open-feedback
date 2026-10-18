@@ -1,17 +1,20 @@
+import type { Meta } from '@storybook/react-vite'
 import { OFRadioButton } from './OFRadioButton.tsx'
 import Typography from '@mui/material/Typography'
 import { RadioButtonGroup } from './RadioButtonGroup.tsx'
 import { Field, Formik } from 'formik'
 
-export default {
+const meta = {
     component: OFRadioButton,
     title: 'Admin/RadioButton',
-}
+} satisfies Meta<typeof OFRadioButton>
+export default meta
 
 const name = 'picker'
 
 export const defaultUsage = () => (
     <Formik
+        onSubmit={() => {}}
         initialValues={{
             [name]: '',
         }}

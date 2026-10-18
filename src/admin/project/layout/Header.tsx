@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, type MouseEvent } from 'react'
 import { COLORS } from '../../../constants/colors'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../store'
 import { createTheme, Grid } from '@mui/material'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
@@ -18,7 +18,7 @@ import {
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import { RoutingMap } from '../../RoutingMap'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, type Location } from 'react-router-dom'
 import Hidden from '@mui/material/Hidden'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -32,6 +32,12 @@ import { getOrganizations } from '../../organization/core/actions/getOrganizatio
 import { getSelectedOrganizationSelector } from '../../organization/core/organizationSelectors'
 import { QRCodeDialog } from '../../../baseComponents/QRCodeDialog'
 import QrCodeIcon from '@mui/icons-material/QrCode'
+import type { Theme } from '@mui/material/styles'
+import type { DrawerToggleHandler } from './ProjectLayout.tsx'
+
+interface HeaderStyleProps {
+    shadow: boolean
+}
 
 const innerTheme = createTheme({
     palette: {
@@ -43,10 +49,11 @@ const innerTheme = createTheme({
     },
 })
 
-const useStyles = makeStyles({
+const useStyles = makeStyles<Theme, HeaderStyleProps>({
     appbar: {
         background: COLORS.RED_ORANGE,
-        boxShadow: (props) => (props.shadow ? null : 'none'),
+        // undefined removes the property, like null did
+        boxShadow: (props) => (props.shadow ? undefined : 'none'),
     },
     topHeader: {
         marginTop: 20,
@@ -87,17 +94,25 @@ const useStyles = makeStyles({
     },
 })
 
-export const Header = ({ refTarget, toggleDrawer }) => {
+export interface HeaderProps {
+    /** The scrolling element, the window when not set yet. */
+    refTarget?: HTMLElement
+    toggleDrawer: DrawerToggleHandler
+}
+
+export const Header = ({ refTarget, toggleDrawer }: HeaderProps) => {
     const location = useLocation()
-    const dispatch = useDispatch()
-    const selectedProjectId = useSelector(getSelectedProjectIdSelector)
-    const selectedProject = useSelector(getSelectedProjectSelector)
-    const projects = useSelector(getSortedProjectsSelector)
-    const selectedOrganization = useSelector(getSelectedOrganizationSelector)
+    const dispatch = useAppDispatch()
+    const selectedProjectId = useAppSelector(getSelectedProjectIdSelector)
+    const selectedProject = useAppSelector(getSelectedProjectSelector)
+    const projects = useAppSelector(getSortedProjectsSelector)
+    const selectedOrganization = useAppSelector(getSelectedOrganizationSelector)
     const { t } = useTranslation()
     const navigate = useNavigate()
 
-    const [anchorEventSelect, setAnchorEventSelect] = useState(null)
+    const [anchorEventSelect, setAnchorEventSelect] = useState<Element | null>(
+        null
+    )
     const [qrCodeDialogOpen, setQRCodeDialogOpen] = useState(false)
     const trigger = useScrollTrigger({ target: refTarget || window })
     const triggerScrollShadow = useScrollTrigger({
@@ -106,21 +121,24 @@ export const Header = ({ refTarget, toggleDrawer }) => {
     })
     const classes = useStyles({ shadow: triggerScrollShadow })
 
-    const onProjectSelectedChange = (projectId) => {
+    const onProjectSelectedChange = (projectId: string) => {
         redirectToProject(selectedProjectId, projectId, navigate)
         setAnchorEventSelect(null)
     }
 
-    const handleChangeEventMenuOpen = (event) => {
-        setAnchorEventSelect(event.target)
+    const handleChangeEventMenuOpen = (
+        event: MouseEvent<HTMLButtonElement>
+    ) => {
+        // DOM boundary: the clicked element inside the button
+        setAnchorEventSelect(event.target as Element)
     }
 
     const handleMenuClose = () => {
         setAnchorEventSelect(null)
     }
 
-    const getTitle = (location) => {
-        return Object.keys(RoutingMap)
+    const getTitle = (location: Location) => {
+        return (Object.keys(RoutingMap) as (keyof typeof RoutingMap)[])
             .filter((key) => {
                 return location.pathname.includes(RoutingMap[key].url)
             })
@@ -280,19 +298,23 @@ export const Header = ({ refTarget, toggleDrawer }) => {
                     </Menu>
                 </ThemeProvider>
             </StyledEngineProvider>
-            <QRCodeDialog
-                open={qrCodeDialogOpen}
-                onClose={() => setQRCodeDialogOpen(false)}
-                title={selectedProject.name}
-                value={`${window.location.origin}/${selectedProjectId}`}
-                fileName={selectedProject.name.trim() + '-qr-code-openfeedback'}
-                logo={selectedProject.logoSmall}
-                eventColor={
-                    selectedProject.chipColors
-                        ? selectedProject.chipColors[0]
-                        : undefined
-                }
-            />
+            {selectedProject && (
+                <QRCodeDialog
+                    open={qrCodeDialogOpen}
+                    onClose={() => setQRCodeDialogOpen(false)}
+                    title={selectedProject.name}
+                    value={`${window.location.origin}/${selectedProjectId}`}
+                    fileName={
+                        selectedProject.name.trim() + '-qr-code-openfeedback'
+                    }
+                    logo={selectedProject.logoSmall}
+                    eventColor={
+                        selectedProject.chipColors
+                            ? selectedProject.chipColors[0]
+                            : undefined
+                    }
+                />
+            )}
         </>
     )
 }

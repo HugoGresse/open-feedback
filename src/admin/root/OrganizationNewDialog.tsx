@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import { object, string } from 'yup'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../../store'
 import { newOrganization } from '../organization/core/actions/newOrganization'
 import { redirectToOrganization } from '../organization/utils/redirectToOrganization'
 import { useNavigate } from 'react-router-dom'
@@ -18,8 +18,16 @@ import { sleep } from '../../utils/sleep'
 import { selectOrganization } from '../organization/core/actions/selectUnselectActions'
 import { OFButton } from '../baseComponents/button/OFButton.tsx'
 
-export const OrganisationNewDialog = ({ onClose, open }) => {
-    const dispatch = useDispatch()
+interface OrganisationNewDialogProps {
+    open: boolean
+    onClose: () => void
+}
+
+export const OrganisationNewDialog = ({
+    onClose,
+    open,
+}: OrganisationNewDialogProps) => {
+    const dispatch = useAppDispatch()
     const { t } = useTranslation()
     const title = t('organization.new')
     const navigate = useNavigate()

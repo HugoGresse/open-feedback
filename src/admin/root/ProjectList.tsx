@@ -12,14 +12,20 @@ import Box from '@mui/material/Box'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { useTheme } from '@mui/material'
+import type { Theme } from '@mui/material/styles'
 import { Link } from 'react-router-dom'
 import { ROUTE_EVENT_BASE, RoutingMap } from '../RoutingMap'
 import { DateTime } from 'luxon'
+import type { Project } from '../../core/models'
 
-const useStyles = makeStyles((theme) => ({
+interface StyleProps {
+    invertedColor: boolean
+}
+
+const useStyles = makeStyles((theme: Theme) => ({
     newEventCard: {
         textAlign: 'center',
-        color: (props) =>
+        color: (props: StyleProps) =>
             props.invertedColor
                 ? theme.palette.secondary.main
                 : theme.palette.primary.main,
@@ -32,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.primary,
     },
     newProjectCard: {
-        color: (props) =>
+        color: (props: StyleProps) =>
             props.invertedColor
                 ? theme.palette.secondary.dark
                 : theme.palette.primary.dark,
@@ -45,16 +51,23 @@ const useStyles = makeStyles((theme) => ({
 
 const DEFAULT_PROJECTS_DISPLAY = 5
 
+interface ProjectListProps {
+    projects: Project[]
+    organizationId: string
+    onNewEventClick: (organizationId: string) => void
+    invertedColor: boolean
+}
+
 export const ProjectList = ({
     projects,
     organizationId,
     onNewEventClick,
     invertedColor,
-}) => {
+}: ProjectListProps) => {
     const classes = useStyles({ invertedColor })
     const theme = useTheme()
     const { t } = useTranslation()
-    const [displayedProjects, setDisplayedProjects] = useState([])
+    const [displayedProjects, setDisplayedProjects] = useState<Project[]>([])
     const showHideAllProject = projects.length > DEFAULT_PROJECTS_DISPLAY
     const allProjectsDisplayed = projects.length === displayedProjects.length
     const hiddenProjectCount = projects.length - displayedProjects.length
@@ -125,9 +138,12 @@ export const ProjectList = ({
                                             variant="caption"
                                             color="textSecondary"
                                         >
-                                            {DateTime.fromMillis(
-                                                project.createdAt.toMillis()
-                                            ).toLocaleString(DateTime.DATE_MED)}
+                                            {project.createdAt &&
+                                                DateTime.fromMillis(
+                                                    project.createdAt.toMillis()
+                                                ).toLocaleString(
+                                                    DateTime.DATE_MED
+                                                )}
                                             <br />
                                             {project.id}
                                         </Typography>

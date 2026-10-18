@@ -4,6 +4,12 @@ import {
     PROJECT_TYPE_JSONURL,
 } from '../../../../core/setupType/projectApi'
 
+/** Setup types whose talks & speakers can be validated before saving. */
+export type ValidatedSetupType =
+    | typeof PROJECT_TYPE_JSONURL
+    | typeof PROJECT_TYPE_JSONIMPORT
+    | typeof PROJECT_TYPE_HOVERBOARDV2
+
 const talkIdValid = 'Some talk IDs are not valid (empty string or no data).'
 const talkTitleValid =
     'Some talk titles are not valid (empty string or no data).'

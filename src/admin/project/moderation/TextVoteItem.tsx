@@ -7,6 +7,7 @@ import { DateTime } from 'luxon'
 import BlockIcon from '@mui/icons-material/Block'
 import Box from '@mui/material/Box'
 import { VOTE_STATUS_HIDDEN } from '../../../core/contants'
+import type { ModerationTextVote } from './moderationActionTypes'
 
 const useStyles = makeStyles(() => ({
     date: {
@@ -18,7 +19,17 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-export const TextVoteItem = ({ vote, onVoteExpandClick, onVoteHideClick }) => {
+export interface TextVoteItemProps {
+    vote: ModerationTextVote
+    onVoteExpandClick: (vote: ModerationTextVote) => void
+    onVoteHideClick: (vote: ModerationTextVote) => void
+}
+
+export const TextVoteItem = ({
+    vote,
+    onVoteExpandClick,
+    onVoteHideClick,
+}: TextVoteItemProps) => {
     const classes = useStyles()
     const { t } = useTranslation()
 

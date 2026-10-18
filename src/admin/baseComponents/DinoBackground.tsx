@@ -18,6 +18,15 @@ const useStyles = makeStyles({
     },
 })
 
+export interface DinoBackgroundProps {
+    speed?: number
+    snake?: boolean
+    spacing?: number
+    offsetY?: number
+    dinoScale?: number
+    startDelay?: number
+}
+
 export const DinoBackground = ({
     speed = 5,
     snake = true,
@@ -25,30 +34,32 @@ export const DinoBackground = ({
     offsetY = 0,
     dinoScale = 1,
     startDelay = 0,
-}) => {
+}: DinoBackgroundProps) => {
     const classes = useStyles()
-    const [canvasRef] = useState(createRef())
-    const [refElement] = useState(createRef())
+    const [canvasRef] = useState(createRef<HTMLCanvasElement>())
+    const [refElement] = useState(createRef<HTMLDivElement>())
 
     useEffect(() => {
         if (!canvasRef || !canvasRef.current || !refElement) return
-        const ctx = canvasRef.current.getContext('2d')
+        const canvas = canvasRef.current
+        const ctx = canvas.getContext('2d')
+        if (!ctx) return
         const dinoWidth = 40
 
         if (refElement.current != null) {
             const width = refElement.current.clientWidth
             const height = refElement.current.clientHeight + 100
             const scale = window.devicePixelRatio
-            canvasRef.current.style.width = width + 'px'
-            canvasRef.current.style.height = height + 'px'
-            canvasRef.current.width = width * scale
-            canvasRef.current.height = height * scale
+            canvas.style.width = width + 'px'
+            canvas.style.height = height + 'px'
+            canvas.width = width * scale
+            canvas.height = height * scale
             ctx.scale(scale, scale)
         }
 
         let moveX = -dinoWidth * 2
-        let firstColor = `#${newRandomHexColor()}88`
-        let secondColor = `#${newRandomHexColor()}88`
+        const firstColor = `#${newRandomHexColor()}88`
+        const secondColor = `#${newRandomHexColor()}88`
         let firstSwift = false
         let isFirstHalf = false
         let model = false
@@ -61,12 +72,7 @@ export const DinoBackground = ({
 
             moveX += speed
 
-            ctx.clearRect(
-                0,
-                0,
-                refElement.current.clientWidth,
-                canvasRef.current.height
-            )
+            ctx.clearRect(0, 0, refElement.current.clientWidth, canvas.height)
 
             if (firstSwift) {
                 ctx.fillStyle = firstColor
@@ -144,7 +150,13 @@ export const DinoBackground = ({
     )
 }
 
-const Dino = (context, scale, offsetX = 0, offsetY = 0, rightLegUp = true) => {
+const Dino = (
+    context: CanvasRenderingContext2D,
+    scale: number,
+    offsetX = 0,
+    offsetY = 0,
+    rightLegUp = true
+) => {
     const ctx = context
 
     ctx.beginPath()

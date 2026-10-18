@@ -3,32 +3,43 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import withStyles from '@mui/styles/withStyles'
+import { createStyles, type WithStyles } from '@mui/styles'
+import type { Theme } from '@mui/material/styles'
+import type { ReactNode } from 'react'
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid'
 
-const styles = (theme) => ({
-    container: {
-        marginBottom: 0,
-        position: 'relative',
-        [theme.breakpoints.up('sm')]: {
-            minHeight: 400,
+const styles = (theme: Theme) =>
+    createStyles({
+        container: {
+            marginBottom: 0,
+            position: 'relative',
+            [theme.breakpoints.up('sm')]: {
+                minHeight: 400,
+            },
         },
-    },
-    content: {
-        '&:last-child': {
-            paddingBottom: 16,
+        content: {
+            '&:last-child': {
+                paddingBottom: 16,
+            },
         },
-    },
-    header: {
-        marginBottom: 10,
-    },
-    icon: {
-        position: 'relative',
-        top: 5,
-        right: 5,
-        paddingLeft: 1,
-    },
-})
+        header: {
+            marginBottom: 10,
+        },
+        icon: {
+            position: 'relative',
+            top: 5,
+            right: 5,
+            paddingLeft: 1,
+        },
+    })
+
+export interface DashboardCardProps {
+    title: string
+    titleIcon: ReactNode
+    rightChildren?: ReactNode
+    children?: ReactNode
+}
 
 function DashboardCardInner({
     title,
@@ -36,7 +47,7 @@ function DashboardCardInner({
     rightChildren,
     children,
     classes,
-}) {
+}: DashboardCardProps & WithStyles<typeof styles>) {
     if (!children) {
         return <LoaderMatchParent />
     }

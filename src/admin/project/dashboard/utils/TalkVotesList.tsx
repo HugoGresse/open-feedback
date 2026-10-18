@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography'
 import ArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import ArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import { makeStyles } from '@mui/styles'
+import type { ReactNode } from 'react'
+import type { TalkWithVotes } from '../dashboardSelectors'
 
 const useStyles = makeStyles({
     title: {
@@ -38,6 +40,18 @@ const useStyles = makeStyles({
     },
 })
 
+type TalkVotesListClasses = ReturnType<typeof useStyles>
+
+export interface TalkVotesListProps {
+    dataArray: TalkWithVotes[]
+    projectId: string | null
+    loading: boolean
+    title: string
+    titleIcon: ReactNode
+    dinoStartDelay?: number
+    countKey: 'voteCount' | 'commentCount'
+}
+
 const previewCount = 5
 export const TalkVotesList = ({
     dataArray,
@@ -47,7 +61,7 @@ export const TalkVotesList = ({
     titleIcon,
     dinoStartDelay,
     countKey,
-}) => {
+}: TalkVotesListProps) => {
     const classes = useStyles()
     const [selectedIndex, setIndex] = useState(0)
 
@@ -115,7 +129,12 @@ export const TalkVotesList = ({
     )
 }
 
-const getItem = (voteWithTalk, projectId, classes, countKey) => {
+const getItem = (
+    voteWithTalk: TalkWithVotes,
+    projectId: string | null,
+    classes: TalkVotesListClasses,
+    countKey: TalkVotesListProps['countKey']
+) => {
     return (
         <Grid item xs={12} component="li" key={voteWithTalk.talkId}>
             <Grid container>
@@ -139,7 +158,6 @@ const getItem = (voteWithTalk, projectId, classes, countKey) => {
                     xs={2}
                     component="a"
                     target="_blank"
-                    align="right"
                     href={`/${projectId}/${voteWithTalk.date}/${voteWithTalk.talkId}`}
                     className={classes.count}
                 >

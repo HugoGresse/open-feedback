@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Auth, onAuthStateChanged } from 'firebase/auth'
+import type firebase from 'firebase/compat/app'
 import * as firebaseui from 'firebaseui'
 import 'firebaseui/dist/firebaseui.css'
 
@@ -10,12 +10,12 @@ export const StyledFirebaseAuth = ({
     uiCallback,
 }: {
     uiConfig: firebaseui.auth.Config
-    firebaseAuth: Auth
+    firebaseAuth: firebase.auth.Auth
     className?: string
     uiCallback: (widget: firebaseui.auth.AuthUI) => void
 }) => {
     const [userSignedIn, setUserSignedIn] = useState(false)
-    const elementRef = useRef(null)
+    const elementRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         // Get or Create a firebaseUI instance.
@@ -25,8 +25,7 @@ export const StyledFirebaseAuth = ({
         if (uiConfig.signInFlow === 'popup') firebaseUiWidget.reset()
 
         // We track the auth state to reset firebaseUi if the user signs out.
-        const unregisterAuthObserver = onAuthStateChanged(
-            firebaseAuth,
+        const unregisterAuthObserver = firebaseAuth.onAuthStateChanged(
             (user) => {
                 if (!user && userSignedIn) firebaseUiWidget.reset()
                 setUserSignedIn(!!user)
@@ -39,8 +38,8 @@ export const StyledFirebaseAuth = ({
         }
 
         // Render the firebaseUi Widget.
-        // @ts-ignore
-        firebaseUiWidget.start(elementRef.current, uiConfig)
+        // The div is mounted before effects run.
+        firebaseUiWidget.start(elementRef.current as HTMLDivElement, uiConfig)
 
         return () => {
             unregisterAuthObserver()

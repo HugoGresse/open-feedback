@@ -3,14 +3,24 @@ import Container from '@mui/material/Container'
 import { makeStyles } from '@mui/styles'
 import { OrganizationHeader } from './OrganizationHeader.tsx'
 import { useTranslation } from 'react-i18next'
+import type { ReactNode } from 'react'
+import type { Theme } from '@mui/material/styles'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     container: {
         paddingBottom: theme.spacing(2),
     },
 }))
 
-export const RootContentLayout = ({ isUserValid, children }) => {
+interface RootContentLayoutProps {
+    isUserValid: boolean
+    children?: ReactNode
+}
+
+export const RootContentLayout = ({
+    isUserValid,
+    children,
+}: RootContentLayoutProps) => {
     const classes = useStyles()
     const { t } = useTranslation()
 

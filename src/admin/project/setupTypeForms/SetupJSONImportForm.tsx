@@ -10,13 +10,11 @@ import UploadIcon from '@mui/icons-material/UploadFile'
 import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 import clipboardCopy from 'clipboard-copy'
-// @ts-expect-error - JS module without types
 import { OFButton } from '../../baseComponents/button/OFButton.tsx'
-// @ts-expect-error - JS module without types
 import { FormikObserver } from '../../baseComponents/form/formik/FormikObserver'
 import jsonModel from './jsonmodel.json'
 import {
-    EventData,
+    type EventData,
     parseEventJson,
 } from '../../../core/setupType/eventDataNormalization'
 

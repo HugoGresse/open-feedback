@@ -4,8 +4,9 @@ import { Trans, useTranslation } from 'react-i18next'
 import { NavLinkMui } from '../project/layout/NavLinkMui.tsx'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { makeStyles } from '@mui/styles'
+import type { Theme } from '@mui/material/styles'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     quatrecentquatre: {
         animation: '$rainbow 2s step-start infinite',
     },
@@ -61,6 +62,9 @@ export const Layout404 = () => {
     const classes = useStyles()
     const pathname = window.location.pathname
     const { t } = useTranslation()
+    // Resolved outside JSX: inside NavLink children, t() would infer its
+    // return type from NavLink's render-prop children type.
+    const goToAdminLabel: string = t('layout.goToAdmin')
 
     return (
         <Box padding={4} bgcolor="#eee">
@@ -78,7 +82,7 @@ export const Layout404 = () => {
             <pre> ¯\_(ツ)_/¯</pre>
 
             <NavLinkMui to={`/admin`} className={classes.link}>
-                <ArrowBackIcon fontSize="small" /> {t('layout.goToAdmin')}
+                <ArrowBackIcon fontSize="small" /> {goToAdminLabel}
             </NavLinkMui>
         </Box>
     )

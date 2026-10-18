@@ -1,6 +1,8 @@
 import { getUserVotesByTalkAndVoteItemSelector } from './voteSelectors'
 import { fireStoreMainInstance } from '../../firebase.ts'
 import { VOTE_TYPE_TEXT_PLUS } from '../../core/contants'
+import type { Vote, VoteItem } from '../../core/models'
+import type { RootState } from '../../store'
 
 /**
  * Get a new vote id or the existing one if only need update
@@ -8,13 +10,18 @@ import { VOTE_TYPE_TEXT_PLUS } from '../../core/contants'
  * @param projectId
  * @param getState
  * @param data the user text vote value if updating
- * @returns {[string]|[undefined,*]}
+ * @returns the vote id, and the existing vote when updating it
  */
-export const getVoteId = (voteItem, projectId, getState, data = null) => {
+export const getVoteId = (
+    voteItem: VoteItem,
+    projectId: string,
+    getState: () => RootState,
+    data: string | null = null
+): [id: string, existingVote?: Vote] => {
     const existingVotes =
         getUserVotesByTalkAndVoteItemSelector(getState())[voteItem.id]
 
-    const isPendingVote = (vote) => {
+    const isPendingVote = (vote: Vote) => {
         if (vote.pending) {
             // eslint-disable-next-line no-console
             console.info(

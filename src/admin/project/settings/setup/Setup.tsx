@@ -5,7 +5,12 @@ import { SetupForm } from './SetupForm.tsx'
 import { DeleteProject } from './DeleteProject.tsx'
 import { LoaderMatchParent } from '../../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import { editProject } from '../../core/actions/editProject'
-import { useDispatch, useSelector, useStore } from 'react-redux'
+import { useStore } from 'react-redux'
+import {
+    type RootState,
+    useAppDispatch,
+    useAppSelector,
+} from '../../../../store'
 import {
     getLanguagesSelector,
     getSelectedProjectSelector,
@@ -20,11 +25,15 @@ const SettingsForm = lazy(() =>
 )
 
 export const Setup = () => {
-    const dispatch = useDispatch()
-    const project = useSelector(getSelectedProjectSelector)
-    const store = useStore()
+    const dispatch = useAppDispatch()
+    const project = useAppSelector(getSelectedProjectSelector)
+    const store = useStore<RootState>()
     // Doing this prevent the selector to be connected to redux directly, thus prevent future update of initialValues
     const initialLanguages = getLanguagesSelector(store.getState())
+
+    // Rendered under <Project>, which only renders its children once the
+    // project is loaded.
+    if (!project) return null
 
     return (
         <>

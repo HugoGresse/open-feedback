@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux'
+import type { SyntheticEvent } from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import ErrorIcon from '@mui/icons-material/Error'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
@@ -13,15 +13,21 @@ import {
     setOpenNotification,
 } from './notifcationActions'
 import { useTranslation } from 'react-i18next'
-import { Snackbar, SnackbarContent } from '@mui/material'
+import {
+    Snackbar,
+    type SnackbarCloseReason,
+    SnackbarContent,
+} from '@mui/material'
 import IconButton from '@mui/material/IconButton'
+import type { Theme } from '@mui/material/styles'
+import { useAppDispatch, useAppSelector } from '../../store'
 
 const variantIcon = {
     success: CheckCircleIcon,
     error: ErrorIcon,
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     success: {
         backgroundColor: green[600],
     },
@@ -51,15 +57,17 @@ const useStyles = makeStyles((theme) => ({
 
 export const Notifications = () => {
     const classes = useStyles()
-    const notification = useSelector(getCurrentNotificationSelector)
-    const isOpen = useSelector(isNotificationOpenSelector)
-    const dispatch = useDispatch()
+    const notification = useAppSelector(getCurrentNotificationSelector)
+    const isOpen = useAppSelector(isNotificationOpenSelector)
+    const dispatch = useAppDispatch()
     const { t } = useTranslation()
 
-    const Icon = notification ? variantIcon[notification.type] : undefined
     const contentClass = notification ? classes[notification.type] : undefined
 
-    const handleClose = (event, reason) => {
+    const handleClose = (
+        _event: Event | SyntheticEvent,
+        reason?: SnackbarCloseReason
+    ) => {
         if (reason === 'clickaway') {
             return
         }
@@ -81,6 +89,7 @@ export const Notifications = () => {
             )
         }
         if (notification.message) {
+            const Icon = variantIcon[notification.type]
             return (
                 <span id="client-snackbar" className={classes.message}>
                     {' '}

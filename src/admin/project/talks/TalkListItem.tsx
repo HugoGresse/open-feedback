@@ -10,8 +10,10 @@ import Chip from '@mui/material/Chip'
 import { DateTime } from 'luxon'
 import Typography from '@mui/material/Typography'
 import { DeleteTalkButton } from './DeleteTalkButton.tsx'
+import type { Theme } from '@mui/material/styles'
+import type { SpeakersMap, Talk } from '../../../core/models'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     cell: {
         paddingRight: 12,
         [theme.breakpoints.down('xl')]: {
@@ -27,13 +29,22 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+export interface TalkListItemProps {
+    item: Talk
+    speakers: SpeakersMap
+    onEdit: (talk: Talk) => void
+    /** Returns true when the removal must not happen (e.g. read-only project). */
+    isRemoveBlocked: () => boolean
+    onSpeakerClicked: (speakerName: string) => void
+}
+
 export const TalkListItem = ({
     item,
     speakers,
     onEdit,
     isRemoveBlocked,
     onSpeakerClicked,
-}) => {
+}: TalkListItemProps) => {
     const classes = useStyles()
 
     return (

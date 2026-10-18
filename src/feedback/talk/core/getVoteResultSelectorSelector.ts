@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect'
+import { createAppSelector, type RootState } from '../../../store'
 import {
     getProjectVoteResultsSelector,
     getProjectVoteStartEndTimeSelector,
@@ -7,14 +7,35 @@ import {
 import { getUserVotesByTalkAndVoteItemSelector } from '../../vote/voteSelectors'
 import { getSelectedTalkIdSelector } from './talkSelectors'
 import { isVoteWindowOpen } from '../../vote/checkDataBeforeVote'
+import type { AggregatedTextVote } from '../../../core/models'
 
-export const getVoteResultSelectorSelector = createSelector(
+/** A text vote of the results, its Firestore timestamps turned into dates. */
+export interface TextVoteResult extends Omit<
+    AggregatedTextVote,
+    'id' | 'createdAt' | 'updatedAt'
+> {
+    /** The vote id. */
+    id: string
+    createdAt: Date | null
+    updatedAt: Date
+}
+
+/**
+ * Value of a vote item in the results: the counter of a boolean vote item or
+ * the text votes of a text vote item (the `id` key holds the talk id).
+ */
+export type VoteResult = number | string | TextVoteResult[] | undefined
+
+/** Vote results of the selected talk keyed by vote item id. */
+export type VoteResults = Record<string, VoteResult>
+
+export const getVoteResultSelectorSelector = createAppSelector(
     getSelectedTalkIdSelector,
     getProjectVoteResultsSelector,
     hideVotesUntilUserVoteSelector,
     getUserVotesByTalkAndVoteItemSelector,
     getProjectVoteStartEndTimeSelector,
-    (_, displayVotes) => displayVotes,
+    (_: RootState, displayVotes: string | null) => displayVotes,
     (
         selectedTalkId,
         voteResults,
@@ -22,7 +43,7 @@ export const getVoteResultSelectorSelector = createSelector(
         currentUserVotes,
         projectVotesWindow,
         displayVotes
-    ) => {
+    ): VoteResults => {
         if (
             hideVotesUntilUserVote &&
             !displayVotes &&
@@ -35,24 +56,28 @@ export const getVoteResultSelectorSelector = createSelector(
                     projectVotesWindow[1]
                 )
                 if (voteWindowOpen) {
-                    return []
+                    return {}
                 }
             } else {
                 // Hide other users votes until the user vote
-                return []
+                return {}
             }
         }
-        if (!voteResults || !voteResults[selectedTalkId]) {
-            return []
+        if (
+            !voteResults ||
+            selectedTalkId === null ||
+            !voteResults[selectedTalkId]
+        ) {
+            return {}
         }
-        let results = voteResults[selectedTalkId]
+        const results = voteResults[selectedTalkId]
 
         // Transform results.id.{ id: voteText1, id: voteText2, id: voteText3} into an array
-        let transformResult = {}
+        const transformResult: VoteResults = {}
         Object.entries(results).forEach(([key, value]) => {
             if (typeof value === 'object') {
-                transformResult[key] = []
-                Object.entries(value).forEach(([, value2]) => {
+                const textVotes: TextVoteResult[] = []
+                Object.entries(value).forEach(([voteId, value2]) => {
                     const keys = Object.keys(value2)
                     if (
                         !value2 ||
@@ -75,14 +100,16 @@ export const getVoteResultSelectorSelector = createSelector(
                         // No usable timestamp, skip this corrupted entry
                         return
                     }
-                    transformResult[key].push({
+                    textVotes.push({
                         ...value2,
+                        // The id is copied in the value when loading the votes
+                        id: value2.id ?? voteId,
                         updatedAt,
                         createdAt,
                     })
                 })
-                transformResult[key] = transformResult[key].sort(
-                    (a, b) => b.updatedAt - a.updatedAt
+                transformResult[key] = textVotes.sort(
+                    (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
                 )
             } else {
                 transformResult[key] = value

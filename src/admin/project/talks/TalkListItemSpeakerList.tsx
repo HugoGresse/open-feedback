@@ -4,6 +4,7 @@ import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
 import WarningIcon from '@mui/icons-material/Warning'
 import { useTranslation } from 'react-i18next'
+import type { SpeakersMap } from '../../../core/models'
 
 const useStyles = makeStyles(() => ({
     chip: {
@@ -12,11 +13,17 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
+export interface TalkListItemSpeakerListProps {
+    speakers: SpeakersMap
+    speakersIds?: string[]
+    onSpeakerClicked: (speakerName: string) => void
+}
+
 export const TalkListItemSpeakerList = ({
     speakers,
     speakersIds,
     onSpeakerClicked,
-}) => {
+}: TalkListItemSpeakerListProps) => {
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -61,7 +68,6 @@ export const TalkListItemSpeakerList = ({
                                 icon={<WarningIcon style={{ width: 20 }} />}
                                 classes={{
                                     root: classes.chip,
-                                    label: classes.label,
                                 }}
                             />
                         </Tooltip>

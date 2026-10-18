@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../store'
 import { getTalksDatesSelector } from '../../core/talks/talksSelectors'
 import {
     getProjectIdSelector,
@@ -22,10 +22,10 @@ const useStyles = makeStyles({
 
 export const TalksDateMenu = () => {
     const { t } = useTranslation()
-    const talksDates = useSelector(getTalksDatesSelector)
-    const selectedDate = useSelector(getProjectSelectedDateSelector)
-    const currentProjectId = useSelector(getProjectIdSelector)
-    const displayFullDates = useSelector(isFullDatesDisplayedSelector)
+    const talksDates = useAppSelector(getTalksDatesSelector)
+    const selectedDate = useAppSelector(getProjectSelectedDateSelector)
+    const currentProjectId = useAppSelector(getProjectIdSelector)
+    const displayFullDates = useAppSelector(isFullDatesDisplayedSelector)
     const { items } = usePagination({
         count: talksDates.length,
         page: talksDates.indexOf(selectedDate) + 1,
@@ -44,11 +44,12 @@ export const TalksDateMenu = () => {
             <ul className={classes.menu}>
                 {items.map(({ page, type, selected }, index) => {
                     let children = null
-                    const pageFixed = page - 1
+                    // page is null on ellipsis items, coerced to 0 as before typing
+                    const pageFixed = (page ?? 0) - 1
 
                     if (type === 'start-ellipsis' || type === 'end-ellipsis') {
                         children = (
-                            <TalkDateMenuItemBlank key="..." isSelected={false}>
+                            <TalkDateMenuItemBlank key="...">
                                 …
                             </TalkDateMenuItemBlank>
                         )

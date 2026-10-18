@@ -1,26 +1,28 @@
-import { createSelector } from 'reselect'
 import { normalizeAndRemoveDiacritics } from '../../utils/stringUtils'
+import { createAppSelector, type RootState } from '../../store'
+import type { Speaker } from '../models'
 
-export const getSpeakersSelector = (state) => state.speakers
+export const getSpeakersSelector = (state: RootState) => state.speakers
 
-export const getSpeakersListSelector = (state) =>
+export const getSpeakersListSelector = (state: RootState) =>
     getSpeakersSelector(state).list || {}
 
-export const getSpeakersFilter = (state) => getSpeakersSelector(state).filter
+export const getSpeakersFilter = (state: RootState) =>
+    getSpeakersSelector(state).filter
 
 //  MEMOIZED SELECTORS HERE
 
-export const getSpeakersAsArraySelector = createSelector(
+export const getSpeakersAsArraySelector = createAppSelector(
     getSpeakersListSelector,
     (speakers) => {
-        return Object.keys(speakers).reduce((acc, id) => {
+        return Object.keys(speakers).reduce<Speaker[]>((acc, id) => {
             acc.push(speakers[id])
             return acc
         }, [])
     }
 )
 
-export const getFilteredSpeakers = createSelector(
+export const getFilteredSpeakers = createAppSelector(
     getSpeakersAsArraySelector,
     getSpeakersFilter,
     (speakers, filter) => {

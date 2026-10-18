@@ -12,11 +12,17 @@ import { useEffect } from 'react'
  * </Formik>
  * @return {null}
  */
-export function FormikObserver({ value, onChange }) {
+export interface FormikObserverProps<Value extends object> {
+    value: Value
+    onChange: (value: Value) => void
+}
+
+export function FormikObserver<Value extends object>({
+    value,
+    onChange,
+}: FormikObserverProps<Value>) {
     useEffect(() => {
         onChange(value)
-        // eslint-disable-next-line
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [Object.values(value).join(', ')])
     return null
 }

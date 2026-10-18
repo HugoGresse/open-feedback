@@ -1,10 +1,10 @@
 import { useEffect, useState, type FC } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import { useTranslation } from 'react-i18next'
 import { LoaderMatchParent } from '../../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import {
     API_DOCS_URL,
-    LastUsedValue,
+    type LastUsedValue,
     ApiKeyIntegrationCard,
 } from '../../../baseComponents/ApiKeyIntegrationCard.tsx'
 import { getSelectedProjectSelector } from '../../core/projectSelectors'
@@ -18,9 +18,8 @@ export { API_DOCS_URL }
 
 export const Integration: FC = () => {
     const { t } = useTranslation()
-    const dispatch = useDispatch()
-    const project = useSelector(getSelectedProjectSelector) as
-        { id: string } | null | undefined
+    const dispatch = useAppDispatch()
+    const project = useAppSelector(getSelectedProjectSelector)
     const projectId = project?.id
 
     const [loaded, setLoaded] = useState(false)
@@ -56,9 +55,7 @@ export const Integration: FC = () => {
     }
 
     const generateOrRotate = async (): Promise<string | void> => {
-        const newKey = (await dispatch(
-            updateProjectApiKey() as never
-        )) as unknown as string | void
+        const newKey = await dispatch(updateProjectApiKey())
         if (newKey) {
             setApiKey(newKey)
             setLastUsedRaw(null)

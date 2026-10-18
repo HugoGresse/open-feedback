@@ -6,7 +6,11 @@ import CachedIcon from '@mui/icons-material/Cached'
 import { SimpleDialog } from '../../../baseComponents/layouts/SimpleDialog.tsx'
 import { TranslatedTypography } from '../../../baseComponents/TranslatedTypography.tsx'
 
-export const VotingFormFooter = ({ reset }) => {
+export interface VotingFormFooterProps {
+    reset: () => Promise<unknown>
+}
+
+export const VotingFormFooter = ({ reset }: VotingFormFooterProps) => {
     const { t } = useTranslation()
     const [isDialogOpen, setDialogOpen] = useState(false)
     const [isSaving, setIsSaving] = useState(false)

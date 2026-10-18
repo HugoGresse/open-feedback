@@ -4,15 +4,30 @@ import Box from '@mui/material/Box'
 
 const circleRadius = 15
 
-const TalkItemVoteBackground = ({ count = 0, colors }) => {
-    const refElement = useRef(null)
-    const canvasRef = useRef(null)
-    const canvasState = useRef({
+interface Circle {
+    x: number
+    y: number
+    opacity: number
+}
+
+interface TalkItemVoteBackgroundProps {
+    count?: number
+    /** Hex colors without `#`, the project chip colors. */
+    colors?: string[]
+}
+
+const TalkItemVoteBackground = ({
+    count = 0,
+    colors,
+}: TalkItemVoteBackgroundProps) => {
+    const refElement = useRef<HTMLDivElement>(null)
+    const canvasRef = useRef<HTMLCanvasElement>(null)
+    const canvasState = useRef<{ circles: Circle[] }>({
         circles: [],
     })
 
     const createRandomCircle = useCallback(
-        (ctx, count) => {
+        (ctx: CanvasRenderingContext2D | null, count: number | undefined) => {
             if (count === undefined || !ctx) {
                 return
             }
@@ -54,13 +69,17 @@ const TalkItemVoteBackground = ({ count = 0, colors }) => {
 
             ctx.clearRect(0, 0, width, height)
 
+            // A project without chip colors draws with the default fill
+            // instead of throwing.
+            const chipColors = colors ?? []
             circles.forEach((circle, index) => {
                 let fillStyle =
                     '#' +
-                    colors[0] +
+                    chipColors[0] +
                     circle.opacity.toString(16).padStart(2, '0')
-                if (colors.length > 1) {
-                    fillStyle = '#' + colors[index % colors.length] + '60'
+                if (chipColors.length > 1) {
+                    fillStyle =
+                        '#' + chipColors[index % chipColors.length] + '60'
                 }
                 ctx.fillStyle = fillStyle
                 ctx.beginPath()

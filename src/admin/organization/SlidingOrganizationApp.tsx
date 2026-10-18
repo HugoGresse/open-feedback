@@ -1,6 +1,6 @@
 import { useEffect, useState, forwardRef, useRef } from 'react'
 import { useMatch, useNavigate } from 'react-router-dom'
-import { Backdrop, Modal, Slide } from '@mui/material'
+import { Modal, Slide } from '@mui/material'
 import { OrganizationApp } from './OrganizationApp.tsx'
 import { makeStyles } from '@mui/styles'
 import Container from '@mui/material/Container'
@@ -27,7 +27,10 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-export const SlidingOrganizationApp = forwardRef(function (props, ref) {
+export const SlidingOrganizationApp = forwardRef<
+    HTMLDivElement,
+    Record<string, never>
+>(function SlidingOrganizationApp(_props, ref) {
     const classes = useStyles()
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
@@ -55,9 +58,6 @@ export const SlidingOrganizationApp = forwardRef(function (props, ref) {
         <Modal
             ref={ref}
             open={open}
-            slot={{
-                backdrop: Backdrop,
-            }}
             slotProps={{
                 backdrop: {
                     timeout: 500,
@@ -81,9 +81,9 @@ export const SlidingOrganizationApp = forwardRef(function (props, ref) {
                     disableGutters
                     className={classes.container}
                 >
-                    {open && (
+                    {open && match && (
                         <OrganizationApp
-                            key={match ? match.params.organizationId : null}
+                            key={match.params.organizationId}
                             match={match}
                             onClose={close}
                         />

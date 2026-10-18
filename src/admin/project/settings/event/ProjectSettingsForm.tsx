@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { object, string, boolean } from 'yup'
 import { Typography } from '@mui/material'
-import { Field, Form, Formik } from 'formik'
+import { Field, Form, Formik, type FormikErrors } from 'formik'
 import { OFFormControl } from '../../../baseComponents/form/formControl/OFFormControl.tsx'
 import Grid from '@mui/material/Grid'
 import { OFButton } from '../../../baseComponents/button/OFButton.tsx'
 import { makeStyles } from '@mui/styles'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../../../../store'
+import type { Theme } from '@mui/material/styles'
+import type { AdminProject } from '../../core/projectActionTypes'
 import { ChipColorsEditor } from './ChipColorsEditor.tsx'
 import { OFFormControlInputFormiked } from '../../../baseComponents/form/formControl/OFFormControlInputFormiked.tsx'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -19,7 +21,7 @@ import { editProject } from '../../core/actions/editProject'
 import { RestrictVoteRangeFields } from './RestrictVoteRangeFields.tsx'
 import { SaveShortcut } from '../../../baseComponents/form/saveShortcut/SaveShortcut'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     buttonContainer: {
         textAlign: 'right',
     },
@@ -31,13 +33,30 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const ProjectSettingsForm = ({ project }) => {
+interface ProjectSettingsFormValues {
+    name: string
+    scheduleLink: string
+    logoUrl: string
+    faviconUrl: string
+    chipColors: string[] | undefined
+    restrictVoteRange: boolean
+    voteStartTime: DateTime
+    voteEndTime: DateTime
+    hideEventName: boolean
+}
+
+interface ProjectSettingsFormProps {
+    project: AdminProject
+}
+
+export const ProjectSettingsForm = ({ project }: ProjectSettingsFormProps) => {
     const classes = useStyles()
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const { t } = useTranslation()
     const [errorOnSubmit, setErrorSubmit] = useState(false)
 
-    const initialValues = {
+    // DateTime.fromISO of a missing date is an invalid (but truthy) DateTime.
+    const initialValues: ProjectSettingsFormValues = {
         name: project.name,
         scheduleLink: project.scheduleLink || '',
         logoUrl: project.logoSmall || '',
@@ -45,8 +64,9 @@ export const ProjectSettingsForm = ({ project }) => {
         chipColors: project.chipColors,
         restrictVoteRange: !!project.voteStartTime,
         voteStartTime:
-            DateTime.fromISO(project.voteStartTime) || DateTime.local(),
-        voteEndTime: DateTime.fromISO(project.voteEndTime) || DateTime.local(),
+            DateTime.fromISO(project.voteStartTime ?? '') || DateTime.local(),
+        voteEndTime:
+            DateTime.fromISO(project.voteEndTime ?? '') || DateTime.local(),
         hideEventName: project.hideEventName || false,
     }
 
@@ -78,11 +98,13 @@ export const ProjectSettingsForm = ({ project }) => {
                         name: values.name,
                         scheduleLink: values.scheduleLink,
                         restrictVoteRange: values.restrictVoteRange,
+                        // Round-trip through the DateTime string (ISO), as
+                        // fromISO() stringified it before typing.
                         voteStartTime: DateTime.fromISO(
-                            values.voteStartTime
+                            String(values.voteStartTime)
                         ).toISO(),
                         voteEndTime: DateTime.fromISO(
-                            values.voteEndTime
+                            String(values.voteEndTime)
                         ).toISO(),
                         hideEventName: values.hideEventName,
                     })
@@ -212,5 +234,6 @@ export const ProjectSettingsForm = ({ project }) => {
     )
 }
 
-const errorArrayContainError = (errorArray) =>
-    Object.values(errorArray).filter((el) => !!el).length > 0
+const errorArrayContainError = (
+    errorArray: FormikErrors<ProjectSettingsFormValues>
+) => Object.values(errorArray).filter((el) => !!el).length > 0

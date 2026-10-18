@@ -1,8 +1,20 @@
 import Box from '@mui/material/Box'
 import { DinoBackground } from '../../../baseComponents/DinoBackground.tsx'
 import { useTranslation } from 'react-i18next'
+import type { ReactNode } from 'react'
 
-export const NoData = ({ children, datas, dinoStartDelay = 0 }) => {
+export interface NoDataProps {
+    children?: ReactNode
+    /** Displays the children if at least one of these values is truthy. */
+    datas: unknown[]
+    dinoStartDelay?: number
+}
+
+export const NoData = ({
+    children,
+    datas,
+    dinoStartDelay = 0,
+}: NoDataProps) => {
     const { t } = useTranslation()
 
     if (datas.filter((data) => !!data).length > 0) {

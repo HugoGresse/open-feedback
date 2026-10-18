@@ -4,19 +4,25 @@ import Link from '@mui/material/Link'
 import { makeStyles } from '@mui/styles'
 import Box from '@mui/material/Box'
 import { useTranslation } from 'react-i18next'
-import { SIZE_SMALL } from './SpeakerList.tsx'
+import type { Theme } from '@mui/material/styles'
+import { SIZE_SMALL, type SpeakerSize } from './SpeakerList.tsx'
 
-const useStyles = makeStyles((theme) => ({
+interface SpeakerItemStyleProps {
+    isLinkable: boolean
+    isSmall: boolean
+}
+
+const useStyles = makeStyles((theme: Theme) => ({
     speaker: {
         display: 'flex',
         alignItems: 'center',
         marginRight: '18px',
         paddingRight: 12,
         transition: 'all 200ms',
-        marginTop: (props) => (props.isSmall ? -4 : 1),
+        marginTop: (props: SpeakerItemStyleProps) => (props.isSmall ? -4 : 1),
         '&:hover': {
             textDecoration: 'none',
-            boxShadow: (props) =>
+            boxShadow: (props: SpeakerItemStyleProps) =>
                 props.isLinkable
                     ? `0 0 3px ${theme.palette.headerShadow}`
                     : 'none',
@@ -49,37 +55,54 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const SpeakerItem = ({ name, photoUrl, socialProfil, size }) => {
+interface SpeakerItemProps {
+    name: string
+    photoUrl?: string
+    socialProfil?: string
+    size: SpeakerSize
+}
+
+export const SpeakerItem = ({
+    name,
+    photoUrl,
+    socialProfil,
+    size,
+}: SpeakerItemProps) => {
     const { t } = useTranslation()
     const isSmall = size === SIZE_SMALL
     const isLinkable = !isSmall && socialProfil
 
     const classes = useStyles({
-        isLinkable,
+        isLinkable: !!isLinkable,
         isSmall,
     })
 
-    const linkProps = isLinkable
-        ? {
-              component: Link,
-              href: socialProfil,
-              target: '_blank',
-              title: socialProfil,
-          }
-        : {
-              component: 'div',
-          }
-
-    return (
-        <Box className={classes.speaker} {...linkProps}>
+    const content = (
+        <>
             <Avatar
                 src={photoUrl}
                 alt={`${t('speakerAvatar')} ${name}`}
-                className={classes.avatar + ' ' + classes[size + 'Avatar']}
+                className={classes.avatar + ' ' + classes[`${size}Avatar`]}
             />
-            <Typography color="textPrimary" className={classes[size + 'Text']}>
+            <Typography color="textPrimary" className={classes[`${size}Text`]}>
                 {name}
             </Typography>
+        </>
+    )
+
+    return isLinkable ? (
+        <Box
+            className={classes.speaker}
+            component={Link}
+            href={isLinkable}
+            target="_blank"
+            title={isLinkable}
+        >
+            {content}
+        </Box>
+    ) : (
+        <Box className={classes.speaker} component="div">
+            {content}
         </Box>
     )
 }

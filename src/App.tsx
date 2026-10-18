@@ -1,9 +1,4 @@
-import {
-    Route,
-    BrowserRouter as Router,
-    Routes,
-    Navigate,
-} from 'react-router-dom'
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import './App.css'
 
 import { Page404 } from './Page404.tsx'
@@ -16,13 +11,7 @@ export const App = () => {
     return (
         <Router>
             <Routes>
-                <Route exact path="/" element={<SuspendedRootApp />} />
-                <Route
-                    strict
-                    exact
-                    path="/admin"
-                    render={() => <Navigate to="/admin/" />}
-                />
+                <Route path="/" element={<SuspendedRootApp />} />
                 <Route path="/admin/" element={<SuspendedAdminApp />} />
                 <Route path="/admin//*" element={<SuspendedAdminApp />} />
                 <Route
@@ -30,7 +19,7 @@ export const App = () => {
                     element={<SuspendedSuperAdminApp />}
                 />
                 <Route path="/:projectId//*" element={<FeedbackApp />} />
-                <Route component={Page404} status={404} />
+                <Route path="*" element={<Page404 />} />
             </Routes>
         </Router>
     )

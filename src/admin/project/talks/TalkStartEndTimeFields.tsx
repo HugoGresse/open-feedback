@@ -3,13 +3,24 @@ import { OFFormControl } from '../../baseComponents/form/formControl/OFFormContr
 import { Field, useField } from 'formik'
 import { OFDateTimePicker } from '../../baseComponents/form/dateTimePicker/OFDateTimePicker.tsx'
 import { useTranslation } from 'react-i18next'
+import type { DateTime } from 'luxon'
 
 const startTimeFieldName = 'startTime'
 const endTimeFieldName = 'endTime'
-export const TalkStartEndTimeFields = ({ defaultValue }) => {
-    const [startField, startMeta] = useField(startTimeFieldName)
-    // eslint-disable-next-line no-unused-vars
-    const [endField, endMeta, endHelpers] = useField(endTimeFieldName)
+export interface TalkStartEndTimeFieldsProps {
+    /** ISO date-time the start time picker opens on. */
+    defaultValue?: string | null
+}
+
+export const TalkStartEndTimeFields = ({
+    defaultValue,
+}: TalkStartEndTimeFieldsProps) => {
+    const [startField, startMeta] = useField<DateTime | null>(
+        startTimeFieldName
+    )
+    const [endField, endMeta, endHelpers] = useField<DateTime | null>(
+        endTimeFieldName
+    )
 
     useEffect(() => {
         // Update end time if start time is touched and updated

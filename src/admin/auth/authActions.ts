@@ -1,4 +1,15 @@
-import { LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT } from './authActionTypes'
+import type firebase from 'firebase/compat/app'
+import type { NavigateFunction } from 'react-router-dom'
+import type { User } from '../../core/models'
+import type { AppThunk } from '../../store'
+import {
+    LOGIN_ERROR,
+    LOGIN_SUCCESS,
+    LOGOUT,
+    type SerializedFirebaseUser,
+    type UserDataFields,
+    type UserDataSource,
+} from './authActionTypes'
 import { isLoggedSelector, isUserValidSelector } from './authSelectors'
 import {
     authProvider,
@@ -12,14 +23,24 @@ import {
     trackUserId,
 } from '../../utils/analytics/track'
 
-export const didSignIn = (baseUser, error) => {
+/**
+ * didSignIn only serializes the user, so anything exposing firebase.User's
+ * toJSON() is accepted (EmulatorLogin overrides emailVerified this way).
+ */
+export type SignInUser = Pick<firebase.User, 'toJSON'>
+
+export const didSignIn = (
+    baseUser: SignInUser | null,
+    error?: string
+): AppThunk<Promise<void>> => {
     return async (dispatch, getState) => {
         if (isLoggedSelector(getState()) && isUserValidSelector(getState())) {
             return
         }
 
         if (baseUser) {
-            const user = baseUser.toJSON()
+            // toJSON() is typed as Object by firebase
+            const user = baseUser.toJSON() as SerializedFirebaseUser
             if (user.isAnonymous) {
                 dispatch({
                     type: LOGIN_ERROR,
@@ -51,7 +72,8 @@ export const didSignIn = (baseUser, error) => {
 
                 if (userInDb.exists) {
                     // update photoURL
-                    const userDbData = userInDb.data()
+                    // exists is true, so data() is defined
+                    const userDbData = userInDb.data() as User
                     const displayNameDb = getDataFromProviderDataOrUser(
                         userDbData,
                         'displayName'
@@ -100,23 +122,30 @@ export const didSignIn = (baseUser, error) => {
     }
 }
 
-export const signOut = (navigate) => (dispatch) => {
-    authProvider.signOut().then(() => {
-        dispatch({
-            type: LOGOUT,
+export const signOut =
+    (navigate: NavigateFunction): AppThunk =>
+    (dispatch) => {
+        authProvider.signOut().then(() => {
+            dispatch({
+                type: LOGOUT,
+            })
+            if (window.location.pathname === '/admin/') {
+                window.location.reload()
+            } else {
+                navigate('/admin/', { replace: true })
+            }
         })
-        if (window.location.pathname === '/admin/') {
-            window.location.reload()
-        } else {
-            navigate.replace('/admin/')
-        }
-    })
-}
+    }
 
-const getUserFromDB = async (uid) =>
+const getUserFromDB = async (uid: string) =>
     await fireStoreMainInstance.collection('users').doc(uid).get()
 
-const createUser = async (user, displayName, photoURL, phone) => {
+const createUser = async (
+    user: SerializedFirebaseUser,
+    displayName: string,
+    photoURL: string,
+    phone: string
+) => {
     const userField = {
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
@@ -132,7 +161,13 @@ const createUser = async (user, displayName, photoURL, phone) => {
         .set(userField)
 }
 
-const updateUser = async (user, displayName, photoURL, email, phone) => {
+const updateUser = async (
+    user: SerializedFirebaseUser,
+    displayName: string,
+    photoURL: string,
+    email: string,
+    phone: string
+) => {
     const userField = {
         updatedAt: serverTimestamp(),
         displayName: displayName,
@@ -148,19 +183,29 @@ const updateUser = async (user, displayName, photoURL, email, phone) => {
         .update(userField)
 }
 
-export const getDataFromProviderDataOrUser = (user, keyToGet) => {
+type UserDataKey = keyof UserDataFields
+
+/**
+ * Read a field on the user, falling back to the first provider data entry
+ * having it, and to '' when none has it.
+ */
+export const getDataFromProviderDataOrUser = <K extends UserDataKey>(
+    user: UserDataSource | null | undefined,
+    keyToGet: K
+): NonNullable<UserDataFields[K]> | '' => {
     if (!user) {
         return ''
     }
-    if (user[keyToGet]) {
-        return user[keyToGet]
+    const userValue = user[keyToGet]
+    if (userValue) {
+        return userValue
     }
-    if (isEmpty(user.providerData)) {
+    if (!user.providerData || isEmpty(user.providerData)) {
         return ''
     }
     const providerData = user.providerData.filter((data) => data[keyToGet])
     if (providerData.length > 0) {
-        return providerData[0][keyToGet]
+        return providerData[0][keyToGet] ?? ''
     }
     return ''
 }

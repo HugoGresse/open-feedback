@@ -1,13 +1,25 @@
+import type { TFunction } from 'react-i18next'
+import type { AppThunk } from '../../../../store'
 import { fireStoreMainInstance } from '../../../../firebase.ts'
 
+export type ResetVotesProgressUpdate = (
+    totalDocs: number,
+    deletingDocsCount?: number
+) => void
+
 export const resetProjectVotes =
-    (projectId, t, progressUpdates = (totalDocs, deletingDocsCount) => {}) =>
+    (
+        projectId: string,
+        // Unused, kept for the callers' signature.
+        _t: TFunction,
+        progressUpdates: ResetVotesProgressUpdate = () => {}
+    ): AppThunk<Promise<boolean>> =>
     async () => {
         const userVotes = await fireStoreMainInstance
             .collection(`projects/${projectId}/userVotes`)
             .get()
             .then(async (snapshot) => {
-                const userVotesIds = []
+                const userVotesIds: string[] = []
                 snapshot.forEach((doc) => userVotesIds.push(doc.id))
                 return userVotesIds
             })
@@ -17,7 +29,7 @@ export const resetProjectVotes =
             .collection(`projects/${projectId}/sessionVotes`)
             .get()
             .then(async (snapshot) => {
-                const ids = []
+                const ids: string[] = []
                 snapshot.forEach((doc) => ids.push(doc.id))
                 return ids
             })

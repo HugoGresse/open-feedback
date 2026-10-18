@@ -4,8 +4,13 @@ import { OFButton } from '../baseComponents/button/OFButton.tsx'
 import { authProvider } from '../../firebase.ts'
 import { didSignIn } from './authActions'
 import { useTranslation } from 'react-i18next'
+import type { AppDispatch } from '../../store'
 
-export const EmailNotVerified = ({ dispatch }) => {
+interface EmailNotVerifiedProps {
+    dispatch: AppDispatch
+}
+
+export const EmailNotVerified = ({ dispatch }: EmailNotVerifiedProps) => {
     const { t } = useTranslation()
 
     return (
@@ -17,8 +22,8 @@ export const EmailNotVerified = ({ dispatch }) => {
                 <OFButton
                     onClick={() => {
                         authProvider.currentUser
-                            .getIdToken(true)
-                            .then(() => authProvider.currentUser.reload())
+                            ?.getIdToken(true)
+                            .then(() => authProvider.currentUser?.reload())
                             .then(() => {
                                 dispatch(didSignIn(authProvider.currentUser))
                             })

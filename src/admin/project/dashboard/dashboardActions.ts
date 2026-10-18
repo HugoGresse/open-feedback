@@ -1,4 +1,6 @@
 import {
+    type DashboardTalkVotes,
+    type DashboardUserVote,
     GET_TALK_VOTES_ERROR,
     GET_TALK_VOTES_SUCCESS,
     GET_USER_VOTES_ERROR,
@@ -6,8 +8,10 @@ import {
 } from './dashboardActionTypes'
 import { fireStoreMainInstance } from '../../../firebase.ts'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
+import type { AppThunk } from '../../../store'
+import type { AggregatedTalkVotes } from '../../../core/models'
 
-export const getTalkVotes = () => {
+export const getTalkVotes = (): AppThunk<Promise<void> | undefined> => {
     return (dispatch, getState) => {
         const projectId = getSelectedProjectIdSelector(getState())
 
@@ -21,11 +25,11 @@ export const getTalkVotes = () => {
             .collection('sessionVotes')
             .get()
             .then((snapshots) => {
-                const talkVotes = {}
+                const talkVotes: Record<string, DashboardTalkVotes> = {}
                 snapshots.forEach((doc) => {
                     talkVotes[doc.id] = {
                         id: doc.id,
-                        votes: doc.data(),
+                        votes: doc.data() as AggregatedTalkVotes,
                     }
                 })
 
@@ -34,16 +38,16 @@ export const getTalkVotes = () => {
                     payload: talkVotes,
                 })
             })
-            .catch((err) => {
+            .catch((err: unknown) => {
                 dispatch({
                     type: GET_TALK_VOTES_ERROR,
-                    payload: err.toString(),
+                    payload: String(err),
                 })
             })
     }
 }
 
-export const getUserVotes = () => {
+export const getUserVotes = (): AppThunk<Promise<void> | undefined> => {
     return (dispatch, getState) => {
         const projectId = getSelectedProjectIdSelector(getState())
 
@@ -57,11 +61,14 @@ export const getUserVotes = () => {
             .orderBy('createdAt')
             .get()
             .then((snapshot) => {
-                const userVotes = []
+                const userVotes: DashboardUserVote[] = []
                 snapshot.forEach((doc) => {
                     userVotes.push({
                         fireStoreId: doc.id,
-                        ...doc.data(),
+                        ...(doc.data() as Omit<
+                            DashboardUserVote,
+                            'fireStoreId'
+                        >),
                     })
                 })
 
@@ -70,10 +77,10 @@ export const getUserVotes = () => {
                     payload: userVotes,
                 })
             })
-            .catch((err) => {
+            .catch((err: unknown) => {
                 dispatch({
                     type: GET_USER_VOTES_ERROR,
-                    payload: err.toString(),
+                    payload: String(err),
                 })
             })
     }

@@ -2,21 +2,24 @@ import { useScript } from '../../../utils/hooks/useScript'
 
 export const useSmallchat = () => useScript(import.meta.env.VITE_SMALL_CHAT)
 
-export const getSmallChatTopButton = () => {
-    const topButton = document.querySelector('#Smallchat')
+export const getSmallChatTopButton = (): HTMLElement[] => {
+    const topButton = document.querySelector<HTMLElement>('#Smallchat')
     if (topButton) return [topButton]
     return []
 }
 
-export const getSmallChatInnerButton = () => {
+export const getSmallChatInnerButton = (): HTMLElement[] => {
     try {
         const button = getSmallChatTopButton()
             .map((node) =>
-                node.children[0].contentDocument.querySelector('.Launcher')
+                // The Smallchat widget renders its launcher inside an iframe.
+                (
+                    node.children[0] as HTMLIFrameElement
+                ).contentDocument?.querySelector<HTMLElement>('.Launcher')
             )
-            .filter((item) => !!item)
+            .filter((item): item is HTMLElement => !!item)
         if (button.length > 0) return button
-    } catch (error) {
+    } catch {
         // ignored
     }
     return []

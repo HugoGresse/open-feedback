@@ -1,12 +1,23 @@
-import { LOGOUT } from '../../auth/authActionTypes'
+import type { Organization } from '../../../core/models'
+import { LOGOUT, type LogoutAction } from '../../auth/authActionTypes'
 import {
     GET_ORGANIZATION_SUCCESS,
     GET_ORGANIZATIONS_ERROR,
     GET_ORGANIZATIONS_SUCCESS,
+    type OrganizationAction,
     SELECT_ORGANIZATION,
 } from './organizationActionTypes'
 
-const initState = {
+export interface OrganizationState {
+    data: {
+        organizations: Organization[]
+    }
+    organizationsLoaded: boolean
+    organizationsLoadError: string | null
+    selectedOrganizationId: string | null
+}
+
+const initState: OrganizationState = {
     data: {
         organizations: [],
     },
@@ -16,22 +27,22 @@ const initState = {
 }
 
 export const adminOrganizationReducer = (
-    state = initState,
-    { payload, type }
-) => {
-    switch (type) {
+    state: OrganizationState = initState,
+    action: OrganizationAction | LogoutAction
+): OrganizationState => {
+    switch (action.type) {
         case LOGOUT:
             return initState
         case SELECT_ORGANIZATION:
             return {
                 ...state,
-                selectedOrganizationId: payload,
+                selectedOrganizationId: action.payload,
             }
         case GET_ORGANIZATIONS_SUCCESS:
             return {
                 ...state,
                 data: {
-                    organizations: payload,
+                    organizations: action.payload,
                 },
                 organizationsLoaded: true,
             }
@@ -39,10 +50,11 @@ export const adminOrganizationReducer = (
         case GET_ORGANIZATIONS_ERROR:
             return {
                 ...state,
-                organizationsLoadError: payload,
+                organizationsLoadError: action.payload,
             }
         case GET_ORGANIZATION_SUCCESS: {
-            let organizations = []
+            const payload = action.payload
+            let organizations: Organization[] = []
             if (state.data.organizations.length > 0) {
                 organizations = state.data.organizations.map((organization) => {
                     if (organization.id === payload.id) {

@@ -7,8 +7,10 @@ import { makeStyles } from '@mui/styles'
 import Avatar from '@mui/material/Avatar'
 import { Box } from '@mui/material'
 import Typography from '@mui/material/Typography'
+import type { Theme } from '@mui/material/styles'
+import type { Speaker } from '../../../core/models'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     cell: {
         paddingRight: 12,
         [theme.breakpoints.down('xl')]: {
@@ -20,7 +22,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const SpeakerListItem = ({ speaker, onEdit, onRemove }) => {
+export interface SpeakerListItemProps {
+    speaker: Speaker
+    onEdit: (speaker: Speaker) => void
+    onRemove: (speaker: Speaker) => void
+}
+
+export const SpeakerListItem = ({
+    speaker,
+    onEdit,
+    onRemove,
+}: SpeakerListItemProps) => {
     const classes = useStyles()
 
     return (

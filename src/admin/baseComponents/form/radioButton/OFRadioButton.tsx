@@ -1,4 +1,8 @@
-import FormControlLabel from '@mui/material/FormControlLabel'
+import type { ReactNode } from 'react'
+import type { FieldProps } from 'formik'
+import FormControlLabel, {
+    type FormControlLabelProps,
+} from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import { makeStyles } from '@mui/styles'
 
@@ -11,12 +15,22 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
+export interface OFRadioButtonProps extends Omit<
+    FormControlLabelProps,
+    'id' | 'label' | 'control' | 'name' | 'value' | 'checked'
+> {
+    field: FieldProps['field']
+    // The option value, also used as the element id
+    id: string
+    label: ReactNode
+}
+
 export const OFRadioButton = ({
     field: { name, value, onChange, onBlur },
     id,
     label,
     ...props
-}) => {
+}: OFRadioButtonProps) => {
     const classes = useStyles()
 
     return (

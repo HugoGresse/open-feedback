@@ -7,18 +7,20 @@ import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import { getSelectedProjectIdSelector } from '../../core/projectSelectors'
 import CircularProgress from '@mui/material/CircularProgress'
 import { resetProjectVotes } from '../../core/actions/resetProjectVotes'
 
 export const ResetVotes = () => {
-    const dispatch = useDispatch()
-    const projectId = useSelector(getSelectedProjectIdSelector)
+    const dispatch = useAppDispatch()
+    const projectId = useAppSelector(getSelectedProjectIdSelector)
     const { t } = useTranslation()
     const [isDialogOpen, setDialogOpen] = useState(false)
     const [isOngoing, setOngoing] = useState(false)
-    const [update, setUpdate] = useState(null)
+    const [update, setUpdate] = useState<[number, number | undefined] | null>(
+        null
+    )
 
     return (
         <>
@@ -60,6 +62,8 @@ export const ResetVotes = () => {
                     </OFButton>
                     <OFButton
                         onClick={() => {
+                            // Always set under <Project>.
+                            if (!projectId) return
                             setOngoing(true)
                             dispatch(
                                 resetProjectVotes(

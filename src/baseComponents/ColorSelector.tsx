@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next'
 
 interface ColorSelectorProps {
     selectedColor: string
-    // eslint-disable-next-line no-unused-vars
     onColorChange: (color: string) => void
     eventColor?: string
 }

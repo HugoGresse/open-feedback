@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+import type { DropzoneState } from 'react-dropzone'
 import Typography from '@mui/material/Typography'
 import { TranslatedTypography } from '../../../TranslatedTypography.tsx'
 import { OFButton } from '../../../button/OFButton.tsx'
@@ -8,7 +10,7 @@ import { OFFormControlInputFormiked } from '../../../form/formControl/OFFormCont
 
 const useStyles = makeStyles(() => ({
     dropZone: {
-        border: (props) =>
+        border: (props: { isDragActive: boolean }) =>
             `2px dashed ${
                 props.isDragActive
                     ? HEX_COLORS.RED_ORANGE
@@ -60,6 +62,24 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
+// A file picked by the user, with its object URL used for preview
+export interface SidePanelUpload {
+    file: File
+    preview: string
+}
+
+export interface SidePanelUploadFormProps {
+    fieldName: string
+    fieldValue?: string
+    helpText?: ReactNode
+    isDragActive: boolean
+    onInputClick: () => void
+    getInputProps: DropzoneState['getInputProps']
+    file: SidePanelUpload | null
+    onSaveClick: () => void
+    uploading: boolean
+}
+
 export const SidePanelUploadForm = ({
     fieldName,
     fieldValue,
@@ -70,7 +90,7 @@ export const SidePanelUploadForm = ({
     file,
     onSaveClick,
     uploading,
-}) => {
+}: SidePanelUploadFormProps) => {
     const { t } = useTranslation()
     const classes = useStyles({
         isDragActive: isDragActive,
@@ -85,7 +105,7 @@ export const SidePanelUploadForm = ({
             <div className={classes.dropZone} onClick={onInputClick}>
                 <input {...getInputProps()} />
                 {isDragActive ? (
-                    <div className={classes.dropConfirm}>
+                    <div>
                         <TranslatedTypography
                             i18nKey={'common.dropzone.image.confirm'}
                         />

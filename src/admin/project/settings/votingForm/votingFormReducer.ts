@@ -9,26 +9,41 @@ import {
     SAVE_VOTEITEMS_ERROR,
     SAVE_VOTEITEMS_ONGOING,
     SAVE_VOTEITEMS_SUCCESS,
+    type VotingFormAction,
 } from './votingFormActionTypes.tsx'
-import { SELECT_PROJECT } from '../../core/projectActionTypes'
+import {
+    SELECT_PROJECT,
+    type SelectProjectAction,
+} from '../../core/projectActionTypes'
+import type { VoteItem } from '../../../../core/models'
 
-const initState = {
+export interface VotingFormState {
+    voteItems: VoteItem[]
+    ongoingSave: boolean
+    shouldConfirmSave: boolean
+}
+
+const initState: VotingFormState = {
     voteItems: [],
     ongoingSave: false,
     shouldConfirmSave: false,
 }
 
-export const votingFormReducer = (state = initState, { payload, type }) => {
-    switch (type) {
+export const votingFormReducer = (
+    state: VotingFormState = initState,
+    action: VotingFormAction | SelectProjectAction
+): VotingFormState => {
+    switch (action.type) {
         case SELECT_PROJECT:
             // called on project switch
             return initState
         case GET_VOTEITEMS_SUCCESS:
             return {
                 ...state,
-                voteItems: payload || [],
+                voteItems: action.payload || [],
             }
         case EDIT_VOTEITEM: {
+            const { payload } = action
             let shouldConfirm = state.shouldConfirmSave
             const voteItems = state.voteItems.map((item) => {
                 if (item.id === payload.id) {
@@ -51,7 +66,7 @@ export const votingFormReducer = (state = initState, { payload, type }) => {
         }
 
         case REORDER_VOTEITEMS: {
-            const { activeId, overId } = payload
+            const { activeId, overId } = action.payload
             const voteItems = [...state.voteItems]
 
             const activeIndex = voteItems.findIndex(
@@ -83,6 +98,7 @@ export const votingFormReducer = (state = initState, { payload, type }) => {
             return state
         }
         case DELETE_VOTEITEM: {
+            const { payload } = action
             const indexToRemove = state.voteItems.findIndex(
                 (item) => item.id === payload.id
             )
@@ -108,7 +124,7 @@ export const votingFormReducer = (state = initState, { payload, type }) => {
         case ADD_VOTEITEM: {
             return {
                 ...state,
-                voteItems: [...state.voteItems, payload],
+                voteItems: [...state.voteItems, action.payload],
             }
         }
         case SAVE_VOTEITEM_CONFIRM:
@@ -120,7 +136,7 @@ export const votingFormReducer = (state = initState, { payload, type }) => {
             return {
                 ...state,
                 ongoingSave: false,
-                voteItems: payload,
+                voteItems: action.payload,
             }
         case SAVE_VOTEITEMS_ERROR:
             return {

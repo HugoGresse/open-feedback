@@ -1,12 +1,11 @@
-import { useMemo, useState, type FC } from 'react'
+import { useMemo, useState } from 'react'
 import AddIcon from '@mui/icons-material/AddCircleOutline'
-import { VoteItemType, VoteItem } from './VoteItem.tsx'
-import { useDispatch, useSelector } from 'react-redux'
+import { VoteItem } from './VoteItem.tsx'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import {
     getSortedVoteItemsSelector,
     shouldConfirmSaveSelector,
     isSavingVotingFormSelector,
-    // @ts-expect-error - JS module without types
 } from './votingFormSelectors'
 import {
     addVoteItem,
@@ -15,13 +14,12 @@ import {
     onVoteItemSaveConfirmed,
     onVoteItemsReorder,
     saveVoteItems,
-    // @ts-expect-error - JS module without types
 } from './votingFormActions'
 import {
     DndContext,
-    DragEndEvent,
+    type DragEndEvent,
     DragOverlay,
-    DragStartEvent,
+    type DragStartEvent,
     PointerSensor,
     useSensor,
     useSensors,
@@ -36,30 +34,25 @@ import {
 } from '@dnd-kit/sortable'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
-// @ts-expect-error - JS module without types
 import { OFListHeader } from '../../../baseComponents/layouts/OFListHeader'
 import { OFListItem } from '../../../baseComponents/layouts/OFListItem.tsx'
 import { useTranslation } from 'react-i18next'
-// @ts-expect-error - JS module without types
 import { VOTE_TYPE_BOOLEAN } from '../../../../core/contants'
-// @ts-expect-error - JS module without types
 import { SimpleDialog } from '../../../baseComponents/layouts/SimpleDialog'
-// @ts-expect-error - JS module without types
 import { TranslatedTypography } from '../../../baseComponents/TranslatedTypography'
 import { useHotkeys } from 'react-hotkeys-hook'
-// @ts-expect-error - JS module without types
 import { OFButton } from '../../../baseComponents/button/OFButton'
 
 export interface VoteItemListProps {
     languages: string[]
 }
 
-export const VoteItemList: FC<VoteItemListProps> = ({ languages }) => {
+export const VoteItemList = ({ languages }: VoteItemListProps) => {
     const { t } = useTranslation()
-    const dispatch = useDispatch()
-    const voteItems: VoteItemType[] = useSelector(getSortedVoteItemsSelector)
-    const isSaving: boolean = useSelector(isSavingVotingFormSelector)
-    const shouldConfirmSave: boolean = useSelector(shouldConfirmSaveSelector)
+    const dispatch = useAppDispatch()
+    const voteItems = useAppSelector(getSortedVoteItemsSelector)
+    const isSaving = useAppSelector(isSavingVotingFormSelector)
+    const shouldConfirmSave = useAppSelector(shouldConfirmSaveSelector)
     const [focusId, setFocusId] = useState<string | undefined>()
     const [isTypeChangeDialogOpen, setTypeChangedDialog] =
         useState<boolean>(false)
@@ -158,7 +151,7 @@ export const VoteItemList: FC<VoteItemListProps> = ({ languages }) => {
                                         })
                                     )
                                 }}
-                                onTypeChange={(type: string) =>
+                                onTypeChange={(type) =>
                                     dispatch(
                                         onVoteItemChange({
                                             ...item,
@@ -221,7 +214,7 @@ export const VoteItemList: FC<VoteItemListProps> = ({ languages }) => {
                         <AddIcon style={{ marginRight: 6 }} />
                         {t('settingsVotingForm.new')}
                     </Button>
-                    <OFButton onClick={save} disabled={isSaving}>
+                    <OFButton onClick={() => save()} disabled={isSaving}>
                         {t('common.save')}
                     </OFButton>
                 </OFListItem>

@@ -1,11 +1,13 @@
+import type { Meta } from '@storybook/react-vite'
 import { useState } from 'react'
 import { SimpleDialog } from './SimpleDialog.tsx'
 import { OFButton } from '../button/OFButton.tsx'
 
-export default {
+const meta = {
     component: SimpleDialog,
     title: 'Admin/Dialog',
-}
+} satisfies Meta<typeof SimpleDialog>
+export default meta
 
 export const DefaultUsage = () => {
     const [isOpen, setDialogOpen] = useState(false)

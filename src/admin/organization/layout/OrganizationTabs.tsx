@@ -1,18 +1,19 @@
 import { Tab, Tabs } from '@mui/material'
 import withStyles from '@mui/styles/withStyles'
+import type { Theme } from '@mui/material/styles'
 import { useTranslation } from 'react-i18next'
 import Box from '@mui/material/Box'
 import { Link, useMatch } from 'react-router-dom'
 import { ORGANIZATION_ROUTES } from '../../RoutingMap'
 
-function a11yProps(index) {
+function a11yProps(index: number) {
     return {
         id: `tab-${index}`,
         'aria-controls': `tabpanel-${index}`,
     }
 }
 
-const OFTabs = withStyles((theme) => ({
+const OFTabs = withStyles((theme: Theme) => ({
     root: {
         borderBottom: '1px solid #e0e0e0',
     },
@@ -21,7 +22,11 @@ const OFTabs = withStyles((theme) => ({
     },
 }))(Tabs)
 
-export const OrganizationTabs = ({ baseUrl }) => {
+export interface OrganizationTabsProps {
+    baseUrl: string
+}
+
+export const OrganizationTabs = ({ baseUrl }: OrganizationTabsProps) => {
     const { t } = useTranslation()
 
     const userPath = `${baseUrl}${ORGANIZATION_ROUTES.users.url}`
@@ -29,22 +34,10 @@ export const OrganizationTabs = ({ baseUrl }) => {
     const themePath = `${baseUrl}${ORGANIZATION_ROUTES.theme.url}`
     const integrationPath = `${baseUrl}${ORGANIZATION_ROUTES.integration.url}`
 
-    const matchUsers = useMatch({
-        path: userPath,
-        exact: true,
-    })
-    const matchVotingForm = useMatch({
-        path: votingFormPath,
-        exact: true,
-    })
-    const matchTheme = useMatch({
-        path: themePath,
-        exact: true,
-    })
-    const matchIntegration = useMatch({
-        path: integrationPath,
-        exact: true,
-    })
+    const matchUsers = useMatch(userPath)
+    const matchVotingForm = useMatch(votingFormPath)
+    const matchTheme = useMatch(themePath)
+    const matchIntegration = useMatch(integrationPath)
 
     const selectedTab = matchUsers
         ? 0

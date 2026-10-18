@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { type ReactNode, useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '../../store'
 import {
     getSelectedTalkSelector,
     getTalkLoadErrorSelector,
@@ -28,7 +28,7 @@ import {
 } from '../vote/voteSelectors'
 
 import Grid from '@mui/material/Grid'
-import { TalkVote } from './TalkVote.tsx'
+import { type OnVoteChange, TalkVote } from './TalkVote.tsx'
 import { LoaderMatchParent } from '../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import { Error } from '../../baseComponents/customComponent/Error.tsx'
 import { Snackbar } from '../../baseComponents/customComponent/Snackbar.tsx'
@@ -43,24 +43,25 @@ import { useParams } from 'react-router-dom'
 export const Talk = () => {
     const { talkId } = useParams()
     const { t } = useTranslation()
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const displayVotes = useQuery().get('displayVotes')
 
-    const id = talkId
+    // The talk page route always has a talkId
+    const id = talkId!
 
-    const talk = useSelector(getSelectedTalkSelector)
-    const speakers = useSelector(getSpeakersForSelectedTalkSelector)
-    const voteItems = useSelector(getProjectVoteItemsOrderedSelector)
-    const userVotes = useSelector((state) =>
+    const talk = useAppSelector(getSelectedTalkSelector)
+    const speakers = useAppSelector(getSpeakersForSelectedTalkSelector)
+    const voteItems = useAppSelector(getProjectVoteItemsOrderedSelector)
+    const userVotes = useAppSelector((state) =>
         getActiveUserVotesByTalkAndVoteItemSelector(state, talkId)
     )
-    const voteResults = useSelector((state) =>
+    const voteResults = useAppSelector((state) =>
         getVoteResultSelectorSelector(state, displayVotes)
     )
-    const errorTalkLoad = useSelector(getTalkLoadErrorSelector)
-    const errorVotePost = useSelector(getErrorVotePostSelector)
-    const errorVotesLoad = useSelector(getErrorVotesLoadSelector)
-    const chipColors = useSelector(getProjectChipColorsSelector)
+    const errorTalkLoad = useAppSelector(getTalkLoadErrorSelector)
+    const errorVotePost = useAppSelector(getErrorVotePostSelector)
+    const errorVotesLoad = useAppSelector(getErrorVotesLoadSelector)
+    const chipColors = useAppSelector(getProjectChipColorsSelector)
 
     useEffect(() => {
         dispatch(getTalk(id))
@@ -74,26 +75,6 @@ export const Talk = () => {
             }
         }
     }, [dispatch, id])
-
-    const onVoteItemChange = (voteItem, data, vote) => {
-        if (vote) {
-            switch (voteItem.type) {
-                case VOTE_TYPE_TEXT:
-                    if (data && data.length > 0) {
-                        dispatch(updateVote(vote, data, t))
-                    } else {
-                        dispatch(removeVote(vote, t))
-                    }
-                    break
-                default:
-                case VOTE_TYPE_BOOLEAN:
-                    dispatch(removeVote(vote, t))
-                    break
-            }
-        } else {
-            dispatch(voteFor(talk.id, voteItem, data, t))
-        }
-    }
 
     const onRetryLoadVotesClick = () => {
         dispatch(removeVoteLoadError())
@@ -121,7 +102,27 @@ export const Talk = () => {
         return <LoaderMatchParent />
     }
 
-    let snackBarError = null
+    const onVoteItemChange: OnVoteChange = (voteItem, data, vote) => {
+        if (vote) {
+            switch (voteItem.type) {
+                case VOTE_TYPE_TEXT:
+                    if (data && data.length > 0) {
+                        dispatch(updateVote(vote, data, t))
+                    } else {
+                        dispatch(removeVote(vote, t))
+                    }
+                    break
+                default:
+                case VOTE_TYPE_BOOLEAN:
+                    dispatch(removeVote(vote, t))
+                    break
+            }
+        } else {
+            dispatch(voteFor(talk.id, voteItem, data, t))
+        }
+    }
+
+    let snackBarError: ReactNode = null
     if (errorVotePost) {
         snackBarError = (
             <Snackbar
@@ -135,7 +136,7 @@ export const Talk = () => {
         snackBarError = (
             <Snackbar
                 text={
-                    'Unable to load the vote results, reason: ' + errorVotePost
+                    'Unable to load the vote results, reason: ' + errorVotesLoad
                 }
                 actionText="Retry"
                 actionCallback={onRetryLoadVotesClick}

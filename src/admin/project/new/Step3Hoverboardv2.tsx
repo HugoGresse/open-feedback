@@ -1,6 +1,18 @@
 import { NewProjectLayout } from './NewProjectLayout.tsx'
 import { SetupHoverboardv2 } from '../setupTypeForms/SetupHoverboardv2.tsx'
 import { useTranslation } from 'react-i18next'
+import type { HoverboardV2Config } from '../../../core/models'
+
+export interface Step3Hoverboardv2Props {
+    onCancel: () => void
+    onBack: (values: HoverboardV2Config) => void
+    onSubmit: (config: HoverboardV2Config) => void
+    stepTitle: string
+    submitText: string
+    backText: string
+    initialValues: HoverboardV2Config
+    rightColumnTitle?: string
+}
 
 export const Step3Hoverboardv2 = ({
     onCancel,
@@ -11,7 +23,7 @@ export const Step3Hoverboardv2 = ({
     backText,
     initialValues,
     rightColumnTitle,
-}) => {
+}: Step3Hoverboardv2Props) => {
     const { t } = useTranslation()
 
     return (

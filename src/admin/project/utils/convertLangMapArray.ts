@@ -1,6 +1,12 @@
-import LangMap from 'langmap'
+import LangMap, { type LanguageMapping } from 'langmap'
 
-export const langMapArray = Object.keys(LangMap).reduce((acc, tag) => {
+export interface LanguageMappingWithTag extends LanguageMapping {
+    tag: string
+}
+
+export const langMapArray = Object.keys(LangMap).reduce<
+    LanguageMappingWithTag[]
+>((acc, tag) => {
     acc.push({
         ...LangMap[tag],
         tag,

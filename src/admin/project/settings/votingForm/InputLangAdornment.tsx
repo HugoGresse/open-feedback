@@ -1,7 +1,16 @@
 import InputAdornment from '@mui/material/InputAdornment'
 import Tooltip from '@mui/material/Tooltip'
+import type { ReactNode } from 'react'
 
-export const InputLangAdornment = ({ children, tooltipContent }) => {
+interface InputLangAdornmentProps {
+    children?: ReactNode
+    tooltipContent: string
+}
+
+export const InputLangAdornment = ({
+    children,
+    tooltipContent,
+}: InputLangAdornmentProps) => {
     return (
         <Tooltip title={tooltipContent} aria-label={tooltipContent}>
             <InputAdornment

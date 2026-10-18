@@ -1,9 +1,22 @@
-import { Component } from 'react'
+import {
+    Component,
+    type HTMLAttributes,
+    type ReactNode,
+    type TextareaHTMLAttributes,
+} from 'react'
 import styled from 'styled-components'
-import { fontSize, fontWeight, height, space, width } from 'styled-system'
+import {
+    fontSize,
+    fontWeight,
+    height,
+    space,
+    width,
+    type HeightProps,
+    type WidthProps,
+} from 'styled-system'
 import { COLORS } from '../../../../constants/colors'
 
-const OFTextAreaWrapper = styled.div`
+const OFTextAreaWrapper = styled.div<WidthProps & HeightProps>`
     ${width}
     ${height}
 
@@ -16,7 +29,7 @@ const IconWrapper = styled.div`
     left: 10px;
 `
 
-const OFTextAreaStyled = styled.textarea`
+const OFTextAreaStyled = styled.textarea<{ icon?: ReactNode }>`
     height: 100%;
     font-size: 16px;
     border: 1px solid #eee;
@@ -37,12 +50,22 @@ const OFTextAreaStyled = styled.textarea`
     }
 `
 
-export class OFTextArea extends Component {
-    render() {
+export interface OFTextAreaProps
+    extends
+        TextareaHTMLAttributes<HTMLTextAreaElement>,
+        WidthProps,
+        HeightProps {
+    icon?: ReactNode
+}
+
+export class OFTextArea extends Component<OFTextAreaProps> {
+    override render() {
         const { icon, ...props } = this.props
 
         return (
-            <OFTextAreaWrapper {...props}>
+            // The wrapper div receives the same props as the textarea (pre-existing
+            // behaviour); only the styled-system width/height matter for it.
+            <OFTextAreaWrapper {...(props as HTMLAttributes<HTMLDivElement>)}>
                 {icon && <IconWrapper>{icon}</IconWrapper>}
                 <OFTextAreaStyled icon={icon} {...props} />
             </OFTextAreaWrapper>

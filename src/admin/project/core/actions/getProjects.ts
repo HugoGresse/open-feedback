@@ -1,6 +1,13 @@
+import type { AppThunk } from '../../../../store'
+import type firebase from 'firebase/compat/app'
+import type { Organization } from '../../../../core/models'
 import { fireStoreMainInstance } from '../../../../firebase.ts'
-import { getUserSelector } from '../../../auth/authSelectors'
-import { GET_PROJECTS_ERROR, GET_PROJECTS_SUCCESS } from '../projectActionTypes'
+import { getUserIdSelector } from '../../../auth/authSelectors'
+import {
+    type AdminProject,
+    GET_PROJECTS_ERROR,
+    GET_PROJECTS_SUCCESS,
+} from '../projectActionTypes'
 import {
     getSelectedProjectIdSelector,
     getSelectedProjectSelector,
@@ -10,9 +17,10 @@ import { initProjectApiIfReady } from './initProjectApi'
 import { getOrganizationsSelector } from '../../../organization/core/organizationSelectors'
 
 export const getProjects =
-    (organizationId = null) =>
+    (organizationId: string | null = null): AppThunk<Promise<void>> =>
     (dispatch, getState) => {
-        let baseQuery = fireStoreMainInstance.collection('projects')
+        let baseQuery: firebase.firestore.Query =
+            fireStoreMainInstance.collection('projects')
 
         if (organizationId) {
             baseQuery = baseQuery.where('organizationId', '==', organizationId)
@@ -20,7 +28,7 @@ export const getProjects =
             baseQuery = baseQuery.where(
                 `members`,
                 'array-contains',
-                getUserSelector(getState()).uid
+                getUserIdSelector(getState())
             )
         }
 
@@ -28,13 +36,15 @@ export const getProjects =
             .orderBy('createdAt', 'desc')
             .get()
             .then((projectsSnapshot) => {
-                const organizations = getOrganizationsSelector(getState())
-                const projects = []
+                const organizations: Organization[] =
+                    getOrganizationsSelector(getState())
+                const projects: AdminProject[] = []
                 projectsSnapshot.forEach((doc) => {
+                    // Firestore boundary
                     const project = {
                         id: doc.id,
                         ...doc.data(),
-                    }
+                    } as AdminProject
                     if (project.organizationId) {
                         const org = organizations.find(
                             (org) => org.id === project.organizationId
@@ -59,10 +69,10 @@ export const getProjects =
                     )
                 )
             })
-            .catch((err) => {
+            .catch((err: unknown) => {
                 dispatch({
                     type: GET_PROJECTS_ERROR,
-                    payload: err.toString(),
+                    payload: String(err),
                 })
                 dispatch(
                     addNotification({

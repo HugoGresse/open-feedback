@@ -15,6 +15,35 @@ import { langMapArray } from '../../utils/convertLangMapArray'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { OFSwitch } from '../../../baseComponents/form/switch/OFSwitch.tsx'
 import { DonateToActivateDialog } from '../../../baseComponents/DonateToActivateDialog.tsx'
+import type { LanguageMappingWithTag } from '../../utils/convertLangMapArray'
+
+interface SettingsFormValues {
+    languages: LanguageMappingWithTag[]
+    disableSoloTalkRedirect: boolean
+    hideVotesUntilUserVote: boolean
+    liveUserVotes: boolean
+    displayFullDates: boolean
+}
+
+/** What `onSave` receives: languages as tags, the redirect flag un-inverted. */
+export interface SettingsFormSaveValues {
+    languages: string[]
+    disableSoloTalkRedirect: boolean
+    hideVotesUntilUserVote: boolean
+    liveUserVotes: boolean
+    displayFullDates: boolean
+}
+
+export interface SettingsFormProps {
+    onSave: (values: SettingsFormSaveValues) => Promise<unknown>
+    initialLanguages: string[]
+    disableSoloTalkRedirect?: boolean
+    hideVotesUntilUserVote?: boolean
+    displayTitle?: boolean
+    liveUserVotes?: boolean
+    isOrganizationSettings?: boolean
+    displayFullDates?: boolean
+}
 
 export const SettingsForm = ({
     onSave,
@@ -25,13 +54,15 @@ export const SettingsForm = ({
     liveUserVotes = false,
     isOrganizationSettings = false,
     displayFullDates = false,
-}) => {
+}: SettingsFormProps) => {
     const { t } = useTranslation()
     const [donationDialogOpen, setDonationDialogOpen] = useState(false)
 
     return (
         <>
-            <Formik
+            <Formik<SettingsFormValues>
+                // Saved by FormikAutoSave, there is no submit.
+                onSubmit={() => {}}
                 validationSchema={object().shape({
                     languages: array().of(string()),
                     disableSoloTalkRedirect: bool(),
@@ -151,7 +182,7 @@ export const SettingsForm = ({
                         </Grid>
 
                         <FormikAutoSave
-                            onSave={(values) => {
+                            onSave={(values: SettingsFormValues) => {
                                 const languages = values.languages.map(
                                     (value) => value.tag
                                 )

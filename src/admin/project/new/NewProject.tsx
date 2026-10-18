@@ -6,7 +6,7 @@ import Hidden from '@mui/material/Hidden'
 import { Step1 } from './Step1.tsx'
 import { Step2 } from './Step2.tsx'
 import { Step3 } from './Step3.tsx'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../../../store'
 import { getNewProjectId } from '../core/projectUtils'
 import {
     PROJECT_TYPE_JSONIMPORT,
@@ -30,6 +30,10 @@ import { selectProject } from '../core/actions/selectUnselectProject'
 import { getProject } from '../core/actions/getProject'
 import { NO_ORGANIZATION_FAKE_ID } from '../../organization/core/organizationConstants'
 import { useNavigate } from 'react-router-dom'
+import type { WizardSetupType } from '../../../core/models'
+import type { EventData } from '../../../core/setupType/eventDataNormalization'
+import type { NewProjectData } from '../core/actions/newProject'
+import type { Step3Values } from './Step3.tsx'
 
 const useStyles = makeStyles({
     container: {
@@ -44,9 +48,14 @@ const useStyles = makeStyles({
     },
 })
 
-export const NewProject = ({ organizationId, onCancel }) => {
+export interface NewProjectProps {
+    organizationId: string
+    onCancel: () => void
+}
+
+export const NewProject = ({ organizationId, onCancel }: NewProjectProps) => {
     const classes = useStyles()
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const { t } = useTranslation()
 
@@ -54,18 +63,20 @@ export const NewProject = ({ organizationId, onCancel }) => {
     const [currentStep, setCurrentStep] = useState(1)
     const [projectName, setProjectName] = useState('')
     const [projectId, setProjectId] = useState(projectIdDefaultValue)
-    const [projectType, setProjectType] = useState(PROJECT_TYPE_OPENFEEDBACK)
+    const [projectType, setProjectType] = useState<WizardSetupType>(
+        PROJECT_TYPE_OPENFEEDBACK
+    )
     const [useOrganizationSettings, setUseOrganizationSettings] = useState(
         organizationId !== NO_ORGANIZATION_FAKE_ID
     )
-    const [step3Data, setStep3Data] = useState()
+    const [step3Data, setStep3Data] = useState<Step3Values>()
     const [isCreatingEvent, setCreatingEvent] = useState(false)
 
     const createEvent = (
-        projectId,
-        useOrganizationSettings,
-        data,
-        importData
+        projectId: string,
+        useOrganizationSettings: boolean,
+        data: NewProjectData,
+        importData?: EventData
     ) => {
         setCreatingEvent(true)
         return dispatch(
@@ -137,7 +148,7 @@ export const NewProject = ({ organizationId, onCancel }) => {
                             setProjectType(newProjectType)
                             setUseOrganizationSettings(useOrganizationSettings)
                             if (projectType !== newProjectType) {
-                                setStep3Data()
+                                setStep3Data(undefined)
                             }
                             setCurrentStep(3)
                         }}
@@ -160,7 +171,7 @@ export const NewProject = ({ organizationId, onCancel }) => {
                         }}
                         initialValues={step3Data}
                         projectType={projectType}
-                        onSubmit={(config) => {
+                        onSubmit={({ projectType, config }) => {
                             // Importing a JSON file creates a regular,
                             // editable openfeedbackv1 event: the talks and
                             // speakers are written to Firestore rather than

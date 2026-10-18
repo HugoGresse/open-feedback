@@ -1,27 +1,19 @@
+import type { Meta } from '@storybook/react-vite'
 import { OFTextArea } from './OFTextArea.tsx'
-export default {
+const meta = {
     component: OFTextArea,
     title: 'Admin/TextArea',
-}
+} satisfies Meta<typeof OFTextArea>
+export default meta
 
 export const defaultUsage = () => (
-    <OFTextArea name="myField" label="Field label" placeholder="Placeholder" />
+    <OFTextArea name="myField" placeholder="Placeholder" />
 )
 
 export const disabled = () => (
-    <OFTextArea
-        name="myField"
-        label="Field label"
-        placeholder="Placeholder"
-        disabled={true}
-    />
+    <OFTextArea name="myField" placeholder="Placeholder" disabled={true} />
 )
 
 export const controlled = () => (
-    <OFTextArea
-        name="myField1"
-        label="Field label"
-        placeholder="Placeholder"
-        value="value"
-    />
+    <OFTextArea name="myField1" placeholder="Placeholder" value="value" />
 )

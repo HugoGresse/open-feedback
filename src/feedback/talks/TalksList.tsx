@@ -1,9 +1,8 @@
-import { useDispatch } from 'react-redux'
-import { setSelectedTalk } from '../talk/core/talkActions'
 import { TalksItem } from './TalksItem.tsx'
 import Grid from '@mui/material/Grid'
 import { makeStyles } from '@mui/styles'
 import Typography from '@mui/material/Typography'
+import type { Talk, Vote } from '../../core/models'
 
 const useStyles = makeStyles(() => ({
     track: {
@@ -12,8 +11,19 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-export const TalksList = ({ talks, userTalkVote }) => {
-    const dispatch = useDispatch()
+/** Talks of one track. */
+export interface TrackTalks {
+    track: string
+    talks: Talk[]
+}
+
+interface TalksListProps {
+    talks: TrackTalks[]
+    /** The user votes keyed by talk id. */
+    userTalkVote: Record<string, Vote>
+}
+
+export const TalksList = ({ talks, userTalkVote }: TalksListProps) => {
     const classes = useStyles()
 
     return talks.map((track, key) => (
@@ -33,7 +43,6 @@ export const TalksList = ({ talks, userTalkVote }) => {
                         key={key}
                         talk={talk}
                         userVote={userTalkVote[talk.id]}
-                        onClick={(talk) => dispatch(setSelectedTalk(talk.id))}
                     />
                 ))}
             </Grid>

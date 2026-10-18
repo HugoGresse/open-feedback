@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../store'
 import { useTranslation } from 'react-i18next'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
@@ -19,9 +19,9 @@ export const DeleteTalkButton = ({
     talk,
     isBlocked,
 }: DeleteTalkButtonProps) => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const { t } = useTranslation()
-    const projectId: string = useSelector(getSelectedProjectIdSelector)
+    const projectId = useAppSelector(getSelectedProjectIdSelector)
     const [isChecking, setIsChecking] = useState(false)
     const [isRemoving, setIsRemoving] = useState(false)
     // undefined: dialog closed, null: vote count unknown, number: vote count
@@ -35,14 +35,15 @@ export const DeleteTalkButton = ({
         }
     }, [])
 
-    const remove = () => dispatch(removeTalk(talk) as any)
+    const remove = () => dispatch(removeTalk(talk))
 
     const onClick = async () => {
         if (isChecking || isBlocked()) return
         setIsChecking(true)
-        const count = await getTalkVoteCount(projectId, talk.id).catch(
-            () => null
-        )
+        // No selected project: the vote count is unknown, so ask
+        const count = projectId
+            ? await getTalkVoteCount(projectId, talk.id).catch(() => null)
+            : null
         if (!isMounted.current) return
         setIsChecking(false)
         if (!shouldConfirmTalkRemoval(count)) {

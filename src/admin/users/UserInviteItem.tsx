@@ -3,14 +3,16 @@ import RemoveButton from '@mui/icons-material/RemoveCircle'
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
 import { makeStyles } from '@mui/styles'
+import type { Theme } from '@mui/material/styles'
 import { OFListItem } from '../baseComponents/layouts/OFListItem.tsx'
 import { Box } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
 import { TranslatedTypography } from '../baseComponents/TranslatedTypography.tsx'
 import { DateTime } from 'luxon'
+import type { Invite, Timestamp } from '../../core/models'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     icon: {
         width: 40,
         height: 40,
@@ -33,7 +35,15 @@ const dateFormat = Object.assign(DateTime.DATE_SHORT, {
     minute: '2-digit',
 })
 
-export const UserInviteItem = ({ invite, cancelInvite }) => {
+export interface UserInviteItemProps {
+    invite: Invite
+    cancelInvite: (inviteId: string) => void
+}
+
+export const UserInviteItem = ({
+    invite,
+    cancelInvite,
+}: UserInviteItemProps) => {
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -52,14 +62,15 @@ export const UserInviteItem = ({ invite, cancelInvite }) => {
                             {t('users.invitation')} <b>{inviteStatus}</b>{' '}
                             {t('users.on')}{' '}
                             {DateTime.fromJSDate(
-                                invite.updatedAt.toDate()
+                                // Read from Firestore or set with nowTimestamp()
+                                (invite.updatedAt as Timestamp).toDate()
                             ).toLocaleString(dateFormat)}
                         </Typography>
                     </Box>
                 </Box>
             </Grid>
             <Grid item xs={12} sm={3} className={classes.cell}>
-                {invite.role ? (
+                {'role' in invite && invite.role ? (
                     <Typography>{t(`users.${invite.role}`)}</Typography>
                 ) : (
                     <TranslatedTypography i18nKey="users.Member" />

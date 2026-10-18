@@ -5,8 +5,9 @@ import {
 } from './talkActionTypes'
 import { SET_TALKS_FILTER } from '../../../core/talks/talksActionTypes'
 import { projectApi } from '../../../core/setupType/projectApi'
+import type { AppThunk } from '../../../store'
 
-export const getTalk = (talkId) => {
+export const getTalk = (talkId: string): AppThunk => {
     return (dispatch) => {
         projectApi
             .getTalk(talkId)
@@ -16,7 +17,7 @@ export const getTalk = (talkId) => {
                     payload: talkWithSchedule,
                 })
             })
-            .catch((err) => {
+            .catch((err: Error) => {
                 dispatch({
                     type: GET_TALK_ERROR,
                     payload: err.toString(),
@@ -25,7 +26,7 @@ export const getTalk = (talkId) => {
     }
 }
 
-export const setSelectedTalk = (talkId) => {
+export const setSelectedTalk = (talkId: string): AppThunk => {
     return (dispatch) => {
         dispatch({
             type: SET_SELECTED_TALK,

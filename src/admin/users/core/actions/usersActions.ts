@@ -1,3 +1,5 @@
+import type { Invite, User } from '../../../../core/models'
+import type { AppThunk } from '../../../../store'
 import {
     arrayRemoveField,
     arrayUnionField,
@@ -8,6 +10,7 @@ import {
     USER_INVITE_REMOVE_SUCCESS,
     USER_INVITES_GET_SUCCESS,
     USERS_SET_FILTER,
+    type UsersAction,
 } from '../usersActionTypes'
 import { getUsersSelector } from '../usersSelectors'
 import {
@@ -17,7 +20,10 @@ import {
 import { addNotification } from '../../../notification/notifcationActions'
 import { editProject } from '../../../project/core/actions/editProject'
 import { getSelectedOrganizationIdSelector } from '../../../organization/core/organizationSelectors'
-import { editOrganization } from '../../../organization/core/actions/editOrganization'
+import {
+    editOrganization,
+    type EditOrganizationData,
+} from '../../../organization/core/actions/editOrganization'
 import {
     ORGANIZATION_EXISTING_USER_ROLES,
     ORGANIZATION_NEW_USER_ROLES,
@@ -25,87 +31,92 @@ import {
     ORGANIZATION_USER_ROLE_OWNER,
 } from '../../../organization/core/organizationConstants'
 
-export const getUserDetails = (uid) => (dispatch, getState) => {
-    const usersDetails = getUsersSelector(getState())
+export const getUserDetails =
+    (uid: string): AppThunk<Promise<void> | undefined> =>
+    (dispatch, getState) => {
+        const usersDetails = getUsersSelector(getState())
 
-    if (usersDetails && usersDetails[uid]) {
-        // prevent load if data are already there
-        return
-    }
+        if (usersDetails && usersDetails[uid]) {
+            // prevent load if data are already there
+            return
+        }
 
-    return fireStoreMainInstance
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((snapshot) => {
-            if (snapshot.exists) {
-                dispatch({
-                    type: GET_USER_DETAILS_SUCCESS,
-                    payload: snapshot.data(),
-                })
-            } else {
+        return fireStoreMainInstance
+            .collection('users')
+            .doc(uid)
+            .get()
+            .then((snapshot) => {
+                if (snapshot.exists) {
+                    dispatch({
+                        type: GET_USER_DETAILS_SUCCESS,
+                        payload: snapshot.data() as User,
+                    })
+                } else {
+                    dispatch(
+                        addNotification({
+                            type: 'error',
+                            i18nkey: 'users.errorUserNotExist',
+                            message: uid,
+                        })
+                    )
+                }
+            })
+            .catch((error: unknown) => {
+                // eslint-disable-next-line no-console
+                console.error(error)
                 dispatch(
                     addNotification({
                         type: 'error',
-                        i18nkey: 'users.errorUserNotExist',
-                        message: uid,
+                        i18nkey: 'users.errorUserLoadFail',
+                        message: `${uid}, ${JSON.stringify(error)}`,
                     })
                 )
-            }
-        })
-        .catch((error) => {
-            // eslint-disable-next-line no-console
-            console.error(error)
-            dispatch(
-                addNotification({
-                    type: 'error',
-                    i18nkey: 'users.errorUserLoadFail',
-                    message: `${uid}, ${JSON.stringify(error)}`,
-                })
-            )
-        })
-}
-
-export const removeUser = (userIdToRemove, role) => (dispatch, getState) => {
-    const state = getState()
-
-    const selectedProjectId = getSelectedProjectIdSelector(state)
-    const selectedOrganizationId = getSelectedOrganizationIdSelector(state)
-
-    if (selectedProjectId) {
-        const currentUsers = getMemberIds(state)
-        return dispatch(
-            editProject({
-                members: currentUsers
-                    .filter(({ userId }) => userId !== userIdToRemove)
-                    .map(({ userId }) => userId),
             })
-        )
     }
 
-    if (selectedOrganizationId) {
-        const roleIndex = ORGANIZATION_EXISTING_USER_ROLES.findIndex(
-            (existingRole) => existingRole === role
-        )
-        return dispatch(
-            editOrganization(
-                ORGANIZATION_EXISTING_USER_ROLES.slice(0, roleIndex + 1).reduce(
-                    (acc, role) => {
+export const removeUser =
+    (userIdToRemove: string, role: string): AppThunk<Promise<void>> =>
+    (dispatch, getState) => {
+        const state = getState()
+
+        const selectedProjectId = getSelectedProjectIdSelector(state)
+        const selectedOrganizationId = getSelectedOrganizationIdSelector(state)
+
+        if (selectedProjectId) {
+            const currentUsers = getMemberIds(state)
+            return dispatch(
+                editProject({
+                    members: currentUsers
+                        .filter(({ userId }) => userId !== userIdToRemove)
+                        .map(({ userId }) => userId),
+                })
+            )
+        }
+
+        if (selectedOrganizationId) {
+            const roleIndex = ORGANIZATION_EXISTING_USER_ROLES.findIndex(
+                (existingRole) => existingRole === role
+            )
+            return dispatch(
+                editOrganization(
+                    ORGANIZATION_EXISTING_USER_ROLES.slice(
+                        0,
+                        roleIndex + 1
+                    ).reduce<EditOrganizationData>((acc, role) => {
                         acc[ORGANIZATION_ROLE_ID[role]] =
                             arrayRemoveField(userIdToRemove)
                         return acc
-                    },
-                    {}
+                    }, {})
                 )
             )
-        )
+        }
+
+        throw new Error('Unknown action to remove user')
     }
 
-    throw new Error('Unknown action to remove user')
-}
-
 export const changeUserRole =
-    (userId, oldRole, newRole) => (dispatch, getState) => {
+    (userId: string, oldRole: string, newRole: string): AppThunk =>
+    (dispatch, getState) => {
         if (oldRole === newRole) {
             throw new Error('Role identical')
         }
@@ -124,7 +135,7 @@ export const changeUserRole =
                 const changes = ORGANIZATION_NEW_USER_ROLES.slice(
                     oldRoleIndex + 1,
                     newRoleIndex + 1
-                ).reduce((acc, role) => {
+                ).reduce<EditOrganizationData>((acc, role) => {
                     acc[ORGANIZATION_ROLE_ID[role]] = arrayUnionField(userId)
                     return acc
                 }, {})
@@ -138,7 +149,7 @@ export const changeUserRole =
                         ORGANIZATION_NEW_USER_ROLES.slice(
                             newRoleIndex + 1,
                             oldRoleIndex + 1
-                        ).reduce((acc, role) => {
+                        ).reduce<EditOrganizationData>((acc, role) => {
                             acc[ORGANIZATION_ROLE_ID[role]] =
                                 arrayRemoveField(userId)
                             return acc
@@ -153,12 +164,12 @@ export const changeUserRole =
         throw new Error('Unknown action to change user role')
     }
 
-export const setUsersFilter = (filterValue) => ({
+export const setUsersFilter = (filterValue: string): UsersAction => ({
     type: USERS_SET_FILTER,
     payload: filterValue.trim(),
 })
 
-export const getPendingInvites = () => (dispatch, getState) => {
+export const getPendingInvites = (): AppThunk => (dispatch, getState) => {
     const state = getState()
     const projectId = getSelectedProjectIdSelector(state)
     const organizationId = getSelectedOrganizationIdSelector(state)
@@ -172,19 +183,19 @@ export const getPendingInvites = () => (dispatch, getState) => {
         .where('status', 'in', ['new', 'emailSent', 'error'])
         .get()
         .then((querySnapshot) => {
-            const pendingInvite = []
+            const pendingInvite: Invite[] = []
             querySnapshot.forEach((snapshot) => {
                 pendingInvite.push({
                     id: snapshot.id,
                     ...snapshot.data(),
-                })
+                } as Invite)
             })
             return dispatch({
                 type: USER_INVITES_GET_SUCCESS,
                 payload: pendingInvite,
             })
         })
-        .catch((error) => {
+        .catch((error: unknown) => {
             // eslint-disable-next-line no-console
             console.error(error)
             dispatch(
@@ -198,27 +209,29 @@ export const getPendingInvites = () => (dispatch, getState) => {
         })
 }
 
-export const cancelInvite = (inviteId) => (dispatch) => {
-    fireStoreMainInstance
-        .collection('invites')
-        .doc(inviteId)
-        .delete()
-        .then(() =>
-            dispatch({
-                type: USER_INVITE_REMOVE_SUCCESS,
-                payload: inviteId,
-            })
-        )
-        .catch((error) => {
-            // eslint-disable-next-line no-console
-            console.error(error)
-            dispatch(
-                addNotification({
-                    type: 'error',
-                    i18nkey: 'users.cancelInviteFail',
-                    message: `${JSON.stringify(error)}`,
+export const cancelInvite =
+    (inviteId: string): AppThunk =>
+    (dispatch) => {
+        fireStoreMainInstance
+            .collection('invites')
+            .doc(inviteId)
+            .delete()
+            .then(() =>
+                dispatch({
+                    type: USER_INVITE_REMOVE_SUCCESS,
+                    payload: inviteId,
                 })
             )
-            return false
-        })
-}
+            .catch((error: unknown) => {
+                // eslint-disable-next-line no-console
+                console.error(error)
+                dispatch(
+                    addNotification({
+                        type: 'error',
+                        i18nkey: 'users.cancelInviteFail',
+                        message: `${JSON.stringify(error)}`,
+                    })
+                )
+                return false
+            })
+    }

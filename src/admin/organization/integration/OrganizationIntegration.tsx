@@ -1,9 +1,8 @@
-import { useEffect, useState, type FC } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LoaderMatchParent } from '../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import {
-    LastUsedValue,
+    type LastUsedValue,
     ApiKeyIntegrationCard,
 } from '../../baseComponents/ApiKeyIntegrationCard.tsx'
 import { getSelectedOrganizationIdSelector } from '../core/organizationSelectors'
@@ -11,12 +10,12 @@ import {
     fetchOrganizationIntegration,
     updateOrganizationApiKey,
 } from '../core/actions/updateOrganizationApiKey'
+import { useAppDispatch, useAppSelector } from '../../../store'
 
-export const OrganizationIntegration: FC = () => {
+export const OrganizationIntegration = () => {
     const { t } = useTranslation()
-    const dispatch = useDispatch()
-    const organizationId = useSelector(getSelectedOrganizationIdSelector) as
-        string | undefined
+    const dispatch = useAppDispatch()
+    const organizationId = useAppSelector(getSelectedOrganizationIdSelector)
 
     const [loaded, setLoaded] = useState(false)
     const [apiKey, setApiKey] = useState<string | undefined>()
@@ -34,7 +33,7 @@ export const OrganizationIntegration: FC = () => {
                     return
                 }
                 setApiKey(integration?.apiKey)
-                setLastUsedRaw(integration?.apiKeyLastUsedAt as LastUsedValue)
+                setLastUsedRaw(integration?.apiKeyLastUsedAt)
             })
             .finally(() => {
                 if (!cancelled) {
@@ -51,9 +50,7 @@ export const OrganizationIntegration: FC = () => {
     }
 
     const generateOrRotate = async (): Promise<string | void> => {
-        const newKey = (await dispatch(
-            updateOrganizationApiKey() as never
-        )) as unknown as string | void
+        const newKey = await dispatch(updateOrganizationApiKey())
         if (newKey) {
             setApiKey(newKey)
             setLastUsedRaw(null)

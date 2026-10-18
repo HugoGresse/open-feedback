@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../store'
 import {
     getBooleanCountByUser,
     getCommentCountByUser,
@@ -29,15 +29,15 @@ const useStyles = makeStyles({
 
 export const Highlights = () => {
     const classes = useStyles()
-    const projectId = useSelector(getSelectedProjectIdSelector)
-    const voterCount = useSelector(getTotalVoterCountSelector)
-    const voteCount = useSelector(getTotalVoteCountSelector)
-    const commentCount = useSelector(getTotalCommentsSelector)
-    const voteCountByUser = useSelector(getBooleanCountByUser)
-    const commentCountByUser = useSelector(getCommentCountByUser)
+    const projectId = useAppSelector(getSelectedProjectIdSelector)
+    const voterCount = useAppSelector(getTotalVoterCountSelector)
+    const voteCount = useAppSelector(getTotalVoteCountSelector)
+    const commentCount = useAppSelector(getTotalCommentsSelector)
+    const voteCountByUser = useAppSelector(getBooleanCountByUser)
+    const commentCountByUser = useAppSelector(getCommentCountByUser)
     const { t } = useTranslation()
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         dispatch(getVoteItems())
@@ -59,43 +59,48 @@ export const Highlights = () => {
             >
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <TranslatedTypography variant="body1">
-                            dashboard.totalVoters
-                        </TranslatedTypography>
+                        <TranslatedTypography
+                            variant="body1"
+                            i18nKey="dashboard.totalVoters"
+                        />
                         <Typography variant="body1" className={classes.count}>
                             {voterCount}
                         </Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TranslatedTypography variant="body1">
-                            dashboard.votes
-                        </TranslatedTypography>
+                        <TranslatedTypography
+                            variant="body1"
+                            i18nKey="dashboard.votes"
+                        />
                         <Typography variant="body1" className={classes.count}>
                             {voteCount}
                         </Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TranslatedTypography variant="body1">
-                            dashboard.comments
-                        </TranslatedTypography>
+                        <TranslatedTypography
+                            variant="body1"
+                            i18nKey="dashboard.comments"
+                        />
                         <Typography variant="body1" className={classes.count}>
                             {commentCount}
                         </Typography>
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <TranslatedTypography variant="body1">
-                            dashboard.votesPerUser
-                        </TranslatedTypography>
+                        <TranslatedTypography
+                            variant="body1"
+                            i18nKey="dashboard.votesPerUser"
+                        />
                         <Typography variant="body1" className={classes.count}>
                             {voteCountByUser}
                         </Typography>
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <TranslatedTypography variant="body1">
-                            dashboard.commentsPerUser
-                        </TranslatedTypography>
+                        <TranslatedTypography
+                            variant="body1"
+                            i18nKey="dashboard.commentsPerUser"
+                        />
                         <Typography variant="body1" className={classes.count}>
                             {commentCountByUser}
                         </Typography>

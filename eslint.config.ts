@@ -25,6 +25,8 @@ export default defineConfig([
             'coverage/**',
             'functions/**',
             'storybook-static/**',
+            // scripts/ is a standalone package with its own tsconfig.
+            'scripts/**',
         ],
     },
     {

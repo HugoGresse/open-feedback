@@ -1,26 +1,44 @@
+import type { NavigateFunction } from 'react-router-dom'
+import type { AppThunk } from '../../../../store'
 import { fireStoreMainInstance } from '../../../../firebase.ts'
-import { USER_INVITE_GET_SUCCESS } from '../usersActionTypes'
+import {
+    type InviteDocument,
+    USER_INVITE_GET_SUCCESS,
+} from '../usersActionTypes'
 import { redirectToProject } from '../../../project/utils/redirectToProject'
 import { addNotification } from '../../../notification/notifcationActions'
 import { redirectToOrganization } from '../../../organization/utils/redirectToOrganization'
 
-let stopListenForInvite
-export const listenForInvite = (inviteId, navigate) => (dispatch) => {
-    stopListenForInvite = fireStoreMainInstance
-        .collection('invites')
-        .doc(inviteId)
-        .onSnapshot(
-            (snapshot) => {
-                if (snapshot.exists) {
-                    const data = snapshot.data()
-                    dispatch({
-                        type: USER_INVITE_GET_SUCCESS,
-                        payload: data,
-                    })
-                    if (data.status === 'completed') {
-                        onInviteCompleted(data, navigate)
+let stopListenForInvite: (() => void) | undefined
+export const listenForInvite =
+    (inviteId: string, navigate: NavigateFunction): AppThunk =>
+    (dispatch) => {
+        stopListenForInvite = fireStoreMainInstance
+            .collection('invites')
+            .doc(inviteId)
+            .onSnapshot(
+                (snapshot) => {
+                    if (snapshot.exists) {
+                        const data = snapshot.data() as InviteDocument
+                        dispatch({
+                            type: USER_INVITE_GET_SUCCESS,
+                            payload: data,
+                        })
+                        if (data.status === 'completed') {
+                            onInviteCompleted(data, navigate)
+                        }
+                    } else {
+                        dispatch(
+                            addNotification({
+                                type: 'error',
+                                i18nkey: 'users.invitationGetFail',
+                            })
+                        )
                     }
-                } else {
+                },
+                (error) => {
+                    // eslint-disable-next-line no-console
+                    console.error(error)
                     dispatch(
                         addNotification({
                             type: 'error',
@@ -28,29 +46,20 @@ export const listenForInvite = (inviteId, navigate) => (dispatch) => {
                         })
                     )
                 }
-            },
-            (error) => {
-                // eslint-disable-next-line no-console
-                console.error(error)
-                dispatch(
-                    addNotification({
-                        type: 'error',
-                        i18nkey: 'users.invitationGetFail',
-                    })
-                )
-                return false
-            }
-        )
+            )
+    }
+
+export const unsubscribeRealtimeInviteListener = (): AppThunk => () => {
+    stopListenForInvite?.()
 }
 
-export const unsubscribeRealtimeInviteListener = () => () => {
-    stopListenForInvite && stopListenForInvite()
-}
-
-const onInviteCompleted = (invite, navigate) => {
-    if (invite.projectId) {
+const onInviteCompleted = (
+    invite: InviteDocument,
+    navigate: NavigateFunction
+) => {
+    if ('projectId' in invite && invite.projectId) {
         redirectToProject(null, invite.projectId, navigate)
-    } else if (invite.organizationId) {
+    } else if ('organizationId' in invite && invite.organizationId) {
         redirectToOrganization(invite.organizationId, navigate)
     } else {
         throw new Error('Unmanaged invite type on completion')

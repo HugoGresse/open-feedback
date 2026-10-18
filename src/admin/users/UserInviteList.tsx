@@ -1,14 +1,14 @@
-import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import Box from '@mui/material/Box'
 import { cancelInvite, getPendingInvites } from './core/actions/usersActions'
 import { getPendingInvitesSelector } from './core/usersSelectors'
 import { UserInviteItem } from './UserInviteItem.tsx'
 import { TranslatedTypography } from '../baseComponents/TranslatedTypography.tsx'
+import { useAppDispatch, useAppSelector } from '../../store'
 
 export const UserInviteList = () => {
-    const dispatch = useDispatch()
-    const pendingInvites = useSelector(getPendingInvitesSelector)
+    const dispatch = useAppDispatch()
+    const pendingInvites = useAppSelector(getPendingInvitesSelector)
 
     useEffect(() => {
         dispatch(getPendingInvites())

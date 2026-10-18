@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { type ReactNode, useEffect } from 'react'
 import '../App.css'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../store'
 import { useNavigate, useParams } from 'react-router-dom'
 import { setFavicon } from '../utils/dom'
 import {
@@ -40,20 +40,24 @@ const Layout = styled('main')(({ theme }) => ({
     },
 }))
 
-export const AppLayout = ({ children }) => {
+interface AppLayoutProps {
+    children?: ReactNode
+}
+
+export const AppLayout = ({ children }: AppLayoutProps) => {
     const theme = useTheme()
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const routerParams = useParams()
     const { t } = useTranslation()
-    const project = useSelector(getProjectSelector)
-    const talkDates = useSelector(getTalksDatesSelector)
+    const project = useAppSelector(getProjectSelector)
+    const talkDates = useAppSelector(getTalksDatesSelector)
 
-    const projectLoadError = useSelector(getProjectLoadErrorSelector)
-    const projectNotFound = useSelector(isProjectNotFoundSelector)
-    const projectVotesError = useSelector(getProjectVotesErrorSelector)
-    const loginError = useSelector(getLoginErrorSelector)
-    const isLoggedIn = useSelector(isLoggedSelector)
+    const projectLoadError = useAppSelector(getProjectLoadErrorSelector)
+    const projectNotFound = useAppSelector(isProjectNotFoundSelector)
+    const projectVotesError = useAppSelector(getProjectVotesErrorSelector)
+    const loginError = useAppSelector(getLoginErrorSelector)
+    const isLoggedIn = useAppSelector(isLoggedSelector)
 
     useEffect(() => {
         if (isLoggedIn && project) {
@@ -63,10 +67,12 @@ export const AppLayout = ({ children }) => {
 
     useEffect(() => {
         if (!project) {
-            dispatch(getProject(routerParams.projectId))
+            // The feedback app is mounted under /:projectId
+            dispatch(getProject(routerParams.projectId!))
         } else {
             document.title = project.name + ' - Feedback'
-            setFavicon(project.favicon)
+            // A missing favicon keeps setting "undefined", as before typing
+            setFavicon(project.favicon!)
             dispatch(signIn())
         }
     }, [routerParams.projectId, project, dispatch])
@@ -84,7 +90,10 @@ export const AppLayout = ({ children }) => {
 
     if (loginError) {
         return (
-            <Error error={t('auth.errorLogin')} errorDetail={t(loginError)} />
+            <Error
+                error={t('auth.errorLogin')}
+                errorDetail={t(String(loginError))}
+            />
         )
     } else if (projectLoadError) {
         return (
@@ -99,13 +108,13 @@ export const AppLayout = ({ children }) => {
         return (
             <Error
                 error={t('project.errorLoadVotes')}
-                errorDetail={projectVotesError}
+                errorDetail={String(projectVotesError)}
             />
         )
     } else {
         return (
             <Box
-                backgroundColor={theme.palette.pageBackground}
+                bgcolor={theme.palette.pageBackground}
                 minHeight="100vh"
                 display="flex"
                 flexDirection="column"

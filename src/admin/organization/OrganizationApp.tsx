@@ -2,15 +2,16 @@ import { useEffect } from 'react'
 import { Organization } from './Organization.tsx'
 import { OrganizationLayout } from './layout/OrganizationLayout.tsx'
 import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material'
-import { useDispatch } from 'react-redux'
+import type { Theme } from '@mui/material/styles'
 import { getOrganizations } from './core/actions/getOrganizations'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, type PathMatch, Route, Routes } from 'react-router-dom'
 import { OrganizationUsers } from './users/OrganizationUsers.tsx'
 import { OrganizationTheme } from './theme/OrganizationTheme.tsx'
 import { OrganizationVotingForm } from './votingForm/OrganizationVotingForm.tsx'
 import { OrganizationIntegration } from './integration/OrganizationIntegration.tsx'
+import { useAppDispatch } from '../../store'
 
-const createOrganizationTheme = (parentTheme) =>
+const createOrganizationTheme = (parentTheme: Theme) =>
     createTheme({
         ...parentTheme,
         palette: {
@@ -20,8 +21,13 @@ const createOrganizationTheme = (parentTheme) =>
         },
     })
 
-export const OrganizationApp = ({ match, onClose }) => {
-    const dispatch = useDispatch()
+export interface OrganizationAppProps {
+    match: PathMatch<'organizationId'>
+    onClose: () => void
+}
+
+export const OrganizationApp = ({ match, onClose }: OrganizationAppProps) => {
+    const dispatch = useAppDispatch()
     const { pathname, pathnameBase } = match
 
     useEffect(() => {

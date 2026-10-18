@@ -1,8 +1,8 @@
-import { alpha, darken, lighten } from '@mui/material/styles'
-import { Card } from '@mui/material'
+import { alpha, darken, lighten, type Theme } from '@mui/material/styles'
+import { Card, type CardProps } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
         boxShadow: 'none',
         border: `1px solid
@@ -14,7 +14,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const OFCard = (props) => {
+export type OFCardProps = CardProps
+
+export const OFCard = (props: OFCardProps) => {
     const classes = useStyles()
 
     return (

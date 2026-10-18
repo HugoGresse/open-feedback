@@ -1,4 +1,4 @@
-export const HEX_COLORS = {
+const HEX_COLORS = {
     RED_ORANGE: 'rgb(255,86,49)',
     DARK_RED_ORANGE: '#a95543',
     LIGHT_RED_ORANGE: '#ffc1ad',

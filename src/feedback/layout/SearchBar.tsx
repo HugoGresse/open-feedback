@@ -1,14 +1,14 @@
 import SearchIcon from '@mui/icons-material/Search'
 import { setTalksFilter } from '../../core/talks/talksActions'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../../store'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from '@mui/material'
+import { type Theme, useTheme } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import InputAdornment from '@mui/material/InputAdornment'
 import InputBase from '@mui/material/InputBase'
 import { grey } from '@mui/material/colors'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     container: {
         backgroundColor:
             theme.palette.mode === 'dark'
@@ -38,7 +38,7 @@ export const SearchBar = () => {
     const { t } = useTranslation()
     const theme = useTheme()
     const classes = useStyles()
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     return (
         <div className={classes.container}>

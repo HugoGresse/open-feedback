@@ -1,7 +1,8 @@
+import type { ReactNode, Ref } from 'react'
 import styled from 'styled-components'
 import { fontSize, fontWeight, space } from 'styled-system'
 import { COLORS } from '../../../../constants/colors'
-import InputBase from '@mui/material/InputBase'
+import InputBase, { type InputBaseProps } from '@mui/material/InputBase'
 import { useTheme } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
 
@@ -11,7 +12,7 @@ const IconWrapper = styled.div`
     left: 10px;
 `
 
-const OFInputStyled = styled(InputBase)`
+const OFInputStyled = styled(InputBase)<{ $primaryColor: string }>`
     height: 40px;
     font-size: 16px;
     ${(props) =>
@@ -50,7 +51,13 @@ const useStyles = makeStyles({
     },
 })
 
-export function OFInput(props) {
+export interface OFInputProps extends InputBaseProps {
+    // Ref forwarded to the InputBase root element
+    forwardedRef?: Ref<HTMLDivElement>
+    icon?: ReactNode
+}
+
+export function OFInput(props: OFInputProps) {
     const classes = useStyles()
     const theme = useTheme()
 

@@ -1,59 +1,110 @@
-import { createSelector } from 'reselect'
 import { getAdminStateSelector } from '../../adminSelector'
 import { NO_ORGANIZATION_FAKE_ID } from '../../organization/core/organizationConstants'
 import { getOrganizationsSelector } from '../../organization/core/organizationSelectors'
 import {
     PROJECT_USER_ROLE_MEMBER,
     PROJECT_USER_ROLE_OWNER,
+    type ProjectUserRole,
 } from '../settings/users/ProjectUserRoles.tsx'
+import { createAppSelector, type RootState } from '../../../store'
+import type { Organization } from '../../../core/models'
+import type { AdminProject } from './projectActionTypes'
+import type { ProjectState } from './projectReducer'
 
-const getProjects = (state) => getAdminStateSelector(state).adminProject
-const getProjectsData = (state) => getProjects(state).data
+export interface ProjectMember {
+    userId: string
+    role: ProjectUserRole
+}
 
-export const isProjectsLoadedSelector = (state) =>
+/**
+ * An organization (or the fake "no organization" group) with its projects. The
+ * organization fields are missing for groups whose organization is not loaded.
+ */
+export interface OrganizationWithProjects extends Partial<Organization> {
+    projects: AdminProject[]
+}
+
+const getProjects = (state: RootState): ProjectState =>
+    getAdminStateSelector(state).adminProject
+const getProjectsData = (state: RootState): ProjectState['data'] =>
+    getProjects(state).data
+
+export const isProjectsLoadedSelector = (state: RootState): boolean =>
     getProjects(state).projectsLoaded
 
-export const getSelectedProjectIdSelector = (state) =>
+export const getSelectedProjectIdSelector = (state: RootState): string | null =>
     getProjects(state).selectedProjectId
 
-export const isProjectApiInitSelector = (state) =>
+/**
+ * Only valid while a project is selected: throws otherwise. For Firestore
+ * paths, where the untyped code passed the null id and Firestore threw.
+ */
+export const getSelectedProjectIdOrThrowSelector = (
+    state: RootState
+): string => {
+    const projectId = getSelectedProjectIdSelector(state)
+    if (!projectId) {
+        throw new TypeError('No selected project id')
+    }
+    return projectId
+}
+
+export const isProjectApiInitSelector = (state: RootState): boolean =>
     getProjects(state).projectApiInit
 
-export const getOwnerId = (state) => getSelectedProjectSelector(state).owner
+/**
+ * Only valid while a project is selected: throws otherwise, like the untyped
+ * `getSelectedProjectSelector(state).field` accesses did.
+ */
+const getSelectedProjectOrThrow = (state: RootState): AdminProject => {
+    const project = getSelectedProjectSelector(state)
+    if (!project) {
+        throw new TypeError('No selected project')
+    }
+    return project
+}
 
-export const getStartTimeSelector = (state) =>
-    getSelectedProjectSelector(state).voteStartTime
+export const getOwnerId = (state: RootState): string =>
+    getSelectedProjectOrThrow(state).owner
+
+export const getStartTimeSelector = (
+    state: RootState
+): string | null | undefined => getSelectedProjectOrThrow(state).voteStartTime
 
 // MEMOIZED
 
-export const getSelectedProjectSelector = createSelector(
-    getProjectsData,
-    getSelectedProjectIdSelector,
-    (projectsData, selectedProjectId) => {
+export const getSelectedProjectSelector = createAppSelector(
+    [getProjectsData, getSelectedProjectIdSelector],
+    (projectsData, selectedProjectId): AdminProject | null | undefined => {
         const projects = projectsData.projects
         if (!projects || projects.length < 1) {
             return null
         }
-        return projects.filter((project) => project.id === selectedProjectId)[0]
+        return projects.find((project) => project.id === selectedProjectId)
     }
 )
 
-export const getLanguagesSelector = createSelector(
-    getSelectedProjectSelector,
-    (project) => (project && project.languages) || []
+export const getLanguagesSelector = createAppSelector(
+    [getSelectedProjectSelector],
+    (project): string[] => (project && project.languages) || []
 )
 
-export const getMemberIds = createSelector(
-    getSelectedProjectSelector,
-    getOwnerId,
-    (project, ownerUserId) => {
-        const members = project.members.reduce((acc, userId) => {
-            acc[userId] = {
-                userId,
-                role: PROJECT_USER_ROLE_MEMBER,
-            }
-            return acc
-        }, {})
+export const getMemberIds = createAppSelector(
+    [getSelectedProjectSelector, getOwnerId],
+    (project, ownerUserId): ProjectMember[] => {
+        if (!project) {
+            throw new TypeError('No selected project')
+        }
+        const members = project.members.reduce<Record<string, ProjectMember>>(
+            (acc, userId) => {
+                acc[userId] = {
+                    userId,
+                    role: PROJECT_USER_ROLE_MEMBER,
+                }
+                return acc
+            },
+            {}
+        )
 
         members[ownerUserId] = {
             userId: ownerUserId,
@@ -63,43 +114,46 @@ export const getMemberIds = createSelector(
     }
 )
 
-export const getSortedProjectsSelector = createSelector(
-    getProjectsData,
-    (projectsData) => {
-        return projectsData.projects.sort((a, b) => {
-            if (a.createdAt < b.createdAt) {
-                return 1
-            }
-            if (a.createdAt > b.createdAt) {
-                return -1
-            }
-            return 0
-        })
+// Firestore Timestamps compare through their valueOf() string.
+const compareCreatedAtDesc = (a: AdminProject, b: AdminProject): number => {
+    const aCreatedAt = a.createdAt?.valueOf()
+    const bCreatedAt = b.createdAt?.valueOf()
+    if (aCreatedAt === undefined || bCreatedAt === undefined) {
+        // `undefined < x` and `undefined > x` are both false.
+        return 0
+    }
+    if (aCreatedAt < bCreatedAt) {
+        return 1
+    }
+    if (aCreatedAt > bCreatedAt) {
+        return -1
+    }
+    return 0
+}
+
+export const getSortedProjectsSelector = createAppSelector(
+    [getProjectsData],
+    (projectsData): AdminProject[] => {
+        return projectsData.projects.sort(compareCreatedAtDesc)
     }
 )
 
-export const getSortedProjectsByOrganizationIdsSelector = createSelector(
-    getSortedProjectsSelector,
-    getOrganizationsSelector,
-    (projects, organizations) => {
+export const getSortedProjectsByOrganizationIdsSelector = createAppSelector(
+    [getSortedProjectsSelector, getOrganizationsSelector],
+    (
+        projects: AdminProject[],
+        organizations: Organization[]
+    ): Record<string, OrganizationWithProjects> => {
         const orgsWithProjects = projects
-            .sort((a, b) => {
-                // Re-do the sort to avoid weird flicker due to object key not keeping it's order
-                if (a.createdAt < b.createdAt) {
-                    return 1
-                }
-                if (a.createdAt > b.createdAt) {
-                    return -1
-                }
-                return 0
-            })
+            // Re-do the sort to avoid weird flicker due to object key not keeping it's order
+            .sort(compareCreatedAtDesc)
             .sort((a) => {
                 if (!a.organizationId) {
                     return -1
                 }
                 return 0
             })
-            .reduce(
+            .reduce<Record<string, OrganizationWithProjects>>(
                 (acc, project) => {
                     const organizationId =
                         project.organizationId || NO_ORGANIZATION_FAKE_ID

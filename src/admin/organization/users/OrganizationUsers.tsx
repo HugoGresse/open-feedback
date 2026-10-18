@@ -1,6 +1,5 @@
 import { UserListHeader } from '../../users/UserListHeader.tsx'
 import { setUsersFilter } from '../../users/core/actions/usersActions'
-import { useDispatch, useSelector } from 'react-redux'
 import {
     INVITE_TYPE_ORGANIZATION,
     inviteUser,
@@ -15,11 +14,12 @@ import {
     ORGANIZATION_NEW_USER_ROLES,
 } from '../core/organizationConstants'
 import { UserInviteList } from '../../users/UserInviteList.tsx'
+import { useAppDispatch, useAppSelector } from '../../../store'
 
 export const OrganizationUsers = () => {
-    const dispatch = useDispatch()
-    const ownerUserId = useSelector(getOrganizationOwnerIdSelector)
-    const membersUserIds = useSelector(getOrganizationMembersSelector)
+    const dispatch = useAppDispatch()
+    const ownerUserId = useAppSelector(getOrganizationOwnerIdSelector)
+    const membersUserIds = useAppSelector(getOrganizationMembersSelector)
     return (
         <div id="orgUsers">
             <UserListHeader

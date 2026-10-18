@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../../store'
 import { LoaderMatchParent } from '../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import { getMostVotedTalkSelector } from './dashboardSelectors'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
@@ -6,9 +6,13 @@ import { useTranslation } from 'react-i18next'
 import { TalkVotesList } from './utils/TalkVotesList.tsx'
 import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown'
 
-export const MostVotedTalks = ({ dinoStartDelay }) => {
-    const mostVotedTalks = useSelector(getMostVotedTalkSelector)
-    const projectId = useSelector(getSelectedProjectIdSelector)
+export interface MostVotedTalksProps {
+    dinoStartDelay?: number
+}
+
+export const MostVotedTalks = ({ dinoStartDelay }: MostVotedTalksProps) => {
+    const mostVotedTalks = useAppSelector(getMostVotedTalkSelector)
+    const projectId = useAppSelector(getSelectedProjectIdSelector)
     const { t } = useTranslation()
 
     if (!mostVotedTalks) {

@@ -1,9 +1,10 @@
 import Paper from '@mui/material/Paper'
 import { makeStyles } from '@mui/styles'
-import { emphasize } from '@mui/material'
+import { emphasize, type Theme } from '@mui/material'
+import type { ReactNode } from 'react'
 import { VoteButtonBackground } from './VoteButtonBackground.tsx'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     item: {
         padding: theme.spacing(2),
         textAlign: 'center',
@@ -31,6 +32,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+interface VoteButtonProps {
+    isSelected: boolean
+    chipColors?: string[]
+    onClick: () => void
+    count?: number
+    children?: ReactNode
+    className?: string
+}
+
 export const VoteButton = ({
     isSelected,
     chipColors,
@@ -38,7 +48,7 @@ export const VoteButton = ({
     count,
     children,
     className,
-}) => {
+}: VoteButtonProps) => {
     const classes = useStyles()
     const paperClasses = `${classes.item} ${
         isSelected ? classes.selectedItem : ''

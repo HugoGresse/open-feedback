@@ -1,9 +1,9 @@
-import Grid, { GridProps } from '@mui/material/Grid'
+import Grid, { type GridProps } from '@mui/material/Grid'
 import { forwardRef } from 'react'
 import { darken, alpha, lighten } from '@mui/material/styles'
 import { styled } from '@mui/material/styles'
 
-type OFListItemProps = GridProps & {
+export type OFListItemProps = GridProps & {
     noBorderBottom?: boolean
 }
 

@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid'
 import { makeStyles } from '@mui/styles'
-import { TextVoteItem } from './TextVoteItem.tsx'
+import { TextVoteItem, type TextVoteItemProps } from './TextVoteItem.tsx'
+import type { ModerationTextVote } from './moderationActionTypes'
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -13,11 +14,17 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
+export interface TextVoteListProps {
+    textVotes?: ModerationTextVote[]
+    onVoteHideClick: TextVoteItemProps['onVoteHideClick']
+    onVoteExpandClick: TextVoteItemProps['onVoteExpandClick']
+}
+
 export const TextVoteList = ({
     textVotes,
     onVoteHideClick,
     onVoteExpandClick,
-}) => {
+}: TextVoteListProps) => {
     const classes = useStyles()
 
     return (

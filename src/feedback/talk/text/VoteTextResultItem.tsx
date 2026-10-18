@@ -1,10 +1,16 @@
 import { makeStyles } from '@mui/styles'
+import type { Theme } from '@mui/material/styles'
 import { DateTime } from 'luxon'
 import Typography from '@mui/material/Typography'
 import { VoteButton } from '../components/VoteButton.tsx'
 import { useTranslation } from 'react-i18next'
+import type { TextVoteResult } from '../core/getVoteResultSelectorSelector'
 
-const useStyles = makeStyles((theme) => ({
+interface VoteTextResultItemStyleProps {
+    isLast: boolean
+}
+
+const useStyles = makeStyles((theme: Theme) => ({
     container: {
         display: 'flex',
         marginTop: theme.spacing(2),
@@ -25,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 0,
     },
     comment: {
-        borderBottom: (props) =>
+        borderBottom: (props: VoteTextResultItemStyleProps) =>
             props.isLast ? '' : `1px solid ${theme.palette.paperBorder}`,
         paddingBottom: 15,
         marginTop: 10,
@@ -34,6 +40,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+interface VoteTextResultItemProps {
+    vote: TextVoteResult
+    isLast: boolean
+    isSelected: boolean
+    chipColors?: string[]
+    onVoteChange: () => void
+    currentUserId: string
+}
+
 export const VoteTextResultItem = ({
     vote,
     isLast,
@@ -41,7 +56,7 @@ export const VoteTextResultItem = ({
     chipColors,
     onVoteChange,
     currentUserId,
-}) => {
+}: VoteTextResultItemProps) => {
     const classes = useStyles({
         isLast,
     })

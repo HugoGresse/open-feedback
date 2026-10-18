@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { SpeakerListItem } from './SpeakerListItem.tsx'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../store'
 import {
     getFilteredSpeakers,
     getSpeakersFilter,
@@ -21,14 +21,22 @@ import { getTalks } from '../../../core/talks/talksActions'
 import { filterMap, isEmptyMap } from '../../../utils/mapUtils'
 import { SimpleDialog } from '../../baseComponents/layouts/SimpleDialog.tsx'
 import { TranslatedTypography } from '../../baseComponents/TranslatedTypography.tsx'
+import type { Speaker, TalksMap } from '../../../core/models'
+
+interface SpeakerToRemoveData {
+    speaker: Speaker
+    /** Talks using the speaker, keyed by talk id. */
+    linkedTalks: TalksMap
+}
 
 export const SpeakerList = () => {
-    const dispatch = useDispatch()
-    const speakers = useSelector(getFilteredSpeakers)
-    const filter = useSelector(getSpeakersFilter)
+    const dispatch = useAppDispatch()
+    const speakers = useAppSelector(getFilteredSpeakers)
+    const filter = useAppSelector(getSpeakersFilter)
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
-    const [editingSpeaker, setEditSpeaker] = useState(null)
-    const [speakerToRemoveData, setSpeakerToRemoveData] = useState()
+    const [editingSpeaker, setEditSpeaker] = useState<Speaker | null>(null)
+    const [speakerToRemoveData, setSpeakerToRemoveData] =
+        useState<SpeakerToRemoveData | null>()
     const [isRemovingSpeaker, setIsRemovingSpeaker] = useState(false)
     const { t } = useTranslation()
 
@@ -50,16 +58,20 @@ export const SpeakerList = () => {
         setSidePanelOpen(true)
     }
 
-    const onEditSpeakerClicked = (speaker) => {
+    const onEditSpeakerClicked = (speaker: Speaker) => {
         if (speakerNotReadableCheck()) return
         setEditSpeaker(speaker)
         setSidePanelOpen(true)
     }
 
-    const onRemoveSpeakerClicked = async (speaker) => {
+    const onRemoveSpeakerClicked = async (speaker: Speaker) => {
         if (speakerNotReadableCheck()) return
 
         const talks = await dispatch(getTalks())
+        if (!talks) {
+            // Talks failed to load (already notified): the usage is unknown
+            return
+        }
         const linkedTalks = filterMap(
             talks,
             (talk) => talk.speakers && talk.speakers.includes(speaker.id)
@@ -76,7 +88,7 @@ export const SpeakerList = () => {
         })
     }
 
-    const maybeCloseSidePanel = (shouldContinueAfterSubmit) => {
+    const maybeCloseSidePanel = (shouldContinueAfterSubmit?: boolean) => {
         if (shouldContinueAfterSubmit) {
             return
         }
@@ -88,7 +100,9 @@ export const SpeakerList = () => {
         <>
             <OFListHeader
                 filterValue={filter}
-                filterChange={(value) => dispatch(filterSpeakers(value))}
+                filterChange={(value: string) =>
+                    dispatch(filterSpeakers(value))
+                }
                 buttonClick={onAddSpeakerClicked}
                 buttonText={t('speakers.addButton')}
             />
@@ -99,7 +113,10 @@ export const SpeakerList = () => {
                 onClose={() => maybeCloseSidePanel()}
                 onSubmit={(speaker, shouldContinueAfterSubmit) => {
                     if (editingSpeaker) {
-                        return dispatch(editSpeaker(speaker)).then(() =>
+                        // The form values hold the edited speaker id
+                        return dispatch(
+                            editSpeaker({ ...speaker, id: editingSpeaker.id })
+                        ).then(() =>
                             maybeCloseSidePanel(shouldContinueAfterSubmit)
                         )
                     }
@@ -112,6 +129,10 @@ export const SpeakerList = () => {
             <SimpleDialog
                 onClose={() => setSpeakerToRemoveData(null)}
                 onConfirm={() => {
+                    // The dialog is only open while a speaker is selected
+                    if (!speakerToRemoveData) {
+                        return
+                    }
                     dispatch(removeSpeaker(speakerToRemoveData.speaker)).then(
                         () => {
                             setSpeakerToRemoveData(null)

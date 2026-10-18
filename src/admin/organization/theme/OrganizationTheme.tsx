@@ -7,22 +7,23 @@ import { ChipColorsEditor } from '../../project/settings/event/ChipColorsEditor.
 import { object, string } from 'yup'
 import { useTranslation } from 'react-i18next'
 import { getSelectedOrganizationSelector } from '../core/organizationSelectors'
-import { useDispatch, useSelector } from 'react-redux'
 import { OFButton } from '../../baseComponents/button/OFButton.tsx'
 import Divider from '@mui/material/Divider'
 import { editOrganization } from '../core/actions/editOrganization'
 import Box from '@mui/material/Box'
 import { SaveShortcut } from '../../baseComponents/form/saveShortcut/SaveShortcut'
+import { useAppDispatch, useAppSelector } from '../../../store'
 
 export const OrganizationTheme = () => {
-    const dispatch = useDispatch()
-    const organization = useSelector(getSelectedOrganizationSelector)
+    const dispatch = useAppDispatch()
+    const organization = useAppSelector(getSelectedOrganizationSelector)
     const { t } = useTranslation()
 
+    // Only displayed while an organization is loaded.
     const initialValues = {
-        logoUrl: organization.logoSmall || '',
-        faviconUrl: organization.favicon || '',
-        chipColors: organization.chipColors,
+        logoUrl: organization?.logoSmall || '',
+        faviconUrl: organization?.favicon || '',
+        chipColors: organization?.chipColors,
     }
 
     return (

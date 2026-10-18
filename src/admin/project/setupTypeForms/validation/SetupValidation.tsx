@@ -7,11 +7,28 @@ import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress'
 import Grow from '@mui/material/Grow'
 import { useTranslation } from 'react-i18next'
+import type { ReactNode } from 'react'
 
 export const STATE_IDLE = 1
 export const STATE_LOADING = 2
 export const STATE_SUCCESS = 3
 export const STATE_ERROR = 4
+
+export type ValidationState =
+    | typeof STATE_IDLE
+    | typeof STATE_LOADING
+    | typeof STATE_SUCCESS
+    | typeof STATE_ERROR
+
+interface SetupValidationProps {
+    processing: boolean
+    onValidateClick: () => void
+    connectionText?: string
+    connectionState: ValidationState
+    modelText?: string
+    modelState: ValidationState
+    modelSubtitleText?: string
+}
 
 export const SetupValidation = ({
     processing,
@@ -21,7 +38,7 @@ export const SetupValidation = ({
     modelText,
     modelState,
     modelSubtitleText,
-}) => {
+}: SetupValidationProps) => {
     const { t } = useTranslation()
     return (
         <Box>
@@ -52,8 +69,14 @@ export const SetupValidation = ({
     )
 }
 
-const Check = ({ state, text, subText }) => {
-    let stateIcon
+interface CheckProps {
+    state: ValidationState
+    text?: string
+    subText?: string
+}
+
+const Check = ({ state, text, subText }: CheckProps) => {
+    let stateIcon: ReactNode
 
     switch (state) {
         default:

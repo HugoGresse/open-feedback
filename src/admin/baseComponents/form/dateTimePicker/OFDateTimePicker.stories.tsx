@@ -1,3 +1,4 @@
+import type { Meta } from '@storybook/react-vite'
 import { OFDateTimePicker } from './OFDateTimePicker.tsx'
 import { Field, Formik } from 'formik'
 import { OFFormControl } from '../formControl/OFFormControl.tsx'
@@ -6,13 +7,15 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { DateTime } from 'luxon'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-export default {
+const meta = {
     component: OFDateTimePicker,
     title: 'Admin/DateTimePicker',
-}
+} satisfies Meta<typeof OFDateTimePicker>
+export default meta
 
 export const defaultUsage = () => (
     <Formik
+        onSubmit={() => {}}
         initialValues={{
             Date: new Date().toString(),
         }}
@@ -29,6 +32,7 @@ export const defaultUsage = () => (
 export const withFormControl = () => (
     <ThemeProvider theme={createTheme()}>
         <Formik
+            onSubmit={() => {}}
             initialValues={{
                 Date: new Date().toString(),
             }}

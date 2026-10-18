@@ -1,7 +1,7 @@
-import i18next from 'i18next'
+import i18next, { type Resource } from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
-export const newI18nInstance = (resources) => {
+export const newI18nInstance = (resources: Resource) => {
     const i18n = i18next.createInstance()
     i18n.use(LanguageDetector).init({
         // we init with resources

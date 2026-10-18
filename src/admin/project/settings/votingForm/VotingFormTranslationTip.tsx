@@ -1,11 +1,12 @@
 import { Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
+import type { Theme } from '@mui/material/styles'
 import { useTranslation } from 'react-i18next'
 import TranslateIcon from '@mui/icons-material/Translate'
 import { NavLinkMui } from '../../layout/NavLinkMui.tsx'
 import { RoutingMap } from '../../../RoutingMap'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     titleIcon: {
         top: 4,
         position: 'relative',

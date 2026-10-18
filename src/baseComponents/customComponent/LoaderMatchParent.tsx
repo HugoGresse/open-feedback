@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { CircularProgress, styled, Theme } from '@mui/material'
+import { CircularProgress, styled, type Theme } from '@mui/material'
 type ContainerProps = {
     theme?: Theme
     width: string

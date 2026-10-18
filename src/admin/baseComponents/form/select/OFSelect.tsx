@@ -1,6 +1,10 @@
-import * as React from 'react'
-import Select from '@mui/material/Select'
+import type { FocusEvent } from 'react'
+import type { FieldProps } from 'formik'
+import Select, { type BaseSelectProps } from '@mui/material/Select'
 import { OFInput } from '../input/OFInput.tsx'
+
+export interface OFSelectProps
+    extends BaseSelectProps, Pick<FieldProps, 'field' | 'form'> {}
 
 export const fieldToSelect = ({
     disabled,
@@ -8,12 +12,12 @@ export const fieldToSelect = ({
     form: { isSubmitting },
     onBlur,
     ...props
-}) => {
+}: OFSelectProps) => {
     return {
         disabled: disabled ?? isSubmitting,
         onBlur:
             onBlur ??
-            function (e) {
+            function (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
                 fieldOnBlur(e ?? field.name)
             },
         ...field,
@@ -21,6 +25,6 @@ export const fieldToSelect = ({
     }
 }
 
-export const OFSelect = (props) => {
+export const OFSelect = (props: OFSelectProps) => {
     return <Select input={<OFInput />} {...fieldToSelect(props)} />
 }

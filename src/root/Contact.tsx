@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { type FormEvent, useRef, useState } from 'react'
 import { InnerWrapper } from './component/InnerWrapper.tsx'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
@@ -8,7 +8,20 @@ import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { isValidEmail } from '../utils/stringUtils'
 import { HttpsFunctionsUrl } from '../firebase.ts'
 
-const INIT_STATE = {
+interface ContactFormState {
+    email: string
+    message: string
+    error: string | null
+    success: boolean
+}
+
+/** JSON body returned by the sendContactEmail function. */
+interface SendContactEmailResponse {
+    success: boolean
+    error?: string
+}
+
+const INIT_STATE: ContactFormState = {
     email: '',
     message: '',
     error: null,
@@ -20,9 +33,9 @@ export const Contact = () => {
     const { executeRecaptcha } = useGoogleReCaptcha()
     const [formValues, setFormValues] = useState(INIT_STATE)
     const [isSending, setIsSending] = useState(false)
-    const formRef = useRef()
+    const formRef = useRef<HTMLFormElement>(null)
 
-    const submit = async (event) => {
+    const submit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         setFormValues({
             ...formValues,
@@ -38,7 +51,10 @@ export const Contact = () => {
             return
         }
 
-        const token = await executeRecaptcha('contact')
+        // executeRecaptcha is undefined until the reCAPTCHA script is loaded
+        const token = executeRecaptcha
+            ? await executeRecaptcha('contact')
+            : undefined
 
         if (!token) {
             setFormValues({
@@ -58,7 +74,10 @@ export const Contact = () => {
                 recaptchaV3Response: token,
             }),
         })
-            .then((response) => response.json())
+            .then(
+                (response) =>
+                    response.json() as Promise<SendContactEmailResponse>
+            )
             .then((response) => {
                 if (!response.success) {
                     setFormValues({
@@ -68,7 +87,7 @@ export const Contact = () => {
                 }
                 return response.success
             })
-            .catch((error) => {
+            .catch((error: Error) => {
                 setFormValues({
                     ...formValues,
                     error: `${t('contact.error')} ${error.toString()}`,
@@ -81,7 +100,7 @@ export const Contact = () => {
                 ...INIT_STATE,
                 success: true,
             })
-            formRef.current.reset()
+            formRef.current?.reset()
         }
         setIsSending(false)
     }

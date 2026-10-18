@@ -2,7 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { ColorBlockDialog } from './ColorBlockDialog.tsx'
 
-const Color = styled.button`
+const Color = styled.button<{ color: string }>`
     height: 45px;
     width: 45px;
     display: inline-block;
@@ -26,23 +26,32 @@ const Color = styled.button`
     }
 `
 
+interface ColorBlockProps {
+    /** Hex color without `#`. */
+    color: string
+    onColorChanged: (color: string) => void
+    onColorDeleted: (color: string) => void
+    className?: string
+    disabled?: boolean
+}
+
 export const ColorBlock = ({
     color,
     onColorChanged,
     onColorDeleted,
     className,
     disabled,
-}) => {
+}: ColorBlockProps) => {
     const [isPickerOpen, setPickerOpen] = useState(false)
     const [stateColor, setColor] = useState(color)
 
-    const onColorPicked = (color) => {
+    const onColorPicked = (color: string) => {
         setPickerOpen(false)
         setColor(color)
         onColorChanged(color)
     }
 
-    const onColorDelete = (color) => {
+    const onColorDelete = (color: string) => {
         setPickerOpen(false)
         onColorDeleted(color)
     }

@@ -4,19 +4,28 @@ import { OFFormControl } from '../../../baseComponents/form/formControl/OFFormCo
 import { Field, useField } from 'formik'
 import { OFDateTimePicker } from '../../../baseComponents/form/dateTimePicker/OFDateTimePicker.tsx'
 import { useTranslation } from 'react-i18next'
+import type { DateTime } from 'luxon'
 
 const fieldNameVoteStartTime = 'voteStartTime'
 const fieldNameVoteEndTime = 'voteEndTime'
 
-export const RestrictVoteRangeFields = ({ isOpen }) => {
+interface RestrictVoteRangeFieldsProps {
+    isOpen: boolean
+}
+
+export const RestrictVoteRangeFields = ({
+    isOpen,
+}: RestrictVoteRangeFieldsProps) => {
     const { t } = useTranslation()
 
-    const [startField, startMeta] = useField(fieldNameVoteStartTime)
-    const [endField, endMeta, endHelpers] = useField(fieldNameVoteEndTime)
+    const [startField, startMeta] = useField<DateTime>(fieldNameVoteStartTime)
+    const [endField, endMeta, endHelpers] =
+        useField<DateTime>(fieldNameVoteEndTime)
 
     useEffect(() => {
         if (
-            startField.value.toMillis() !== startMeta.initialValue.toMillis() &&
+            startField.value.toMillis() !==
+                startMeta.initialValue?.toMillis() &&
             !endMeta.touched &&
             startField.value.toMillis() !== endField.value.toMillis()
         ) {

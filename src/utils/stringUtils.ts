@@ -1,4 +1,4 @@
-export const normalizeAndRemoveDiacritics = (value) => {
+export const normalizeAndRemoveDiacritics = (value: string): string => {
     if (!value) {
         return value
     }
@@ -34,8 +34,8 @@ export const newId = () => {
  * @param  values
  * @return {String}
  */
-export const sprintf = (template, ...values) =>
-    template.replace(/%s/g, () => values.shift())
+export const sprintf = (template: string, ...values: (string | number)[]) =>
+    template.replace(/%s/g, () => String(values.shift()))
 
 /**
  * Generate a hash from a string
@@ -43,7 +43,7 @@ export const sprintf = (template, ...values) =>
  * @param value
  * @returns {number}
  */
-export const hashString = (value) => {
+export const hashString = (value: string | null | undefined) => {
     if (!value) {
         return 0
     }
@@ -65,10 +65,13 @@ export const hashString = (value) => {
  * @returns array an array with the string as first item and if the string was cutted as second
  */
 export const textEllipsis = (
-    str,
-    maxLength,
-    { side = 'end', ellipsis = '...' } = {}
-) => {
+    str: string | null | undefined,
+    maxLength: number,
+    {
+        side = 'end',
+        ellipsis = '...',
+    }: { side?: 'start' | 'end'; ellipsis?: string } = {}
+): [string, boolean] => {
     if (!str) {
         return ['', false]
     }
@@ -90,11 +93,11 @@ export const textEllipsis = (
     return [str, false]
 }
 
-export const isValidEmail = (email) => {
+export const isValidEmail = (email: unknown) => {
     const re = /^\S+@\S+$/
     return re.test(String(email).toLowerCase())
 }
 
-export const isString = (value) => {
+export const isString = (value: unknown): value is string => {
     return typeof value === 'string' || value instanceof String
 }

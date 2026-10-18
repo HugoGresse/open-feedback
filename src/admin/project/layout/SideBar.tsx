@@ -1,6 +1,7 @@
 import { COLORS } from '../../../constants/colors'
 import logo from '../../../assets/logo-openfeedback-color&white.png'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../store'
+import type { DrawerToggleHandler } from './ProjectLayout.tsx'
 import { getUserSelector } from '../../auth/authSelectors'
 import { signOut } from '../../auth/authActions'
 import { createTheme } from '@mui/material'
@@ -79,19 +80,32 @@ const useStyles = makeStyles({
     },
 })
 
-export const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
-    const dispatch = useDispatch()
+export interface SideBarProps {
+    baseUrl: string
+    drawerOpen: boolean
+    toggleDrawer: DrawerToggleHandler
+    isMobile: boolean
+}
+
+export const SideBar = ({
+    baseUrl,
+    drawerOpen,
+    toggleDrawer,
+    isMobile,
+}: SideBarProps) => {
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const classes = useStyles()
     const { t } = useTranslation()
 
     const sponsors = useOSSSponsors()
 
-    const user = useSelector(getUserSelector)
-    const selectedProjectId = useSelector(getSelectedProjectIdSelector)
+    const user = useAppSelector(getUserSelector)
+    const selectedProjectId = useAppSelector(getSelectedProjectIdSelector)
 
+    // The project layout is only rendered for a logged-in user
     const displayedUserName =
-        user.displayName || (user.email.split('@') || [''])[0]
+        user?.displayName || (user?.email?.split('@') || [''])[0]
 
     return (
         <StyledEngineProvider injectFirst>
@@ -269,7 +283,7 @@ export const SideBar = ({ baseUrl, drawerOpen, toggleDrawer, isMobile }) => {
                                 <ListItemAvatar>
                                     <Avatar
                                         alt={displayedUserName}
-                                        src={user.photoURL}
+                                        src={user?.photoURL}
                                     />
                                 </ListItemAvatar>
                                 <ListItemText

@@ -1,4 +1,4 @@
-import { memo, ReactNode, useEffect, useState } from 'react'
+import { memo, type ReactNode, useEffect, useState } from 'react'
 import logoWhite from '../assets/logo-openfeedback-white.png'
 import { auth, authProvider } from '../firebase'
 import { LoaderMatchParent } from '../baseComponents/customComponent/LoaderMatchParent.tsx'
@@ -48,7 +48,7 @@ export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
     if (loggedInUser && !isSuperAdmin) {
         return (
             <Box color={'white'}>
-                <p>NOT A SUPER ADMIN, YOU CAN'T SEE THIS OUST!</p>
+                <p>NOT A SUPER ADMIN, YOU CAN&apos;T SEE THIS OUST!</p>
                 <Button variant="contained" onClick={() => signOut()}>
                     LOGOUT
                 </Button>

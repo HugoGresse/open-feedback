@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { VoteItemList } from '../../project/settings/votingForm/VoteItemList'
 import { VotingFormFooter } from '../../project/settings/votingForm/VotingFormFooter.tsx'
 import { OrganizationVotingFormSettings } from './OrganizationVotingFormSettings.tsx'
-import { useDispatch, useSelector } from 'react-redux'
 import {
     getOrganizationLanguagesSelector,
     getSelectedOrganizationIdSelector,
@@ -15,14 +14,15 @@ import {
 import { sleep } from '../../../utils/sleep'
 import { useTranslation } from 'react-i18next'
 import { getOrganization } from '../core/actions/getOrganization'
+import { useAppDispatch, useAppSelector } from '../../../store'
 
 export const OrganizationVotingForm = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const { t } = useTranslation()
-    const selectedOrganizationId = useSelector(
+    const selectedOrganizationId = useAppSelector(
         getSelectedOrganizationIdSelector
     )
-    const languages = useSelector(getOrganizationLanguagesSelector)
+    const languages = useAppSelector(getOrganizationLanguagesSelector)
 
     useEffect(() => {
         dispatch(getVoteItems())
@@ -38,9 +38,12 @@ export const OrganizationVotingForm = () => {
                         async () => {
                             await dispatch(saveVoteItems())
                             await sleep(1000) // delay on firestore...
-                            await dispatch(
-                                getOrganization(selectedOrganizationId)
-                            )
+                            // Always set while this page is displayed.
+                            if (selectedOrganizationId) {
+                                await dispatch(
+                                    getOrganization(selectedOrganizationId)
+                                )
+                            }
                             await dispatch(getVoteItems())
                         }
                     )

@@ -1,11 +1,13 @@
+import type { ReactNode } from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import CloseIcon from '@mui/icons-material/Close'
 import IconButton from '@mui/material/IconButton'
-import Drawer from '@mui/material/Drawer'
+import Drawer, { type DrawerProps } from '@mui/material/Drawer'
 import { makeStyles } from '@mui/styles'
+import type { Theme } from '@mui/material/styles'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     paper: {
         maxWidth: 300,
         minWidth: 300,
@@ -19,13 +21,22 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+export interface SidePanelLayoutProps {
+    title?: ReactNode
+    isOpen: boolean
+    onClose: () => void
+    children?: ReactNode
+    // Extra props spread on the Drawer
+    containerProps?: Partial<DrawerProps>
+}
+
 export const SidePanelLayout = ({
     title,
     isOpen,
     onClose,
     children,
     containerProps,
-}) => {
+}: SidePanelLayoutProps) => {
     const classes = useStyles()
 
     return (

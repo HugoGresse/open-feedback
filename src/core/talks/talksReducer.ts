@@ -9,10 +9,23 @@ import {
     REMOVE_TALK_ERROR,
     REMOVE_TALK_SUCCESS,
     SET_TALKS_FILTER,
+    type TalksAction,
 } from './talksActionTypes'
-import { GET_TALK_SUCCESS } from '../../feedback/talk/core/talkActionTypes'
+import {
+    GET_TALK_SUCCESS,
+    type GetTalkSuccessAction,
+} from '../../feedback/talk/core/talkActionTypes'
+import type { TalksMap } from '../models'
 
-const initState = {
+export interface TalksState {
+    list: TalksMap
+    filter: string | null
+    errorTalksLoad: string | null
+    loading: boolean
+    loaded: boolean
+}
+
+const initState: TalksState = {
     list: {},
     filter: null,
     errorTalksLoad: null,
@@ -20,14 +33,17 @@ const initState = {
     loaded: false,
 }
 
-export const talksReducer = (state = initState, { payload, type }) => {
-    switch (type) {
+export const talksReducer = (
+    state: TalksState = initState,
+    action: TalksAction | GetTalkSuccessAction
+): TalksState => {
+    switch (action.type) {
         case GET_TALK_SUCCESS:
             return {
                 ...state,
                 list: {
                     ...state.list,
-                    ...payload,
+                    ...action.payload,
                 },
             }
         case GET_TALKS_LOADING:
@@ -38,14 +54,14 @@ export const talksReducer = (state = initState, { payload, type }) => {
         case GET_TALKS_SUCCESS:
             return {
                 ...state,
-                list: payload,
+                list: action.payload,
                 loading: false,
                 loaded: true,
             }
         case SET_TALKS_FILTER:
             return {
                 ...state,
-                filter: payload,
+                filter: action.payload,
             }
         case ADD_TALK_SUCCESS:
         case EDIT_TALK_SUCCESS:
@@ -53,13 +69,13 @@ export const talksReducer = (state = initState, { payload, type }) => {
                 ...state,
                 list: {
                     ...state.list,
-                    [payload.id]: payload,
+                    [action.payload.id]: action.payload,
                 },
             }
         case REMOVE_TALK_SUCCESS: {
             const {
-                // eslint-disable-next-line no-unused-vars
-                [payload.id]: value,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                [action.payload.id]: value,
                 ...list
             } = state.list
 
@@ -72,14 +88,14 @@ export const talksReducer = (state = initState, { payload, type }) => {
         case EDIT_TALK_ERROR:
         case REMOVE_TALK_ERROR:
             // eslint-disable-next-line no-console
-            console.error(type, payload)
+            console.error(action.type, action.payload)
             return state
         case GET_TALKS_ERROR:
             // eslint-disable-next-line no-console
-            console.error(type, payload)
+            console.error(action.type, action.payload)
             return {
                 ...state,
-                errorTalksLoad: payload,
+                errorTalksLoad: action.payload,
             }
         default:
             return state

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import { VoteItemList } from './VoteItemList'
 import {
     fillDefaultVotingForm,
@@ -15,9 +15,9 @@ import { getProject } from '../../core/actions/getProject'
 import { useTranslation } from 'react-i18next'
 
 export const VotingForm = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const { t } = useTranslation()
-    const languages = useSelector(getLanguagesSelector)
+    const languages = useAppSelector(getLanguagesSelector)
 
     useEffect(() => {
         dispatch(getVoteItems())

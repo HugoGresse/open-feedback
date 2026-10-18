@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import { Link } from 'react-router-dom'
@@ -6,12 +5,13 @@ import { getSpeakersListSelector } from '../../core/speakers/speakerSelectors'
 import { SpeakerList } from '../speaker/SpeakerList.tsx'
 import { getDateFromStartTime } from '../../core/talks/talksUtils'
 import { getProjectIdSelector } from '../project/projectSelectors'
-import { darken, lighten, Typography } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { darken, lighten, type Theme, Typography } from '@mui/material'
+import { useAppSelector } from '../../store'
 import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
+import type { Talk, Vote } from '../../core/models'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     itemContainer: {
         margin: -1,
     },
@@ -54,11 +54,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const TalksItem = ({ talk, userVote }) => {
+interface TalksItemProps {
+    talk: Talk
+    /** A vote of the user on the talk. */
+    userVote?: Vote
+}
+
+export const TalksItem = ({ talk, userVote }: TalksItemProps) => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const speakersEntities = useSelector(getSpeakersListSelector)
-    const currentProjectId = useSelector(getProjectIdSelector)
+    const speakersEntities = useAppSelector(getSpeakersListSelector)
+    const currentProjectId = useAppSelector(getProjectIdSelector)
     const itemClasses = `${classes.paper} ${
         userVote ? classes.paperSelected : ''
     }`
@@ -94,9 +100,4 @@ export const TalksItem = ({ talk, userVote }) => {
             </Link>
         </Grid>
     )
-}
-
-TalksItem.propTypes = {
-    talk: PropTypes.object.isRequired,
-    userVote: PropTypes.object,
 }

@@ -7,7 +7,9 @@ export const getNewProjectId = () => {
 const reservedProjectIds = ['admin', 'l', 'contact', 'help', 'legal']
 
 // Not using Thunks (dispatch, etc)
-export const doesProjectIdExistOrIsAllowed = (projectId) => {
+export const doesProjectIdExistOrIsAllowed = (
+    projectId: string
+): Promise<boolean> => {
     if (reservedProjectIds.includes(projectId)) {
         return Promise.resolve(true)
     }

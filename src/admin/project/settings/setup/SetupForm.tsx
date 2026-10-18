@@ -1,4 +1,5 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../../store'
+import type { ReactNode } from 'react'
 import Box from '@mui/material/Box'
 import { SetupJSON } from '../../setupTypeForms/SetupJSON.tsx'
 import { SetupTypeBox } from './SetupTypeBox.tsx'
@@ -14,11 +15,15 @@ import { TranslatedTypography } from '../../../baseComponents/TranslatedTypograp
 import { editProject } from '../../core/actions/editProject'
 
 export const SetupForm = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const { t } = useTranslation()
-    const project = useSelector(getSelectedProjectSelector)
+    const project = useAppSelector(getSelectedProjectSelector)
 
-    let setupTypeComponent
+    // Rendered under <Project>, which only renders its children once the
+    // project is loaded.
+    if (!project) return null
+
+    let setupTypeComponent: ReactNode
 
     switch (project.setupType) {
         case PROJECT_TYPE_OPENFEEDBACK:
@@ -31,9 +36,10 @@ export const SetupForm = () => {
                     leftColumnTitle={t('settingsSetup.config')}
                     rightColumnTitle={t('settingsSetup.validation')}
                     initialValues={{
-                        projectId: project.config.projectId,
-                        apiKey: project.config.apiKey,
-                        databaseURL: project.config.databaseURL,
+                        // Firestore boundary: a hoverboardv2 project always has its config.
+                        projectId: project.config?.projectId as string,
+                        apiKey: project.config?.apiKey as string,
+                        databaseURL: project.config?.databaseURL as string,
                     }}
                     onSubmit={(values) =>
                         dispatch(
@@ -52,7 +58,8 @@ export const SetupForm = () => {
                     leftColumnTitle={t('settingsSetup.config')}
                     rightColumnTitle={t('settingsSetup.validation')}
                     initialValues={{
-                        jsonUrl: project.config.jsonUrl,
+                        // Firestore boundary: a jsonurl project always has its config.
+                        jsonUrl: project.config?.jsonUrl as string,
                     }}
                     onSubmit={(values) =>
                         dispatch(

@@ -1,8 +1,35 @@
+import type { CSSProperties, ReactNode } from 'react'
 import { COLORS } from '../../../constants/colors'
-import Button from '@mui/material/Button'
+import Button, { type ButtonProps } from '@mui/material/Button'
 import { darken, alpha, lighten } from '@mui/material/styles'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useTheme } from '@mui/material'
+
+/**
+ * The `style` prop of OFButton is a regular inline style object extended with
+ * a few custom design keys read by the component to compute its `sx`.
+ */
+export interface OFButtonStyle extends CSSProperties {
+    design?: 'text'
+    customBg?: string
+    customText?: string
+    type?: 'big' | 'small'
+}
+
+export type OFButtonColor =
+    'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success'
+
+export interface OFButtonProps extends Omit<
+    ButtonProps,
+    'color' | 'style' | 'children'
+> {
+    children?: ReactNode
+    loading?: boolean
+    color?: OFButtonColor
+    style?: OFButtonStyle
+    // Used when rendered as a link (component="a")
+    target?: string
+}
 
 export const OFButton = ({
     children,
@@ -10,7 +37,7 @@ export const OFButton = ({
     color = 'primary',
     style = {},
     ...otherProps
-}) => {
+}: OFButtonProps) => {
     const theme = useTheme()
 
     return (

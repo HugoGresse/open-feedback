@@ -22,6 +22,20 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { DateTime } from 'luxon'
 import { EnforceTrailingSlash } from '../utils/EnforceTrailingSlash.tsx'
 
+// Custom palette keys of the admin theme.
+declare module '@mui/material/styles' {
+    interface PaletteColor {
+        inputLabel?: string
+        buttonSecondaryBackground?: string
+        buttonSecondaryText?: string
+    }
+    interface SimplePaletteColorOptions {
+        inputLabel?: string
+        buttonSecondaryBackground?: string
+        buttonSecondaryText?: string
+    }
+}
+
 const innerTheme = responsiveFontSizes(
     createTheme({
         palette: {
@@ -81,7 +95,6 @@ export function AdminApp() {
                                 <Routes>
                                     <Route element={<EnforceTrailingSlash />}>
                                         <Route
-                                            exact
                                             path="/event/"
                                             element={<Navigate to="/admin/" />}
                                         />
@@ -93,7 +106,6 @@ export function AdminApp() {
                                             }
                                         />
                                         <Route
-                                            exact
                                             path="/:projectId/"
                                             element={
                                                 <Navigate to="/admin/event/:projectId" />

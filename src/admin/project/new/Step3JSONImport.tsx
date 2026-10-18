@@ -1,11 +1,10 @@
 import { useTranslation } from 'react-i18next'
-// @ts-expect-error - JS module without types
 import { NewProjectLayout } from './NewProjectLayout.tsx'
 import { SetupJSONImport } from '../setupTypeForms/SetupJSONImport'
-import { JSONImportFormValues } from '../setupTypeForms/SetupJSONImportForm'
-import { EventData } from '../../../core/setupType/eventDataNormalization'
+import type { JSONImportFormValues } from '../setupTypeForms/SetupJSONImportForm'
+import type { EventData } from '../../../core/setupType/eventDataNormalization'
 
-interface Step3JSONImportProps {
+export interface Step3JSONImportProps {
     stepTitle: string
     submitText: string
     backText: string

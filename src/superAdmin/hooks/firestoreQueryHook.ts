@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import firebase from 'firebase/compat/app'
-import Query = firebase.firestore.Query
-import QuerySnapshot = firebase.firestore.QuerySnapshot
-import DocumentSnapshot = firebase.firestore.DocumentSnapshot
-import DocumentReference = firebase.firestore.DocumentReference
-import DocumentData = firebase.firestore.DocumentData
+import type firebase from 'firebase/compat/app'
+
+type Query = firebase.firestore.Query
+type QuerySnapshot<T> = firebase.firestore.QuerySnapshot<T>
+type DocumentSnapshot<T> = firebase.firestore.DocumentSnapshot<T>
+type DocumentReference<T> = firebase.firestore.DocumentReference<T>
+type DocumentData = firebase.firestore.DocumentData
 
 export type UseQueryResult<T = unknown> = {
     isLoading: boolean
@@ -15,8 +16,9 @@ export type UseQueryResult<T = unknown> = {
     loaded: boolean
 }
 
+// The documents are cast to T: callers state the shape of the collection.
 export const useFirestoreCollection = <T>(
-    query: Query<T>,
+    query: Query,
     requestId: string
 ): UseQueryResult<T[]> => {
     const [isLoading, setLoading] = useState(true)
@@ -42,7 +44,7 @@ export const useFirestoreCollection = <T>(
             query
                 .get()
                 .then((querySnapshot) => {
-                    docTransformer(querySnapshot as QuerySnapshot<DocumentData>)
+                    docTransformer(querySnapshot)
                 })
                 .catch((error) => {
                     setLoading(false)

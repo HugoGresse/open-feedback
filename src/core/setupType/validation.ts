@@ -1,7 +1,67 @@
 import { DateTime } from 'luxon'
 
-export const validate = async (api) => {
-    let result = {
+/** Any source exposing talks & speakers, their content is checked here. */
+export interface ValidationApi {
+    getTalks(): Promise<unknown>
+    getSpeakers(): Promise<unknown>
+}
+
+export interface TalkValidation {
+    idValid: boolean
+    titleValid: boolean
+    startEndTimeValid: boolean
+    trackTitleValid: boolean
+    speakersValid: boolean
+    tagsValid: boolean
+    noSpeakers: number
+    speakersMissing: number
+    talkCount: number
+}
+
+export interface SpeakerValidation {
+    idValid: boolean
+    nameValid: boolean
+    photoUrlValid: boolean
+    speakerCount: number
+}
+
+interface TalksValidationResult {
+    talksObjectFound: boolean
+    talk: TalkValidation
+}
+
+interface SpeakersValidationResult {
+    speakersObjectFound: boolean
+    speaker: SpeakerValidation
+}
+
+export interface ValidationResult
+    extends TalksValidationResult, SpeakersValidationResult {
+    dataAvailable: boolean
+    /** Missing when the data could not be loaded. */
+    isSuccessful?: boolean
+}
+
+// Raw, unchecked entries of the talks/speakers maps (JSON boundary).
+interface RawTalk {
+    id?: unknown
+    title?: unknown
+    startTime?: string
+    endTime?: string
+    tags?: unknown
+    speakers?: unknown
+}
+
+interface RawSpeaker {
+    id?: unknown
+    name?: unknown
+    photoUrl?: string
+}
+
+export const validate = async (
+    api: ValidationApi
+): Promise<ValidationResult> => {
+    const result: ValidationResult = {
         dataAvailable: false,
         speakersObjectFound: false,
         talksObjectFound: false,
@@ -51,8 +111,11 @@ export const validate = async (api) => {
     return result
 }
 
-const validateTalks = (talks, speakers) => {
-    const result = {
+const validateTalks = (
+    talks: unknown,
+    speakers: unknown
+): TalksValidationResult => {
+    const result: TalksValidationResult = {
         talksObjectFound: true,
         talk: {
             idValid: true,
@@ -83,7 +146,9 @@ const validateTalks = (talks, speakers) => {
         }
     }
 
-    const talkKeys = Object.keys(talks)
+    const talksMap = talks as Record<string, RawTalk>
+    const speakersMap = speakers as Record<string, unknown> | null | undefined
+    const talkKeys = Object.keys(talksMap)
     if (talkKeys.length <= 0) {
         return {
             talksObjectFound: false,
@@ -100,9 +165,9 @@ const validateTalks = (talks, speakers) => {
             },
         }
     } else {
-        let tempTalk
+        let tempTalk: RawTalk
         talkKeys.forEach((key) => {
-            tempTalk = talks[key]
+            tempTalk = talksMap[key]
             if (tempTalk || typeof talks === 'object') {
                 result.talk.talkCount++
 
@@ -132,8 +197,9 @@ const validateTalks = (talks, speakers) => {
                     if (tempTalk.speakers.constructor !== Array) {
                         result.talk.speakersValid = false
                     } else {
-                        tempTalk.speakers.forEach((speakerId) => {
-                            if (!speakers || !speakers[speakerId]) {
+                        const talkSpeakers = tempTalk.speakers as string[]
+                        talkSpeakers.forEach((speakerId) => {
+                            if (!speakersMap || !speakersMap[speakerId]) {
                                 result.talk.speakersMissing++
                             }
                         })
@@ -146,8 +212,8 @@ const validateTalks = (talks, speakers) => {
     return result
 }
 
-const validateSpeakers = (speakers) => {
-    const result = {
+const validateSpeakers = (speakers: unknown): SpeakersValidationResult => {
+    const result: SpeakersValidationResult = {
         speakersObjectFound: true,
         speaker: {
             idValid: true,
@@ -168,7 +234,8 @@ const validateSpeakers = (speakers) => {
         }
     }
 
-    const speakerKeys = Object.keys(speakers)
+    const speakersMap = speakers as Record<string, RawSpeaker>
+    const speakerKeys = Object.keys(speakersMap)
     if (speakerKeys.length <= 0) {
         return {
             speakersObjectFound: true,
@@ -180,9 +247,9 @@ const validateSpeakers = (speakers) => {
             },
         }
     } else {
-        let speaker
+        let speaker: RawSpeaker
         speakerKeys.forEach((key) => {
-            speaker = speakers[key]
+            speaker = speakersMap[key]
             result.speaker.speakerCount++
             if (key !== speaker.id) {
                 result.speaker.idValid = false

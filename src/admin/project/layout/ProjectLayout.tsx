@@ -1,9 +1,9 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, type ReactNode } from 'react'
 import { SideBar } from './SideBar.tsx'
 import { Header } from './Header.tsx'
 import { HEX_COLORS } from '../../../constants/colors'
 import { Helmet } from 'react-helmet-async'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../../store'
 import { getSelectedProjectSelector } from '../core/projectSelectors'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
@@ -14,7 +14,6 @@ import Box from '@mui/material/Box'
 
 const innerTheme = createTheme({
     palette: {
-        type: 'light',
         primary: {
             light: '#ff9c76',
             main: '#ff6a49',
@@ -37,13 +36,28 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-export const ProjectLayout = ({ baseUrl, children }) => {
+/** What the drawer toggle reads from the triggering event. */
+export interface DrawerToggleEvent {
+    type?: string
+    key?: string
+}
+
+export type DrawerToggleHandler = (event: DrawerToggleEvent) => void
+
+export interface ProjectLayoutProps {
+    baseUrl: string
+    children?: ReactNode
+}
+
+export const ProjectLayout = ({ baseUrl, children }: ProjectLayoutProps) => {
     const classes = useStyles()
 
-    const project = useSelector(getSelectedProjectSelector)
-    const [scrollTargetRef, setRef] = useState(undefined)
+    const project = useAppSelector(getSelectedProjectSelector)
+    const [scrollTargetRef, setRef] = useState<HTMLDivElement | undefined>(
+        undefined
+    )
 
-    const scrollRef = useCallback((node) => {
+    const scrollRef = useCallback((node: HTMLDivElement | null) => {
         if (node !== null) {
             setRef(node)
         }
@@ -55,21 +69,23 @@ export const ProjectLayout = ({ baseUrl, children }) => {
         drawerOpen: !isMobile,
     })
 
-    const toggleDrawer = (open) => (event) => {
-        if (
-            event.type === 'keydown' &&
-            (event.key === 'Tab' || event.key === 'Shift')
-        ) {
-            return
-        }
+    const toggleDrawer =
+        (open: boolean): DrawerToggleHandler =>
+        (event) => {
+            if (
+                event.type === 'keydown' &&
+                (event.key === 'Tab' || event.key === 'Shift')
+            ) {
+                return
+            }
 
-        if (!isMobile) {
-            // Menu always open is mobile
-            return
-        }
+            if (!isMobile) {
+                // Menu always open is mobile
+                return
+            }
 
-        setState({ ...state, drawerOpen: open })
-    }
+            setState({ ...state, drawerOpen: open })
+        }
 
     return (
         <Box

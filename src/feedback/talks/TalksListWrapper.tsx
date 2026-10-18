@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../store'
 import { getTalks } from '../../core/talks/talksActions'
 import { setSelectedDate } from '../project/projectActions'
 
@@ -27,19 +27,21 @@ import {
 } from '../project/projectSelectors'
 
 export const TalksListWrapper = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const routerParams = useParams()
     const navigate = useNavigate()
 
-    const project = useSelector(getProjectSelector)
-    const errorTalksLoad = useSelector(getTalksLoadError)
-    const talks = useSelector(getTalksAsArraySelector)
-    const currentTalksByTrack = useSelector(getCurrentTalksGroupByTrackSelector)
-    const talkIsLoading = useSelector(isTalksLoadingSelector)
-    const filter = useSelector(getTalksFilterSelector)
-    const userTalkVote = useSelector(getVotesByTalkSelector)
-    const extendedSearchTalks = useSelector(getExtendedSearchTalksSelector)
-    const selectedDate = useSelector(getProjectSelectedDateSelector)
+    const project = useAppSelector(getProjectSelector)
+    const errorTalksLoad = useAppSelector(getTalksLoadError)
+    const talks = useAppSelector(getTalksAsArraySelector)
+    const currentTalksByTrack = useAppSelector(
+        getCurrentTalksGroupByTrackSelector
+    )
+    const talkIsLoading = useAppSelector(isTalksLoadingSelector)
+    const filter = useAppSelector(getTalksFilterSelector)
+    const userTalkVote = useAppSelector(getVotesByTalkSelector)
+    const extendedSearchTalks = useAppSelector(getExtendedSearchTalksSelector)
+    const selectedDate = useAppSelector(getProjectSelectedDateSelector)
 
     useEffect(() => {
         dispatch(getTalks())

@@ -8,8 +8,12 @@ import {
     getOrganizationLanguagesSelector,
     hideVotesUntilUserVoteSelector,
 } from '../core/organizationSelectors'
-import { useDispatch, useSelector, useStore } from 'react-redux'
-import { editOrganization } from '../core/actions/editOrganization'
+import { useStore } from 'react-redux'
+import {
+    editOrganization,
+    type EditOrganizationData,
+} from '../core/actions/editOrganization'
+import { type RootState, useAppDispatch, useAppSelector } from '../../../store'
 const SettingsForm = lazy(() =>
     import('../../project/settings/setup/SettingsForm.tsx').then((module) => ({
         default: module.SettingsForm,
@@ -17,21 +21,27 @@ const SettingsForm = lazy(() =>
 )
 
 export const OrganizationVotingFormSettings = () => {
-    const dispatch = useDispatch()
-    const disableSoloTalkRedirect = useSelector(disableSoloTalkRedirectSelector)
-    const hideVotesUntilUserVote = useSelector(hideVotesUntilUserVoteSelector)
+    const dispatch = useAppDispatch()
+    const disableSoloTalkRedirect = useAppSelector(
+        disableSoloTalkRedirectSelector
+    )
+    const hideVotesUntilUserVote = useAppSelector(
+        hideVotesUntilUserVoteSelector
+    )
     // Doing this prevents the selector to be connected to redux directly, thus prevent future update of initialValues
     const initialLanguages = getOrganizationLanguagesSelector(
-        useStore().getState()
+        useStore<RootState>().getState()
     )
-    const displayFullDates = useSelector(displayFullEventDatesSelector)
+    const displayFullDates = useAppSelector(displayFullEventDatesSelector)
 
     return (
         <Box padding={2} paddingTop={0}>
             <OrgDataInfo />
             <Suspense fallback={<LoaderMatchParent height="100px" />}>
                 <SettingsForm
-                    onSave={(settings) => dispatch(editOrganization(settings))}
+                    onSave={(settings: EditOrganizationData) =>
+                        dispatch(editOrganization(settings))
+                    }
                     initialLanguages={initialLanguages}
                     disableSoloTalkRedirect={disableSoloTalkRedirect}
                     hideVotesUntilUserVote={hideVotesUntilUserVote}

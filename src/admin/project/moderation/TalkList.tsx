@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { TalkListItem } from './TalkListItem.tsx'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../store'
 import { getSpeakersListSelector } from '../../../core/speakers/speakerSelectors'
 import Grid from '@mui/material/Grid'
 import { OFListHeader } from '../../baseComponents/layouts/OFListHeader.tsx'
@@ -21,20 +21,25 @@ import { SimpleDialog } from '../../baseComponents/layouts/SimpleDialog.tsx'
 import { TranslatedTypography } from '../../baseComponents/TranslatedTypography.tsx'
 import { VOTE_STATUS_ACTIVE, VOTE_STATUS_HIDDEN } from '../../../core/contants'
 import { OFPagination } from '../../baseComponents/layouts/OFPagination.tsx'
+import type { ModerationTextVote } from './moderationActionTypes'
 
 const itemPerPage = 10
 export const TalkList = () => {
-    const dispatch = useDispatch()
-    const talks = useSelector(getFilteredTalksAsMapSelector)
-    const votesWithTalkId = useSelector(getTextVotesSelector)
-    const filter = useSelector(getTalksFilterSelector)
-    const speakersMap = useSelector(getSpeakersListSelector)
-    const isVotesLoaded = useSelector(isTextVotesLoadedSelector)
+    const dispatch = useAppDispatch()
+    const talks = useAppSelector(getFilteredTalksAsMapSelector)
+    const votesWithTalkId = useAppSelector(getTextVotesSelector)
+    const filter = useAppSelector(getTalksFilterSelector)
+    const speakersMap = useAppSelector(getSpeakersListSelector)
+    const isVotesLoaded = useAppSelector(isTextVotesLoadedSelector)
     const { t } = useTranslation()
 
     const [currentPage, setPage] = useState(1)
-    const [selectedVote, setSelectedVote] = useState(null)
-    const [changingVote, setChangingVote] = useState(null)
+    const [selectedVote, setSelectedVote] = useState<ModerationTextVote | null>(
+        null
+    )
+    const [changingVote, setChangingVote] = useState<ModerationTextVote | null>(
+        null
+    )
     const [isVoteStatusChanging, setVoteStatusChange] = useState(false)
 
     const talkKeys = Object.keys(votesWithTalkId)
@@ -46,7 +51,7 @@ export const TalkList = () => {
     const isChangingVoteHide =
         changingVote && changingVote.status === VOTE_STATUS_ACTIVE
 
-    const movePage = (newPage) => {
+    const movePage = (newPage: number) => {
         setPage(newPage)
     }
 
@@ -64,7 +69,9 @@ export const TalkList = () => {
         <>
             <OFListHeader
                 filterValue={filter}
-                filterChange={(value) => dispatch(setTalksFilter(value))}
+                filterChange={(value: string) =>
+                    dispatch(setTalksFilter(value))
+                }
             />
 
             <Grid container component="ul">
@@ -79,7 +86,7 @@ export const TalkList = () => {
                             key={talkId}
                             speakers={speakersMap}
                             votes={votesWithTalkId[talkId]}
-                            onSpeakerClicked={(value) =>
+                            onSpeakerClicked={(value: string) =>
                                 dispatch(setTalksFilter(value))
                             }
                             onVoteExpandClick={setSelectedVote}
@@ -93,7 +100,7 @@ export const TalkList = () => {
                         talkKeys ? Math.ceil(talkKeys.length / itemPerPage) : 0
                     }
                     current={currentPage}
-                    onChange={(event, page) => movePage(page)}
+                    onChange={(_event: unknown, page: number) => movePage(page)}
                 />
             </Grid>
 
@@ -113,6 +120,10 @@ export const TalkList = () => {
                     setVoteStatusChange(false)
                 }}
                 onConfirm={async () => {
+                    // The dialog is only open while a vote is selected
+                    if (!changingVote) {
+                        return
+                    }
                     setVoteStatusChange(true)
                     if (changingVote.status === VOTE_STATUS_HIDDEN) {
                         await dispatch(unhideVote(changingVote))

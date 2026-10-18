@@ -7,6 +7,9 @@ import { TextVoteList } from './TextVoteList.tsx'
 import { VOTE_STATUS_ACTIVE, VOTE_STATUS_HIDDEN } from '../../../core/contants'
 import { CollapsePanel } from '../../baseComponents/layouts/CollapsePanel.tsx'
 import { useTranslation } from 'react-i18next'
+import type { SpeakersMap, Talk } from '../../../core/models'
+import type { TextVoteListProps } from './TextVoteList.tsx'
+import type { ModerationTextVote } from './moderationActionTypes'
 
 const useStyles = makeStyles(() => ({
     headerCell: {
@@ -19,6 +22,15 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
+export interface TalkListItemProps {
+    talk: Talk
+    speakers: SpeakersMap
+    votes: ModerationTextVote[]
+    onSpeakerClicked: (speakerName: string) => void
+    onVoteExpandClick: TextVoteListProps['onVoteExpandClick']
+    onVoteHideClick: TextVoteListProps['onVoteHideClick']
+}
+
 export const TalkListItem = ({
     talk,
     speakers,
@@ -26,7 +38,7 @@ export const TalkListItem = ({
     onSpeakerClicked,
     onVoteExpandClick,
     onVoteHideClick,
-}) => {
+}: TalkListItemProps) => {
     const classes = useStyles()
     const { t } = useTranslation()
 

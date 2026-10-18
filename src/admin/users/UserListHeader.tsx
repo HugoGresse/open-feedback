@@ -1,9 +1,20 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
 import { getUsersFilterSelector } from './core/usersSelectors'
 import { OFListHeader } from '../baseComponents/layouts/OFListHeader.tsx'
 import { UserInvitePanel } from './UserInvitePanel.tsx'
 import { useTranslation } from 'react-i18next'
+import type { User } from '../../core/models'
+import { useAppSelector } from '../../store'
+
+export interface UserListHeaderProps {
+    onFilterChange: (value: string) => void
+    /** Resolves to a truthy value when the invite succeeded. */
+    onUserInvite: (email: string, userType: string) => Promise<unknown>
+    onSidePanelOpen?: () => void
+    /** Users suggested in the invite email autocomplete. */
+    usersDetails?: Record<string, User>
+    userTypes?: readonly string[]
+}
 
 export const UserListHeader = ({
     onFilterChange,
@@ -11,14 +22,14 @@ export const UserListHeader = ({
     onSidePanelOpen,
     usersDetails,
     userTypes = ['members'],
-}) => {
-    const filter = useSelector(getUsersFilterSelector)
+}: UserListHeaderProps) => {
+    const filter = useAppSelector(getUsersFilterSelector)
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
     const { t } = useTranslation()
 
     const openSidePanel = () => {
         setSidePanelOpen(true)
-        onSidePanelOpen && onSidePanelOpen()
+        onSidePanelOpen?.()
     }
 
     return (

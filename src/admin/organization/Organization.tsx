@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { type ReactNode, useEffect } from 'react'
+import type { PathMatch } from 'react-router-dom'
 import { LoaderMatchParent } from '../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import { Layout404 } from '../baseComponents/Layout404.tsx'
 import {
@@ -10,19 +10,27 @@ import {
     selectOrganization,
     unselectOrganization,
 } from './core/actions/selectUnselectActions'
+import { useAppDispatch, useAppSelector } from '../../store'
 
-export const Organization = ({ match, children }) => {
-    const dispatch = useDispatch()
+export interface OrganizationProps {
+    match: PathMatch<'organizationId'>
+    children?: ReactNode
+}
+
+export const Organization = ({ match, children }: OrganizationProps) => {
+    const dispatch = useAppDispatch()
+    // Always set: the route pattern is /admin/org/:organizationId/*
+    const organizationId = match.params.organizationId as string
 
     useEffect(() => {
-        dispatch(selectOrganization(match.params.organizationId))
+        dispatch(selectOrganization(organizationId))
         return () => {
-            dispatch(unselectOrganization(null))
+            dispatch(unselectOrganization())
         }
-    }, [dispatch, match.params.organizationId])
+    }, [dispatch, organizationId])
 
-    const selectedOrganization = useSelector(getSelectedOrganizationSelector)
-    const irOrganizationsLoaded = useSelector(isOrganizationsLoadedSelector)
+    const selectedOrganization = useAppSelector(getSelectedOrganizationSelector)
+    const irOrganizationsLoaded = useAppSelector(isOrganizationsLoadedSelector)
 
     if (selectedOrganization) return children
     if (irOrganizationsLoaded && !selectedOrganization) return <Layout404 />

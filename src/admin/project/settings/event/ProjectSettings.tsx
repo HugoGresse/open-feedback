@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../../../store'
 import { OFCard } from '../../../baseComponents/OFCard.tsx'
 import CardContent from '@mui/material/CardContent'
 import { getSelectedProjectSelector } from '../../core/projectSelectors'
@@ -6,7 +6,7 @@ import { LoaderMatchParent } from '../../../../baseComponents/customComponent/Lo
 import { ProjectSettingsForm } from './ProjectSettingsForm.tsx'
 
 export const ProjectSettings = () => {
-    const project = useSelector(getSelectedProjectSelector)
+    const project = useAppSelector(getSelectedProjectSelector)
 
     if (!project) {
         return <LoaderMatchParent />

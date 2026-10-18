@@ -6,12 +6,19 @@ import Box from '@mui/material/Box'
 import { OFButton } from '../../baseComponents/button/OFButton.tsx'
 import { useTranslation } from 'react-i18next'
 
+export interface ProjectIdChangeProps {
+    anchorElement: HTMLElement | null
+    disableSave: boolean
+    onSave: () => void
+    onCancel: () => void
+}
+
 export const ProjectIdChange = ({
     anchorElement,
     disableSave,
     onSave,
     onCancel,
-}) => {
+}: ProjectIdChangeProps) => {
     const { t } = useTranslation()
 
     return (

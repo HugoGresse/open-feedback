@@ -8,11 +8,17 @@ import EditIcon from '@mui/icons-material/Edit'
 import { Link } from 'react-router-dom'
 import { ROUTE_ADMIN, ROUTE_ORGANIZATION_SEGMENT } from '../RoutingMap'
 
+interface OrganizationHeaderProps {
+    title: string
+    isOrganization?: boolean
+    organizationId?: string | null
+}
+
 export const OrganizationHeader = ({
     title,
     isOrganization = false,
     organizationId = null,
-}) => {
+}: OrganizationHeaderProps) => {
     const { t } = useTranslation()
     const theme = useTheme()
 

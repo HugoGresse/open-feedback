@@ -1,12 +1,17 @@
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../store'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
 import { DateTime } from 'luxon'
 import { getProjectSelectedDateSelector } from '../project/projectSelectors'
 
-export const SearchNoMatch = ({ otherMatch }) => {
+interface SearchNoMatchProps {
+    /** Some talks of other dates match the search. */
+    otherMatch: boolean
+}
+
+export const SearchNoMatch = ({ otherMatch }: SearchNoMatchProps) => {
     const { t } = useTranslation()
-    const selectedDate = useSelector(getProjectSelectedDateSelector)
+    const selectedDate = useAppSelector(getProjectSelectedDateSelector)
 
     return (
         <Typography color="textPrimary">

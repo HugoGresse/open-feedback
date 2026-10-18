@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { SidePanelLayout } from '../SidePanelLayout.tsx'
 import { useField } from 'formik'
 import { makeStyles } from '@mui/styles'
@@ -6,11 +6,14 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
 import { OFFormControl } from '../../../form/formControl/OFFormControl.tsx'
 import { useDropzone } from 'react-dropzone'
 import { HEX_COLORS } from '../../../../../constants/colors'
-import { SidePanelUploadForm } from './SidePanelUploadForm.tsx'
+import {
+    SidePanelUploadForm,
+    type SidePanelUpload,
+} from './SidePanelUploadForm.tsx'
 import { uploadImage } from '../../../../project/utils/storage/uploadImage'
-import { useDispatch } from 'react-redux'
 import { addNotification } from '../../../../notification/notifcationActions'
 import { useTranslation } from 'react-i18next'
+import { useAppDispatch } from '../../../../../store.ts'
 
 const useStyles = makeStyles(() => ({
     imageButton: {
@@ -38,7 +41,7 @@ const useStyles = makeStyles(() => ({
         width: '100%',
     },
     dropZone: {
-        border: (props) =>
+        border: (props: { isDragActive?: boolean }) =>
             `3px dashed ${
                 props.isDragActive ? 'royalblue' : HEX_COLORS.RED_ORANGE
             }`,
@@ -51,6 +54,16 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
+export interface SidePanelUploadLayoutProps {
+    // Label of the field, also used in the preview image alt
+    name?: string
+    fieldName: string
+    helpText?: ReactNode
+    isSubmitting?: boolean
+    title?: ReactNode
+    finalImageWidthHeight?: number
+}
+
 export const SidePanelUploadLayout = ({
     name,
     fieldName,
@@ -58,14 +71,14 @@ export const SidePanelUploadLayout = ({
     isSubmitting,
     title,
     finalImageWidthHeight = 500,
-}) => {
+}: SidePanelUploadLayoutProps) => {
     const { t } = useTranslation()
-    const classes = useStyles()
-    const dispatch = useDispatch()
+    // Same as the makeStyles default props: `dropZone` is not rendered here.
+    const classes = useStyles({})
+    const dispatch = useAppDispatch()
     const [isOpen, setOpen] = useState(false)
-    // eslint-disable-next-line
-    const [field, meta, helpers] = useField(fieldName)
-    const [upload, setUpload] = useState(null)
+    const [field, , helpers] = useField<string>(fieldName)
+    const [upload, setUpload] = useState<SidePanelUpload | null>(null)
     const [uploading, setUploading] = useState(false)
 
     const uploadAndSave = async () => {
@@ -90,14 +103,14 @@ export const SidePanelUploadLayout = ({
                 addNotification({
                     type: 'error',
                     i18nkey: 'common.dropzone.image.failUpload',
-                    message: error.message,
+                    message: error instanceof Error ? error.message : undefined,
                 })
             )
             setUploading(false)
         }
     }
 
-    const onDrop = useCallback((acceptedFiles) => {
+    const onDrop = useCallback((acceptedFiles: File[]) => {
         if (acceptedFiles.length > 0) {
             setUpload({
                 file: acceptedFiles[0],

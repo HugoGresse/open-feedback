@@ -10,6 +10,36 @@ import { SpeakerAddEditPanel } from '../speakers/SpeakerAddEditPanel.tsx'
 import { useTranslation } from 'react-i18next'
 import { DateTime } from 'luxon'
 import { TalkStartEndTimeFields } from './TalkStartEndTimeFields.tsx'
+import type { Speaker, Talk } from '../../../core/models'
+import type { SpeakerFormValues } from '../speakers/SpeakerAddEditPanel.tsx'
+
+/** Values of the talk form: a new talk, or the edited one (with its id). */
+export interface TalkFormValues extends Omit<
+    Talk,
+    'id' | 'startTime' | 'endTime' | 'speakers'
+> {
+    id?: string
+    startTime: DateTime | null
+    endTime: DateTime | null
+    speakers: Speaker[]
+}
+
+export interface TalkAddEditPanelProps {
+    isOpen: boolean
+    /** The edited talk, `null` to add a new one. */
+    talk: TalkFormValues | null
+    /** ISO date-time of the project vote start. */
+    projectVoteStartTime?: string | null
+    existingSpeakers: Speaker[]
+    existingTags: string[]
+    existingTracks: string[]
+    onClose: () => void
+    onSubmit: (
+        talk: TalkFormValues,
+        shouldContinueAfterSubmit: boolean
+    ) => Promise<unknown>
+    onSpeakerAdd: (speaker: SpeakerFormValues) => Promise<Speaker | undefined>
+}
 
 export const TalkAddEditPanel = ({
     isOpen,
@@ -21,7 +51,7 @@ export const TalkAddEditPanel = ({
     onClose,
     onSubmit,
     onSpeakerAdd,
-}) => {
+}: TalkAddEditPanelProps) => {
     const [shouldContinueAfterSubmit, setContinueAfterSubmit] = useState(false)
     const [addingASpeaker, setSpeakerAdd] = useState(false)
     const { t } = useTranslation()
@@ -33,7 +63,7 @@ export const TalkAddEditPanel = ({
                 onClose={onClose}
                 title={talk ? t('talks.titleEdit') : t('talks.titleAdd')}
             >
-                <Formik
+                <Formik<TalkFormValues>
                     validationSchema={object().shape({
                         title: string()
                             .trim()
@@ -176,7 +206,10 @@ export const TalkAddEditPanel = ({
                                                 ...values.speakers,
                                                 speaker,
                                             ])
-                                            document.activeElement.blur()
+                                            // DOM boundary: an element has the focus (the form button)
+                                            ;(
+                                                document.activeElement as HTMLElement
+                                            ).blur()
                                         }
                                     )
                                 }}

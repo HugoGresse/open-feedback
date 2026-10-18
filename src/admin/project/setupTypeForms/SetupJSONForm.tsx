@@ -12,6 +12,7 @@ import jsonModel from './jsonmodel.json'
 import clipboardCopy from 'clipboard-copy'
 import Button from '@mui/material/Button'
 import { useTranslation } from 'react-i18next'
+import type { JsonUrlConfig } from '../../../core/models'
 
 const useStyles = makeStyles(() => ({
     jsonShowButton: {
@@ -35,6 +36,15 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
+interface SetupJSONFormProps {
+    onBack?: (values: JsonUrlConfig) => void
+    onSubmit: (config: JsonUrlConfig) => void
+    submitText?: string
+    backText?: string
+    initialValues: JsonUrlConfig
+    onFormChange?: (values: JsonUrlConfig) => void
+}
+
 export const SetupJSONForm = ({
     onBack,
     onSubmit,
@@ -42,13 +52,13 @@ export const SetupJSONForm = ({
     backText,
     initialValues,
     onFormChange,
-}) => {
+}: SetupJSONFormProps) => {
     const classes = useStyles()
     const [isExampleOpen, setExampleOpen] = useState(false)
     const { t } = useTranslation()
 
     return (
-        <Formik
+        <Formik<JsonUrlConfig>
             validationSchema={object().shape({
                 jsonUrl: string()
                     .url(t('settingsSetup.json.jsonUrlValid'))
@@ -119,7 +129,7 @@ export const SetupJSONForm = ({
                         {backText && (
                             <OFButton
                                 disabled={isSubmitting}
-                                onClick={() => onBack(values)}
+                                onClick={() => onBack?.(values)}
                                 style={{
                                     type: 'big',
                                     design: 'text',

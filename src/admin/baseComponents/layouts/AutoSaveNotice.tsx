@@ -4,8 +4,13 @@ import CheckIcon from '@mui/icons-material/Check'
 import Fade from '@mui/material/Fade'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
+import type { DateTime } from 'luxon'
 
-export const AutoSaveNotice = ({ saveDate }) => {
+export interface AutoSaveNoticeProps {
+    saveDate?: DateTime | null
+}
+
+export const AutoSaveNotice = ({ saveDate }: AutoSaveNoticeProps) => {
     const [isDisplayed, setDisplay] = useState(false)
     const { t } = useTranslation()
 

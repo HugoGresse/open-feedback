@@ -3,15 +3,20 @@ import { SearchBar } from './SearchBar.tsx'
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import CalendarToday from '@mui/icons-material/CalendarToday'
 import { grey } from '@mui/material/colors'
-import { darken } from '@mui/material/styles'
+import { darken, type Theme } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '@mui/material'
 import { isInIFrame } from '../utils/isInIFrame'
 import { useQuery } from '../../utils/useQuery'
 import Hidden from '@mui/material/Hidden'
+import type { Project } from '../../core/models'
 
-const useStyles = makeStyles((theme) => ({
+interface HeaderStyleProps {
+    inIFrame: boolean
+}
+
+const useStyles = makeStyles((theme: Theme) => ({
     logo: {
         marginRight: 20,
         maxHeight: 60,
@@ -74,9 +79,10 @@ const useStyles = makeStyles((theme) => ({
         top: 0,
         left: 'auto',
         right: 0,
-        position: (props) => (props.inIFrame ? 'relative' : 'sticky'),
+        position: (props: HeaderStyleProps) =>
+            props.inIFrame ? 'relative' : 'sticky',
         zIndex: 3,
-        boxShadow: (props) =>
+        boxShadow: (props: HeaderStyleProps) =>
             props.inIFrame
                 ? 'none'
                 : `0px 1px 15px ${theme.palette.headerShadow}`,
@@ -89,7 +95,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const Header = ({ project }) => {
+interface HeaderProps {
+    project: Project
+}
+
+export const Header = ({ project }: HeaderProps) => {
     const classes = useStyles({
         inIFrame: isInIFrame(),
     })
@@ -136,7 +146,9 @@ export const Header = ({ project }) => {
                         <Typography
                             variant="h1"
                             color="textPrimary"
-                            aria-label={project.hideEventName && project.name}
+                            aria-label={
+                                project.hideEventName ? project.name : undefined
+                            }
                         >
                             {!project.hideEventName && project.name}
                         </Typography>

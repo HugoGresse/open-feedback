@@ -1,8 +1,8 @@
-import Paper from '@mui/material/Paper'
-import { darken, alpha, lighten } from '@mui/material/styles'
+import Paper, { type PaperProps } from '@mui/material/Paper'
+import { darken, alpha, lighten, type Theme } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
         boxShadow: 'none',
         border: `1px solid
@@ -14,7 +14,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const OFPaper = (props) => {
+export type OFPaperProps = PaperProps
+
+export const OFPaper = (props: OFPaperProps) => {
     const classes = useStyles()
 
     return (

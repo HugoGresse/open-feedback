@@ -1,12 +1,22 @@
+import type { HTMLAttributes, MouseEventHandler, ReactNode } from 'react'
 import styled from 'styled-components'
 import CloseIcon from '@mui/icons-material/Close'
 import { HEX_COLORS } from '../../../../constants/colors'
-export const Tag = styled(({ label, onDelete, ...props }) => (
+
+export interface TagProps extends HTMLAttributes<HTMLDivElement> {
+    label: ReactNode
+    onDelete?: MouseEventHandler<SVGSVGElement>
+    disabled?: boolean
+}
+
+const TagBase = ({ label, onDelete, ...props }: TagProps) => (
     <div {...props}>
         <span>{label}</span>
         <CloseIcon onClick={onDelete} />
     </div>
-))`
+)
+
+export const Tag = styled(TagBase)`
   display: flex;
   align-items: center;
   height: 24px;

@@ -1,3 +1,5 @@
+import type { Organization } from '../../../../core/models'
+import type { AppThunk } from '../../../../store'
 import { fireStoreMainInstance } from '../../../../firebase.ts'
 import {
     GET_ORGANIZATION_SUCCESS,
@@ -5,41 +7,44 @@ import {
 } from '../organizationActionTypes'
 import { addNotification } from '../../../notification/notifcationActions'
 
-export const getOrganization = (organizationId) => (dispatch) => {
-    return fireStoreMainInstance
-        .collection('organizations')
-        .doc(organizationId)
-        .get()
-        .then((docSnapshot) => {
-            if (docSnapshot.exists) {
-                const data = {
-                    id: organizationId,
-                    ...docSnapshot.data(),
+export const getOrganization =
+    (organizationId: string): AppThunk<Promise<Organization | undefined>> =>
+    (dispatch) => {
+        return fireStoreMainInstance
+            .collection('organizations')
+            .doc(organizationId)
+            .get()
+            .then((docSnapshot) => {
+                if (docSnapshot.exists) {
+                    const data = {
+                        id: organizationId,
+                        ...docSnapshot.data(),
+                    } as Organization
+                    dispatch({
+                        type: GET_ORGANIZATION_SUCCESS,
+                        payload: data,
+                    })
+                    return data
+                } else {
+                    dispatch(
+                        addNotification({
+                            type: 'error',
+                            i18nkey: 'organization.errorsLoadOrganizations',
+                        })
+                    )
                 }
+            })
+            .catch((err: unknown) => {
                 dispatch({
-                    type: GET_ORGANIZATION_SUCCESS,
-                    payload: data,
+                    type: GET_ORGANIZATIONS_ERROR,
+                    payload: String(err),
                 })
-                return data
-            } else {
                 dispatch(
                     addNotification({
                         type: 'error',
                         i18nkey: 'organization.errorsLoadOrganizations',
                     })
                 )
-            }
-        })
-        .catch((err) => {
-            dispatch({
-                type: GET_ORGANIZATIONS_ERROR,
-                payload: err.toString(),
+                return undefined
             })
-            dispatch(
-                addNotification({
-                    type: 'error',
-                    i18nkey: 'organization.errorsLoadOrganizations',
-                })
-            )
-        })
-}
+    }

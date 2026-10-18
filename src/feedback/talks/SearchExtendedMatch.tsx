@@ -1,14 +1,20 @@
-import { useDispatch } from 'react-redux'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
 import Box from '@mui/material/Box'
 import { makeStyles } from '@mui/styles'
+import type { Theme } from '@mui/material/styles'
 import { grey } from '@mui/material/colors'
 import Grid from '@mui/material/Grid'
 import { TalksItem } from './TalksItem.tsx'
-import { setSelectedTalk } from '../talk/core/talkActions'
+import type { Talk, Vote } from '../../core/models'
 
-const useStyles = makeStyles((theme) => ({
+interface SearchExtendedMatchProps {
+    talks: Talk[]
+    /** The user votes keyed by talk id. */
+    userTalkVote: Record<string, Vote>
+}
+
+const useStyles = makeStyles((theme: Theme) => ({
     container: {
         padding: 16,
         borderRadius: 4,
@@ -23,10 +29,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export const SearchExtendedMatch = ({ talks, userTalkVote }) => {
+export const SearchExtendedMatch = ({
+    talks,
+    userTalkVote,
+}: SearchExtendedMatchProps) => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const dispatch = useDispatch()
 
     if (talks.length === 0) {
         return null
@@ -46,7 +54,6 @@ export const SearchExtendedMatch = ({ talks, userTalkVote }) => {
                         key={key}
                         talk={talk}
                         userVote={userTalkVote[talk.id]}
-                        onClick={(talk) => dispatch(setSelectedTalk(talk.id))}
                     />
                 ))}
             </Grid>

@@ -8,7 +8,15 @@ import { Box } from '@mui/material'
 import { OrganizationSettings } from '../settings/OrganizationSettings.tsx'
 import SettingsIcon from '@mui/icons-material/Settings'
 
-export const OrganizationHeader = ({ organizationName, onClose }) => {
+export interface OrganizationHeaderProps {
+    organizationName: string
+    onClose: () => void
+}
+
+export const OrganizationHeader = ({
+    organizationName,
+    onClose,
+}: OrganizationHeaderProps) => {
     const { t } = useTranslation()
     const [settingsDisplayed, setSettingsDisplayed] = useState(false)
 

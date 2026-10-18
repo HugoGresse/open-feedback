@@ -5,6 +5,16 @@ import { OFButton } from '../../baseComponents/button/OFButton.tsx'
 import Box from '@mui/material/Box'
 import { FormikObserver } from '../../baseComponents/form/formik/FormikObserver'
 import { useTranslation } from 'react-i18next'
+import type { HoverboardV2Config } from '../../../core/models'
+
+interface SetupHoverboardv2FormProps {
+    onBack?: (values: HoverboardV2Config) => void
+    onSubmit: (config: HoverboardV2Config) => void
+    submitText?: string
+    backText?: string
+    initialValues: HoverboardV2Config
+    onFormChange?: (values: HoverboardV2Config) => void
+}
 
 export const SetupHoverboardv2Form = ({
     onBack,
@@ -13,10 +23,10 @@ export const SetupHoverboardv2Form = ({
     backText,
     initialValues,
     onFormChange,
-}) => {
+}: SetupHoverboardv2FormProps) => {
     const { t } = useTranslation()
     return (
-        <Formik
+        <Formik<HoverboardV2Config>
             validationSchema={object().shape({
                 projectId: string().required(
                     t('settingsSetup.hoverboard.projectIdRequired')
@@ -70,7 +80,7 @@ export const SetupHoverboardv2Form = ({
                         {backText && (
                             <OFButton
                                 disabled={isSubmitting}
-                                onClick={() => onBack(values)}
+                                onClick={() => onBack?.(values)}
                                 style={{
                                     type: 'big',
                                     design: 'text',

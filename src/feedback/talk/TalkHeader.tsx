@@ -1,53 +1,64 @@
 import Box from '@mui/material/Box'
-import { DateTime } from 'luxon'
+import { DateTime, type DateTimeFormatOptions } from 'luxon'
 import { SpeakerList } from '../speaker/SpeakerList.tsx'
 import { useTheme } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { useQuery } from '../../utils/useQuery'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../store'
 import {
     getProjectSelector,
     isFullDatesDisplayedSelector,
 } from '../project/projectSelectors'
 import { QRCodeButton } from '../../baseComponents/QRCodeButton'
+import type { Speaker, Talk } from '../../core/models'
 
-const DATE_FORMAT = {
+const DATE_FORMAT: DateTimeFormatOptions = {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
 }
 
-const DATE_FORMAT_LONG = {
+const DATE_FORMAT_LONG: DateTimeFormatOptions = {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
     year: 'numeric',
 }
 
-const formatTalkDateTime = (talk, displayFullDates = false) => {
-    const startDate = DateTime.fromISO(talk.startTime, {
+const formatTalkDateTime = (
+    startTime: string,
+    endTimeISO: string | null | undefined,
+    displayFullDates = false
+) => {
+    const startDate = DateTime.fromISO(startTime, {
         setZone: true,
     }).toLocaleString(displayFullDates ? DATE_FORMAT_LONG : DATE_FORMAT)
 
-    const startTime = DateTime.fromISO(talk.startTime, { setZone: true })
+    const startHour = DateTime.fromISO(startTime, { setZone: true })
         .setZone('local', { keepLocalTime: true })
         .toLocaleString(DateTime.TIME_SIMPLE)
 
-    const endTime = talk.endTime
+    const endTime = endTimeISO
         ? ' - ' +
-          DateTime.fromISO(talk.endTime, {
+          DateTime.fromISO(endTimeISO, {
               setZone: true,
           }).toLocaleString(DateTime.TIME_SIMPLE)
         : ''
 
-    return `${startDate} / ${startTime}${endTime}`
+    return `${startDate} / ${startHour}${endTime}`
 }
 
-export const TalkHeader = ({ talk, speakers }) => {
+interface TalkHeaderProps {
+    talk: Talk
+    speakers: Speaker[]
+}
+
+export const TalkHeader = ({ talk, speakers }: TalkHeaderProps) => {
     const theme = useTheme()
-    const project = useSelector(getProjectSelector)
+    // The talk page is only rendered once the project is loaded
+    const project = useAppSelector(getProjectSelector)!
     const hideHeader = useQuery().get('hideHeader')
-    const displayFullDates = useSelector(isFullDatesDisplayedSelector)
+    const displayFullDates = useAppSelector(isFullDatesDisplayedSelector)
 
     if (hideHeader && hideHeader === 'true') {
         return <Box height={2}></Box>
@@ -86,7 +97,11 @@ export const TalkHeader = ({ talk, speakers }) => {
                     marginBottom={2}
                 >
                     {talk.startTime &&
-                        formatTalkDateTime(talk, displayFullDates)}
+                        formatTalkDateTime(
+                            talk.startTime,
+                            talk.endTime,
+                            displayFullDates
+                        )}
                 </Box>
                 <SpeakerList speakers={speakers} />
             </Box>

@@ -1,6 +1,11 @@
+import type { NavigateFunction } from 'react-router-dom'
 import { ROUTE_EVENT_SEGMENT } from '../../RoutingMap'
 
-export const redirectToProject = (currentProjectId, newProjectId, navigate) => {
+export const redirectToProject = (
+    currentProjectId: string | null | undefined,
+    newProjectId: string,
+    navigate: NavigateFunction
+): void => {
     if (newProjectId === currentProjectId) {
         return
     }

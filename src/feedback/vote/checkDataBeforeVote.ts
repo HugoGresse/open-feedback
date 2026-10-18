@@ -1,8 +1,19 @@
+import type { TFunction } from 'react-i18next'
 import { getProjectSelector } from '../project/projectSelectors'
 import { ADD_VOTE_ERROR } from './voteActionTypes'
+import type { AppDispatch, RootState } from '../../store'
 
-export const checkDateBeforeVote = (dispatch, state, translate) => {
-    const project = getProjectSelector(state)
+/** `[true]` when open, else `[false, translation key, start date?]`. */
+export type VoteWindowState =
+    [isOpen: true] | [isOpen: false, reason: string, date?: string]
+
+export const checkDateBeforeVote = (
+    dispatch: AppDispatch,
+    state: RootState,
+    translate: TFunction
+) => {
+    // Votes are only possible once the project is loaded.
+    const project = getProjectSelector(state)!
 
     const [isOpen, reason, date] = isVoteWindowOpen(
         project.voteStartTime,
@@ -22,7 +33,10 @@ export const checkDateBeforeVote = (dispatch, state, translate) => {
     return true
 }
 
-export const isVoteWindowOpen = (voteStartTime, voteEndTime) => {
+export const isVoteWindowOpen = (
+    voteStartTime: string | null | undefined,
+    voteEndTime: string | null | undefined
+): VoteWindowState => {
     const currentDate = new Date().getTime()
 
     if (voteEndTime && Date.parse(voteEndTime) < currentDate) {

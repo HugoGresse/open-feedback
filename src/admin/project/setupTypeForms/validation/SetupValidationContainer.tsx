@@ -4,18 +4,42 @@ import {
     STATE_LOADING,
     STATE_SUCCESS,
     SetupValidation,
+    type ValidationState,
 } from './SetupValidation.tsx'
-import { validate } from '../../../../core/setupType/validation'
+import {
+    validate,
+    type ValidationApi,
+    type ValidationResult,
+} from '../../../../core/setupType/validation'
 import { useState } from 'react'
-import { validationText } from './validationString.tsx'
+import { type ValidatedSetupType, validationText } from './validationString.tsx'
 import { sprintf } from '../../../../utils/stringUtils'
 
-export const SetupValidationContainer = ({ api, setupType }) => {
-    const [validationProcessing, onValidationChange] = useState(false)
-    const [validationResult, setValidationResult] = useState(null)
+interface SetupValidationContainerProps {
+    api: ValidationApi
+    setupType: ValidatedSetupType
+}
 
-    let connectionText
-    let connectionState = STATE_IDLE
+const TALK_CHECKS = [
+    'idValid',
+    'titleValid',
+    'startEndTimeValid',
+    'trackTitleValid',
+    'speakersValid',
+    'tagsValid',
+] as const
+const SPEAKER_CHECKS = ['idValid', 'nameValid', 'photoUrlValid'] as const
+
+export const SetupValidationContainer = ({
+    api,
+    setupType,
+}: SetupValidationContainerProps) => {
+    const [validationProcessing, onValidationChange] = useState(false)
+    const [validationResult, setValidationResult] =
+        useState<ValidationResult | null>(null)
+
+    let connectionText: string | undefined
+    let connectionState: ValidationState = STATE_IDLE
     if (validationProcessing) {
         connectionText = validationText.connection[setupType].connecting
         connectionState = STATE_LOADING
@@ -29,15 +53,16 @@ export const SetupValidationContainer = ({ api, setupType }) => {
         }
     }
 
-    let modelState = STATE_IDLE
-    let modelText, modelSubtitleText
+    let modelState: ValidationState = STATE_IDLE
+    let modelText: string | undefined
+    let modelSubtitleText: string | undefined
     if (validationProcessing) {
         modelState = STATE_LOADING
     } else if (connectionState === STATE_ERROR) {
         modelState = STATE_ERROR
         modelText = 'Previous step failed'
     } else if (validationResult) {
-        modelSubtitleText = sprintf(
+        let subtitleText = sprintf(
             validationText.model[setupType].talk.talkCount,
             validationResult.talk.talkCount,
             validationResult.speaker.speakerCount
@@ -48,7 +73,7 @@ export const SetupValidationContainer = ({ api, setupType }) => {
             modelText = validationText.validModel
 
             if (validationResult.talk.noSpeakers) {
-                modelSubtitleText +=
+                subtitleText +=
                     '\n' +
                     sprintf(
                         validationText.model[setupType].talk.noSpeakers,
@@ -56,7 +81,7 @@ export const SetupValidationContainer = ({ api, setupType }) => {
                     )
             }
             if (validationResult.talk.speakersMissing) {
-                modelSubtitleText +=
+                subtitleText +=
                     '\n' +
                     sprintf(
                         validationText.model[setupType].talk.speakersMissing,
@@ -79,7 +104,7 @@ export const SetupValidationContainer = ({ api, setupType }) => {
                 if (!validationResult.speakersObjectFound) {
                     text += ' and speakers'
                 }
-                modelSubtitleText +=
+                subtitleText +=
                     '\n' +
                     sprintf(
                         validationText.model[setupType]
@@ -90,27 +115,21 @@ export const SetupValidationContainer = ({ api, setupType }) => {
                 const resultTalk = validationResult.talk
                 const resultSpeaker = validationResult.speaker
 
-                ;[
-                    'idValid',
-                    'titleValid',
-                    'startEndTimeValid',
-                    'trackTitleValid',
-                    'speakersValid',
-                    'tagsValid',
-                ].forEach((el) => {
+                TALK_CHECKS.forEach((el) => {
                     if (!resultTalk[el]) {
-                        modelSubtitleText +=
+                        subtitleText +=
                             '\n' + validationText.model[setupType].talk[el]
                     }
                 })
-                ;['idValid', 'nameValid', 'photoUrlValid'].forEach((el) => {
+                SPEAKER_CHECKS.forEach((el) => {
                     if (!resultSpeaker[el]) {
-                        modelSubtitleText +=
+                        subtitleText +=
                             '\n' + validationText.model[setupType].speaker[el]
                     }
                 })
             }
         }
+        modelSubtitleText = subtitleText
     }
 
     return (

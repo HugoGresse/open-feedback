@@ -1,3 +1,4 @@
+import type { Meta } from '@storybook/react-vite'
 import { OFFormControl } from './OFFormControl.tsx'
 import { Field, Formik } from 'formik'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -6,14 +7,16 @@ import { OFFormControlInputFormiked } from './OFFormControlInputFormiked.tsx'
 import { OFAutoComplete } from '../autoComplete/OFAutoComplete.tsx'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-export default {
+const meta = {
     component: OFFormControl,
     title: 'Admin/FormControl',
-}
+} satisfies Meta<typeof OFFormControl>
+export default meta
 
 export const defaultUsage = () => (
     <ThemeProvider theme={createTheme()}>
         <Formik
+            onSubmit={() => {}}
             initialValues={{
                 restrictVoteRange: false,
             }}
@@ -33,6 +36,7 @@ export const defaultUsage = () => (
 export const withInput = () => (
     <ThemeProvider theme={createTheme()}>
         <Formik
+            onSubmit={() => {}}
             initialValues={{
                 name: '',
                 nameDisabled: 'some value',
@@ -60,6 +64,7 @@ export const withInput = () => (
 export const withOtherComponents = () => (
     <ThemeProvider theme={createTheme()}>
         <Formik
+            onSubmit={() => {}}
             initialValues={{
                 voteStartTime: '',
             }}
@@ -78,6 +83,7 @@ export const withOtherComponents = () => (
 export const withAnError = () => (
     <ThemeProvider theme={createTheme()}>
         <Formik
+            onSubmit={() => {}}
             initialValues={{
                 autoComplete: 'some not valid value',
             }}

@@ -1,8 +1,19 @@
 import { fireStoreMainInstance, serverTimestamp } from '../../../firebase.ts'
 import { convertSnapshotToMap } from '../../../utils/firebaseUtils'
+import type {
+    NewSpeaker,
+    NewTalk,
+    Speaker,
+    SpeakersMap,
+    Talk,
+    TalksMap,
+} from '../../models'
+import type { ProjectApi } from '../projectApi'
 
-export class OpenfeedbackApi {
-    constructor(projectId) {
+export class OpenfeedbackApi implements ProjectApi {
+    projectId: string
+
+    constructor(projectId: string) {
         this.projectId = projectId
     }
 
@@ -10,14 +21,14 @@ export class OpenfeedbackApi {
         return fireStoreMainInstance.collection('projects').doc(this.projectId)
     }
 
-    getTalks() {
+    getTalks(): Promise<TalksMap> {
         return this.firestoreProject()
             .collection('talks')
             .get()
-            .then((talksSnapshot) => convertSnapshotToMap(talksSnapshot))
+            .then((talksSnapshot) => convertSnapshotToMap<Talk>(talksSnapshot))
     }
 
-    getTalk(talkId) {
+    getTalk(talkId: string): Promise<TalksMap> {
         return this.firestoreProject()
             .collection('talks')
             .doc(talkId)
@@ -25,19 +36,21 @@ export class OpenfeedbackApi {
             .then((talkDoc) => ({
                 [talkDoc.id]: {
                     id: talkDoc.id,
-                    ...talkDoc.data(),
+                    ...(talkDoc.data() as NewTalk),
                 },
             }))
     }
 
-    getSpeakers() {
+    getSpeakers(): Promise<SpeakersMap> {
         return this.firestoreProject()
             .collection('speakers')
             .get()
-            .then((talksSnapshot) => convertSnapshotToMap(talksSnapshot))
+            .then((talksSnapshot) =>
+                convertSnapshotToMap<Speaker>(talksSnapshot)
+            )
     }
 
-    addTalk(newTalk) {
+    addTalk(newTalk: NewTalk): Promise<string> {
         return this.firestoreProject()
             .collection('talks')
             .add({
@@ -48,11 +61,11 @@ export class OpenfeedbackApi {
             .then((docRef) => docRef.id)
     }
 
-    removeTalk(talkId) {
+    removeTalk(talkId: string): Promise<void> {
         return this.firestoreProject().collection('talks').doc(talkId).delete()
     }
 
-    editTalk(talk) {
+    editTalk(talk: Talk): Promise<void> {
         return this.firestoreProject()
             .collection('talks')
             .doc(talk.id)
@@ -65,7 +78,7 @@ export class OpenfeedbackApi {
             )
     }
 
-    addSpeaker(speaker) {
+    addSpeaker(speaker: NewSpeaker): Promise<string> {
         return this.firestoreProject()
             .collection('speakers')
             .add({
@@ -76,14 +89,14 @@ export class OpenfeedbackApi {
             .then((docRef) => docRef.id)
     }
 
-    removeSpeaker(speakerId) {
+    removeSpeaker(speakerId: string): Promise<void> {
         return this.firestoreProject()
             .collection('speakers')
             .doc(speakerId)
             .delete()
     }
 
-    editSpeaker(speaker) {
+    editSpeaker(speaker: Speaker): Promise<void> {
         return this.firestoreProject()
             .collection('speakers')
             .doc(speaker.id)

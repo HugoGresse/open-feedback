@@ -1,7 +1,11 @@
-export const getAuthSelector = (state) => state.auth
+import type { RootState } from '../../store'
 
-export const isLoggedSelector = (state) => getAuthSelector(state).isLogin
+export const getAuthSelector = (state: RootState) => state.auth
 
-export const getUserSelector = (state) => getAuthSelector(state).user
+export const isLoggedSelector = (state: RootState) =>
+    getAuthSelector(state).isLogin
 
-export const getLoginErrorSelector = (state) => getAuthSelector(state).error
+export const getUserSelector = (state: RootState) => getAuthSelector(state).user
+
+export const getLoginErrorSelector = (state: RootState) =>
+    getAuthSelector(state).error

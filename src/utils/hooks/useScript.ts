@@ -1,8 +1,10 @@
 // From https://usehooks.com/useScript/
 import { useEffect, useState } from 'react'
 
-let cachedScripts = []
-export const useScript = (src) => {
+const cachedScripts: string[] = []
+export const useScript = (
+    src: string | null | undefined
+): [loaded: boolean, error: boolean] => {
     // Keeping track of script loaded and error state
     const [state, setState] = useState({
         loaded: false,
@@ -25,7 +27,7 @@ export const useScript = (src) => {
                 cachedScripts.push(src)
 
                 // Create script
-                let script = document.createElement('script')
+                const script = document.createElement('script')
                 script.src = src
                 script.async = true
 

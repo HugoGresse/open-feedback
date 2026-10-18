@@ -1,6 +1,7 @@
 import { functions } from '../../firebase.ts'
+import type { Alert } from './alerts'
 
-export const createAlert = (alert) => {
+export const createAlert = (alert: Alert) => {
     functions
         .alert(alert)
         // eslint-disable-next-line no-console

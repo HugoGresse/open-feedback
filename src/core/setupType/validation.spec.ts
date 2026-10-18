@@ -1,18 +1,19 @@
-import { enableFetchMocks } from 'jest-fetch-mock'
-
-enableFetchMocks()
+import { afterEach, expect, test, vi } from 'vitest'
 import { JsonUrlApi } from './jsonurl/JsonUrlApi'
 import { validate } from './validation'
 
-const setupApi = (data) => {
-    fetch.mockResponseOnce(JSON.stringify(data))
+const fetchMock = vi.fn<typeof fetch>()
+vi.stubGlobal('fetch', fetchMock)
+
+const setupApi = (data: unknown) => {
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify(data)))
     return new JsonUrlApi({
         jsonUrl: 'point-to-nowhere.json',
     })
 }
 
-beforeEach(() => {
-    fetch.resetMocks()
+afterEach(() => {
+    fetchMock.mockReset()
 })
 
 test('everything is valid', async () => {
@@ -51,7 +52,7 @@ test('everything is valid', async () => {
     })
 
     const result = await validate(api)
-    expect(fetch.mock.calls.length).toEqual(1)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
     expect(result).toEqual({
         dataAvailable: true,
         isSuccessful: true,
@@ -89,7 +90,7 @@ test('only required attributes supplied', async () => {
     })
 
     const result = await validate(api)
-    expect(fetch.mock.calls.length).toEqual(1)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
     expect(result).toEqual({
         dataAvailable: true,
         isSuccessful: true,
@@ -152,7 +153,7 @@ test('some speakers are missing, some photo url not formatted correctly', async 
     })
 
     const result = await validate(api)
-    expect(fetch.mock.calls.length).toEqual(1)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
     expect(result).toEqual({
         dataAvailable: true,
         isSuccessful: false,
@@ -193,7 +194,7 @@ test('malformated date & tags', async () => {
     })
 
     const result = await validate(api)
-    expect(fetch.mock.calls.length).toEqual(1)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
     expect(result).toEqual({
         dataAvailable: true,
         isSuccessful: false,

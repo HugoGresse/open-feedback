@@ -1,3 +1,4 @@
+import type firebase from 'firebase/compat/app'
 import {
     GET_PROJECT_ERROR,
     GET_PROJECT_NOTFOUND,
@@ -5,12 +6,44 @@ import {
     GET_PROJECT_VOTE_RESULT_ERROR,
     GET_PROJECT_VOTE_RESULT_SUCCESS,
     INCREMENT_VOTE_LOCALLY,
+    type ProjectAction,
     SET_SELECTED_DATE,
 } from './projectActionTypes'
 import { nowTimestamp } from '../../firebase.ts'
-import { ADD_VOTE_SUCCESS } from '../vote/voteActionTypes'
+import {
+    ADD_VOTE_SUCCESS,
+    type AddVoteSuccessAction,
+} from '../vote/voteActionTypes'
+import type {
+    AggregatedTextVotes,
+    AggregatedVoteItemValue,
+    Project,
+    ProjectTalkVotes,
+    TalkVotes,
+} from '../../core/models'
 
-const initState = {
+/** Placeholder held until the project is loaded (`id` is null). */
+export interface UnloadedProject {
+    id: null
+    contact: null
+    favicon: null
+    firebaseConfig: null
+    logoSmall: null
+    name: null
+    voteItems: null
+    chipColors: string[]
+}
+
+export interface ProjectState {
+    project: Project | UnloadedProject
+    talkVotes: ProjectTalkVotes | null
+    selectedDate: string
+    projectLoadError: string | null
+    projectLoadNotFound?: boolean
+    projectVotesError: firebase.firestore.FirestoreError | null
+}
+
+const initState: ProjectState = {
     project: {
         id: null,
         contact: null,
@@ -27,13 +60,20 @@ const initState = {
     projectVotesError: null,
 }
 
-export const projectReducer = (state = initState, { payload, type }) => {
-    switch (type) {
+/** The text votes of a vote item, `{}` when it holds none (or a counter). */
+const asTextVotes = (value: TalkVotes[string]): AggregatedTextVotes =>
+    typeof value === 'object' && value !== null ? value : {}
+
+export const projectReducer = (
+    state: ProjectState = initState,
+    action: ProjectAction | AddVoteSuccessAction
+): ProjectState => {
+    switch (action.type) {
         case GET_PROJECT_SUCCESS:
             return {
                 ...state,
                 project: {
-                    ...payload,
+                    ...action.payload,
                 },
             }
 
@@ -42,7 +82,7 @@ export const projectReducer = (state = initState, { payload, type }) => {
                 ...state,
                 talkVotes: {
                     ...state.talkVotes,
-                    [payload.id]: payload,
+                    [action.payload.id]: action.payload,
                 },
             }
         case ADD_VOTE_SUCCESS: {
@@ -52,46 +92,48 @@ export const projectReducer = (state = initState, { payload, type }) => {
             }
         }
         case INCREMENT_VOTE_LOCALLY: {
-            const vote = payload.vote
+            const { vote, amount } = action.payload
 
-            let precedentData = null
-            try {
-                precedentData = state.talkVotes[vote.talkId][vote.voteItemId]
-            } catch (e) {
-                precedentData = null
-            }
-            let newVoteValue
+            // undefined when the talk has no votes loaded yet
+            const precedentData =
+                state.talkVotes?.[vote.talkId]?.[vote.voteItemId]
+
+            let newVoteValue: AggregatedVoteItemValue
             if (vote.text) {
-                if (payload.amount === -1) {
+                const precedentTextVotes = asTextVotes(precedentData)
+                if (amount === -1) {
                     if (vote.plus) {
                         // If the user remove his vote on another user text vote
                         newVoteValue = {
-                            ...precedentData,
+                            ...precedentTextVotes,
                             [vote.id]: {
-                                ...precedentData[vote.id],
-                                plus: precedentData[vote.id].plus - 1,
+                                ...precedentTextVotes[vote.id],
+                                // A missing count gives NaN, as before typing
+                                plus:
+                                    (precedentTextVotes[vote.id].plus ?? NaN) -
+                                    1,
                                 updatedAt: nowTimestamp(),
                             },
                         }
                     } else {
                         // Remove a vote from the aggregate locally before database update
                         newVoteValue = {
-                            ...precedentData,
+                            ...precedentTextVotes,
                         }
                         delete newVoteValue[vote.id]
                     }
                 } else if (vote.plus) {
                     newVoteValue = {
-                        ...precedentData,
+                        ...precedentTextVotes,
                         [vote.id]: {
-                            ...precedentData[vote.id],
-                            plus: (precedentData[vote.id].plus || 1) + 1,
+                            ...precedentTextVotes[vote.id],
+                            plus: (precedentTextVotes[vote.id].plus || 1) + 1,
                             updatedAt: nowTimestamp(),
                         },
                     }
                 } else {
                     newVoteValue = {
-                        ...precedentData,
+                        ...precedentTextVotes,
                         [vote.id]: {
                             ...vote,
                             plus: 1,
@@ -102,10 +144,10 @@ export const projectReducer = (state = initState, { payload, type }) => {
                     }
                 }
             } else {
-                if (precedentData == null) {
-                    precedentData = 0
-                }
-                newVoteValue = precedentData + payload.amount
+                const precedentCount =
+                    typeof precedentData === 'number' ? precedentData : 0
+                // A missing amount gives NaN, as before typing
+                newVoteValue = precedentCount + (amount ?? NaN)
             }
 
             if (!state.talkVotes || !state.talkVotes[vote.talkId]) {
@@ -133,10 +175,10 @@ export const projectReducer = (state = initState, { payload, type }) => {
         }
         case GET_PROJECT_VOTE_RESULT_ERROR:
             // eslint-disable-next-line no-console
-            console.error(payload)
+            console.error(action.payload)
             return {
                 ...state,
-                projectVotesError: payload,
+                projectVotesError: action.payload,
             }
         case GET_PROJECT_NOTFOUND:
             return {
@@ -145,16 +187,16 @@ export const projectReducer = (state = initState, { payload, type }) => {
             }
         case GET_PROJECT_ERROR:
             // eslint-disable-next-line no-console
-            console.error(payload)
+            console.error(action.payload)
             return {
                 ...state,
-                projectLoadError: payload,
+                projectLoadError: action.payload,
             }
 
         case SET_SELECTED_DATE:
             return {
                 ...state,
-                selectedDate: payload.date,
+                selectedDate: action.payload.date,
             }
         default:
             return state

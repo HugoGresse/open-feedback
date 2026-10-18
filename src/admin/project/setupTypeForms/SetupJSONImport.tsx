@@ -2,16 +2,14 @@ import { useState } from 'react'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import {
-    JSONImportFormValues,
+    type JSONImportFormValues,
     SetupJSONImportForm,
 } from './SetupJSONImportForm'
-// @ts-expect-error - JS module without types
 import { SetupValidationContainer } from './validation/SetupValidationContainer.tsx'
-// @ts-expect-error - JS module without types
 import { PROJECT_TYPE_JSONIMPORT } from '../../../core/setupType/projectApi'
 import { JsonImportApi } from '../../../core/setupType/jsonimport/JsonImportApi'
 import {
-    EventData,
+    type EventData,
     parseEventJson,
 } from '../../../core/setupType/eventDataNormalization'
 

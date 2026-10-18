@@ -1,20 +1,30 @@
 import { VoteTextResultItem } from './VoteTextResultItem.tsx'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../store'
 import {
     removeUpVoteOnTextVoteItemVote,
     upVoteOnTextVoteItemVote,
 } from '../../vote/actions/upVoteOnTextVoteItemVote'
 import { useTranslation } from 'react-i18next'
 import { getUserSelector } from '../../auth/authSelectors'
+import type { AuthUser, Vote, VoteItem } from '../../../core/models'
+import type { TextVoteResult } from '../core/getVoteResultSelectorSelector'
+
+interface TalkVoteTextResultProps {
+    result: TextVoteResult[]
+    chipColors?: string[]
+    voteItem: VoteItem
+    /** The user votes on this vote item. */
+    currentUserVotes?: Vote[]
+}
 
 export const TalkVoteTextResult = ({
     result,
     chipColors,
     voteItem,
     currentUserVotes,
-}) => {
-    const user = useSelector(getUserSelector)
-    const dispatch = useDispatch()
+}: TalkVoteTextResultProps) => {
+    const user = useAppSelector(getUserSelector)
+    const dispatch = useAppDispatch()
     const { t } = useTranslation()
 
     return (
@@ -51,7 +61,11 @@ export const TalkVoteTextResult = ({
     )
 }
 
-const isVoteSelected = (currentUserVotes, user, resultItem) => {
+const isVoteSelected = (
+    currentUserVotes: Vote[] | undefined,
+    user: AuthUser | null,
+    resultItem: TextVoteResult
+): [isSelected: boolean, vote: Vote | null] => {
     if (!currentUserVotes) {
         return [false, null]
     }
@@ -64,7 +78,8 @@ const isVoteSelected = (currentUserVotes, user, resultItem) => {
         return [true, userTextPlusVote]
     }
 
-    if (resultItem.userId === user.uid) {
+    // The user is logged in once their votes are loaded
+    if (resultItem.userId === user!.uid) {
         // The current user was the one to submit the vote
         return [true, null]
     }

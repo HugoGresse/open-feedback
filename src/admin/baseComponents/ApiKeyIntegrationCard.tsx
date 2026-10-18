@@ -1,5 +1,4 @@
-import { useState, type FC } from 'react'
-import { useDispatch } from 'react-redux'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import clipboardCopy from 'clipboard-copy'
 import {
@@ -19,6 +18,7 @@ import { OFCard } from './OFCard.tsx'
 import { OFButton } from './button/OFButton.tsx'
 import { SimpleDialog } from './layouts/SimpleDialog.tsx'
 import { addNotification } from '../notification/notifcationActions'
+import { useAppDispatch } from '../../store.ts'
 
 export const API_DOCS_URL =
     import.meta.env.VITE_API_DOCS_URL || 'https://api.openfeedback.io/'
@@ -45,7 +45,7 @@ const formatLastUsed = (value: LastUsedValue): string | null => {
     return date.toLocaleString()
 }
 
-interface ApiKeyIntegrationCardProps {
+export interface ApiKeyIntegrationCardProps {
     // Sentence shown under the title, before the docs link.
     description: string
     // Shown when no key exists yet.
@@ -62,15 +62,15 @@ interface ApiKeyIntegrationCardProps {
  * generate/rotate). Shared by the event and organization integration tabs so
  * the two stay in lockstep; only the data layer (fetch + write) differs.
  */
-export const ApiKeyIntegrationCard: FC<ApiKeyIntegrationCardProps> = ({
+export const ApiKeyIntegrationCard = ({
     description,
     noKeyText,
     apiKey,
     lastUsedRaw,
     onGenerateOrRotate,
-}) => {
+}: ApiKeyIntegrationCardProps) => {
     const { t } = useTranslation()
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const [revealed, setRevealed] = useState(false)
     const [rotateOpen, setRotateOpen] = useState(false)

@@ -1,3 +1,5 @@
+import type { Organization } from '../../../../core/models'
+import type { AppThunk } from '../../../../store'
 import { fireStoreMainInstance } from '../../../../firebase.ts'
 import { getUserSelector } from '../../../auth/authSelectors'
 import {
@@ -11,50 +13,51 @@ import {
 } from '../organizationConstants'
 import { getProjects } from '../../../project/core/actions/getProjects'
 
-export const getOrganizations = () => (dispatch, getState) => {
-    const user = getUserSelector(getState())
+export const getOrganizations =
+    (): AppThunk<Promise<void> | undefined> => (dispatch, getState) => {
+        const user = getUserSelector(getState())
 
-    if (!user) {
-        return
-    }
+        if (!user) {
+            return
+        }
 
-    return fireStoreMainInstance
-        .collection('organizations')
-        .where(
-            ORGANIZATION_ROLE_ID[ORGANIZATION_USER_ROLE_VIEWER],
-            'array-contains',
-            user.uid
-        )
-        .orderBy('createdAt', 'desc')
-        .get()
-        .then((querySnapshot) => {
-            const organizations = []
-            querySnapshot.forEach((doc) => {
-                organizations.push({
-                    id: doc.id,
-                    ...doc.data(),
-                })
-            })
-
-            dispatch({
-                type: GET_ORGANIZATIONS_SUCCESS,
-                payload: organizations,
-            })
-
-            organizations.forEach((org) => {
-                dispatch(getProjects(org.id))
-            })
-        })
-        .catch((err) => {
-            dispatch({
-                type: GET_ORGANIZATIONS_ERROR,
-                payload: err.toString(),
-            })
-            dispatch(
-                addNotification({
-                    type: 'error',
-                    i18nkey: 'organization.errorsLoadOrganizations',
-                })
+        return fireStoreMainInstance
+            .collection('organizations')
+            .where(
+                ORGANIZATION_ROLE_ID[ORGANIZATION_USER_ROLE_VIEWER],
+                'array-contains',
+                user.uid
             )
-        })
-}
+            .orderBy('createdAt', 'desc')
+            .get()
+            .then((querySnapshot) => {
+                const organizations: Organization[] = []
+                querySnapshot.forEach((doc) => {
+                    organizations.push({
+                        id: doc.id,
+                        ...doc.data(),
+                    } as Organization)
+                })
+
+                dispatch({
+                    type: GET_ORGANIZATIONS_SUCCESS,
+                    payload: organizations,
+                })
+
+                organizations.forEach((org) => {
+                    dispatch(getProjects(org.id))
+                })
+            })
+            .catch((err: unknown) => {
+                dispatch({
+                    type: GET_ORGANIZATIONS_ERROR,
+                    payload: String(err),
+                })
+                dispatch(
+                    addNotification({
+                        type: 'error',
+                        i18nkey: 'organization.errorsLoadOrganizations',
+                    })
+                )
+            })
+    }

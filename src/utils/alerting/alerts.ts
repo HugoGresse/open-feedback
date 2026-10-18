@@ -1,6 +1,18 @@
 import { hashString } from '../stringUtils'
 
-export const ALERT_FIREBASE_QUOTA_REACHED = {
+/** Payload of the `alert` callable function (forwarded to OpsGenie). */
+export interface Alert {
+    message: string
+    alias: string
+    description: string
+    details?: Record<string, unknown>
+    tags: string[]
+    priority: 'P1' | 'P2' | 'P3' | 'P4' | 'P5'
+}
+
+export type ErrorAlertFactory = (error: unknown, stack: unknown) => Alert
+
+export const ALERT_FIREBASE_QUOTA_REACHED: Alert = {
     message: 'Firebase Authentification Quota Reached',
     alias: 'firebase-authentification-quota-reached',
     description:
@@ -9,7 +21,10 @@ export const ALERT_FIREBASE_QUOTA_REACHED = {
     priority: 'P1',
 }
 
-export const ALERT_REACT_CATCHED_ERROR_ADMIN = (error, stack) => ({
+export const ALERT_REACT_CATCHED_ERROR_ADMIN: ErrorAlertFactory = (
+    error,
+    stack
+) => ({
     message: 'React error catched',
     alias:
         'react-error-catch-' +
@@ -27,7 +42,10 @@ export const ALERT_REACT_CATCHED_ERROR_ADMIN = (error, stack) => ({
     priority: 'P5',
 })
 
-export const ALERT_REACT_CATCHED_ERROR_FEEDBACK = (error, stack) => ({
+export const ALERT_REACT_CATCHED_ERROR_FEEDBACK: ErrorAlertFactory = (
+    error,
+    stack
+) => ({
     message: 'Feedback App: React error catched',
     alias:
         'feedback-react-error-catch-' +
@@ -45,7 +63,10 @@ export const ALERT_REACT_CATCHED_ERROR_FEEDBACK = (error, stack) => ({
     priority: 'P2',
 })
 
-export const ALERT_REACT_CATCHED_ERROR_LANDING = (error, stack) => ({
+export const ALERT_REACT_CATCHED_ERROR_LANDING: ErrorAlertFactory = (
+    error,
+    stack
+) => ({
     message: 'Root/Landing App: React error catched',
     alias:
         'landing-react-error-catch-' +

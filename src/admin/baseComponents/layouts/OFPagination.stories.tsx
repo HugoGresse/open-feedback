@@ -1,11 +1,13 @@
+import type { Meta } from '@storybook/react-vite'
 import { useState } from 'react'
 import { OFPagination } from './OFPagination.tsx'
 import Typography from '@mui/material/Typography'
 
-export default {
+const meta = {
     component: OFPagination,
     title: 'Admin/Pagination',
-}
+} satisfies Meta<typeof OFPagination>
+export default meta
 
 export const DefaultUsage = () => {
     const [currentPage, setPage] = useState(1)
@@ -15,8 +17,8 @@ export const DefaultUsage = () => {
             <Typography>Page {currentPage}</Typography>
             <OFPagination
                 count={10}
-                page={currentPage}
-                onChange={(event, page) => setPage(page)}
+                current={currentPage}
+                onChange={(_event, page) => setPage(page)}
             />
         </>
     )

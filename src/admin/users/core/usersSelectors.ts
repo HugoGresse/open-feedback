@@ -1,23 +1,27 @@
+import type { User } from '../../../core/models'
+import type { RootState } from '../../../store'
+import { createAppSelector } from '../../../store'
 import { getAdminStateSelector } from '../../adminSelector'
-import { createSelector } from 'reselect'
 import { getUserIdSelector } from '../../auth/authSelectors'
 
-const getUsersState = (state) => getAdminStateSelector(state).adminUsers
+const getUsersState = (state: RootState) =>
+    getAdminStateSelector(state).adminUsers
 
-export const getUsersSelector = (state) => getUsersState(state).usersData
+export const getUsersSelector = (state: RootState) =>
+    getUsersState(state).usersData
 
-export const getUsersFilterSelector = (state) => getUsersState(state).filter
+export const getUsersFilterSelector = (state: RootState) =>
+    getUsersState(state).filter
 
-export const getFilteredUsersSelector = createSelector(
-    getUsersSelector,
-    getUsersFilterSelector,
+export const getFilteredUsersSelector = createAppSelector(
+    [getUsersSelector, getUsersFilterSelector],
     (userDetails, filter) => {
         const userDetailsArray = Object.values(userDetails)
         if (!filter || userDetailsArray.length === 0) {
             return userDetails
         }
 
-        const result = {}
+        const result: Record<string, User> = {}
         userDetailsArray.forEach((userDetail) => {
             const displayNameMatch =
                 userDetail.displayName &&
@@ -32,11 +36,10 @@ export const getFilteredUsersSelector = createSelector(
     }
 )
 
-export const getFilteredUsersWithoutCurrentOneSelector = createSelector(
-    getFilteredUsersSelector,
-    getUserIdSelector,
+export const getFilteredUsersWithoutCurrentOneSelector = createAppSelector(
+    [getFilteredUsersSelector, getUserIdSelector],
     (users, currentUserId) =>
-        Object.keys(users).reduce((acc, userId) => {
+        Object.keys(users).reduce<Record<string, User>>((acc, userId) => {
             if (userId === currentUserId) {
                 return acc
             }
@@ -45,7 +48,8 @@ export const getFilteredUsersWithoutCurrentOneSelector = createSelector(
         }, {})
 )
 
-export const getInviteSelector = (state) => getUsersState(state).invite
+export const getInviteSelector = (state: RootState) =>
+    getUsersState(state).invite
 
-export const getPendingInvitesSelector = (state) =>
+export const getPendingInvitesSelector = (state: RootState) =>
     getUsersState(state).pendingInvites

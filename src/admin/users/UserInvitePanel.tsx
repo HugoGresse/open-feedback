@@ -9,6 +9,21 @@ import MenuItem from '@mui/material/MenuItem'
 import { OrganizationRoleInfo } from '../organization/users/OrganizationRoleInfos.tsx'
 import { OFAutoComplete } from '../baseComponents/form/autoComplete/OFAutoComplete.tsx'
 import { renderUserAutoCompleteOption } from './components/UserAutocompleteOption.tsx'
+import type { User } from '../../core/models'
+
+interface UserInviteFormValues {
+    /** Typed email, or a user picked in the autocomplete. */
+    email: string | User | null
+    userType: string
+}
+
+export interface UserInvitePanelProps {
+    isOpen: boolean
+    onClose: () => void
+    onSubmit: (email: string, userType: string) => void
+    userTypes: readonly string[]
+    usersDetails?: Record<string, User>
+}
 
 export const UserInvitePanel = ({
     isOpen,
@@ -16,7 +31,7 @@ export const UserInvitePanel = ({
     onSubmit,
     userTypes,
     usersDetails = {},
-}) => {
+}: UserInvitePanelProps) => {
     const { t } = useTranslation()
     return (
         <SidePanelLayout
@@ -29,20 +44,18 @@ export const UserInvitePanel = ({
                 },
             }}
         >
-            <Formik
+            <Formik<UserInviteFormValues>
                 validationSchema={object().shape({
                     email: string()
-                        .transform(function (value) {
+                        .transform(function (value: unknown) {
                             if (value instanceof Object) {
-                                return value.email
+                                return (value as User).email
                             }
                             return value
                         })
                         .email(t('users.emailNotValid'))
                         .required(t('users.emailRequired')),
-                    userType: string(t('users.typeNotValid')).required(
-                        t('users.typeRequired')
-                    ),
+                    userType: string().required(t('users.typeRequired')),
                 })}
                 initialValues={{
                     email: null,
@@ -53,7 +66,8 @@ export const UserInvitePanel = ({
                         values.email instanceof Object
                             ? values.email.email
                             : values.email
-                    onSubmit(email, values.userType)
+                    // The schema validated it as a required email.
+                    onSubmit(email as string, values.userType)
                 }}
             >
                 {({ isSubmitting }) => (
@@ -66,7 +80,7 @@ export const UserInvitePanel = ({
                             <Field
                                 name="email"
                                 dataArray={Object.values(usersDetails)}
-                                keyToDisplay={['email']}
+                                keyToDisplay="email"
                                 freeSolo={true}
                                 renderOption={renderUserAutoCompleteOption}
                                 component={OFAutoComplete}

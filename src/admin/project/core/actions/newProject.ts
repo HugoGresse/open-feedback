@@ -1,9 +1,11 @@
+import type { AppThunk } from '../../../../store'
+import type { FieldValue, Project } from '../../../../core/models'
 import {
     ADD_PROJECT_ERROR,
     ADD_PROJECT_ONGOING,
     ADD_PROJECT_SUCCESS,
 } from '../projectActionTypes'
-import { getUserSelector } from '../../../auth/authSelectors'
+import { getUserIdSelector } from '../../../auth/authSelectors'
 import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase.ts'
 import { newRandomHexColor } from '../../../../utils/colorsUtils'
 import { generateProjectApiKey } from '../../../../utils/generateApiKey'
@@ -12,14 +14,28 @@ import { trackNewProject } from '../../../utils/track'
 import { NO_ORGANIZATION_FAKE_ID } from '../../../organization/core/organizationConstants'
 import { getOrganization } from '../../../organization/core/actions/getOrganization'
 
+/**
+ * The project document written on creation. The wizard gives the name, the
+ * setupType and its config, `newProject` fills the rest.
+ */
+export type NewProjectData = Pick<Project, 'name' | 'setupType'> &
+    Partial<Omit<Project, 'id' | 'name' | 'setupType' | 'createdAt'>> & {
+        createdAt?: FieldValue
+    }
+
 export const newProject =
-    (organizationId, projectId, projectData, useOrganizationSettings = true) =>
+    (
+        organizationId: string,
+        projectId: string,
+        projectData: NewProjectData,
+        useOrganizationSettings = true
+    ): AppThunk<Promise<string | void>> =>
     async (dispatch, getState) => {
         dispatch({
             type: ADD_PROJECT_ONGOING,
         })
 
-        projectData.owner = getUserSelector(getState()).uid
+        projectData.owner = getUserIdSelector(getState())
         projectData.members = [projectData.owner]
         projectData.createdAt = serverTimestamp()
         projectData.chipColors = [newRandomHexColor()]
@@ -84,17 +100,17 @@ export const newProject =
                 )
                 return projectId
             })
-            .catch((err) => {
+            .catch((err: unknown) => {
                 dispatch(
                     addNotification({
                         type: 'error',
                         i18nkey: 'project.newFail',
-                        message: err.toString(),
+                        message: String(err),
                     })
                 )
                 dispatch({
                     type: ADD_PROJECT_ERROR,
-                    payload: err.toString(),
+                    payload: String(err),
                 })
             })
     }

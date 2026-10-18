@@ -1,3 +1,4 @@
+import type { Meta } from '@storybook/react-vite'
 import { OFInput } from './OFInput.tsx'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
@@ -6,18 +7,20 @@ import { Formik } from 'formik'
 import { OFFormControlInputFormiked } from '../formControl/OFFormControlInputFormiked.tsx'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-export default {
+const meta = {
     component: OFInput,
     title: 'Admin/Input',
-}
+} satisfies Meta<typeof OFInput>
+export default meta
 
 export const defaultUsage = () => (
-    <OFInput name="myField" label="Field label" placeholder="Placeholder" />
+    <OFInput name="myField" placeholder="Placeholder" />
 )
 
 export const withFormControl = () => (
     <ThemeProvider theme={createTheme()}>
         <Formik
+            onSubmit={() => {}}
             initialValues={{
                 name: '',
                 nameDisabled: 'some value',
@@ -42,30 +45,15 @@ export const withFormControl = () => (
 )
 
 export const disabled = () => (
-    <OFInput
-        name="myField"
-        label="Field label"
-        placeholder="Placeholder"
-        disabled={true}
-    />
+    <OFInput name="myField" placeholder="Placeholder" disabled={true} />
 )
 
 export const controlled = () => (
-    <OFInput
-        name="myField1"
-        label="Field label"
-        placeholder="Placeholder"
-        value="value"
-    />
+    <OFInput name="myField1" placeholder="Placeholder" value="value" />
 )
 
 export const error = () => (
-    <OFInput
-        name="myField1"
-        label="Field label"
-        placeholder="Placeholder"
-        error={true}
-    />
+    <OFInput name="myField1" placeholder="Placeholder" error={true} />
 )
 
 export const endAdornment = () => (

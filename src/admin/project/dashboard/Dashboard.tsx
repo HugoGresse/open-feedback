@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../store'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import { LoaderMatchParent } from '../../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import { getTalkVotes, getUserVotes } from './dashboardActions'
@@ -16,9 +16,9 @@ import { LeastVotedTalks } from './LeastVotedTalks.tsx'
 import { MostCommentedTalks } from './MostCommentedTalks.tsx'
 
 export const Dashboard = () => {
-    const dispatch = useDispatch()
-    const project = useSelector(getProjectSelector)
-    const selectedProjectId = useSelector(getSelectedProjectIdSelector)
+    const dispatch = useAppDispatch()
+    const project = useAppSelector(getProjectSelector)
+    const selectedProjectId = useAppSelector(getSelectedProjectIdSelector)
 
     useEffect(() => {
         if (project && selectedProjectId) {

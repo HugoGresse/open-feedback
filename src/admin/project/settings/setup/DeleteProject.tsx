@@ -7,7 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import { getSelectedProjectIdSelector } from '../../core/projectSelectors'
 import CircularProgress from '@mui/material/CircularProgress'
 import { deleteProject } from '../../core/actions/deleteProject'
@@ -15,8 +15,8 @@ import { useNavigate } from 'react-router-dom'
 
 export const DeleteProject = () => {
     const navigate = useNavigate()
-    const dispatch = useDispatch()
-    const projectId = useSelector(getSelectedProjectIdSelector)
+    const dispatch = useAppDispatch()
+    const projectId = useAppSelector(getSelectedProjectIdSelector)
     const { t } = useTranslation()
     const [isDialogOpen, setDialogOpen] = useState(false)
     const [isDeleting, setDeleteState] = useState(false)
@@ -61,6 +61,8 @@ export const DeleteProject = () => {
                     </OFButton>
                     <OFButton
                         onClick={() => {
+                            // Always set under <Project>.
+                            if (!projectId) return
                             setDeleteState(true)
                             dispatch(deleteProject(projectId, t))
                                 .then(() => {

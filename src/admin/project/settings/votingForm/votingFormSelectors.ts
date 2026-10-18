@@ -1,35 +1,43 @@
 import { getAdminStateSelector } from '../../../adminSelector'
-import { createSelector } from 'reselect'
+import { createAppSelector, type RootState } from '../../../../store'
+import type { VoteItem } from '../../../../core/models'
+import type { VotingFormState } from './votingFormReducer'
 
-const getVotingForm = (state) => getAdminStateSelector(state).adminVotingForm
+const getVotingForm = (state: RootState): VotingFormState =>
+    getAdminStateSelector(state).adminVotingForm
 
-export const getVoteItemsSelector = (state) => getVotingForm(state).voteItems
-export const isSavingVotingFormSelector = (state) =>
+export const getVoteItemsSelector = (state: RootState): VoteItem[] =>
+    getVotingForm(state).voteItems
+export const isSavingVotingFormSelector = (state: RootState): boolean =>
     getVotingForm(state).ongoingSave
-export const shouldConfirmSaveSelector = (state) =>
+export const shouldConfirmSaveSelector = (state: RootState): boolean =>
     getVotingForm(state).shouldConfirmSave
+
+// A missing position compares like `undefined` did in the untyped code: every
+// comparison is false and every subtraction NaN.
+const positionOf = (item: VoteItem): number => item.position ?? NaN
 
 // MEMOIZED
 
-export const getSortedVoteItemsSelector = createSelector(
-    getVoteItemsSelector,
+export const getSortedVoteItemsSelector = createAppSelector(
+    [getVoteItemsSelector],
     (voteItems) =>
         voteItems.sort((a, b) => {
-            return a.position > b.position ? 1 : -1
+            return positionOf(a) > positionOf(b) ? 1 : -1
         })
 )
 
-export const getBooleanVoteItemsSelector = createSelector(
-    getSortedVoteItemsSelector,
+export const getBooleanVoteItemsSelector = createAppSelector(
+    [getSortedVoteItemsSelector],
     (voteItems) => {
         return voteItems
             .filter((item) => item.type === 'boolean')
-            .sort((a, b) => a.position - b.position)
+            .sort((a, b) => positionOf(a) - positionOf(b))
     }
 )
 
-export const getCommentVoteItemSelector = createSelector(
-    getSortedVoteItemsSelector,
+export const getCommentVoteItemSelector = createAppSelector(
+    [getSortedVoteItemsSelector],
     (voteItems) => {
         return voteItems.filter((item) => item.type === 'text')
     }

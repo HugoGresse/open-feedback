@@ -1,3 +1,3 @@
-export const round1Decimals = (value) => Math.round(value * 10) / 10
+export const round1Decimals = (value: number) => Math.round(value * 10) / 10
 
-export const twoDigits = (value) => ('0' + value).slice(-2)
+export const twoDigits = (value: number | string) => ('0' + value).slice(-2)

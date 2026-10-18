@@ -6,8 +6,32 @@ import { OFButton } from '../../baseComponents/button/OFButton.tsx'
 import { OFFormControlInputFormiked } from '../../baseComponents/form/formControl/OFFormControlInputFormiked.tsx'
 import { useTranslation } from 'react-i18next'
 import { SidePanelUploadLayout } from '../../baseComponents/layouts/sidepanel/upload/SidePanelUploadLayout.tsx'
+import type { NewSpeaker, Speaker } from '../../../core/models'
 
-export const SpeakerAddEditPanel = ({ isOpen, speaker, onClose, onSubmit }) => {
+/** Values of the speaker form: a new speaker, or the edited one (with its id). */
+export interface SpeakerFormValues extends NewSpeaker {
+    id?: string
+    /** Form only field, saved as is with the speaker. */
+    socialProfil?: string
+}
+
+export interface SpeakerAddEditPanelProps {
+    isOpen: boolean
+    /** The edited speaker, `null`/missing to add a new one. */
+    speaker?: Speaker | null
+    onClose: () => void
+    onSubmit: (
+        speaker: SpeakerFormValues,
+        shouldContinueAfterSubmit: boolean
+    ) => Promise<unknown>
+}
+
+export const SpeakerAddEditPanel = ({
+    isOpen,
+    speaker,
+    onClose,
+    onSubmit,
+}: SpeakerAddEditPanelProps) => {
     const { t } = useTranslation()
     const [shouldContinueAfterSubmit, setContinueAfterSubmit] = useState(false)
 
@@ -17,7 +41,7 @@ export const SpeakerAddEditPanel = ({ isOpen, speaker, onClose, onSubmit }) => {
             onClose={onClose}
             title={t('speakers.addTitle')}
         >
-            <Formik
+            <Formik<SpeakerFormValues>
                 validationSchema={object().shape({
                     name: string().trim().required(t('speakers.addTitle')),
                     photoUrl: string()

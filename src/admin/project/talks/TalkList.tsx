@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../store'
 import { DateTime } from 'luxon'
 import { TalkListItem } from './TalkListItem.tsx'
 import {
@@ -22,18 +22,24 @@ import { TalkAddEditPanel } from './TalkAddEditPanel.tsx'
 import { addSpeaker } from '../../../core/speakers/speakerActions'
 import { useTranslation } from 'react-i18next'
 import { getStartTimeSelector } from '../core/projectSelectors'
+import type { NewTalk, Speaker, Talk } from '../../../core/models'
+import type { TalkFormValues } from './TalkAddEditPanel.tsx'
+
+type EditedTalkFormValues = TalkFormValues & Pick<Talk, 'id'>
 
 export const TalkList = () => {
-    const dispatch = useDispatch()
-    const projectVoteStartTime = useSelector(getStartTimeSelector)
-    const talks = useSelector(getFilteredTalksSelector)
-    const speakersMap = useSelector(getSpeakersListSelector)
-    const speakersArray = useSelector(getSpeakersAsArraySelector)
-    const filter = useSelector(getTalksFilterSelector)
-    const tags = useSelector(getTagsSelector)
-    const tracks = useSelector(getTracksSelector)
+    const dispatch = useAppDispatch()
+    const projectVoteStartTime = useAppSelector(getStartTimeSelector)
+    const talks = useAppSelector(getFilteredTalksSelector)
+    const speakersMap = useAppSelector(getSpeakersListSelector)
+    const speakersArray = useAppSelector(getSpeakersAsArraySelector)
+    const filter = useAppSelector(getTalksFilterSelector)
+    const tags = useAppSelector(getTagsSelector)
+    const tracks = useAppSelector(getTracksSelector)
     const [sidePanelOpen, setSidePanelOpen] = useState(false)
-    const [editingTalk, setEditTalk] = useState(null)
+    const [editingTalk, setEditTalk] = useState<EditedTalkFormValues | null>(
+        null
+    )
     const { t } = useTranslation()
 
     useEffect(() => {
@@ -61,14 +67,15 @@ export const TalkList = () => {
         setSidePanelOpen(true)
     }
 
-    const onEditTalkClicked = (talk) => {
+    const onEditTalkClicked = (talk: Talk) => {
         if (talkNotReadableCheck()) return
         setEditTalk({
             ...talk,
-            startTime: DateTime.fromISO(talk.startTime),
-            endTime: DateTime.fromISO(talk.endTime),
-            speakers: talk
-                ? talk.speakers.map((id) =>
+            // An invalid DateTime when the talk has no start/end time
+            startTime: DateTime.fromISO(talk.startTime ?? ''),
+            endTime: DateTime.fromISO(talk.endTime ?? ''),
+            speakers: talk.speakers
+                ? talk.speakers.map((id): Speaker =>
                       speakersMap[id] ? speakersMap[id] : { id: id, name: id }
                   )
                 : [],
@@ -76,17 +83,19 @@ export const TalkList = () => {
         setSidePanelOpen(true)
     }
 
-    const maybeCloseSidePanel = (shouldContinueAfterSubmit) => {
+    const maybeCloseSidePanel = (shouldContinueAfterSubmit?: boolean) => {
         if (shouldContinueAfterSubmit) {
             return
         }
         setSidePanelOpen(false)
     }
 
-    const reformatTalk = (talk) => ({
+    // The picker values (DateTime or null) are stringified then parsed back,
+    // an empty date ends up as `null`.
+    const reformatTalk = (talk: TalkFormValues) => ({
         ...talk,
-        startTime: DateTime.fromISO(talk.startTime).toISO(),
-        endTime: DateTime.fromISO(talk.endTime).toISO(),
+        startTime: DateTime.fromISO(String(talk.startTime)).toISO(),
+        endTime: DateTime.fromISO(String(talk.endTime)).toISO(),
         speakers: talk.speakers.map((speaker) => speaker.id),
     })
 
@@ -94,7 +103,9 @@ export const TalkList = () => {
         <>
             <OFListHeader
                 filterValue={filter}
-                filterChange={(value) => dispatch(setTalksFilter(value))}
+                filterChange={(value: string) =>
+                    dispatch(setTalksFilter(value))
+                }
                 buttonProcessing={false}
                 buttonClick={() => onAddTalkClicked()}
                 buttonText={t('talks.addTalks')}
@@ -113,7 +124,10 @@ export const TalkList = () => {
                     onSubmit={(talk, shouldContinueAfterSubmit) => {
                         const fixedTalk = reformatTalk(talk)
                         if (editingTalk) {
-                            return dispatch(editTalk(fixedTalk)).then(() =>
+                            // The form values hold the edited talk id
+                            return dispatch(
+                                editTalk({ ...fixedTalk, id: editingTalk.id })
+                            ).then(() =>
                                 maybeCloseSidePanel(shouldContinueAfterSubmit)
                             )
                         }
@@ -130,7 +144,7 @@ export const TalkList = () => {
                         speakers={speakersMap}
                         onEdit={onEditTalkClicked}
                         isRemoveBlocked={talkNotReadableCheck}
-                        onSpeakerClicked={(speakerName) =>
+                        onSpeakerClicked={(speakerName: string) =>
                             dispatch(setTalksFilter(speakerName))
                         }
                     />

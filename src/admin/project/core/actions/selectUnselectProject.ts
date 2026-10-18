@@ -1,3 +1,4 @@
+import type { AppThunk } from '../../../../store'
 import {
     getSelectedProjectIdSelector,
     getSelectedProjectSelector,
@@ -10,44 +11,49 @@ import {
     unselectOrganization,
 } from '../../../organization/core/actions/selectUnselectActions'
 
-export const unselectProject = () => (dispatch, getState) => {
-    const projectId = getSelectedProjectIdSelector(getState())
+export const unselectProject =
+    (): AppThunk<Promise<void>> => (dispatch, getState) => {
+        const projectId = getSelectedProjectIdSelector(getState())
 
-    if (!projectId) {
+        if (!projectId) {
+            return Promise.resolve()
+        }
+
+        dispatch({
+            type: CLEAR_TALK_VOTES,
+            payload: projectId,
+        })
+        dispatch({
+            type: SELECT_PROJECT,
+            payload: null,
+        })
+        dispatch(unselectOrganization())
+
         return Promise.resolve()
     }
 
-    dispatch({
-        type: CLEAR_TALK_VOTES,
-        payload: projectId,
-    })
-    dispatch({
-        type: SELECT_PROJECT,
-        payload: null,
-    })
-    dispatch(unselectOrganization())
+export const selectProject =
+    (projectId: string): AppThunk<Promise<boolean>> =>
+    (dispatch, getState) => {
+        const currentSelectedProjectId =
+            getSelectedProjectIdSelector(getState())
+        if (currentSelectedProjectId === projectId) {
+            // Project already selected (HMR potentially)
+            return Promise.resolve(true)
+        }
 
-    return Promise.resolve()
-}
-export const selectProject = (projectId) => (dispatch, getState) => {
-    const currentSelectedProjectId = getSelectedProjectIdSelector(getState())
-    if (currentSelectedProjectId === projectId) {
-        // Project already selected (HMR potentially)
-        return Promise.resolve(true)
+        dispatch({
+            type: SELECT_PROJECT,
+            payload: projectId,
+        })
+
+        const selectedProject = getSelectedProjectSelector(getState())
+
+        if (selectedProject && selectedProject.organizationId) {
+            dispatch(selectOrganization(selectedProject.organizationId))
+        }
+
+        dispatch(initProjectApiIfReady(projectId, selectedProject))
+
+        return Promise.resolve(false)
     }
-
-    dispatch({
-        type: SELECT_PROJECT,
-        payload: projectId,
-    })
-
-    const selectedProject = getSelectedProjectSelector(getState())
-
-    if (selectedProject && selectedProject.organizationId) {
-        dispatch(selectOrganization(selectedProject.organizationId))
-    }
-
-    dispatch(initProjectApiIfReady(projectId, selectedProject))
-
-    return Promise.resolve(false)
-}

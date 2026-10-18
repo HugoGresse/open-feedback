@@ -19,3 +19,8 @@ interface ImportMetaEnv {
 interface ImportMeta {
     readonly env: ImportMetaEnv
 }
+
+interface Window {
+    /** Set by the Redux DevTools browser extension. */
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof import('redux').compose
+}

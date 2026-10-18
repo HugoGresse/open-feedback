@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type MouseEvent } from 'react'
 import { NewProjectLayout } from './NewProjectLayout.tsx'
 import { object, string } from 'yup'
 import { Form, Formik } from 'formik'
@@ -12,15 +12,26 @@ import ErrorIcon from '@mui/icons-material/Error'
 import { ProjectIdChange } from './Step1.projectIdChange.tsx'
 import { doesProjectIdExistOrIsAllowed } from '../core/projectUtils'
 
-export const Step1 = ({ onCancel, onSubmit, initialValues }) => {
+export interface Step1Values {
+    name: string
+    id: string
+}
+
+export interface Step1Props {
+    onCancel: () => void
+    onSubmit: (projectName: string, projectId: string) => void
+    initialValues: Step1Values
+}
+
+export const Step1 = ({ onCancel, onSubmit, initialValues }: Step1Props) => {
     const { t } = useTranslation()
     const [projectIdEditOpen, setProjectIdOpen] = useState(false)
-    const [projectIdAnchor, setAnchorEl] = useState(null)
+    const [projectIdAnchor, setAnchorEl] = useState<HTMLElement | null>(null)
     const [idValueBeforeOpeningIdChange, setPrecedentIdValue] = useState(
         initialValues.id
     )
 
-    const handleProjectIdClick = (event) => {
+    const handleProjectIdClick = (event: MouseEvent<HTMLElement>) => {
         setProjectIdOpen(!projectIdEditOpen)
         setAnchorEl(projectIdAnchor ? null : event.currentTarget)
     }
@@ -31,7 +42,7 @@ export const Step1 = ({ onCancel, onSubmit, initialValues }) => {
             title={t('newEvent.step1.name')}
             onCancel={onCancel}
         >
-            <Formik
+            <Formik<Step1Values>
                 validationSchema={object().shape({
                     name: string().required(t('newEvent.step1.nameRequired')),
                     id: string()

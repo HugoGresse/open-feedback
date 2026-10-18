@@ -3,7 +3,7 @@ import { OFCard } from '../../../baseComponents/OFCard.tsx'
 import { UserList } from '../../../users/UserList.tsx'
 import { UserListHeader } from '../../../users/UserListHeader.tsx'
 import { UserInviteList } from '../../../users/UserInviteList.tsx'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import {
     getUserDetails,
     setUsersFilter,
@@ -19,11 +19,15 @@ import { getOrganizationMembersIdsSelector } from '../../../organization/core/or
 import { getFilteredUsersWithoutCurrentOneSelector } from '../../../users/core/usersSelectors'
 
 export const ProjectUsers = () => {
-    const dispatch = useDispatch()
-    const userIds = useSelector(getMemberIds)
-    const ownerId = useSelector(getOwnerId)
-    const organizationUserIds = useSelector(getOrganizationMembersIdsSelector)
-    const usersDetails = useSelector(getFilteredUsersWithoutCurrentOneSelector)
+    const dispatch = useAppDispatch()
+    const userIds = useAppSelector(getMemberIds)
+    const ownerId = useAppSelector(getOwnerId)
+    const organizationUserIds = useAppSelector(
+        getOrganizationMembersIdsSelector
+    )
+    const usersDetails = useAppSelector(
+        getFilteredUsersWithoutCurrentOneSelector
+    )
 
     useEffect(() => {
         organizationUserIds.forEach((userId) => {

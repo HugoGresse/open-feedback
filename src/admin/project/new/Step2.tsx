@@ -16,6 +16,23 @@ import { TranslatedTypography } from '../../baseComponents/TranslatedTypography.
 import { OFFormControl } from '../../baseComponents/form/formControl/OFFormControl.tsx'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { OFSwitch } from '../../baseComponents/form/switch/OFSwitch.tsx'
+import type { WizardSetupType } from '../../../core/models'
+
+export interface Step2Values {
+    projectType: WizardSetupType
+    useOrganizationSettings: boolean
+}
+
+export interface Step2Props {
+    onCancel: () => void
+    onBack: () => void
+    onSubmit: (
+        projectType: WizardSetupType,
+        useOrganizationSettings: boolean
+    ) => Promise<unknown> | void
+    initialValues: Step2Values
+    displayOrganizationSettings: boolean
+}
 
 export const Step2 = ({
     onCancel,
@@ -23,14 +40,14 @@ export const Step2 = ({
     onSubmit,
     initialValues,
     displayOrganizationSettings,
-}) => {
+}: Step2Props) => {
     const { t } = useTranslation()
 
-    const isLastStep = (projectType) =>
+    const isLastStep = (projectType: WizardSetupType) =>
         projectType === PROJECT_TYPE_OPENFEEDBACK
 
     return (
-        <Formik
+        <Formik<Step2Values>
             validationSchema={object().shape({
                 projectType: string().required(
                     t('newEvent.step2.projectTypeRequired')

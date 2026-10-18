@@ -1,13 +1,26 @@
 import {
     GET_TEXT_VOTES_SUCCESS,
     HIDE_VOTE_SUCCESS,
+    type ModerationAction,
+    type ModerationTextVotes,
     UNHIDE_VOTE_SUCCESS,
 } from './moderationActionTypes'
-import { LOGOUT } from '../../auth/authActionTypes'
-import { SELECT_PROJECT } from '../core/projectActionTypes'
+import { LOGOUT, type LogoutAction } from '../../auth/authActionTypes'
+import {
+    SELECT_PROJECT,
+    type SelectProjectAction,
+} from '../core/projectActionTypes'
 import { VOTE_STATUS_ACTIVE, VOTE_STATUS_HIDDEN } from '../../../core/contants'
 
-const initState = {
+export interface AdminModerationState {
+    data: {
+        textVotes: ModerationTextVotes
+    }
+    textVotesLoaded: boolean
+    textVotesError: string | null
+}
+
+const initState: AdminModerationState = {
     data: {
         // { sessionId: [{...vote1}, {...vote2}], sessionId2: ... }
         textVotes: {},
@@ -17,10 +30,10 @@ const initState = {
 }
 
 export const adminModerationReducer = (
-    state = initState,
-    { payload, type }
-) => {
-    switch (type) {
+    state: AdminModerationState = initState,
+    action: ModerationAction | LogoutAction | SelectProjectAction
+): AdminModerationState => {
+    switch (action.type) {
         case GET_TEXT_VOTES_SUCCESS:
             return {
                 ...state,
@@ -28,12 +41,13 @@ export const adminModerationReducer = (
                     ...state.data,
                     textVotes: {
                         ...state.data.textVotes,
-                        ...payload,
+                        ...action.payload,
                     },
                 },
                 textVotesLoaded: true,
             }
-        case HIDE_VOTE_SUCCESS:
+        case HIDE_VOTE_SUCCESS: {
+            const payload = action.payload
             return {
                 ...state,
                 data: {
@@ -50,7 +64,9 @@ export const adminModerationReducer = (
                     },
                 },
             }
-        case UNHIDE_VOTE_SUCCESS:
+        }
+        case UNHIDE_VOTE_SUCCESS: {
+            const payload = action.payload
             return {
                 ...state,
                 data: {
@@ -67,6 +83,7 @@ export const adminModerationReducer = (
                     },
                 },
             }
+        }
         case LOGOUT:
         case SELECT_PROJECT:
             return initState

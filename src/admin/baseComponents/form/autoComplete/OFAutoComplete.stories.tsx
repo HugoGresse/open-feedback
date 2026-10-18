@@ -1,4 +1,5 @@
-import { OFAutoComplete } from './OFAutoComplete.tsx'
+import type { Meta } from '@storybook/react-vite'
+import { OFAutoComplete, type OFAutoCompleteValue } from './OFAutoComplete.tsx'
 import { useState } from 'react'
 
 const data = ['Web', 'Back', 'Cloud', 'UX', 'Design', 'Food', 'Biking']
@@ -17,22 +18,21 @@ const objectData = [
     },
 ]
 
-export default {
+const meta = {
     component: OFAutoComplete,
     title: 'Admin/AutoComplete',
-}
+} satisfies Meta<typeof OFAutoComplete>
+export default meta
 
 export const DefaultUsage = () => {
-    const [value, setFieldValue] = useState([])
+    const [value, setFieldValue] = useState<OFAutoCompleteValue>([])
 
     return (
         <OFAutoComplete
-            name="myField"
-            label="Field label"
-            placeholder="Placeholder"
             dataArray={data}
             multiple={true}
             field={{
+                name: 'myField',
                 value: value,
             }}
             form={{
@@ -40,8 +40,8 @@ export const DefaultUsage = () => {
                 initialValues: {
                     myField: '',
                 },
-                setFieldValue: (name, value) => {
-                    setFieldValue(value)
+                setFieldValue: (_name: string, value: unknown) => {
+                    setFieldValue(value as OFAutoCompleteValue)
                 },
             }}
         />
@@ -50,12 +50,10 @@ export const DefaultUsage = () => {
 
 export const submitting = () => (
     <OFAutoComplete
-        name="myField"
-        label="Field label"
-        placeholder="Placeholder"
         dataArray={data}
         multiple={true}
         field={{
+            name: 'myField',
             value: ['toto', 'titi'],
         }}
         form={{
@@ -69,17 +67,15 @@ export const submitting = () => (
 )
 
 export const FreeSolo = () => {
-    const [value, setFieldValue] = useState([])
+    const [value, setFieldValue] = useState<OFAutoCompleteValue>([])
 
     return (
         <OFAutoComplete
-            name="myField"
-            label="Field label"
-            placeholder="Placeholder"
             dataArray={data}
             multiple={true}
             freeSolo={true}
             field={{
+                name: 'myField',
                 value: value,
             }}
             form={{
@@ -87,8 +83,8 @@ export const FreeSolo = () => {
                 initialValues: {
                     myField: '',
                 },
-                setFieldValue: (name, value) => {
-                    setFieldValue(value)
+                setFieldValue: (_name: string, value: unknown) => {
+                    setFieldValue(value as OFAutoCompleteValue)
                 },
             }}
         />
@@ -96,15 +92,13 @@ export const FreeSolo = () => {
 }
 
 export const OnlyOneValue = () => {
-    const [value, setFieldValue] = useState([])
+    const [value, setFieldValue] = useState<OFAutoCompleteValue>([])
 
     return (
         <OFAutoComplete
-            name="myField"
-            label="Field label"
-            placeholder="Placeholder"
             dataArray={data}
             field={{
+                name: 'myField',
                 value: value,
             }}
             form={{
@@ -112,8 +106,8 @@ export const OnlyOneValue = () => {
                 initialValues: {
                     myField: '',
                 },
-                setFieldValue: (name, value) => {
-                    setFieldValue(value)
+                setFieldValue: (_name: string, value: unknown) => {
+                    setFieldValue(value as OFAutoCompleteValue)
                 },
             }}
         />
@@ -121,16 +115,14 @@ export const OnlyOneValue = () => {
 }
 
 export const FromAnArrayOfObject = () => {
-    const [value, setFieldValue] = useState([])
+    const [value, setFieldValue] = useState<OFAutoCompleteValue>([])
 
     return (
         <OFAutoComplete
-            name="myField"
-            label="Field label"
-            placeholder="Placeholder"
             dataArray={objectData}
             keyToDisplay="nativeName"
             field={{
+                name: 'myField',
                 value: value,
             }}
             form={{
@@ -138,8 +130,8 @@ export const FromAnArrayOfObject = () => {
                 initialValues: {
                     myField: '',
                 },
-                setFieldValue: (name, value) => {
-                    setFieldValue(value)
+                setFieldValue: (_name: string, value: unknown) => {
+                    setFieldValue(value as OFAutoCompleteValue)
                 },
             }}
         />
@@ -147,16 +139,14 @@ export const FromAnArrayOfObject = () => {
 }
 
 export const ManyKeysFromAnArrayOfObject = () => {
-    const [value, setFieldValue] = useState([])
+    const [value, setFieldValue] = useState<OFAutoCompleteValue>([])
 
     return (
         <OFAutoComplete
-            name="myField"
-            label="Field label"
-            placeholder="Placeholder"
             dataArray={objectData}
             keysToDisplay={['nativeName', 'tag']}
             field={{
+                name: 'myField',
                 value: value,
             }}
             form={{
@@ -164,8 +154,8 @@ export const ManyKeysFromAnArrayOfObject = () => {
                 initialValues: {
                     myField: '',
                 },
-                setFieldValue: (name, value) => {
-                    setFieldValue(value)
+                setFieldValue: (_name: string, value: unknown) => {
+                    setFieldValue(value as OFAutoCompleteValue)
                 },
             }}
         />

@@ -1,10 +1,21 @@
 import { useState } from 'react'
+import type { HoverboardV2Config } from '../../../core/models'
 import Grid from '@mui/material/Grid'
 import { Typography } from '@mui/material'
 import { SetupHoverboardv2Form } from './SetupHoverboardv2Form.tsx'
 import { SetupValidationContainer } from './validation/SetupValidationContainer.tsx'
 import { PROJECT_TYPE_HOVERBOARDV2 } from '../../../core/setupType/projectApi'
 import { Hoverboardv2Api } from '../../../core/setupType/hoverboardv2/Hoverboardv2Api'
+
+export interface SetupHoverboardv2Props {
+    submitText?: string
+    leftColumnTitle?: string
+    rightColumnTitle?: string
+    onSubmit: (config: HoverboardV2Config) => void
+    initialValues: HoverboardV2Config
+    backText?: string
+    onBack?: (values: HoverboardV2Config) => void
+}
 
 export const SetupHoverboardv2 = ({
     submitText,
@@ -14,8 +25,9 @@ export const SetupHoverboardv2 = ({
     initialValues,
     backText,
     onBack,
-}) => {
-    const [formChangeValues, onFormChange] = useState(null)
+}: SetupHoverboardv2Props) => {
+    const [formChangeValues, onFormChange] =
+        useState<HoverboardV2Config | null>(null)
 
     const formValues = formChangeValues || initialValues
     const isFieldNotEmpty =

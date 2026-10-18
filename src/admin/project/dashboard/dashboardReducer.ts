@@ -1,13 +1,26 @@
 import {
     CLEAR_TALK_VOTES,
+    type DashboardAction,
+    type DashboardTalkVotes,
+    type DashboardUserVote,
     GET_TALK_VOTES_SUCCESS,
     GET_USER_VOTES_SUCCESS,
 } from './dashboardActionTypes'
-import { LOGOUT } from '../../auth/authActionTypes'
+import { LOGOUT, type LogoutAction } from '../../auth/authActionTypes'
 
-const initState = {
+export interface AdminDashboardState {
     data: {
-        talkVotes: [],
+        talkVotes: Record<string, DashboardTalkVotes>
+        userVotes: DashboardUserVote[]
+    }
+    talkVotesLoaded: boolean
+    talkVotesError: string | null
+    userVotesLoaded: boolean
+}
+
+const initState: AdminDashboardState = {
+    data: {
+        talkVotes: {},
         userVotes: [],
     },
     talkVotesLoaded: false,
@@ -15,14 +28,17 @@ const initState = {
     userVotesLoaded: false,
 }
 
-export const adminDashboardReducer = (state = initState, { payload, type }) => {
-    switch (type) {
+export const adminDashboardReducer = (
+    state: AdminDashboardState = initState,
+    action: DashboardAction | LogoutAction
+): AdminDashboardState => {
+    switch (action.type) {
         case GET_TALK_VOTES_SUCCESS:
             return {
                 ...state,
                 data: {
                     ...state.data,
-                    talkVotes: payload,
+                    talkVotes: action.payload,
                 },
                 talkVotesLoaded: true,
             }
@@ -31,7 +47,7 @@ export const adminDashboardReducer = (state = initState, { payload, type }) => {
                 ...state,
                 data: {
                     ...state.data,
-                    userVotes: payload,
+                    userVotes: action.payload,
                 },
                 userVotesLoaded: true,
             }

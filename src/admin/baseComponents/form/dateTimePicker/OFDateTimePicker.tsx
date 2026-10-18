@@ -1,18 +1,29 @@
 import { useState } from 'react'
+import type { FieldProps } from 'formik'
+import type { DateTime } from 'luxon'
 import { OFInputForDateTimePicker } from './OFInputForDateTimePicker.tsx'
-import { useTranslation } from 'react-i18next'
-import { DateTimePicker } from '@mui/x-date-pickers'
+import { DateTimePicker, type DateTimePickerProps } from '@mui/x-date-pickers'
+
+export interface OFDateTimePickerProps
+    extends
+        Pick<FieldProps<DateTime | null>, 'field' | 'form'>,
+        Omit<
+            Partial<DateTimePickerProps<DateTime>>,
+            'name' | 'value' | 'format'
+        > {
+    format?: string
+    // Legacy (MUI pickers v4) prop, ignored by the current DateTimePicker.
+    initialFocusedDate?: unknown
+}
 
 export const OFDateTimePicker = ({
     field,
     form,
     format,
-    initialFocusedDate,
     ...other
-}) => {
-    const { t } = useTranslation()
+}: OFDateTimePickerProps) => {
     const [isOpen, setIsOpen] = useState(false)
-    const [closeTime, setCloseTime] = useState(null)
+    const [closeTime, setCloseTime] = useState<number | null>(null)
     const currentError = form.errors[field.name]
 
     const maybeOpenPicker = () => {
@@ -21,36 +32,32 @@ export const OFDateTimePicker = ({
             return
         }
         // Prevent the input re-focus to display the picker when the picker is just closed
-        if (Date.now() - closeTime > 1000) {
+        if (Date.now() - (closeTime ?? 0) > 1000) {
             setIsOpen(true)
         }
     }
 
     return (
-        <DateTimePicker
+        <DateTimePicker<DateTime>
             open={isOpen}
             onClose={() => {
                 setCloseTime(Date.now())
                 setIsOpen(false)
             }}
-            autoOk
             disabled={!!form.isSubmitting}
             name={field.name}
             value={field.value}
-            initialFocusedDate={initialFocusedDate}
-            clearable
             format={format}
             minutesStep={5}
             ampm={false}
-            helperText={currentError}
-            error={Boolean(currentError)}
             onError={(error) => {
                 // handle as a side effect
                 if (error !== currentError) {
-                    form.setFieldError(field.name, error)
+                    // The picker reports `null` when the value is valid; it is
+                    // stored as is in Formik errors.
+                    form.setFieldError(field.name, error as string | undefined)
                 }
             }}
-            onBlur={field.onBlur}
             onChange={(date) => form.setFieldValue(field.name, date, false)}
             slots={{
                 textField: OFInputForDateTimePicker,
@@ -61,10 +68,6 @@ export const OFDateTimePicker = ({
                     onClick: maybeOpenPicker,
                 },
             }}
-            autoComplete="off"
-            okLabel={t('common.pick')}
-            cancelLabel={t('common.cancel')}
-            clearLabel={t('common.clear')}
             {...other}
         />
     )

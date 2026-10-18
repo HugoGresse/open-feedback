@@ -4,6 +4,7 @@ import { ColorBlock } from './ColorBlock.tsx'
 import IconButton from '@mui/material/IconButton'
 import { newRandomHexColor } from '../../../../utils/colorsUtils'
 import { useTranslation } from 'react-i18next'
+import type { FieldProps } from 'formik'
 
 const useStyles = makeStyles(() => ({
     colorBlock: {
@@ -15,14 +16,17 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-export const ChipColorsEditor = ({ field, form }) => {
+/** Hex colors without `#`. */
+export type ChipColorsEditorProps = FieldProps<string[] | undefined>
+
+export const ChipColorsEditor = ({ field, form }: ChipColorsEditorProps) => {
     const { t } = useTranslation()
     const classes = useStyles()
 
-    const onColorChanges = (oldColor, newColor) => {
+    const onColorChanges = (oldColor: string, newColor: string) => {
         form.setFieldValue(
             field.name,
-            field.value.map((color) => {
+            field.value?.map((color) => {
                 if (color === oldColor) {
                     return newColor
                 }
@@ -37,10 +41,10 @@ export const ChipColorsEditor = ({ field, form }) => {
         form.setFieldValue(field.name, values)
     }
 
-    const onColorDeleted = (color) => {
+    const onColorDeleted = (color: string) => {
         form.setFieldValue(
             field.name,
-            field.value.filter((item) => item !== color)
+            field.value?.filter((item) => item !== color)
         )
     }
 

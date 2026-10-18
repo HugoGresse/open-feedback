@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../../store'
 import { getVotesByDaySelector } from './dashboardSelectors'
 import { DashboardCard } from './utils/DashboardCard.tsx'
 import InsertChartOutlined from '@mui/icons-material/InsertChartOutlined'
@@ -10,18 +10,26 @@ import { OFButton } from '../../baseComponents/button/OFButton.tsx'
 import ArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import ArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import Typography from '@mui/material/Typography'
-import { DateTime } from 'luxon'
+import { DateTime, type DateTimeFormatOptions } from 'luxon'
 import { VoteTimelineGraph } from './VoteTimelineGraph.tsx'
 
-const dateFormat = { month: 'long', day: 'numeric', year: 'numeric' }
-export const VoteTimeline = ({ dinoStartDelay }) => {
-    const voteByDay = useSelector(getVotesByDaySelector)
+const dateFormat: DateTimeFormatOptions = {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+}
+export interface VoteTimelineProps {
+    dinoStartDelay?: number
+}
+
+export const VoteTimeline = ({ dinoStartDelay }: VoteTimelineProps) => {
+    const voteByDay = useAppSelector(getVotesByDaySelector)
     const [selectedIndex, setSelectedIndex] = useState(-1)
     const { t } = useTranslation()
 
     const voteByDayKeys = Object.keys(voteByDay)
 
-    const changeDate = (newIndex) => {
+    const changeDate = (newIndex: number) => {
         if (voteByDayKeys[newIndex] !== undefined) {
             setSelectedIndex(newIndex)
         }

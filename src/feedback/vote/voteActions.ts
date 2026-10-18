@@ -10,6 +10,7 @@ import {
     REMOVE_VOTE_SUCCESS,
     UPDATE_VOTE_ERROR,
     UPDATE_VOTE_SUCCESS,
+    type VoteAction,
 } from './voteActionTypes'
 import { fireStoreMainInstance, serverTimestamp } from '../../firebase.ts'
 import { getUserSelector } from '../auth/authSelectors'
@@ -24,14 +25,26 @@ import {
 import { trackUnvote, trackVote } from '../utils/track'
 import { getVoteId } from './getVoteId'
 import { isVoteAllowed } from './actions/isVoteAllowed'
+import type { TFunction } from 'react-i18next'
+import type firebase from 'firebase/compat/app'
+import type { Vote, VoteItem, VotesMap } from '../../core/models'
+import type { AppThunk } from '../../store'
 
-export const voteFor = (talkId, voteItem, data, translate) => {
+// The thunks below run from the Talk page: the project is loaded and the
+// user logged in (`!` on their selectors).
+
+export const voteFor = (
+    talkId: string,
+    voteItem: VoteItem,
+    data: string | null,
+    translate: TFunction
+): AppThunk => {
     return (dispatch, getState) => {
         if (!isVoteAllowed(dispatch, getState, translate)) {
             return
         }
 
-        const project = getProjectSelector(getState())
+        const project = getProjectSelector(getState())!
         const projectId = project.id
 
         const [id, existingVote] = getVoteId(
@@ -41,7 +54,7 @@ export const voteFor = (talkId, voteItem, data, translate) => {
             data
         )
 
-        const voteContent = {
+        const voteContent: Vote = {
             projectId: projectId,
             talkId: talkId,
             voteItemId: voteItem.id,
@@ -50,12 +63,13 @@ export const voteFor = (talkId, voteItem, data, translate) => {
                 ? existingVote.createdAt
                 : serverTimestamp(),
             updatedAt: serverTimestamp(),
-            userId: getUserSelector(getState()).uid,
+            userId: getUserSelector(getState())!.uid,
             status: VOTE_STATUS_ACTIVE,
         }
 
         if (voteItem.type === VOTE_TYPE_TEXT) {
-            voteContent.text = data.trim()
+            // A text vote item always sends the text
+            voteContent.text = data!.trim()
             if (voteContent.text.length === 0) {
                 return
             }
@@ -94,7 +108,7 @@ export const voteFor = (talkId, voteItem, data, translate) => {
                 })
                 trackVote(project.name, projectId, voteItem.type)
             })
-            .catch((error) => {
+            .catch((error: unknown) => {
                 dispatch({
                     type: ADD_VOTE_ERROR,
                     payload: {
@@ -114,7 +128,10 @@ export const voteFor = (talkId, voteItem, data, translate) => {
     }
 }
 
-export const removeVote = (voteToDelete, translate) => {
+export const removeVote = (
+    voteToDelete: Vote,
+    translate: TFunction
+): AppThunk => {
     return (dispatch, getState) => {
         if (getCurrentUserVotesSelector(getState())[voteToDelete.id].pending) {
             // eslint-disable-next-line no-console
@@ -128,7 +145,7 @@ export const removeVote = (voteToDelete, translate) => {
             return
         }
 
-        const project = getProjectSelector(getState())
+        const project = getProjectSelector(getState())!
 
         dispatch({
             type: REMOVE_VOTE_BEFORE_SUCCESS,
@@ -145,7 +162,7 @@ export const removeVote = (voteToDelete, translate) => {
 
         fireStoreMainInstance
             .collection('projects')
-            .doc(getProjectSelector(getState()).id)
+            .doc(getProjectSelector(getState())!.id)
             .collection('userVotes')
             .doc(voteToDelete.id)
             .set(
@@ -162,7 +179,7 @@ export const removeVote = (voteToDelete, translate) => {
                 })
                 trackUnvote(project.name, project.id)
             })
-            .catch((error) => {
+            .catch((error: unknown) => {
                 dispatch({
                     type: ADD_VOTE_ERROR,
                     payload: {
@@ -182,69 +199,72 @@ export const removeVote = (voteToDelete, translate) => {
     }
 }
 
-export const updateVote = (vote, data, translate) => (dispatch, getState) => {
-    if (
-        !isVoteAllowed(dispatch, getState, translate) ||
-        data.trim().length === 0
-    ) {
-        return
-    }
+export const updateVote =
+    (vote: Vote, data: string, translate: TFunction): AppThunk =>
+    (dispatch, getState) => {
+        if (
+            !isVoteAllowed(dispatch, getState, translate) ||
+            data.trim().length === 0
+        ) {
+            return
+        }
 
-    dispatch({
-        type: INCREMENT_VOTE_LOCALLY,
-        payload: {
-            vote: {
-                ...vote,
-                text: data.trim(),
+        dispatch({
+            type: INCREMENT_VOTE_LOCALLY,
+            payload: {
+                vote: {
+                    ...vote,
+                    text: data.trim(),
+                },
             },
-        },
-    })
-
-    fireStoreMainInstance
-        .collection('projects')
-        .doc(getProjectSelector(getState()).id)
-        .collection('userVotes')
-        .doc(vote.id)
-        .update({
-            text: data,
-            updatedAt: serverTimestamp(),
         })
-        .then(() => {
-            dispatch({
-                type: UPDATE_VOTE_SUCCESS,
-                payload: {
-                    vote: {
-                        [vote.id]: {
-                            ...vote,
-                            text: data,
+
+        fireStoreMainInstance
+            .collection('projects')
+            .doc(getProjectSelector(getState())!.id)
+            .collection('userVotes')
+            .doc(vote.id)
+            .update({
+                text: data,
+                updatedAt: serverTimestamp(),
+            })
+            .then(() => {
+                dispatch({
+                    type: UPDATE_VOTE_SUCCESS,
+                    payload: {
+                        vote: {
+                            [vote.id]: {
+                                ...vote,
+                                text: data,
+                            },
                         },
                     },
-                },
+                })
             })
-        })
-        .catch((error) => {
-            dispatch({
-                type: UPDATE_VOTE_ERROR,
-                payload: {
-                    error: error.toString(),
-                    voteId: vote.id,
-                },
+            .catch((error: Error) => {
+                dispatch({
+                    type: UPDATE_VOTE_ERROR,
+                    payload: {
+                        error: error.toString(),
+                        voteId: vote.id,
+                    },
+                })
             })
-        })
-}
+    }
 
-export const getVotes = () => {
+export const getVotes = (): AppThunk => {
     return (dispatch, getState) => {
         fireStoreMainInstance
             .collection('projects')
-            .doc(getProjectSelector(getState()).id)
+            .doc(getProjectSelector(getState())!.id)
             .collection('userVotes')
-            .where('userId', '==', getUserSelector(getState()).uid)
+            .where('userId', '==', getUserSelector(getState())!.uid)
             .get()
             .then((voteSnapshot) => {
-                const votes = {}
+                const votes: VotesMap = {}
                 voteSnapshot.forEach((doc) => {
-                    votes[doc.id] = doc.data()
+                    // Firestore boundary: userVotes documents are votes.
+                    votes[doc.id] = doc.data() as Vote
                     votes[doc.id].id = doc.id
                 })
                 dispatch({
@@ -252,7 +272,7 @@ export const getVotes = () => {
                     payload: votes,
                 })
             })
-            .catch((error) => {
+            .catch((error: firebase.firestore.FirestoreError) => {
                 dispatch({
                     type: GET_USER_VOTES_ERROR,
                     payload: error,
@@ -261,10 +281,10 @@ export const getVotes = () => {
     }
 }
 
-export const removeVotePostError = () => ({
+export const removeVotePostError = (): VoteAction => ({
     type: DELETE_VOTE_POST_ERROR,
 })
 
-export const removeVoteLoadError = () => ({
+export const removeVoteLoadError = (): VoteAction => ({
     type: DELETE_VOTE_LOAD_ERROR,
 })

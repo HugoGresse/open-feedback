@@ -1,11 +1,11 @@
-import { DateRange, useProjects } from './hooks/useProjects.ts'
+import { type DateRange, useProjects } from './hooks/useProjects.ts'
 import { FirestoreQueryLoaderAndErrorDisplay } from './FirestoreQueryLoaderAndErrorDisplay.tsx'
 import { getInitialDateRanges } from './utils/getYearsFilters.ts'
 import { Box, Button } from '@mui/material'
 import { useState } from 'react'
-import { DataGrid, GridColDef } from '@mui/x-data-grid'
+import { DataGrid, type GridColDef } from '@mui/x-data-grid'
 import { useExtraProjectsInfo } from './hooks/useExtraProjectsInfo.ts'
-import { Project, ProjectExtraInfo } from './type.ts'
+import type { Project, ProjectExtraInfo } from './type.ts'
 
 /**
  * Show last projects created with:

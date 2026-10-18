@@ -1,9 +1,14 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Collapse } from '@mui/material'
 import ArrowDown from '@mui/icons-material/KeyboardArrowDown'
 import { OFButton } from '../button/OFButton.tsx'
 
-export const CollapsePanel = ({ children, buttonText }) => {
+export interface CollapsePanelProps {
+    children?: ReactNode
+    buttonText: ReactNode
+}
+
+export const CollapsePanel = ({ children, buttonText }: CollapsePanelProps) => {
     const [isExpanded, setExpanded] = useState(false)
 
     return (

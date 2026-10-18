@@ -8,6 +8,27 @@ import {
 } from '../../core/contants'
 import { TalkVoteTitle } from './nonVoteItem/TalkVoteTitle.tsx'
 import { TalkVoteSeparator } from './nonVoteItem/TalkVoteSeparator.tsx'
+import type { Vote, VoteItem } from '../../core/models'
+import type { VoteResult } from './core/getVoteResultSelectorSelector'
+
+/**
+ * Called when the user votes on a vote item. `vote` is the user existing vote
+ * to update or remove, `data` the text of a text vote.
+ */
+export type OnVoteChange = (
+    voteItem: VoteItem,
+    data: string | null,
+    vote?: Vote | null
+) => void
+
+interface TalkVoteProps {
+    voteItem: VoteItem
+    /** The user votes on this vote item. */
+    userVotes?: Vote[]
+    voteResult: VoteResult
+    chipColors?: string[]
+    onVoteChange: OnVoteChange
+}
 
 export const TalkVote = ({
     voteItem,
@@ -15,7 +36,7 @@ export const TalkVote = ({
     voteResult,
     chipColors,
     onVoteChange,
-}) => {
+}: TalkVoteProps) => {
     switch (voteItem.type) {
         default:
         case VOTE_TYPE_BOOLEAN:
@@ -26,7 +47,9 @@ export const TalkVote = ({
                     }}
                     voteItem={voteItem}
                     isSelected={!!userVotes}
-                    voteResult={voteResult}
+                    voteResult={
+                        typeof voteResult === 'number' ? voteResult : undefined
+                    }
                     chipColors={chipColors}
                 />
             )
@@ -36,7 +59,9 @@ export const TalkVote = ({
                     onVoteChange={onVoteChange}
                     voteItem={voteItem}
                     currentUserVotes={userVotes}
-                    voteResult={voteResult}
+                    voteResult={
+                        Array.isArray(voteResult) ? voteResult : undefined
+                    }
                     chipColors={chipColors}
                 />
             )

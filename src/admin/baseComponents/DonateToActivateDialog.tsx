@@ -6,7 +6,15 @@ import { OFButton } from './button/OFButton.tsx'
 import DialogContentText from '@mui/material/DialogContentText'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 
-export const DonateToActivateDialog = ({ isDialogOpen, onClose }) => {
+export interface DonateToActivateDialogProps {
+    isDialogOpen: boolean
+    onClose: () => void
+}
+
+export const DonateToActivateDialog = ({
+    isDialogOpen,
+    onClose,
+}: DonateToActivateDialogProps) => {
     const { t } = useTranslation()
 
     return (

@@ -5,14 +5,15 @@ import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
 import { signOut } from '../auth/authActions'
 import PowerSettingsIcon from '@mui/icons-material/PowerSettingsNew'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../store'
 import { getUserSelector } from '../auth/authSelectors'
 import { makeStyles } from '@mui/styles'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
+import type { Theme } from '@mui/material/styles'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     container: {
         background: HEX_COLORS.RED_ORANGE,
         padding: 32,
@@ -50,13 +51,18 @@ const useStyles = makeStyles((theme) => ({
 
 export const RootHeader = () => {
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const classes = useStyles()
 
-    const user = useSelector(getUserSelector)
+    const user = useAppSelector(getUserSelector)
+
+    // Only rendered once logged in (see Login)
+    if (!user) {
+        return null
+    }
 
     const displayedUserName =
-        user.displayName || (user.email.split('@') || [''])[0]
+        user.displayName || (user.email?.split('@') || [''])[0]
 
     return (
         <header className={classes.container}>

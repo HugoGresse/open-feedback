@@ -1,8 +1,11 @@
+import type { Meta } from '@storybook/react-vite'
 import { OFButton } from './OFButton.tsx'
-export default {
+
+const meta = {
     component: OFButton,
     title: 'Admin/Button',
-}
+} satisfies Meta<typeof OFButton>
+export default meta
 
 export const defaultUsage = () => <OFButton>Click me</OFButton>
 

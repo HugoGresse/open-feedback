@@ -72,13 +72,13 @@ const Wrapper = styled.header`
     }
 `
 
-const LinkButton = styled.a`
+const LinkButton = styled.a<{ $variant?: 'outline' }>`
     ${(props) =>
-        props.variant === 'outline'
+        props.$variant === 'outline'
             ? `color: ${COLORS.WHITE}`
             : `color: ${COLORS.RED_ORANGE}`};
     ${(props) =>
-        props.variant === 'outline'
+        props.$variant === 'outline'
             ? `background : none`
             : `background:  ${COLORS.WHITE}`};
     transition: all 0.2s ease;
@@ -168,7 +168,7 @@ export const Header = () => {
                                     ? '/testprojectid/'
                                     : '/eaJnyMXD3oNfhrrnBYDT/'
                             }
-                            variant="outline"
+                            $variant="outline"
                         >
                             {t('home.headerActionDemo')}
                         </LinkButton>

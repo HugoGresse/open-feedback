@@ -1,3 +1,4 @@
+import type { Meta } from '@storybook/react-vite'
 import { Form, Formik } from 'formik'
 import { FormikAutoSave } from './FormikAutoSave.tsx'
 import { object, string } from 'yup'
@@ -5,10 +6,11 @@ import { CircularProgress } from '@mui/material'
 import { OFFormControlInputFormiked } from '../formControl/OFFormControlInputFormiked.tsx'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-export default {
+const meta = {
     component: FormikAutoSave,
     title: 'Admin/AutoSave',
-}
+} satisfies Meta<typeof FormikAutoSave>
+export default meta
 
 export const defaultUsage = () => (
     <ThemeProvider theme={createTheme()}>
@@ -19,7 +21,7 @@ export const defaultUsage = () => (
             initialValues={{
                 title: '',
             }}
-            onSubmit={() => null}
+            onSubmit={() => {}}
         >
             {({ isSubmitting }) => (
                 <Form method="POST">
@@ -31,17 +33,17 @@ export const defaultUsage = () => (
                     />
 
                     <FormikAutoSave
-                        onSave={(values) => {
+                        onSave={(values: { title: string }) => {
                             return Promise.resolve(values)
                         }}
-                        render={({ isSaving, lastSaved, saveError }) => (
+                        render={({ isSaving, lastSavedDate, saveError }) => (
                             <div>
                                 {isSaving ? (
                                     <CircularProgress />
                                 ) : saveError ? (
                                     `Error: ${saveError}`
-                                ) : lastSaved ? (
-                                    `Autosaved ${lastSaved}`
+                                ) : lastSavedDate ? (
+                                    `Autosaved ${lastSavedDate}`
                                 ) : (
                                     ''
                                 )}

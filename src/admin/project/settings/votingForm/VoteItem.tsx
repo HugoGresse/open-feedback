@@ -5,7 +5,6 @@ import {
     type KeyboardEvent,
     type ChangeEvent,
 } from 'react'
-// @ts-expect-error - JS module without types
 import { OFInput } from '../../../baseComponents/form/input/OFInput.tsx'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator'
@@ -13,55 +12,45 @@ import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
 import { OFListItem } from '../../../baseComponents/layouts/OFListItem.tsx'
 import { makeStyles } from '@mui/styles'
-import Select from '@mui/material/Select'
+import Select, { type SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
-import { SelectChangeEvent } from '@mui/material/Select'
 import { useTranslation } from 'react-i18next'
 import {
     VOTE_TYPE_BOOLEAN,
     VOTE_TYPE_SEPARATOR,
     VOTE_TYPE_TEXT,
     VOTE_TYPE_TITLE,
-    // @ts-expect-error - JS module without types
 } from '../../../../core/contants'
-// @ts-expect-error - JS module without types
 import langMap from 'langmap'
-// @ts-expect-error - JS module without types
 import { InputLangAdornment } from './InputLangAdornment.tsx'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-
-// Types
-export interface VoteItemType {
-    id: string
-    name: string | null
-    position: number
-    type: string
-    local?: boolean
-    oldId?: string
-    languages?: Record<string, string>
-}
+import type { TFunction } from 'react-i18next'
+import type {
+    VoteItem as VoteItemModel,
+    VoteItemType,
+} from '../../../../core/models'
 
 interface VoteType {
-    type: string
+    type: VoteItemType
     name: string
 }
 
 interface VoteItemProps {
     id: string
-    item: VoteItemType
+    item: VoteItemModel
     languages: string[]
     onChange: (_newValue: string) => void
     onLanguagesChange: (_langTag: string, _value: string) => void
     onDelete: () => void
     onEnterPressed: () => void
-    onTypeChange: (_type: string) => void
+    onTypeChange: (_type: VoteItemType) => void
     onFocus: () => void
     focusId?: string
     noBorderBottom?: boolean
 }
 
-const useStyles = makeStyles((_theme) => ({
+const useStyles = makeStyles(() => ({
     cell: {
         paddingRight: 12,
     },
@@ -83,7 +72,7 @@ const useStyles = makeStyles((_theme) => ({
     },
 }))
 
-const getTypes = (t: (_key: string) => string): VoteType[] => [
+const getTypes = (t: TFunction): VoteType[] => [
     {
         type: VOTE_TYPE_BOOLEAN,
         name: t('settingsVotingForm.typeBoolean'),
@@ -182,8 +171,12 @@ export const VoteItem = ({
         onLanguagesChange(langTag, event.target.value)
     }
 
-    const handleTypeChange = (event: SelectChangeEvent<string>) => {
-        onTypeChange(event.target.value)
+    const handleTypeChange = (event: SelectChangeEvent<VoteItemType>) => {
+        // The value is one of the MenuItem values below.
+        const voteType = types.find((type) => type.type === event.target.value)
+        if (voteType) {
+            onTypeChange(voteType.type)
+        }
     }
 
     const handleInputFocus = () => {
@@ -269,7 +262,7 @@ export const VoteItem = ({
                     ))}
             </Grid>
             <Grid item xs={12} sm={2} className={classes.typeCell}>
-                <Select
+                <Select<VoteItemType>
                     id="vote-item-type"
                     value={item.type}
                     onChange={handleTypeChange}

@@ -1,6 +1,11 @@
 import { SpeakerItem } from './SpeakerItem.tsx'
 import { makeStyles } from '@mui/styles'
 import { Typography } from '@mui/material'
+import type { Speaker } from '../../core/models'
+
+interface SpeakerListStyleProps {
+    isSmall: boolean
+}
 import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(() => ({
@@ -8,7 +13,8 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         alignItems: 'center',
         flexWrap: 'wrap',
-        maxHeight: (props) => (props.isSmall ? 58 : 'none'),
+        maxHeight: (props: SpeakerListStyleProps) =>
+            props.isSmall ? 58 : 'none',
     },
     exceeding: {
         fontSize: '12px',
@@ -18,7 +24,17 @@ const useStyles = makeStyles(() => ({
 const MAX_DISPLAYED_SPEAKERS = 3
 export const SIZE_SMALL = 'small'
 export const SIZE_MEDIUM = 'medium'
-export const SpeakerList = ({ speakers, size = SIZE_MEDIUM }) => {
+export type SpeakerSize = typeof SIZE_SMALL | typeof SIZE_MEDIUM
+
+interface SpeakerListProps {
+    speakers: Speaker[]
+    size?: SpeakerSize
+}
+
+export const SpeakerList = ({
+    speakers,
+    size = SIZE_MEDIUM,
+}: SpeakerListProps) => {
     const isSmall = size === SIZE_SMALL
     const classes = useStyles({
         isSmall: isSmall,

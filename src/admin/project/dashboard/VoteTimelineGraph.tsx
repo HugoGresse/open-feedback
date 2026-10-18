@@ -1,11 +1,44 @@
-import { ResponsiveLine } from '@nivo/line'
+import {
+    type LineSvgProps,
+    ResponsiveLine,
+    type SliceTooltipProps,
+} from '@nivo/line'
+import type { CSSProperties } from 'react'
 import { HEX_COLORS } from '../../../constants/colors'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { animated } from 'react-spring'
 import { useTheme as useMuiTheme } from '@mui/material'
 import { useTheme as useNivoTheme } from '@nivo/theming'
+import type { VoteTimelinePoint } from './dashboardSelectors'
 
-export const VoteTimelineGraph = ({ votes }) => {
+interface VoteSeries {
+    id: string
+    data: VoteTimelinePoint[]
+}
+
+// Axis types of @nivo/axes (not a direct dependency), read from @nivo/line.
+type TickRenderer = NonNullable<
+    NonNullable<LineSvgProps<VoteSeries>['axisBottom']>['renderTick']
+>
+type AxisTickProps = Parameters<TickRenderer>[0]
+
+// nivo types renderTick as returning an Element, but it renders whatever the
+// function returns, so returning null hides the tick.
+const asTickRenderer = (render: (tick: AxisTickProps) => JSX.Element | null) =>
+    render as TickRenderer
+
+type TickOpacity = AxisTickProps['animatedProps']['opacity']
+
+// nivo hands @react-spring/web SpringValues to the ticks, while they are
+// rendered with react-spring v8 `animated`, whose types only know CSS values.
+const asAnimatedOpacity = (opacity: TickOpacity | number) =>
+    opacity as unknown as CSSProperties['opacity']
+
+export interface VoteTimelineGraphProps {
+    votes: VoteTimelinePoint[]
+}
+
+export const VoteTimelineGraph = ({ votes }: VoteTimelineGraphProps) => {
     const theme = useMuiTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('lg'))
 
@@ -23,14 +56,12 @@ export const VoteTimelineGraph = ({ votes }) => {
             yScale={{ type: 'linear' }}
             sliceTooltip={Tooltip}
             axisBottom={{
-                orient: 'bottom',
                 tickValues: 10,
-                renderTick: HorizontalTick(isMobile ? 2 : 100),
+                renderTick: asTickRenderer(HorizontalTick(isMobile ? 2 : 100)),
             }}
             axisLeft={{
-                orient: 'left',
                 tickValues: 4,
-                renderTick: VerticalTick,
+                renderTick: asTickRenderer(VerticalTick),
             }}
             enablePoints={false}
             enableGridX={false}
@@ -42,7 +73,7 @@ export const VoteTimelineGraph = ({ votes }) => {
     )
 }
 
-const VerticalTick = (tick) => {
+const VerticalTick = (tick: AxisTickProps) => {
     const theme = useNivoTheme()
 
     // Hide first tick at 0, 0
@@ -53,7 +84,7 @@ const VerticalTick = (tick) => {
     return (
         <animated.g
             transform={`translate(${tick.x},${tick.y + 8})`}
-            style={{ opacity: tick.animatedProps.opacity }}
+            style={{ opacity: asAnimatedOpacity(tick.animatedProps.opacity) }}
         >
             <text
                 textAnchor="left"
@@ -70,21 +101,21 @@ const VerticalTick = (tick) => {
     )
 }
 
-function HorizontalTick(pointToDisplay) {
-    const tickFunction = (tick) => {
+function HorizontalTick(pointToDisplay: number) {
+    const tickFunction = (tick: AxisTickProps) => {
         // Hide first tick at 0, 0
         if (tick.tickIndex === 0) {
             return null
         }
 
-        let opacity = tick.animatedProps.opacity
+        let opacity: TickOpacity | number = tick.animatedProps.opacity
         if (parseInt(tick.value) % pointToDisplay === 0) {
             opacity = 0
         }
 
         return (
             <animated.g
-                style={{ opacity: opacity }}
+                style={{ opacity: asAnimatedOpacity(opacity) }}
                 transform={`translate(${tick.x},${tick.y})`}
             >
                 <line stroke="#ccc" strokeWidth={1} y1={0} y2={7} />
@@ -106,7 +137,7 @@ function HorizontalTick(pointToDisplay) {
     return tickFunction
 }
 
-const Tooltip = ({ slice }) => {
+const Tooltip = ({ slice }: SliceTooltipProps<VoteSeries>) => {
     return (
         <div
             style={{

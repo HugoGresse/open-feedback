@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { emphasize, styled } from '@mui/material'
+import { type ChangeEvent, useEffect, useState } from 'react'
+import { emphasize, styled, type Theme } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import SaveIcon from '@mui/icons-material/Save'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -13,8 +13,11 @@ import { VOTE_STATUS_HIDDEN, VOTE_TYPE_TEXT_PLUS } from '../../../core/contants'
 import { HEX_COLORS } from '../../../constants/colors'
 import Typography from '@mui/material/Typography'
 import { makeStyles } from '@mui/styles'
+import type { Vote, VoteItem, VoteStatus } from '../../../core/models'
+import type { OnVoteChange } from '../TalkVote.tsx'
+import type { TextVoteResult } from '../core/getVoteResultSelectorSelector'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     itemContainer: {
         margin: -1,
     },
@@ -72,16 +75,33 @@ const VoteTextField = styled(TextField)({
     },
 })
 
+interface TalkVoteTextProps {
+    /** The user votes on this vote item. */
+    currentUserVotes?: Vote[]
+    onVoteChange: OnVoteChange
+    voteItem: VoteItem
+    voteResult?: TextVoteResult[]
+    chipColors?: string[]
+}
+
+interface TextVoteFormState {
+    comment: string
+    status: VoteStatus | null
+    dataLoaded: boolean
+    /** The user text vote being edited. */
+    vote?: Vote | null
+}
+
 export const TalkVoteText = ({
     currentUserVotes,
     onVoteChange,
     voteItem,
     voteResult,
     chipColors,
-}) => {
+}: TalkVoteTextProps) => {
     const { t } = useTranslation()
     const classes = useStyles()
-    const [data, setData] = useState({
+    const [data, setData] = useState<TextVoteFormState>({
         comment: '',
         status: null,
         dataLoaded: false,
@@ -90,7 +110,8 @@ export const TalkVoteText = ({
     useEffect(() => {
         if (currentUserVotes && (!data.dataLoaded || !data.vote)) {
             const foundTextVote = currentUserVotes.find(
-                (vote) => !!vote.text && vote.voteType !== VOTE_TYPE_TEXT_PLUS
+                (vote): vote is Vote & { text: string } =>
+                    !!vote.text && vote.voteType !== VOTE_TYPE_TEXT_PLUS
             )
             if (foundTextVote) {
                 setData({
@@ -103,7 +124,9 @@ export const TalkVoteText = ({
         }
     }, [currentUserVotes, data.vote, data.dataLoaded])
 
-    const onTextChange = (event) => {
+    const onTextChange = (
+        event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
         setData({
             ...data,
             comment: event.target.value,

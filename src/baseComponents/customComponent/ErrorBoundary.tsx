@@ -1,21 +1,35 @@
-import { Component } from 'react'
+import { Component, type ErrorInfo, type ReactNode } from 'react'
 import { OFButton } from '../../admin/baseComponents/button/OFButton.tsx'
 import { Box } from '@mui/material'
 import { createAlert } from '../../utils/alerting/createAlert'
+import type { ErrorAlertFactory } from '../../utils/alerting/alerts'
 
-export class ErrorBoundary extends Component {
-    constructor(props) {
+interface ErrorBoundaryProps {
+    errorToReport: ErrorAlertFactory
+    children?: ReactNode
+}
+
+interface ErrorBoundaryState {
+    hasError: boolean
+    error?: unknown
+}
+
+export class ErrorBoundary extends Component<
+    ErrorBoundaryProps,
+    ErrorBoundaryState
+> {
+    constructor(props: ErrorBoundaryProps) {
         super(props)
         this.state = {
             hasError: false,
         }
     }
 
-    static getDerivedStateFromError(error) {
+    static getDerivedStateFromError(error: unknown): ErrorBoundaryState {
         return { hasError: true, error: error }
     }
 
-    componentDidCatch(error, errorInfo) {
+    override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         if (import.meta.env.PROD) {
             createAlert(
                 this.props.errorToReport(error, errorInfo.componentStack)
@@ -23,7 +37,7 @@ export class ErrorBoundary extends Component {
         }
     }
 
-    render() {
+    override render() {
         if (this.state.hasError) {
             return (
                 <Box margin={4}>

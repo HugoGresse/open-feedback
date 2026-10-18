@@ -3,6 +3,7 @@ import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { makeStyles } from '@mui/styles'
+import type { ReactNode } from 'react'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -22,7 +23,12 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-export const Error = ({ error, errorDetail }) => {
+interface ErrorProps {
+    error?: ReactNode
+    errorDetail?: ReactNode
+}
+
+export const Error = ({ error, errorDetail }: ErrorProps) => {
     const classes = useStyles()
     const reportString = `mailto:hugo.gresse@gmail.com?subject=OpenFeedback%20Error&body=@error:${JSON.stringify(
         error

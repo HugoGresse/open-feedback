@@ -1,30 +1,44 @@
-import { createSelector } from 'reselect'
 import { getDateFromStartTime } from './talksUtils'
 import { getProjectSelectedDateSelector } from '../../feedback/project/projectSelectors'
 import { getSpeakersListSelector } from '../speakers/speakerSelectors'
 import { DateTime } from 'luxon'
+import { createAppSelector, type RootState } from '../../store'
+import type { Talk, TalksMap } from '../models'
 
-export const getTalksSelector = (state) => state.talks
+/** A talk with its start/end times parsed (null when missing). */
+export interface TalkWithLuxonTimes extends Talk {
+    startTimeLuxon: DateTime | null
+    endTimeLuxon: DateTime | null
+}
 
-export const getTalksListSelector = (state) =>
+export interface TalksByTrack {
+    track: string
+    talks: TalkWithLuxonTimes[]
+}
+
+export const getTalksSelector = (state: RootState) => state.talks
+
+export const getTalksListSelector = (state: RootState): TalksMap =>
     getTalksSelector(state).list || {}
 
-export const getTalksFilterSelector = (state) =>
+export const getTalksFilterSelector = (state: RootState) =>
     getTalksSelector(state).filter || ''
 
-export const getTalksLoadError = (state) =>
+export const getTalksLoadError = (state: RootState) =>
     getTalksSelector(state).errorTalksLoad
 
-export const isTalksLoadingSelector = (state) => getTalksSelector(state).loading
+export const isTalksLoadingSelector = (state: RootState) =>
+    getTalksSelector(state).loading
 
-export const isTalkLoadedSelector = (state) => getTalksSelector(state).loaded
+export const isTalkLoadedSelector = (state: RootState) =>
+    getTalksSelector(state).loaded
 
 //  MEMOIZED SELECTORS HERE
 
-export const getTalksAsArraySelector = createSelector(
+export const getTalksAsArraySelector = createAppSelector(
     getTalksListSelector,
     (talks) => {
-        return Object.keys(talks).reduce((acc, id) => {
+        return Object.keys(talks).reduce<Talk[]>((acc, id) => {
             if (talks[id].hideInFeedback) {
                 // Some talks are not displayed (break time, etc)
                 return acc
@@ -35,11 +49,11 @@ export const getTalksAsArraySelector = createSelector(
     }
 )
 
-export const getTalksDatesSelector = createSelector(
+export const getTalksDatesSelector = createAppSelector(
     getTalksAsArraySelector,
     (talks) => {
         return talks
-            .reduce((acc, talk) => {
+            .reduce<string[]>((acc, talk) => {
                 const date = getDateFromStartTime(talk.startTime)
                 if (!acc.includes(date)) {
                     acc.push(date)
@@ -50,7 +64,7 @@ export const getTalksDatesSelector = createSelector(
     }
 )
 
-export const getFilteredTalksSelector = createSelector(
+export const getFilteredTalksSelector = createAppSelector(
     getTalksAsArraySelector,
     getTalksFilterSelector,
     getSpeakersListSelector,
@@ -92,10 +106,10 @@ export const getFilteredTalksSelector = createSelector(
     }
 )
 
-export const getFilteredTalksAsMapSelector = createSelector(
+export const getFilteredTalksAsMapSelector = createAppSelector(
     getFilteredTalksSelector,
     (talks) => {
-        const data = {}
+        const data: TalksMap = {}
 
         talks.forEach((talk) => {
             data[talk.id] = talk
@@ -105,7 +119,7 @@ export const getFilteredTalksAsMapSelector = createSelector(
     }
 )
 
-export const getCurrentTalksGroupByTrackSelector = createSelector(
+export const getCurrentTalksGroupByTrackSelector = createAppSelector(
     getFilteredTalksSelector,
     getProjectSelectedDateSelector,
     (talks, date) => {
@@ -116,11 +130,15 @@ export const getCurrentTalksGroupByTrackSelector = createSelector(
         if (filteredTalks.length === 0) {
             return []
         }
-        const talksGroupByTrack = filteredTalks.reduce((acc, talk) => {
-            if (!acc[talk.trackTitle]) {
-                acc[talk.trackTitle] = []
+        const talksGroupByTrack = filteredTalks.reduce<
+            Record<string, TalkWithLuxonTimes[]>
+        >((acc, talk) => {
+            // A talk without track is grouped under "undefined".
+            const trackTitle = String(talk.trackTitle)
+            if (!acc[trackTitle]) {
+                acc[trackTitle] = []
             }
-            acc[talk.trackTitle].push({
+            acc[trackTitle].push({
                 ...talk,
                 startTimeLuxon: talk.startTime
                     ? DateTime.fromISO(talk.startTime, {
@@ -139,14 +157,17 @@ export const getCurrentTalksGroupByTrackSelector = createSelector(
 
         return Object.keys(talksGroupByTrack)
             .sort()
-            .reduce((acc, track) => {
+            .reduce<TalksByTrack[]>((acc, track) => {
                 acc.push({
                     track: track,
                     talks: talksGroupByTrack[track].sort((a, b) => {
                         if (!a.startTimeLuxon || !b.startTimeLuxon) {
                             return 0
                         }
-                        return a.startTimeLuxon - b.startTimeLuxon
+                        return (
+                            a.startTimeLuxon.toMillis() -
+                            b.startTimeLuxon.toMillis()
+                        )
                     }),
                 })
                 return acc
@@ -154,7 +175,7 @@ export const getCurrentTalksGroupByTrackSelector = createSelector(
     }
 )
 
-export const getExtendedSearchTalksSelector = createSelector(
+export const getExtendedSearchTalksSelector = createAppSelector(
     getFilteredTalksSelector,
     getProjectSelectedDateSelector,
     (talks, selectedDate) => {
@@ -164,23 +185,25 @@ export const getExtendedSearchTalksSelector = createSelector(
     }
 )
 
-export const getTracksSelector = createSelector(
+export const getTracksSelector = createAppSelector(
     getTalksAsArraySelector,
     (talks) => {
         return [
             ...new Set(
-                talks.map((talk) => talk.trackTitle).filter((track) => !!track)
+                talks
+                    .map((talk) => talk.trackTitle)
+                    .filter((track): track is string => !!track)
             ),
         ].sort()
     }
 )
 
-export const getTagsSelector = createSelector(
+export const getTagsSelector = createAppSelector(
     getTalksAsArraySelector,
     (talks) => {
         return [
             ...new Set(
-                talks.reduce((acc, talk) => {
+                talks.reduce<string[]>((acc, talk) => {
                     if (!talk.tags) {
                         return acc
                     }

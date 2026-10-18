@@ -10,34 +10,48 @@ import {
     GET_SPEAKERS_SUCCESS,
     REMOVE_SPEAKER_ERROR,
     REMOVE_SPEAKER_SUCCESS,
+    type SpeakersAction,
 } from './speakerActionTypes'
-import { SELECT_PROJECT } from '../../admin/project/core/projectActionTypes'
+import {
+    SELECT_PROJECT,
+    type SelectProjectAction,
+} from '../../admin/project/core/projectActionTypes'
+import type { SpeakersMap } from '../models'
 
-const initState = {
+export interface SpeakersState {
+    list: SpeakersMap
+    filter: string
+    selected: string | null
+}
+
+const initState: SpeakersState = {
     list: {},
     filter: '',
     selected: null,
 }
 
-export const speakerReducer = (state = initState, { payload, type }) => {
-    switch (type) {
+export const speakerReducer = (
+    state: SpeakersState = initState,
+    action: SpeakersAction | SelectProjectAction
+): SpeakersState => {
+    switch (action.type) {
         case GET_SPEAKER_SUCCESS:
             return {
                 ...state,
                 list: {
                     ...state.list,
-                    ...payload,
+                    ...action.payload,
                 },
             }
         case GET_SPEAKERS_SUCCESS:
             return {
                 ...state,
-                list: payload,
+                list: action.payload,
             }
         case FILTER_SPEAKER:
             return {
                 ...state,
-                filter: payload,
+                filter: action.payload,
             }
         case SELECT_PROJECT:
             return initState
@@ -47,13 +61,13 @@ export const speakerReducer = (state = initState, { payload, type }) => {
                 ...state,
                 list: {
                     ...state.list,
-                    [payload.id]: payload,
+                    [action.payload.id]: action.payload,
                 },
             }
         case REMOVE_SPEAKER_SUCCESS: {
             const {
-                // eslint-disable-next-line no-unused-vars
-                [payload.id]: value,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                [action.payload.id]: value,
                 ...list
             } = state.list
 
@@ -68,7 +82,7 @@ export const speakerReducer = (state = initState, { payload, type }) => {
         case GET_SPEAKER_ERROR:
         case GET_SPEAKERS_ERROR:
             // eslint-disable-next-line no-console
-            console.warn(payload)
+            console.warn(action.payload)
             return state
         default:
             return state

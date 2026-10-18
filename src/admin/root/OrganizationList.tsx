@@ -1,4 +1,5 @@
-import { useSelector } from 'react-redux'
+import type { Theme } from '@mui/material/styles'
+import { useAppSelector } from '../../store'
 import {
     getSortedProjectsByOrganizationIdsSelector,
     isProjectsLoadedSelector,
@@ -15,7 +16,7 @@ import Grid from '@mui/material/Grid'
 import { OFButton } from '../baseComponents/button/OFButton.tsx'
 import AddIcon from '@mui/icons-material/Add'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     loaderContainer: {
         margin: theme.spacing(2),
         padding: theme.spacing(2, 2),
@@ -26,16 +27,21 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+interface OrganizationListProps {
+    onNewEventClick: (organizationId: string) => void
+    onNewOrganizationClick: () => void
+}
+
 export const OrganizationList = ({
     onNewEventClick,
     onNewOrganizationClick,
-}) => {
+}: OrganizationListProps) => {
     const classes = useStyles()
-    const projectsByOrganizations = useSelector(
+    const projectsByOrganizations = useAppSelector(
         getSortedProjectsByOrganizationIdsSelector
     )
-    const isProjectsLoaded = useSelector(isProjectsLoadedSelector)
-    const isOrganizationsLoaded = useSelector(isOrganizationsLoadedSelector)
+    const isProjectsLoaded = useAppSelector(isProjectsLoadedSelector)
+    const isOrganizationsLoaded = useAppSelector(isOrganizationsLoadedSelector)
     const { t } = useTranslation()
 
     const organizationIds = Object.keys(projectsByOrganizations)
@@ -60,7 +66,7 @@ export const OrganizationList = ({
                     organizationName={
                         id === NO_ORGANIZATION_FAKE_ID
                             ? t('root.organization.noOrganizationName')
-                            : projectsByOrganizations[id].name
+                            : (projectsByOrganizations[id].name ?? '')
                     }
                     projects={projectsByOrganizations[id].projects}
                     onNewEventClick={onNewEventClick}

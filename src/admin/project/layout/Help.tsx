@@ -6,9 +6,13 @@ import MenuItem from '@mui/material/MenuItem'
 import { useTranslation } from 'react-i18next'
 import { hideSmallChat, openSmallChat } from '../utils/smallchat'
 
-export const Help = ({ buttonClass }) => {
+export interface HelpProps {
+    buttonClass?: string
+}
+
+export const Help = ({ buttonClass }: HelpProps) => {
     const { t } = useTranslation()
-    const [anchorEl, setAnchorEl] = useState(null)
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [isSupportOpen, setSupportOpen] = useState(false)
 
     useEffect(() => {
