@@ -35,7 +35,6 @@ export class FeedbackApp {
 
         cy.reload()
         cy.injectAxe()
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(2000)
     }
 

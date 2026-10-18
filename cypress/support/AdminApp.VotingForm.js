@@ -87,7 +87,6 @@ export class VotingForm {
             .get('li[data-testid=VoteItem]')
             .eq(itemToMove)
             .within(() => {
-                // eslint-disable-next-line cypress/no-unnecessary-waiting
                 cy.get(`button[aria-label="drag to reorder"]`)
                     .click()
                     .scrollTo(0, -1000, {

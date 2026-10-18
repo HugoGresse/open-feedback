@@ -104,7 +104,7 @@ export const validate = async (
                 !Object.values(speakerResult.speaker).includes(false),
         }
     } catch (error) {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: intentional log
         console.log(error)
     }
 

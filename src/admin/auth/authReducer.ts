@@ -38,7 +38,7 @@ export const authReducer = (
                 error: null,
             }
         case LOGIN_ERROR:
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.error(action.payload)
             return {
                 ...state,

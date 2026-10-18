@@ -1,0 +1,89 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+    "vcs": {
+        "enabled": true,
+        "clientKind": "git",
+        "useIgnoreFile": true
+    },
+    "files": {
+        "includes": [
+            "**",
+            // functions/ and scripts/ are standalone packages with their own tooling.
+            "!functions",
+            "!scripts",
+            "!storybook-static",
+            "!dist",
+            "!build",
+            "!coverage"
+        ]
+    },
+    // Prettier formats the code (lint-staged).
+    "formatter": {
+        "enabled": false
+    },
+    "assist": {
+        "enabled": false
+    },
+    "linter": {
+        "enabled": true,
+        "includes": ["**/*.{js,jsx,mjs,cjs,ts,tsx,json}"],
+        "rules": {
+            "preset": "recommended",
+            "suspicious": {
+                "noConsole": "warn",
+                // Not enforced by the former ESLint config, and the code does
+                // not follow them yet: enable them one by one with the fixes.
+                "noArrayIndexKey": "off",
+                "noConfusingVoidType": "off",
+                "noDocumentCookie": "off",
+                "noImplicitAnyLet": "off",
+                // Flags the `Error` components, which shadow the global.
+                "noShadowRestrictedNames": "off",
+                "useDefaultSwitchClauseLast": "off",
+                "useIterableCallbackReturn": "off"
+            },
+            "correctness": {
+                // The react-hooks rules were not enabled with ESLint either.
+                "useExhaustiveDependencies": "off",
+                "useHookAtTopLevel": "off",
+                "noUnusedFunctionParameters": "off",
+                "useParseIntRadix": "off"
+            },
+            "complexity": {
+                "noUselessFragments": "off",
+                "noUselessSwitchCase": "off",
+                "useArrowFunction": "off",
+                "useDateNow": "off",
+                "useIndexOf": "off",
+                "useLiteralKeys": "off",
+                "useOptionalChain": "off"
+            },
+            "style": {
+                "noNonNullAssertion": "off",
+                "useTemplate": "off"
+            },
+            "a11y": {
+                "noStaticElementInteractions": "off",
+                "noSvgWithoutTitle": "off",
+                "useKeyWithClickEvents": "off"
+            }
+        }
+    },
+    "overrides": [
+        {
+            // Named exports only. Storybook CSF stories need their default meta export.
+            "includes": [
+                "src/**/*.{ts,tsx}",
+                "!**/*.stories.tsx",
+                "!**/*.d.ts"
+            ],
+            "linter": {
+                "rules": {
+                    "style": {
+                        "noDefaultExport": "error"
+                    }
+                }
+            }
+        }
+    ]
+}

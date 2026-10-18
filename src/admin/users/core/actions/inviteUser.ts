@@ -96,7 +96,7 @@ export const inviteUser =
                 return dispatch(action)
             })
             .catch((error: unknown) => {
-                // eslint-disable-next-line no-console
+                // biome-ignore lint/suspicious/noConsole: intentional log
                 console.error(error)
                 dispatch(
                     addNotification({

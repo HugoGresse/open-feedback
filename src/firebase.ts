@@ -43,7 +43,7 @@ if (import.meta.env.PROD) {
     firebase.performance()
 }
 if (isUsingEmulators) {
-    // eslint-disable-next-line no-console
+    // biome-ignore lint/suspicious/noConsole: intentional log
     console.log('ℹ️ App is using Firebase Emulators')
     authProvider.useEmulator('http://127.0.0.1:9099')
     firebase.storage().useEmulator('127.0.0.1', 9199)

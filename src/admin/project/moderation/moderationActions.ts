@@ -121,7 +121,7 @@ export const getTextUserVotes =
                         })
                     })
                     .catch((err: unknown) => {
-                        // eslint-disable-next-line no-console
+                        // biome-ignore lint/suspicious/noConsole: intentional log
                         console.error(err)
                         dispatch({
                             type: GET_TEXT_VOTES_ERROR,
@@ -130,7 +130,7 @@ export const getTextUserVotes =
                     })
             })
             .catch((err: unknown) => {
-                // eslint-disable-next-line no-console
+                // biome-ignore lint/suspicious/noConsole: intentional log
                 console.error(err)
                 dispatch({
                     type: GET_TEXT_VOTES_ERROR,

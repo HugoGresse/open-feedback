@@ -152,7 +152,6 @@ export const OFAutoComplete = ({
             renderInput={(params) => {
                 const {
                     InputProps,
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     InputLabelProps,
                     inputProps,
                     ...other

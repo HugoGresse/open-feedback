@@ -43,7 +43,7 @@ export interface ProjectApi {
 }
 
 const logProjectNotInitialized = () => {
-    // eslint-disable-next-line no-console
+    // biome-ignore lint/suspicious/noConsole: intentional log
     console.warn('The project is not initialized yet.')
 }
 

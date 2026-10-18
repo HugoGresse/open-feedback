@@ -33,7 +33,7 @@ export const deleteProject =
                 )
             })
             .catch((error: unknown) => {
-                // eslint-disable-next-line no-console
+                // biome-ignore lint/suspicious/noConsole: intentional log
                 console.error(error)
 
                 // Callable errors codes are prefixed by the "functions/" service

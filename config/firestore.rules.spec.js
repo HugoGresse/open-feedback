@@ -1,4 +1,3 @@
-/* eslint-env jest */
 const firebase = require('@firebase/testing')
 const path = require('path')
 const fs = require('fs')

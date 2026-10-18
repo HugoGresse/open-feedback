@@ -62,7 +62,6 @@ export const Login = memo(({ children }: LoginProps) => {
         return () => {
             unregisterAuthObserver()
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, tempUser])
 
     if (isLoggedIn) {

@@ -27,15 +27,12 @@ export const OFInputForDateTimePicker = ({
     autoComplete,
     onFocus,
     InputProps,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     focused,
     ...otherProps
 }: OFInputForDateTimePickerProps) => {
     const otherRef = useRef<HTMLDivElement>(null)
     const {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ref,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         endAdornment,
         ...otherInputProps
     } = InputProps

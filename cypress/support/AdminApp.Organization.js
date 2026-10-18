@@ -2,7 +2,6 @@ export class Organization {
     newOrganization(name) {
         cy.contains('New organization').click()
         cy.get('input[name=name]').type(name).type('{enter}')
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(1000)
     }
 

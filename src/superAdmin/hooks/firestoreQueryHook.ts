@@ -53,7 +53,7 @@ export const useFirestoreCollection = <T>(
                 .finally(() => {
                     setLoading(false)
                 })
-        } catch (error: unknown | { message: string }) {
+        } catch (error: unknown) {
             setError(error instanceof Error ? error.message : `${error}`)
         }
     }, [requestId])
@@ -108,7 +108,7 @@ export const useFirestoreDocument = <T>(
                 .finally(() => {
                     setLoading(false)
                 })
-        } catch (error: unknown | { message: string }) {
+        } catch (error: unknown) {
             setError(error instanceof Error ? error.message : `${error}`)
         }
     }, [ref.path])

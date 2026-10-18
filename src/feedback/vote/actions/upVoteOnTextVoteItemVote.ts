@@ -146,7 +146,7 @@ export const removeUpVoteOnTextVoteItemVote =
         const previousVote =
             getCurrentUserVotesSelector(getState())[voteToDelete.id]
         if (previousVote.pending) {
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.info(
                 'Unable to delete vote as it has not been written on the database'
             )

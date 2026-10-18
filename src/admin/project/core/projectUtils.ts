@@ -20,7 +20,7 @@ export const doesProjectIdExistOrIsAllowed = (
         .get()
         .then((result) => result.exists)
         .catch((error) => {
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.error(error)
             return true
         })

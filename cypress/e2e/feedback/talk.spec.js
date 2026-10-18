@@ -33,7 +33,6 @@ describe('Single talk', function () {
         feedback.clearUserSession()
 
         // to test if this help fixing this random test
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
         const voteButtonText = 'Trop de code'
 
         cy.getVoteCountData(voteButtonText).then((originalVoteCount) => {
@@ -46,7 +45,6 @@ describe('Single talk', function () {
                 )
             })
 
-            // eslint-disable-next-line cypress/no-unnecessary-waiting
             cy.wait(1000) // serverless functions runing time wait
             cy.getVoteCountData(voteButtonText).should((voteCount) => {
                 expect(voteCount, 'Vote count still incremented').to.equal(
@@ -68,7 +66,6 @@ describe('Single talk', function () {
         feedback.clearUserSession()
 
         // to test if this help fixing this random test
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
         const voteButtonText = 'Trop de code'
 
         cy.getVoteCountData(voteButtonText).then((originalVoteCount) => {
@@ -90,7 +87,6 @@ describe('Single talk', function () {
             cy.reload()
             feedback.clearUserSession()
             // cy.reload()
-            // eslint-disable-next-line cypress/no-unnecessary-waiting
             cy.wait(3000) // user login anonymous
 
             // assert data change before reload
@@ -122,7 +118,6 @@ describe('Single talk', function () {
         feedback.clearUserSession()
         cy.checkA11yWithoutFirebaseEmulatorsWarningAndH1()
         cy.reload()
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(2000) // user login anonymous
 
         const inputText = stringGenerator()
@@ -138,7 +133,6 @@ describe('Single talk', function () {
         cy.get('.comments').should('contain', inputText + textEdited)
         cy.get('.comments').should('contain', '1 vote')
 
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(500)
         cy.contains('Delete').click()
         cy.get('.comments').should('not.contain', inputText + textEdited)
