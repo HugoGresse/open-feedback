@@ -19,7 +19,7 @@ import {
 } from '../voteActionTypes'
 import { INCREMENT_VOTE_LOCALLY } from '../../project/projectActionTypes'
 import { getVoteId } from '../getVoteId'
-import type { TFunction } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type { Vote, VoteItem } from '../../../core/models'
 import type { AppThunk } from '../../../store'
 import type { TextVoteResult } from '../../talk/core/getVoteResultSelectorSelector'
@@ -143,10 +143,11 @@ export const removeUpVoteOnTextVoteItemVote =
             return
         }
         // The store entry, voteToDelete may be an older copy
-        const previousVote =
-            getCurrentUserVotesSelector(getState())[voteToDelete.id]
+        const previousVote = getCurrentUserVotesSelector(getState())[
+            voteToDelete.id
+        ]
         if (previousVote.pending) {
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.info(
                 'Unable to delete vote as it has not been written on the database'
             )

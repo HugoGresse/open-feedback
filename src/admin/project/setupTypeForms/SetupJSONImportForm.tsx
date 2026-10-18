@@ -193,10 +193,8 @@ export const SetupJSONImportForm = ({
                                     {JSON.stringify(jsonModel, undefined, 4)}
                                     <br />
                                     Required fields:
-                                    <br />
-                                    - session.title
-                                    <br />
-                                    - session.id
+                                    <br />- session.title
+                                    <br />- session.id
                                     <br />- speakers: {'{}'}
                                     <br />
                                     Optional fields: all others

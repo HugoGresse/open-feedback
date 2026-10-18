@@ -2,8 +2,7 @@ import type { FieldProps } from 'formik'
 import MuiSwitch, { type SwitchProps } from '@mui/material/Switch'
 
 export interface OFSwitchProps
-    extends
-        Omit<SwitchProps, 'form'>,
+    extends Omit<SwitchProps, 'form'>,
         Pick<FieldProps<boolean>, 'field' | 'form'> {}
 
 const fieldToSwitch = ({

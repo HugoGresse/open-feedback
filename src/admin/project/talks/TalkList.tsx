@@ -75,8 +75,11 @@ export const TalkList = () => {
             startTime: DateTime.fromISO(talk.startTime ?? ''),
             endTime: DateTime.fromISO(talk.endTime ?? ''),
             speakers: talk.speakers
-                ? talk.speakers.map((id): Speaker =>
-                      speakersMap[id] ? speakersMap[id] : { id: id, name: id }
+                ? talk.speakers.map(
+                      (id): Speaker =>
+                          speakersMap[id]
+                              ? speakersMap[id]
+                              : { id: id, name: id }
                   )
                 : [],
         })

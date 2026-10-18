@@ -77,7 +77,8 @@ export const getVoteResult =
         const onNewVotes = (snapshot: firebase.firestore.DocumentSnapshot) => {
             // Firestore boundary: sessionVotes/{talkId} holds the aggregated votes.
             const inputVotes = snapshot.data() as
-                AggregatedTalkVotes | undefined
+                | AggregatedTalkVotes
+                | undefined
 
             // Add the vote id inside the actual vote to be re-used on other parts
             const votesWithIds = inputVotes

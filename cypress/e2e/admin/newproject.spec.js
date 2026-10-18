@@ -50,7 +50,6 @@ describe('Test creating a new project', function () {
 
         // -- Edit the added talk to add 2 speakers
         app.editTalk(data.talk1Name, [data.speaker1, data.speaker2])
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(500)
         app.assertTalk(data.talk1Name, [data.speaker1.name, data.speaker2.name])
 

@@ -39,7 +39,7 @@ export const listenForInvite =
                     }
                 },
                 (error) => {
-                    // eslint-disable-next-line no-console
+                    // biome-ignore lint/suspicious/noConsole: intentional log
                     console.error(error)
                     dispatch({ type: USER_INVITE_GET_ERROR })
                     dispatch(

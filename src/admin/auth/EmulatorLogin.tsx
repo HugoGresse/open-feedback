@@ -59,12 +59,12 @@ const login = async (
                     password
                 )
             } catch (error) {
-                // eslint-disable-next-line no-console
+                // biome-ignore lint/suspicious/noConsole: intentional log
                 console.log('Login error:', error)
             }
         }
         const { code, message } = error
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: intentional log
         console.log(`Error email auth: ${code}, message: ${message}`)
     }
 }
@@ -81,7 +81,7 @@ const verifyEmail = async (user: firebase.User | null = null) => {
 
     for (const oobCodeObject of responseJson.oobCodes) {
         await fetch(oobCodeObject.oobLink.split('&continueUrl')[0])
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: intentional log
         console.log(`Email ${oobCodeObject.email} verified!`)
     }
 }

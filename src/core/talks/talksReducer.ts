@@ -73,11 +73,7 @@ export const talksReducer = (
                 },
             }
         case REMOVE_TALK_SUCCESS: {
-            const {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                [action.payload.id]: value,
-                ...list
-            } = state.list
+            const { [action.payload.id]: value, ...list } = state.list
 
             return {
                 ...state,
@@ -87,11 +83,11 @@ export const talksReducer = (
         case ADD_TALK_ERROR:
         case EDIT_TALK_ERROR:
         case REMOVE_TALK_ERROR:
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.error(action.type, action.payload)
             return state
         case GET_TALKS_ERROR:
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.error(action.type, action.payload)
             return {
                 ...state,

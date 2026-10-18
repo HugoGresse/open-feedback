@@ -6,4 +6,5 @@ export const PROJECT_USER_ROLES = [
 ]
 
 export type ProjectUserRole =
-    typeof PROJECT_USER_ROLE_MEMBER | typeof PROJECT_USER_ROLE_OWNER
+    | typeof PROJECT_USER_ROLE_MEMBER
+    | typeof PROJECT_USER_ROLE_OWNER

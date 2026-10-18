@@ -14,10 +14,8 @@ import type { Speaker, Talk } from '../../../core/models'
 import type { SpeakerFormValues } from '../speakers/SpeakerAddEditPanel.tsx'
 
 /** Values of the talk form: a new talk, or the edited one (with its id). */
-export interface TalkFormValues extends Omit<
-    Talk,
-    'id' | 'startTime' | 'endTime' | 'speakers'
-> {
+export interface TalkFormValues
+    extends Omit<Talk, 'id' | 'startTime' | 'endTime' | 'speakers'> {
     id?: string
     startTime: DateTime | null
     endTime: DateTime | null

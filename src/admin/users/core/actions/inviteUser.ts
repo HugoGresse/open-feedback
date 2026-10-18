@@ -22,7 +22,8 @@ export const INVITE_TYPE_ORGANIZATION = 'organization'
 export const INVITE_TYPE_PROJECT = 'project'
 
 export type InviteType =
-    typeof INVITE_TYPE_ORGANIZATION | typeof INVITE_TYPE_PROJECT
+    | typeof INVITE_TYPE_ORGANIZATION
+    | typeof INVITE_TYPE_PROJECT
 
 /**
  * Resolves `false` on failure, the dispatched USER_INVITE_ADD action otherwise.
@@ -96,7 +97,7 @@ export const inviteUser =
                 return dispatch(action)
             })
             .catch((error: unknown) => {
-                // eslint-disable-next-line no-console
+                // biome-ignore lint/suspicious/noConsole: intentional log
                 console.error(error)
                 dispatch(
                     addNotification({

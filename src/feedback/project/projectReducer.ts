@@ -178,7 +178,7 @@ export const projectReducer = (
             }
         }
         case GET_PROJECT_VOTE_RESULT_ERROR:
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.error(action.payload)
             return {
                 ...state,
@@ -190,7 +190,7 @@ export const projectReducer = (
                 projectLoadNotFound: true,
             }
         case GET_PROJECT_ERROR:
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.error(action.payload)
             return {
                 ...state,

@@ -65,11 +65,7 @@ export const speakerReducer = (
                 },
             }
         case REMOVE_SPEAKER_SUCCESS: {
-            const {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                [action.payload.id]: value,
-                ...list
-            } = state.list
+            const { [action.payload.id]: value, ...list } = state.list
 
             return {
                 ...state,
@@ -81,7 +77,7 @@ export const speakerReducer = (
         case REMOVE_SPEAKER_ERROR:
         case GET_SPEAKER_ERROR:
         case GET_SPEAKERS_ERROR:
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.warn(action.payload)
             return state
         default:

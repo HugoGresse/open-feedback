@@ -13,10 +13,8 @@ export interface DashboardTalkVotes {
 }
 
 /** A `userVotes/{voteId}` document as loaded by the dashboard. */
-export interface DashboardUserVote extends Omit<
-    Vote,
-    'createdAt' | 'updatedAt'
-> {
+export interface DashboardUserVote
+    extends Omit<Vote, 'createdAt' | 'updatedAt'> {
     fireStoreId: string
     /** Read back from Firestore, so never the serverTimestamp sentinel. */
     createdAt?: Timestamp | null

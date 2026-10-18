@@ -4,7 +4,7 @@ import { useFormikContext } from 'formik'
 export const SaveShortcut = () => {
     const { submitForm } = useFormikContext()
 
-    useHotkeys('ctrl+s, command+s', (event) => {
+    useHotkeys('ctrl+s, meta+s', (event) => {
         event.preventDefault()
         submitForm()
     })

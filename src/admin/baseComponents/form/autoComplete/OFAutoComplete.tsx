@@ -30,7 +30,9 @@ const AutoCompleteInput = styled(AutoCompleteInputBase)`
 export type OFAutoCompleteOption = string | Record<string, unknown>
 
 export type OFAutoCompleteValue =
-    OFAutoCompleteOption | OFAutoCompleteOption[] | null
+    | OFAutoCompleteOption
+    | OFAutoCompleteOption[]
+    | null
 
 /**
  * Subset of Formik's `FieldProps` used by the component (it is usually rendered
@@ -58,21 +60,22 @@ type MuiAutocompleteProps = AutocompleteProps<
     boolean | undefined
 >
 
-export interface OFAutoCompleteProps extends Omit<
-    Partial<MuiAutocompleteProps>,
-    | 'options'
-    | 'value'
-    | 'getOptionLabel'
-    | 'isOptionEqualToValue'
-    | 'id'
-    | 'disabled'
-    | 'defaultValue'
-    | 'onClose'
-    | 'onChange'
-    | 'onInputChange'
-    | 'renderTags'
-    | 'renderInput'
-> {
+export interface OFAutoCompleteProps
+    extends Omit<
+        Partial<MuiAutocompleteProps>,
+        | 'options'
+        | 'value'
+        | 'getOptionLabel'
+        | 'isOptionEqualToValue'
+        | 'id'
+        | 'disabled'
+        | 'defaultValue'
+        | 'onClose'
+        | 'onChange'
+        | 'onInputChange'
+        | 'renderTags'
+        | 'renderInput'
+    > {
     field: OFAutoCompleteField
     form: OFAutoCompleteForm
     dataArray: readonly OFAutoCompleteOption[]
@@ -150,13 +153,8 @@ export const OFAutoComplete = ({
                 })
             }
             renderInput={(params) => {
-                const {
-                    InputProps,
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    InputLabelProps,
-                    inputProps,
-                    ...other
-                } = params
+                const { InputProps, InputLabelProps, inputProps, ...other } =
+                    params
                 const { ref, ...otherInputProps } = InputProps
 
                 return (

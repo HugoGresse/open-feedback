@@ -3,7 +3,7 @@ import { onBeforeLoadChangeNavigatorLanguages } from '../utils/onBeforeLoadChang
 
 export class FeedbackApp {
     open(talkId, options = {}) {
-        const rootUrl = `/${Cypress.env('firestoreTestProjectId')}`
+        const rootUrl = `/${Cypress.expose('firestoreTestProjectId')}`
         if (talkId) {
             cy.visit(`${rootUrl}/${talkId}`, {
                 ...onBeforeLoadChangeNavigatorLanguages,
@@ -35,7 +35,6 @@ export class FeedbackApp {
 
         cy.reload()
         cy.injectAxe()
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(2000)
     }
 

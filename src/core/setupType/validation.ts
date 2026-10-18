@@ -36,7 +36,8 @@ interface SpeakersValidationResult {
 }
 
 export interface ValidationResult
-    extends TalksValidationResult, SpeakersValidationResult {
+    extends TalksValidationResult,
+        SpeakersValidationResult {
     dataAvailable: boolean
     /** Missing when the data could not be loaded. */
     isSuccessful?: boolean
@@ -104,7 +105,7 @@ export const validate = async (
                 !Object.values(speakerResult.speaker).includes(false),
         }
     } catch (error) {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: intentional log
         console.log(error)
     }
 

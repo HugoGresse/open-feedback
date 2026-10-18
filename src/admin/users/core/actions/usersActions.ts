@@ -62,7 +62,7 @@ export const getUserDetails =
                 }
             })
             .catch((error: unknown) => {
-                // eslint-disable-next-line no-console
+                // biome-ignore lint/suspicious/noConsole: intentional log
                 console.error(error)
                 dispatch(
                     addNotification({
@@ -196,7 +196,7 @@ export const getPendingInvites = (): AppThunk => (dispatch, getState) => {
             })
         })
         .catch((error: unknown) => {
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.error(error)
             dispatch(
                 addNotification({
@@ -223,7 +223,7 @@ export const cancelInvite =
                 })
             )
             .catch((error: unknown) => {
-                // eslint-disable-next-line no-console
+                // biome-ignore lint/suspicious/noConsole: intentional log
                 console.error(error)
                 dispatch(
                     addNotification({

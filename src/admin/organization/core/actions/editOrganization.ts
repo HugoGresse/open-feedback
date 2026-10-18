@@ -43,7 +43,7 @@ export const editOrganization =
                 dispatch(getOrganization(organizationId))
             })
             .catch((err: unknown) => {
-                // eslint-disable-next-line no-console
+                // biome-ignore lint/suspicious/noConsole: intentional log
                 console.log(err)
                 dispatch(
                     addNotification({

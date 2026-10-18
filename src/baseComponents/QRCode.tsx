@@ -96,7 +96,7 @@ export const QRCode: FC<QRCodeProps> = ({
             ref.current.innerHTML = ''
             qrCode.current.append(ref.current)
         } else {
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.error('QRCode ref is not found')
         }
     }, [])

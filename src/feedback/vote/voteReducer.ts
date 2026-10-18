@@ -77,7 +77,7 @@ export const voteReducer = (
                 }
             }
 
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.error(payload.error)
 
             return {
@@ -116,7 +116,7 @@ export const voteReducer = (
             }
         }
         case GET_USER_VOTES_ERROR:
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.error(action.payload)
             return {
                 ...state,

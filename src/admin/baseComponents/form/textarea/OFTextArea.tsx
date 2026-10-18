@@ -51,8 +51,7 @@ const OFTextAreaStyled = styled.textarea<{ icon?: ReactNode }>`
 `
 
 export interface OFTextAreaProps
-    extends
-        TextareaHTMLAttributes<HTMLTextAreaElement>,
+    extends TextareaHTMLAttributes<HTMLTextAreaElement>,
         WidthProps,
         HeightProps {
     icon?: ReactNode

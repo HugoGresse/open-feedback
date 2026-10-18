@@ -5,10 +5,8 @@ import { OFInput, type OFInputProps } from '../input/OFInput.tsx'
 /**
  * Props received from the date picker `textField` slot (TextField-like props).
  */
-export interface OFInputForDateTimePickerProps extends Omit<
-    OFInputProps,
-    'onFocus'
-> {
+export interface OFInputForDateTimePickerProps
+    extends Omit<OFInputProps, 'onFocus'> {
     icon?: ReactNode
     onFocus?: () => void
     InputProps: Partial<InputBaseProps> & { ref?: Ref<HTMLDivElement> }
@@ -27,18 +25,11 @@ export const OFInputForDateTimePicker = ({
     autoComplete,
     onFocus,
     InputProps,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     focused,
     ...otherProps
 }: OFInputForDateTimePickerProps) => {
     const otherRef = useRef<HTMLDivElement>(null)
-    const {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        ref,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        endAdornment,
-        ...otherInputProps
-    } = InputProps
+    const { ref, endAdornment, ...otherInputProps } = InputProps
     return (
         <OFInput
             icon={icon}

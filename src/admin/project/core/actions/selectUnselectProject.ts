@@ -35,8 +35,9 @@ export const unselectProject =
 export const selectProject =
     (projectId: string): AppThunk<Promise<boolean>> =>
     (dispatch, getState) => {
-        const currentSelectedProjectId =
-            getSelectedProjectIdSelector(getState())
+        const currentSelectedProjectId = getSelectedProjectIdSelector(
+            getState()
+        )
         if (currentSelectedProjectId === projectId) {
             // Project already selected (HMR potentially)
             return Promise.resolve(true)

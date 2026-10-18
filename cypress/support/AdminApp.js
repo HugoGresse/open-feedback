@@ -141,7 +141,6 @@ export class AdminApp {
             } else {
                 cy.contains('Add speaker').click()
             }
-            // eslint-disable-next-line cypress/no-unnecessary-waiting
             cy.wait(200)
         }
 

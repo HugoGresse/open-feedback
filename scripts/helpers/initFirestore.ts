@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { initializeApp, cert } from 'firebase-admin/app'
 
 // service account credentials (need to be downloaded from firebase console)

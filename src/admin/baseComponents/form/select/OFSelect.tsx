@@ -4,7 +4,8 @@ import Select, { type BaseSelectProps } from '@mui/material/Select'
 import { OFInput } from '../input/OFInput.tsx'
 
 export interface OFSelectProps
-    extends BaseSelectProps, Pick<FieldProps, 'field' | 'form'> {}
+    extends BaseSelectProps,
+        Pick<FieldProps, 'field' | 'form'> {}
 
 export const fieldToSelect = ({
     disabled,

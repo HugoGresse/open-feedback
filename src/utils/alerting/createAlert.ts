@@ -4,8 +4,8 @@ import type { Alert } from './alerts'
 export const createAlert = (alert: Alert) => {
     functions
         .alert(alert)
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: intentional log
         .then((result) => console.info('Alert triggered', result))
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: intentional log
         .catch((error) => console.warn('Alert failed', error))
 }

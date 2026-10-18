@@ -26,7 +26,7 @@ import {
 import { trackUnvote, trackVote } from '../utils/track'
 import { getVoteId } from './getVoteId'
 import { isVoteAllowed } from './actions/isVoteAllowed'
-import type { TFunction } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type firebase from 'firebase/compat/app'
 import type { Vote, VoteItem, VotesMap } from '../../core/models'
 import type { AppThunk } from '../../store'
@@ -147,10 +147,11 @@ export const removeVote = (
     return (dispatch, getState) => {
         // The store entry, voteToDelete may be an older copy (the comment
         // field keeps the vote loaded before an edit)
-        const previousVote =
-            getCurrentUserVotesSelector(getState())[voteToDelete.id]
+        const previousVote = getCurrentUserVotesSelector(getState())[
+            voteToDelete.id
+        ]
         if (previousVote.pending) {
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: intentional log
             console.info(
                 'Unable to delete vote as it has not been writed on the database'
             )

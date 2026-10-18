@@ -12,8 +12,6 @@ interface OpenFeedbackPalette {
 }
 
 declare module '@mui/material/styles' {
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface Palette extends OpenFeedbackPalette {}
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface PaletteOptions extends Partial<OpenFeedbackPalette> {}
 }
