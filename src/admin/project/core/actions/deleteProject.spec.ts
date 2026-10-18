@@ -14,6 +14,9 @@ const deleteProjectCallable = vi.hoisted(() => vi.fn())
 vi.mock('../../../../firebase.ts', () => ({
     functions: { deleteProject: deleteProjectCallable },
 }))
+vi.mock('./selectUnselectProject', () => ({
+    unselectProject: () => ({ type: 'unselectProject' }),
+}))
 vi.mock('../../../notification/notifcationActions', () => ({
     addNotification: (notification: unknown) => ({
         type: 'notification',
@@ -41,11 +44,17 @@ beforeEach(() => {
 })
 
 describe('deleteProject', () => {
-    test('removes the deleted project from the store', async () => {
+    test('unselects, then removes the deleted project from the store', async () => {
         deleteProjectCallable.mockResolvedValue({})
 
         const dispatch = await run()
 
+        // Unselected first, so the project page does not render a 404
+        const types = dispatch.mock.calls.map(([action]) => action.type)
+        expect(types.slice(0, 2)).toEqual([
+            'unselectProject',
+            DELETE_PROJECT_SUCCESS,
+        ])
         expect(dispatch).toHaveBeenCalledWith({
             type: DELETE_PROJECT_SUCCESS,
             payload: 'p1',

@@ -79,7 +79,10 @@ export const UserInvitePanel = ({
                         >
                             <Field
                                 name="email"
-                                dataArray={Object.values(usersDetails)}
+                                // Only users with an email can be invited
+                                dataArray={Object.values(usersDetails).filter(
+                                    (user) => !!user.email
+                                )}
                                 keyToDisplay="email"
                                 freeSolo={true}
                                 renderOption={renderUserAutoCompleteOption}

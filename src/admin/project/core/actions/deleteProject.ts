@@ -3,6 +3,7 @@ import type { AppThunk } from '../../../../store'
 import { functions } from '../../../../firebase.ts'
 import { addNotification } from '../../../notification/notifcationActions'
 import { DELETE_PROJECT_SUCCESS } from '../projectActionTypes'
+import { unselectProject } from './selectUnselectProject'
 
 const getErrorCode = (error: unknown): unknown =>
     typeof error === 'object' && error !== null && 'code' in error
@@ -17,6 +18,9 @@ export const deleteProject =
                 projectId: projectId,
             })
             .then(() => {
+                // Unselected first: the project page shows a loader, not a
+                // 404, until the caller navigates away
+                dispatch(unselectProject())
                 dispatch({
                     type: DELETE_PROJECT_SUCCESS,
                     payload: projectId,

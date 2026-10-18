@@ -8,6 +8,13 @@ describe('toReferenceDate', () => {
         )
     })
 
+    test('drops the seconds and milliseconds', () => {
+        // The picker copies the reference time into the picked day
+        expect(toReferenceDate('2026-06-27T16:20:12.345Z')?.toMillis()).toBe(
+            Date.parse('2026-06-27T16:20:00.000Z')
+        )
+    })
+
     test('ignores a missing or invalid date', () => {
         expect(toReferenceDate(undefined)).toBeUndefined()
         expect(toReferenceDate(null)).toBeUndefined()

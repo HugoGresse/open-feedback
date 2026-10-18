@@ -1,4 +1,11 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import {
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+    type ReactNode,
+} from 'react'
 import { isEqual, debounce } from 'lodash'
 import { useFormikContext, type FormikValues } from 'formik'
 import { DateTime } from 'luxon'
@@ -52,8 +59,10 @@ export const FormikAutoSave = <Values extends FormikValues>({
         []
     )
 
-    // Save the pending changes when leaving the form
-    useEffect(() => () => save.flush(), [save])
+    // Save the pending changes when leaving the form. A layout effect cleanup
+    // runs before the passive ones of the parents: <Project> and
+    // <Organization> still have their project/organization selected.
+    useLayoutEffect(() => () => save.flush(), [save])
 
     useEffect(() => {
         const previous = previousValues.current
