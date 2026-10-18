@@ -1,8 +1,9 @@
-import { describe, expect, test, vi } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import { findReusableVote } from './findReusableVote'
 import {
     VOTE_STATUS_ACTIVE,
     VOTE_STATUS_DELETED,
+    VOTE_STATUS_HIDDEN,
     VOTE_TYPE_TEXT_PLUS,
 } from '../../core/contants'
 import type { FirestoreDate, Vote } from '../../core/models'
@@ -65,9 +66,28 @@ describe('findReusableVote', () => {
         ).toBeUndefined()
     })
 
-    test('does not reuse a pending vote', () => {
-        vi.spyOn(console, 'info').mockImplementation(() => undefined)
-        const pendingVote = vote({ id: 'b1', pending: true })
-        expect(findReusableVote([pendingVote], null)).toBeUndefined()
+    test('reuses a text vote still being written', () => {
+        // A second Save before the first write ends updates the same comment
+        const pendingVote = vote({ id: 'own', text: 'first', pending: true })
+        expect(findReusableVote([pendingVote], 'second')).toBe(pendingVote)
+    })
+
+    test('does not reuse a deleted text vote', () => {
+        // Up-votes still pointing at it would move to the new comment
+        const deletedVote = vote({
+            id: 'own',
+            text: 'deleted comment',
+            status: VOTE_STATUS_DELETED,
+        })
+        expect(findReusableVote([deletedVote], 'new comment')).toBeUndefined()
+    })
+
+    test('reuses a hidden text vote', () => {
+        const hiddenVote = vote({
+            id: 'own',
+            text: 'hidden comment',
+            status: VOTE_STATUS_HIDDEN,
+        })
+        expect(findReusableVote([hiddenVote], 'edited')).toBe(hiddenVote)
     })
 })

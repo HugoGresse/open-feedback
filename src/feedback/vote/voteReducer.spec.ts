@@ -45,7 +45,7 @@ describe('voteReducer ADD_VOTE_ERROR', () => {
 
         const state = voteReducer(removingState, {
             type: ADD_VOTE_ERROR,
-            payload: { error: 'failed', voteWhichShouldHaveBeenDeleted: vote },
+            payload: { error: 'failed', voteToRestore: vote },
         })
 
         expect(state.currentUserVotes[vote.id]).toEqual({

@@ -1,19 +1,10 @@
-import { VOTE_TYPE_TEXT_PLUS } from '../../core/contants'
+import { VOTE_STATUS_DELETED, VOTE_TYPE_TEXT_PLUS } from '../../core/contants'
 import type { Vote } from '../../core/models'
-
-const isPendingVote = (vote: Vote) => {
-    if (vote.pending) {
-        // eslint-disable-next-line no-console
-        console.info(
-            'Unable to modify a vote that has not been written on the database'
-        )
-        return true
-    }
-    return false
-}
 
 /**
  * Find the user vote document to update instead of creating a new one.
+ * A vote still being written is re-used too: Firestore applies the writes of
+ * a document in order, while a new document would duplicate the vote.
  * @param existingVotes the user votes on the vote item
  * @param data the user text vote value if adding a text vote
  * @param upVotedVoteId the text vote id when up-voting another text vote
@@ -28,20 +19,19 @@ export const findReusableVote = (
         return undefined
     }
 
-    const existingVote = data
-        ? // The user is adding or updating a text vote
-          existingVotes.find(
-              (vote) => vote.text && vote.voteType !== VOTE_TYPE_TEXT_PLUS
-          )
-        : // The user is adding a boolean vote, or an up-vote on a text vote.
-          // An up-vote document is only reused for the same text vote: the
-          // server never decrements the previous one when its voteId changes.
-          existingVotes.find(
-              (vote) => !vote.text && vote.voteId === upVotedVoteId
-          )
-
-    if (existingVote && !isPendingVote(existingVote)) {
-        return existingVote
+    if (data) {
+        // The user is updating their text vote. A deleted one is not re-used:
+        // the up-votes still pointing at it would move to the new text.
+        return existingVotes.find(
+            (vote) =>
+                vote.text &&
+                vote.voteType !== VOTE_TYPE_TEXT_PLUS &&
+                vote.status !== VOTE_STATUS_DELETED
+        )
     }
-    return undefined
+    // The user is adding a boolean vote, or an up-vote on a text vote. An
+    // up-vote document is only re-used for the same text vote.
+    return existingVotes.find(
+        (vote) => !vote.text && vote.voteId === upVotedVoteId
+    )
 }

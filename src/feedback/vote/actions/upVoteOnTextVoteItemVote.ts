@@ -49,7 +49,13 @@ export const upVoteOnTextVoteItemVote =
         const project = getProjectSelector(state)!
         const projectId = project.id
 
-        const [id] = getVoteId(voteItem, projectId, getState, null, voteId)
+        const [id, existingVote] = getVoteId(
+            voteItem,
+            projectId,
+            getState,
+            null,
+            voteId
+        )
 
         const voteContent: Vote = {
             projectId: projectId,
@@ -57,7 +63,9 @@ export const upVoteOnTextVoteItemVote =
             voteItemId: voteItem.id,
             id: id,
             voteId,
-            createdAt: serverTimestamp(),
+            createdAt: existingVote
+                ? existingVote.createdAt
+                : serverTimestamp(),
             updatedAt: serverTimestamp(),
             voteType: VOTE_TYPE_TEXT_PLUS,
             userId: getUserSelector(state)!.uid,
@@ -108,6 +116,8 @@ export const upVoteOnTextVoteItemVote =
                     payload: {
                         error: `Unable to save the vote, ${error}`,
                         voteId: voteContent.id,
+                        // A re-used up-vote document stays in the user votes
+                        voteToRestore: existingVote,
                     },
                 })
                 dispatch({
@@ -132,7 +142,10 @@ export const removeUpVoteOnTextVoteItemVote =
             // no voteToDelete if the user has written the initial text, the user need to delete it, not remove the up vote
             return
         }
-        if (getCurrentUserVotesSelector(getState())[voteToDelete.id].pending) {
+        // The store entry, voteToDelete may be an older copy
+        const previousVote =
+            getCurrentUserVotesSelector(getState())[voteToDelete.id]
+        if (previousVote.pending) {
             // eslint-disable-next-line no-console
             console.info(
                 'Unable to delete vote as it has not been written on the database'
@@ -186,7 +199,7 @@ export const removeUpVoteOnTextVoteItemVote =
                     type: ADD_VOTE_ERROR,
                     payload: {
                         error: `Unable to save the vote, ${error}`,
-                        voteWhichShouldHaveBeenDeleted: voteToDelete,
+                        voteToRestore: previousVote,
                     },
                 })
 

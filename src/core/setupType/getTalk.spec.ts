@@ -1,6 +1,27 @@
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { JsonUrlApi } from './jsonurl/JsonUrlApi'
 import { JsonImportApi } from './jsonimport/JsonImportApi'
+import { OpenfeedbackApi } from './openfeedback/OpefeedbackApi'
+
+const talkDoc = vi.hoisted(() => ({
+    exists: false,
+    data: (): Record<string, unknown> | undefined => undefined,
+}))
+
+vi.mock('../../firebase.ts', () => ({
+    serverTimestamp: () => 'serverTimestamp',
+    fireStoreMainInstance: {
+        collection: () => ({
+            doc: () => ({
+                collection: () => ({
+                    doc: (id: string) => ({
+                        get: () => Promise.resolve({ id, ...talkDoc }),
+                    }),
+                }),
+            }),
+        }),
+    },
+}))
 
 const fetchMock = vi.fn<typeof fetch>()
 vi.stubGlobal('fetch', fetchMock)
@@ -41,5 +62,25 @@ describe('JsonImportApi.getTalk', () => {
     test('returns no talk for an unknown id', async () => {
         const api = new JsonImportApi({ jsonData: { sessions } })
         expect(await api.getTalk('unknown')).toStrictEqual({})
+    })
+})
+
+describe('OpenfeedbackApi.getTalk', () => {
+    test('returns the talk keyed by its id', async () => {
+        talkDoc.exists = true
+        talkDoc.data = () => ({ title: 'Talk 1' })
+
+        const talks = await new OpenfeedbackApi('p1').getTalk('t1')
+
+        expect(talks).toEqual({ t1: { id: 't1', title: 'Talk 1' } })
+    })
+
+    test('returns no talk for a missing talk document', async () => {
+        talkDoc.exists = false
+        talkDoc.data = () => undefined
+
+        const talks = await new OpenfeedbackApi('p1').getTalk('deleted')
+
+        expect(talks).toStrictEqual({})
     })
 })

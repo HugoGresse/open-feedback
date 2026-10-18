@@ -20,6 +20,7 @@ import { INCREMENT_VOTE_LOCALLY } from '../project/projectActionTypes'
 import {
     VOTE_STATUS_ACTIVE,
     VOTE_STATUS_DELETED,
+    VOTE_STATUS_HIDDEN,
     VOTE_TYPE_TEXT,
 } from '../../core/contants'
 import { trackUnvote, trackVote } from '../utils/track'
@@ -53,6 +54,8 @@ export const voteFor = (
             getState,
             data
         )
+        // Editing a comment hidden by the moderation keeps it hidden
+        const isHidden = existingVote?.status === VOTE_STATUS_HIDDEN
 
         const voteContent: Vote = {
             projectId: projectId,
@@ -64,7 +67,7 @@ export const voteFor = (
                 : serverTimestamp(),
             updatedAt: serverTimestamp(),
             userId: getUserSelector(getState())!.uid,
-            status: VOTE_STATUS_ACTIVE,
+            status: isHidden ? VOTE_STATUS_HIDDEN : VOTE_STATUS_ACTIVE,
         }
 
         if (voteItem.type === VOTE_TYPE_TEXT) {
@@ -85,13 +88,15 @@ export const voteFor = (
             },
         })
 
-        dispatch({
-            type: INCREMENT_VOTE_LOCALLY,
-            payload: {
-                vote: voteContent,
-                amount: 1,
-            },
-        })
+        if (!isHidden) {
+            dispatch({
+                type: INCREMENT_VOTE_LOCALLY,
+                payload: {
+                    vote: voteContent,
+                    amount: 1,
+                },
+            })
+        }
 
         fireStoreMainInstance
             .collection('projects')
@@ -114,15 +119,22 @@ export const voteFor = (
                     payload: {
                         error: `Unable to save the vote, ${error}`,
                         voteId: voteContent.id,
+                        // A re-used vote document stays in the user votes
+                        voteToRestore: existingVote,
                     },
                 })
 
+                if (isHidden) {
+                    return
+                }
                 dispatch({
                     type: INCREMENT_VOTE_LOCALLY,
-                    payload: {
-                        vote: voteContent,
-                        amount: -1,
-                    },
+                    payload:
+                        existingVote?.text &&
+                        existingVote.status === VOTE_STATUS_ACTIVE
+                            ? // A failed edit puts the previous text back
+                              { vote: existingVote, amount: 1 }
+                            : { vote: voteContent, amount: -1 },
                 })
             })
     }
@@ -133,7 +145,11 @@ export const removeVote = (
     translate: TFunction
 ): AppThunk => {
     return (dispatch, getState) => {
-        if (getCurrentUserVotesSelector(getState())[voteToDelete.id].pending) {
+        // The store entry, voteToDelete may be an older copy (the comment
+        // field keeps the vote loaded before an edit)
+        const previousVote =
+            getCurrentUserVotesSelector(getState())[voteToDelete.id]
+        if (previousVote.pending) {
             // eslint-disable-next-line no-console
             console.info(
                 'Unable to delete vote as it has not been writed on the database'
@@ -184,14 +200,14 @@ export const removeVote = (
                     type: ADD_VOTE_ERROR,
                     payload: {
                         error: `Unable to save the vote, ${error}`,
-                        voteWhichShouldHaveBeenDeleted: voteToDelete,
+                        voteToRestore: previousVote,
                     },
                 })
 
                 dispatch({
                     type: INCREMENT_VOTE_LOCALLY,
                     payload: {
-                        vote: voteToDelete,
+                        vote: previousVote,
                         amount: 1,
                     },
                 })

@@ -33,12 +33,17 @@ export class OpenfeedbackApi implements ProjectApi {
             .collection('talks')
             .doc(talkId)
             .get()
-            .then((talkDoc) => ({
-                [talkDoc.id]: {
-                    id: talkDoc.id,
-                    ...(talkDoc.data() as NewTalk),
-                },
-            }))
+            .then((talkDoc) =>
+                // An unknown id resolves to no talk instead of a talk without data
+                talkDoc.exists
+                    ? {
+                          [talkDoc.id]: {
+                              id: talkDoc.id,
+                              ...(talkDoc.data() as NewTalk),
+                          },
+                      }
+                    : {}
+            )
     }
 
     getSpeakers(): Promise<SpeakersMap> {

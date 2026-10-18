@@ -67,20 +67,15 @@ export class Vote {
     }
 
     public getVoteItemIncrementAggregation(
-        snapshotExists: boolean,
         aggregatedVote?: AggregatedVote
     ): VoteItemAggregationChange {
         if (this.isTextVoteItem()) {
-            return this.getTextVoteItemAggregation(
-                snapshotExists,
-                aggregatedVote
-            )
+            return this.getTextVoteItemAggregation(aggregatedVote)
         }
         return this.getBooleanVoteItemAggregation()
     }
 
     private getTextVoteItemAggregation(
-        snapshotExists: boolean,
         aggregatedVote?: AggregatedVote
     ): VoteItemAggregationChange {
         if (this.isTextPlusVote()) {
@@ -99,51 +94,30 @@ export class Vote {
             }
         }
 
-        let aggregatedValue
+        // The merge write only changes this text vote, so the other text
+        // votes and the up-vote count keep their concurrent increments.
+        if (!this.isActive()) {
+            return {
+                [this.voteData.voteItemId]: {
+                    [this.id]: {},
+                },
+            }
+        }
         const voteText = {
             text: this.voteData.text,
             createdAt: this.voteData.createdAt,
             updatedAt: this.voteData.updatedAt,
             userId: this.voteData.userId,
         }
-        if (this.isActive()) {
-            // Editing the text keeps the up-votes it already received
-            const plus =
-                aggregatedVote?.[this.voteData.voteItemId]?.[this.id]?.plus ?? 1
-            if (
-                !snapshotExists ||
-                !aggregatedVote ||
-                !aggregatedVote[this.voteData.voteItemId]
-            ) {
-                aggregatedValue = {
-                    [this.id]: {
-                        ...voteText,
-                        plus,
-                    },
-                }
-            } else {
-                aggregatedValue = {
-                    ...aggregatedVote[this.voteData.voteItemId],
-                    [this.id]: {
-                        ...voteText,
-                        plus,
-                    },
-                }
-            }
-        } else {
-            if (
-                !snapshotExists ||
-                !aggregatedVote ||
-                !aggregatedVote[this.voteData.voteItemId]
-            ) {
-                aggregatedValue = {}
-            } else {
-                aggregatedValue = aggregatedVote[this.voteData.voteItemId]
-                aggregatedValue[this.id] = {}
-            }
-        }
+        // An edit keeps the current up-votes, a new (or re-written after its
+        // deletion) text vote starts with its author's vote
+        const hasPlus =
+            aggregatedVote?.[this.voteData.voteItemId]?.[this.id]?.plus !==
+            undefined
         return {
-            [this.voteData.voteItemId]: aggregatedValue,
+            [this.voteData.voteItemId]: {
+                [this.id]: hasPlus ? voteText : { ...voteText, plus: 1 },
+            },
         }
     }
 

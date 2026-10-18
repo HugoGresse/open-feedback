@@ -68,9 +68,9 @@ export const voteReducer = (
             if (payload.voteId !== undefined) {
                 delete newVoteState[payload.voteId]
             }
-            if (payload.voteWhichShouldHaveBeenDeleted) {
-                // The removal failed: put the vote back as it was
-                const vote = payload.voteWhichShouldHaveBeenDeleted
+            if (payload.voteToRestore) {
+                // The write failed: put the vote back as it was
+                const vote = payload.voteToRestore
                 newVoteState[vote.id] = {
                     ...vote,
                     pending: false,
