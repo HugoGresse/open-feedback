@@ -1,5 +1,5 @@
-import type { Dispatch } from 'redux'
-import { getSelectedProjectIdSelector } from '../projectSelectors'
+import type { AppThunk } from '../../../../store'
+import { getSelectedProjectIdOrThrowSelector } from '../projectSelectors'
 import { deleteField, fireStoreMainInstance } from '../../../../firebase.ts'
 import { addNotification } from '../../../notification/notifcationActions'
 import { generateProjectApiKey } from '../../../../utils/generateApiKey'
@@ -34,9 +34,8 @@ export const fetchProjectIntegration = async (
  * so we also reset the last-used marker. Returns the new key.
  */
 export const updateProjectApiKey =
-    () =>
-    (dispatch: Dispatch, getState: () => unknown): Promise<string | void> => {
-        const projectId = getSelectedProjectIdSelector(getState())
+    (): AppThunk<Promise<string | void>> => (dispatch, getState) => {
+        const projectId = getSelectedProjectIdOrThrowSelector(getState())
         const apiKey = generateProjectApiKey()
 
         return integrationDocRef(projectId)
@@ -50,7 +49,7 @@ export const updateProjectApiKey =
                 )
                 return apiKey
             })
-            .catch((err: unknown) => {
+            .catch(() => {
                 dispatch(
                     addNotification({
                         type: 'error',

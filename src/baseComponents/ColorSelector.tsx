@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react'
+import { useMemo, useRef, type FC, type ChangeEvent } from 'react'
 import {
     Box,
     ButtonGroup,
@@ -11,12 +11,11 @@ import { useTranslation } from 'react-i18next'
 
 interface ColorSelectorProps {
     selectedColor: string
-    // eslint-disable-next-line no-unused-vars
     onColorChange: (color: string) => void
     eventColor?: string
 }
 
-export const ColorSelector: React.FC<ColorSelectorProps> = ({
+export const ColorSelector: FC<ColorSelectorProps> = ({
     selectedColor,
     onColorChange,
     eventColor = '#000000',
@@ -44,9 +43,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
         ]
     }, [t, eventColor, selectedColor])
 
-    const handleCustomColorChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleCustomColorChange = (event: ChangeEvent<HTMLInputElement>) => {
         onColorChange(event.target.value)
     }
 
@@ -55,7 +52,8 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
             <ButtonGroup
                 variant="contained"
                 orientation="vertical"
-                aria-label="QR Code color selection">
+                aria-label="QR Code color selection"
+            >
                 {colorOptions.map((option) => (
                     <Button
                         key={option.color}
@@ -74,7 +72,8 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
                             alignItems: 'center',
                             gap: 1,
                             borderColor: theme.palette.divider,
-                        }}>
+                        }}
+                    >
                         <Box
                             width={16}
                             height={16}
@@ -90,7 +89,8 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
                                     selectedColor === option.color
                                         ? option.color
                                         : theme.palette.text.primary,
-                            }}>
+                            }}
+                        >
                             {option.label}
                         </Typography>
                     </Button>

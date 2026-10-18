@@ -1,0 +1,89 @@
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import Dialog from '@mui/material/Dialog'
+import { useTranslation } from 'react-i18next'
+import { OFButton } from '../../baseComponents/button/OFButton.tsx'
+import { object, string } from 'yup'
+import { Form, Formik } from 'formik'
+import { getSelectedOrganizationSelector } from '../core/organizationSelectors'
+import { OFFormControlInputFormiked } from '../../baseComponents/form/formControl/OFFormControlInputFormiked.tsx'
+import SaveIcon from '@mui/icons-material/Save'
+import Box from '@mui/material/Box'
+import { editOrganization } from '../core/actions/editOrganization'
+import { useAppDispatch, useAppSelector } from '../../../store'
+
+export interface OrganizationSettingsProps {
+    onClose: () => void
+}
+
+export const OrganizationSettings = ({
+    onClose,
+}: OrganizationSettingsProps) => {
+    const { t } = useTranslation()
+    const organization = useAppSelector(getSelectedOrganizationSelector)
+    const dispatch = useAppDispatch()
+
+    return (
+        <Dialog
+            open={true}
+            fullWidth={true}
+            maxWidth="sm"
+            onClose={onClose}
+            aria-labelledby={t('organization.settings')}
+        >
+            <DialogTitle id="org-settings">
+                {t('organization.settings')}
+            </DialogTitle>
+            <DialogContent>
+                <Formik
+                    validationSchema={object().shape({
+                        name: string().required(t('organization.nameRequired')),
+                    })}
+                    initialValues={{
+                        // Only displayed while an organization is loaded.
+                        name: organization?.name ?? '',
+                    }}
+                    onSubmit={(values) => {
+                        return dispatch(
+                            editOrganization({
+                                name: values.name,
+                            })
+                        ).then(() => onClose())
+                    }}
+                >
+                    {({ isSubmitting }) => (
+                        <Form method="POST">
+                            <OFFormControlInputFormiked
+                                name={t('organization.name')}
+                                fieldName="name"
+                                type="text"
+                                isSubmitting={isSubmitting}
+                                color="secondary"
+                            />
+
+                            <Box
+                                display="flex"
+                                justifyContent="flex-end"
+                                marginTop={4}
+                                marginBottom={2}
+                            >
+                                <OFButton
+                                    onClick={onClose}
+                                    style={{ design: 'text' }}
+                                >
+                                    {t('common.back')}
+                                </OFButton>
+                                <OFButton
+                                    startIcon={<SaveIcon />}
+                                    type="submit"
+                                >
+                                    {t('common.save')}
+                                </OFButton>
+                            </Box>
+                        </Form>
+                    )}
+                </Formik>
+            </DialogContent>
+        </Dialog>
+    )
+}

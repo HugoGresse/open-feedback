@@ -1,0 +1,91 @@
+import { makeStyles } from '@mui/styles'
+import type { Theme } from '@mui/material/styles'
+import { DateTime } from 'luxon'
+import Typography from '@mui/material/Typography'
+import { VoteButton } from '../components/VoteButton.tsx'
+import { useTranslation } from 'react-i18next'
+import type { TextVoteResult } from '../core/getVoteResultSelectorSelector'
+
+interface VoteTextResultItemStyleProps {
+    isLast: boolean
+}
+
+const useStyles = makeStyles((theme: Theme) => ({
+    container: {
+        display: 'flex',
+        marginTop: theme.spacing(2),
+    },
+    button: {
+        width: '80px !important',
+        height: '80px !important',
+        float: 'left',
+        marginRight: theme.spacing(2),
+    },
+    right: {
+        flexDirection: 'row',
+        flex: 1,
+    },
+    date: {
+        color: theme.palette.textDimmed,
+        fontSize: 14,
+        marginBottom: 0,
+    },
+    comment: {
+        borderBottom: (props: VoteTextResultItemStyleProps) =>
+            props.isLast ? '' : `1px solid ${theme.palette.paperBorder}`,
+        paddingBottom: 15,
+        marginTop: 10,
+        wordBreak: 'break-word',
+        whiteSpace: 'pre-wrap',
+    },
+}))
+
+interface VoteTextResultItemProps {
+    vote: TextVoteResult
+    isLast: boolean
+    isSelected: boolean
+    chipColors?: string[]
+    onVoteChange: () => void
+    currentUserId: string
+}
+
+export const VoteTextResultItem = ({
+    vote,
+    isLast,
+    isSelected,
+    chipColors,
+    onVoteChange,
+    currentUserId,
+}: VoteTextResultItemProps) => {
+    const classes = useStyles({
+        isLast,
+    })
+    const { t } = useTranslation()
+    const isVoteFromUser = vote.userId === currentUserId
+    const voteCount = vote.plus === undefined ? 1 : vote.plus // vote.plus can be undefined for old projects
+
+    return (
+        <li className={classes.container}>
+            <VoteButton
+                className={classes.button}
+                count={voteCount ?? 1}
+                isSelected={isSelected}
+                chipColors={chipColors}
+                onClick={onVoteChange}
+            >
+                {voteCount} {voteCount > 1 ? 'votes' : 'vote'}
+            </VoteButton>
+            <div className={classes.right}>
+                <p className={classes.date}>
+                    {DateTime.fromJSDate(vote.updatedAt)
+                        .minus({ seconds: 1 })
+                        .toRelative()}
+                    {isVoteFromUser ? ', ' + t('vote.yourVote') : ''}
+                </p>
+                <Typography className={classes.comment} color="textPrimary">
+                    {vote.text}
+                </Typography>
+            </div>
+        </li>
+    )
+}

@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react'
+import { lazy, Suspense, type FC } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
@@ -21,7 +21,7 @@ interface QRCodeDialogProps {
     logo?: string
 }
 
-export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({
+export const QRCodeDialog: FC<QRCodeDialogProps> = ({
     open,
     onClose,
     value,
@@ -39,14 +39,16 @@ export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({
             onClose={onClose}
             aria-labelledby="qr-code-dialog-title"
             maxWidth="sm"
-            fullWidth>
+            fullWidth
+        >
             <DialogTitle
                 id="qr-code-dialog-title"
                 sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                }}>
+                }}
+            >
                 {title}
             </DialogTitle>
             <DialogContent>
@@ -58,7 +60,8 @@ export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({
                     sx={{
                         borderRadius: 1,
                         padding: 2,
-                    }}>
+                    }}
+                >
                     {open && (
                         <Suspense
                             fallback={
@@ -67,10 +70,12 @@ export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({
                                     justifyContent="center"
                                     alignItems="center"
                                     width={size}
-                                    height={size}>
+                                    height={size}
+                                >
                                     <CircularProgress />
                                 </Box>
-                            }>
+                            }
+                        >
                             <QRCode
                                 data={value}
                                 size={size}

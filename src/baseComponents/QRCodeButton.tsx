@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, type FC } from 'react'
 import { IconButton, Tooltip, useTheme } from '@mui/material'
 import QrCode2Icon from '@mui/icons-material/QrCode'
 import { QRCodeDialog } from './QRCodeDialog'
@@ -14,7 +14,7 @@ interface QRCodeButtonProps {
     eventColor?: string
 }
 
-export const QRCodeButton: React.FC<QRCodeButtonProps> = ({
+export const QRCodeButton: FC<QRCodeButtonProps> = ({
     url,
     title = 'QR Code',
     tooltipTitle = 'Show QR Code',
@@ -43,7 +43,8 @@ export const QRCodeButton: React.FC<QRCodeButtonProps> = ({
                             backgroundColor: theme.palette.action.hover,
                         },
                     }}
-                    aria-label={tooltipTitle}>
+                    aria-label={tooltipTitle}
+                >
                     <QrCode2Icon />
                 </IconButton>
             </Tooltip>

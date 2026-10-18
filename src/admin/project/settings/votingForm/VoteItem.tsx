@@ -1,61 +1,56 @@
-import React, { useEffect, useState } from 'react'
-// @ts-expect-error - JS module without types
-import OFInput from '../../../baseComponents/form/input/OFInput.jsx'
+import {
+    useEffect,
+    useState,
+    type CSSProperties,
+    type KeyboardEvent,
+    type ChangeEvent,
+} from 'react'
+import { OFInput } from '../../../baseComponents/form/input/OFInput.tsx'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator'
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
-import OFListItem from '../../../baseComponents/layouts/OFListItem.tsx'
+import { OFListItem } from '../../../baseComponents/layouts/OFListItem.tsx'
 import { makeStyles } from '@mui/styles'
-import Select from '@mui/material/Select'
+import Select, { type SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
-import { SelectChangeEvent } from '@mui/material/Select'
 import { useTranslation } from 'react-i18next'
 import {
     VOTE_TYPE_BOOLEAN,
     VOTE_TYPE_SEPARATOR,
     VOTE_TYPE_TEXT,
     VOTE_TYPE_TITLE,
-    // @ts-expect-error - JS module without types
 } from '../../../../core/contants'
-// @ts-expect-error - JS module without types
 import langMap from 'langmap'
-// @ts-expect-error - JS module without types
-import InputLangAdornment from './InputLangAdornment.jsx'
+import { InputLangAdornment } from './InputLangAdornment.tsx'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-
-// Types
-export interface VoteItemType {
-    id: string
-    name: string | null
-    position: number
-    type: string
-    local?: boolean
-    oldId?: string
-    languages?: Record<string, string>
-}
+import type { TFunction } from 'react-i18next'
+import type {
+    VoteItem as VoteItemModel,
+    VoteItemType,
+} from '../../../../core/models'
 
 interface VoteType {
-    type: string
+    type: VoteItemType
     name: string
 }
 
 interface VoteItemProps {
     id: string
-    item: VoteItemType
+    item: VoteItemModel
     languages: string[]
     onChange: (_newValue: string) => void
     onLanguagesChange: (_langTag: string, _value: string) => void
     onDelete: () => void
     onEnterPressed: () => void
-    onTypeChange: (_type: string) => void
+    onTypeChange: (_type: VoteItemType) => void
     onFocus: () => void
     focusId?: string
     noBorderBottom?: boolean
 }
 
-const useStyles = makeStyles((_theme) => ({
+const useStyles = makeStyles(() => ({
     cell: {
         paddingRight: 12,
     },
@@ -77,7 +72,7 @@ const useStyles = makeStyles((_theme) => ({
     },
 }))
 
-const getTypes = (t: (_key: string) => string): VoteType[] => [
+const getTypes = (t: TFunction): VoteType[] => [
     {
         type: VOTE_TYPE_BOOLEAN,
         name: t('settingsVotingForm.typeBoolean'),
@@ -96,7 +91,7 @@ const getTypes = (t: (_key: string) => string): VoteType[] => [
     },
 ]
 
-const VoteItem = ({
+export const VoteItem = ({
     id,
     item,
     languages,
@@ -131,15 +126,13 @@ const VoteItem = ({
 
     const isSeparator = item.type === VOTE_TYPE_SEPARATOR
 
-    const style: React.CSSProperties = {
+    const style: CSSProperties = {
         transform: CSS.Transform.toString(transform),
         transition,
         opacity: isDragging ? 0.5 : 1,
     }
 
-    const handleInputKeyPress = (
-        event: React.KeyboardEvent<HTMLInputElement>
-    ) => {
+    const handleInputKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             if (languages.length > 0) {
                 setFocusLangIndex(0)
@@ -151,7 +144,7 @@ const VoteItem = ({
     }
 
     const handleLangInputKeyPress = (
-        event: React.KeyboardEvent<HTMLInputElement>
+        event: KeyboardEvent<HTMLInputElement>
     ) => {
         if (event.key === 'Enter') {
             if (focusedLangIndex >= languages.length - 1) {
@@ -167,19 +160,23 @@ const VoteItem = ({
         }
     }
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         onChange(event.target.value)
     }
 
     const handleLangInputChange = (
         langTag: string,
-        event: React.ChangeEvent<HTMLInputElement>
+        event: ChangeEvent<HTMLInputElement>
     ) => {
         onLanguagesChange(langTag, event.target.value)
     }
 
-    const handleTypeChange = (event: SelectChangeEvent<string>) => {
-        onTypeChange(event.target.value)
+    const handleTypeChange = (event: SelectChangeEvent<VoteItemType>) => {
+        // The value is one of the MenuItem values below.
+        const voteType = types.find((type) => type.type === event.target.value)
+        if (voteType) {
+            onTypeChange(voteType.type)
+        }
     }
 
     const handleInputFocus = () => {
@@ -217,7 +214,8 @@ const VoteItem = ({
             }}
             noBorderBottom={noBorderBottom}
             data-testid="VoteItem"
-            className={classes.sortableItem}>
+            className={classes.sortableItem}
+        >
             <Grid item xs={12} sm={6} className={classes.cell}>
                 <OFInput
                     value={item.name}
@@ -241,12 +239,12 @@ const VoteItem = ({
                             }
                             className={classes.inputLang}
                             disabled={isSeparator}
-                            onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                            ) => handleLangInputChange(langTag, event)}
+                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                                handleLangInputChange(langTag, event)
+                            }
                             onFocus={() => handleLangInputFocus(index)}
                             onKeyPress={(
-                                event: React.KeyboardEvent<HTMLInputElement>
+                                event: KeyboardEvent<HTMLInputElement>
                             ) => handleLangInputKeyPress(event)}
                             startAdornment={
                                 <InputLangAdornment
@@ -254,7 +252,8 @@ const VoteItem = ({
                                         langMap[langTag].nativeName
                                     } (${langTag}) - ${t(
                                         'settingsVotingForm.editLang'
-                                    )}`}>
+                                    )}`}
+                                >
                                     {' '}
                                     {langMap[langTag].nativeName}{' '}
                                 </InputLangAdornment>
@@ -263,11 +262,12 @@ const VoteItem = ({
                     ))}
             </Grid>
             <Grid item xs={12} sm={2} className={classes.typeCell}>
-                <Select
+                <Select<VoteItemType>
                     id="vote-item-type"
                     value={item.type}
                     onChange={handleTypeChange}
-                    input={<OFInput />}>
+                    input={<OFInput />}
+                >
                     {types.map((type) => (
                         <MenuItem key={type.type} value={type.type}>
                             {type.name}
@@ -281,7 +281,8 @@ const VoteItem = ({
                     size="large"
                     className={classes.dragIndicator}
                     {...attributes}
-                    {...listeners}>
+                    {...listeners}
+                >
                     <DragIndicatorIcon />
                 </IconButton>
 
@@ -294,5 +295,3 @@ const VoteItem = ({
 }
 
 VoteItem.displayName = 'VoteItem'
-
-export default VoteItem

@@ -1,16 +1,16 @@
 import type firebase from 'firebase/compat/app'
 import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase'
+import type { AppThunk } from '../../../../store'
 import {
-    EventData,
+    type EventData,
     normalizeEventData,
 } from '../../../../core/setupType/eventDataNormalization'
-// @ts-expect-error - JS module without types
 import { addNotification } from '../../../notification/notifcationActions'
 
 // Firestore caps a write batch at 500 operations; stay under it.
 const BATCH_LIMIT = 450
 
-interface ImportSummary {
+export interface ImportSummary {
     talkCount: number
     speakerCount: number
 }
@@ -52,9 +52,8 @@ const commitInBatches = async (ops: WriteOp[]): Promise<void> => {
 // that session.speakers references stay valid. The project itself is created
 // as a regular openfeedbackv1 event, so everything is editable afterwards.
 export const importEventData =
-    (projectId: string, rawData: EventData) =>
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async (dispatch: any): Promise<ImportSummary> => {
+    (projectId: string, rawData: EventData): AppThunk<Promise<ImportSummary>> =>
+    async (dispatch) => {
         try {
             const data = normalizeEventData(rawData)
             const projectRef = fireStoreMainInstance

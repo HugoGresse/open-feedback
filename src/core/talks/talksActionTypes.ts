@@ -1,0 +1,25 @@
+import type { Talk, TalksMap } from '../models'
+
+export const GET_TALKS_SUCCESS = 'core/talks/get/success'
+export const GET_TALKS_LOADING = 'core/talks/get/loading'
+export const GET_TALKS_ERROR = 'core/talks/get/error'
+export const SET_TALKS_FILTER = 'core/talks/filter'
+
+export const ADD_TALK_SUCCESS = 'core/talk/add/success'
+export const ADD_TALK_ERROR = 'core/talk/add/error'
+export const EDIT_TALK_SUCCESS = 'core/talk/edit/success'
+export const EDIT_TALK_ERROR = 'core/talk/edit/error'
+export const REMOVE_TALK_SUCCESS = 'core/talk/remove/success'
+export const REMOVE_TALK_ERROR = 'core/talk/remove/error'
+
+export type TalksAction =
+    | { type: typeof GET_TALKS_LOADING }
+    | { type: typeof GET_TALKS_SUCCESS; payload: TalksMap }
+    | { type: typeof GET_TALKS_ERROR; payload: string }
+    | { type: typeof SET_TALKS_FILTER; payload: string | null }
+    | { type: typeof ADD_TALK_SUCCESS; payload: Talk }
+    | { type: typeof EDIT_TALK_SUCCESS; payload: Talk }
+    | { type: typeof REMOVE_TALK_SUCCESS; payload: Talk }
+    | { type: typeof ADD_TALK_ERROR; payload: { error: unknown } }
+    | { type: typeof EDIT_TALK_ERROR; payload: { error: unknown } }
+    | { type: typeof REMOVE_TALK_ERROR; payload: { error: unknown } }

@@ -1,12 +1,9 @@
-import firebase from 'firebase/compat/app'
-import Timestamp = firebase.firestore.Timestamp
+import type { Project as ProjectDocument, Timestamp } from '../core/models'
 
-export type Project = {
-    id: string
-    name: string
-    owner: string
-    setupType: string
-    organizationId?: string
+export type Project = Pick<
+    ProjectDocument,
+    'id' | 'name' | 'owner' | 'setupType' | 'organizationId' | 'config'
+> & {
     createdAt: Timestamp
     voteStartTime?: string
 }

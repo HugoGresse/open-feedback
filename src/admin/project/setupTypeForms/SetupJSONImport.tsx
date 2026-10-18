@@ -1,16 +1,15 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import SetupJSONImportForm, {
-    JSONImportFormValues,
-} from './SetupJSONImportForm'
-// @ts-expect-error - JS module without types
-import SetupValidationContainer from './validation/SetupValidationContainer.jsx'
-// @ts-expect-error - JS module without types
-import { PROJECT_TYPE_JSONIMPORT } from '../../../core/setupType/projectApi'
-import JsonImportApi from '../../../core/setupType/jsonimport/JsonImportApi'
 import {
-    EventData,
+    type JSONImportFormValues,
+    SetupJSONImportForm,
+} from './SetupJSONImportForm'
+import { SetupValidationContainer } from './validation/SetupValidationContainer.tsx'
+import { PROJECT_TYPE_JSONIMPORT } from '../../../core/setupType/projectApi'
+import { JsonImportApi } from '../../../core/setupType/jsonimport/JsonImportApi'
+import {
+    type EventData,
     parseEventJson,
 } from '../../../core/setupType/eventDataNormalization'
 
@@ -24,7 +23,7 @@ interface SetupJSONImportProps {
     onBack?: (values: JSONImportFormValues) => void
 }
 
-const SetupJSONImport = ({
+export const SetupJSONImport = ({
     submitText,
     leftColumnTitle,
     rightColumnTitle,
@@ -68,5 +67,3 @@ const SetupJSONImport = ({
         </Grid>
     )
 }
-
-export default SetupJSONImport

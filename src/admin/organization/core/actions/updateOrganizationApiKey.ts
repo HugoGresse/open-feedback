@@ -1,4 +1,5 @@
-import type { Dispatch } from 'redux'
+import type { OrganizationIntegration } from '../../../../core/models'
+import type { AppThunk } from '../../../../store'
 import { getSelectedOrganizationIdSelector } from '../organizationSelectors'
 import { deleteField, fireStoreMainInstance } from '../../../../firebase.ts'
 import { addNotification } from '../../../notification/notifcationActions'
@@ -9,10 +10,7 @@ import { generateOrgApiKey } from '../../../../utils/generateApiKey'
 export const ORGANIZATION_PRIVATE_COLLECTION = 'private'
 export const ORGANIZATION_INTEGRATION_DOC = 'integration'
 
-export interface OrganizationIntegration {
-    apiKey?: string
-    apiKeyLastUsedAt?: unknown
-}
+export type { OrganizationIntegration }
 
 const integrationDocRef = (organizationId: string) =>
     fireStoreMainInstance
@@ -34,8 +32,7 @@ export const fetchOrganizationIntegration = async (
  * so we also reset the last-used marker. Returns the new key.
  */
 export const updateOrganizationApiKey =
-    () =>
-    (dispatch: Dispatch, getState: () => unknown): Promise<string | void> => {
+    (): AppThunk<Promise<string | void>> => (dispatch, getState) => {
         const organizationId = getSelectedOrganizationIdSelector(getState())
         if (!organizationId) {
             dispatch(

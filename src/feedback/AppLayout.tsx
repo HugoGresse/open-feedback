@@ -1,0 +1,135 @@
+import { type ReactNode, useEffect } from 'react'
+import '../App.css'
+import { useAppDispatch, useAppSelector } from '../store'
+import { useNavigate, useParams } from 'react-router-dom'
+import { setFavicon } from '../utils/dom'
+import {
+    getProjectLoadErrorSelector,
+    getProjectSelector,
+    getProjectVotesErrorSelector,
+    isProjectNotFoundSelector,
+} from './project/projectSelectors'
+import { Error } from '../baseComponents/customComponent/Error.tsx'
+import { LoaderMatchParent } from '../baseComponents/customComponent/LoaderMatchParent.tsx'
+import { getLoginErrorSelector, isLoggedSelector } from './auth/authSelectors'
+import { Footer } from './layout/Footer.tsx'
+import { getTalksDatesSelector } from '../core/talks/talksSelectors'
+import { HardRedirect } from '../baseComponents/HardRedirect.tsx'
+import { getProject } from './project/projectActions'
+import { signIn } from './auth/authActions'
+import { getVotes } from './vote/voteActions'
+import { useTranslation } from 'react-i18next'
+import { TALK_NO_DATE } from '../core/talks/talksUtils'
+import { Header } from './layout/Header.tsx'
+import { styled, useTheme } from '@mui/material'
+import Box from '@mui/material/Box'
+
+const Layout = styled('main')(({ theme }) => ({
+    marginLeft: 0,
+    marginRight: 0,
+    width: '100%',
+    boxSizing: 'border-box',
+    [theme.breakpoints.up(900)]: {
+        width: 900,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    },
+    [theme.breakpoints.down('lg')]: {
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+    },
+}))
+
+interface AppLayoutProps {
+    children?: ReactNode
+}
+
+export const AppLayout = ({ children }: AppLayoutProps) => {
+    const theme = useTheme()
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+    const routerParams = useParams()
+    const { t } = useTranslation()
+    const project = useAppSelector(getProjectSelector)
+    const talkDates = useAppSelector(getTalksDatesSelector)
+
+    const projectLoadError = useAppSelector(getProjectLoadErrorSelector)
+    const projectNotFound = useAppSelector(isProjectNotFoundSelector)
+    const projectVotesError = useAppSelector(getProjectVotesErrorSelector)
+    const loginError = useAppSelector(getLoginErrorSelector)
+    const isLoggedIn = useAppSelector(isLoggedSelector)
+
+    useEffect(() => {
+        if (isLoggedIn && project) {
+            dispatch(getVotes())
+        }
+    }, [dispatch, isLoggedIn, project])
+
+    useEffect(() => {
+        if (!project) {
+            // The feedback app is mounted under /:projectId
+            dispatch(getProject(routerParams.projectId!))
+        } else {
+            document.title = project.name + ' - Feedback'
+            // A missing favicon keeps setting "undefined", as before typing
+            setFavicon(project.favicon!)
+            dispatch(signIn())
+        }
+    }, [routerParams.projectId, project, dispatch])
+
+    useEffect(() => {
+        const { date, projectId } = routerParams
+        if (
+            !date &&
+            talkDates.length > 0 &&
+            !talkDates.includes(TALK_NO_DATE)
+        ) {
+            navigate(`/${projectId}/${talkDates[0]}`)
+        }
+    }, [routerParams, talkDates, navigate])
+
+    if (loginError) {
+        return (
+            <Error
+                error={t('auth.errorLogin')}
+                errorDetail={t(String(loginError))}
+            />
+        )
+    } else if (projectLoadError) {
+        return (
+            <Error
+                error={t('project.errorLoad')}
+                errorDetail={projectLoadError}
+            />
+        )
+    } else if (projectNotFound) {
+        return <HardRedirect to="/404" />
+    } else if (projectVotesError) {
+        return (
+            <Error
+                error={t('project.errorLoadVotes')}
+                errorDetail={String(projectVotesError)}
+            />
+        )
+    } else {
+        return (
+            <Box
+                bgcolor={theme.palette.pageBackground}
+                minHeight="100vh"
+                display="flex"
+                flexDirection="column"
+            >
+                {project ? (
+                    <Box flex={1}>
+                        <Header project={project} />
+
+                        <Layout> {children}</Layout>
+                    </Box>
+                ) : (
+                    <LoaderMatchParent height="90vh" />
+                )}
+                <Footer />
+            </Box>
+        )
+    }
+}

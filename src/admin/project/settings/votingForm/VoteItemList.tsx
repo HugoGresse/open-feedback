@@ -1,12 +1,11 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import AddIcon from '@mui/icons-material/AddCircleOutline'
-import VoteItem, { VoteItemType } from './VoteItem.tsx'
-import { useDispatch, useSelector } from 'react-redux'
+import { VoteItem } from './VoteItem.tsx'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import {
     getSortedVoteItemsSelector,
     shouldConfirmSaveSelector,
     isSavingVotingFormSelector,
-    // @ts-expect-error - JS module without types
 } from './votingFormSelectors'
 import {
     addVoteItem,
@@ -15,13 +14,12 @@ import {
     onVoteItemSaveConfirmed,
     onVoteItemsReorder,
     saveVoteItems,
-    // @ts-expect-error - JS module without types
 } from './votingFormActions'
 import {
     DndContext,
-    DragEndEvent,
+    type DragEndEvent,
     DragOverlay,
-    DragStartEvent,
+    type DragStartEvent,
     PointerSensor,
     useSensor,
     useSensors,
@@ -36,30 +34,25 @@ import {
 } from '@dnd-kit/sortable'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
-// @ts-expect-error - JS module without types
-import OFListHeader from '../../../baseComponents/layouts/OFListHeader'
-import OFListItem from '../../../baseComponents/layouts/OFListItem.tsx'
+import { OFListHeader } from '../../../baseComponents/layouts/OFListHeader'
+import { OFListItem } from '../../../baseComponents/layouts/OFListItem.tsx'
 import { useTranslation } from 'react-i18next'
-// @ts-expect-error - JS module without types
 import { VOTE_TYPE_BOOLEAN } from '../../../../core/contants'
-// @ts-expect-error - JS module without types
-import SimpleDialog from '../../../baseComponents/layouts/SimpleDialog'
-// @ts-expect-error - JS module without types
-import TranslatedTypography from '../../../baseComponents/TranslatedTypography'
+import { SimpleDialog } from '../../../baseComponents/layouts/SimpleDialog'
+import { TranslatedTypography } from '../../../baseComponents/TranslatedTypography'
 import { useHotkeys } from 'react-hotkeys-hook'
-// @ts-expect-error - JS module without types
-import OFButton from '../../../baseComponents/button/OFButton'
+import { OFButton } from '../../../baseComponents/button/OFButton'
 
 export interface VoteItemListProps {
     languages: string[]
 }
 
-const VoteItemList: React.FC<VoteItemListProps> = ({ languages }) => {
+export const VoteItemList = ({ languages }: VoteItemListProps) => {
     const { t } = useTranslation()
-    const dispatch = useDispatch()
-    const voteItems: VoteItemType[] = useSelector(getSortedVoteItemsSelector)
-    const isSaving: boolean = useSelector(isSavingVotingFormSelector)
-    const shouldConfirmSave: boolean = useSelector(shouldConfirmSaveSelector)
+    const dispatch = useAppDispatch()
+    const voteItems = useAppSelector(getSortedVoteItemsSelector)
+    const isSaving = useAppSelector(isSavingVotingFormSelector)
+    const shouldConfirmSave = useAppSelector(shouldConfirmSaveSelector)
     const [focusId, setFocusId] = useState<string | undefined>()
     const [isTypeChangeDialogOpen, setTypeChangedDialog] =
         useState<boolean>(false)
@@ -124,10 +117,12 @@ const VoteItemList: React.FC<VoteItemListProps> = ({ languages }) => {
                     sensors={sensors}
                     collisionDetection={closestCenter}
                     onDragStart={handleDragStart}
-                    onDragEnd={handleDragEnd}>
+                    onDragEnd={handleDragEnd}
+                >
                     <SortableContext
                         items={voteItems.map((item) => item.id)}
-                        strategy={verticalListSortingStrategy}>
+                        strategy={verticalListSortingStrategy}
+                    >
                         {voteItems.map((item, index) => (
                             <VoteItem
                                 key={item.id}
@@ -156,7 +151,7 @@ const VoteItemList: React.FC<VoteItemListProps> = ({ languages }) => {
                                         })
                                     )
                                 }}
-                                onTypeChange={(type: string) =>
+                                onTypeChange={(type) =>
                                     dispatch(
                                         onVoteItemChange({
                                             ...item,
@@ -208,16 +203,18 @@ const VoteItemList: React.FC<VoteItemListProps> = ({ languages }) => {
                         paddingLeft: 20,
                         paddingRight: 20,
                         justifyContent: 'space-between',
-                    }}>
+                    }}
+                >
                     <Button
                         aria-label="new vote item"
                         onClick={() =>
                             dispatch(addVoteItem(undefined, VOTE_TYPE_BOOLEAN))
-                        }>
+                        }
+                    >
                         <AddIcon style={{ marginRight: 6 }} />
                         {t('settingsVotingForm.new')}
                     </Button>
-                    <OFButton onClick={save} disabled={isSaving}>
+                    <OFButton onClick={() => save()} disabled={isSaving}>
                         {t('common.save')}
                     </OFButton>
                 </OFListItem>
@@ -233,11 +230,10 @@ const VoteItemList: React.FC<VoteItemListProps> = ({ languages }) => {
                 title={t('settingsVotingForm.typeChangeDialogTitle')}
                 cancelText={t('common.cancel')}
                 confirmText={t('settingsVotingForm.typeChangeDialogConfirm')}
-                open={isTypeChangeDialogOpen}>
+                open={isTypeChangeDialogOpen}
+            >
                 <TranslatedTypography i18nKey="settingsVotingForm.typeChangeDialogDesc" />
             </SimpleDialog>
         </>
     )
 }
-
-export default VoteItemList

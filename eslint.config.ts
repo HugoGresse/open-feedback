@@ -24,14 +24,17 @@ export default defineConfig([
             'dist/**',
             'coverage/**',
             'functions/**',
-            '**/*.ts',
+            'storybook-static/**',
+            // scripts/ is a standalone package with its own tsconfig.
+            'scripts/**',
         ],
     },
     {
-        files: ['**/*.{js,jsx,mjs,cjs,tsx}'],
+        files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
         extends: [
             js.configs.recommended,
             react.configs.flat.recommended,
+            react.configs.flat['jsx-runtime'],
             tseslint.configs.recommended,
         ],
         // react-hooks is registered so its disable comments resolve; its rules are not enabled.
@@ -52,12 +55,30 @@ export default defineConfig([
             'react/jsx-uses-vars': 'warn',
             'react/display-name': 'warn',
             'react/prop-types': 'off',
-            'no-unused-vars': 'warn',
             '@typescript-eslint/no-unused-vars': 'error',
             'no-console': 'warn',
             'no-unexpected-multiline': 'warn',
             'cypress/no-assigning-return-values': 'error',
             'cypress/no-unnecessary-waiting': 'error',
+        },
+    },
+    {
+        // Named exports only. Storybook CSF stories need their default meta export.
+        files: ['src/**/*.{ts,tsx}'],
+        ignores: ['**/*.stories.tsx', '**/*.d.ts'],
+        rules: {
+            'no-restricted-exports': [
+                'error',
+                {
+                    restrictDefaultExports: {
+                        direct: true,
+                        named: true,
+                        defaultFrom: true,
+                        namedFrom: true,
+                        namespaceFrom: true,
+                    },
+                },
+            ],
         },
     },
     {

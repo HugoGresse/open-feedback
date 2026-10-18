@@ -300,7 +300,8 @@
         "errorPendingInvitesFailed": "Erreur lors du chargement des invitations en attente, ",
         "cancelInviteFail": "Erreur lors de l'annulation de l'invitation, ",
         "inviteAlreadyUsed": "L'invitation a déjà été utilisé",
-        "inviteCompleted": "Invite terminé, vous allez être rediriger vers l'évènement ou l'organisation"
+        "inviteCompleted": "Invite terminé, vous allez être rediriger vers l'évènement ou l'organisation",
+        "inviteFailed": "Cette invitation a échoué. Demandez à l'organisateur de vous inviter à nouveau."
     },
     "settingsVotingForm": {
         "new": "Nouveau choix de vote",

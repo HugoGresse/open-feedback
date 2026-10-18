@@ -1,6 +1,5 @@
-import * as React from 'react'
 import { CircularProgress, Typography } from '@mui/material'
-import { UseQueryResult } from './hooks/firestoreQueryHook'
+import type { UseQueryResult } from './hooks/firestoreQueryHook'
 
 export type FirestoreQueryLoaderAndErrorDisplayProps = {
     hookResult: UseQueryResult
@@ -11,7 +10,9 @@ export type FirestoreQueryLoaderAndErrorDisplayProps = {
  * @param props
  * @constructor
  */
-export const FirestoreQueryLoaderAndErrorDisplay = ({ hookResult }: FirestoreQueryLoaderAndErrorDisplayProps) => {
+export const FirestoreQueryLoaderAndErrorDisplay = ({
+    hookResult,
+}: FirestoreQueryLoaderAndErrorDisplayProps) => {
     if (hookResult.isLoading) {
         return <CircularProgress />
     }

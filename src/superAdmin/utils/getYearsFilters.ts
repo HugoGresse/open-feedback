@@ -1,4 +1,4 @@
-import { DateRange } from '../hooks/useProjects.ts'
+import type { DateRange } from '../hooks/useProjects.ts'
 
 const getYearlyDateRanges = (
     startYear: number,

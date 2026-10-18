@@ -300,7 +300,8 @@
         "errorPendingInvitesFailed": "Failed to load pending invites, ",
         "cancelInviteFail": "Failed to cancel invite, ",
         "inviteAlreadyUsed": "You've already used this invitation",
-        "inviteCompleted": "Invite completed, you'll be redirected to the event or organization soon"
+        "inviteCompleted": "Invite completed, you'll be redirected to the event or organization soon",
+        "inviteFailed": "This invitation failed. Ask the organizer to invite you again."
     },
     "settingsVotingForm": {
         "new": "New item",

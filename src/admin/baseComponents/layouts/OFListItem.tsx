@@ -1,9 +1,9 @@
-import Grid, { GridProps } from '@mui/material/Grid'
-import React, { forwardRef } from 'react'
+import Grid, { type GridProps } from '@mui/material/Grid'
+import { forwardRef } from 'react'
 import { darken, alpha, lighten } from '@mui/material/styles'
 import { styled } from '@mui/material/styles'
 
-type OFListItemProps = GridProps & {
+export type OFListItemProps = GridProps & {
     noBorderBottom?: boolean
 }
 
@@ -21,7 +21,7 @@ const StyledGrid = styled(Grid)<OFListItemProps>(
     })
 )
 
-const OFListItem = forwardRef<HTMLDivElement, OFListItemProps>(
+export const OFListItem = forwardRef<HTMLDivElement, OFListItemProps>(
     ({ children, ...props }, ref) => {
         return (
             <StyledGrid ref={ref} container component="li" {...props}>
@@ -32,5 +32,3 @@ const OFListItem = forwardRef<HTMLDivElement, OFListItemProps>(
 )
 
 OFListItem.displayName = 'OFListItem'
-
-export default OFListItem

@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useRef, useState } from 'react'
+import { useAppDispatch, useAppSelector } from '../../../store'
 import { useTranslation } from 'react-i18next'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import DeleteIcon from '@mui/icons-material/Delete'
-import SimpleDialog from '../../baseComponents/layouts/SimpleDialog'
+import { SimpleDialog } from '../../baseComponents/layouts/SimpleDialog'
 import { removeTalk } from '../../../core/talks/talksActions'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import { getTalkVoteCount, shouldConfirmTalkRemoval } from './talkVoteCount'
@@ -15,10 +15,13 @@ interface DeleteTalkButtonProps {
     isBlocked: () => boolean
 }
 
-const DeleteTalkButton = ({ talk, isBlocked }: DeleteTalkButtonProps) => {
-    const dispatch = useDispatch()
+export const DeleteTalkButton = ({
+    talk,
+    isBlocked,
+}: DeleteTalkButtonProps) => {
+    const dispatch = useAppDispatch()
     const { t } = useTranslation()
-    const projectId: string = useSelector(getSelectedProjectIdSelector)
+    const projectId = useAppSelector(getSelectedProjectIdSelector)
     const [isChecking, setIsChecking] = useState(false)
     const [isRemoving, setIsRemoving] = useState(false)
     // undefined: dialog closed, null: vote count unknown, number: vote count
@@ -32,14 +35,15 @@ const DeleteTalkButton = ({ talk, isBlocked }: DeleteTalkButtonProps) => {
         }
     }, [])
 
-    const remove = () => dispatch(removeTalk(talk) as any)
+    const remove = () => dispatch(removeTalk(talk))
 
     const onClick = async () => {
         if (isChecking || isBlocked()) return
         setIsChecking(true)
-        const count = await getTalkVoteCount(projectId, talk.id).catch(
-            () => null
-        )
+        // No selected project: the vote count is unknown, so ask
+        const count = projectId
+            ? await getTalkVoteCount(projectId, talk.id).catch(() => null)
+            : null
         if (!isMounted.current) return
         setIsChecking(false)
         if (!shouldConfirmTalkRemoval(count)) {
@@ -91,5 +95,3 @@ const DeleteTalkButton = ({ talk, isBlocked }: DeleteTalkButtonProps) => {
         </>
     )
 }
-
-export default DeleteTalkButton

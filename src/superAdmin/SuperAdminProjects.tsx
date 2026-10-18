@@ -1,11 +1,11 @@
-import { DateRange, useProjects } from './hooks/useProjects.ts'
+import { type DateRange, useProjects } from './hooks/useProjects.ts'
 import { FirestoreQueryLoaderAndErrorDisplay } from './FirestoreQueryLoaderAndErrorDisplay.tsx'
 import { getInitialDateRanges } from './utils/getYearsFilters.ts'
 import { Box, Button } from '@mui/material'
-import React, { useState } from 'react'
-import { DataGrid, GridColDef } from '@mui/x-data-grid'
+import { useState } from 'react'
+import { DataGrid, type GridColDef } from '@mui/x-data-grid'
 import { useExtraProjectsInfo } from './hooks/useExtraProjectsInfo.ts'
-import { Project, ProjectExtraInfo } from './type.ts'
+import type { Project, ProjectExtraInfo } from './type.ts'
 
 /**
  * Show last projects created with:
@@ -20,7 +20,9 @@ import { Project, ProjectExtraInfo } from './type.ts'
  */
 export const SuperAdminProjects = () => {
     const [dateRanges] = useState<DateRange[]>(getInitialDateRanges())
-    const [selectedDateRange, setSelectedDateRange] = useState<DateRange>(dateRanges[0])
+    const [selectedDateRange, setSelectedDateRange] = useState<DateRange>(
+        dateRanges[0]
+    )
     const projects = useProjects(selectedDateRange)
     const extraInfos = useExtraProjectsInfo(projects.data || [])
 
@@ -69,7 +71,7 @@ export const SuperAdminProjects = () => {
     ]
 
     const rows = (projects.data || []).map((project: Project) => {
-        return ({
+        return {
             id: project.id,
             name: project.name,
             owner: project.owner,
@@ -82,42 +84,53 @@ export const SuperAdminProjects = () => {
             speakerCount: extraInfos.projects[project.id]?.speakerCount,
             email: extraInfos.users[project.owner]?.email,
             link: extraInfos.projects[project.id]?.link,
-        })
+        }
     })
 
-    return <Box sx={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        paddingLeft: 5,
-        paddingRight: 5,
-        boxSizing: 'content-box',
-    }}>
-        <FirestoreQueryLoaderAndErrorDisplay hookResult={projects} />
+    return (
+        <Box
+            sx={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                paddingLeft: 5,
+                paddingRight: 5,
+                boxSizing: 'content-box',
+            }}
+        >
+            <FirestoreQueryLoaderAndErrorDisplay hookResult={projects} />
 
-        <Box>
-            {dateRanges.map((range) => <Button
-                key={range.name}
-                onClick={() => setSelectedDateRange(range)}
-                variant={selectedDateRange?.name === range.name ? 'contained' : 'outlined'}
-            >
-                {range.name}</Button>)}
-        </Box>
+            <Box>
+                {dateRanges.map((range) => (
+                    <Button
+                        key={range.name}
+                        onClick={() => setSelectedDateRange(range)}
+                        variant={
+                            selectedDateRange?.name === range.name
+                                ? 'contained'
+                                : 'outlined'
+                        }
+                    >
+                        {range.name}
+                    </Button>
+                ))}
+            </Box>
 
-        <Box sx={{ height: "90vh", width: "90vw" }}>
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                initialState={{
-                    pagination: {
-                        paginationModel: {
-                            pageSize: 100,
+            <Box sx={{ height: '90vh', width: '90vw' }}>
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    initialState={{
+                        pagination: {
+                            paginationModel: {
+                                pageSize: 100,
+                            },
                         },
-                    },
-                }}
-                pageSizeOptions={[100]}
-                disableRowSelectionOnClick
-            />
+                    }}
+                    pageSizeOptions={[100]}
+                    disableRowSelectionOnClick
+                />
+            </Box>
         </Box>
-    </Box>
+    )
 }

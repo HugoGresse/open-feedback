@@ -1,0 +1,18 @@
+import { isOrganizationRightAllowed } from '../core/organizationSelectors'
+import Box from '@mui/material/Box'
+import InfoIcon from '@mui/icons-material/Info'
+import { TranslatedTypography } from '../../baseComponents/TranslatedTypography.tsx'
+import { useAppSelector } from '../../../store'
+
+export const OrganizationWriteInfo = () => {
+    const isRightAllowed = useAppSelector(isOrganizationRightAllowed)
+    if (isRightAllowed) {
+        return null
+    }
+    return (
+        <Box bgcolor="primary.main" borderRadius="4px" marginY={4} padding={2}>
+            <InfoIcon />
+            <TranslatedTypography i18nKey="organization.rightDenied" />
+        </Box>
+    )
+}

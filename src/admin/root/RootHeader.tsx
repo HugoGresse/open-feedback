@@ -1,0 +1,97 @@
+import { useNavigate } from 'react-router-dom'
+import logo from '../../assets/logo-openfeedback-white.png'
+import { HEX_COLORS } from '../../constants/colors'
+import Avatar from '@mui/material/Avatar'
+import IconButton from '@mui/material/IconButton'
+import { signOut } from '../auth/authActions'
+import PowerSettingsIcon from '@mui/icons-material/PowerSettingsNew'
+import { useAppDispatch, useAppSelector } from '../../store'
+import { getUserSelector } from '../auth/authSelectors'
+import { makeStyles } from '@mui/styles'
+import Typography from '@mui/material/Typography'
+import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box'
+import type { Theme } from '@mui/material/styles'
+
+const useStyles = makeStyles((theme: Theme) => ({
+    container: {
+        background: HEX_COLORS.RED_ORANGE,
+        padding: 32,
+        marginBottom: -300,
+        minHeight: 300,
+    },
+    logo: {
+        width: 200,
+    },
+    left: {
+        [theme.breakpoints.down('lg')]: {
+            justifyContent: 'center',
+            display: 'flex',
+        },
+    },
+    right: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        [theme.breakpoints.down('lg')]: {
+            justifyContent: 'center',
+            marginTop: 30,
+        },
+    },
+    user: {
+        lineHeight: '40px',
+        marginLeft: 12,
+        marginRight: 12,
+        color: 'white',
+    },
+    logout: {
+        top: -4,
+        color: 'white',
+    },
+}))
+
+export const RootHeader = () => {
+    const navigate = useNavigate()
+    const dispatch = useAppDispatch()
+    const classes = useStyles()
+
+    const user = useAppSelector(getUserSelector)
+
+    // Only rendered once logged in (see Login)
+    if (!user) {
+        return null
+    }
+
+    const displayedUserName =
+        user.displayName || (user.email?.split('@') || [''])[0]
+
+    return (
+        <header className={classes.container}>
+            <Grid container>
+                <Grid item xs={12} sm={6} className={classes.left}>
+                    <Box component="a" href="/">
+                        <img
+                            className={classes.logo}
+                            src={logo}
+                            alt="open feedback logo"
+                        />
+                    </Box>
+                </Grid>
+                <Grid item xs={12} sm={6} className={classes.right}>
+                    <Avatar alt={displayedUserName} src={user.photoURL} />
+                    <Typography className={classes.user}>
+                        {displayedUserName}
+                    </Typography>
+                    <IconButton
+                        edge="end"
+                        className={classes.logout}
+                        aria-label="signout"
+                        onClick={() => dispatch(signOut(navigate))}
+                        size="large"
+                    >
+                        <PowerSettingsIcon />
+                    </IconButton>
+                </Grid>
+            </Grid>
+        </header>
+    )
+}

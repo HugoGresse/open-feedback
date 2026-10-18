@@ -45,6 +45,12 @@ jobs:
             - name: npm build
               run: |
                   npm run build
+            - name: npm typecheck
+              run: |
+                  npm run typecheck
+            - name: npm lint
+              run: |
+                  npm run lint
             - name: npm lint:i18n
               run: |
                   npm run lint:i18n

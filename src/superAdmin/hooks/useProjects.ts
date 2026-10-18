@@ -1,6 +1,9 @@
-import { useFirestoreCollection, UseQueryResult } from './firestoreQueryHook.ts'
+import {
+    useFirestoreCollection,
+    type UseQueryResult,
+} from './firestoreQueryHook.ts'
 import { fireStoreMainInstance } from '../../firebase.ts'
-import { Project } from '../type.ts'
+import type { Project } from '../type.ts'
 
 export type DateRange = {
     name: string
@@ -19,6 +22,5 @@ export const useProjects = (
 
     const requestId = `projects-${dateRange.name}`
 
-    // @ts-ignore
     return useFirestoreCollection<Project>(query, requestId)
 }

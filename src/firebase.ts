@@ -39,7 +39,7 @@ export const HttpsFunctionsUrl = {
 }
 authProvider.useDeviceLanguage()
 
-if (process.env.NODE_ENV === 'production') {
+if (import.meta.env.PROD) {
     firebase.performance()
 }
 if (isUsingEmulators) {

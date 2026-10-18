@@ -1,10 +1,7 @@
-import { ProjectExtraInfo, Project } from '../type.ts'
+import type { ProjectExtraInfo, Project } from '../type.ts'
 import { useEffect, useState } from 'react'
 import { fireStoreMainInstance } from '../../firebase.ts'
-import {
-    getProjectApi,
-    // @ts-ignore
-} from '../../core/setupType/projectApi.js'
+import { getProjectApi } from '../../core/setupType/projectApi.ts'
 
 const getOrganizationName = async (organizationId: string) => {
     return fireStoreMainInstance
