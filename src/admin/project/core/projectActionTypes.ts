@@ -9,6 +9,8 @@ export const SELECT_PROJECT = 'admin/project/select'
 export const EDIT_PROJECT_SUCCESS = 'admin/project/edit/success'
 export const EDIT_PROJECT_ERROR = 'admin/project/edit/error'
 
+export const DELETE_PROJECT_SUCCESS = 'admin/project/delete/success'
+
 export const ADD_PROJECT_SUCCESS = 'admin/project/add/success'
 export const ADD_PROJECT_ONGOING = 'admin/project/add/ongoing'
 export const ADD_PROJECT_ERROR = 'admin/project/add/error'
@@ -44,6 +46,7 @@ export type ProjectAction =
     | SelectProjectAction
     | { type: typeof EDIT_PROJECT_SUCCESS; payload: Partial<Project> }
     | { type: typeof EDIT_PROJECT_ERROR; payload: string }
+    | { type: typeof DELETE_PROJECT_SUCCESS; payload: string }
     | { type: typeof ADD_PROJECT_SUCCESS; payload: string }
     | { type: typeof ADD_PROJECT_ONGOING }
     | { type: typeof ADD_PROJECT_ERROR; payload: string }

@@ -14,6 +14,7 @@ import {
 import { deleteOldFilesIfNewValueDiffer } from '../../utils/storage/deleteImageIfPossible'
 import { getSortedVoteItemsSelector } from '../../settings/votingForm/votingFormSelectors'
 import { getVoteItems } from '../../settings/votingForm/votingFormActions.tsx'
+import { projectEditToState } from './projectEditToState'
 
 export const editProject =
     (projectData: Partial<Omit<Project, 'id'>>): AppThunk<Promise<void>> =>
@@ -43,9 +44,7 @@ export const editProject =
 
                 dispatch({
                     type: EDIT_PROJECT_SUCCESS,
-                    // The store keeps what was written, Firestore sentinels
-                    // (deleteField() of the vote range) included, as before.
-                    payload: fixedProject as Partial<Project>,
+                    payload: projectEditToState(fixedProject),
                 })
                 dispatch(
                     deleteOldFilesIfNewValueDiffer(

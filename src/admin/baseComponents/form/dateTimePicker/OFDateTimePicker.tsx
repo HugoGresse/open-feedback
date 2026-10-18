@@ -3,6 +3,7 @@ import type { FieldProps } from 'formik'
 import type { DateTime } from 'luxon'
 import { OFInputForDateTimePicker } from './OFInputForDateTimePicker.tsx'
 import { DateTimePicker, type DateTimePickerProps } from '@mui/x-date-pickers'
+import { toReferenceDate } from './toReferenceDate'
 
 export interface OFDateTimePickerProps
     extends
@@ -12,14 +13,15 @@ export interface OFDateTimePickerProps
             'name' | 'value' | 'format'
         > {
     format?: string
-    // Legacy (MUI pickers v4) prop, ignored by the current DateTimePicker.
-    initialFocusedDate?: unknown
+    /** ISO date-time an empty picker opens on, unless `referenceDate` is set. */
+    initialFocusedDate?: string | null
 }
 
 export const OFDateTimePicker = ({
     field,
     form,
     format,
+    initialFocusedDate,
     ...other
 }: OFDateTimePickerProps) => {
     const [isOpen, setIsOpen] = useState(false)
@@ -27,7 +29,8 @@ export const OFDateTimePicker = ({
     const currentError = form.errors[field.name]
 
     const maybeOpenPicker = () => {
-        form.setTouched({ [field.name]: true })
+        // setTouched would replace the touched state of the other fields
+        form.setFieldTouched(field.name, true)
         if (isOpen) {
             return
         }
@@ -48,6 +51,7 @@ export const OFDateTimePicker = ({
             name={field.name}
             value={field.value}
             format={format}
+            referenceDate={toReferenceDate(initialFocusedDate)}
             minutesStep={5}
             ampm={false}
             onError={(error) => {

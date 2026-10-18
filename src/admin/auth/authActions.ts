@@ -102,7 +102,7 @@ export const didSignIn = (
                             user,
                             displayName,
                             photoURL,
-                            emailDb,
+                            email,
                             phone
                         )
                     }
@@ -156,7 +156,8 @@ const createUser = async (
         updatedAt: serverTimestamp(),
         displayName: displayName,
         photoURL: photoURL,
-        email: user.email,
+        // Phone-auth users have no email, Firestore rejects undefined
+        email: user.email ?? null,
         phoneNumber: phone,
         uid: user.uid,
     }

@@ -1,15 +1,14 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import {
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+    type ReactNode,
+} from 'react'
 import { isEqual, debounce } from 'lodash'
 import { useFormikContext, type FormikValues } from 'formik'
 import { DateTime } from 'luxon'
-
-const usePrevious = <T,>(value: T): T | undefined => {
-    const ref = useRef<T>()
-    useEffect(() => {
-        ref.current = value
-    })
-    return ref.current
-}
 
 export interface FormikAutoSaveRenderProps {
     isSaving: boolean
@@ -33,29 +32,44 @@ export const FormikAutoSave = <Values extends FormikValues>({
     render,
 }: FormikAutoSaveProps<Values>) => {
     const { values } = useFormikContext<Values>()
-    const previousValues = usePrevious(values)
     const [isSaving, setSaving] = useState(false)
     const [lastSavedDate, setSaveDate] = useState<DateTime | null>(null)
-
-    const callback = (value: unknown) => {
-        setSaving(false)
-        setSaveDate(DateTime.local().minus({ seconds: 1 }))
-        return value
-    }
-
-    const save = debounce(() => {
-        if (
-            previousValues &&
-            Object.keys(previousValues).length &&
-            !isEqual(previousValues, values)
-        ) {
-            setSaving(true)
-            onSave(values).then(callback, callback)
-        }
-    }, 400)
+    const previousValues = useRef(values)
+    const latest = useRef({ values, onSave })
 
     useEffect(() => {
-        save()
+        latest.current = { values, onSave }
+    })
+
+    // Created once so that changes within 400ms are saved together, with the
+    // latest values.
+    const save = useMemo(
+        () =>
+            debounce(() => {
+                const callback = (value: unknown) => {
+                    setSaving(false)
+                    setSaveDate(DateTime.local().minus({ seconds: 1 }))
+                    return value
+                }
+                setSaving(true)
+                latest.current
+                    .onSave(latest.current.values)
+                    .then(callback, callback)
+            }, 400),
+        []
+    )
+
+    // Save the pending changes when leaving the form. A layout effect cleanup
+    // runs before the passive ones of the parents: <Project> and
+    // <Organization> still have their project/organization selected.
+    useLayoutEffect(() => () => save.flush(), [save])
+
+    useEffect(() => {
+        const previous = previousValues.current
+        previousValues.current = values
+        if (Object.keys(previous).length && !isEqual(previous, values)) {
+            save()
+        }
     }, [values, save])
 
     return render({ isSaving, lastSavedDate })
