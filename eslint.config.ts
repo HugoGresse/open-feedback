@@ -1,3 +1,4 @@
+import { fixupPluginRules } from '@eslint/compat'
 import js from '@eslint/js'
 import { defineConfig } from 'eslint/config'
 import globals from 'globals'
@@ -6,6 +7,11 @@ import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import cypress from 'eslint-plugin-cypress'
 import i18nJson from 'eslint-plugin-i18n-json'
+
+// eslint-plugin-react and eslint-plugin-i18n-json still call the rule context
+// methods removed in ESLint 10 (getFilename...): @eslint/compat adds them back.
+const reactPlugin = fixupPluginRules(react)
+const i18nJsonPlugin = fixupPluginRules(i18nJson)
 
 // Translation files are compared against the English source of their app.
 // Paths are relative to the linted file (src/<app>/translations/languages/).
@@ -31,15 +37,11 @@ export default defineConfig([
     },
     {
         files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
-        extends: [
-            js.configs.recommended,
-            react.configs.flat.recommended,
-            react.configs.flat['jsx-runtime'],
-            tseslint.configs.recommended,
-        ],
+        extends: [js.configs.recommended, tseslint.configs.recommended],
         // react-hooks is registered so its disable comments resolve; its rules are not enabled.
-        plugins: { cypress, 'react-hooks': reactHooks },
+        plugins: { react: reactPlugin, cypress, 'react-hooks': reactHooks },
         languageOptions: {
+            ...react.configs.flat.recommended.languageOptions,
             ecmaVersion: 'latest',
             globals: {
                 ...globals.browser,
@@ -51,6 +53,8 @@ export default defineConfig([
             react: { version: 'detect' },
         },
         rules: {
+            ...react.configs.flat.recommended.rules,
+            ...react.configs.flat['jsx-runtime'].rules,
             'comma-dangle': 'off',
             'react/jsx-uses-vars': 'warn',
             'react/display-name': 'warn',
@@ -83,10 +87,10 @@ export default defineConfig([
     },
     {
         files: ['**/translations/languages/*.json'],
-        plugins: { 'i18n-json': i18nJson },
+        plugins: { 'i18n-json': i18nJsonPlugin },
         processor: {
             meta: { name: '.json' },
-            ...i18nJson.processors['.json'],
+            ...i18nJsonPlugin.processors['.json'],
         },
         rules: {
             ...i18nJson.configs.recommended.rules,
