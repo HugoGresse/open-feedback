@@ -2,7 +2,7 @@
     "name": "functions",
     "scripts": {
         "lint": "",
-        "build": "tsc",
+        "build": "rm -rf lib && tsc",
         "build:watch": "tsc --watch",
         "dev:api": "npm run build && node lib/api/standalone.js",
         "serve": "npm run build && firebase emulators:start --only functions",

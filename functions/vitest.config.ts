@@ -6,6 +6,7 @@ export default defineConfig({
         include: ['**/*.spec.ts'],
         globals: true,
         testTimeout: 1000,
-        hookTimeout: 1000,
+        // The first beforeEach of each file cold-imports the whole API.
+        hookTimeout: 10000,
     },
 })

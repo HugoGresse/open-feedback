@@ -25,6 +25,9 @@ export async function createFastifyAPI() {
         // or coercing them (e.g. `name: 123` -> "123"). Note: querystring
         // integers therefore need explicit parsing if a route ever uses them.
         ajv: { customOptions: { removeAdditional: false, coerceTypes: false } },
+        // Talk and speaker IDs follow Firestore's limit (1500 bytes), not
+        // Fastify's default of 100, so listed records stay addressable.
+        maxParamLength: 1500,
     }).withTypeProvider<TypeBoxTypeProvider>()
     addContentTypeParserForServerless(fastify)
 

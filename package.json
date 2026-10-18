@@ -1,6 +1,6 @@
 {
     "name": "open-feedback",
-    "version": "0.35.1",
+    "version": "0.36.0",
     "private": true,
     "homepage": "https://openfeedback.io/",
     "type": "module",

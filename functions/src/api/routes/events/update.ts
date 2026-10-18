@@ -9,7 +9,7 @@ import {
 } from '../../schemas'
 import { authenticateRequest } from '../../plugins/apiKeyPlugin'
 import { ProjectDao } from '../../dao/ProjectDao'
-import { NotFoundError } from '../../others/Errors'
+import { eventAccessFor } from '../../services/eventAccess'
 import { publicEvent } from '../../services/eventSettings'
 
 export const updateEventRoute: FastifyPluginAsync = async (server) => {
@@ -30,23 +30,16 @@ export const updateEventRoute: FastifyPluginAsync = async (server) => {
                     400: ErrorSchema,
                     401: ErrorSchema,
                     404: ErrorSchema,
+                    503: ErrorSchema,
                 },
             },
             preHandler: authenticateRequest,
         },
         async (request) => {
-            const access = request.project
-                ? { projectId: request.project.id }
-                : request.organization
-                  ? { organizationId: request.organization.id }
-                  : null
-            if (!access) {
-                throw new NotFoundError('Event not found')
-            }
             const project = await ProjectDao.updateProject(
                 server.firebase,
                 request.params.projectId,
-                access,
+                eventAccessFor(request),
                 request.body
             )
             return publicEvent(project)
