@@ -3,6 +3,7 @@ import {
     GET_USER_DETAILS_SUCCESS,
     type InviteDocument,
     USER_INVITE_ADD,
+    USER_INVITE_GET_ERROR,
     USER_INVITE_GET_SUCCESS,
     USER_INVITE_REMOVE_SUCCESS,
     USER_INVITES_GET_SUCCESS,
@@ -22,8 +23,8 @@ import { LOGOUT, type LogoutAction } from '../../auth/authActionTypes'
 export interface UsersState {
     /** Loaded `users/{uid}` documents keyed by uid. */
     usersData: Record<string, User>
-    /** The listened invite, `{}` before it is loaded. */
-    invite: Partial<InviteDocument>
+    /** The listened invite: `{}` while loading, `null` when it can't be read. */
+    invite: Partial<InviteDocument> | null
     pendingInvites: Invite[]
     filter: string
 }
@@ -61,6 +62,11 @@ export const usersReducer = (
             return {
                 ...state,
                 invite: action.payload,
+            }
+        case USER_INVITE_GET_ERROR:
+            return {
+                ...state,
+                invite: null,
             }
         case USER_INVITES_GET_SUCCESS:
             return {

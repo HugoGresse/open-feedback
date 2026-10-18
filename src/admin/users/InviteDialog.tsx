@@ -56,6 +56,7 @@ export const InviteDialog = ({ inviteId }: InviteDialogProps) => {
         }
     } else {
         text = t('users.inviteAlreadyUsed')
+        pending = false
     }
 
     return (

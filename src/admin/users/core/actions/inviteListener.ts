@@ -3,6 +3,7 @@ import type { AppThunk } from '../../../../store'
 import { fireStoreMainInstance } from '../../../../firebase.ts'
 import {
     type InviteDocument,
+    USER_INVITE_GET_ERROR,
     USER_INVITE_GET_SUCCESS,
 } from '../usersActionTypes'
 import { redirectToProject } from '../../../project/utils/redirectToProject'
@@ -28,6 +29,7 @@ export const listenForInvite =
                             onInviteCompleted(data, navigate)
                         }
                     } else {
+                        dispatch({ type: USER_INVITE_GET_ERROR })
                         dispatch(
                             addNotification({
                                 type: 'error',
@@ -39,6 +41,7 @@ export const listenForInvite =
                 (error) => {
                     // eslint-disable-next-line no-console
                     console.error(error)
+                    dispatch({ type: USER_INVITE_GET_ERROR })
                     dispatch(
                         addNotification({
                             type: 'error',
