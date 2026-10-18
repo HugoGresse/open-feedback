@@ -1,4 +1,4 @@
-import type { TFunction } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type { AppThunk } from '../../../../store'
 import { functions } from '../../../../firebase.ts'
 import { addNotification } from '../../../notification/notifcationActions'

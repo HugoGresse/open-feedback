@@ -26,7 +26,7 @@ import {
 import { trackUnvote, trackVote } from '../utils/track'
 import { getVoteId } from './getVoteId'
 import { isVoteAllowed } from './actions/isVoteAllowed'
-import type { TFunction } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type firebase from 'firebase/compat/app'
 import type { Vote, VoteItem, VotesMap } from '../../core/models'
 import type { AppThunk } from '../../store'

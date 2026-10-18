@@ -354,8 +354,8 @@
         "titleEdit": "Modifier une présentation",
         "addNewSpeaker": "Ajouter un·e orateur·rice à la présentation",
         "removeConfirmTitle": "Supprimer cette présentation ?",
-        "removeConfirmDesc": "« {{title}} » a {{count}} vote. Supprimer la présentation rendra ce vote inaccessible. Êtes-vous sûr·e ?",
-        "removeConfirmDesc_plural": "« {{title}} » a {{count}} votes. Supprimer la présentation rendra ces votes inaccessibles. Êtes-vous sûr·e ?",
+        "removeConfirmDesc_one": "« {{title}} » a {{count}} vote. Supprimer la présentation rendra ce vote inaccessible. Êtes-vous sûr·e ?",
+        "removeConfirmDesc_other": "« {{title}} » a {{count}} votes. Supprimer la présentation rendra ces votes inaccessibles. Êtes-vous sûr·e ?",
         "removeConfirmDescUnknown": "Impossible de vérifier si « {{title}} » a des votes. Supprimer la présentation rendra les éventuels votes inaccessibles. Êtes-vous sûr·e ?",
         "removeConfirmButton": "Supprimer la présentation"
     },

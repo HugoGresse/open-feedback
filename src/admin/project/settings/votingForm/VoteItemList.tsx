@@ -65,10 +65,15 @@ export const VoteItemList = ({ languages }: VoteItemListProps) => {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     )
-    useHotkeys('ctrl+s, command+s', (event) => {
-        event.preventDefault()
-        save()
-    })
+    useHotkeys(
+        'ctrl+s, meta+s',
+        (event) => {
+            event.preventDefault()
+            save()
+        },
+        // save() reads shouldConfirmSave: re-bind the callback when it changes.
+        [shouldConfirmSave]
+    )
 
     const save = (bypassConfirm?: boolean): void => {
         if (shouldConfirmSave && !bypassConfirm) {

@@ -1,4 +1,4 @@
-import type { TFunction } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import { getProjectSelector } from '../project/projectSelectors'
 import { ADD_VOTE_ERROR } from './voteActionTypes'
 import type { AppDispatch, RootState } from '../../store'

@@ -6,7 +6,7 @@ import {
 } from '../projectActionTypes'
 import { projectReducer } from '../projectReducer'
 import type { AdminProject } from '../projectActionTypes'
-import type { TFunction } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type { AppDispatch, RootState } from '../../../../store'
 
 const deleteProjectCallable = vi.hoisted(() => vi.fn())

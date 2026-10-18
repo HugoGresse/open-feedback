@@ -25,7 +25,7 @@ import langMap from 'langmap'
 import { InputLangAdornment } from './InputLangAdornment.tsx'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import type { TFunction } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type {
     VoteItem as VoteItemModel,
     VoteItemType,

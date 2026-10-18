@@ -1,7 +1,7 @@
 import { describe, expect, test, vi } from 'vitest'
 import { isVoteAllowed } from './isVoteAllowed'
 import { ADD_VOTE_ERROR } from '../voteActionTypes'
-import type { TFunction } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type { AppDispatch, RootState } from '../../../store'
 
 // The vote window is open

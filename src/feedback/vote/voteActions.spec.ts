@@ -10,7 +10,7 @@ import {
     VOTE_TYPE_BOOLEAN,
     VOTE_TYPE_TEXT,
 } from '../../core/contants'
-import type { TFunction } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type {
     AggregatedTextVotes,
     FirestoreDate,

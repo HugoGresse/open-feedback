@@ -11,7 +11,7 @@ import {
     SAVE_VOTEITEMS_SUCCESS,
     type VotingFormAction,
 } from './votingFormActionTypes.tsx'
-import type { TFunction } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type { AppThunk } from '../../../../store'
 import type { VoteItem, VoteItemType } from '../../../../core/models'
 import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase.ts'

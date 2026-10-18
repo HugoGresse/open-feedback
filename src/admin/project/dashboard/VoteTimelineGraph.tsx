@@ -3,7 +3,6 @@ import {
     ResponsiveLine,
     type SliceTooltipProps,
 } from '@nivo/line'
-import type { CSSProperties } from 'react'
 import { HEX_COLORS } from '../../../constants/colors'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { animated } from 'react-spring'
@@ -26,13 +25,6 @@ type AxisTickProps = Parameters<TickRenderer>[0]
 // function returns, so returning null hides the tick.
 const asTickRenderer = (render: (tick: AxisTickProps) => JSX.Element | null) =>
     render as TickRenderer
-
-type TickOpacity = AxisTickProps['animatedProps']['opacity']
-
-// nivo hands @react-spring/web SpringValues to the ticks, while they are
-// rendered with react-spring v8 `animated`, whose types only know CSS values.
-const asAnimatedOpacity = (opacity: TickOpacity | number) =>
-    opacity as unknown as CSSProperties['opacity']
 
 export interface VoteTimelineGraphProps {
     votes: VoteTimelinePoint[]
@@ -84,10 +76,10 @@ const VerticalTick = (tick: AxisTickProps) => {
     return (
         <animated.g
             transform={`translate(${tick.x},${tick.y + 8})`}
-            style={{ opacity: asAnimatedOpacity(tick.animatedProps.opacity) }}
+            style={{ opacity: tick.animatedProps.opacity }}
         >
             <text
-                textAnchor="left"
+                textAnchor="start"
                 dominantBaseline="middle"
                 style={{
                     ...theme.axis.ticks.text,
@@ -108,14 +100,14 @@ function HorizontalTick(pointToDisplay: number) {
             return null
         }
 
-        let opacity: TickOpacity | number = tick.animatedProps.opacity
-        if (parseInt(tick.value) % pointToDisplay === 0) {
-            opacity = 0
-        }
+        const opacity =
+            parseInt(tick.value) % pointToDisplay === 0
+                ? 0
+                : tick.animatedProps.opacity
 
         return (
             <animated.g
-                style={{ opacity: asAnimatedOpacity(opacity) }}
+                style={{ opacity }}
                 transform={`translate(${tick.x},${tick.y})`}
             >
                 <line stroke="#ccc" strokeWidth={1} y1={0} y2={7} />
