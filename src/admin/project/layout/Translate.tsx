@@ -11,7 +11,7 @@ import {
 } from 'react'
 import { useTheme } from '@mui/material/styles'
 import { useForkRef } from '@mui/material/utils'
-import { debounce } from 'lodash'
+import { debounce } from 'es-toolkit'
 import Transition, {
     type TransitionProps,
 } from 'react-transition-group/Transition'
@@ -285,7 +285,7 @@ export const Translate = forwardRef<HTMLElement, TranslateProps>(
                 if (childrenRef.current) {
                     setTranslateValue(direction, childrenRef.current)
                 }
-            })
+            }, 0)
 
             const containerWindow = ownerWindow(childrenRef.current)
             containerWindow.addEventListener('resize', handleResize)

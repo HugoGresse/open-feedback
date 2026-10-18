@@ -5,7 +5,6 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Box } from '@mui/material'
-import { isEmpty } from 'lodash'
 import { getInviteSelector } from './core/usersSelectors'
 import { getUserSelector } from '../auth/authSelectors'
 import { useTranslation } from 'react-i18next'
@@ -63,7 +62,7 @@ export const InviteDialog = ({ inviteId }: InviteDialogProps) => {
         <Dialog
             onClose={() => closeDialog()}
             aria-labelledby="event invitation"
-            open={!isEmpty(inviteId)}
+            open={!!inviteId}
         >
             <DialogTitle>Event invitation</DialogTitle>
             <DialogContent>

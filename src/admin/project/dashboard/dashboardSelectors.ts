@@ -3,7 +3,6 @@ import {
     isTalkLoadedSelector,
 } from '../../../core/talks/talksSelectors'
 import { getAdminStateSelector } from '../../adminSelector'
-import { groupBy } from 'lodash'
 import {
     getBooleanVoteItemsSelector,
     getCommentVoteItemSelector,
@@ -228,11 +227,6 @@ export const getVotesByDaySelector = createAppSelector(
     }
 )
 
-const getVoteByUserSelector = createAppSelector(
-    getActiveUserVoteSelector,
-    (userVotes) => groupBy(userVotes, 'userId')
-)
-
 const getBooleanVotesSelector = createAppSelector(
     getActiveUserVoteSelector,
     getBooleanVoteItemsSelector,
@@ -259,8 +253,8 @@ const getCommentVotesSelector = createAppSelector(
 )
 
 export const getTotalVoterCountSelector = createAppSelector(
-    getVoteByUserSelector,
-    (voteByUser) => Object.keys(voteByUser).length
+    getActiveUserVoteSelector,
+    (userVotes) => new Set(userVotes.map((vote) => vote.userId)).size
 )
 
 export const getTotalVoteCountSelector = createAppSelector(

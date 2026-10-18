@@ -6,7 +6,7 @@ import {
     useState,
     type ReactNode,
 } from 'react'
-import { isEqual, debounce } from 'lodash'
+import { debounce, isEqual } from 'es-toolkit'
 import { useFormikContext, type FormikValues } from 'formik'
 import { DateTime } from 'luxon'
 
