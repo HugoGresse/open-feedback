@@ -21,6 +21,7 @@ import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { DateTime } from 'luxon'
 import { EnforceTrailingSlash } from '../utils/EnforceTrailingSlash.tsx'
+import { ROUTE_EVENT_BASE, RoutingMap } from './RoutingMap'
 
 // Custom palette keys of the admin theme.
 declare module '@mui/material/styles' {
@@ -70,7 +71,12 @@ const innerTheme = responsiveFontSizes(
 /** `/admin/{projectId}/` is a shortcut to the project admin. */
 const RedirectToProject = () => {
     const { projectId } = useParams()
-    return <Navigate to={`/admin/event/${projectId}/`} replace />
+    return (
+        <Navigate
+            to={`${ROUTE_EVENT_BASE}/${projectId}${RoutingMap.dashboard.url}`}
+            replace
+        />
+    )
 }
 
 export function AdminApp() {
