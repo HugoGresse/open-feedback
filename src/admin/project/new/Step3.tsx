@@ -1,0 +1,81 @@
+import { Step3Hoverboardv2 } from './Step3Hoverboardv2.tsx'
+import { Step3JSON } from './Step3JSON.tsx'
+import { Step3JSONImport } from './Step3JSONImport.tsx'
+import {
+    PROJECT_TYPE_HOVERBOARDV2,
+    PROJECT_TYPE_JSONIMPORT,
+    PROJECT_TYPE_JSONURL,
+} from '../../../core/setupType/projectApi'
+import { useTranslation } from 'react-i18next'
+
+export const Step3 = ({
+    onCancel,
+    onBack,
+    onSubmit,
+    projectType,
+    initialValues,
+}) => {
+    const { t } = useTranslation()
+
+    const stepTitle = t('newEvent.step3.stepTitle')
+    const submitText = t('newEvent.step3.submit')
+    const backText = t('newEvent.step3.back')
+    const rightColumnTitle = t('newEvent.step3.validation')
+
+    switch (projectType) {
+        case PROJECT_TYPE_HOVERBOARDV2:
+            return (
+                <Step3Hoverboardv2
+                    stepTitle={stepTitle}
+                    submitText={submitText}
+                    backText={backText}
+                    onCancel={onCancel}
+                    onBack={onBack}
+                    onSubmit={onSubmit}
+                    initialValues={
+                        initialValues || {
+                            projectId: '',
+                            apiKey: '',
+                            databaseURL: '',
+                        }
+                    }
+                />
+            )
+        case PROJECT_TYPE_JSONURL:
+            return (
+                <Step3JSON
+                    stepTitle={stepTitle}
+                    submitText={submitText}
+                    backText={backText}
+                    onCancel={onCancel}
+                    onBack={onBack}
+                    onSubmit={onSubmit}
+                    rightColumnTitle={rightColumnTitle}
+                    initialValues={
+                        initialValues || {
+                            jsonUrl: '',
+                        }
+                    }
+                />
+            )
+        case PROJECT_TYPE_JSONIMPORT:
+            return (
+                <Step3JSONImport
+                    stepTitle={stepTitle}
+                    submitText={submitText}
+                    backText={backText}
+                    onCancel={onCancel}
+                    onBack={onBack}
+                    onSubmit={onSubmit}
+                    rightColumnTitle={rightColumnTitle}
+                    initialValues={
+                        initialValues || {
+                            jsonText: '',
+                        }
+                    }
+                />
+            )
+        default:
+            return t('newEvent.step3.notManaged')
+    }
+}

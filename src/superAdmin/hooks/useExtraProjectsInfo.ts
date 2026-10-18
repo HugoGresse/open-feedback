@@ -4,7 +4,7 @@ import { fireStoreMainInstance } from '../../firebase.ts'
 import {
     getProjectApi,
     // @ts-ignore
-} from '../../core/setupType/projectApi.js'
+} from '../../core/setupType/projectApi.ts'
 
 const getOrganizationName = async (organizationId: string) => {
     return fireStoreMainInstance

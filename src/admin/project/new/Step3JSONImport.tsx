@@ -1,8 +1,7 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 // @ts-expect-error - JS module without types
-import NewProjectLayout from './NewProjectLayout.jsx'
-import SetupJSONImport from '../setupTypeForms/SetupJSONImport'
+import { NewProjectLayout } from './NewProjectLayout.tsx'
+import { SetupJSONImport } from '../setupTypeForms/SetupJSONImport'
 import { JSONImportFormValues } from '../setupTypeForms/SetupJSONImportForm'
 import { EventData } from '../../../core/setupType/eventDataNormalization'
 
@@ -17,7 +16,7 @@ interface Step3JSONImportProps {
     initialValues?: JSONImportFormValues
 }
 
-const Step3JSONImport = ({
+export const Step3JSONImport = ({
     stepTitle,
     submitText,
     backText,
@@ -32,7 +31,8 @@ const Step3JSONImport = ({
         <NewProjectLayout
             stepTitle={stepTitle}
             title={t('newEvent.step3.jsonImport')}
-            onCancel={onCancel}>
+            onCancel={onCancel}
+        >
             <SetupJSONImport
                 submitText={submitText}
                 backText={backText}
@@ -44,5 +44,3 @@ const Step3JSONImport = ({
         </NewProjectLayout>
     )
 }
-
-export default Step3JSONImport

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type FC } from 'react'
 import QRCodeStyling from 'qr-code-styling'
 import { Box, Button, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
@@ -17,7 +17,7 @@ interface QRCodeProps {
     logo?: string
 }
 
-export const QRCode: React.FC<QRCodeProps> = ({
+export const QRCode: FC<QRCodeProps> = ({
     data,
     size = 300,
     eventColor = '#000000',
@@ -112,7 +112,8 @@ export const QRCode: React.FC<QRCodeProps> = ({
             className={className}
             display="flex"
             flexDirection="column"
-            alignItems="center">
+            alignItems="center"
+        >
             <Typography variant="body1" gutterBottom>
                 {data}
             </Typography>
@@ -129,17 +130,20 @@ export const QRCode: React.FC<QRCodeProps> = ({
                     gap={1}
                     justifyContent="center"
                     alignItems="center"
-                    mt={1}>
+                    mt={1}
+                >
                     <Button
                         variant="contained"
                         startIcon={<DownloadIcon />}
-                        onClick={() => handleDownload('png')}>
+                        onClick={() => handleDownload('png')}
+                    >
                         {t('qrCode.downloadPng')}
                     </Button>
                     <Button
                         variant="contained"
                         startIcon={<DownloadIcon />}
-                        onClick={() => handleDownload('svg')}>
+                        onClick={() => handleDownload('svg')}
+                    >
                         {t('qrCode.downloadSvg')}
                     </Button>
                 </Box>

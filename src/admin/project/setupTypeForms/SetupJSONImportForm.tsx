@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Form, Formik } from 'formik'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -11,7 +11,7 @@ import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 import clipboardCopy from 'clipboard-copy'
 // @ts-expect-error - JS module without types
-import OFButton from '../../baseComponents/button/OFButton.jsx'
+import { OFButton } from '../../baseComponents/button/OFButton.tsx'
 // @ts-expect-error - JS module without types
 import { FormikObserver } from '../../baseComponents/form/formik/FormikObserver'
 import jsonModel from './jsonmodel.json'
@@ -55,7 +55,7 @@ interface SetupJSONImportFormProps {
     onFormChange?: (values: JSONImportFormValues) => void
 }
 
-const SetupJSONImportForm = ({
+export const SetupJSONImportForm = ({
     onBack,
     onSubmit,
     submitText,
@@ -90,7 +90,8 @@ const SetupJSONImportForm = ({
                 if (data) {
                     onSubmit({ jsonData: data })
                 }
-            }}>
+            }}
+        >
             {({ isSubmitting, values, errors, setFieldValue }) => {
                 const readFile = (file?: File) => {
                     if (!file) {
@@ -128,13 +129,15 @@ const SetupJSONImportForm = ({
                         <Button
                             variant="outlined"
                             startIcon={<UploadIcon />}
-                            onClick={() => fileInputRef.current?.click()}>
+                            onClick={() => fileInputRef.current?.click()}
+                        >
                             {t('settingsSetup.jsonImport.uploadFile')}
                         </Button>
 
                         <Typography
                             variant="body2"
-                            sx={{ marginTop: 2, marginBottom: 1 }}>
+                            sx={{ marginTop: 2, marginBottom: 1 }}
+                        >
                             {t('settingsSetup.jsonImport.orPaste')}
                         </Typography>
                         <TextField
@@ -143,7 +146,9 @@ const SetupJSONImportForm = ({
                             minRows={8}
                             maxRows={20}
                             fullWidth
-                            placeholder={'{\n  "sessions": {},\n  "speakers": {}\n}'}
+                            placeholder={
+                                '{\n  "sessions": {},\n  "speakers": {}\n}'
+                            }
                             value={values.jsonText}
                             onChange={(e) =>
                                 setFieldValue('jsonText', e.target.value)
@@ -161,22 +166,29 @@ const SetupJSONImportForm = ({
                         <div className={classes.jsonExample}>
                             <Button
                                 className={classes.jsonShowButton}
-                                onClick={() => setExampleOpen(!isExampleOpen)}>
+                                onClick={() => setExampleOpen(!isExampleOpen)}
+                            >
                                 {t('settingsSetup.json.showJsonModel')}{' '}
                                 <ArrowDownIcon />
                             </Button>
                             <Collapse
                                 in={isExampleOpen}
-                                className={classes.jsonExampleInnerContainer}>
+                                className={classes.jsonExampleInnerContainer}
+                            >
                                 <OFButton
                                     style={{ design: 'text' }}
                                     variant="outlined"
                                     className={classes.jsonCopyButton}
                                     onClick={() =>
                                         clipboardCopy(
-                                            JSON.stringify(jsonModel, undefined, 4)
+                                            JSON.stringify(
+                                                jsonModel,
+                                                undefined,
+                                                4
+                                            )
                                         )
-                                    }>
+                                    }
+                                >
                                     {t('common.copy')}
                                 </OFButton>
                                 <pre className={classes.jsonExamplePre}>
@@ -203,7 +215,8 @@ const SetupJSONImportForm = ({
                                         type: 'big',
                                         design: 'text',
                                         marginTop: 64,
-                                    }}>
+                                    }}
+                                >
                                     {backText}
                                 </OFButton>
                             )}
@@ -212,7 +225,8 @@ const SetupJSONImportForm = ({
                                 <OFButton
                                     disabled={isSubmitting}
                                     type="submit"
-                                    style={{ type: 'big', marginTop: 64 }}>
+                                    style={{ type: 'big', marginTop: 64 }}
+                                >
                                     {submitText}
                                 </OFButton>
                             )}
@@ -223,5 +237,3 @@ const SetupJSONImportForm = ({
         </Formik>
     )
 }
-
-export default SetupJSONImportForm

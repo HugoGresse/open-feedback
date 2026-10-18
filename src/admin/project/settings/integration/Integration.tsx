@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, type FC } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import LoaderMatchParent from '../../../../baseComponents/customComponent/LoaderMatchParent.tsx'
-import ApiKeyIntegrationCard, {
+import { LoaderMatchParent } from '../../../../baseComponents/customComponent/LoaderMatchParent.tsx'
+import {
     API_DOCS_URL,
     LastUsedValue,
+    ApiKeyIntegrationCard,
 } from '../../../baseComponents/ApiKeyIntegrationCard.tsx'
 import { getSelectedProjectSelector } from '../../core/projectSelectors'
 import {
@@ -15,13 +16,11 @@ import {
 // Re-exported for callers that imported the docs URL from here historically.
 export { API_DOCS_URL }
 
-const Integration: React.FC = () => {
+export const Integration: FC = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const project = useSelector(getSelectedProjectSelector) as
-        | { id: string }
-        | null
-        | undefined
+        { id: string } | null | undefined
     const projectId = project?.id
 
     const [loaded, setLoaded] = useState(false)
@@ -77,5 +76,3 @@ const Integration: React.FC = () => {
         />
     )
 }
-
-export default Integration

@@ -1,7 +1,11 @@
-import React, { Suspense, lazy } from 'react'
-import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent.tsx'
+import { Suspense, lazy } from 'react'
+import { LoaderMatchParent } from '../baseComponents/customComponent/LoaderMatchParent.tsx'
 
-const SuperAdminApp = lazy(() => import('./SuperAdminApp.tsx'))
+const SuperAdminApp = lazy(() =>
+    import('./SuperAdminApp.tsx').then((module) => ({
+        default: module.SuperAdminApp,
+    }))
+)
 
 export const SuspendedSuperAdminApp = () => {
     return (

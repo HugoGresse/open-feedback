@@ -1,14 +1,16 @@
-import React, { memo, ReactNode, useEffect, useState } from 'react'
+import { memo, ReactNode, useEffect, useState } from 'react'
 import logoWhite from '../assets/logo-openfeedback-white.png'
 import { auth, authProvider } from '../firebase'
-import LoaderMatchParent from '../baseComponents/customComponent/LoaderMatchParent.tsx'
+import { LoaderMatchParent } from '../baseComponents/customComponent/LoaderMatchParent.tsx'
 import Box from '@mui/material/Box'
-import StyledFirebaseAuth from '../baseComponents/StyledFirebaseAuth.tsx'
+import { StyledFirebaseAuth } from '../baseComponents/StyledFirebaseAuth.tsx'
 import { Button } from '@mui/material'
 import { useIsSuperAdmin } from './hooks/useIsSuperAdmin.ts'
 
 export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
-    const [loggedInUser, setUser] = useState<{ uid: string } | null>(authProvider.currentUser)
+    const [loggedInUser, setUser] = useState<{ uid: string } | null>(
+        authProvider.currentUser
+    )
     const [loaderDisplayed, setLoaderDisplay] = useState(true)
     const isSuperAdmin = useIsSuperAdmin(loggedInUser)
 
@@ -19,10 +21,9 @@ export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
     }
 
     const signOut = () => {
-        authProvider.signOut()
-            .then(() => {
-                setUser(null)
-            })
+        authProvider.signOut().then(() => {
+            setUser(null)
+        })
     }
 
     useEffect(() => {
@@ -37,36 +38,37 @@ export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
                 } else if (loggedInUser) {
                     setUserIfNeeded(null)
                 }
-            },
+            }
         )
         return () => {
             unregisterAuthObserver()
         }
     }, [loggedInUser])
 
-    if(loggedInUser && !isSuperAdmin) {
-        return <Box color={'white'}>
-            <p>NOT A SUPER ADMIN, YOU CAN'T SEE THIS
-                OUST!</p>
-            <Button variant="contained" onClick={() => signOut()}>LOGOUT</Button>
-        </Box>
+    if (loggedInUser && !isSuperAdmin) {
+        return (
+            <Box color={'white'}>
+                <p>NOT A SUPER ADMIN, YOU CAN'T SEE THIS OUST!</p>
+                <Button variant="contained" onClick={() => signOut()}>
+                    LOGOUT
+                </Button>
+            </Box>
+        )
     }
 
-
     if (loggedInUser) {
-        return <>
-            <Button variant="contained" onClick={() => signOut()}>LOGOUT</Button>
-            {children}
-        </>
+        return (
+            <>
+                <Button variant="contained" onClick={() => signOut()}>
+                    LOGOUT
+                </Button>
+                {children}
+            </>
+        )
     }
 
     return (
-        <Box
-            height="100vh"
-            padding={1}
-            display="flex"
-            boxSizing="border-box"
-        >
+        <Box height="100vh" padding={1} display="flex" boxSizing="border-box">
             <Box
                 display="flex"
                 flexDirection="column"
@@ -87,7 +89,9 @@ export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
                 <Box display={loaderDisplayed ? 'none' : 'block'}>
                     <StyledFirebaseAuth
                         firebaseAuth={authProvider}
-                        uiCallback={(firebaseUI: { isPendingRedirect: () => boolean }) => {
+                        uiCallback={(firebaseUI: {
+                            isPendingRedirect: () => boolean
+                        }) => {
                             if (firebaseUI.isPendingRedirect()) {
                                 setLoaderDisplay(true)
                             }
@@ -105,10 +109,11 @@ export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
                                 // Avoid redirects after sign-in.
                                 signInSuccessWithAuthResult: () => false,
                                 signInFailure: (error: {
-                                    code: string, credential: {
-                                        signInMethod: string,
-                                        providerId: string,
-                                        toJSON: () => object,
+                                    code: string
+                                    credential: {
+                                        signInMethod: string
+                                        providerId: string
+                                        toJSON: () => object
                                     }
                                 }) => {
                                     if (
@@ -133,7 +138,7 @@ export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
                                     // nothing is displayed...
                                     setTimeout(
                                         () => setLoaderDisplay(false),
-                                        2000,
+                                        2000
                                     )
                                 },
                             },

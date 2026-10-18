@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, type FC } from 'react'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import clipboardCopy from 'clipboard-copy'
@@ -15,25 +15,20 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
-import OFCard from './OFCard.jsx'
-import OFButton from './button/OFButton.jsx'
-import SimpleDialog from './layouts/SimpleDialog.jsx'
+import { OFCard } from './OFCard.tsx'
+import { OFButton } from './button/OFButton.tsx'
+import { SimpleDialog } from './layouts/SimpleDialog.tsx'
 import { addNotification } from '../notification/notifcationActions'
 
 export const API_DOCS_URL =
-    import.meta.env.VITE_API_DOCS_URL ||
-    'https://api.openfeedback.io/'
+    import.meta.env.VITE_API_DOCS_URL || 'https://api.openfeedback.io/'
 
 interface FirestoreTimestamp {
     toDate: () => Date
 }
 
 export type LastUsedValue =
-    | FirestoreTimestamp
-    | string
-    | number
-    | null
-    | undefined
+    FirestoreTimestamp | string | number | null | undefined
 
 const hasToDate = (value: unknown): value is FirestoreTimestamp =>
     typeof (value as FirestoreTimestamp)?.toDate === 'function'
@@ -67,7 +62,7 @@ interface ApiKeyIntegrationCardProps {
  * generate/rotate). Shared by the event and organization integration tabs so
  * the two stay in lockstep; only the data layer (fetch + write) differs.
  */
-const ApiKeyIntegrationCard: React.FC<ApiKeyIntegrationCardProps> = ({
+export const ApiKeyIntegrationCard: FC<ApiKeyIntegrationCardProps> = ({
     description,
     noKeyText,
     apiKey,
@@ -117,7 +112,8 @@ const ApiKeyIntegrationCard: React.FC<ApiKeyIntegrationCardProps> = ({
                     <Link
                         href={API_DOCS_URL}
                         target="_blank"
-                        rel="noopener noreferrer">
+                        rel="noopener noreferrer"
+                    >
                         {t('settingsIntegration.documentationLink')}
                         <OpenInNewIcon
                             fontSize="inherit"
@@ -138,7 +134,9 @@ const ApiKeyIntegrationCard: React.FC<ApiKeyIntegrationCardProps> = ({
                                 value={
                                     revealed
                                         ? apiKey
-                                        : '•'.repeat(Math.min(apiKey.length, 32))
+                                        : '•'.repeat(
+                                              Math.min(apiKey.length, 32)
+                                          )
                                 }
                                 InputProps={{
                                     readOnly: true,
@@ -151,7 +149,8 @@ const ApiKeyIntegrationCard: React.FC<ApiKeyIntegrationCardProps> = ({
                                                 )}
                                                 onClick={() =>
                                                     setRevealed(!revealed)
-                                                }>
+                                                }
+                                            >
                                                 {revealed ? (
                                                     <VisibilityOffIcon />
                                                 ) : (
@@ -160,7 +159,8 @@ const ApiKeyIntegrationCard: React.FC<ApiKeyIntegrationCardProps> = ({
                                             </IconButton>
                                             <IconButton
                                                 aria-label={t('common.copy')}
-                                                onClick={copyKey}>
+                                                onClick={copyKey}
+                                            >
                                                 <ContentCopyIcon />
                                             </IconButton>
                                         </InputAdornment>
@@ -170,7 +170,8 @@ const ApiKeyIntegrationCard: React.FC<ApiKeyIntegrationCardProps> = ({
                             <Typography
                                 variant="caption"
                                 color="textSecondary"
-                                sx={{ display: 'block', mt: 1 }}>
+                                sx={{ display: 'block', mt: 1 }}
+                            >
                                 {lastUsed
                                     ? t('settingsIntegration.lastUsed', {
                                           date: lastUsed,
@@ -181,7 +182,8 @@ const ApiKeyIntegrationCard: React.FC<ApiKeyIntegrationCardProps> = ({
                             <Box sx={{ mt: 2 }}>
                                 <OFButton
                                     color="error"
-                                    onClick={() => setRotateOpen(true)}>
+                                    onClick={() => setRotateOpen(true)}
+                                >
                                     {t('settingsIntegration.rotateKey')}
                                 </OFButton>
                             </Box>
@@ -191,12 +193,14 @@ const ApiKeyIntegrationCard: React.FC<ApiKeyIntegrationCardProps> = ({
                             <Typography
                                 variant="body2"
                                 color="textSecondary"
-                                gutterBottom>
+                                gutterBottom
+                            >
                                 {noKeyText}
                             </Typography>
                             <OFButton
                                 loading={loading}
-                                onClick={generateOrRotate}>
+                                onClick={generateOrRotate}
+                            >
                                 {t('settingsIntegration.generateKey')}
                             </OFButton>
                         </Box>
@@ -210,12 +214,11 @@ const ApiKeyIntegrationCard: React.FC<ApiKeyIntegrationCardProps> = ({
                     title={t('settingsIntegration.rotateConfirmTitle')}
                     confirmText={t('settingsIntegration.rotateKey')}
                     cancelText={t('common.cancel')}
-                    confirmLoading={loading}>
+                    confirmLoading={loading}
+                >
                     {t('settingsIntegration.rotateConfirmBody')}
                 </SimpleDialog>
             </CardContent>
         </OFCard>
     )
 }
-
-export default ApiKeyIntegrationCard

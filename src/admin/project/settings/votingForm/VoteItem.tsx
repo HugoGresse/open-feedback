@@ -1,11 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import {
+    useEffect,
+    useState,
+    type CSSProperties,
+    type KeyboardEvent,
+    type ChangeEvent,
+} from 'react'
 // @ts-expect-error - JS module without types
-import OFInput from '../../../baseComponents/form/input/OFInput.jsx'
+import { OFInput } from '../../../baseComponents/form/input/OFInput.tsx'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator'
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
-import OFListItem from '../../../baseComponents/layouts/OFListItem.tsx'
+import { OFListItem } from '../../../baseComponents/layouts/OFListItem.tsx'
 import { makeStyles } from '@mui/styles'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
@@ -21,7 +27,7 @@ import {
 // @ts-expect-error - JS module without types
 import langMap from 'langmap'
 // @ts-expect-error - JS module without types
-import InputLangAdornment from './InputLangAdornment.jsx'
+import { InputLangAdornment } from './InputLangAdornment.tsx'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
@@ -96,7 +102,7 @@ const getTypes = (t: (_key: string) => string): VoteType[] => [
     },
 ]
 
-const VoteItem = ({
+export const VoteItem = ({
     id,
     item,
     languages,
@@ -131,15 +137,13 @@ const VoteItem = ({
 
     const isSeparator = item.type === VOTE_TYPE_SEPARATOR
 
-    const style: React.CSSProperties = {
+    const style: CSSProperties = {
         transform: CSS.Transform.toString(transform),
         transition,
         opacity: isDragging ? 0.5 : 1,
     }
 
-    const handleInputKeyPress = (
-        event: React.KeyboardEvent<HTMLInputElement>
-    ) => {
+    const handleInputKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             if (languages.length > 0) {
                 setFocusLangIndex(0)
@@ -151,7 +155,7 @@ const VoteItem = ({
     }
 
     const handleLangInputKeyPress = (
-        event: React.KeyboardEvent<HTMLInputElement>
+        event: KeyboardEvent<HTMLInputElement>
     ) => {
         if (event.key === 'Enter') {
             if (focusedLangIndex >= languages.length - 1) {
@@ -167,13 +171,13 @@ const VoteItem = ({
         }
     }
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         onChange(event.target.value)
     }
 
     const handleLangInputChange = (
         langTag: string,
-        event: React.ChangeEvent<HTMLInputElement>
+        event: ChangeEvent<HTMLInputElement>
     ) => {
         onLanguagesChange(langTag, event.target.value)
     }
@@ -217,7 +221,8 @@ const VoteItem = ({
             }}
             noBorderBottom={noBorderBottom}
             data-testid="VoteItem"
-            className={classes.sortableItem}>
+            className={classes.sortableItem}
+        >
             <Grid item xs={12} sm={6} className={classes.cell}>
                 <OFInput
                     value={item.name}
@@ -241,12 +246,12 @@ const VoteItem = ({
                             }
                             className={classes.inputLang}
                             disabled={isSeparator}
-                            onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                            ) => handleLangInputChange(langTag, event)}
+                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                                handleLangInputChange(langTag, event)
+                            }
                             onFocus={() => handleLangInputFocus(index)}
                             onKeyPress={(
-                                event: React.KeyboardEvent<HTMLInputElement>
+                                event: KeyboardEvent<HTMLInputElement>
                             ) => handleLangInputKeyPress(event)}
                             startAdornment={
                                 <InputLangAdornment
@@ -254,7 +259,8 @@ const VoteItem = ({
                                         langMap[langTag].nativeName
                                     } (${langTag}) - ${t(
                                         'settingsVotingForm.editLang'
-                                    )}`}>
+                                    )}`}
+                                >
                                     {' '}
                                     {langMap[langTag].nativeName}{' '}
                                 </InputLangAdornment>
@@ -267,7 +273,8 @@ const VoteItem = ({
                     id="vote-item-type"
                     value={item.type}
                     onChange={handleTypeChange}
-                    input={<OFInput />}>
+                    input={<OFInput />}
+                >
                     {types.map((type) => (
                         <MenuItem key={type.type} value={type.type}>
                             {type.name}
@@ -281,7 +288,8 @@ const VoteItem = ({
                     size="large"
                     className={classes.dragIndicator}
                     {...attributes}
-                    {...listeners}>
+                    {...listeners}
+                >
                     <DragIndicatorIcon />
                 </IconButton>
 
@@ -294,5 +302,3 @@ const VoteItem = ({
 }
 
 VoteItem.displayName = 'VoteItem'
-
-export default VoteItem

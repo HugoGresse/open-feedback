@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import DeleteIcon from '@mui/icons-material/Delete'
-import SimpleDialog from '../../baseComponents/layouts/SimpleDialog'
+import { SimpleDialog } from '../../baseComponents/layouts/SimpleDialog'
 import { removeTalk } from '../../../core/talks/talksActions'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import { getTalkVoteCount, shouldConfirmTalkRemoval } from './talkVoteCount'
@@ -15,7 +15,10 @@ interface DeleteTalkButtonProps {
     isBlocked: () => boolean
 }
 
-const DeleteTalkButton = ({ talk, isBlocked }: DeleteTalkButtonProps) => {
+export const DeleteTalkButton = ({
+    talk,
+    isBlocked,
+}: DeleteTalkButtonProps) => {
     const dispatch = useDispatch()
     const { t } = useTranslation()
     const projectId: string = useSelector(getSelectedProjectIdSelector)
@@ -91,5 +94,3 @@ const DeleteTalkButton = ({ talk, isBlocked }: DeleteTalkButtonProps) => {
         </>
     )
 }
-
-export default DeleteTalkButton

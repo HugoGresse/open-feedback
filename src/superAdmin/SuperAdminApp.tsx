@@ -1,7 +1,11 @@
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
-import React from 'react'
 import { LocalizationProvider } from '@mui/x-date-pickers'
-import { createTheme, responsiveFontSizes, StyledEngineProvider, ThemeProvider } from '@mui/material'
+import {
+    createTheme,
+    responsiveFontSizes,
+    StyledEngineProvider,
+    ThemeProvider,
+} from '@mui/material'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { LoginSuperAdmin } from './LoginSuperAdmin.tsx'
 import { SuperAdminProjects } from './SuperAdminProjects.tsx'
@@ -25,38 +29,35 @@ const innerTheme = responsiveFontSizes(
                 fontSize: 28,
             },
         },
-    }),
+    })
 )
 
-
-export default function SuperAdminApp() {
+export function SuperAdminApp() {
     return (
         <HelmetProvider>
             <Helmet>
                 <title>🦸🏿 ADMIN- Open Feedback</title>
             </Helmet>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                height: '100vh',
-                width: '100%',
-                backgroundColor: '#111',
-            }}>
-            <LoginSuperAdmin>
-                <StyledEngineProvider injectFirst>
-                    <ThemeProvider theme={innerTheme}>
-                        <LocalizationProvider dateAdapter={AdapterLuxon}>
-
-                            <SuperAdminProjects/>
-
-
-                        </LocalizationProvider>
-                    </ThemeProvider>
-                </StyledEngineProvider>
-            </LoginSuperAdmin>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    height: '100vh',
+                    width: '100%',
+                    backgroundColor: '#111',
+                }}
+            >
+                <LoginSuperAdmin>
+                    <StyledEngineProvider injectFirst>
+                        <ThemeProvider theme={innerTheme}>
+                            <LocalizationProvider dateAdapter={AdapterLuxon}>
+                                <SuperAdminProjects />
+                            </LocalizationProvider>
+                        </ThemeProvider>
+                    </StyledEngineProvider>
+                </LoginSuperAdmin>
             </div>
-
         </HelmetProvider>
     )
 }

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, type FC } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import LoaderMatchParent from '../../../baseComponents/customComponent/LoaderMatchParent.tsx'
-import ApiKeyIntegrationCard, {
+import { LoaderMatchParent } from '../../../baseComponents/customComponent/LoaderMatchParent.tsx'
+import {
     LastUsedValue,
+    ApiKeyIntegrationCard,
 } from '../../baseComponents/ApiKeyIntegrationCard.tsx'
 import { getSelectedOrganizationIdSelector } from '../core/organizationSelectors'
 import {
@@ -11,12 +12,11 @@ import {
     updateOrganizationApiKey,
 } from '../core/actions/updateOrganizationApiKey'
 
-export const OrganizationIntegration: React.FC = () => {
+export const OrganizationIntegration: FC = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const organizationId = useSelector(getSelectedOrganizationIdSelector) as
-        | string
-        | undefined
+        string | undefined
 
     const [loaded, setLoaded] = useState(false)
     const [apiKey, setApiKey] = useState<string | undefined>()
@@ -71,5 +71,3 @@ export const OrganizationIntegration: React.FC = () => {
         />
     )
 }
-
-export default OrganizationIntegration
