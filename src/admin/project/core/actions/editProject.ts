@@ -1,10 +1,11 @@
 import type { AppThunk } from '../../../../store'
-import type { Project, VoteItem } from '../../../../core/models'
+import type { Project } from '../../../../core/models'
 import {
     getSelectedProjectIdOrThrowSelector,
     getSelectedProjectSelector,
 } from '../projectSelectors'
 import { deleteField, fireStoreMainInstance } from '../../../../firebase.ts'
+import { fixVoteItemLanguages } from './fixVoteItemLanguages'
 import { addNotification } from '../../../notification/notifcationActions'
 import {
     EDIT_PROJECT_ERROR,
@@ -87,48 +88,4 @@ const fixProjectVoteRange = (project: ProjectEditData): ProjectEditData => {
     }
     delete editedValues.restrictVoteRange
     return editedValues
-}
-
-/**
- * We need to cleanup vote items when an additional language has been added, used and then removed from an event.
- *
- * @param languages project languages
- * @param voteItems vote items of a project
- */
-const fixVoteItemLanguages = (
-    languages: string[] | undefined,
-    voteItems: VoteItem[]
-): { voteItems?: VoteItem[] } => {
-    if (!languages || !voteItems || voteItems.length === 0) {
-        return {}
-    }
-
-    const voteItemsLangs = [
-        ...new Set(
-            voteItems.reduce<string[]>((acc, item) => {
-                if (item.languages) {
-                    return acc.concat(Object.keys(item.languages))
-                }
-                return acc
-            }, [])
-        ),
-    ]
-    const undesiredLangs = voteItemsLangs.filter(
-        (lang) => !languages.includes(lang)
-    )
-
-    return {
-        voteItems: voteItems.map((item) => {
-            const cloneItem = { ...item }
-            // The untyped check was `Object.keys(item.languages > 0)`, always
-            // truthy (an empty array), so only `item.languages` mattered.
-            const languagesToClean = cloneItem.languages
-            if (languagesToClean) {
-                undesiredLangs.forEach((undesiredLang) => {
-                    delete languagesToClean[undesiredLang]
-                })
-            }
-            return cloneItem
-        }),
-    }
 }

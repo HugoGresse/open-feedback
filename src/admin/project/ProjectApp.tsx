@@ -38,6 +38,7 @@ export const ProjectApp = () => {
                         element={
                             <Navigate
                                 to={`${ROUTE_EVENT_BASE}/${params.projectId}${RoutingMap.dashboard.url}`}
+                                replace
                             />
                         }
                     />
