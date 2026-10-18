@@ -35,6 +35,7 @@
         "@firebase/testing": "^0.20.11",
         "@storybook/addon-docs": "^10.6.2",
         "@storybook/react-vite": "^10.6.2",
+        "@types/lodash": "^4.17.26",
         "@types/luxon": "^3.7.6",
         "@types/react": "^18.3.31",
         "@types/react-color": "^3.0.13",
