@@ -23,7 +23,10 @@ export interface VoteData {
 }
 
 export class Vote {
-    constructor(public id: string, public voteData: VoteData) {}
+    constructor(
+        public id: string,
+        public voteData: VoteData
+    ) {}
 
     public isValid(): boolean {
         // noinspection RedundantIfStatementJS
@@ -104,6 +107,9 @@ export class Vote {
             userId: this.voteData.userId,
         }
         if (this.isActive()) {
+            // Editing the text keeps the up-votes it already received
+            const plus =
+                aggregatedVote?.[this.voteData.voteItemId]?.[this.id]?.plus ?? 1
             if (
                 !snapshotExists ||
                 !aggregatedVote ||
@@ -112,7 +118,7 @@ export class Vote {
                 aggregatedValue = {
                     [this.id]: {
                         ...voteText,
-                        plus: 1,
+                        plus,
                     },
                 }
             } else {
@@ -120,7 +126,7 @@ export class Vote {
                     ...aggregatedVote[this.voteData.voteItemId],
                     [this.id]: {
                         ...voteText,
-                        plus: 1,
+                        plus,
                     },
                 }
             }

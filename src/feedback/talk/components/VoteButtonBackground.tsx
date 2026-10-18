@@ -1,5 +1,6 @@
 import { useRef, useEffect, useCallback, memo } from 'react'
 import { getRandomArbitrary } from '../../utils/Random'
+import { clampCircleCount } from './clampCircleCount'
 import Box from '@mui/material/Box'
 
 const circleRadius = 15
@@ -27,10 +28,14 @@ const TalkItemVoteBackground = ({
     })
 
     const createRandomCircle = useCallback(
-        (ctx: CanvasRenderingContext2D | null, count: number | undefined) => {
-            if (count === undefined || !ctx) {
+        (
+            ctx: CanvasRenderingContext2D | null,
+            voteCount: number | undefined
+        ) => {
+            if (voteCount === undefined || !ctx) {
                 return
             }
+            const count = clampCircleCount(voteCount)
 
             if (!refElement.current || !canvasRef.current) return
 

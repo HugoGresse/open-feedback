@@ -21,9 +21,11 @@ export class JsonImportApi {
     }
 
     getTalk(talkId: string) {
-        return this.getJsonData().then((data) => ({
-            [talkId]: data.sessions?.[talkId],
-        }))
+        return this.getJsonData().then((data) => {
+            // An unknown id resolves to no talk instead of `{[id]: undefined}`
+            const talk = data.sessions?.[talkId]
+            return talk ? { [talkId]: talk } : {}
+        })
     }
 
     getSpeakers() {

@@ -15,6 +15,7 @@
         "adminNotAnonymous": "Vous êtes connecté à l'admin, le vote ne sera pas anonyme.",
         "rangePassed": "La date de fin de vote est passé, impossible de sauvegarder le vote.",
         "rangeNotReached": "Vous ne pouvez pas voter avant le  ",
+        "notLoggedIn": "Impossible de sauvegarder le vote, vous n'êtes pas encore connecté. Réessayez dans un instant.",
         "yourVote": "de vous"
     },
     "searchPlaceholder": "Recherche",

@@ -13,8 +13,19 @@ export const isVoteAllowed = (
         return false
     }
 
-    // Votes are only possible once logged in.
-    if (!getUserSelector(getState())!.isAnonymous) {
+    // A vote clicked before the anonymous sign-in resolves has no user yet.
+    const user = getUserSelector(getState())
+    if (!user) {
+        dispatch({
+            type: ADD_VOTE_ERROR,
+            payload: {
+                error: translate('vote.notLoggedIn'),
+            },
+        })
+        return false
+    }
+
+    if (!user.isAnonymous) {
         dispatch({
             type: ADD_VOTE_ERROR,
             payload: {

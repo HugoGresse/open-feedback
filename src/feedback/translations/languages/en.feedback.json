@@ -15,6 +15,7 @@
         "adminNotAnonymous": "You are logged in to the admin, your vote will not be anonymous.",
         "rangePassed": "Unable to save the vote, the vote period has passed.",
         "rangeNotReached": "You cannot vote before the ",
+        "notLoggedIn": "Unable to save the vote, you are not logged in yet. Please try again in a moment.",
         "yourVote": "from you"
     },
     "searchPlaceholder": "Search",

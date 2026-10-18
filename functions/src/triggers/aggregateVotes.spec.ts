@@ -275,6 +275,78 @@ describe('incrementVoteAggregate', () => {
             },
         })
     })
+    it('keeps the up-votes of a text vote when its author edits the text', async () => {
+        const input: VoteData = {
+            projectId: 'p1',
+            talkId: 's1',
+            voteItemId: 'vi1',
+            userId: 'u1',
+            text: 'edited',
+            status: VOTE_STATUS_ACTIVE,
+            createdAt: {},
+            updatedAt: {},
+        }
+
+        const result = await incrementVoteAggregate(
+            getMockedFirestore({
+                [input.voteItemId]: {
+                    1: {
+                        createdAt: {},
+                        text: 'original',
+                        plus: 3,
+                        updatedAt: {},
+                        userId: 'u1',
+                    },
+                },
+            }),
+            new Vote('1', input)
+        )
+
+        expect(result).toEqual({
+            [input.voteItemId]: {
+                1: {
+                    createdAt: {},
+                    text: 'edited',
+                    plus: 3,
+                    updatedAt: {},
+                    userId: 'u1',
+                },
+            },
+        })
+    })
+    it('resets the up-votes of a text vote written again after its deletion', async () => {
+        const input: VoteData = {
+            projectId: 'p1',
+            talkId: 's1',
+            voteItemId: 'vi1',
+            userId: 'u1',
+            text: 'back again',
+            status: VOTE_STATUS_ACTIVE,
+            createdAt: {},
+            updatedAt: {},
+        }
+
+        const result = await incrementVoteAggregate(
+            getMockedFirestore({
+                [input.voteItemId]: {
+                    1: {},
+                },
+            }),
+            new Vote('1', input)
+        )
+
+        expect(result).toEqual({
+            [input.voteItemId]: {
+                1: {
+                    createdAt: {},
+                    text: 'back again',
+                    plus: 1,
+                    updatedAt: {},
+                    userId: 'u1',
+                },
+            },
+        })
+    })
     it('successfully remove text to vote aggregate for an existing voteItemId & talk', async () => {
         const input: VoteData = {
             projectId: 'p1',

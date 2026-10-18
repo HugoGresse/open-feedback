@@ -49,7 +49,7 @@ export const upVoteOnTextVoteItemVote =
         const project = getProjectSelector(state)!
         const projectId = project.id
 
-        const [id] = getVoteId(voteItem, projectId, getState)
+        const [id] = getVoteId(voteItem, projectId, getState, null, voteId)
 
         const voteContent: Vote = {
             projectId: projectId,
