@@ -19,7 +19,8 @@ import Transition, {
 type TranslateDirection = 'down' | 'left' | 'right' | 'up'
 
 type TranslateTimeout =
-    number | { appear?: number; enter?: number; exit?: number }
+    | number
+    | { appear?: number; enter?: number; exit?: number }
 
 type EnterCallback = (node: HTMLElement, isAppearing?: boolean) => void
 type ExitCallback = (node: HTMLElement) => void

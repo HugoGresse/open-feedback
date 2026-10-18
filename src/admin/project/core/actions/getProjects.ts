@@ -36,8 +36,9 @@ export const getProjects =
             .orderBy('createdAt', 'desc')
             .get()
             .then((projectsSnapshot) => {
-                const organizations: Organization[] =
-                    getOrganizationsSelector(getState())
+                const organizations: Organization[] = getOrganizationsSelector(
+                    getState()
+                )
                 const projects: AdminProject[] = []
                 projectsSnapshot.forEach((doc) => {
                     // Firestore boundary

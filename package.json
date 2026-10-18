@@ -26,7 +26,8 @@
         "lint:i18n": "vitest run src/utils/i18n",
         "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
         "prepare": "husky",
-        "exportFirebaseEmulatorsData": "firebase emulators:export ./cypress/fixtures/firebase-emulators-data"
+        "exportFirebaseEmulatorsData": "firebase emulators:export ./cypress/fixtures/firebase-emulators-data",
+        "format": "biome format --write"
     },
     "devDependencies": {
         "@biomejs/biome": "2.5.15",
@@ -48,7 +49,6 @@
         "firebase-tools": "^15.34.0",
         "husky": "^9.1.7",
         "lint-staged": "^17.6.0",
-        "prettier": "^3.9.10",
         "storybook": "^10.6.2",
         "typescript": "^6.0.3",
         "vite": "^8.3.4",
@@ -116,8 +116,8 @@
         "not op_mini all"
     ],
     "lint-staged": {
-        "*.{ts,js,json,css,md}": [
-            "prettier --write"
+        "*.{js,jsx,ts,tsx,json,jsonc,css}": [
+            "biome check --write --no-errors-on-unmatched"
         ]
     }
 }

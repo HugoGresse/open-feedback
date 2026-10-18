@@ -147,8 +147,9 @@ export const removeVote = (
     return (dispatch, getState) => {
         // The store entry, voteToDelete may be an older copy (the comment
         // field keeps the vote loaded before an edit)
-        const previousVote =
-            getCurrentUserVotesSelector(getState())[voteToDelete.id]
+        const previousVote = getCurrentUserVotesSelector(getState())[
+            voteToDelete.id
+        ]
         if (previousVote.pending) {
             // biome-ignore lint/suspicious/noConsole: intentional log
             console.info(

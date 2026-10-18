@@ -10,10 +10,8 @@ import { isVoteWindowOpen } from '../../vote/checkDataBeforeVote'
 import type { AggregatedTextVote } from '../../../core/models'
 
 /** A text vote of the results, its Firestore timestamps turned into dates. */
-export interface TextVoteResult extends Omit<
-    AggregatedTextVote,
-    'id' | 'createdAt' | 'updatedAt'
-> {
+export interface TextVoteResult
+    extends Omit<AggregatedTextVote, 'id' | 'createdAt' | 'updatedAt'> {
     /** The vote id. */
     id: string
     createdAt: Date | null

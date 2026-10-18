@@ -36,7 +36,8 @@ interface SpeakersValidationResult {
 }
 
 export interface ValidationResult
-    extends TalksValidationResult, SpeakersValidationResult {
+    extends TalksValidationResult,
+        SpeakersValidationResult {
     dataAvailable: boolean
     /** Missing when the data could not be loaded. */
     isSuccessful?: boolean

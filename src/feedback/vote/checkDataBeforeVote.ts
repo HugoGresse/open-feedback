@@ -5,7 +5,8 @@ import type { AppDispatch, RootState } from '../../store'
 
 /** `[true]` when open, else `[false, translation key, start date?]`. */
 export type VoteWindowState =
-    [isOpen: true] | [isOpen: false, reason: string, date?: string]
+    | [isOpen: true]
+    | [isOpen: false, reason: string, date?: string]
 
 export const checkDateBeforeVote = (
     dispatch: AppDispatch,

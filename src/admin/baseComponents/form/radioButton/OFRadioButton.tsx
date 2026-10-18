@@ -15,10 +15,11 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-export interface OFRadioButtonProps extends Omit<
-    FormControlLabelProps,
-    'id' | 'label' | 'control' | 'name' | 'value' | 'checked'
-> {
+export interface OFRadioButtonProps
+    extends Omit<
+        FormControlLabelProps,
+        'id' | 'label' | 'control' | 'name' | 'value' | 'checked'
+    > {
     field: FieldProps['field']
     // The option value, also used as the element id
     id: string

@@ -6,8 +6,7 @@ import { DateTimePicker, type DateTimePickerProps } from '@mui/x-date-pickers'
 import { toReferenceDate } from './toReferenceDate'
 
 export interface OFDateTimePickerProps
-    extends
-        Pick<FieldProps<DateTime | null>, 'field' | 'form'>,
+    extends Pick<FieldProps<DateTime | null>, 'field' | 'form'>,
         Omit<
             Partial<DateTimePickerProps<DateTime>>,
             'name' | 'value' | 'format'

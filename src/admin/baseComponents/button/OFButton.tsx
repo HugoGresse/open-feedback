@@ -17,12 +17,15 @@ export interface OFButtonStyle extends CSSProperties {
 }
 
 export type OFButtonColor =
-    'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success'
+    | 'primary'
+    | 'secondary'
+    | 'error'
+    | 'warning'
+    | 'info'
+    | 'success'
 
-export interface OFButtonProps extends Omit<
-    ButtonProps,
-    'color' | 'style' | 'children'
-> {
+export interface OFButtonProps
+    extends Omit<ButtonProps, 'color' | 'style' | 'children'> {
     children?: ReactNode
     loading?: boolean
     color?: OFButtonColor

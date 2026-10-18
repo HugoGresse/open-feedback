@@ -17,7 +17,9 @@ import type { EventData } from '../../../core/setupType/eventDataNormalization'
 
 /** Values of the step 3 form, kept by the wizard when going back. */
 export type Step3Values =
-    HoverboardV2Config | JsonUrlConfig | JSONImportFormValues
+    | HoverboardV2Config
+    | JsonUrlConfig
+    | JSONImportFormValues
 
 /** What the step 3 submits, tagged with the project type it was made for. */
 export type Step3Submission =

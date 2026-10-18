@@ -17,9 +17,26 @@
             "!coverage"
         ]
     },
-    // Prettier formats the code (lint-staged).
     "formatter": {
-        "enabled": false
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 80
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "single",
+            "jsxQuoteStyle": "double",
+            "semicolons": "asNeeded",
+            "trailingCommas": "es5",
+            "bracketSameLine": false,
+            "arrowParentheses": "always"
+        }
+    },
+    "css": {
+        "formatter": {
+            "quoteStyle": "single"
+        }
     },
     "assist": {
         "enabled": false

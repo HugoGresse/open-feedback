@@ -28,7 +28,11 @@ interface FirestoreTimestamp {
 }
 
 export type LastUsedValue =
-    FirestoreTimestamp | string | number | null | undefined
+    | FirestoreTimestamp
+    | string
+    | number
+    | null
+    | undefined
 
 const hasToDate = (value: unknown): value is FirestoreTimestamp =>
     typeof (value as FirestoreTimestamp)?.toDate === 'function'

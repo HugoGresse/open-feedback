@@ -143,8 +143,9 @@ export const removeUpVoteOnTextVoteItemVote =
             return
         }
         // The store entry, voteToDelete may be an older copy
-        const previousVote =
-            getCurrentUserVotesSelector(getState())[voteToDelete.id]
+        const previousVote = getCurrentUserVotesSelector(getState())[
+            voteToDelete.id
+        ]
         if (previousVote.pending) {
             // biome-ignore lint/suspicious/noConsole: intentional log
             console.info(

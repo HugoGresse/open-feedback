@@ -23,8 +23,9 @@ export const unselectOrganization =
 export const selectOrganization =
     (organizationId: string): AppThunk<Promise<boolean>> =>
     (dispatch, getState) => {
-        const currentSelectedOrganizationId =
-            getSelectedOrganizationIdSelector(getState())
+        const currentSelectedOrganizationId = getSelectedOrganizationIdSelector(
+            getState()
+        )
         if (currentSelectedOrganizationId === organizationId) {
             // Organization already selected (HMR potentially)
             return Promise.resolve(true)

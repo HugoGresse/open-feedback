@@ -93,8 +93,9 @@ export const Notifications = () => {
             return (
                 <span id="client-snackbar" className={classes.message}>
                     {' '}
-                    <Icon className={classes.icon} />{' '}
-                    {notification.message}{' '}
+                    <Icon className={classes.icon} /> {
+                        notification.message
+                    }{' '}
                 </span>
             )
         }
