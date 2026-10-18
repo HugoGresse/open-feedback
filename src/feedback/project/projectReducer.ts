@@ -132,14 +132,18 @@ export const projectReducer = (
                         },
                     }
                 } else {
+                    // An edit keeps the up-votes and date of the text vote,
+                    // like the aggregation trigger does
+                    const precedentTextVote = precedentTextVotes[vote.id]
                     newVoteValue = {
                         ...precedentTextVotes,
                         [vote.id]: {
                             ...vote,
-                            plus: 1,
+                            plus: precedentTextVote?.plus ?? 1,
                             text: vote.text,
                             updatedAt: nowTimestamp(),
-                            createdAt: nowTimestamp(),
+                            createdAt:
+                                precedentTextVote?.createdAt ?? nowTimestamp(),
                         },
                     }
                 }

@@ -1,6 +1,6 @@
 import { getUserVotesByTalkAndVoteItemSelector } from './voteSelectors'
 import { fireStoreMainInstance } from '../../firebase.ts'
-import { VOTE_TYPE_TEXT_PLUS } from '../../core/contants'
+import { findReusableVote } from './findReusableVote'
 import type { Vote, VoteItem } from '../../core/models'
 import type { RootState } from '../../store'
 
@@ -10,46 +10,23 @@ import type { RootState } from '../../store'
  * @param projectId
  * @param getState
  * @param data the user text vote value if updating
+ * @param upVotedVoteId the text vote id when up-voting another text vote
  * @returns the vote id, and the existing vote when updating it
  */
 export const getVoteId = (
     voteItem: VoteItem,
     projectId: string,
     getState: () => RootState,
-    data: string | null = null
+    data: string | null = null,
+    upVotedVoteId?: string
 ): [id: string, existingVote?: Vote] => {
-    const existingVotes =
-        getUserVotesByTalkAndVoteItemSelector(getState())[voteItem.id]
-
-    const isPendingVote = (vote: Vote) => {
-        if (vote.pending) {
-            // eslint-disable-next-line no-console
-            console.info(
-                'Unable to modify a vote that has not been written on the database'
-            )
-            return true
-        }
-        return false
-    }
-
-    if (existingVotes && existingVotes.length > 0) {
-        if (data) {
-            // The user is adding a text vote
-            const existingVote = existingVotes.find(
-                (vote) => vote.text && vote.voteType !== VOTE_TYPE_TEXT_PLUS
-            )
-            if (existingVote && !isPendingVote(existingVote)) {
-                // The user is updating an existing text vote
-                return [existingVote.id, existingVote]
-            }
-        } else {
-            // The user is adding a boolean vote on another text or a boolean vote
-            const existingVote = existingVotes.find((vote) => !vote.text)
-            if (existingVote && !isPendingVote(existingVote)) {
-                // The user is updating an existing boolean vote
-                return [existingVote.id, existingVote]
-            }
-        }
+    const existingVote = findReusableVote(
+        getUserVotesByTalkAndVoteItemSelector(getState())[voteItem.id],
+        data,
+        upVotedVoteId
+    )
+    if (existingVote) {
+        return [existingVote.id, existingVote]
     }
 
     return [

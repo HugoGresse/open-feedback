@@ -68,9 +68,13 @@ export class Hoverboardv2Api implements ProjectApi {
                 const talks: TalksMap = {}
                 const schedule: HoverboardScheduleDay[] = []
 
-                talks[talkId] = {
-                    ...(resultTalks.data() as NewTalk),
-                    id: resultTalks.id,
+                // A session missing from the database is not a talk, even
+                // when the schedule still lists it
+                if (resultTalks.exists) {
+                    talks[talkId] = {
+                        ...(resultTalks.data() as NewTalk),
+                        id: resultTalks.id,
+                    }
                 }
 
                 resultSchedule.forEach((doc) => {

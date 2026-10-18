@@ -66,9 +66,9 @@ export class JsonUrlApi implements ProjectApi {
 
     getTalk(talkId: string): Promise<TalksMap> {
         return this.getJsonData().then((data) => {
-            return {
-                [talkId]: data.sessions[talkId],
-            }
+            // An unknown id resolves to no talk instead of `{[id]: undefined}`
+            const talk = data.sessions?.[talkId]
+            return talk ? { [talkId]: talk } : {}
         })
     }
 

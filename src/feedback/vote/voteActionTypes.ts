@@ -23,7 +23,8 @@ export interface AddVoteErrorPayload {
     error: string
     /** The optimistic vote to drop from the user votes. */
     voteId?: string
-    voteWhichShouldHaveBeenDeleted?: Vote
+    /** The vote to put back as it was before the failed write. */
+    voteToRestore?: Vote
 }
 
 export type VoteAction =

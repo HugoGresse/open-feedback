@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
+    getVoteUpdates,
     incrementVoteAggregate,
     normalizeVoteTimestamps,
 } from './aggregateVotes'
@@ -7,6 +8,7 @@ import {
     Vote,
     VOTE_STATUS_DELETED,
     VOTE_STATUS_ACTIVE,
+    VOTE_TYPE_TEXT_PLUS,
     VoteData,
 } from './models/vote'
 import * as admin from 'firebase-admin'
@@ -150,8 +152,9 @@ describe('incrementVoteAggregate', () => {
             getMockedFirestore({}),
             new Vote('1', input)
         )
+        // Only this text vote is written, as an empty (deleted) entry
         expect(result).toEqual({
-            [input.voteItemId]: {},
+            [input.voteItemId]: { 1: {} },
         })
     })
     it('successfully add text to vote aggregate for an existing voteItemId & talk', async () => {
@@ -181,15 +184,9 @@ describe('incrementVoteAggregate', () => {
             new Vote('2', input)
         )
 
+        // The merge write leaves the other text votes untouched
         expect(result).toEqual({
             [input.voteItemId]: {
-                1: {
-                    createdAt: {},
-                    text: 'toto1',
-                    plus: 1,
-                    updatedAt: {},
-                    userId: 'u1',
-                },
                 2: {
                     createdAt: {},
                     text: 'grosminé',
@@ -258,19 +255,84 @@ describe('incrementVoteAggregate', () => {
 
         expect(result).toEqual({
             [input.voteItemId]: {
-                1: {
-                    createdAt: {},
-                    text: 'toto1',
-                    plus: 2,
-                    updatedAt: {},
-                    userId: 'u1',
-                },
                 2: {
                     createdAt: {},
                     text: 'New vote',
                     plus: 1,
                     updatedAt: {},
                     userId: 'secondUser',
+                },
+            },
+        })
+    })
+    it('keeps the up-votes of a text vote when its author edits the text', async () => {
+        const input: VoteData = {
+            projectId: 'p1',
+            talkId: 's1',
+            voteItemId: 'vi1',
+            userId: 'u1',
+            text: 'edited',
+            status: VOTE_STATUS_ACTIVE,
+            createdAt: {},
+            updatedAt: {},
+        }
+
+        const result = await incrementVoteAggregate(
+            getMockedFirestore({
+                [input.voteItemId]: {
+                    1: {
+                        createdAt: {},
+                        text: 'original',
+                        plus: 3,
+                        updatedAt: {},
+                        userId: 'u1',
+                    },
+                },
+            }),
+            new Vote('1', input)
+        )
+
+        // The merge write keeps the current plus (no stale copy of it)
+        expect(result).toEqual({
+            [input.voteItemId]: {
+                1: {
+                    createdAt: {},
+                    text: 'edited',
+                    updatedAt: {},
+                    userId: 'u1',
+                },
+            },
+        })
+    })
+    it('resets the up-votes of a text vote written again after its deletion', async () => {
+        const input: VoteData = {
+            projectId: 'p1',
+            talkId: 's1',
+            voteItemId: 'vi1',
+            userId: 'u1',
+            text: 'back again',
+            status: VOTE_STATUS_ACTIVE,
+            createdAt: {},
+            updatedAt: {},
+        }
+
+        const result = await incrementVoteAggregate(
+            getMockedFirestore({
+                [input.voteItemId]: {
+                    1: {},
+                },
+            }),
+            new Vote('1', input)
+        )
+
+        expect(result).toEqual({
+            [input.voteItemId]: {
+                1: {
+                    createdAt: {},
+                    text: 'back again',
+                    plus: 1,
+                    updatedAt: {},
+                    userId: 'u1',
                 },
             },
         })
@@ -308,15 +370,7 @@ describe('incrementVoteAggregate', () => {
         )
 
         expect(result).toEqual({
-            [input.voteItemId]: {
-                1: {},
-                2: {
-                    createdAt: undefined,
-                    text: 'caritta',
-                    updatedAt: undefined,
-                    userId: 'u2',
-                },
-            },
+            [input.voteItemId]: { 1: {} },
         })
     })
 })
@@ -380,5 +434,62 @@ describe('normalizeVoteTimestamps', () => {
 
         expect(result.createdAt).toBe(createdAt)
         expect(result.updatedAt).toBe(updatedAt)
+    })
+})
+
+describe('getVoteUpdates', () => {
+    const voteData = (fields: Partial<VoteData>): VoteData => ({
+        projectId: 'p1',
+        talkId: 's1',
+        voteItemId: 'vi1',
+        userId: 'u1',
+        status: VOTE_STATUS_ACTIVE,
+        createdAt: {},
+        updatedAt: {},
+        ...fields,
+    })
+    const update = (before: Partial<VoteData>, after: Partial<VoteData>) =>
+        getVoteUpdates(
+            new Vote('1', voteData(before)),
+            new Vote('1', voteData(after))
+        ).map((vote) => vote.voteData)
+
+    it('counts a status change', () => {
+        expect(update({ status: VOTE_STATUS_DELETED }, {})).toEqual([
+            voteData({}),
+        ])
+        expect(update({}, { status: VOTE_STATUS_DELETED })).toEqual([
+            voteData({ status: VOTE_STATUS_DELETED }),
+        ])
+    })
+
+    it('does not count again a write that keeps the status', () => {
+        expect(update({}, {})).toEqual([])
+        expect(
+            update(
+                { status: VOTE_STATUS_DELETED },
+                { status: VOTE_STATUS_DELETED }
+            )
+        ).toEqual([])
+    })
+
+    it('aggregates the edit of an active text vote', () => {
+        expect(update({ text: 'old' }, { text: 'new' })).toEqual([
+            voteData({ text: 'new' }),
+        ])
+    })
+
+    it('moves an active up-vote to another text vote', () => {
+        const upVote = { voteType: VOTE_TYPE_TEXT_PLUS } as const
+        expect(
+            update({ ...upVote, voteId: 'A' }, { ...upVote, voteId: 'B' })
+        ).toEqual([
+            voteData({
+                ...upVote,
+                voteId: 'A',
+                status: VOTE_STATUS_DELETED,
+            }),
+            voteData({ ...upVote, voteId: 'B' }),
+        ])
     })
 })
