@@ -40,10 +40,16 @@ export const ColorBlockDialog = ({
         setColor(data.hex)
     }
 
+    // Cancel keeps the original color, and resets the picker to it
+    const onCancel = () => {
+        setColor(`#${color}`)
+        onClose(color)()
+    }
+
     return (
         <Dialog
             open={open}
-            onClose={onClose(pickerColor.replace('#', ''))}
+            onClose={onCancel}
             aria-labelledby="dialog-color-picker"
         >
             <DialogTitle id="dialog-color-picker">
@@ -59,14 +65,11 @@ export const ColorBlockDialog = ({
                 <br />
             </DialogContent>
             <DialogActions>
-                <Button onClick={onColorDeleted(pickerColor.replace('#', ''))}>
+                <Button onClick={onColorDeleted(color)}>
                     <DeleteIcon />
                     {t('settingsEvent.delete')}
                 </Button>
-                <Button
-                    onClick={onClose(pickerColor.replace('#', ''))}
-                    color="primary"
-                >
+                <Button onClick={onCancel} color="primary">
                     {t('settingsEvent.cancel')}
                 </Button>
                 <Button

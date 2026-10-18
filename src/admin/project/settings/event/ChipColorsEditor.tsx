@@ -36,9 +36,11 @@ export const ChipColorsEditor = ({ field, form }: ChipColorsEditorProps) => {
     }
 
     const addColor = () => {
-        const values = field.value || []
-        values.push(newRandomHexColor())
-        form.setFieldValue(field.name, values)
+        // field.value is the Redux project array: copy it, never mutate it
+        form.setFieldValue(field.name, [
+            ...(field.value ?? []),
+            newRandomHexColor(),
+        ])
     }
 
     const onColorDeleted = (color: string) => {

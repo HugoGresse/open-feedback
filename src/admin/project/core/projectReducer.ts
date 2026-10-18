@@ -1,6 +1,7 @@
 import {
     ADD_PROJECT_ERROR,
     ADD_PROJECT_ONGOING,
+    DELETE_PROJECT_SUCCESS,
     type AdminProject,
     EDIT_PROJECT_SUCCESS,
     GET_PROJECT_ERROR,
@@ -123,6 +124,16 @@ export const projectReducer = (
                 },
             }
         }
+        case DELETE_PROJECT_SUCCESS:
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    projects: state.data.projects.filter(
+                        (project) => project.id !== action.payload
+                    ),
+                },
+            }
         case INIT_PROJECTAPI: {
             return {
                 ...state,

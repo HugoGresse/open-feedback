@@ -199,6 +199,11 @@ export const TalkAddEditPanel = ({
                                 ) => {
                                     return onSpeakerAdd(speaker).then(
                                         (speaker) => {
+                                            if (!speaker) {
+                                                // Adding failed, a notification
+                                                // reports it, keep the panel open
+                                                return
+                                            }
                                             if (!shouldContinueAfterSubmit) {
                                                 setSpeakerAdd(false)
                                             }

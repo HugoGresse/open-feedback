@@ -2,6 +2,7 @@ import type { TFunction } from 'react-i18next'
 import type { AppThunk } from '../../../../store'
 import { functions } from '../../../../firebase.ts'
 import { addNotification } from '../../../notification/notifcationActions'
+import { DELETE_PROJECT_SUCCESS } from '../projectActionTypes'
 
 const getErrorCode = (error: unknown): unknown =>
     typeof error === 'object' && error !== null && 'code' in error
@@ -15,8 +16,11 @@ export const deleteProject =
             .deleteProject({
                 projectId: projectId,
             })
-            // eslint-disable-next-line no-console
             .then(() => {
+                dispatch({
+                    type: DELETE_PROJECT_SUCCESS,
+                    payload: projectId,
+                })
                 dispatch(
                     addNotification({
                         type: 'success',
@@ -28,7 +32,8 @@ export const deleteProject =
                 // eslint-disable-next-line no-console
                 console.error(error)
 
-                if (getErrorCode(error) === 'permission-denied') {
+                // Callable errors codes are prefixed by the "functions/" service
+                if (getErrorCode(error) === 'functions/permission-denied') {
                     dispatch(
                         addNotification({
                             type: 'error',

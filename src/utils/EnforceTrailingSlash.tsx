@@ -4,9 +4,9 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom'
  * From https://stackoverflow.com/a/77391833/1377145
  */
 export const EnforceTrailingSlash = () => {
-    const { pathname } = useLocation()
+    const { pathname, search, hash } = useLocation()
     if (!pathname.endsWith('/')) {
-        return <Navigate to={`${pathname}/`} />
+        return <Navigate to={`${pathname}/${search}${hash}`} replace />
     }
     return <Outlet />
 }
