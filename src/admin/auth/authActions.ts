@@ -53,7 +53,8 @@ export const didSignIn = (
                 )
                 const photoURL = getDataFromProviderDataOrUser(user, 'photoURL')
                 const email = getDataFromProviderDataOrUser(user, 'email')
-                const emailVerified = getDataFromProviderDataOrUser(
+                // The helper returns '' for false, compare booleans
+                const emailVerified = !!getDataFromProviderDataOrUser(
                     user,
                     'emailVerified'
                 )
@@ -86,7 +87,7 @@ export const didSignIn = (
                         userDbData,
                         'email'
                     )
-                    const emailVerifiedDb = userDbData.emailVerified
+                    const emailVerifiedDb = !!userDbData.emailVerified
                     const phoneDb = getDataFromProviderDataOrUser(
                         userDbData,
                         'phoneNumber'

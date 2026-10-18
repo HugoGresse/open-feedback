@@ -67,6 +67,12 @@ const innerTheme = responsiveFontSizes(
     })
 )
 
+/** `/admin/{projectId}/` is a shortcut to the project admin. */
+const RedirectToProject = () => {
+    const { projectId } = useParams()
+    return <Navigate to={`/admin/event/${projectId}/`} replace />
+}
+
 export function AdminApp() {
     useSmallchat()
 
@@ -107,9 +113,7 @@ export function AdminApp() {
                                         />
                                         <Route
                                             path="/:projectId/"
-                                            element={
-                                                <Navigate to="/admin/event/:projectId" />
-                                            }
+                                            element={<RedirectToProject />}
                                         />
 
                                         <Route

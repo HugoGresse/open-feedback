@@ -113,9 +113,18 @@ export const voteFor = (
                     type: ADD_VOTE_ERROR,
                     payload: {
                         error: `Unable to save the vote, ${error}`,
-                        voteId: voteContent.id,
+                        // A re-used vote document is restored below instead
+                        voteId: existingVote ? undefined : voteContent.id,
                     },
                 })
+                if (existingVote) {
+                    dispatch({
+                        type: UPDATE_VOTE_SUCCESS,
+                        payload: {
+                            vote: { [existingVote.id]: existingVote },
+                        },
+                    })
+                }
 
                 dispatch({
                     type: INCREMENT_VOTE_LOCALLY,
