@@ -40,7 +40,10 @@ export const editOrganization =
                     })
                 )
 
-                dispatch(getOrganization(organizationId))
+                // Resolved once reloaded, so callers display the saved data
+                return dispatch(getOrganization(organizationId)).then(
+                    () => undefined
+                )
             })
             .catch((err: unknown) => {
                 // biome-ignore lint/suspicious/noConsole: intentional log

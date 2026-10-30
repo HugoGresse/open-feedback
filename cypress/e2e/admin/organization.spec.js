@@ -79,4 +79,26 @@ describe('Test organization as owner role', function () {
         feedback.openTalkByClick(data.talk1Name)
         feedback.assertInTalk(data.talk1Name, [data.voteItem])
     })
+
+    it('Rename the organization inline, then delete it', function () {
+        const orgName = `organizationDelete ${stringGenerator()}`
+        const renamedOrgName = `organizationRenamed ${stringGenerator()}`
+
+        app.organization.newOrganization(orgName)
+        app.organization.assertNewOrgScreen(orgName, ['currentOne?'])
+
+        app.organization.cancelInlineRename('not saved')
+        cy.get('h2').should('contain', orgName)
+
+        app.organization.renameInline(renamedOrgName)
+        cy.get('h2').should('contain', renamedOrgName)
+        cy.contains('Organization saved')
+
+        app.organization.openSettings()
+        app.organization.deleteOrganization(renamedOrgName)
+
+        cy.contains('Organization deleted!')
+        cy.location('pathname').should('not.contain', '/org/')
+        cy.contains(renamedOrgName).should('not.exist')
+    })
 })

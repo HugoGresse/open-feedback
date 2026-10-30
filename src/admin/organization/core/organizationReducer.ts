@@ -1,6 +1,7 @@
 import type { Organization } from '../../../core/models'
 import { LOGOUT, type LogoutAction } from '../../auth/authActionTypes'
 import {
+    DELETE_ORGANIZATION_SUCCESS,
     GET_ORGANIZATION_SUCCESS,
     GET_ORGANIZATIONS_ERROR,
     GET_ORGANIZATIONS_SUCCESS,
@@ -76,6 +77,16 @@ export const adminOrganizationReducer = (
                 },
             }
         }
+        case DELETE_ORGANIZATION_SUCCESS:
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    organizations: state.data.organizations.filter(
+                        (organization) => organization.id !== action.payload
+                    ),
+                },
+            }
         default:
             return state
     }

@@ -171,7 +171,22 @@
             "owner": "Comme l'admin +  gérer le role de propriétaire (un seul propriétaire) et supprimer l'organisation."
         },
         "infoData": "Les paramètres de l'organisation, du bulletin de vote et du thème sont appliqués lors de la création d'évènement, ils n'affectent pas les évènements existants.",
-        "settings": "Paramètres"
+        "settings": "Paramètres",
+        "editName": "Cliquer pour modifier le nom de l'organisation",
+        "delete": {
+            "sectionTitle": "Zone de danger",
+            "sectionDescription": "Supprimer l'organisation la retire avec ses membres, rôles, bulletin de vote, thème et clé d'API. Les évènements doivent être supprimés avant.",
+            "button": "Supprimer l'organisation",
+            "confirmTitle": "Êtes-vous sûr de vouloir supprimer l'organisation ?",
+            "confirmDescription": "La suppression de l'organisation est définitive : ses membres, rôles, bulletin de vote, thème et images, clé d'API et invitations seront supprimés.",
+            "typeName": "Pour confirmer, saisissez le nom de l'organisation « {{name}} » ci-dessous.",
+            "typeNameLabel": "Nom de l'organisation pour confirmer la suppression",
+            "hasEventsDescription": "Cette organisation contient encore des évènements ({{count}}). Supprimez-les d'abord, vous pourrez ensuite supprimer l'organisation.",
+            "hasEvents": "Cette organisation contient encore des évènements. Supprimez-les d'abord.",
+            "permissionDenied": "Seul le propriétaire de l'organisation peut la supprimer.",
+            "success": "Organisation supprimée !",
+            "fail": "Échec de la suppression de l'organisation, "
+        }
     },
     "rooting": {
         "dashboard": "Statistiques",

@@ -11,16 +11,26 @@ import SaveIcon from '@mui/icons-material/Save'
 import Box from '@mui/material/Box'
 import { editOrganization } from '../core/actions/editOrganization'
 import { useAppDispatch, useAppSelector } from '../../../store'
+import Divider from '@mui/material/Divider'
+import Typography from '@mui/material/Typography'
+import { getUserIdSelector } from '../../auth/authSelectors'
+import { DeleteOrganization } from './DeleteOrganization.tsx'
+import { getOrganizationNameToSave } from '../utils/organizationName'
 
 export interface OrganizationSettingsProps {
     onClose: () => void
+    onOrganizationDeleted: () => void
 }
 
 export const OrganizationSettings = ({
     onClose,
+    onOrganizationDeleted,
 }: OrganizationSettingsProps) => {
     const { t } = useTranslation()
     const organization = useAppSelector(getSelectedOrganizationSelector)
+    const userId = useAppSelector(getUserIdSelector)
+    // Only the owner can delete the organization (see the deleteOrganization function)
+    const isOwner = organization?.ownerUserId === userId
     const dispatch = useAppDispatch()
 
     return (
@@ -37,18 +47,28 @@ export const OrganizationSettings = ({
             <DialogContent>
                 <Formik
                     validationSchema={object().shape({
-                        name: string().required(t('organization.nameRequired')),
+                        name: string()
+                            .trim()
+                            .required(t('organization.nameRequired')),
                     })}
+                    // Follows an inline rename saved while the dialog opens
+                    enableReinitialize
                     initialValues={{
                         // Only displayed while an organization is loaded.
                         name: organization?.name ?? '',
                     }}
                     onSubmit={(values) => {
-                        return dispatch(
-                            editOrganization({
-                                name: values.name,
-                            })
-                        ).then(() => onClose())
+                        const name = getOrganizationNameToSave(
+                            organization?.name ?? '',
+                            values.name
+                        )
+                        if (!name) {
+                            onClose()
+                            return
+                        }
+                        return dispatch(editOrganization({ name })).then(() =>
+                            onClose()
+                        )
                     }}
                 >
                     {({ isSubmitting }) => (
@@ -83,6 +103,24 @@ export const OrganizationSettings = ({
                         </Form>
                     )}
                 </Formik>
+                {organization && isOwner && (
+                    <>
+                        <Divider />
+                        <Box marginTop={2} marginBottom={1}>
+                            <Typography variant="h6">
+                                {t('organization.delete.sectionTitle')}
+                            </Typography>
+                            <Typography variant="body2" marginBottom={1}>
+                                {t('organization.delete.sectionDescription')}
+                            </Typography>
+                            <DeleteOrganization
+                                organizationId={organization.id}
+                                organizationName={organization.name}
+                                onDeleted={onOrganizationDeleted}
+                            />
+                        </Box>
+                    </>
+                )}
             </DialogContent>
         </Dialog>
     )

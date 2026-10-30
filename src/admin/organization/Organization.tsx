@@ -3,6 +3,7 @@ import type { PathMatch } from 'react-router-dom'
 import { LoaderMatchParent } from '../../baseComponents/customComponent/LoaderMatchParent.tsx'
 import { Layout404 } from '../baseComponents/Layout404.tsx'
 import {
+    getSelectedOrganizationIdSelector,
     getSelectedOrganizationSelector,
     isOrganizationsLoadedSelector,
 } from './core/organizationSelectors'
@@ -29,10 +30,15 @@ export const Organization = ({ match, children }: OrganizationProps) => {
         }
     }, [dispatch, organizationId])
 
+    const selectedOrganizationId = useAppSelector(
+        getSelectedOrganizationIdSelector
+    )
     const selectedOrganization = useAppSelector(getSelectedOrganizationSelector)
     const irOrganizationsLoaded = useAppSelector(isOrganizationsLoadedSelector)
 
     if (selectedOrganization) return children
-    if (irOrganizationsLoaded && !selectedOrganization) return <Layout404 />
+    // Not a 404 while not selected yet, or unselected once deleted (until the
+    // modal closes)
+    if (selectedOrganizationId && irOrganizationsLoaded) return <Layout404 />
     return <LoaderMatchParent />
 }

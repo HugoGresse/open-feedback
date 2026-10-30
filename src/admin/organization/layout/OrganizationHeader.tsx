@@ -7,6 +7,10 @@ import Grid from '@mui/material/Grid'
 import { Box } from '@mui/material'
 import { OrganizationSettings } from '../settings/OrganizationSettings.tsx'
 import SettingsIcon from '@mui/icons-material/Settings'
+import { OrganizationName } from './OrganizationName.tsx'
+import { useAppDispatch, useAppSelector } from '../../../store'
+import { isOrganizationRightAllowed } from '../core/organizationSelectors'
+import { editOrganization } from '../core/actions/editOrganization'
 
 export interface OrganizationHeaderProps {
     organizationName: string
@@ -18,6 +22,8 @@ export const OrganizationHeader = ({
     onClose,
 }: OrganizationHeaderProps) => {
     const { t } = useTranslation()
+    const dispatch = useAppDispatch()
+    const canEdit = useAppSelector(isOrganizationRightAllowed)
     const [settingsDisplayed, setSettingsDisplayed] = useState(false)
 
     return (
@@ -33,9 +39,11 @@ export const OrganizationHeader = ({
             </OFButton>
             <Grid container>
                 <Grid item xs={12} sm={9}>
-                    <Typography variant="h2" color="primary">
-                        {organizationName}
-                    </Typography>
+                    <OrganizationName
+                        name={organizationName}
+                        editable={canEdit}
+                        onSave={(name) => dispatch(editOrganization({ name }))}
+                    />
                 </Grid>
                 <Grid
                     item
@@ -63,6 +71,7 @@ export const OrganizationHeader = ({
             {settingsDisplayed && (
                 <OrganizationSettings
                     onClose={() => setSettingsDisplayed(false)}
+                    onOrganizationDeleted={onClose}
                 />
             )}
         </>

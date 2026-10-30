@@ -171,7 +171,22 @@
             "owner": "Same as admin + manage owner role (only one owner) and delete the organization."
         },
         "infoData": "Organization settings, voting form & theme are applied on new event creation only, they do not affect existing events.",
-        "settings": "Settings"
+        "settings": "Settings",
+        "editName": "Click to edit the organization name",
+        "delete": {
+            "sectionTitle": "Danger zone",
+            "sectionDescription": "Deleting the organization removes it with its members, roles, voting form, theme and API key. The events must be deleted first.",
+            "button": "Delete organization",
+            "confirmTitle": "Are you sure you want to delete the organization?",
+            "confirmDescription": "Deleting the organization is definitive: its members, roles, voting form, theme and images, API key and invites will be deleted.",
+            "typeName": "To confirm, type the organization name \"{{name}}\" below.",
+            "typeNameLabel": "Organization name to confirm the deletion",
+            "hasEventsDescription": "This organization still has events ({{count}}). Delete them first, then you will be able to delete the organization.",
+            "hasEvents": "This organization still has events. Delete them first.",
+            "permissionDenied": "Only the organization owner can delete the organization.",
+            "success": "Organization deleted!",
+            "fail": "Failed to delete the organization, "
+        }
     },
     "rooting": {
         "dashboard": "Dashboard",
