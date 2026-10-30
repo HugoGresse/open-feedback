@@ -54,6 +54,10 @@
     "dashboard": {
         "comments": "Comments",
         "commentsPerUser": "Comments per user",
+        "export": "Export",
+        "exportJson": "JSON: talks, votes and comments",
+        "exportCsvTalks": "CSV: votes per talk",
+        "exportCsvComments": "CSV: comments",
         "highlights": "Highlights",
         "mostVoted": "Most voted",
         "leastVotedTalks": "Least voted",
