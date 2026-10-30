@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import { newRandomHexColor } from '../../../../utils/colorsUtils'
 import { useTranslation } from 'react-i18next'
 import type { FieldProps } from 'formik'
+import { ChipColorsPreview } from './ChipColorsPreview.tsx'
 
 const useStyles = makeStyles(() => ({
     colorBlock: {
@@ -51,31 +52,36 @@ export const ChipColorsEditor = ({ field, form }: ChipColorsEditorProps) => {
     }
 
     return (
-        <div id="chipColors">
-            {field.value &&
-                field.value.map((color, index) => {
-                    return (
-                        <ColorBlock
-                            key={index + color}
-                            color={color}
-                            className={classes.colorBlock}
-                            disabled={form.isSubmitting}
-                            onColorChanged={(newColor) =>
-                                onColorChanges(color, newColor)
-                            }
-                            onColorDeleted={(color) => onColorDeleted(color)}
-                        />
-                    )
-                })}
-            <IconButton
-                className={classes.addButton}
-                aria-label={t('settingsEvent.newChipColors')}
-                disabled={form.isSubmitting}
-                onClick={() => addColor()}
-                size="large"
-            >
-                <AddIcon />
-            </IconButton>
-        </div>
+        <>
+            <div id="chipColors">
+                {field.value &&
+                    field.value.map((color, index) => {
+                        return (
+                            <ColorBlock
+                                key={index + color}
+                                color={color}
+                                className={classes.colorBlock}
+                                disabled={form.isSubmitting}
+                                onColorChanged={(newColor) =>
+                                    onColorChanges(color, newColor)
+                                }
+                                onColorDeleted={(color) =>
+                                    onColorDeleted(color)
+                                }
+                            />
+                        )
+                    })}
+                <IconButton
+                    className={classes.addButton}
+                    aria-label={t('settingsEvent.newChipColors')}
+                    disabled={form.isSubmitting}
+                    onClick={() => addColor()}
+                    size="large"
+                >
+                    <AddIcon />
+                </IconButton>
+            </div>
+            <ChipColorsPreview chipColors={field.value} />
+        </>
     )
 }

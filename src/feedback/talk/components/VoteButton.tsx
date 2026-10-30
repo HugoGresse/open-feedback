@@ -59,6 +59,7 @@ export const VoteButton = ({
             className={paperClasses}
             onClick={onClick}
             component="button"
+            type="button"
         >
             {children}
             <VoteButtonBackground colors={chipColors} count={count} />

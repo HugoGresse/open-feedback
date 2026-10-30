@@ -1,25 +1,11 @@
 import Grid from '@mui/material/Grid'
-import type { Theme } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
-import { VoteButton } from '../components/VoteButton.tsx'
+import { BooleanVoteButton } from './BooleanVoteButton.tsx'
 import type { VoteItem } from '../../../core/models'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
     itemContainer: {
         margin: -1,
-    },
-    voteTitle: {
-        color: theme.palette.textVoteTitle,
-        zIndex: 2,
-        textShadow: `0px 0px 6px ${theme.palette.textVoteTitleShadow}`,
-    },
-    voteResult: {
-        position: 'absolute',
-        bottom: '5px',
-        fontSize: '14px',
-        transition: 'all 200ms ease-in-out',
-        zIndex: 2,
-        textShadow: `0px 0px 6px ${theme.palette.textVoteTitleShadow}`,
     },
 }))
 
@@ -40,7 +26,6 @@ export const TalkVoteBoolean = ({
     chipColors,
 }: TalkVoteBooleanProps) => {
     const classes = useStyles()
-    const hasVotes = voteResult !== undefined && voteResult > 0
 
     return (
         <Grid
@@ -52,19 +37,13 @@ export const TalkVoteBoolean = ({
             aria-label={voteItem.name ?? undefined}
             data-testid="VoteItem"
         >
-            <VoteButton
+            <BooleanVoteButton
+                name={voteItem.name}
                 isSelected={isSelected}
                 chipColors={chipColors}
                 onClick={() => onVoteChange(voteItem)}
-                count={voteResult}
-            >
-                <span className={classes.voteTitle}>{voteItem.name}</span>
-                {hasVotes && (
-                    <span className={classes.voteResult}>
-                        {voteResult} {voteResult > 1 ? 'votes' : 'vote'}
-                    </span>
-                )}
-            </VoteButton>
+                voteResult={voteResult}
+            />
         </Grid>
     )
 }
