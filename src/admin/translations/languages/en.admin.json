@@ -299,9 +299,10 @@
         "invitationGetFail": "Unable to get your invitation, ask for another one please.",
         "errorPendingInvitesFailed": "Failed to load pending invites, ",
         "cancelInviteFail": "Failed to cancel invite, ",
-        "inviteAlreadyUsed": "You've already used this invitation",
         "inviteCompleted": "Invite completed, you'll be redirected to the event or organization soon",
-        "inviteFailed": "This invitation failed. Ask the organizer to invite you again."
+        "inviteFailed": "This invitation failed. Ask the organizer to invite you again.",
+        "inviteWrongAccount": "This invitation can't be opened with the account you are signed in with ({{account}}): it was sent to another email address. Log out and sign in with the email address the invitation was sent to.",
+        "inviteLogout": "Log out"
     },
     "settingsVotingForm": {
         "new": "New item",

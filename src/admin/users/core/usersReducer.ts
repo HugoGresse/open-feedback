@@ -2,9 +2,11 @@ import type { Invite, User } from '../../../core/models'
 import {
     GET_USER_DETAILS_SUCCESS,
     type InviteDocument,
+    type InviteReadError,
     USER_INVITE_ADD,
     USER_INVITE_GET_ERROR,
     USER_INVITE_GET_SUCCESS,
+    USER_INVITE_LISTEN,
     USER_INVITE_REMOVE_SUCCESS,
     USER_INVITES_GET_SUCCESS,
     type UsersAction,
@@ -23,8 +25,8 @@ import { LOGOUT, type LogoutAction } from '../../auth/authActionTypes'
 export interface UsersState {
     /** Loaded `users/{uid}` documents keyed by uid. */
     usersData: Record<string, User>
-    /** The listened invite: `{}` while loading, `null` when it can't be read. */
-    invite: Partial<InviteDocument> | null
+    /** The listened invite: `{}` while loading, the error when unreadable. */
+    invite: Partial<InviteDocument> | InviteReadError
     pendingInvites: Invite[]
     filter: string
 }
@@ -58,15 +60,16 @@ export const usersReducer = (
                 ...state,
                 filter: action.payload,
             }
-        case USER_INVITE_GET_SUCCESS:
+        case USER_INVITE_LISTEN:
             return {
                 ...state,
-                invite: action.payload,
+                invite: {},
             }
+        case USER_INVITE_GET_SUCCESS:
         case USER_INVITE_GET_ERROR:
             return {
                 ...state,
-                invite: null,
+                invite: action.payload,
             }
         case USER_INVITES_GET_SUCCESS:
             return {

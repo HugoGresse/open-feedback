@@ -36,11 +36,16 @@ export const inviteUser =
     ): AppThunk<Promise<UsersAction | false>> =>
     (dispatch, getState) => {
         const state = getState()
+        // Firebase Auth emails are lowercase, and the rules and functions
+        // match the invite email exactly.
+        const destinationEmail = userEmail.trim().toLowerCase()
 
         const pendingInvites = getPendingInvitesSelector(state)
         if (
             pendingInvites.filter(
-                (invite) => invite.destinationUserInfo === userEmail
+                (invite) =>
+                    invite.destinationUserInfo.toLowerCase() ===
+                    destinationEmail
             ).length > 0
         ) {
             dispatch(
@@ -62,7 +67,7 @@ export const inviteUser =
         const invite = {
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
-            destinationUserInfo: userEmail,
+            destinationUserInfo: destinationEmail,
             originUserId: currentUser.uid,
             originUserName: currentUser.displayName,
             originUserPhotoURL: getDataFromProviderDataOrUser(

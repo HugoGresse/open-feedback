@@ -2,6 +2,7 @@ import type { Invite, User } from '../../../core/models'
 
 export const GET_USER_DETAILS_SUCCESS = 'admin/users/get/success'
 export const USERS_SET_FILTER = 'admin/users/filter/set'
+export const USER_INVITE_LISTEN = 'admin/users/invite/listen'
 export const USER_INVITE_GET_SUCCESS = 'admin/users/invite/get/success'
 export const USER_INVITE_GET_ERROR = 'admin/users/invite/get/error'
 export const USER_INVITE_ADD = 'admin/users/invite/add'
@@ -15,11 +16,19 @@ type DistributiveOmit<T, K extends PropertyKey> = T extends unknown
 /** The `invites/{id}` document data, as listened to (without its id). */
 export type InviteDocument = DistributiveOmit<Invite, 'id'>
 
+/**
+ * Why the invite could not be read: `notAllowed` when the Firestore rules deny
+ * it, as an invite is only readable by the account it was sent to; `failed`
+ * when it does not exist (cancelled) or the read failed.
+ */
+export type InviteReadError = 'notAllowed' | 'failed'
+
 export type UsersAction =
     | { type: typeof GET_USER_DETAILS_SUCCESS; payload: User }
     | { type: typeof USERS_SET_FILTER; payload: string }
+    | { type: typeof USER_INVITE_LISTEN }
     | { type: typeof USER_INVITE_GET_SUCCESS; payload: InviteDocument }
-    | { type: typeof USER_INVITE_GET_ERROR }
+    | { type: typeof USER_INVITE_GET_ERROR; payload: InviteReadError }
     | { type: typeof USER_INVITE_ADD; payload: Invite }
     | { type: typeof USER_INVITE_REMOVE_SUCCESS; payload: string }
     | { type: typeof USER_INVITES_GET_SUCCESS; payload: Invite[] }
