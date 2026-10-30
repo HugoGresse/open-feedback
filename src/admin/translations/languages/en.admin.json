@@ -301,9 +301,8 @@
         "cancelInviteFail": "Failed to cancel invite, ",
         "inviteCompleted": "Invite completed, you'll be redirected to the event or organization soon",
         "inviteFailed": "This invitation failed. Ask the organizer to invite you again.",
-        "inviteWrongAccount": "This invitation can't be opened with the account you are signed in with ({{account}}). It was sent to another email address, or it has been cancelled. Log out and sign in with the email address the invitation was sent to.",
-        "inviteLogout": "Log out",
-        "inviteGoToDashboard": "Go to my dashboard"
+        "inviteWrongAccount": "This invitation can't be opened with the account you are signed in with ({{account}}): it was sent to another email address. Log out and sign in with the email address the invitation was sent to.",
+        "inviteLogout": "Log out"
     },
     "settingsVotingForm": {
         "new": "New item",

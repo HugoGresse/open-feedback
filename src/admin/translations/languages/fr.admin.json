@@ -301,9 +301,8 @@
         "cancelInviteFail": "Erreur lors de l'annulation de l'invitation, ",
         "inviteCompleted": "Invite terminé, vous allez être rediriger vers l'évènement ou l'organisation",
         "inviteFailed": "Cette invitation a échoué. Demandez à l'organisateur de vous inviter à nouveau.",
-        "inviteWrongAccount": "Cette invitation ne peut pas être ouverte avec le compte connecté ({{account}}). Elle a été envoyée à une autre adresse email, ou a été annulée. Déconnectez-vous puis connectez-vous avec l'adresse email qui a reçu l'invitation.",
-        "inviteLogout": "Se déconnecter",
-        "inviteGoToDashboard": "Aller à mon tableau de bord"
+        "inviteWrongAccount": "Cette invitation ne peut pas être ouverte avec le compte connecté ({{account}}) : elle a été envoyée à une autre adresse email. Déconnectez-vous puis connectez-vous avec l'adresse email qui a reçu l'invitation.",
+        "inviteLogout": "Se déconnecter"
     },
     "settingsVotingForm": {
         "new": "Nouveau choix de vote",

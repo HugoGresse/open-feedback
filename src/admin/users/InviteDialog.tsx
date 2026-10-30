@@ -5,17 +5,11 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogActions from '@mui/material/DialogActions'
 import CircularProgress from '@mui/material/CircularProgress'
-import { Box, Button } from '@mui/material'
-import {
-    getInviteReadErrorSelector,
-    getInviteSelector,
-} from './core/usersSelectors'
+import { Box } from '@mui/material'
+import { getInviteSelector } from './core/usersSelectors'
 import { getUserSelector } from '../auth/authSelectors'
-import { signOut } from '../auth/authActions'
-import {
-    getInviteDialogStatus,
-    type InviteDialogStatus,
-} from './core/getInviteDialogStatus'
+import { getDataFromProviderDataOrUser, signOut } from '../auth/authActions'
+import { getInviteDialogStatus } from './core/getInviteDialogStatus'
 import { useTranslation } from 'react-i18next'
 import {
     listenForInvite,
@@ -23,18 +17,7 @@ import {
 } from './core/actions/inviteListener'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../store'
-
-const PENDING_STATUSES: InviteDialogStatus[] = ['loading', 'processing']
-
-const STATUS_TEXT_KEYS: Record<
-    Exclude<InviteDialogStatus, 'wrongAccount'>,
-    string | null
-> = {
-    loading: null,
-    processing: 'users.inviteCompleted',
-    failed: 'users.inviteFailed',
-    unavailable: 'users.invitationGetFail',
-}
+import { OFButton } from '../baseComponents/button/OFButton.tsx'
 
 export interface InviteDialogProps {
     inviteId: string
@@ -44,7 +27,6 @@ export const InviteDialog = ({ inviteId }: InviteDialogProps) => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const invite = useAppSelector(getInviteSelector)
-    const readError = useAppSelector(getInviteReadErrorSelector)
     const currentUser = useAppSelector(getUserSelector)
     const { t } = useTranslation()
 
@@ -56,24 +38,25 @@ export const InviteDialog = ({ inviteId }: InviteDialogProps) => {
     }, [dispatch, inviteId, navigate])
 
     const closeDialog = () => {
-        navigate(window.location.pathname)
+        navigate(window.location.pathname, { replace: true })
     }
 
-    const status = getInviteDialogStatus(invite, readError, currentUser)
-    const pending = PENDING_STATUSES.includes(status)
-    const text =
-        status === 'wrongAccount'
-            ? t('users.inviteWrongAccount', {
-                  account: currentUser?.email || currentUser?.phoneNumber,
-              })
-            : STATUS_TEXT_KEYS[status] && t(STATUS_TEXT_KEYS[status])
+    const status = getInviteDialogStatus(invite)
+    const account =
+        getDataFromProviderDataOrUser(currentUser, 'email') ||
+        getDataFromProviderDataOrUser(currentUser, 'phoneNumber') ||
+        currentUser?.displayName
+    const text = {
+        loading: '',
+        processing: t('users.inviteCompleted'),
+        failed: t('users.inviteFailed'),
+        wrongAccount: t('users.inviteWrongAccount', { account }),
+        unavailable: t('users.invitationGetFail'),
+    }[status]
+    const pending = status === 'loading' || status === 'processing'
 
     return (
-        <Dialog
-            onClose={() => closeDialog()}
-            aria-labelledby="event invitation"
-            open={!!inviteId}
-        >
+        <Dialog onClose={() => closeDialog()} open={!!inviteId}>
             <DialogTitle>{t('users.invitation')}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
@@ -87,15 +70,15 @@ export const InviteDialog = ({ inviteId }: InviteDialogProps) => {
             </DialogContent>
             {status === 'wrongAccount' && (
                 <DialogActions>
-                    <Button onClick={() => closeDialog()}>
-                        {t('users.inviteGoToDashboard')}
-                    </Button>
-                    <Button
-                        variant="contained"
-                        onClick={() => dispatch(signOut())}
+                    <OFButton
+                        onClick={() => closeDialog()}
+                        style={{ design: 'text' }}
                     >
+                        {t('common.close')}
+                    </OFButton>
+                    <OFButton onClick={() => dispatch(signOut())}>
                         {t('users.inviteLogout')}
-                    </Button>
+                    </OFButton>
                 </DialogActions>
             )}
         </Dialog>

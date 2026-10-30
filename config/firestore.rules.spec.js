@@ -696,6 +696,18 @@ describe('Firestore rules', () => {
             await firebase.assertFails(getInviteStranger)
         })
 
+        it('a missing (cancelled) invite reads as not existing, not denied', async () => {
+            const strangerApp = createApp(UID_VIEWER)
+
+            const getMissing = strangerApp
+                .collection('invites')
+                .doc('missing-invite')
+                .get()
+
+            const snapshot = await firebase.assertSucceeds(getMissing)
+            expect(snapshot.exists).toBe(false)
+        })
+
         it('project admin can list the project invites, not another random user', async () => {
             const ownerApp = createApp(UID_OWNER)
             const strangerApp = createApp(UID_VIEWER)

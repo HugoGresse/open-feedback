@@ -91,7 +91,8 @@ service cloud.firestore {
 
         // PROJECTS INVITE
         match /invites/{inviteId} {
-            allow get: if authenticated() && isDestinedToMe(resource.data);
+            // A missing (cancelled) invite reads as not existing, not denied.
+            allow get: if authenticated() && (resource == null || isDestinedToMe(resource.data));
             allow list: if authenticated() && ( ("projectId" in resource.data && isAdmin(projectData(resource.data.projectId))) || isAnOrgViewer(getOrganization(resource.data.organizationId)));
             allow create: if authenticated() && ( ("projectId" in request.resource.data && isAdmin(projectData(request.resource.data.projectId))) || isAnOrgAdmin(getOrganization(request.resource.data.organizationId)));
             allow delete: if authenticated() && ( ("projectId" in resource.data && isAdmin(projectData(resource.data.projectId))) || isAnOrgAdmin(getOrganization(resource.data.organizationId)));
