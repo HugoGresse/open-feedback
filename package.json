@@ -27,14 +27,12 @@
         "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
         "prepare": "husky",
         "exportFirebaseEmulatorsData": "firebase emulators:export ./cypress/fixtures/firebase-emulators-data",
-        "format": "biome format --write",
-        "lighthouse": "lhci autorun --config=./lighthouse/lighthouserc.json"
+        "format": "biome format --write"
     },
     "devDependencies": {
         "@biomejs/biome": "2.5.15",
         "@chromatic-com/storybook": "^5.5.1",
         "@firebase/testing": "^0.20.11",
-        "@lhci/cli": "0.15.1",
         "@storybook/addon-docs": "^10.6.2",
         "@storybook/react-vite": "^10.6.2",
         "@types/luxon": "^3.7.6",

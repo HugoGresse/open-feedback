@@ -1,7 +1,8 @@
 version: 2
 
 # One pull request per month bumping every dependency: GitHub Actions (SHA
-# pins and their version comments) and npm in both the app and functions/.
+# pins and their version comments) and npm in the app, functions/ and the
+# CI-only tool lockfiles (.github/firebase-tools, lighthouse).
 # Minor and patch versions only: major upgrades are done deliberately.
 multi-ecosystem-groups:
   all-dependencies:
@@ -38,7 +39,16 @@ updates:
       - dependency-name: '*'
         update-types: ['version-update:semver-major']
   - package-ecosystem: npm
-    directory: /.github/preview-deploy
+    directory: /.github/firebase-tools
+    patterns: ['*']
+    multi-ecosystem-group: all-dependencies
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+  - package-ecosystem: npm
+    directory: /lighthouse
     patterns: ['*']
     multi-ecosystem-group: all-dependencies
     cooldown:
