@@ -1,13 +1,6 @@
 import Grid from '@mui/material/Grid'
-import { makeStyles } from '@mui/styles'
 import { BooleanVoteButton } from './BooleanVoteButton.tsx'
 import type { VoteItem } from '../../../core/models'
-
-const useStyles = makeStyles(() => ({
-    itemContainer: {
-        margin: -1,
-    },
-}))
 
 interface TalkVoteBooleanProps {
     voteItem: VoteItem
@@ -25,15 +18,13 @@ export const TalkVoteBoolean = ({
     onVoteChange,
     chipColors,
 }: TalkVoteBooleanProps) => {
-    const classes = useStyles()
-
     return (
         <Grid
             item
             xs={6}
             sm={4}
             md={3}
-            className={classes.itemContainer}
+            sx={{ margin: '-1px' }}
             aria-label={voteItem.name ?? undefined}
             data-testid="VoteItem"
         >

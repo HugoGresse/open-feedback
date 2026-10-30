@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { AppLayout } from './AppLayout.tsx'
 import { TalksListWrapper } from './talks/TalksListWrapper.tsx'
@@ -10,7 +9,7 @@ import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { ErrorBoundary } from '../baseComponents/customComponent/ErrorBoundary.tsx'
 import { ALERT_REACT_CATCHED_ERROR_FEEDBACK } from '../utils/alerting/alerts'
 import { useQuery } from '../utils/useQuery'
-import { createFeedbackTheme } from './feedbackTheme'
+import { feedbackThemes } from './feedbackTheme'
 
 export const FeedbackApp = () => {
     const forceColorScheme = useQuery().get('forceColorScheme')
@@ -23,10 +22,7 @@ export const FeedbackApp = () => {
         }
     }
 
-    const theme = useMemo(
-        () => createFeedbackTheme(prefersDarkMode),
-        [prefersDarkMode]
-    )
+    const theme = feedbackThemes[prefersDarkMode ? 'dark' : 'light']
 
     return (
         <ErrorBoundary errorToReport={ALERT_REACT_CATCHED_ERROR_FEEDBACK}>

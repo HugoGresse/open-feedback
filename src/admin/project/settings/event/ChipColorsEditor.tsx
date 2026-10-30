@@ -5,7 +5,6 @@ import IconButton from '@mui/material/IconButton'
 import { newRandomHexColor } from '../../../../utils/colorsUtils'
 import { useTranslation } from 'react-i18next'
 import type { FieldProps } from 'formik'
-import { ChipColorsPreview } from './ChipColorsPreview.tsx'
 
 const useStyles = makeStyles(() => ({
     colorBlock: {
@@ -24,15 +23,13 @@ export const ChipColorsEditor = ({ field, form }: ChipColorsEditorProps) => {
     const { t } = useTranslation()
     const classes = useStyles()
 
-    const onColorChanges = (oldColor: string, newColor: string) => {
+    // By index: two swatches can hold the same color
+    const onColorChanges = (colorIndex: number, newColor: string) => {
         form.setFieldValue(
             field.name,
-            field.value?.map((color) => {
-                if (color === oldColor) {
-                    return newColor
-                }
-                return color
-            })
+            field.value?.map((color, index) =>
+                index === colorIndex ? newColor : color
+            )
         )
     }
 
@@ -44,44 +41,39 @@ export const ChipColorsEditor = ({ field, form }: ChipColorsEditorProps) => {
         ])
     }
 
-    const onColorDeleted = (color: string) => {
+    const onColorDeleted = (colorIndex: number) => {
         form.setFieldValue(
             field.name,
-            field.value?.filter((item) => item !== color)
+            field.value?.filter((_, index) => index !== colorIndex)
         )
     }
 
     return (
-        <>
-            <div id="chipColors">
-                {field.value &&
-                    field.value.map((color, index) => {
-                        return (
-                            <ColorBlock
-                                key={index + color}
-                                color={color}
-                                className={classes.colorBlock}
-                                disabled={form.isSubmitting}
-                                onColorChanged={(newColor) =>
-                                    onColorChanges(color, newColor)
-                                }
-                                onColorDeleted={(color) =>
-                                    onColorDeleted(color)
-                                }
-                            />
-                        )
-                    })}
-                <IconButton
-                    className={classes.addButton}
-                    aria-label={t('settingsEvent.newChipColors')}
-                    disabled={form.isSubmitting}
-                    onClick={() => addColor()}
-                    size="large"
-                >
-                    <AddIcon />
-                </IconButton>
-            </div>
-            <ChipColorsPreview chipColors={field.value} />
-        </>
+        <div id="chipColors">
+            {field.value &&
+                field.value.map((color, index) => {
+                    return (
+                        <ColorBlock
+                            key={index + color}
+                            color={color}
+                            className={classes.colorBlock}
+                            disabled={form.isSubmitting}
+                            onColorChanged={(newColor) =>
+                                onColorChanges(index, newColor)
+                            }
+                            onColorDeleted={() => onColorDeleted(index)}
+                        />
+                    )
+                })}
+            <IconButton
+                className={classes.addButton}
+                aria-label={t('settingsEvent.newChipColors')}
+                disabled={form.isSubmitting}
+                onClick={() => addColor()}
+                size="large"
+            >
+                <AddIcon />
+            </IconButton>
+        </div>
     )
 }

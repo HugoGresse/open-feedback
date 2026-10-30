@@ -3,8 +3,7 @@ import { createTheme } from '@mui/material/styles'
 import { grey } from '@mui/material/colors'
 import { COLORS } from '../constants/colors'
 
-/** Theme of the feedback app, also used by the admin to preview votes. */
-export const createFeedbackTheme = (prefersDarkMode: boolean) =>
+const createFeedbackTheme = (prefersDarkMode: boolean) =>
     responsiveFontSizes(
         createTheme({
             typography: {
@@ -52,3 +51,9 @@ export const createFeedbackTheme = (prefersDarkMode: boolean) =>
             },
         })
     )
+
+/** Themes of the feedback app, also used by the admin to preview votes. */
+export const feedbackThemes = {
+    light: createFeedbackTheme(false),
+    dark: createFeedbackTheme(true),
+}

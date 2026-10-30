@@ -65,6 +65,7 @@ export const ColorBlock = ({
     return (
         <>
             <Color
+                type="button"
                 color={stateColor}
                 className={className}
                 disabled={disabled}

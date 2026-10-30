@@ -1,18 +1,26 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { ThemeProvider } from '@mui/material/styles'
 import { useTranslation } from 'react-i18next'
 import { BooleanVoteButton } from '../../../../feedback/talk/boolean/BooleanVoteButton.tsx'
-import { createFeedbackTheme } from '../../../../feedback/feedbackTheme'
+import { feedbackThemes } from '../../../../feedback/feedbackTheme'
 
-const feedbackThemes = [createFeedbackTheme(false), createFeedbackTheme(true)]
+const themes = [feedbackThemes.light, feedbackThemes.dark]
 
-/** Votes from other attendees, before the admin own vote. */
-const previewItems = [
-    { nameKey: 'settingsEvent.chipColorsPreviewItem1', otherVotes: 4 },
-    { nameKey: 'settingsEvent.chipColorsPreviewItem2', otherVotes: 11 },
-] as const
+// otherVotes: votes from other attendees, before the admin own vote
+const initialItems = [
+    {
+        nameKey: 'settingsEvent.chipColorsPreviewItem1',
+        otherVotes: 4,
+        voted: false,
+    },
+    {
+        nameKey: 'settingsEvent.chipColorsPreviewItem2',
+        otherVotes: 11,
+        voted: true,
+    },
+]
 
 interface ChipColorsPreviewProps {
     /** Hex colors without `#`. */
@@ -22,62 +30,68 @@ interface ChipColorsPreviewProps {
 /**
  * Boolean votes rendered with the feedback app components and themes (light
  * and dark), so the chip colors can be checked while editing them.
+ * Memoized: the nested ThemeProviders would otherwise rebuild the vote styles
+ * on every render of the surrounding form.
  */
-export const ChipColorsPreview = ({ chipColors }: ChipColorsPreviewProps) => {
-    const { t } = useTranslation()
-    // The second item starts voted to show both states
-    const [selected, setSelected] = useState([false, true])
+export const ChipColorsPreview = memo(
+    ({ chipColors }: ChipColorsPreviewProps) => {
+        const { t } = useTranslation()
+        const [items, setItems] = useState(initialItems)
 
-    const toggle = (index: number) =>
-        setSelected((current) =>
-            current.map((isSelected, i) =>
-                i === index ? !isSelected : isSelected
+        const toggle = (nameKey: string) =>
+            setItems((current) =>
+                current.map((item) =>
+                    item.nameKey === nameKey
+                        ? { ...item, voted: !item.voted }
+                        : item
+                )
             )
-        )
 
-    return (
-        <Box sx={{ clear: 'both', paddingTop: 1 }}>
-            <Typography variant="caption" color="textSecondary">
-                {t('settingsEvent.chipColorsPreview')}
-            </Typography>
-            <Box
-                data-testid="ChipColorsPreview"
-                sx={{
-                    display: 'grid',
-                    gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-                    gap: 1,
-                    marginTop: 0.5,
-                }}
-            >
-                {feedbackThemes.map((theme) => (
-                    <ThemeProvider theme={theme} key={theme.palette.mode}>
-                        <Box
-                            sx={{
-                                display: 'grid',
-                                gridTemplateColumns: '1fr 1fr',
-                                padding: 1,
-                                backgroundColor: theme.palette.pageBackground,
-                                border: 1,
-                                borderColor: theme.palette.paperBorder,
-                            }}
-                        >
-                            {previewItems.map((item, index) => (
-                                <BooleanVoteButton
-                                    key={item.nameKey}
-                                    name={t(item.nameKey)}
-                                    isSelected={selected[index]}
-                                    voteResult={
-                                        item.otherVotes +
-                                        (selected[index] ? 1 : 0)
-                                    }
-                                    chipColors={chipColors}
-                                    onClick={() => toggle(index)}
-                                />
-                            ))}
-                        </Box>
-                    </ThemeProvider>
-                ))}
+        return (
+            <Box sx={{ paddingTop: 1 }}>
+                <Typography variant="caption" color="textSecondary">
+                    {t('settingsEvent.chipColorsPreview')}
+                </Typography>
+                <Box
+                    sx={{
+                        display: 'grid',
+                        // Side by side only when the column fits both themes
+                        gridTemplateColumns:
+                            'repeat(auto-fit, minmax(170px, 1fr))',
+                        gap: 1,
+                        marginTop: 0.5,
+                    }}
+                >
+                    {themes.map((theme) => (
+                        <ThemeProvider theme={theme} key={theme.palette.mode}>
+                            <Box
+                                sx={{
+                                    display: 'grid',
+                                    gridTemplateColumns: '1fr 1fr',
+                                    padding: 1,
+                                    backgroundColor:
+                                        theme.palette.pageBackground,
+                                    border: 1,
+                                    borderColor: theme.palette.paperBorder,
+                                }}
+                            >
+                                {items.map((item) => (
+                                    <BooleanVoteButton
+                                        key={item.nameKey}
+                                        name={t(item.nameKey)}
+                                        isSelected={item.voted}
+                                        voteResult={
+                                            item.otherVotes + Number(item.voted)
+                                        }
+                                        chipColors={chipColors}
+                                        onClick={() => toggle(item.nameKey)}
+                                    />
+                                ))}
+                            </Box>
+                        </ThemeProvider>
+                    ))}
+                </Box>
             </Box>
-        </Box>
-    )
-}
+        )
+    }
+)

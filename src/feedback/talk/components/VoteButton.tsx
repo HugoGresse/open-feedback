@@ -52,7 +52,7 @@ export const VoteButton = ({
     const classes = useStyles()
     const paperClasses = `${classes.item} ${
         isSelected ? classes.selectedItem : ''
-    } ${className}`
+    } ${className ?? ''}`
     return (
         <Paper
             elevation={1}
