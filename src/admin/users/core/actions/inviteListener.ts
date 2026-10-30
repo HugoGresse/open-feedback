@@ -7,7 +7,6 @@ import {
     USER_INVITE_GET_SUCCESS,
 } from '../usersActionTypes'
 import { redirectToProject } from '../../../project/utils/redirectToProject'
-import { addNotification } from '../../../notification/notifcationActions'
 import { redirectToOrganization } from '../../../organization/utils/redirectToOrganization'
 
 let stopListenForInvite: (() => void) | undefined
@@ -29,25 +28,25 @@ export const listenForInvite =
                             onInviteCompleted(data, navigate)
                         }
                     } else {
-                        dispatch({ type: USER_INVITE_GET_ERROR })
-                        dispatch(
-                            addNotification({
-                                type: 'error',
-                                i18nkey: 'users.invitationGetFail',
-                            })
-                        )
+                        dispatch({
+                            type: USER_INVITE_GET_ERROR,
+                            payload: 'failed',
+                        })
                     }
                 },
                 (error) => {
+                    // An invite is only readable by the account it was sent
+                    // to, the dialog explains it to the user.
+                    if (error.code === 'permission-denied') {
+                        dispatch({
+                            type: USER_INVITE_GET_ERROR,
+                            payload: 'notAllowed',
+                        })
+                        return
+                    }
                     // biome-ignore lint/suspicious/noConsole: intentional log
                     console.error(error)
-                    dispatch({ type: USER_INVITE_GET_ERROR })
-                    dispatch(
-                        addNotification({
-                            type: 'error',
-                            i18nkey: 'users.invitationGetFail',
-                        })
-                    )
+                    dispatch({ type: USER_INVITE_GET_ERROR, payload: 'failed' })
                 }
             )
     }

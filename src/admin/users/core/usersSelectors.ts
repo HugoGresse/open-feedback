@@ -51,5 +51,8 @@ export const getFilteredUsersWithoutCurrentOneSelector = createAppSelector(
 export const getInviteSelector = (state: RootState) =>
     getUsersState(state).invite
 
+export const getInviteReadErrorSelector = (state: RootState) =>
+    getUsersState(state).inviteReadError
+
 export const getPendingInvitesSelector = (state: RootState) =>
     getUsersState(state).pendingInvites

@@ -2,6 +2,7 @@ import type { Invite, User } from '../../../core/models'
 import {
     GET_USER_DETAILS_SUCCESS,
     type InviteDocument,
+    type InviteReadError,
     USER_INVITE_ADD,
     USER_INVITE_GET_ERROR,
     USER_INVITE_GET_SUCCESS,
@@ -25,6 +26,8 @@ export interface UsersState {
     usersData: Record<string, User>
     /** The listened invite: `{}` while loading, `null` when it can't be read. */
     invite: Partial<InviteDocument> | null
+    /** Set alongside `invite: null`. */
+    inviteReadError: InviteReadError | null
     pendingInvites: Invite[]
     filter: string
 }
@@ -32,6 +35,7 @@ export interface UsersState {
 const initState: UsersState = {
     usersData: {},
     invite: {},
+    inviteReadError: null,
     pendingInvites: [],
     filter: '',
 }
@@ -62,11 +66,13 @@ export const usersReducer = (
             return {
                 ...state,
                 invite: action.payload,
+                inviteReadError: null,
             }
         case USER_INVITE_GET_ERROR:
             return {
                 ...state,
                 invite: null,
+                inviteReadError: action.payload,
             }
         case USER_INVITES_GET_SUCCESS:
             return {

@@ -3,10 +3,19 @@ import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
 import CircularProgress from '@mui/material/CircularProgress'
-import { Box } from '@mui/material'
-import { getInviteSelector } from './core/usersSelectors'
+import { Box, Button } from '@mui/material'
+import {
+    getInviteReadErrorSelector,
+    getInviteSelector,
+} from './core/usersSelectors'
 import { getUserSelector } from '../auth/authSelectors'
+import { signOut } from '../auth/authActions'
+import {
+    getInviteDialogStatus,
+    type InviteDialogStatus,
+} from './core/getInviteDialogStatus'
 import { useTranslation } from 'react-i18next'
 import {
     listenForInvite,
@@ -14,6 +23,18 @@ import {
 } from './core/actions/inviteListener'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../store'
+
+const PENDING_STATUSES: InviteDialogStatus[] = ['loading', 'processing']
+
+const STATUS_TEXT_KEYS: Record<
+    Exclude<InviteDialogStatus, 'wrongAccount'>,
+    string | null
+> = {
+    loading: null,
+    processing: 'users.inviteCompleted',
+    failed: 'users.inviteFailed',
+    unavailable: 'users.invitationGetFail',
+}
 
 export interface InviteDialogProps {
     inviteId: string
@@ -23,6 +44,7 @@ export const InviteDialog = ({ inviteId }: InviteDialogProps) => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const invite = useAppSelector(getInviteSelector)
+    const readError = useAppSelector(getInviteReadErrorSelector)
     const currentUser = useAppSelector(getUserSelector)
     const { t } = useTranslation()
 
@@ -37,26 +59,14 @@ export const InviteDialog = ({ inviteId }: InviteDialogProps) => {
         navigate(window.location.pathname)
     }
 
-    let text = ''
-    let pending = true
-    if (invite) {
-        if (
-            invite.destinationUserInfo &&
-            invite.destinationUserInfo !== currentUser?.email &&
-            invite.destinationUserInfo !== currentUser?.phoneNumber
-        ) {
-            navigate(window.location.pathname)
-        }
-        if (invite.status === 'emailSent') {
-            text = t('users.inviteCompleted')
-        } else if (invite.status === 'error') {
-            text = t('users.inviteFailed')
-            pending = false
-        }
-    } else {
-        text = t('users.inviteAlreadyUsed')
-        pending = false
-    }
+    const status = getInviteDialogStatus(invite, readError, currentUser)
+    const pending = PENDING_STATUSES.includes(status)
+    const text =
+        status === 'wrongAccount'
+            ? t('users.inviteWrongAccount', {
+                  account: currentUser?.email || currentUser?.phoneNumber,
+              })
+            : STATUS_TEXT_KEYS[status] && t(STATUS_TEXT_KEYS[status])
 
     return (
         <Dialog
@@ -64,7 +74,7 @@ export const InviteDialog = ({ inviteId }: InviteDialogProps) => {
             aria-labelledby="event invitation"
             open={!!inviteId}
         >
-            <DialogTitle>Event invitation</DialogTitle>
+            <DialogTitle>{t('users.invitation')}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                     {text}
@@ -75,6 +85,19 @@ export const InviteDialog = ({ inviteId }: InviteDialogProps) => {
                     </Box>
                 )}
             </DialogContent>
+            {status === 'wrongAccount' && (
+                <DialogActions>
+                    <Button onClick={() => closeDialog()}>
+                        {t('users.inviteGoToDashboard')}
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={() => dispatch(signOut())}
+                    >
+                        {t('users.inviteLogout')}
+                    </Button>
+                </DialogActions>
+            )}
         </Dialog>
     )
 }
