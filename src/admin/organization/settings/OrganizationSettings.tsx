@@ -15,6 +15,7 @@ import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
 import { getUserIdSelector } from '../../auth/authSelectors'
 import { DeleteOrganization } from './DeleteOrganization.tsx'
+import { getOrganizationNameToSave } from '../utils/organizationName'
 
 export interface OrganizationSettingsProps {
     onClose: () => void
@@ -28,8 +29,8 @@ export const OrganizationSettings = ({
     const { t } = useTranslation()
     const organization = useAppSelector(getSelectedOrganizationSelector)
     const userId = useAppSelector(getUserIdSelector)
-    // Only the owner can delete the organization (see firestore.rules)
-    const isOwner = !!organization && organization.ownerUserId === userId
+    // Only the owner can delete the organization (see the deleteOrganization function)
+    const isOwner = organization?.ownerUserId === userId
     const dispatch = useAppDispatch()
 
     return (
@@ -46,18 +47,28 @@ export const OrganizationSettings = ({
             <DialogContent>
                 <Formik
                     validationSchema={object().shape({
-                        name: string().required(t('organization.nameRequired')),
+                        name: string()
+                            .trim()
+                            .required(t('organization.nameRequired')),
                     })}
+                    // Follows an inline rename saved while the dialog opens
+                    enableReinitialize
                     initialValues={{
                         // Only displayed while an organization is loaded.
                         name: organization?.name ?? '',
                     }}
                     onSubmit={(values) => {
-                        return dispatch(
-                            editOrganization({
-                                name: values.name,
-                            })
-                        ).then(() => onClose())
+                        const name = getOrganizationNameToSave(
+                            organization?.name ?? '',
+                            values.name
+                        )
+                        if (!name) {
+                            onClose()
+                            return
+                        }
+                        return dispatch(editOrganization({ name })).then(() =>
+                            onClose()
+                        )
                     }}
                 >
                     {({ isSubmitting }) => (
@@ -105,10 +116,7 @@ export const OrganizationSettings = ({
                             <DeleteOrganization
                                 organizationId={organization.id}
                                 organizationName={organization.name}
-                                onDeleted={() => {
-                                    onClose()
-                                    onOrganizationDeleted()
-                                }}
+                                onDeleted={onOrganizationDeleted}
                             />
                         </Box>
                     </>

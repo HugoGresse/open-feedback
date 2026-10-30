@@ -69,12 +69,12 @@ export class Organization {
     }
 
     renameInline(name) {
-        cy.get('h2[role=button]').click()
+        cy.get('h2 button').click()
         cy.get('input[name=organizationName]').clear().type(`${name}{enter}`)
     }
 
     cancelInlineRename(name) {
-        cy.get('h2[role=button]').click()
+        cy.get('h2 button').click()
         cy.get('input[name=organizationName]').clear().type(`${name}{esc}`)
     }
 

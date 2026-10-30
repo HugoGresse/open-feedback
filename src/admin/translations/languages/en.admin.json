@@ -173,11 +173,12 @@
             "sectionDescription": "Deleting the organization removes it with its members, roles, voting form, theme and API key. The events must be deleted first.",
             "button": "Delete organization",
             "confirmTitle": "Are you sure you want to delete the organization?",
-            "confirmDescription": "Deleting the organization is definitive: its members, roles, voting form, theme, API key and pending invites will be deleted.",
+            "confirmDescription": "Deleting the organization is definitive: its members, roles, voting form, theme and images, API key and invites will be deleted.",
             "typeName": "To confirm, type the organization name \"{{name}}\" below.",
             "typeNameLabel": "Organization name to confirm the deletion",
             "hasEventsDescription": "This organization still has events ({{count}}). Delete them first, then you will be able to delete the organization.",
             "hasEvents": "This organization still has events. Delete them first.",
+            "permissionDenied": "Only the organization owner can delete the organization.",
             "success": "Organization deleted!",
             "fail": "Failed to delete the organization, "
         }

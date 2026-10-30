@@ -86,10 +86,6 @@ export const adminOrganizationReducer = (
                         (organization) => organization.id !== action.payload
                     ),
                 },
-                selectedOrganizationId:
-                    state.selectedOrganizationId === action.payload
-                        ? null
-                        : state.selectedOrganizationId,
             }
         default:
             return state

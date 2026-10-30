@@ -104,9 +104,13 @@ service cloud.firestore {
         match /organizations/{organizationId} {
             allow get: if authenticated() && (isAnOrgViewer(resource.data) || isSuperAdmin(request.auth.uid) );
             allow list: if authenticated() && (isAnOrgViewer(resource.data) || isSuperAdmin(request.auth.uid) );
-            allow create: if authenticated();
+            // The creator must be the owner: a stale write (set with merge) on a
+            // deleted organization must not recreate it as an ownerless doc.
+            allow create: if authenticated() && request.resource.data.ownerUserId == request.auth.uid;
             allow update: if authenticated() && ((isAnOrgAdmin(resource.data) && request.resource.data.ownerUserId == resource.data.ownerUserId) || isOrgOwner(resource.data) );
-            allow delete: if authenticated() && isOrgOwner(resource.data);
+            // Only through the deleteOrganization function, which checks there
+            // are no events left and cleans up the invites, images...
+            allow delete: if false;
 
             // Private, member-only data (e.g. the organization API key). Never
             // exposed on the org doc itself. Mirrors projects/{id}/private.

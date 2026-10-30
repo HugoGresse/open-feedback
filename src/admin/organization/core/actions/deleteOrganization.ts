@@ -1,68 +1,60 @@
 import type { AppThunk } from '../../../../store'
-import { fireStoreMainInstance } from '../../../../firebase.ts'
+import { functions } from '../../../../firebase.ts'
 import { addNotification } from '../../../notification/notifcationActions'
 import { DELETE_ORGANIZATION_SUCCESS } from '../organizationActionTypes'
-import { ORGANIZATION_PRIVATE_COLLECTION } from './updateOrganizationApiKey'
+import { unselectOrganization } from './selectUnselectActions'
+
+const getErrorCode = (error: unknown): unknown =>
+    typeof error === 'object' && error !== null && 'code' in error
+        ? error.code
+        : undefined
 
 /**
- * Delete an organization, its private docs (API key) and its invites, in one
- * batch. Refused while the organization still has events: they must be deleted
- * (or moved) first, so no event is ever left pointing to a missing
- * organization. Only the owner is allowed to do this by the Firestore rules.
+ * Delete an organization through the deleteOrganization function, which only
+ * allows its owner, refuses while it still has events and also deletes its API
+ * key, invites and images.
  *
  * Resolves to true once deleted.
  */
 export const deleteOrganization =
     (organizationId: string): AppThunk<Promise<boolean>> =>
     async (dispatch) => {
-        const organizationRef = fireStoreMainInstance
-            .collection('organizations')
-            .doc(organizationId)
-
         try {
-            const projects = await fireStoreMainInstance
-                .collection('projects')
-                .where('organizationId', '==', organizationId)
-                .limit(1)
-                .get()
-            if (!projects.empty) {
+            await functions.deleteOrganization({ organizationId })
+        } catch (error: unknown) {
+            // biome-ignore lint/suspicious/noConsole: intentional log
+            console.error(error)
+            // Callable errors codes are prefixed by the "functions/" service
+            const code = getErrorCode(error)
+            if (code === 'functions/failed-precondition') {
                 dispatch(
                     addNotification({
                         type: 'error',
                         i18nkey: 'organization.delete.hasEvents',
                     })
                 )
-                return false
+            } else if (code === 'functions/permission-denied') {
+                dispatch(
+                    addNotification({
+                        type: 'error',
+                        i18nkey: 'organization.delete.permissionDenied',
+                    })
+                )
+            } else {
+                dispatch(
+                    addNotification({
+                        type: 'error',
+                        i18nkey: 'organization.delete.fail',
+                        message: String(error),
+                    })
+                )
             }
-
-            const [privateDocs, invites] = await Promise.all([
-                organizationRef
-                    .collection(ORGANIZATION_PRIVATE_COLLECTION)
-                    .get(),
-                fireStoreMainInstance
-                    .collection('invites')
-                    .where('organizationId', '==', organizationId)
-                    .get(),
-            ])
-
-            const batch = fireStoreMainInstance.batch()
-            privateDocs.forEach((doc) => batch.delete(doc.ref))
-            invites.forEach((doc) => batch.delete(doc.ref))
-            batch.delete(organizationRef)
-            await batch.commit()
-        } catch (err: unknown) {
-            // biome-ignore lint/suspicious/noConsole: intentional log
-            console.error(err)
-            dispatch(
-                addNotification({
-                    type: 'error',
-                    i18nkey: 'organization.delete.fail',
-                    message: String(err),
-                })
-            )
             return false
         }
 
+        // Unselected first: the organization page shows a loader, not a 404,
+        // until the caller closes it
+        await dispatch(unselectOrganization())
         dispatch({
             type: DELETE_ORGANIZATION_SUCCESS,
             payload: organizationId,

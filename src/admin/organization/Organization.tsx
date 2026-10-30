@@ -37,8 +37,8 @@ export const Organization = ({ match, children }: OrganizationProps) => {
     const irOrganizationsLoaded = useAppSelector(isOrganizationsLoadedSelector)
 
     if (selectedOrganization) return children
-    // Not selected yet, or unselected once deleted (until the modal closes)
-    if (!selectedOrganizationId) return <LoaderMatchParent />
-    if (irOrganizationsLoaded) return <Layout404 />
+    // Not a 404 while not selected yet, or unselected once deleted (until the
+    // modal closes)
+    if (selectedOrganizationId && irOrganizationsLoaded) return <Layout404 />
     return <LoaderMatchParent />
 }

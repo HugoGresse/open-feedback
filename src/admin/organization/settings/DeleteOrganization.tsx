@@ -13,7 +13,8 @@ import { OFInput } from '../../baseComponents/form/input/OFInput.tsx'
 import { useAppDispatch, useAppSelector } from '../../../store'
 import { getSortedProjectsByOrganizationIdsSelector } from '../../project/core/projectSelectors'
 import { deleteOrganization } from '../core/actions/deleteOrganization'
-import { isOrganizationDeleteConfirmed } from '../utils/organizationNameEdit'
+import { isOrganizationDeleteConfirmed } from '../utils/organizationName'
+import { isComposingKeyEvent } from '../../../utils/isComposingKeyEvent'
 
 const DANGER_COLOR = '#FF2222'
 
@@ -30,6 +31,8 @@ export const DeleteOrganization = ({
 }: DeleteOrganizationProps) => {
     const { t } = useTranslation()
     const dispatch = useAppDispatch()
+    // Only a hint: the store may miss events deleted or created by another
+    // member, the deleteOrganization function makes the actual check
     const eventCount = useAppSelector(
         (state) =>
             getSortedProjectsByOrganizationIdsSelector(state)[organizationId]
@@ -41,7 +44,6 @@ export const DeleteOrganization = ({
 
     const hasEvents = eventCount > 0
     const canDelete =
-        !hasEvents &&
         !isDeleting &&
         isOrganizationDeleteConfirmed(organizationName, typedName)
 
@@ -90,49 +92,48 @@ export const DeleteOrganization = ({
                         component="div"
                     >
                         <br />
-                        {hasEvents ? (
-                            <b>
-                                {t('organization.delete.hasEventsDescription', {
-                                    count: eventCount,
-                                })}
-                            </b>
-                        ) : (
-                            <>
+                        {hasEvents && (
+                            <p>
                                 <b>
                                     {t(
-                                        'organization.delete.confirmDescription'
+                                        'organization.delete.hasEventsDescription',
+                                        { count: eventCount }
                                     )}
                                 </b>
-                                <p>
-                                    {t('organization.delete.typeName', {
-                                        name: organizationName,
-                                    })}
-                                </p>
-                            </>
+                            </p>
                         )}
+                        <b>{t('organization.delete.confirmDescription')}</b>
+                        <p>
+                            {t('organization.delete.typeName', {
+                                name: organizationName,
+                            })}
+                        </p>
                     </DialogContentText>
-                    {!hasEvents && (
-                        <Box marginTop={1}>
-                            <OFInput
-                                autoFocus
-                                name="confirmOrganizationName"
-                                placeholder={organizationName}
-                                value={typedName}
-                                disabled={isDeleting}
-                                onChange={(event) =>
-                                    setTypedName(event.target.value)
+                    <Box marginTop={1}>
+                        <OFInput
+                            autoFocus
+                            name="confirmOrganizationName"
+                            placeholder={organizationName}
+                            value={typedName}
+                            disabled={isDeleting}
+                            onChange={(event) =>
+                                setTypedName(event.target.value)
+                            }
+                            onKeyDown={(event) => {
+                                if (
+                                    event.key === 'Enter' &&
+                                    !isComposingKeyEvent(event)
+                                ) {
+                                    onConfirm()
                                 }
-                                onKeyDown={(event) => {
-                                    if (event.key === 'Enter') onConfirm()
-                                }}
-                                inputProps={{
-                                    'aria-label': t(
-                                        'organization.delete.typeNameLabel'
-                                    ),
-                                }}
-                            />
-                        </Box>
-                    )}
+                            }}
+                            inputProps={{
+                                'aria-label': t(
+                                    'organization.delete.typeNameLabel'
+                                ),
+                            }}
+                        />
+                    </Box>
                 </DialogContent>
                 <DialogActions>
                     <OFButton

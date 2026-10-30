@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest'
 import {
     getOrganizationNameToSave,
     isOrganizationDeleteConfirmed,
-} from './organizationNameEdit'
+} from './organizationName'
 
 describe('getOrganizationNameToSave', () => {
     test('returns the trimmed new name', () => {

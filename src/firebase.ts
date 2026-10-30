@@ -31,6 +31,9 @@ export const arrayUnionField = firebase.firestore.FieldValue.arrayUnion
 export const functions = {
     alert: firebase.functions().httpsCallable('alert'),
     deleteProject: firebase.functions().httpsCallable('deleteProject'),
+    deleteOrganization: firebase
+        .functions()
+        .httpsCallable('deleteOrganization'),
 }
 export const HttpsFunctionsUrl = {
     sendContactEmail: isUsingEmulators

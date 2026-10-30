@@ -3,64 +3,18 @@ import { deleteOrganization } from './deleteOrganization'
 import {
     DELETE_ORGANIZATION_SUCCESS,
     GET_ORGANIZATIONS_SUCCESS,
-    SELECT_ORGANIZATION,
 } from '../organizationActionTypes'
 import { adminOrganizationReducer } from '../organizationReducer'
 import type { Organization } from '../../../../core/models'
 import type { AppDispatch, RootState } from '../../../../store'
 
-type FakeDoc = { ref: string }
-type FakeSnapshot = {
-    empty: boolean
-    forEach: (callback: (doc: FakeDoc) => void) => void
-}
+const deleteOrganizationCallable = vi.hoisted(() => vi.fn())
 
-const snapshot = (refs: string[]): FakeSnapshot => ({
-    empty: refs.length === 0,
-    forEach: (callback) => refs.forEach((ref) => callback({ ref })),
-})
-
-const firestore = vi.hoisted(() => ({
-    projects: [] as string[],
-    privateDocs: [] as string[],
-    invites: [] as string[],
-    commit: vi.fn(),
-    deleted: [] as string[],
+vi.mock('../../../../firebase.ts', () => ({
+    functions: { deleteOrganization: deleteOrganizationCallable },
 }))
-
-vi.mock('../../../../firebase.ts', () => {
-    const query = (getRefs: () => string[]) => {
-        const q = {
-            where: () => q,
-            limit: () => q,
-            get: () => Promise.resolve(snapshot(getRefs())),
-        }
-        return q
-    }
-    return {
-        fireStoreMainInstance: {
-            collection: (name: string) => {
-                if (name === 'projects') return query(() => firestore.projects)
-                if (name === 'invites') return query(() => firestore.invites)
-                return {
-                    doc: (id: string) => ({
-                        id: `organizations/${id}`,
-                        collection: () => query(() => firestore.privateDocs),
-                    }),
-                }
-            },
-            batch: () => ({
-                delete: (ref: string | { id: string }) =>
-                    firestore.deleted.push(
-                        typeof ref === 'string' ? ref : ref.id
-                    ),
-                commit: firestore.commit,
-            }),
-        },
-    }
-})
-vi.mock('./updateOrganizationApiKey', () => ({
-    ORGANIZATION_PRIVATE_COLLECTION: 'private',
+vi.mock('./selectUnselectActions', () => ({
+    unselectOrganization: () => ({ type: 'unselectOrganization' }),
 }))
 vi.mock('../../../notification/notifcationActions', () => ({
     addNotification: (notification: unknown) => ({
@@ -80,29 +34,31 @@ const run = async () => {
     return { dispatch, result }
 }
 
+const notification = (dispatch: ReturnType<typeof vi.fn>) =>
+    dispatch.mock.calls
+        .map(([action]) => action)
+        .find((action) => action.type === 'notification')?.notification
+
 beforeEach(() => {
-    firestore.projects = []
-    firestore.privateDocs = []
-    firestore.invites = []
-    firestore.deleted = []
-    firestore.commit.mockReset().mockResolvedValue(undefined)
+    deleteOrganizationCallable.mockReset()
     vi.spyOn(console, 'error').mockImplementation(() => undefined)
 })
 
 describe('deleteOrganization', () => {
-    test('deletes the organization, its private docs and invites in one batch', async () => {
-        firestore.privateDocs = ['private/integration']
-        firestore.invites = ['invites/i1', 'invites/i2']
+    test('calls the function, then unselects and removes the organization', async () => {
+        deleteOrganizationCallable.mockResolvedValue({})
 
         const { dispatch, result } = await run()
 
         expect(result).toBe(true)
-        expect(firestore.commit).toHaveBeenCalledTimes(1)
-        expect(firestore.deleted).toEqual([
-            'private/integration',
-            'invites/i1',
-            'invites/i2',
-            'organizations/org1',
+        expect(deleteOrganizationCallable).toHaveBeenCalledWith({
+            organizationId: 'org1',
+        })
+        // Unselected first, so the organization page does not render a 404
+        const types = dispatch.mock.calls.map(([action]) => action.type)
+        expect(types.slice(0, 2)).toEqual([
+            'unselectOrganization',
+            DELETE_ORGANIZATION_SUCCESS,
         ])
         expect(dispatch).toHaveBeenCalledWith({
             type: DELETE_ORGANIZATION_SUCCESS,
@@ -110,56 +66,41 @@ describe('deleteOrganization', () => {
         })
     })
 
-    test('refuses to delete an organization which still has events', async () => {
-        firestore.projects = ['projects/p1']
+    test.each([
+        ['functions/failed-precondition', 'organization.delete.hasEvents'],
+        ['functions/permission-denied', 'organization.delete.permissionDenied'],
+    ])('reports a %s error', async (code, i18nkey) => {
+        deleteOrganizationCallable.mockRejectedValue({ code })
 
         const { dispatch, result } = await run()
 
         expect(result).toBe(false)
-        expect(firestore.commit).not.toHaveBeenCalled()
-        expect(dispatch).toHaveBeenCalledWith({
-            type: 'notification',
-            notification: {
-                type: 'error',
-                i18nkey: 'organization.delete.hasEvents',
-            },
-        })
+        expect(notification(dispatch)).toEqual({ type: 'error', i18nkey })
         expect(dispatch).not.toHaveBeenCalledWith(
             expect.objectContaining({ type: DELETE_ORGANIZATION_SUCCESS })
         )
     })
 
-    test('reports a failed deletion and keeps the organization', async () => {
-        firestore.commit.mockRejectedValue(new Error('permission-denied'))
+    test('reports any other error with its message', async () => {
+        deleteOrganizationCallable.mockRejectedValue(new Error('internal'))
 
         const { dispatch, result } = await run()
 
         expect(result).toBe(false)
-        expect(dispatch).toHaveBeenCalledWith({
-            type: 'notification',
-            notification: {
-                type: 'error',
-                i18nkey: 'organization.delete.fail',
-                message: 'Error: permission-denied',
-            },
+        expect(notification(dispatch)).toEqual({
+            type: 'error',
+            i18nkey: 'organization.delete.fail',
+            message: 'Error: internal',
         })
-        expect(dispatch).not.toHaveBeenCalledWith(
-            expect.objectContaining({ type: DELETE_ORGANIZATION_SUCCESS })
-        )
     })
 })
 
 describe('adminOrganizationReducer on delete', () => {
-    const org = (id: string) => ({ id, name: id }) as Organization
-
-    test('removes the organization and unselects it', () => {
+    test('removes the deleted organization', () => {
+        const org = (id: string) => ({ id, name: id }) as Organization
         let state = adminOrganizationReducer(undefined, {
             type: GET_ORGANIZATIONS_SUCCESS,
             payload: [org('org1'), org('org2')],
-        })
-        state = adminOrganizationReducer(state, {
-            type: SELECT_ORGANIZATION,
-            payload: 'org1',
         })
 
         state = adminOrganizationReducer(state, {
@@ -168,20 +109,5 @@ describe('adminOrganizationReducer on delete', () => {
         })
 
         expect(state.data.organizations.map((o) => o.id)).toEqual(['org2'])
-        expect(state.selectedOrganizationId).toBeNull()
-    })
-
-    test('keeps another selected organization selected', () => {
-        let state = adminOrganizationReducer(undefined, {
-            type: SELECT_ORGANIZATION,
-            payload: 'org2',
-        })
-
-        state = adminOrganizationReducer(state, {
-            type: DELETE_ORGANIZATION_SUCCESS,
-            payload: 'org1',
-        })
-
-        expect(state.selectedOrganizationId).toBe('org2')
     })
 })

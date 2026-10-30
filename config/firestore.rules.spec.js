@@ -19,15 +19,21 @@ function createApp(uid = UID_VIEWER) {
     return firebase.initializeTestApp({ projectId, auth }).firestore()
 }
 
+function createAdminApp() {
+    return firebase.initializeAdminApp({ projectId }).firestore()
+}
+
+// Seeded with the admin app: the create rule only lets the owner create an
+// organization, and most tests need one owned by someone else.
 const createOrg = async (
-    app,
+    _app,
     orgId,
     viewerUserIds = [],
     editorUserIds = [],
     adminUserIds = [],
     ownerUserId = null
 ) => {
-    await app.collection('organizations').doc(orgId).set(
+    await createAdminApp().collection('organizations').doc(orgId).set(
         {
             organizationName: orgId,
             viewerUserIds,
@@ -634,7 +640,7 @@ describe('Firestore rules', () => {
             await firebase.assertFails(setBackOrgOwner)
         })
 
-        it('can delete an organization with owner role', async () => {
+        it('cannot delete an organization directly with owner role (done by the deleteOrganization function)', async () => {
             const ownerApp = createApp(UID_OWNER)
             await createOrg(ownerApp, 'FirstOrg', [], [], [], UID_OWNER)
 
@@ -642,40 +648,46 @@ describe('Firestore rules', () => {
                 .collection('organizations')
                 .doc('FirstOrg')
                 .delete()
-            await firebase.assertSucceeds(deleteOrg)
+            await firebase.assertFails(deleteOrg)
+        })
+    })
+
+    describe('Organization/create', () => {
+        it('can create an organization as its owner', async () => {
+            const app = createApp(UID_OWNER)
+
+            const createOrganization = app
+                .collection('organizations')
+                .doc('NewOrg')
+                .set({
+                    name: 'NewOrg',
+                    ownerUserId: UID_OWNER,
+                    adminUserIds: [UID_OWNER],
+                    editorUserIds: [UID_OWNER],
+                    viewerUserIds: [UID_OWNER],
+                })
+            await firebase.assertSucceeds(createOrganization)
         })
 
-        it('can delete an organization with its private docs and invites in one batch with owner role', async () => {
-            const ownerApp = createApp(UID_OWNER)
-            // Like the admin app does, the owner has every role
-            await createOrg(
-                ownerApp,
-                'FirstOrg',
-                [UID_OWNER],
-                [UID_OWNER],
-                [UID_OWNER],
-                UID_OWNER
-            )
-            const orgRef = ownerApp.collection('organizations').doc('FirstOrg')
-            await orgRef
-                .collection('private')
-                .doc('integration')
-                .set({ apiKey: 'key' })
-            const invite = await ownerApp.collection('invites').add({
-                organizationId: 'FirstOrg',
-            })
+        it('cannot create an organization owned by someone else', async () => {
+            const app = createApp(UID_ADMIN)
 
-            const invites = await ownerApp
-                .collection('invites')
-                .where('organizationId', '==', 'FirstOrg')
-                .get()
-            expect(invites.size).toBe(1)
+            const createOrganization = app
+                .collection('organizations')
+                .doc('NewOrg')
+                .set({ name: 'NewOrg', ownerUserId: UID_OWNER })
+            await firebase.assertFails(createOrganization)
+        })
 
-            const batch = ownerApp.batch()
-            batch.delete(orgRef.collection('private').doc('integration'))
-            batch.delete(invite)
-            batch.delete(orgRef)
-            await firebase.assertSucceeds(batch.commit())
+        it('cannot recreate a deleted organization with a stale merge write', async () => {
+            const app = createApp(UID_ADMIN)
+
+            // e.g. a rename from a tab opened before the organization was deleted
+            const staleRename = app
+                .collection('organizations')
+                .doc('DeletedOrg')
+                .set({ name: 'Renamed' }, { merge: true })
+            await firebase.assertFails(staleRename)
         })
     })
 
