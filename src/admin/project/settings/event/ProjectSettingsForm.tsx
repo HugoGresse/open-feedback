@@ -10,6 +10,7 @@ import { useAppDispatch } from '../../../../store'
 import type { Theme } from '@mui/material/styles'
 import type { AdminProject } from '../../core/projectActionTypes'
 import { ChipColorsEditor } from './ChipColorsEditor.tsx'
+import { ChipColorsPreview } from './ChipColorsPreview.tsx'
 import { OFFormControlInputFormiked } from '../../../baseComponents/form/formControl/OFFormControlInputFormiked.tsx'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { OFSwitch } from '../../../baseComponents/form/switch/OFSwitch.tsx'
@@ -201,6 +202,7 @@ export const ProjectSettingsForm = ({ project }: ProjectSettingsFormProps) => {
                                     component={ChipColorsEditor}
                                 />
                             </OFFormControl>
+                            <ChipColorsPreview chipColors={values.chipColors} />
                         </Grid>
 
                         <Grid item xs={12} className={classes.buttonContainer}>

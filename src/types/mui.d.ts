@@ -1,6 +1,6 @@
 import '@mui/material/styles'
 
-// Custom palette entries of the feedback app theme (src/feedback/FeedbackApp.tsx).
+// Custom palette entries of the feedback app theme (src/feedback/feedbackTheme.ts).
 interface OpenFeedbackPalette {
     pageBackground: string
     headerShadow: string

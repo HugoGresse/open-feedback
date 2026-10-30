@@ -52,13 +52,14 @@ export const VoteButton = ({
     const classes = useStyles()
     const paperClasses = `${classes.item} ${
         isSelected ? classes.selectedItem : ''
-    } ${className}`
+    } ${className ?? ''}`
     return (
         <Paper
             elevation={1}
             className={paperClasses}
             onClick={onClick}
             component="button"
+            type="button"
         >
             {children}
             <VoteButtonBackground colors={chipColors} count={count} />
