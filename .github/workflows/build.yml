@@ -63,10 +63,10 @@ jobs:
             - name: build functions/
               working-directory: ./functions
               run: npm run build
+            # @lhci/cli is a devDependency, pinned by package-lock.json.
             - name: run lighthouse ci
               run: |
-                  npm install -g @lhci/cli@0.14.x
-                  lhci autorun --config=./lighthouse/lighthouserc.json
+                  npm run lighthouse
               env:
                   # Empty on fork PRs: results are still uploaded to temporary
                   # public storage, only the GitHub status check is skipped.

@@ -15,14 +15,30 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Google access is keyless (Workload Identity Federation) once the
+# PROD_WIF_PROVIDER and PROD_SERVICE_ACCOUNT repository variables are set. The
+# provider only accepts this workflow, on main, for this repository. Until
+# then the deploy falls back to the FIREBASE_SERVICE_ACCOUNT_OPEN_FEEDBACK_42
+# JSON key; drop that fallback once the key is deleted.
+env:
+  PROD_PROJECT_ID: open-feedback-42
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # Workload Identity Federation
     steps:
       - name: check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - name: set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
       - name: install dependencies
         run: npm ci
       - name: build the app
@@ -44,10 +60,22 @@ jobs:
           VITE_OPEN_SPONSORS: ${{ secrets.OF_VITE_OPEN_SPONSORS }}
           VITE_EMULATORS: ${{ secrets.OF_VITE_EMULATORS }}
           VITE_API_DOCS_URL: ${{ secrets.OF_VITE_API_DOCS_URL }}
+
+      - name: authenticate to Google Cloud
+        if: vars.PROD_WIF_PROVIDER != ''
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        with:
+          workload_identity_provider: ${{ vars.PROD_WIF_PROVIDER }}
+          service_account: ${{ vars.PROD_SERVICE_ACCOUNT }}
       - name: deploy to Firebase Hosting
+        if: vars.PROD_WIF_PROVIDER != ''
+        run: node_modules/.bin/firebase deploy --only hosting --project "$PROD_PROJECT_ID" --non-interactive
+
+      - name: deploy to Firebase Hosting (JSON key fallback)
+        if: vars.PROD_WIF_PROVIDER == ''
         uses: FirebaseExtended/action-hosting-deploy@500ac625ca2dd40cbd15f7659af953801858032a # v0.11.0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_OPEN_FEEDBACK_42 }}
           channelId: live
-          projectId: open-feedback-42
+          projectId: ${{ env.PROD_PROJECT_ID }}
