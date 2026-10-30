@@ -67,4 +67,23 @@ export class Organization {
     setOrganizationName(name) {
         cy.get('input[name=name]').clear().type(name)
     }
+
+    renameInline(name) {
+        cy.get('h2[role=button]').click()
+        cy.get('input[name=organizationName]').clear().type(`${name}{enter}`)
+    }
+
+    cancelInlineRename(name) {
+        cy.get('h2[role=button]').click()
+        cy.get('input[name=organizationName]').clear().type(`${name}{esc}`)
+    }
+
+    deleteOrganization(name) {
+        cy.contains('button', 'Delete organization').click()
+        cy.get('[aria-labelledby=delete-org-dialog-title]').within(() => {
+            cy.contains('button', 'Delete organization').should('be.disabled')
+            cy.get('input[name=confirmOrganizationName]').type(name)
+            cy.contains('button', 'Delete organization').click()
+        })
+    }
 }

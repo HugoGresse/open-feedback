@@ -644,6 +644,39 @@ describe('Firestore rules', () => {
                 .delete()
             await firebase.assertSucceeds(deleteOrg)
         })
+
+        it('can delete an organization with its private docs and invites in one batch with owner role', async () => {
+            const ownerApp = createApp(UID_OWNER)
+            // Like the admin app does, the owner has every role
+            await createOrg(
+                ownerApp,
+                'FirstOrg',
+                [UID_OWNER],
+                [UID_OWNER],
+                [UID_OWNER],
+                UID_OWNER
+            )
+            const orgRef = ownerApp.collection('organizations').doc('FirstOrg')
+            await orgRef
+                .collection('private')
+                .doc('integration')
+                .set({ apiKey: 'key' })
+            const invite = await ownerApp.collection('invites').add({
+                organizationId: 'FirstOrg',
+            })
+
+            const invites = await ownerApp
+                .collection('invites')
+                .where('organizationId', '==', 'FirstOrg')
+                .get()
+            expect(invites.size).toBe(1)
+
+            const batch = ownerApp.batch()
+            batch.delete(orgRef.collection('private').doc('integration'))
+            batch.delete(invite)
+            batch.delete(orgRef)
+            await firebase.assertSucceeds(batch.commit())
+        })
     })
 
     describe('invites', () => {

@@ -11,16 +11,25 @@ import SaveIcon from '@mui/icons-material/Save'
 import Box from '@mui/material/Box'
 import { editOrganization } from '../core/actions/editOrganization'
 import { useAppDispatch, useAppSelector } from '../../../store'
+import Divider from '@mui/material/Divider'
+import Typography from '@mui/material/Typography'
+import { getUserIdSelector } from '../../auth/authSelectors'
+import { DeleteOrganization } from './DeleteOrganization.tsx'
 
 export interface OrganizationSettingsProps {
     onClose: () => void
+    onOrganizationDeleted: () => void
 }
 
 export const OrganizationSettings = ({
     onClose,
+    onOrganizationDeleted,
 }: OrganizationSettingsProps) => {
     const { t } = useTranslation()
     const organization = useAppSelector(getSelectedOrganizationSelector)
+    const userId = useAppSelector(getUserIdSelector)
+    // Only the owner can delete the organization (see firestore.rules)
+    const isOwner = !!organization && organization.ownerUserId === userId
     const dispatch = useAppDispatch()
 
     return (
@@ -83,6 +92,27 @@ export const OrganizationSettings = ({
                         </Form>
                     )}
                 </Formik>
+                {organization && isOwner && (
+                    <>
+                        <Divider />
+                        <Box marginTop={2} marginBottom={1}>
+                            <Typography variant="h6">
+                                {t('organization.delete.sectionTitle')}
+                            </Typography>
+                            <Typography variant="body2" marginBottom={1}>
+                                {t('organization.delete.sectionDescription')}
+                            </Typography>
+                            <DeleteOrganization
+                                organizationId={organization.id}
+                                organizationName={organization.name}
+                                onDeleted={() => {
+                                    onClose()
+                                    onOrganizationDeleted()
+                                }}
+                            />
+                        </Box>
+                    </>
+                )}
             </DialogContent>
         </Dialog>
     )
