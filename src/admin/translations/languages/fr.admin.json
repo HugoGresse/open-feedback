@@ -54,6 +54,11 @@
     "dashboard": {
         "comments": "Commentaires",
         "commentsPerUser": "Commentaires par utilisateur",
+        "export": "Exporter",
+        "exportJson": "JSON : présentations, votes et commentaires",
+        "exportCsvTalks": "CSV : votes par présentation",
+        "exportCsvComments": "CSV : commentaires",
+        "exportError": "L'export a échoué, veuillez réessayer.",
         "highlights": "Chiffres clé",
         "mostVoted": "Les plus votés",
         "leastVotedTalks": "Les moins votés",

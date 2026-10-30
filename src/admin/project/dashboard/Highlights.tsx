@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { TranslatedTypography } from '../../baseComponents/TranslatedTypography.tsx'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import { makeStyles } from '@mui/styles'
+import { ExportButton } from './export/ExportButton.tsx'
 
 const useStyles = makeStyles({
     count: {
@@ -47,6 +48,7 @@ export const Highlights = () => {
         <DashboardCard
             title={t('dashboard.highlights')}
             titleIcon={<WhatshotIcon />}
+            rightChildren={<ExportButton />}
         >
             <NoData
                 datas={[
