@@ -65,7 +65,8 @@ jobs:
           name: dist
           path: dist
           if-no-files-found: error
-          retention-days: 1
+          # Long enough to re-run a failed deploy job on its own.
+          retention-days: 7
 
   deploy:
     needs: build
