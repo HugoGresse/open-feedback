@@ -58,6 +58,7 @@
         "exportJson": "JSON: talks, votes and comments",
         "exportCsvTalks": "CSV: votes per talk",
         "exportCsvComments": "CSV: comments",
+        "exportError": "The export failed, please try again.",
         "highlights": "Highlights",
         "mostVoted": "Most voted",
         "leastVotedTalks": "Least voted",

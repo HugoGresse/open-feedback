@@ -288,8 +288,3 @@ export const getCommentCountByUser = createAppSelector(
         return round1Decimals(commentCount / voters)
     }
 )
-
-export const getTalkVotesSelector = getTalkVotes
-
-export const isTalkVotesLoadedSelector = (state: RootState): boolean =>
-    getDashboard(state).talkVotesLoaded

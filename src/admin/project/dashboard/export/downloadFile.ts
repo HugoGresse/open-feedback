@@ -1,3 +1,5 @@
+const REVOKE_DELAY_MS = 40_000
+
 // Hands a generated file to the browser, which saves it under `fileName`.
 export const downloadFile = (
     fileName: string,
@@ -11,6 +13,7 @@ export const downloadFile = (
     document.body.appendChild(link)
     link.click()
     link.remove()
-    // Revoked once the download started, some browsers read the URL async.
-    setTimeout(() => URL.revokeObjectURL(url), 0)
+    // Safari reads the URL only once the user accepted the download: revoke it
+    // later, as FileSaver.js does.
+    setTimeout(() => URL.revokeObjectURL(url), REVOKE_DELAY_MS)
 }

@@ -4,99 +4,42 @@ import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import DownloadIcon from '@mui/icons-material/FileDownloadOutlined'
-import { useAppSelector } from '../../../../store'
-import { getSelectedProjectSelector } from '../../core/projectSelectors'
-import { getSortedVoteItemsSelector } from '../../settings/votingForm/votingFormSelectors'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import {
-    getTalksAsArraySelector,
-    isTalkLoadedSelector,
-} from '../../../../core/talks/talksSelectors'
-import { getSpeakersListSelector } from '../../../../core/speakers/speakerSelectors'
-import {
-    getTalkVotesSelector,
-    isTalkVotesLoadedSelector,
-} from '../dashboardSelectors'
-import {
-    buildProjectExport,
-    type ProjectExport,
-    toExportFileName,
-} from './projectExport'
-import { commentsToCsv, CSV_BOM, talksToCsv } from './projectExportCsv'
-import { downloadFile } from './downloadFile'
+    getSelectedProjectSelector,
+    isProjectApiInitSelector,
+} from '../../core/projectSelectors'
+import { EXPORT_FORMATS, type ExportFormat } from './exportFormats'
+import { exportProject } from './exportProjectActions'
 
-interface ExportFormat {
-    i18nKey: string
-    suffix: string
-    extension: string
-    type: string
-    serialize: (projectExport: ProjectExport) => string
-}
-
-const EXPORT_FORMATS: ExportFormat[] = [
-    {
-        i18nKey: 'dashboard.exportJson',
-        suffix: 'data',
-        extension: 'json',
-        type: 'application/json',
-        serialize: (projectExport) => JSON.stringify(projectExport, null, 2),
-    },
-    {
-        i18nKey: 'dashboard.exportCsvTalks',
-        suffix: 'votes',
-        extension: 'csv',
-        type: 'text/csv;charset=utf-8',
-        serialize: (projectExport) => CSV_BOM + talksToCsv(projectExport),
-    },
-    {
-        i18nKey: 'dashboard.exportCsvComments',
-        suffix: 'comments',
-        extension: 'csv',
-        type: 'text/csv;charset=utf-8',
-        serialize: (projectExport) => CSV_BOM + commentsToCsv(projectExport),
-    },
-]
-
+const buttonId = 'dashboard-export-button'
 const menuId = 'dashboard-export-menu'
 
 export const ExportButton = () => {
     const { t } = useTranslation()
+    const dispatch = useAppDispatch()
     const [anchor, setAnchor] = useState<HTMLElement | null>(null)
+    const [isExporting, setExporting] = useState(false)
     const project = useAppSelector(getSelectedProjectSelector)
-    const voteItems = useAppSelector(getSortedVoteItemsSelector)
-    const talks = useAppSelector(getTalksAsArraySelector)
-    const speakers = useAppSelector(getSpeakersListSelector)
-    const talkVotes = useAppSelector(getTalkVotesSelector)
-    const isTalkLoaded = useAppSelector(isTalkLoadedSelector)
-    const isTalkVotesLoaded = useAppSelector(isTalkVotesLoadedSelector)
+    const isProjectApiInit = useAppSelector(isProjectApiInitSelector)
+    const isOpen = !!anchor
 
     const onExport = (format: ExportFormat) => {
         setAnchor(null)
-        if (!project) {
-            return
-        }
-        const projectExport = buildProjectExport({
-            project,
-            voteItems,
-            talks,
-            speakers,
-            talkVotes,
-            exportedAt: new Date(),
-        })
-        downloadFile(
-            toExportFileName(project.name, format.suffix, format.extension),
-            format.serialize(projectExport),
-            format.type
-        )
+        setExporting(true)
+        dispatch(exportProject(format)).finally(() => setExporting(false))
     }
 
     return (
         <>
             <Button
+                id={buttonId}
                 size="small"
                 startIcon={<DownloadIcon />}
-                aria-controls={menuId}
+                aria-controls={isOpen ? menuId : undefined}
                 aria-haspopup="true"
-                disabled={!project || !isTalkLoaded || !isTalkVotesLoaded}
+                aria-expanded={isOpen ? 'true' : undefined}
+                disabled={!project || !isProjectApiInit || isExporting}
                 onClick={(event) => setAnchor(event.currentTarget)}
             >
                 {t('dashboard.export')}
@@ -104,10 +47,11 @@ export const ExportButton = () => {
             <Menu
                 id={menuId}
                 anchorEl={anchor}
-                open={!!anchor}
+                open={isOpen}
                 onClose={() => setAnchor(null)}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                MenuListProps={{ 'aria-labelledby': buttonId }}
             >
                 {EXPORT_FORMATS.map((format) => (
                     <MenuItem

@@ -3,11 +3,9 @@
 // testable. The CSV flavours are built from this structure in projectExportCsv.
 import type {
     AggregatedTalkVotes,
-    AggregatedTextVote,
-    Speaker,
+    AggregatedVoteItemValue,
     SpeakersMap,
     Talk,
-    Timestamp,
     VoteItem,
 } from '../../../../core/models'
 import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../../../core/contants'
@@ -71,6 +69,7 @@ export interface ProjectExportInput {
     project: { id: string; name: string }
     /** The voting form, titles and separators are skipped. */
     voteItems: VoteItem[]
+    /** Every talk, hidden ones included. */
     talks: Talk[]
     speakers: SpeakersMap
     /** `sessionVotes` documents keyed by talk id. */
@@ -78,8 +77,18 @@ export interface ProjectExportInput {
     exportedAt: Date
 }
 
-const toIsoDate = (date?: Timestamp | null): string | null =>
-    date ? date.toDate().toISOString() : null
+// Attendees write their votes directly, so a vote date is not guaranteed to be
+// a Timestamp: anything else is exported as an unknown date.
+const toIsoDate = (date: unknown): string | null => {
+    const toDate = (date as { toDate?: unknown } | null | undefined)?.toDate
+    if (typeof toDate !== 'function') {
+        return null
+    }
+    const jsDate: unknown = toDate.call(date)
+    return jsDate instanceof Date && !Number.isNaN(jsDate.getTime())
+        ? jsDate.toISOString()
+        : null
+}
 
 const isExportedVoteItemType = (
     type: VoteItem['type']
@@ -95,28 +104,27 @@ export const toExportedVoteItems = (
             : []
     )
 
-// Deleted text votes stay in the aggregation as empty objects.
+// Deleted and hidden text votes stay in the aggregation as empty objects.
 const toComments = (
     voteItemId: string,
-    value: AggregatedTalkVotes[string] | undefined
+    value: AggregatedVoteItemValue | undefined
 ): ExportedComment[] => {
     if (!value || typeof value !== 'object') {
         return []
     }
-    return Object.entries(value).flatMap(
-        ([id, vote]: [string, AggregatedTextVote]) =>
-            vote?.text
-                ? [
-                      {
-                          id,
-                          voteItemId,
-                          text: vote.text,
-                          plus: vote.plus ?? 1,
-                          createdAt: toIsoDate(vote.createdAt),
-                          updatedAt: toIsoDate(vote.updatedAt),
-                      },
-                  ]
-                : []
+    return Object.entries(value).flatMap(([id, vote]) =>
+        typeof vote?.text === 'string' && vote.text
+            ? [
+                  {
+                      id,
+                      voteItemId,
+                      text: vote.text,
+                      plus: typeof vote.plus === 'number' ? vote.plus : 1,
+                      createdAt: toIsoDate(vote.createdAt),
+                      updatedAt: toIsoDate(vote.updatedAt),
+                  },
+              ]
+            : []
     )
 }
 
@@ -125,28 +133,25 @@ const toSpeakerNames = (
     speakers: SpeakersMap
 ): string[] =>
     (speakerIds ?? []).map(
-        (speakerId) =>
-            (speakers[speakerId] as Speaker | undefined)?.name ?? speakerId
+        (speakerId) => speakers[speakerId]?.name ?? speakerId
     )
 
 const toExportedTalk = (
     talk: Talk,
-    voteItems: ExportedVoteItem[],
+    booleanVoteItems: ExportedVoteItem[],
+    textVoteItems: ExportedVoteItem[],
     speakers: SpeakersMap,
     talkVotes: AggregatedTalkVotes | undefined
 ): ExportedTalk => {
-    const votes = voteItems
-        .filter((item) => item.type === VOTE_TYPE_BOOLEAN)
-        .map((item) => {
-            const value = talkVotes?.[item.id]
-            return {
-                voteItemId: item.id,
-                name: item.name,
-                count: typeof value === 'number' ? Math.max(value, 0) : 0,
-            }
-        })
-    const comments = voteItems
-        .filter((item) => item.type === VOTE_TYPE_TEXT)
+    const votes = booleanVoteItems.map((item) => {
+        const value = talkVotes?.[item.id]
+        return {
+            voteItemId: item.id,
+            name: item.name,
+            count: typeof value === 'number' ? Math.max(value, 0) : 0,
+        }
+    })
+    const comments = textVoteItems
         .flatMap((item) => toComments(item.id, talkVotes?.[item.id]))
         .sort((a, b) => b.plus - a.plus)
 
@@ -174,6 +179,12 @@ export const buildProjectExport = ({
     exportedAt,
 }: ProjectExportInput): ProjectExport => {
     const exportedVoteItems = toExportedVoteItems(voteItems)
+    const booleanVoteItems = exportedVoteItems.filter(
+        (item) => item.type === VOTE_TYPE_BOOLEAN
+    )
+    const textVoteItems = exportedVoteItems.filter(
+        (item) => item.type === VOTE_TYPE_TEXT
+    )
     return {
         project: {
             id: project.id,
@@ -181,14 +192,19 @@ export const buildProjectExport = ({
             exportedAt: exportedAt.toISOString(),
         },
         voteItems: exportedVoteItems,
-        talks: talks.map((talk) =>
-            toExportedTalk(
-                talk,
-                exportedVoteItems,
-                speakers,
-                talkVotes[talk.id]?.votes
-            )
-        ),
+        // Hidden talks (breaks...) are only listed when they got votes, which
+        // they can through their direct link.
+        talks: talks
+            .filter((talk) => !talk.hideInFeedback || talkVotes[talk.id])
+            .map((talk) =>
+                toExportedTalk(
+                    talk,
+                    booleanVoteItems,
+                    textVoteItems,
+                    speakers,
+                    talkVotes[talk.id]?.votes
+                )
+            ),
     }
 }
 

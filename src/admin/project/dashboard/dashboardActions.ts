@@ -11,6 +11,26 @@ import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import type { AppThunk } from '../../../store'
 import type { AggregatedTalkVotes } from '../../../core/models'
 
+/** Reads the `sessionVotes` documents of a project, keyed by talk id. */
+export const fetchTalkVotes = (
+    projectId: string
+): Promise<Record<string, DashboardTalkVotes>> =>
+    fireStoreMainInstance
+        .collection('projects')
+        .doc(projectId)
+        .collection('sessionVotes')
+        .get()
+        .then((snapshots) => {
+            const talkVotes: Record<string, DashboardTalkVotes> = {}
+            snapshots.forEach((doc) => {
+                talkVotes[doc.id] = {
+                    id: doc.id,
+                    votes: doc.data() as AggregatedTalkVotes,
+                }
+            })
+            return talkVotes
+        })
+
 export const getTalkVotes = (): AppThunk<Promise<void> | undefined> => {
     return (dispatch, getState) => {
         const projectId = getSelectedProjectIdSelector(getState())
@@ -19,20 +39,8 @@ export const getTalkVotes = (): AppThunk<Promise<void> | undefined> => {
             return
         }
 
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(projectId)
-            .collection('sessionVotes')
-            .get()
-            .then((snapshots) => {
-                const talkVotes: Record<string, DashboardTalkVotes> = {}
-                snapshots.forEach((doc) => {
-                    talkVotes[doc.id] = {
-                        id: doc.id,
-                        votes: doc.data() as AggregatedTalkVotes,
-                    }
-                })
-
+        return fetchTalkVotes(projectId)
+            .then((talkVotes) => {
                 dispatch({
                     type: GET_TALK_VOTES_SUCCESS,
                     payload: talkVotes,

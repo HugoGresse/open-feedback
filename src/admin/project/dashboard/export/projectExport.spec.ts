@@ -142,6 +142,75 @@ describe('buildProjectExport', () => {
     })
 })
 
+describe('buildProjectExport with unexpected data', () => {
+    it('exports a date that is not a Timestamp as unknown', () => {
+        const [talk] = buildProjectExport(
+            input({
+                talkVotes: {
+                    t1: {
+                        votes: {
+                            comment: {
+                                c1: {
+                                    text: 'hi',
+                                    createdAt: '2026-10-10' as never,
+                                    updatedAt: { seconds: 1 } as never,
+                                },
+                            },
+                        },
+                    },
+                },
+            })
+        ).talks
+        expect(talk.comments[0]).toMatchObject({
+            createdAt: null,
+            updatedAt: null,
+        })
+    })
+
+    it('skips comments whose text is not a string', () => {
+        const [talk] = buildProjectExport(
+            input({
+                talkVotes: {
+                    t1: {
+                        votes: {
+                            comment: {
+                                c1: { text: ['a', 'b'] as never },
+                                c2: { text: 'ok', plus: 'many' as never },
+                            },
+                        },
+                    },
+                },
+            })
+        ).talks
+        expect(talk.comments).toEqual([
+            expect.objectContaining({ id: 'c2', text: 'ok', plus: 1 }),
+        ])
+    })
+})
+
+describe('buildProjectExport hidden talks', () => {
+    const hiddenTalk = { id: 'lunch', title: 'Lunch', hideInFeedback: true }
+
+    it('skips hidden talks without votes', () => {
+        const { talks } = buildProjectExport(
+            input({ talks: [hiddenTalk], talkVotes: {} })
+        )
+        expect(talks).toEqual([])
+    })
+
+    it('keeps hidden talks that got votes through their link', () => {
+        const { talks } = buildProjectExport(
+            input({
+                talks: [hiddenTalk],
+                talkVotes: { lunch: { votes: { fun: 2 } } },
+            })
+        )
+        expect(talks.map((talk) => [talk.id, talk.voteCount])).toEqual([
+            ['lunch', 2],
+        ])
+    })
+})
+
 describe('toExportFileName', () => {
     it('replaces spaces and forbidden characters', () => {
         expect(toExportFileName(' DevFest: Nantes/2026 ', 'votes', 'csv')).toBe(
