@@ -63,10 +63,13 @@ jobs:
             - name: build functions/
               working-directory: ./functions
               run: npm run build
+            # Pinned by its own lockfile, so its tree stays out of the app's
+            # installs (and out of the deploy jobs).
+            - name: install lighthouse ci
+              run: npm ci --prefix lighthouse --ignore-scripts
             - name: run lighthouse ci
               run: |
-                  npm install -g @lhci/cli@0.14.x
-                  lhci autorun --config=./lighthouse/lighthouserc.json
+                  lighthouse/node_modules/.bin/lhci autorun --config=./lighthouse/lighthouserc.json
               env:
                   # Empty on fork PRs: results are still uploaded to temporary
                   # public storage, only the GitHub status check is skipped.

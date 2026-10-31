@@ -95,11 +95,11 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: 'npm'
-          cache-dependency-path: .github/preview-deploy/package-lock.json
+          cache-dependency-path: .github/firebase-tools/package-lock.json
       # Only firebase-tools, pinned by its own lockfile, without install
       # scripts: the app's dependency tree never runs in this job.
       - name: install firebase-tools
-        run: npm ci --prefix .github/preview-deploy --ignore-scripts
+        run: npm ci --prefix .github/firebase-tools --ignore-scripts
 
       # Extracted outside the workspace, so even an extractor path-traversal
       # bug could not reach the checkout, node_modules or credentials.
@@ -146,7 +146,7 @@ jobs:
       - name: deploy the preview channel
         id: deploy
         run: |
-          .github/preview-deploy/node_modules/.bin/firebase hosting:channel:deploy "pr-$PR_NUMBER" \
+          .github/firebase-tools/node_modules/.bin/firebase hosting:channel:deploy "pr-$PR_NUMBER" \
             --project "$PREVIEW_PROJECT_ID" --expires 7d --json > deploy.json
           url=$(jq -r '[.result[]?.url] | first // empty' deploy.json)
           [[ -n "$url" ]] || { cat deploy.json; exit 1; }
