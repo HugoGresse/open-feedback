@@ -15,12 +15,10 @@ export const getProjectSelector = (state: RootState): Project | null => {
 
 export const getProjectIdSelector = (state: RootState) => getProject(state).id
 
-export const getProjectVoteStartEndTimeSelector = (
-    state: RootState
-): [Project['voteStartTime'], Project['voteEndTime']] => [
-    getProjectSelector(state)!.voteStartTime,
-    getProjectSelector(state)!.voteEndTime,
-]
+export const getProjectVoteStartTimeSelector = (state: RootState) =>
+    getProjectSelector(state)!.voteStartTime
+export const getProjectVoteEndTimeSelector = (state: RootState) =>
+    getProjectSelector(state)!.voteEndTime
 export const getProjectVoteItemsSelector = (state: RootState) =>
     getProjectSelector(state)!.voteItems
 export const getProjectVoteResultsSelector = (state: RootState) =>

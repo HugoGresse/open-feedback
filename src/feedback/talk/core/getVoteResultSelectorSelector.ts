@@ -1,12 +1,13 @@
 import { createAppSelector, type RootState } from '../../../store'
 import {
+    getProjectVoteEndTimeSelector,
     getProjectVoteResultsSelector,
-    getProjectVoteStartEndTimeSelector,
+    getProjectVoteStartTimeSelector,
     hideVotesUntilUserVoteSelector,
 } from '../../project/projectSelectors'
-import { getUserVotesByTalkAndVoteItemSelector } from '../../vote/voteSelectors'
 import { getSelectedTalkIdSelector } from './talkSelectors'
 import { isVoteWindowOpen } from '../../vote/checkDataBeforeVote'
+import { shouldShowVoteResults } from './voteResultsVisibility'
 import type { AggregatedTextVote } from '../../../core/models'
 
 /** A text vote of the results, its Firestore timestamps turned into dates. */
@@ -27,46 +28,44 @@ export type VoteResult = number | string | TextVoteResult[] | undefined
 /** Vote results of the selected talk keyed by vote item id. */
 export type VoteResults = Record<string, VoteResult>
 
+// The same object for every render without results
+const NO_VOTE_RESULTS: VoteResults = {}
+
 export const getVoteResultSelectorSelector = createAppSelector(
     getSelectedTalkIdSelector,
     getProjectVoteResultsSelector,
     hideVotesUntilUserVoteSelector,
-    getUserVotesByTalkAndVoteItemSelector,
-    getProjectVoteStartEndTimeSelector,
+    getProjectVoteStartTimeSelector,
+    getProjectVoteEndTimeSelector,
     (_: RootState, displayVotes: string | null) => displayVotes,
+    (_: RootState, _displayVotes: string | null, votedOnTalkAtLoad: boolean) =>
+        votedOnTalkAtLoad,
     (
         selectedTalkId,
         voteResults,
         hideVotesUntilUserVote,
-        currentUserVotes,
-        projectVotesWindow,
-        displayVotes
+        voteStartTime,
+        voteEndTime,
+        displayVotes,
+        votedOnTalkAtLoad
     ): VoteResults => {
+        const [voteWindowOpen] = isVoteWindowOpen(voteStartTime, voteEndTime)
         if (
-            hideVotesUntilUserVote &&
-            !displayVotes &&
-            (!currentUserVotes || Object.keys(currentUserVotes).length === 0)
+            !shouldShowVoteResults({
+                hideVotesUntilUserVote,
+                displayVotes,
+                votedOnTalkAtLoad,
+                voteWindowOpen,
+            })
         ) {
-            // Is vote window open?
-            if (projectVotesWindow[0] && projectVotesWindow[1]) {
-                const [voteWindowOpen] = isVoteWindowOpen(
-                    projectVotesWindow[0],
-                    projectVotesWindow[1]
-                )
-                if (voteWindowOpen) {
-                    return {}
-                }
-            } else {
-                // Hide other users votes until the user vote
-                return {}
-            }
+            return NO_VOTE_RESULTS
         }
         if (
             !voteResults ||
             selectedTalkId === null ||
             !voteResults[selectedTalkId]
         ) {
-            return {}
+            return NO_VOTE_RESULTS
         }
         const results = voteResults[selectedTalkId]
 

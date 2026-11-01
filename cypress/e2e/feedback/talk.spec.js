@@ -138,3 +138,59 @@ describe('Single talk', function () {
         cy.get('.comments').should('not.contain', inputText + textEdited)
     })
 })
+
+describe('Single talk with votes hidden until the user vote', function () {
+    const feedback = new FeedbackApp()
+    const talkUrl = '2019-06-28/Hv0z6Vqnlk3FsJcx04Hc'
+    const voteButtonText = 'Trop de code'
+    const voteButtonSelector = `div[aria-label="${voteButtonText}"]`
+
+    // Toggles the setting on the emulator test project, the owner token
+    // bypasses the security rules
+    const setHideVotesUntilUserVote = (hideVotesUntilUserVote) => {
+        // Only .json files are parsed by cy.readFile
+        cy.readFile('.firebaserc').then((firebaserc) => {
+            const firebaseProjectId = JSON.parse(firebaserc).projects.default
+            cy.request({
+                method: 'PATCH',
+                url: `http://127.0.0.1:8080/v1/projects/${firebaseProjectId}/databases/(default)/documents/projects/${Cypress.expose('firestoreTestProjectId')}?updateMask.fieldPaths=hideVotesUntilUserVote`,
+                headers: { Authorization: 'Bearer owner' },
+                body: {
+                    fields: {
+                        hideVotesUntilUserVote: {
+                            booleanValue: hideVotesUntilUserVote,
+                        },
+                    },
+                },
+            })
+        })
+    }
+
+    before(() => {
+        setHideVotesUntilUserVote(true)
+    })
+
+    after(() => {
+        setHideVotesUntilUserVote(false)
+    })
+
+    it('Votes cast during the visit keep the results hidden until the talk is loaded again', function () {
+        feedback.open(talkUrl, { clearUserSession: true })
+
+        const inputText = stringGenerator()
+        cy.contains(voteButtonText).parent().click()
+        cy.get('textarea[placeholder="Your answer"]').type(inputText)
+        cy.contains('Save').click()
+        cy.contains('Update')
+
+        cy.wait(1000) // serverless functions runing time wait
+        cy.get(voteButtonSelector).should('not.contain', ' vote')
+        cy.get('.comments').should('not.exist')
+
+        cy.reload()
+        cy.wait(3000) // user login anonymous
+
+        cy.get(voteButtonSelector).should('contain', ' vote')
+        cy.get('.comments').should('contain', inputText)
+    })
+})

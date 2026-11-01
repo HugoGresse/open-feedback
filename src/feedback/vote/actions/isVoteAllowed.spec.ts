@@ -11,16 +11,32 @@ vi.mock('../checkDataBeforeVote', () => ({
 
 const translate = ((key: string) => key) as TFunction
 
-const setup = (user: { isAnonymous: boolean } | null) => {
+const setup = (
+    user: { isAnonymous: boolean } | null,
+    votes = { userVotesSettled: true }
+) => {
     const dispatch = vi.fn() as unknown as AppDispatch
-    // Only the auth slice is read
-    const getState = () => ({ auth: { user } }) as unknown as RootState
+    // Only the auth and vote slices are read
+    const getState = () => ({ auth: { user }, votes }) as unknown as RootState
     return { dispatch, getState }
 }
 
 describe('isVoteAllowed', () => {
     test('refuses the vote and reports it before the user is logged in', () => {
         const { dispatch, getState } = setup(null)
+
+        expect(isVoteAllowed(dispatch, getState, translate)).toBe(false)
+        expect(dispatch).toHaveBeenCalledWith({
+            type: ADD_VOTE_ERROR,
+            payload: { error: 'vote.notLoggedIn' },
+        })
+    })
+
+    test('refuses the vote until the user votes are loaded', () => {
+        const { dispatch, getState } = setup(
+            { isAnonymous: true },
+            { userVotesSettled: false }
+        )
 
         expect(isVoteAllowed(dispatch, getState, translate)).toBe(false)
         expect(dispatch).toHaveBeenCalledWith({

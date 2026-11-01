@@ -84,7 +84,7 @@ export const EventSettingsSchema = Type.Object({
     hideVotesUntilUserVote: Type.Optional(
         Type.Boolean({
             description:
-                'Hide vote results on a talk until the attendee has voted on it (or `?displayVotes=true` is in the URL).',
+                'During the vote window, hide the vote results of a talk until the attendee loads it again after voting on it, so they do not appear right after a vote. `?displayVotes=true` in the URL always shows them.',
         })
     ),
     displayFullDates: Type.Optional(
