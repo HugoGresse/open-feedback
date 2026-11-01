@@ -7,7 +7,9 @@ export const USER_INVITE_GET_SUCCESS = 'admin/users/invite/get/success'
 export const USER_INVITE_GET_ERROR = 'admin/users/invite/get/error'
 export const USER_INVITE_ADD = 'admin/users/invite/add'
 export const USER_INVITE_REMOVE_SUCCESS = 'admin/users/invite/remove/success'
+export const USER_INVITES_LISTEN = 'admin/users/invites/listen'
 export const USER_INVITES_GET_SUCCESS = 'admin/users/invites/get/success'
+export const USER_INVITE_HIDE = 'admin/users/invite/hide'
 
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown
     ? Omit<T, K>
@@ -31,4 +33,6 @@ export type UsersAction =
     | { type: typeof USER_INVITE_GET_ERROR; payload: InviteReadError }
     | { type: typeof USER_INVITE_ADD; payload: Invite }
     | { type: typeof USER_INVITE_REMOVE_SUCCESS; payload: string }
+    | { type: typeof USER_INVITES_LISTEN }
     | { type: typeof USER_INVITES_GET_SUCCESS; payload: Invite[] }
+    | { type: typeof USER_INVITE_HIDE; payload: string }

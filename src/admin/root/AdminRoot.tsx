@@ -4,14 +4,12 @@ import { RootHeader } from './RootHeader.tsx'
 import { Box, Slide } from '@mui/material'
 import { HEX_COLORS } from '../../constants/colors'
 import { NewProject } from '../project/new/NewProject.tsx'
-import { InviteDialog } from '../users/InviteDialog.tsx'
 import { makeStyles } from '@mui/styles'
 import { isUserValidSelector } from '../auth/authSelectors'
 import { RootContentLayout } from './RootContentLayout.tsx'
 import { EmailNotVerified } from '../auth/EmailNotVerified.tsx'
 import { authProvider } from '../../firebase.ts'
 import { getProjects } from '../project/core/actions/getProjects'
-import { useQuery } from '../../utils/useQuery'
 import { OrganizationList } from './OrganizationList.tsx'
 import { getOrganizations } from '../organization/core/actions/getOrganizations'
 import { OrganisationNewDialog } from './OrganizationNewDialog.tsx'
@@ -32,7 +30,6 @@ const useStyles = makeStyles({
 
 export const AdminRoot = () => {
     const classes = useStyles()
-    const inviteId = useQuery().get('inviteId')
     const dispatch = useAppDispatch()
     const isUserValid = useAppSelector(isUserValidSelector)
     // The organization id is kept after closing so the form stays rendered
@@ -95,8 +92,6 @@ export const AdminRoot = () => {
                 open={isNewOrganizationOpen}
                 onClose={() => setNewOrganizationOpen(false)}
             />
-
-            {inviteId && <InviteDialog inviteId={inviteId} />}
         </main>
     )
 }

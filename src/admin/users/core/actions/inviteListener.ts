@@ -8,14 +8,19 @@ import {
     USER_INVITE_GET_SUCCESS,
     USER_INVITE_LISTEN,
 } from '../usersActionTypes'
-import { redirectToProject } from '../../../project/utils/redirectToProject'
-import { redirectToOrganization } from '../../../organization/utils/redirectToOrganization'
+import {
+    getInviteDestination,
+    getInviteDestinationUrl,
+} from '../getInviteDialogStatus'
 
 let stopListenForInvite: (() => void) | undefined
 export const listenForInvite =
     (inviteId: string, navigate: NavigateFunction): AppThunk =>
     (dispatch) => {
         dispatch({ type: USER_INVITE_LISTEN })
+        // The completed invite may be delivered again (e.g. back online): do
+        // not take the user back to the joined event.
+        let redirected = false
         const onError = (error: unknown) => {
             // biome-ignore lint/suspicious/noConsole: intentional log
             console.error(error)
@@ -34,7 +39,8 @@ export const listenForInvite =
                             type: USER_INVITE_GET_SUCCESS,
                             payload: data,
                         })
-                        if (data.status === 'completed') {
+                        if (data.status === 'completed' && !redirected) {
+                            redirected = true
                             onInviteCompleted(data, navigate)
                         }
                     } else if (!snapshot.metadata.fromCache) {
@@ -61,15 +67,18 @@ export const unsubscribeRealtimeInviteListener = (): AppThunk => () => {
     stopListenForInvite?.()
 }
 
+/**
+ * Opens the joined event. The organization is opened from the dialog, as its
+ * modal would cover it.
+ */
 const onInviteCompleted = (
     invite: InviteDocument,
     navigate: NavigateFunction
 ) => {
-    if ('projectId' in invite && invite.projectId) {
-        redirectToProject(null, invite.projectId, navigate)
-    } else if ('organizationId' in invite && invite.organizationId) {
-        redirectToOrganization(invite.organizationId, navigate)
-    } else {
-        throw new Error('Unmanaged invite type on completion')
+    const destination = getInviteDestination(invite)
+    if (destination?.type === 'project') {
+        // Absolute, as the dialog may be open on any page, and replacing the
+        // invite link so that going back does not redirect again.
+        navigate(getInviteDestinationUrl(destination), { replace: true })
     }
 }

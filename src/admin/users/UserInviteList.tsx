@@ -1,20 +1,34 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import Box from '@mui/material/Box'
-import { cancelInvite, getPendingInvites } from './core/actions/usersActions'
-import { getPendingInvitesSelector } from './core/usersSelectors'
+import {
+    cancelInvite,
+    hideInvite,
+    listenForInvites,
+} from './core/actions/usersActions'
+import { getListedInvitesSelector } from './core/usersSelectors'
 import { UserInviteItem } from './UserInviteItem.tsx'
 import { TranslatedTypography } from '../baseComponents/TranslatedTypography.tsx'
 import { useAppDispatch, useAppSelector } from '../../store'
+import { getSelectedProjectIdSelector } from '../project/core/projectSelectors'
+import { getSelectedOrganizationIdSelector } from '../organization/core/organizationSelectors'
 
 export const UserInviteList = () => {
     const dispatch = useAppDispatch()
-    const pendingInvites = useAppSelector(getPendingInvitesSelector)
+    const invites = useAppSelector(getListedInvitesSelector)
+    const projectId = useAppSelector(getSelectedProjectIdSelector)
+    const organizationId = useAppSelector(getSelectedOrganizationIdSelector)
 
-    useEffect(() => {
-        dispatch(getPendingInvites())
-    }, [dispatch])
+    useEffect(
+        () => dispatch(listenForInvites(projectId, organizationId)),
+        [dispatch, projectId, organizationId]
+    )
 
-    if (pendingInvites.length === 0) {
+    const onAcceptedShown = useCallback(
+        (inviteId: string) => dispatch(hideInvite(inviteId)),
+        [dispatch]
+    )
+
+    if (invites.length === 0) {
         return ''
     }
 
@@ -27,13 +41,14 @@ export const UserInviteList = () => {
             >
                 PENDING INVITES
             </TranslatedTypography>
-            {pendingInvites.map((invite) => (
+            {invites.map((invite) => (
                 <UserInviteItem
                     key={invite.id}
                     invite={invite}
                     cancelInvite={(inviteId) =>
                         dispatch(cancelInvite(inviteId))
                     }
+                    onAcceptedShown={onAcceptedShown}
                 />
             ))}
         </Box>

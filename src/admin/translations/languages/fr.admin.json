@@ -300,7 +300,8 @@
             "default": "a disparu",
             "emailSent": "envoyé",
             "error": "échoué",
-            "new": "créé"
+            "new": "créé",
+            "completed": "acceptée"
         },
         "invites": "INVITATION(S) EN ATTENTE",
         "Member": "Membre",
@@ -322,7 +323,11 @@
         "invitationGetFail": "Erreur lors du chargement de votre invitation, demandez en une nouvelle svp.",
         "errorPendingInvitesFailed": "Erreur lors du chargement des invitations en attente, ",
         "cancelInviteFail": "Erreur lors de l'annulation de l'invitation, ",
-        "inviteCompleted": "Invite terminé, vous allez être rediriger vers l'évènement ou l'organisation",
+        "inviteProcessing": "Vous rejoignez l'évènement ou l'organisation, vous allez y être redirigé…",
+        "inviteAccepted": "Invitation acceptée",
+        "inviteJoinedEvent": "Vous avez rejoint l'évènement {{name}}.",
+        "inviteJoinedOrganization": "Vous avez rejoint l'organisation {{name}}.",
+        "inviteOpenOrganization": "Ouvrir l'organisation",
         "inviteFailed": "Cette invitation a échoué. Demandez à l'organisateur de vous inviter à nouveau.",
         "inviteWrongAccount": "Cette invitation ne peut pas être ouverte avec le compte connecté ({{account}}) : elle a été envoyée à une autre adresse email. Déconnectez-vous puis connectez-vous avec l'adresse email qui a reçu l'invitation.",
         "inviteLogout": "Se déconnecter"
