@@ -94,10 +94,40 @@ service cloud.firestore {
             // A missing (cancelled) invite reads as not existing, not denied.
             allow get: if authenticated() && (resource == null || isDestinedToMe(resource.data));
             allow list: if authenticated() && ( ("projectId" in resource.data && isAdmin(projectData(resource.data.projectId))) || isAnOrgViewer(getOrganization(resource.data.organizationId)));
-            allow create: if authenticated() && ( ("projectId" in request.resource.data && isAdmin(projectData(request.resource.data.projectId))) || isAnOrgAdmin(getOrganization(request.resource.data.organizationId)));
+            // An invite targets a project or an organization, never both: the
+            // functions apply it to the organization when organizationId is set.
+            // Each invite sends an email, so anonymous or unverified users cannot create one.
+            allow create: if authenticated() && !isAnonymous() && (isEmailVerified() || isPhoneNumberAccount())
+                && isValidInvite(request.resource.data) && (
+                (isProjectInvite(request.resource.data) && isAdmin(projectData(request.resource.data.projectId))) ||
+                (isOrganizationInvite(request.resource.data) && isAnOrgAdmin(getOrganization(request.resource.data.organizationId))));
             allow delete: if authenticated() && ( ("projectId" in resource.data && isAdmin(projectData(resource.data.projectId))) || isAnOrgAdmin(getOrganization(resource.data.organizationId)));
 
-            function isDestinedToMe(data) { return request.auth.token.email == data.destinationUserInfo; }
+            function isDestinedToMe(data) { return isEmailVerified() && request.auth.token.email == data.destinationUserInfo; }
+            function isProjectInvite(data) { return data.get('projectId', null) is string && !("organizationId" in data) && !("role" in data); }
+            // Owner is never offered: ownership moves through the organization settings
+            function isOrganizationInvite(data) { return data.get('organizationId', null) is string && !("projectId" in data) && data.get('role', null) in ['Viewer', 'Editor', 'Admin']; }
+            function isOptionalString(data, field, maxSize) { return data.get(field, null) == null || (data[field] is string && data[field].size() <= maxSize); }
+            // One plain address (no list, display name or whitespace), lowercase
+            // as Firebase Auth emails are: the functions match them exactly.
+            function isValidInviteEmail(email) {
+                return email is string
+                    && email.size() <= 254
+                    && email == email.lower()
+                    && email.matches('[^\\s\\pZ\\pC@<>(),;:"]+@[^\\s\\pZ\\pC@<>(),;:"]+[.][^\\s\\pZ\\pC@<>(),;:".]+');
+            }
+            function isValidInvite(data) {
+                return data.keys().hasOnly(['createdAt', 'updatedAt', 'destinationUserInfo', 'originUserId', 'originUserName', 'originUserPhotoURL', 'status', 'projectId', 'projectName', 'organizationId', 'organizationName', 'role'])
+                    && isValidInviteEmail(data.get('destinationUserInfo', null))
+                    && data.get('originUserId', request.auth.uid) == request.auth.uid
+                    && data.get('status', 'new') == 'new'
+                    && data.get('createdAt', request.time) is timestamp
+                    && data.get('updatedAt', request.time) is timestamp
+                    && isOptionalString(data, 'originUserName', 1000)
+                    && isOptionalString(data, 'originUserPhotoURL', 2000)
+                    && isOptionalString(data, 'projectName', 1000)
+                    && isOptionalString(data, 'organizationName', 1000);
+            }
         }
 
         // ORGANIZATIONS

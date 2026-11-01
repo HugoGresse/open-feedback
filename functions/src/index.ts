@@ -8,6 +8,7 @@ export {
 } from './triggers/aggregateVotes'
 export { userInviteCreated } from './triggers/invites/userInvite'
 export { userCreated } from './triggers/userCreated'
+export { userEmailVerified } from './triggers/userEmailVerified'
 
 export { alert } from './callable/alert'
 export { deleteProject } from './callable/deleteProject'

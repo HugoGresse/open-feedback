@@ -171,37 +171,19 @@ describe('applyInvites', () => {
         expect(result).toEqual('invites update done')
     })
 
-    it('should apply invite for Owner role on an organization and successfully update the invite at the end', async () => {
-        const { update, doc } = getFirestoreMocksAndInit()
+    it('should never apply an Owner role from an invite', async () => {
+        const { update } = getFirestoreMocksAndInit()
 
-        update.mockImplementationOnce(() =>
-            Promise.resolve('organization update done')
-        )
-        update.mockImplementationOnce(() =>
-            Promise.resolve('invites update done')
-        )
-
-        const result = await applyInvites(
-            inviteOrganization.id,
-            InvitationType.OrganizationInvitationType,
-            USER_ID,
-            inviteOrganization.organizationId,
-            'Owner'
-        )
-        expect(doc).toHaveBeenCalledWith(inviteOrganization.organizationId)
-        expect(update).toHaveBeenCalledTimes(2)
-        expect(update).toBeCalledWith({
-            updatedAt: serverTimestamp(),
-            viewerUserIds: arrayUnion(USER_ID),
-            editorUserIds: arrayUnion(USER_ID),
-            adminUserIds: arrayUnion(USER_ID),
-            ownerUserId: USER_ID,
-        })
-        expect(update).toBeCalledWith({
-            status: 'completed',
-            updatedAt: serverTimestamp(),
-        })
-        expect(result).toEqual('invites update done')
+        await expect(
+            applyInvites(
+                inviteOrganization.id,
+                InvitationType.OrganizationInvitationType,
+                USER_ID,
+                inviteOrganization.organizationId,
+                'Owner'
+            )
+        ).rejects.toThrow('Unknown role to process organization invite')
+        expect(update).not.toHaveBeenCalled()
     })
 
     it('should fail to apply invite on an organization due to missing role to be added to', async () => {
