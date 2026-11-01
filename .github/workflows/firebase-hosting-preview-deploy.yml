@@ -7,7 +7,8 @@ run-name: Preview ${{ github.event.workflow_run.head_repository.full_name }}@${{
 #  - no pull request code runs here: the artifact is only handled as data;
 #  - Google access is keyless (Workload Identity Federation). The provider only
 #    accepts this workflow, on main, triggered by workflow_run, for this repo,
-#    and the service account can only deploy Hosting on the sandbox project;
+#    and the service account only has Firebase Hosting Admin, API Keys Viewer
+#    and an authorized-domains role on the sandbox project;
 #  - fork previews wait for a maintainer to approve the
 #    `external-contributors` environment. The run name above and the pending
 #    "Firebase preview" commit status tell the approver which fork, branch
@@ -90,12 +91,13 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      # No npm cache: jobs that run the app's install scripts can write
+      # cache entries, and this job holds the deploy identity.
       - name: set up Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: .nvmrc
-          cache: 'npm'
-          cache-dependency-path: .github/firebase-tools/package-lock.json
+          package-manager-cache: false
       # Only firebase-tools, pinned by its own lockfile, without install
       # scripts: the app's dependency tree never runs in this job.
       - name: install firebase-tools

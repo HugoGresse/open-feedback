@@ -4,9 +4,8 @@ name: Deploy to Firebase Hosting on merge
 #  - the build job runs the app's dependency tree and holds no Google
 #    credential;
 #  - the deploy job only installs firebase-tools (.github/firebase-tools,
-#    pinned by its own lockfile, no install scripts) and authenticates.
-# Google access is keyless (Workload Identity Federation) once the
-# PROD_WIF_PROVIDER and PROD_SERVICE_ACCOUNT repository variables are set.
+#    pinned by its own lockfile, no install scripts) and authenticates
+#    keylessly (Workload Identity Federation).
 on:
   push:
     branches:
@@ -20,12 +19,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  PROD_PROJECT_ID: open-feedback-42
-
 jobs:
   build:
-    # Manual runs deploy main only, whichever branch they are started from.
+    # Manual runs only deploy when started from main.
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -38,6 +34,7 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: .nvmrc
+          package-manager-cache: false
       - name: install dependencies
         run: npm ci
       - name: build the app
@@ -74,17 +71,25 @@ jobs:
     permissions:
       contents: read
       id-token: write # Workload Identity Federation
+    # Production identity. The provider only accepts this workflow, on main,
+    # triggered by push or workflow_dispatch, for this repo. The account has
+    # Firebase Hosting Admin and API Keys Viewer on open-feedback-42.
+    env:
+      PROD_PROJECT_ID: open-feedback-42
+      PROD_WIF_PROVIDER: projects/635903227116/locations/global/workloadIdentityPools/github-hosting-deploy/providers/open-feedback-main
+      PROD_SERVICE_ACCOUNT: gh-prod-deploy@open-feedback-42.iam.gserviceaccount.com
     steps:
       - name: check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      # No npm cache: jobs that run the app's install scripts can write
+      # cache entries, and this job holds the deploy identity.
       - name: set up Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: .nvmrc
-          cache: 'npm'
-          cache-dependency-path: .github/firebase-tools/package-lock.json
+          package-manager-cache: false
       - name: install firebase-tools
         run: npm ci --prefix .github/firebase-tools --ignore-scripts
       - name: download the built site
@@ -92,22 +97,10 @@ jobs:
         with:
           name: dist
           path: dist
-
-      - name: check the deploy identity variables
-        env:
-          WIF_PROVIDER: ${{ vars.PROD_WIF_PROVIDER }}
-          SERVICE_ACCOUNT: ${{ vars.PROD_SERVICE_ACCOUNT }}
-        run: |
-          if [[ -n "$WIF_PROVIDER$SERVICE_ACCOUNT" && ( -z "$WIF_PROVIDER" || -z "$SERVICE_ACCOUNT" ) ]]; then
-            echo "::error::Set both PROD_WIF_PROVIDER and PROD_SERVICE_ACCOUNT, or neither"; exit 1
-          fi
       - name: authenticate to Google Cloud
         uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
         with:
-          workload_identity_provider: ${{ vars.PROD_WIF_PROVIDER }}
-          service_account: ${{ vars.PROD_SERVICE_ACCOUNT }}
-          # Temporary (#1686): the JSON key until the variables above are set.
-          # Remove this line, then delete the secret and the key.
-          credentials_json: ${{ vars.PROD_WIF_PROVIDER == '' && secrets.FIREBASE_SERVICE_ACCOUNT_OPEN_FEEDBACK_42 || '' }}
+          workload_identity_provider: ${{ env.PROD_WIF_PROVIDER }}
+          service_account: ${{ env.PROD_SERVICE_ACCOUNT }}
       - name: deploy to Firebase Hosting
         run: .github/firebase-tools/node_modules/.bin/firebase deploy --only hosting --project "$PROD_PROJECT_ID"
