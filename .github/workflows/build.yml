@@ -57,6 +57,10 @@ jobs:
             - name: functions npm install (ci)
               working-directory: ./functions
               run: npm ci
+            # Fails on any warning, not only on errors.
+            - name: lint functions/
+              working-directory: ./functions
+              run: npm run lint
             - name: npm test (Firestore rules and functions/)
               run: |
                   npm run test

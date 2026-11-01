@@ -1,7 +1,7 @@
 {
     "name": "functions",
     "scripts": {
-        "lint": "",
+        "lint": "biome check --error-on-warnings",
         "build": "rm -rf lib && tsc",
         "build:watch": "tsc --watch",
         "dev:api": "npm run build && node lib/api/standalone.js",
@@ -10,7 +10,8 @@
         "start": "npm run shell",
         "deploy": "firebase deploy --only functions",
         "logs": "firebase functions:log",
-        "test": "vitest"
+        "test": "vitest",
+        "format": "biome format --write"
     },
     "engines": {
         "node": "24"
@@ -36,14 +37,10 @@
         "ts-custom-error": "^3.3.1"
     },
     "devDependencies": {
-        "@eslint/js": "^9.39.5",
+        "@biomejs/biome": "2.6.4",
         "@types/har-format": "^1.2.16",
-        "eslint": "^9.39.0",
-        "eslint-config-google": "^0.14.0",
-        "eslint-plugin-import": "^2.32.0",
         "firestore-vitest": "^0.20.2",
         "typescript": "^5.9.3",
-        "typescript-eslint": "^8.70.0",
         "vitest": "^4.1.11"
     },
     "overrides": {
@@ -51,5 +48,10 @@
             "esbuild": "0.25.12"
         }
     },
-    "private": true
+    "private": true,
+    "lint-staged": {
+        "*.{js,ts,json}": [
+            "biome check --write --no-errors-on-unmatched"
+        ]
+    }
 }
