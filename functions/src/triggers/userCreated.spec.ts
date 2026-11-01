@@ -15,7 +15,7 @@ describe('userCreated', () => {
         await expect(
             userCreatedWrapped({
                 data: { uid: '123', email: undefined, providerData: [] },
-            } as any)
+            })
         ).resolves.toEqual('new anonymous user')
 
         expect(where, 'firestore request not made').toHaveBeenCalledTimes(0)
@@ -29,7 +29,7 @@ describe('userCreated', () => {
 
         await userCreatedWrapped({
             data: { uid: '123', email: 'jane@example.com', providerData: [] },
-        } as any)
+        })
 
         expect(where).toHaveBeenCalledWith(
             'destinationUserInfo',

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import Fastify from 'fastify'
+import Fastify, { type FastifyInstance } from 'fastify'
 import { mockFirebaseAdminApp } from '../../testUtils/firestoreMock'
 import { mockWhere } from 'firestore-vitest/mocks/firestore'
 
@@ -27,7 +27,7 @@ const buildApp = async () => {
 }
 
 describe('authenticateRequest setDecorator', () => {
-    let fastify: any
+    let fastify: FastifyInstance
 
     beforeEach(() => {
         mockFirebaseAdminApp({ organizations: [], users: [] })

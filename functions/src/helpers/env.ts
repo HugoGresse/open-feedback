@@ -1,6 +1,6 @@
-import { AppEnv } from '../types/AppEnv'
-import { MailgunEnv } from '../types/MailgunEnv'
-import { OpsGenieEnv } from '../types/OpsGenieEnv'
+import type { AppEnv } from '../types/AppEnv'
+import type { MailgunEnv } from '../types/MailgunEnv'
+import type { OpsGenieEnv } from '../types/OpsGenieEnv'
 
 export const getAppEnv = (): AppEnv => {
     const appEnv = process.env.APP_ENV

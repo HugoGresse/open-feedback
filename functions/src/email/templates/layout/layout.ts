@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export default (children: string) => `
 <!DOCTYPE html>
 <html
@@ -153,4 +152,3 @@ export default (children: string) => `
 
 </html>
 `
-/* eslint-enable max-len */

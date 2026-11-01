@@ -1,4 +1,4 @@
-import { Organization } from '../types/Organization'
+import type { Organization } from '../types/Organization'
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 

@@ -1,4 +1,9 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
+import type {
+    FastifyError,
+    FastifyInstance,
+    FastifyReply,
+    FastifyRequest,
+} from 'fastify'
 import { HttpError } from './Errors'
 
 // gRPC status the Firestore SDK reports once a transaction has exhausted its
@@ -7,13 +12,7 @@ const FIRESTORE_ABORTED = 10
 
 export const fastifyErrorHandler = async function (
     this: FastifyInstance,
-    error:
-        | (Error & {
-              code: string
-              statusCode: number
-              validation: any[]
-          })
-        | HttpError,
+    error: FastifyError | HttpError,
     request: FastifyRequest,
     reply: FastifyReply
 ) {

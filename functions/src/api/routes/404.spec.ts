@@ -1,8 +1,9 @@
+import type { FastifyInstance } from 'fastify'
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mockFirebaseAdminApp } from '../../testUtils/firestoreMock'
 
 describe('/organizations/me', () => {
-    let fastify: any
+    let fastify: FastifyInstance
 
     beforeEach(async () => {
         mockFirebaseAdminApp({})

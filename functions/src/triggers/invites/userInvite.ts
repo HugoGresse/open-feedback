@@ -5,7 +5,7 @@ import { getAppEnv, getMailgunEnv } from '../../helpers/env'
 import { generateInviteEmail } from './generateInviteEmail'
 import { applyInvites } from './applyInvites'
 import { InvitationType } from '../../types/InvitationType'
-import { EmailInvite } from '../../types/EmailInvite'
+import type { EmailInvite } from '../../types/EmailInvite'
 import { onDocumentCreated } from 'firebase-functions/v2/firestore'
 
 // userInviteCreated is called when an user as been invited to a project or an organization.
@@ -56,7 +56,7 @@ export const userInviteCreated = onDocumentCreated(
             generateInviteEmail(invite, data.lang || 'en', appEnv, inviteId)
         )
 
-        if (sendResult instanceof Response && sendResult.ok) {
+        if (sendResult.ok) {
             return admin
                 .firestore()
                 .collection('invites')
@@ -75,10 +75,11 @@ export const userInviteCreated = onDocumentCreated(
                             if (querySnapshot.empty) {
                                 return Promise.resolve('no user matched')
                             }
-                            let promise: Promise<string | any[]> =
-                                Promise.resolve(
-                                    'forEach not implemented or firebase issue'
-                                )
+                            let promise: Promise<
+                                string | FirebaseFirestore.WriteResult[]
+                            > = Promise.resolve(
+                                'forEach not implemented or firebase issue'
+                            )
                             querySnapshot.forEach((userSnapshot) => {
                                 promise = checkPendingInviteAndProcessThem(
                                     userSnapshot.data() as admin.auth.UserRecord
@@ -89,7 +90,6 @@ export const userInviteCreated = onDocumentCreated(
                 })
         }
 
-        // eslint-disable-next-line prefer-promise-reject-errors
         return Promise.reject(
             'Function failed due to not successful email send'
         )
@@ -111,7 +111,7 @@ export const checkPendingInviteAndProcessThem = (
         .where('status', '==', 'emailSent')
         .get()
         .then((querySnapshot) => {
-            const promises: Promise<any>[] = []
+            const promises: Promise<FirebaseFirestore.WriteResult>[] = []
             querySnapshot.forEach((snapshot) => {
                 const data = snapshot.data()
                 const organizationIdOrProjectId =
@@ -121,17 +121,13 @@ export const checkPendingInviteAndProcessThem = (
                     : InvitationType.ProjectInvitationType
 
                 promises.push(
-                    new Promise((resolve, reject) => {
-                        applyInvites(
-                            snapshot.id,
-                            invitationType,
-                            userId,
-                            organizationIdOrProjectId,
-                            data.role
-                        )
-                            .then((result) => resolve(result))
-                            .catch((error) => reject(error))
-                    })
+                    applyInvites(
+                        snapshot.id,
+                        invitationType,
+                        userId,
+                        organizationIdOrProjectId,
+                        data.role
+                    )
                 )
             })
             return Promise.all(promises)

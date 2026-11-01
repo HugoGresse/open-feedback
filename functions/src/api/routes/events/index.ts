@@ -1,4 +1,4 @@
-import { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsync } from 'fastify'
 import { getEventByApiKeyRoute } from './getByApiKey'
 import { getEventVotesRoute } from './getVotes'
 import { createEventRoute } from './create'

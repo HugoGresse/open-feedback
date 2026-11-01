@@ -5,11 +5,11 @@ import {
     getApps,
     initializeApp,
 } from 'firebase-admin/app'
-import { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 
 export function setupFirebase(
     fastify: FastifyInstance,
-    options: any,
+    _options: unknown,
     next: () => void
 ) {
     const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
@@ -22,7 +22,7 @@ export function setupFirebase(
             : applicationDefault(),
     }
 
-    let existingApps = getApps()
+    const existingApps = getApps()
     if (!existingApps[0]) {
         existingApps[0] = initializeApp(appConfig)
     }

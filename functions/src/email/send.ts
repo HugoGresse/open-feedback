@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash'
-import { MailgunEnv } from '../types/MailgunEnv'
+import type { MailgunEnv } from '../types/MailgunEnv'
 
 export interface EmailData {
     to?: string[]
@@ -10,11 +10,8 @@ export interface EmailData {
     html: string
 }
 
-const send = (
-    config: MailgunEnv,
-    data: EmailData
-): Promise<Error | Response> => {
-    if (!config || !config.key || !config.api || !config.domain) {
+const send = (config: MailgunEnv, data: EmailData): Promise<Response> => {
+    if (!config?.key || !config.api || !config.domain) {
         return Promise.reject(
             new Error(
                 'Mailgun configuration mailgun.key or mailgun.domain or mailgun.api not found.'
@@ -29,7 +26,6 @@ const send = (
 
     const { key, api, domain } = config
 
-    // eslint-disable-next-line no-undef
     const token = Buffer.from(`api:${key}`).toString('base64')
     const from = `OpenFeedback <no-reply@${domain}>`
     const form = new FormData()
@@ -37,24 +33,20 @@ const send = (
     form.append('subject', subject)
     form.append('html', html)
     replyTo && form.append('h:Reply-To', replyTo)
-    to &&
-        to.forEach((dest) => {
-            if (dest) form.append('to', dest)
-        })
-    bcc &&
-        bcc.forEach((dest) => {
-            const bccEmail =
-                !isEmpty(dest) && /\S+@\S+\.\S+/.test(dest) ? dest : null
-            if (bccEmail) form.append('bcc', bccEmail)
-        })
-    cc &&
-        cc.forEach((dest) => {
-            const ccEmail =
-                !isEmpty(dest) && /\S+@\S+\.\S+/.test(dest) ? dest : null
-            if (ccEmail) form.append('cc', ccEmail)
-        })
+    to?.forEach((dest) => {
+        if (dest) form.append('to', dest)
+    })
+    bcc?.forEach((dest) => {
+        const bccEmail =
+            !isEmpty(dest) && /\S+@\S+\.\S+/.test(dest) ? dest : null
+        if (bccEmail) form.append('bcc', bccEmail)
+    })
+    cc?.forEach((dest) => {
+        const ccEmail =
+            !isEmpty(dest) && /\S+@\S+\.\S+/.test(dest) ? dest : null
+        if (ccEmail) form.append('cc', ccEmail)
+    })
 
-    // eslint-disable-next-line no-console
     console.info(`Send email "${subject}" to`, { to, cc, bcc })
 
     return fetch(`${api}`, {

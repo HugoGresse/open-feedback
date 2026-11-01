@@ -1,10 +1,10 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https'
-// @ts-ignore: no type declaration for firebase tools
+// @ts-expect-error: no type declaration for firebase tools
 import firebaseTools from 'firebase-tools'
 import * as admin from 'firebase-admin'
 import { assertUserAuthenticated } from '../helpers/assertUserAuthenticated'
 import { getProject } from '../helpers/getProject'
-import { Project } from '../types/Project'
+import type { Project } from '../types/Project'
 import { getOrganization } from '../helpers/getOrganization'
 
 export const deleteProject = onCall(

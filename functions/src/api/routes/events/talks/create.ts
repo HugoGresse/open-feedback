@@ -1,7 +1,7 @@
-import { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsync } from 'fastify'
 import { Type } from '@sinclair/typebox'
 import {
-    CreateTalk,
+    type CreateTalk,
     CreateTalkSchema,
     ErrorSchema,
     EventIdSchema,

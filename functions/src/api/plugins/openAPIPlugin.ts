@@ -1,6 +1,6 @@
 import fastifyPlugin from 'fastify-plugin'
 import swagger from '@fastify/swagger'
-import { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 import { isNodeEnvDev } from '../env'
 /**
  * This plugin adds Swagger documentation to the API

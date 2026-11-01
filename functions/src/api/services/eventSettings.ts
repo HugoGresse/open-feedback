@@ -1,7 +1,7 @@
 import { randomInt } from 'node:crypto'
 import { BadRequestError } from '../others/Errors'
-import { EventSchema, UpdateEvent } from '../schemas'
-import { Project } from '../../types/Project'
+import { EventSchema, type UpdateEvent } from '../schemas'
+import type { Project } from '../../types/Project'
 
 // Top-level app routes (see src/App.jsx and projectUtils.reservedProjectIds).
 // An event with one of these IDs would be shadowed by the route. React Router

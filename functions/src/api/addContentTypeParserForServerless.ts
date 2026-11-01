@@ -1,5 +1,5 @@
-import { FastifyInstance } from 'fastify'
-import { IncomingMessage } from 'node:http'
+import type { FastifyInstance } from 'fastify'
+import type { IncomingMessage } from 'node:http'
 import { Readable } from 'node:stream'
 
 export const addContentTypeParserForServerless = (fastify: FastifyInstance) => {
@@ -24,7 +24,7 @@ export const addContentTypeParserForServerless = (fastify: FastifyInstance) => {
     fastify.addContentTypeParser(
         'multipart/form-data',
         {},
-        (req, body, done) => {
+        (req, _body, done) => {
             done(null, req)
         }
     )

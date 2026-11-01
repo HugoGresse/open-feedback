@@ -1,4 +1,4 @@
-import { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsync } from 'fastify'
 import { EventSchema, ErrorSchema } from '../../schemas'
 import { authenticateRequest } from '../../plugins/apiKeyPlugin'
 import { publicEvent } from '../../services/eventSettings'

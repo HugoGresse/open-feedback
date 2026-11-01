@@ -1,18 +1,18 @@
 import { createHash } from 'node:crypto'
-import { App as FirebaseApp } from 'firebase-admin/app'
+import type { App as FirebaseApp } from 'firebase-admin/app'
 import {
-    DocumentReference,
-    DocumentSnapshot,
+    type DocumentReference,
+    type DocumentSnapshot,
     FieldPath,
     FieldValue,
     getFirestore,
-    Transaction,
+    type Transaction,
 } from 'firebase-admin/firestore'
 import { HttpError, NotFoundError } from '../others/Errors'
 import {
     assertEventAccess,
     assertKeyScope,
-    EventAccess,
+    type EventAccess,
 } from '../services/eventAccess'
 import { PROJECT_COLLECTION } from './ProjectDao'
 

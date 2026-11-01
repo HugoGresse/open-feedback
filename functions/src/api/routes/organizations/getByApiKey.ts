@@ -1,4 +1,4 @@
-import { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsync } from 'fastify'
 import { OrganizationSchema, ErrorSchema } from '../../schemas'
 import { OrganizationDao } from '../../dao/OrganizationDao'
 import { authenticateRequest } from '../../plugins/apiKeyPlugin'

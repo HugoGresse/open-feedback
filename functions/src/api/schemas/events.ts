@@ -1,4 +1,4 @@
-import { Static, Type } from '@sinclair/typebox'
+import { type Static, Type } from '@sinclair/typebox'
 import { IdSchema } from './common'
 
 const HttpUrlSchema = Type.String({ format: 'uri', pattern: '^https?://' })

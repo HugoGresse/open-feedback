@@ -1,4 +1,4 @@
-import { App as FirebaseApp } from 'firebase-admin/app'
+import type { App as FirebaseApp } from 'firebase-admin/app'
 
 // Event fields that hold an uploaded image URL.
 const IMAGE_FIELDS = ['favicon', 'logoSmall'] as const

@@ -1,4 +1,4 @@
-import { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsync } from 'fastify'
 import { getOrganizationByApiKeyRoute } from './getByApiKey'
 
 export const organizationsRoutes: FastifyPluginAsync = async (server) => {

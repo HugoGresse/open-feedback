@@ -1,6 +1,6 @@
-import { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsync } from 'fastify'
 import {
-    CreateEvent,
+    type CreateEvent,
     CreateEventSchema,
     ErrorSchema,
     EventSchema,

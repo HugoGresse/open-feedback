@@ -1,11 +1,11 @@
-import { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsync } from 'fastify'
 import { Type } from '@sinclair/typebox'
 import {
     ErrorSchema,
     EventIdSchema,
     ResourceAcknowledgementSchema,
     ResourceIdSchema,
-    UpdateTalk,
+    type UpdateTalk,
     UpdateTalkSchema,
     RESOURCE_ACCESS_NOTE,
 } from '../../../schemas'

@@ -1,15 +1,13 @@
 {
+    // Typechecks the specs and test utilities, which the build excludes.
+    // Vitest resolves imports like a bundler, so the specs do too.
+    "extends": "./tsconfig.json",
     "compilerOptions": {
-        "module": "commonjs",
-        "noImplicitReturns": true,
-        "noUnusedLocals": true,
-        "outDir": "lib",
-        "sourceMap": true,
-        "strict": true,
-        "target": "es2017",
-        "esModuleInterop": true,
-        "resolveJsonModule": true
+        "noEmit": true,
+        "module": "preserve",
+        "moduleResolution": "bundler",
+        "skipLibCheck": true
     },
-    "compileOnSave": true,
-    "include": ["src"]
+    "include": ["src"],
+    "exclude": []
 }

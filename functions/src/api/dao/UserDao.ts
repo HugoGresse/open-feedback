@@ -1,11 +1,11 @@
-import { App as FirebaseApp } from 'firebase-admin/app'
+import type { App as FirebaseApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
-import { User } from '../../types/User'
+import type { User } from '../../types/User'
 
 const USER_COLLECTION = 'users'
 
-export class UserDao {
-    public static async getUsersByIds(
+export const UserDao = {
+    async getUsersByIds(
         firebaseApp: FirebaseApp,
         userIds: string[]
     ): Promise<Map<string, User>> {
@@ -40,7 +40,7 @@ export class UserDao {
                         data?.updatedAt?.toDate?.()?.toISOString() ||
                         data?.updatedAt,
                 } as User
-            } catch (error) {
+            } catch {
                 return null
             }
         })
@@ -55,5 +55,5 @@ export class UserDao {
         })
 
         return userMap
-    }
+    },
 }

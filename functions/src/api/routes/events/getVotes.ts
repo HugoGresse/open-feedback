@@ -1,12 +1,13 @@
-import { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsync } from 'fastify'
 import { Type } from '@sinclair/typebox'
 import { ErrorSchema, IdSchema } from '../../schemas'
 import { authenticateRequest } from '../../plugins/apiKeyPlugin'
 import { ProjectDao } from '../../dao/ProjectDao'
 import { NotFoundError } from '../../others/Errors'
+import type { Project } from '../../../types/Project'
 import {
     buildEventVotesExport,
-    ExportableProject,
+    type ExportableProject,
 } from '../../services/exportEventVotes'
 
 const ParamsSchema = Type.Object({
@@ -57,7 +58,7 @@ export const getEventVotesRoute: FastifyPluginAsync = async (server) => {
                 // Resolve the event and confirm it belongs to this org. A
                 // missing project and a wrong-org project must look identical
                 // (same 404 message) so event ids stay non-enumerable.
-                let resolved
+                let resolved: Project
                 try {
                     resolved = await ProjectDao.getProjectFromId(
                         server.firebase,

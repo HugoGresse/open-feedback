@@ -1,4 +1,4 @@
-import { Static, Type } from '@sinclair/typebox'
+import { type Static, Type } from '@sinclair/typebox'
 import { EventIdSchema } from './common'
 import { ResourceIdSchema, ResourceRevisionSchema } from './resources'
 

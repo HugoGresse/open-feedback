@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin'
-import { Vote, VoteData, VOTE_STATUS_DELETED } from './models/vote'
+import { Vote, type VoteData, VOTE_STATUS_DELETED } from './models/vote'
 import {
     onDocumentCreated,
     onDocumentUpdated,
@@ -92,7 +92,7 @@ export const incrementVoteAggregate = (
     firestoreDb: FirebaseFirestore.Firestore,
     vote: Vote
 ) => {
-    if (!vote || !vote.isValid()) {
+    if (!vote?.isValid()) {
         console.error('newVotes ids are not valid', JSON.stringify(vote))
         return
     }

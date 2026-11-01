@@ -1,4 +1,4 @@
-import { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsync } from 'fastify'
 import { listSpeakersRoute } from './list'
 import { getSpeakerRoute } from './get'
 import { createSpeakerRoute } from './create'

@@ -3,9 +3,9 @@ import { vi } from 'vitest'
 
 // test().firestore.makeDocumentSnapshot
 export const makeDocumentSnapshot = (
-    data: Record<any, any> | null,
-    path: string
-): any => {
+    data: Record<string, unknown> | null,
+    _path: string
+) => {
     return {
         ...data,
         data: () => data,
@@ -14,16 +14,16 @@ export const makeDocumentSnapshot = (
 
 // Used for specific event ... in tests
 export const makeDocumentSnapshot2 = (
-    data: Record<any, any> | null,
-    path: string
-): any => {
+    data: Record<string, unknown> | null,
+    _path: string
+) => {
     return {
         data: data,
     }
 }
 
 export const getFirestoreMocksAndInit = () => {
-    const collection = vi.fn((path) => {
+    const collection = vi.fn((_path: string) => {
         return {
             where,
             limit,
@@ -45,10 +45,10 @@ export const getFirestoreMocksAndInit = () => {
         operator: string,
         secondTerm: string
     ) => {
-        get: () => Promise<any>
-        set: () => Promise<any>
-        update: () => Promise<any>
-        onSnapshot: () => Promise<any>
+        get: () => Promise<unknown>
+        set: () => Promise<unknown>
+        update: () => Promise<unknown>
+        onSnapshot: () => Promise<unknown>
     } = vi.fn(() => {
         return {
             where,
@@ -60,7 +60,7 @@ export const getFirestoreMocksAndInit = () => {
         }
     })
 
-    const limit = vi.fn((limitCount: number) => {
+    const limit = vi.fn((_limitCount: number) => {
         return {
             get,
             set,
@@ -69,19 +69,26 @@ export const getFirestoreMocksAndInit = () => {
         }
     })
 
-    const get = vi.fn((): Promise<any> => Promise.resolve(true))
-    const set = vi.fn((): Promise<any> => Promise.resolve(true))
-    const update = vi.fn((): Promise<any> => Promise.resolve(true))
-    const onSnapshot = vi.fn((): Promise<any> => Promise.resolve(true))
+    const get = vi.fn((): Promise<unknown> => Promise.resolve(true))
+    const set = vi.fn((): Promise<unknown> => Promise.resolve(true))
+    const update = vi.fn((): Promise<unknown> => Promise.resolve(true))
+    const onSnapshot = vi.fn((): Promise<unknown> => Promise.resolve(true))
 
     const firestoreStub = vi.fn(() => ({
         collection,
-        snapshot_: (a, b, c, d) => {
+        // Called by the test SDK to turn event data into a snapshot. Empty
+        // data comes as the document name alone: a missing document.
+        snapshot_: (
+            proto: string | { fields: Record<string, { stringValue?: string }> }
+        ) => {
             return {
                 data: () => {
-                    const newObj = {}
-                    Object.keys(a.fields).forEach((key: string) => {
-                        const field = a.fields[key]
+                    if (typeof proto === 'string') {
+                        return undefined
+                    }
+                    const newObj: Record<string, string | undefined> = {}
+                    Object.keys(proto.fields).forEach((key: string) => {
+                        const field = proto.fields[key]
                         newObj[key] = field.stringValue
                     })
 
@@ -105,7 +112,7 @@ export const getFirestoreMocksAndInit = () => {
     }
 }
 
-export const replaceFirestoreByStub = (stub: any) => {
+export const replaceFirestoreByStub = (stub: unknown) => {
     Object.defineProperty(admin, 'firestore', {
         get: () => stub,
         configurable: true,

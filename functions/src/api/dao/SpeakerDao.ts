@@ -1,9 +1,9 @@
-import { App as FirebaseApp } from 'firebase-admin/app'
-import { EventAccess } from '../services/eventAccess'
-import { CreateSpeaker, Speaker, UpdateSpeaker } from '../schemas'
+import type { App as FirebaseApp } from 'firebase-admin/app'
+import type { EventAccess } from '../services/eventAccess'
+import type { CreateSpeaker, Speaker, UpdateSpeaker } from '../schemas'
 import {
     createResource,
-    EventResource,
+    type EventResource,
     getResource,
     listResources,
     textOrUndefined,
@@ -15,8 +15,8 @@ const speakers: EventResource<Omit<Speaker, 'id' | 'revision'>> = {
     map: (data) => ({ name: textOrUndefined(data.name) }),
 }
 
-export class SpeakerDao {
-    public static list(
+export const SpeakerDao = {
+    list(
         firebaseApp: FirebaseApp,
         projectId: string,
         access: EventAccess,
@@ -27,18 +27,18 @@ export class SpeakerDao {
             limit,
             after,
         })
-    }
+    },
 
-    public static get(
+    get(
         firebaseApp: FirebaseApp,
         projectId: string,
         access: EventAccess,
         speakerId: string
     ) {
         return getResource(firebaseApp, projectId, access, speakers, speakerId)
-    }
+    },
 
-    public static create(
+    create(
         firebaseApp: FirebaseApp,
         projectId: string,
         access: EventAccess,
@@ -49,9 +49,9 @@ export class SpeakerDao {
             id,
             fields,
         })
-    }
+    },
 
-    public static update(
+    update(
         firebaseApp: FirebaseApp,
         projectId: string,
         access: EventAccess,
@@ -64,5 +64,5 @@ export class SpeakerDao {
             revision,
             fields,
         })
-    }
+    },
 }

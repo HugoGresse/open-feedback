@@ -1,4 +1,4 @@
-import { Organization } from '../types/Organization'
+import type { Organization } from '../types/Organization'
 
 export const isOrganizationWriteAllowed = (
     uid: string,
