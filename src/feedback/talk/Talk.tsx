@@ -25,7 +25,7 @@ import {
     getActiveUserVotesByTalkAndVoteItemSelector,
     getErrorVotePostSelector,
     getErrorVotesLoadSelector,
-    getUserVotesLoadedSelector,
+    getUserVotesSettledSelector,
 } from '../vote/voteSelectors'
 
 import Grid from '@mui/material/Grid'
@@ -60,17 +60,18 @@ export const Talk = () => {
     const userVotes = useAppSelector((state) =>
         getActiveUserVotesByTalkAndVoteItemSelector(state, talkId)
     )
-    const userVotesLoaded = useAppSelector(getUserVotesLoadedSelector)
+    const userVotesSettled = useAppSelector(getUserVotesSettledSelector)
 
     // Whether the user had voted on the talk when it loaded: the votes cast
-    // during this visit don't reveal the results hidden until the user votes
+    // during this visit don't reveal the results hidden until the user votes.
+    // Votes that failed to load count as not voted, even after a retry.
     const [votedAtLoad, setVotedAtLoad] = useState<VotedOnTalkAtLoad | null>(
         null
     )
     const nextVotedAtLoad = snapshotVotedOnTalkAtLoad(
         votedAtLoad,
         id,
-        userVotesLoaded,
+        userVotesSettled,
         userVotes
     )
     if (nextVotedAtLoad !== votedAtLoad) {

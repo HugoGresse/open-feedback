@@ -148,8 +148,9 @@ describe('Single talk with votes hidden until the user vote', function () {
     // Toggles the setting on the emulator test project, the owner token
     // bypasses the security rules
     const setHideVotesUntilUserVote = (hideVotesUntilUserVote) => {
+        // Only .json files are parsed by cy.readFile
         cy.readFile('.firebaserc').then((firebaserc) => {
-            const firebaseProjectId = firebaserc.projects.default
+            const firebaseProjectId = JSON.parse(firebaserc).projects.default
             cy.request({
                 method: 'PATCH',
                 url: `http://127.0.0.1:8080/v1/projects/${firebaseProjectId}/databases/(default)/documents/projects/${Cypress.expose('firestoreTestProjectId')}?updateMask.fieldPaths=hideVotesUntilUserVote`,

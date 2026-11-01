@@ -100,7 +100,7 @@ const INIT_ACTION = { type: '@@init' } as never
 const createStore = (currentUserVotes: VoteState['currentUserVotes']) => {
     let votes: VoteState = {
         currentUserVotes,
-        userVotesLoaded: true,
+        userVotesSettled: true,
         errorVotePost: null,
         errorVotesLoad: null,
     }

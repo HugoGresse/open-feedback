@@ -9,18 +9,19 @@ export interface VotedOnTalkAtLoad {
 /**
  * The "voted at load" snapshot of the talk, taken once per talk page load:
  * the votes cast during the visit don't change it. `null` until the user
- * votes are loaded, so an early render doesn't wrongly mark "not voted".
+ * votes are loaded (or failed to load), so an early render doesn't wrongly
+ * mark "not voted".
  */
 export const snapshotVotedOnTalkAtLoad = (
     previous: VotedOnTalkAtLoad | null,
     talkId: string,
-    userVotesLoaded: boolean,
+    userVotesSettled: boolean,
     userTalkVotes: VotesByVoteItem
 ): VotedOnTalkAtLoad | null => {
     if (previous?.talkId === talkId) {
         return previous
     }
-    if (!userVotesLoaded) {
+    if (!userVotesSettled) {
         return null
     }
     return {

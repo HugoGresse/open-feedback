@@ -1,7 +1,8 @@
 import { createAppSelector, type RootState } from '../../../store'
 import {
+    getProjectVoteEndTimeSelector,
     getProjectVoteResultsSelector,
-    getProjectVoteStartEndTimeSelector,
+    getProjectVoteStartTimeSelector,
     hideVotesUntilUserVoteSelector,
 } from '../../project/projectSelectors'
 import { getSelectedTalkIdSelector } from './talkSelectors'
@@ -27,11 +28,15 @@ export type VoteResult = number | string | TextVoteResult[] | undefined
 /** Vote results of the selected talk keyed by vote item id. */
 export type VoteResults = Record<string, VoteResult>
 
+// The same object for every render without results
+const NO_VOTE_RESULTS: VoteResults = {}
+
 export const getVoteResultSelectorSelector = createAppSelector(
     getSelectedTalkIdSelector,
     getProjectVoteResultsSelector,
     hideVotesUntilUserVoteSelector,
-    getProjectVoteStartEndTimeSelector,
+    getProjectVoteStartTimeSelector,
+    getProjectVoteEndTimeSelector,
     (_: RootState, displayVotes: string | null) => displayVotes,
     (_: RootState, _displayVotes: string | null, votedOnTalkAtLoad: boolean) =>
         votedOnTalkAtLoad,
@@ -39,16 +44,12 @@ export const getVoteResultSelectorSelector = createAppSelector(
         selectedTalkId,
         voteResults,
         hideVotesUntilUserVote,
-        projectVotesWindow,
+        voteStartTime,
+        voteEndTime,
         displayVotes,
         votedOnTalkAtLoad
     ): VoteResults => {
-        const [voteStartTime, voteEndTime] = projectVotesWindow
-        // Without both dates, the vote window is always open
-        const voteWindowOpen =
-            !voteStartTime ||
-            !voteEndTime ||
-            isVoteWindowOpen(voteStartTime, voteEndTime)[0]
+        const [voteWindowOpen] = isVoteWindowOpen(voteStartTime, voteEndTime)
         if (
             !shouldShowVoteResults({
                 hideVotesUntilUserVote,
@@ -57,14 +58,14 @@ export const getVoteResultSelectorSelector = createAppSelector(
                 voteWindowOpen,
             })
         ) {
-            return {}
+            return NO_VOTE_RESULTS
         }
         if (
             !voteResults ||
             selectedTalkId === null ||
             !voteResults[selectedTalkId]
         ) {
-            return {}
+            return NO_VOTE_RESULTS
         }
         const results = voteResults[selectedTalkId]
 
