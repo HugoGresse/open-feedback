@@ -6,7 +6,8 @@ import {
     ADD_PROJECT_SUCCESS,
 } from '../projectActionTypes'
 import { getUserIdSelector } from '../../../auth/authSelectors'
-import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase.ts'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { newRandomHexColor } from '../../../../utils/colorsUtils'
 import { generateProjectApiKey } from '../../../../utils/generateApiKey'
 import { addNotification } from '../../../notification/notifcationActions'
@@ -70,17 +71,13 @@ export const newProject =
         // writes must be sequential, not batched: the private-doc create rule
         // does get(project), which in a batch would see the project as
         // not-yet-created and fail.
-        const projectRef = fireStoreMainInstance
-            .collection('projects')
-            .doc(projectId)
+        const projectRef = doc(fireStoreMainInstance, 'projects', projectId)
 
-        return await projectRef
-            .set(projectData)
+        return await setDoc(projectRef, projectData)
             .then(() =>
-                projectRef
-                    .collection('private')
-                    .doc('integration')
-                    .set({ apiKey: generateProjectApiKey() })
+                setDoc(doc(projectRef, 'private', 'integration'), {
+                    apiKey: generateProjectApiKey(),
+                })
             )
             .then(() => {
                 dispatch(

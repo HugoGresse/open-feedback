@@ -1,14 +1,13 @@
 import { describe, expect, test } from 'vitest'
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/firestore'
+import { deleteField } from 'firebase/firestore'
 import { projectEditToState } from './projectEditToState'
 
 describe('projectEditToState', () => {
     test('stores null instead of the deleteField() sentinels', () => {
         const state = projectEditToState({
             name: 'Event',
-            voteStartTime: firebase.firestore.FieldValue.delete(),
-            voteEndTime: firebase.firestore.FieldValue.delete(),
+            voteStartTime: deleteField(),
+            voteEndTime: deleteField(),
         })
 
         expect(state).toEqual({

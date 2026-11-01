@@ -12,7 +12,18 @@ import {
     UPDATE_VOTE_SUCCESS,
     type VoteAction,
 } from './voteActionTypes'
-import { fireStoreMainInstance, serverTimestamp } from '../../firebase.ts'
+import {
+    collection,
+    doc,
+    type FirestoreError,
+    getDocs,
+    query,
+    serverTimestamp,
+    setDoc,
+    updateDoc,
+    where,
+} from 'firebase/firestore'
+import { fireStoreMainInstance } from '../../firebase.ts'
 import { getUserSelector } from '../auth/authSelectors'
 import { getProjectSelector } from '../project/projectSelectors'
 import { getCurrentUserVotesSelector } from './voteSelectors'
@@ -27,7 +38,6 @@ import { trackUnvote, trackVote } from '../utils/track'
 import { getVoteId } from './getVoteId'
 import { isVoteAllowed } from './actions/isVoteAllowed'
 import type { TFunction } from 'i18next'
-import type firebase from 'firebase/compat/app'
 import type { Vote, VoteItem, VotesMap } from '../../core/models'
 import type { AppThunk } from '../../store'
 
@@ -98,12 +108,11 @@ export const voteFor = (
             })
         }
 
-        fireStoreMainInstance
-            .collection('projects')
-            .doc(projectId)
-            .collection('userVotes')
-            .doc(id)
-            .set(voteContent, { merge: true })
+        setDoc(
+            doc(fireStoreMainInstance, 'projects', projectId, 'userVotes', id),
+            voteContent,
+            { merge: true }
+        )
             .then(() => {
                 dispatch({
                     type: ADD_VOTE_SUCCESS,
@@ -177,18 +186,20 @@ export const removeVote = (
             },
         })
 
-        fireStoreMainInstance
-            .collection('projects')
-            .doc(getProjectSelector(getState())!.id)
-            .collection('userVotes')
-            .doc(voteToDelete.id)
-            .set(
-                {
-                    status: VOTE_STATUS_DELETED,
-                    updatedAt: serverTimestamp(),
-                },
-                { merge: true }
-            )
+        setDoc(
+            doc(
+                fireStoreMainInstance,
+                'projects',
+                getProjectSelector(getState())!.id,
+                'userVotes',
+                voteToDelete.id
+            ),
+            {
+                status: VOTE_STATUS_DELETED,
+                updatedAt: serverTimestamp(),
+            },
+            { merge: true }
+        )
             .then(() => {
                 dispatch({
                     type: REMOVE_VOTE_SUCCESS,
@@ -236,15 +247,19 @@ export const updateVote =
             },
         })
 
-        fireStoreMainInstance
-            .collection('projects')
-            .doc(getProjectSelector(getState())!.id)
-            .collection('userVotes')
-            .doc(vote.id)
-            .update({
+        updateDoc(
+            doc(
+                fireStoreMainInstance,
+                'projects',
+                getProjectSelector(getState())!.id,
+                'userVotes',
+                vote.id
+            ),
+            {
                 text: data,
                 updatedAt: serverTimestamp(),
-            })
+            }
+        )
             .then(() => {
                 dispatch({
                     type: UPDATE_VOTE_SUCCESS,
@@ -271,12 +286,17 @@ export const updateVote =
 
 export const getVotes = (): AppThunk => {
     return (dispatch, getState) => {
-        fireStoreMainInstance
-            .collection('projects')
-            .doc(getProjectSelector(getState())!.id)
-            .collection('userVotes')
-            .where('userId', '==', getUserSelector(getState())!.uid)
-            .get()
+        getDocs(
+            query(
+                collection(
+                    fireStoreMainInstance,
+                    'projects',
+                    getProjectSelector(getState())!.id,
+                    'userVotes'
+                ),
+                where('userId', '==', getUserSelector(getState())!.uid)
+            )
+        )
             .then((voteSnapshot) => {
                 const votes: VotesMap = {}
                 voteSnapshot.forEach((doc) => {
@@ -289,7 +309,7 @@ export const getVotes = (): AppThunk => {
                     payload: votes,
                 })
             })
-            .catch((error: firebase.firestore.FirestoreError) => {
+            .catch((error: FirestoreError) => {
                 dispatch({
                     type: GET_USER_VOTES_ERROR,
                     payload: error,

@@ -5,6 +5,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 interface RecordedOp {
     collection: string
     docId: string
+    path: string
     data: Record<string, unknown>
     merge: unknown
 }
@@ -12,44 +13,47 @@ interface RecordedOp {
 let recordedOps: RecordedOp[] = []
 let committedBatches = 0
 
-const makeCollection = (collectionName: string) => ({
-    doc: (docId: string) => ({ __collection: collectionName, __docId: docId }),
-})
-
 vi.mock('../../../notification/notifcationActions', () => ({
     addNotification: (payload: unknown) => ({ type: 'NOTIFY', payload }),
 }))
 
-vi.mock('../../../../firebase', () => ({
+vi.mock('../../../../firebase', () => ({ fireStoreMainInstance: {} }))
+
+interface FakeRef {
+    __path: string[]
+}
+
+vi.mock('firebase/firestore', () => ({
     serverTimestamp: () => 'SERVER_TS',
-    fireStoreMainInstance: {
-        collection: () => ({
-            doc: () => ({
-                collection: (name: string) => makeCollection(name),
-            }),
-        }),
-        batch: () => {
-            const ops: RecordedOp[] = []
-            return {
-                set: (
-                    ref: { __collection: string; __docId: string },
-                    data: Record<string, unknown>,
-                    options: unknown
-                ) => {
-                    ops.push({
-                        collection: ref.__collection,
-                        docId: ref.__docId,
-                        data,
-                        merge: options,
-                    })
-                },
-                commit: () => {
-                    committedBatches++
-                    recordedOps.push(...ops)
-                    return Promise.resolve()
-                },
-            }
-        },
+    // fireStoreMainInstance (mocked as {}) has no path: it is the root.
+    collection: (parent: Partial<FakeRef>, ...segments: string[]) => ({
+        __path: [...(parent.__path ?? []), ...segments],
+    }),
+    doc: (parent: Partial<FakeRef>, ...segments: string[]) => ({
+        __path: [...(parent.__path ?? []), ...segments],
+    }),
+    writeBatch: () => {
+        const ops: RecordedOp[] = []
+        return {
+            set: (
+                ref: FakeRef,
+                data: Record<string, unknown>,
+                options: unknown
+            ) => {
+                ops.push({
+                    collection: ref.__path[ref.__path.length - 2],
+                    docId: ref.__path[ref.__path.length - 1],
+                    path: ref.__path.join('/'),
+                    data,
+                    merge: options,
+                })
+            },
+            commit: () => {
+                committedBatches++
+                recordedOps.push(...ops)
+                return Promise.resolve()
+            },
+        }
     },
 }))
 
@@ -85,6 +89,8 @@ describe('importEventData', () => {
 
         expect(speaker?.docId).toBe('s1')
         expect(talk?.docId).toBe('t1')
+        expect(speaker?.path).toBe('projects/proj1/speakers/s1')
+        expect(talk?.path).toBe('projects/proj1/talks/t1')
         // serverTimestamp() is stamped on each imported doc.
         expect(speaker?.data.createdAt).toBe('SERVER_TS')
         expect(talk?.data.updatedAt).toBe('SERVER_TS')

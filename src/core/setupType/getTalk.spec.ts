@@ -7,21 +7,26 @@ const talkDoc = vi.hoisted(() => ({
     exists: false,
     data: (): Record<string, unknown> | undefined => undefined,
 }))
+const firestoreGetDoc = vi.hoisted(() =>
+    vi.fn((ref: { path: string; id: string }) =>
+        Promise.resolve({
+            id: ref.id,
+            exists: () => talkDoc.exists,
+            data: talkDoc.data,
+        })
+    )
+)
 
-vi.mock('../../firebase.ts', () => ({
-    serverTimestamp: () => 'serverTimestamp',
-    fireStoreMainInstance: {
-        collection: () => ({
-            doc: () => ({
-                collection: () => ({
-                    doc: (id: string) => ({
-                        get: () => Promise.resolve({ id, ...talkDoc }),
-                    }),
-                }),
-            }),
-        }),
+vi.mock('firebase/firestore', () => ({
+    // A fake reference: its path, and its id, the last path segment
+    doc: (parent: { path?: string }, ...segments: string[]) => {
+        const path = [parent.path, ...segments].filter(Boolean).join('/')
+        return { path, id: path.split('/').pop() }
     },
+    getDoc: firestoreGetDoc,
+    serverTimestamp: () => 'serverTimestamp',
 }))
+vi.mock('../../firebase.ts', () => ({ fireStoreMainInstance: {} }))
 
 const fetchMock = vi.fn<typeof fetch>()
 vi.stubGlobal('fetch', fetchMock)
@@ -73,6 +78,9 @@ describe('OpenfeedbackApi.getTalk', () => {
         const talks = await new OpenfeedbackApi('p1').getTalk('t1')
 
         expect(talks).toEqual({ t1: { id: 't1', title: 'Talk 1' } })
+        expect(firestoreGetDoc).toHaveBeenLastCalledWith(
+            expect.objectContaining({ path: 'projects/p1/talks/t1' })
+        )
     })
 
     test('returns no talk for a missing talk document', async () => {

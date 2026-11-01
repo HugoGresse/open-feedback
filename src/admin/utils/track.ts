@@ -1,3 +1,4 @@
+import { logEvent } from 'firebase/analytics'
 import { analytics } from '../../firebase.ts'
 
 export const trackNewProject = (
@@ -6,7 +7,7 @@ export const trackNewProject = (
     organizationId: string | null | undefined
 ) => {
     if (!analytics) return
-    analytics.logEvent('admin_new_project', {
+    logEvent(analytics, 'admin_new_project', {
         name: projectName,
         setup: setupType,
         organizationId: organizationId,
@@ -15,7 +16,7 @@ export const trackNewProject = (
 
 export const trackNewOrganization = (organizationName: string) => {
     if (!analytics) return
-    analytics.logEvent('admin_new_organization', {
+    logEvent(analytics, 'admin_new_organization', {
         name: organizationName,
     })
 }

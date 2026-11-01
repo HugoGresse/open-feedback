@@ -1,13 +1,13 @@
-import type firebase from 'firebase/compat/app'
+import type { QuerySnapshot } from 'firebase/firestore'
 
-// From a snapshot of collection (when you use .collection(..).get()), convert it into a map of:
+// From a snapshot of collection (when you use getDocs(collection(..))), convert it into a map of:
 // {
 //    id1: {...dataOfId1},
 //    id2: {...dataOfId2}
 // }
 // The documents are cast to T: callers state the shape of the collection.
 export const convertSnapshotToMap = <T extends { id: string }>(
-    snapshot: firebase.firestore.QuerySnapshot
+    snapshot: QuerySnapshot
 ): Record<string, T> => {
     const map: Record<string, T> = {}
     snapshot.forEach((doc) => {

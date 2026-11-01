@@ -1,4 +1,4 @@
-import type firebase from 'firebase/compat/app'
+import { type FirestoreError, Timestamp } from 'firebase/firestore'
 import {
     GET_PROJECT_ERROR,
     GET_PROJECT_NOTFOUND,
@@ -9,7 +9,6 @@ import {
     type ProjectAction,
     SET_SELECTED_DATE,
 } from './projectActionTypes'
-import { nowTimestamp } from '../../firebase.ts'
 import {
     ADD_VOTE_SUCCESS,
     type AddVoteSuccessAction,
@@ -40,7 +39,7 @@ export interface ProjectState {
     selectedDate: string
     projectLoadError: string | null
     projectLoadNotFound?: boolean
-    projectVotesError: firebase.firestore.FirestoreError | null
+    projectVotesError: FirestoreError | null
 }
 
 const initState: ProjectState = {
@@ -112,7 +111,7 @@ export const projectReducer = (
                                 plus:
                                     (precedentTextVotes[vote.id].plus ?? NaN) -
                                     1,
-                                updatedAt: nowTimestamp(),
+                                updatedAt: Timestamp.now(),
                             },
                         }
                     } else {
@@ -128,7 +127,7 @@ export const projectReducer = (
                         [vote.id]: {
                             ...precedentTextVotes[vote.id],
                             plus: (precedentTextVotes[vote.id].plus || 1) + 1,
-                            updatedAt: nowTimestamp(),
+                            updatedAt: Timestamp.now(),
                         },
                     }
                 } else {
@@ -141,9 +140,9 @@ export const projectReducer = (
                             ...vote,
                             plus: precedentTextVote?.plus ?? 1,
                             text: vote.text,
-                            updatedAt: nowTimestamp(),
+                            updatedAt: Timestamp.now(),
                             createdAt:
-                                precedentTextVote?.createdAt ?? nowTimestamp(),
+                                precedentTextVote?.createdAt ?? Timestamp.now(),
                         },
                     }
                 }

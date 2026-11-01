@@ -1,3 +1,4 @@
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore'
 import type { Organization } from '../../../../core/models'
 import type { AppThunk } from '../../../../store'
 import { fireStoreMainInstance } from '../../../../firebase.ts'
@@ -21,15 +22,17 @@ export const getOrganizations =
             return
         }
 
-        return fireStoreMainInstance
-            .collection('organizations')
-            .where(
-                ORGANIZATION_ROLE_ID[ORGANIZATION_USER_ROLE_VIEWER],
-                'array-contains',
-                user.uid
+        return getDocs(
+            query(
+                collection(fireStoreMainInstance, 'organizations'),
+                where(
+                    ORGANIZATION_ROLE_ID[ORGANIZATION_USER_ROLE_VIEWER],
+                    'array-contains',
+                    user.uid
+                ),
+                orderBy('createdAt', 'desc')
             )
-            .orderBy('createdAt', 'desc')
-            .get()
+        )
             .then((querySnapshot) => {
                 const organizations: Organization[] = []
                 querySnapshot.forEach((doc) => {

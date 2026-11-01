@@ -4,7 +4,8 @@ import {
     getSelectedProjectIdOrThrowSelector,
     getSelectedProjectSelector,
 } from '../projectSelectors'
-import { deleteField, fireStoreMainInstance } from '../../../../firebase.ts'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
+import { deleteField, doc, setDoc } from 'firebase/firestore'
 import { fixVoteItemLanguages } from './fixVoteItemLanguages'
 import { addNotification } from '../../../notification/notifcationActions'
 import {
@@ -31,10 +32,15 @@ export const editProject =
             ),
         }
 
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(getSelectedProjectIdOrThrowSelector(getState()))
-            .set(fixedProject, { merge: true })
+        return setDoc(
+            doc(
+                fireStoreMainInstance,
+                'projects',
+                getSelectedProjectIdOrThrowSelector(getState())
+            ),
+            fixedProject,
+            { merge: true }
+        )
             .then(() => {
                 dispatch(
                     addNotification({

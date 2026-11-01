@@ -1,11 +1,33 @@
-import { memo, type ReactNode, useEffect, useState } from 'react'
+import {
+    lazy,
+    memo,
+    type ReactNode,
+    Suspense,
+    useEffect,
+    useState,
+} from 'react'
 import logoWhite from '../assets/logo-openfeedback-white.png'
-import { auth, authProvider } from '../firebase'
+import {
+    EmailAuthProvider,
+    GithubAuthProvider,
+    GoogleAuthProvider,
+    onAuthStateChanged,
+    PhoneAuthProvider,
+    signInWithCredential,
+    signOut as firebaseSignOut,
+} from 'firebase/auth'
+import { authProvider } from '../firebase'
 import { LoaderMatchParent } from '../baseComponents/customComponent/LoaderMatchParent.tsx'
 import Box from '@mui/material/Box'
-import { StyledFirebaseAuth } from '../baseComponents/StyledFirebaseAuth.tsx'
 import { Button } from '@mui/material'
 import { useIsSuperAdmin } from './hooks/useIsSuperAdmin.ts'
+
+// firebaseui and the compat Auth it needs load only with the sign-in form
+const StyledFirebaseAuth = lazy(() =>
+    import('../baseComponents/StyledFirebaseAuth.tsx').then((module) => ({
+        default: module.StyledFirebaseAuth,
+    }))
+)
 
 export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
     const [loggedInUser, setUser] = useState<{ uid: string } | null>(
@@ -21,13 +43,14 @@ export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
     }
 
     const signOut = () => {
-        authProvider.signOut().then(() => {
+        firebaseSignOut(authProvider).then(() => {
             setUser(null)
         })
     }
 
     useEffect(() => {
-        const unregisterAuthObserver = authProvider.onAuthStateChanged(
+        const unregisterAuthObserver = onAuthStateChanged(
+            authProvider,
             (user) => {
                 if (user) {
                     if (user.isAnonymous) {
@@ -87,64 +110,60 @@ export const LoginSuperAdmin = memo(({ children }: { children: ReactNode }) => {
                     <LoaderMatchParent style={{ color: 'white' }} height={40} />
                 )}
                 <Box display={loaderDisplayed ? 'none' : 'block'}>
-                    <StyledFirebaseAuth
-                        firebaseAuth={authProvider}
-                        uiCallback={(firebaseUI: {
-                            isPendingRedirect: () => boolean
-                        }) => {
-                            if (firebaseUI.isPendingRedirect()) {
-                                setLoaderDisplay(true)
-                            }
-                        }}
-                        uiConfig={{
-                            signInFlow: 'popup',
-                            signInSuccessUrl: '/superadmin/',
-                            signInOptions: [
-                                auth.GoogleAuthProvider.PROVIDER_ID,
-                                auth.GithubAuthProvider.PROVIDER_ID,
-                                auth.EmailAuthProvider.PROVIDER_ID,
-                                auth.PhoneAuthProvider.PROVIDER_ID,
-                            ],
-                            callbacks: {
-                                // Avoid redirects after sign-in.
-                                signInSuccessWithAuthResult: () => false,
-                                signInFailure: (error: {
-                                    code: string
-                                    credential: {
-                                        signInMethod: string
-                                        providerId: string
-                                        toJSON: () => object
-                                    }
-                                }) => {
-                                    if (
-                                        error.code !==
-                                        'firebaseui/anonymous-upgrade-merge-conflict'
-                                    ) {
-                                        return Promise.resolve()
-                                    }
+                    <Suspense fallback={null}>
+                        <StyledFirebaseAuth
+                            uiCallback={(firebaseUI: {
+                                isPendingRedirect: () => boolean
+                            }) => {
+                                if (firebaseUI.isPendingRedirect()) {
+                                    setLoaderDisplay(true)
+                                }
+                            }}
+                            uiConfig={{
+                                signInFlow: 'popup',
+                                signInSuccessUrl: '/superadmin/',
+                                signInOptions: [
+                                    GoogleAuthProvider.PROVIDER_ID,
+                                    GithubAuthProvider.PROVIDER_ID,
+                                    EmailAuthProvider.PROVIDER_ID,
+                                    PhoneAuthProvider.PROVIDER_ID,
+                                ],
+                                callbacks: {
+                                    // Avoid redirects after sign-in.
+                                    signInSuccessWithAuthResult: () => false,
+                                    signInFailure: (error) => {
+                                        if (
+                                            error.code !==
+                                            'firebaseui/anonymous-upgrade-merge-conflict'
+                                        ) {
+                                            return Promise.resolve()
+                                        }
 
-                                    const currentUser = authProvider.currentUser
+                                        const currentUser =
+                                            authProvider.currentUser
 
-                                    authProvider
-                                        .signInWithCredential(error.credential)
-                                        .then(() => {
+                                        signInWithCredential(
+                                            authProvider,
+                                            error.credential
+                                        ).then(() => {
                                             if (currentUser?.isAnonymous) {
                                                 return currentUser.delete()
                                             }
                                         })
+                                    },
+                                    uiShown: () => {
+                                        // Add additional time because for third party sign in (google) the uisown is called but
+                                        // nothing is displayed...
+                                        setTimeout(
+                                            () => setLoaderDisplay(false),
+                                            2000
+                                        )
+                                    },
                                 },
-                                uiShown: () => {
-                                    // Add additional time because for third party sign in (google) the uisown is called but
-                                    // nothing is displayed...
-                                    setTimeout(
-                                        () => setLoaderDisplay(false),
-                                        2000
-                                    )
-                                },
-                            },
-                            autoUpgradeAnonymousUsers: true,
-                        }}
-                    />
+                                autoUpgradeAnonymousUsers: true,
+                            }}
+                        />
+                    </Suspense>
                 </Box>
             </Box>
         </Box>

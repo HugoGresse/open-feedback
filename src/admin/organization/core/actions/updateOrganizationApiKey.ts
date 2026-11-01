@@ -1,7 +1,8 @@
+import { deleteField, doc, getDoc, setDoc } from 'firebase/firestore'
 import type { OrganizationIntegration } from '../../../../core/models'
 import type { AppThunk } from '../../../../store'
 import { getSelectedOrganizationIdSelector } from '../organizationSelectors'
-import { deleteField, fireStoreMainInstance } from '../../../../firebase.ts'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
 import { addNotification } from '../../../notification/notifcationActions'
 import { generateOrgApiKey } from '../../../../utils/generateApiKey'
 
@@ -13,17 +14,21 @@ export const ORGANIZATION_INTEGRATION_DOC = 'integration'
 export type { OrganizationIntegration }
 
 const integrationDocRef = (organizationId: string) =>
-    fireStoreMainInstance
-        .collection('organizations')
-        .doc(organizationId)
-        .collection(ORGANIZATION_PRIVATE_COLLECTION)
-        .doc(ORGANIZATION_INTEGRATION_DOC)
+    doc(
+        fireStoreMainInstance,
+        'organizations',
+        organizationId,
+        ORGANIZATION_PRIVATE_COLLECTION,
+        ORGANIZATION_INTEGRATION_DOC
+    )
 
 export const fetchOrganizationIntegration = async (
     organizationId: string
 ): Promise<OrganizationIntegration | null> => {
-    const doc = await integrationDocRef(organizationId).get()
-    return doc.exists ? (doc.data() as OrganizationIntegration) : null
+    const docSnapshot = await getDoc(integrationDocRef(organizationId))
+    return docSnapshot.exists()
+        ? (docSnapshot.data() as OrganizationIntegration)
+        : null
 }
 
 /**
@@ -45,8 +50,11 @@ export const updateOrganizationApiKey =
         }
         const apiKey = generateOrgApiKey()
 
-        return integrationDocRef(organizationId)
-            .set({ apiKey, apiKeyLastUsedAt: deleteField() }, { merge: true })
+        return setDoc(
+            integrationDocRef(organizationId),
+            { apiKey, apiKeyLastUsedAt: deleteField() },
+            { merge: true }
+        )
             .then(() => {
                 dispatch(
                     addNotification({

@@ -1,3 +1,4 @@
+import { logEvent } from 'firebase/analytics'
 import { analytics } from '../../firebase.ts'
 
 export const trackVote = (
@@ -6,7 +7,7 @@ export const trackVote = (
     voteType: string
 ) => {
     if (!analytics) return
-    analytics.logEvent('vote', {
+    logEvent(analytics, 'vote', {
         project_name: projectName,
         project_id: projectId,
         voteType: voteType,
@@ -15,7 +16,7 @@ export const trackVote = (
 
 export const trackUnvote = (projectName: string, projectId: string) => {
     if (!analytics) return
-    analytics.logEvent('unvote', {
+    logEvent(analytics, 'unvote', {
         project_name: projectName,
         project_id: projectId,
     })

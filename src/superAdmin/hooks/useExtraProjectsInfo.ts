@@ -1,27 +1,23 @@
 import type { ProjectExtraInfo, Project } from '../type.ts'
 import { useEffect, useState } from 'react'
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore'
 import { fireStoreMainInstance } from '../../firebase.ts'
 import { getProjectApi } from '../../core/setupType/projectApi.ts'
 
 const getOrganizationName = async (organizationId: string) => {
-    return fireStoreMainInstance
-        .collection('organizations')
-        .doc(organizationId)
-        .get()
-        .then((doc) => {
-            return doc.data()?.name || '•'
-        })
+    return getDoc(
+        doc(fireStoreMainInstance, 'organizations', organizationId)
+    ).then((docSnapshot) => {
+        return docSnapshot.data()?.name || '•'
+    })
 }
 
 const getProjectVoteCount = async (projectId: string) => {
-    return fireStoreMainInstance
-        .collection('projects')
-        .doc(projectId)
-        .collection('userVotes')
-        .get()
-        .then((querySnapshot) => {
-            return querySnapshot.size
-        })
+    return getDocs(
+        collection(fireStoreMainInstance, 'projects', projectId, 'userVotes')
+    ).then((querySnapshot) => {
+        return querySnapshot.size
+    })
 }
 const getUser = async (
     userId: string
@@ -29,16 +25,14 @@ const getUser = async (
     email: string
     name: string
 }> => {
-    return fireStoreMainInstance
-        .collection('users')
-        .doc(userId)
-        .get()
-        .then((doc) => {
+    return getDoc(doc(fireStoreMainInstance, 'users', userId)).then(
+        (docSnapshot) => {
             return {
-                email: doc.data()?.email || '•',
-                name: doc.data()?.displayName || '•',
+                email: docSnapshot.data()?.email || '•',
+                name: docSnapshot.data()?.displayName || '•',
             }
-        })
+        }
+    )
 }
 
 const getSpeakersCount = async (project: Project) => {

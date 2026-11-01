@@ -1,4 +1,11 @@
-import firebase from 'firebase/compat/app'
+import { getApp, getApps, initializeApp } from 'firebase/app'
+import {
+    collection,
+    doc,
+    getDoc,
+    getDocs,
+    getFirestore,
+} from 'firebase/firestore'
 import {
     formatTalksWithScheduledForHoverboardv2,
     type HoverboardScheduleDay,
@@ -19,24 +26,24 @@ export class Hoverboardv2Api implements ProjectApi {
         this.config = config
 
         if (
-            firebase.apps.filter((app) => app.name === this.config.projectId)
+            getApps().filter((app) => app.name === this.config.projectId)
                 .length > 0
         ) {
             return
         }
 
-        firebase.initializeApp(this.config, this.config.projectId)
+        initializeApp(this.config, this.config.projectId)
     }
 
     getFirestore() {
-        return firebase.app(this.config.projectId).firestore()
+        return getFirestore(getApp(this.config.projectId))
     }
 
     getTalks(): Promise<TalksMap> {
         const firestore = this.getFirestore()
 
-        const schedulePromise = firestore.collection('schedule').get()
-        const talksPromise = firestore.collection('sessions').get()
+        const schedulePromise = getDocs(collection(firestore, 'schedule'))
+        const talksPromise = getDocs(collection(firestore, 'sessions'))
 
         return Promise.all([schedulePromise, talksPromise]).then(
             ([resultSchedule, resultTalks]) => {
@@ -60,8 +67,8 @@ export class Hoverboardv2Api implements ProjectApi {
 
     getTalk(talkId: string): Promise<TalksMap> {
         const firestore = this.getFirestore()
-        const schedulePromise = firestore.collection('schedule').get()
-        const talksPromise = firestore.collection('sessions').doc(talkId).get()
+        const schedulePromise = getDocs(collection(firestore, 'schedule'))
+        const talksPromise = getDoc(doc(firestore, 'sessions', talkId))
 
         return Promise.all([schedulePromise, talksPromise]).then(
             ([resultSchedule, resultTalks]) => {
@@ -70,7 +77,7 @@ export class Hoverboardv2Api implements ProjectApi {
 
                 // A session missing from the database is not a talk, even
                 // when the schedule still lists it
-                if (resultTalks.exists) {
+                if (resultTalks.exists()) {
                     talks[talkId] = {
                         ...(resultTalks.data() as NewTalk),
                         id: resultTalks.id,
@@ -87,10 +94,8 @@ export class Hoverboardv2Api implements ProjectApi {
     }
 
     getSpeakers(): Promise<SpeakersMap> {
-        return this.getFirestore()
-            .collection('speakers')
-            .get()
-            .then((speakersSnapshot) => {
+        return getDocs(collection(this.getFirestore(), 'speakers')).then(
+            (speakersSnapshot) => {
                 const speakers: SpeakersMap = {}
 
                 speakersSnapshot.forEach((doc) => {
@@ -99,7 +104,8 @@ export class Hoverboardv2Api implements ProjectApi {
                 })
 
                 return speakers
-            })
+            }
+        )
     }
 
     isReadOnly() {

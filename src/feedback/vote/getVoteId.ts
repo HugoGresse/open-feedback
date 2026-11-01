@@ -1,3 +1,4 @@
+import { collection, doc } from 'firebase/firestore'
 import { getUserVotesByTalkAndVoteItemSelector } from './voteSelectors'
 import { fireStoreMainInstance } from '../../firebase.ts'
 import { findReusableVote } from './findReusableVote'
@@ -30,10 +31,13 @@ export const getVoteId = (
     }
 
     return [
-        fireStoreMainInstance
-            .collection('projects')
-            .doc(projectId)
-            .collection('userVotes')
-            .doc().id,
+        doc(
+            collection(
+                fireStoreMainInstance,
+                'projects',
+                projectId,
+                'userVotes'
+            )
+        ).id,
     ]
 }

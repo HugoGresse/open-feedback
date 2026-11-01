@@ -1,5 +1,6 @@
 import { isVoteAllowed } from './isVoteAllowed'
-import { fireStoreMainInstance, serverTimestamp } from '../../../firebase.ts'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
+import { fireStoreMainInstance } from '../../../firebase.ts'
 import { trackUnvote, trackVote } from '../../utils/track'
 import { getProjectSelector } from '../../project/projectSelectors'
 import { getUserSelector } from '../../auth/authSelectors'
@@ -95,12 +96,11 @@ export const upVoteOnTextVoteItemVote =
             },
         })
 
-        fireStoreMainInstance
-            .collection('projects')
-            .doc(projectId)
-            .collection('userVotes')
-            .doc(id)
-            .set(voteContent, { merge: true })
+        setDoc(
+            doc(fireStoreMainInstance, 'projects', projectId, 'userVotes', id),
+            voteContent,
+            { merge: true }
+        )
             .then(() => {
                 dispatch({
                     type: ADD_VOTE_SUCCESS,
@@ -176,18 +176,20 @@ export const removeUpVoteOnTextVoteItemVote =
             },
         })
 
-        fireStoreMainInstance
-            .collection('projects')
-            .doc(project.id)
-            .collection('userVotes')
-            .doc(voteToDelete.id)
-            .set(
-                {
-                    status: VOTE_STATUS_DELETED,
-                    updatedAt: serverTimestamp(),
-                },
-                { merge: true }
-            )
+        setDoc(
+            doc(
+                fireStoreMainInstance,
+                'projects',
+                project.id,
+                'userVotes',
+                voteToDelete.id
+            ),
+            {
+                status: VOTE_STATUS_DELETED,
+                updatedAt: serverTimestamp(),
+            },
+            { merge: true }
+        )
             .then(() => {
                 dispatch({
                     type: REMOVE_VOTE_SUCCESS,

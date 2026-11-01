@@ -7,6 +7,7 @@ import {
     GET_USER_VOTES_SUCCESS,
 } from './dashboardActionTypes'
 import { fireStoreMainInstance } from '../../../firebase.ts'
+import { collection, getDocs, orderBy, query } from 'firebase/firestore'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import type { AppThunk } from '../../../store'
 import type { AggregatedTalkVotes } from '../../../core/models'
@@ -15,21 +16,18 @@ import type { AggregatedTalkVotes } from '../../../core/models'
 export const fetchTalkVotes = (
     projectId: string
 ): Promise<Record<string, DashboardTalkVotes>> =>
-    fireStoreMainInstance
-        .collection('projects')
-        .doc(projectId)
-        .collection('sessionVotes')
-        .get()
-        .then((snapshots) => {
-            const talkVotes: Record<string, DashboardTalkVotes> = {}
-            snapshots.forEach((doc) => {
-                talkVotes[doc.id] = {
-                    id: doc.id,
-                    votes: doc.data() as AggregatedTalkVotes,
-                }
-            })
-            return talkVotes
+    getDocs(
+        collection(fireStoreMainInstance, 'projects', projectId, 'sessionVotes')
+    ).then((snapshots) => {
+        const talkVotes: Record<string, DashboardTalkVotes> = {}
+        snapshots.forEach((doc) => {
+            talkVotes[doc.id] = {
+                id: doc.id,
+                votes: doc.data() as AggregatedTalkVotes,
+            }
         })
+        return talkVotes
+    })
 
 export const getTalkVotes = (): AppThunk<Promise<void> | undefined> => {
     return (dispatch, getState) => {
@@ -62,12 +60,17 @@ export const getUserVotes = (): AppThunk<Promise<void> | undefined> => {
         if (!projectId) {
             return
         }
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(projectId)
-            .collection('userVotes')
-            .orderBy('createdAt')
-            .get()
+        return getDocs(
+            query(
+                collection(
+                    fireStoreMainInstance,
+                    'projects',
+                    projectId,
+                    'userVotes'
+                ),
+                orderBy('createdAt')
+            )
+        )
             .then((snapshot) => {
                 const userVotes: DashboardUserVote[] = []
                 snapshot.forEach((doc) => {

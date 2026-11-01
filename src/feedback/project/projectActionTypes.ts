@@ -1,4 +1,4 @@
-import type firebase from 'firebase/compat/app'
+import type { FirestoreError } from 'firebase/firestore'
 import type { Project, TalkVotes, Vote } from '../../core/models'
 
 export const GET_PROJECT_SUCCESS = 'project/get/success'
@@ -34,7 +34,7 @@ export type ProjectAction =
     | { type: typeof GET_PROJECT_VOTE_RESULT_SUCCESS; payload: LoadedTalkVotes }
     | {
           type: typeof GET_PROJECT_VOTE_RESULT_ERROR
-          payload: firebase.firestore.FirestoreError
+          payload: FirestoreError
       }
     | {
           type: typeof INCREMENT_VOTE_LOCALLY

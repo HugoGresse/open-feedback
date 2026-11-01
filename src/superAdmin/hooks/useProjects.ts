@@ -1,3 +1,4 @@
+import { collection, orderBy, query, where } from 'firebase/firestore'
 import {
     useFirestoreCollection,
     type UseQueryResult,
@@ -14,13 +15,14 @@ export type DateRange = {
 export const useProjects = (
     dateRange: DateRange
 ): UseQueryResult<Project[]> => {
-    const query = fireStoreMainInstance
-        .collection('projects')
-        .where('createdAt', '>=', dateRange.startDate)
-        .where('createdAt', '<=', dateRange.endDate)
-        .orderBy('createdAt', 'desc')
+    const projectsQuery = query(
+        collection(fireStoreMainInstance, 'projects'),
+        where('createdAt', '>=', dateRange.startDate),
+        where('createdAt', '<=', dateRange.endDate),
+        orderBy('createdAt', 'desc')
+    )
 
     const requestId = `projects-${dateRange.name}`
 
-    return useFirestoreCollection<Project>(query, requestId)
+    return useFirestoreCollection<Project>(projectsQuery, requestId)
 }

@@ -1,4 +1,10 @@
-import type firebase from 'firebase/compat/app'
+import {
+    type DocumentSnapshot,
+    doc,
+    type FirestoreError,
+    getDoc,
+    onSnapshot,
+} from 'firebase/firestore'
 import {
     GET_PROJECT_ERROR,
     GET_PROJECT_SUCCESS,
@@ -21,12 +27,9 @@ import type { AppThunk } from '../../store'
 export const getProject =
     (projectId: string): AppThunk<Promise<void>> =>
     (dispatch) => {
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(projectId)
-            .get()
+        return getDoc(doc(fireStoreMainInstance, 'projects', projectId))
             .then((projectSnapshot) => {
-                if (projectSnapshot.exists) {
+                if (projectSnapshot.exists()) {
                     // Firestore boundary: the document is a project.
                     const project = projectSnapshot.data() as Project
                     project.id = projectId
@@ -74,7 +77,7 @@ export const setSelectedDate = (date: string): ProjectAction => ({
 export const getVoteResult =
     (talkId: string): AppThunk<(() => void) | undefined> =>
     (dispatch, getState) => {
-        const onNewVotes = (snapshot: firebase.firestore.DocumentSnapshot) => {
+        const onNewVotes = (snapshot: DocumentSnapshot) => {
             // Firestore boundary: sessionVotes/{talkId} holds the aggregated votes.
             const inputVotes = snapshot.data() as
                 | AggregatedTalkVotes
@@ -124,7 +127,7 @@ export const getVoteResult =
             })
         }
 
-        const onError = (error: firebase.firestore.FirestoreError) => {
+        const onError = (error: FirestoreError) => {
             dispatch({
                 type: GET_PROJECT_VOTE_RESULT_ERROR,
                 payload: error,
@@ -135,19 +138,27 @@ export const getVoteResult =
         const projectId = getProjectSelector(getState())!.id
 
         if (isLiveUserVotesSelector(getState())) {
-            return fireStoreMainInstance
-                .collection('projects')
-                .doc(projectId)
-                .collection('sessionVotes')
-                .doc(talkId)
-                .onSnapshot((snapshot) => onNewVotes(snapshot), onError)
+            return onSnapshot(
+                doc(
+                    fireStoreMainInstance,
+                    'projects',
+                    projectId,
+                    'sessionVotes',
+                    talkId
+                ),
+                (snapshot) => onNewVotes(snapshot),
+                onError
+            )
         } else {
-            fireStoreMainInstance
-                .collection('projects')
-                .doc(projectId)
-                .collection('sessionVotes')
-                .doc(talkId)
-                .get()
+            getDoc(
+                doc(
+                    fireStoreMainInstance,
+                    'projects',
+                    projectId,
+                    'sessionVotes',
+                    talkId
+                )
+            )
                 .then(onNewVotes)
                 .catch(onError)
         }

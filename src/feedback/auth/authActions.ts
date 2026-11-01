@@ -1,4 +1,8 @@
-import type firebase from 'firebase/compat/app'
+import {
+    type AuthError,
+    onAuthStateChanged,
+    signInAnonymously,
+} from 'firebase/auth'
 import { authProvider } from '../../firebase.ts'
 import { LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT } from './authActionTypes'
 import { isLoggedSelector } from './authSelectors'
@@ -12,7 +16,7 @@ export const signIn = (): AppThunk => {
         if (isLoggedSelector(getState())) {
             return
         }
-        authProvider.onAuthStateChanged((user) => {
+        onAuthStateChanged(authProvider, (user) => {
             if (user) {
                 dispatch({
                     type: LOGIN_SUCCESS,
@@ -32,18 +36,16 @@ export const signIn = (): AppThunk => {
                 payload: authProvider.currentUser,
             })
         } else {
-            // Firebase Auth rejects with a firebase.auth.Error
-            authProvider
-                .signInAnonymously()
-                .catch((error: firebase.auth.Error) => {
-                    if (error.code === 'auth/too-many-requests') {
-                        createAlert(ALERT_FIREBASE_QUOTA_REACHED)
-                    }
-                    dispatch({
-                        type: LOGIN_ERROR,
-                        payload: error,
-                    })
+            // Firebase Auth rejects with an AuthError
+            signInAnonymously(authProvider).catch((error: AuthError) => {
+                if (error.code === 'auth/too-many-requests') {
+                    createAlert(ALERT_FIREBASE_QUOTA_REACHED)
+                }
+                dispatch({
+                    type: LOGIN_ERROR,
+                    payload: error,
                 })
+            })
         }
     }
 }

@@ -1,6 +1,13 @@
-import type firebase from 'firebase/compat/app'
+import { signOut as firebaseSignOut } from 'firebase/auth'
+import {
+    doc,
+    getDoc,
+    serverTimestamp,
+    setDoc,
+    updateDoc,
+} from 'firebase/firestore'
 import type { NavigateFunction } from 'react-router-dom'
-import type { User } from '../../core/models'
+import type { AuthUser, User } from '../../core/models'
 import type { AppThunk } from '../../store'
 import {
     LOGIN_ERROR,
@@ -11,11 +18,7 @@ import {
     type UserDataSource,
 } from './authActionTypes'
 import { isLoggedSelector, isUserValidSelector } from './authSelectors'
-import {
-    authProvider,
-    fireStoreMainInstance,
-    serverTimestamp,
-} from '../../firebase.ts'
+import { authProvider, fireStoreMainInstance } from '../../firebase.ts'
 import {
     trackLogin,
     trackSignIn,
@@ -23,10 +26,10 @@ import {
 } from '../../utils/analytics/track'
 
 /**
- * didSignIn only serializes the user, so anything exposing firebase.User's
+ * didSignIn only serializes the user, so anything exposing the auth User's
  * toJSON() is accepted (EmulatorLogin overrides emailVerified this way).
  */
-export type SignInUser = Pick<firebase.User, 'toJSON'>
+export type SignInUser = Pick<AuthUser, 'toJSON'>
 
 export const didSignIn = (
     baseUser: SignInUser | null,
@@ -70,7 +73,7 @@ export const didSignIn = (
 
                 const userInDb = await getUserFromDB(user.uid)
 
-                if (userInDb.exists) {
+                if (userInDb.exists()) {
                     // update photoURL
                     // exists is true, so data() is defined
                     const userDbData = userInDb.data() as User
@@ -130,7 +133,7 @@ export const didSignIn = (
 export const signOut =
     (navigate?: NavigateFunction): AppThunk =>
     (dispatch) => {
-        authProvider.signOut().then(() => {
+        firebaseSignOut(authProvider).then(() => {
             dispatch({
                 type: LOGOUT,
             })
@@ -143,7 +146,7 @@ export const signOut =
     }
 
 const getUserFromDB = async (uid: string) =>
-    await fireStoreMainInstance.collection('users').doc(uid).get()
+    await getDoc(doc(fireStoreMainInstance, 'users', uid))
 
 const createUser = async (
     user: SerializedFirebaseUser,
@@ -161,10 +164,7 @@ const createUser = async (
         phoneNumber: phone,
         uid: user.uid,
     }
-    return fireStoreMainInstance
-        .collection('users')
-        .doc(user.uid)
-        .set(userField)
+    return setDoc(doc(fireStoreMainInstance, 'users', user.uid), userField)
 }
 
 const updateUser = async (
@@ -183,10 +183,7 @@ const updateUser = async (
         phoneNumber: phone,
     }
 
-    return fireStoreMainInstance
-        .collection('users')
-        .doc(user.uid)
-        .update(userField)
+    return updateDoc(doc(fireStoreMainInstance, 'users', user.uid), userField)
 }
 
 type UserDataKey = keyof UserDataFields

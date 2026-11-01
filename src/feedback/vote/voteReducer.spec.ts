@@ -8,7 +8,7 @@ import {
 } from './voteActionTypes'
 import { VOTE_STATUS_ACTIVE } from '../../core/contants'
 import type { FirestoreDate, Vote } from '../../core/models'
-import type firebase from 'firebase/compat/app'
+import type { FirestoreError } from 'firebase/firestore'
 
 // Dates are irrelevant to the reducer
 const date = {} as FirestoreDate
@@ -55,7 +55,7 @@ describe('voteReducer user votes loading', () => {
             type: GET_USER_VOTES_ERROR,
             payload: {
                 toString: () => 'failed',
-            } as firebase.firestore.FirestoreError,
+            } as FirestoreError,
         })
 
         expect(state.userVotesSettled).toBe(true)

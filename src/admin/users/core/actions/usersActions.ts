@@ -1,10 +1,17 @@
+import {
+    arrayRemove,
+    arrayUnion,
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    getDocs,
+    query,
+    where,
+} from 'firebase/firestore'
 import type { Invite, User } from '../../../../core/models'
 import type { AppThunk } from '../../../../store'
-import {
-    arrayRemoveField,
-    arrayUnionField,
-    fireStoreMainInstance,
-} from '../../../../firebase.ts'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
 import {
     GET_USER_DETAILS_SUCCESS,
     USER_INVITE_REMOVE_SUCCESS,
@@ -41,12 +48,9 @@ export const getUserDetails =
             return
         }
 
-        return fireStoreMainInstance
-            .collection('users')
-            .doc(uid)
-            .get()
+        return getDoc(doc(fireStoreMainInstance, 'users', uid))
             .then((snapshot) => {
-                if (snapshot.exists) {
+                if (snapshot.exists()) {
                     dispatch({
                         type: GET_USER_DETAILS_SUCCESS,
                         payload: snapshot.data() as User,
@@ -104,7 +108,7 @@ export const removeUser =
                         roleIndex + 1
                     ).reduce<EditOrganizationData>((acc, role) => {
                         acc[ORGANIZATION_ROLE_ID[role]] =
-                            arrayRemoveField(userIdToRemove)
+                            arrayRemove(userIdToRemove)
                         return acc
                     }, {})
                 )
@@ -136,7 +140,7 @@ export const changeUserRole =
                     oldRoleIndex + 1,
                     newRoleIndex + 1
                 ).reduce<EditOrganizationData>((acc, role) => {
-                    acc[ORGANIZATION_ROLE_ID[role]] = arrayUnionField(userId)
+                    acc[ORGANIZATION_ROLE_ID[role]] = arrayUnion(userId)
                     return acc
                 }, {})
                 if (newRole === ORGANIZATION_USER_ROLE_OWNER) {
@@ -151,7 +155,7 @@ export const changeUserRole =
                             oldRoleIndex + 1
                         ).reduce<EditOrganizationData>((acc, role) => {
                             acc[ORGANIZATION_ROLE_ID[role]] =
-                                arrayRemoveField(userId)
+                                arrayRemove(userId)
                             return acc
                         }, {})
                     )
@@ -177,11 +181,13 @@ export const getPendingInvites = (): AppThunk => (dispatch, getState) => {
     const whereKey = projectId ? 'projectId' : 'organizationId'
     const orgIdOrProjectId = projectId || organizationId
 
-    fireStoreMainInstance
-        .collection('invites')
-        .where(whereKey, '==', orgIdOrProjectId)
-        .where('status', 'in', ['new', 'emailSent', 'error'])
-        .get()
+    getDocs(
+        query(
+            collection(fireStoreMainInstance, 'invites'),
+            where(whereKey, '==', orgIdOrProjectId),
+            where('status', 'in', ['new', 'emailSent', 'error'])
+        )
+    )
         .then((querySnapshot) => {
             const pendingInvite: Invite[] = []
             querySnapshot.forEach((snapshot) => {
@@ -212,10 +218,7 @@ export const getPendingInvites = (): AppThunk => (dispatch, getState) => {
 export const cancelInvite =
     (inviteId: string): AppThunk =>
     (dispatch) => {
-        fireStoreMainInstance
-            .collection('invites')
-            .doc(inviteId)
-            .delete()
+        deleteDoc(doc(fireStoreMainInstance, 'invites', inviteId))
             .then(() =>
                 dispatch({
                     type: USER_INVITE_REMOVE_SUCCESS,

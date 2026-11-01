@@ -10,20 +10,19 @@ const firestore = vi.hoisted(() => ({
 
 vi.mock('../../firebase.ts', () => ({
     authProvider: {},
-    serverTimestamp: () => 'serverTimestamp',
-    fireStoreMainInstance: {
-        collection: () => ({
-            doc: () => ({
-                get: () =>
-                    Promise.resolve({
-                        exists: !!firestore.userInDb,
-                        data: () => firestore.userInDb,
-                    }),
-                set: vi.fn(),
-                update: firestore.update,
-            }),
+    fireStoreMainInstance: {},
+}))
+vi.mock('firebase/auth', () => ({ signOut: vi.fn() }))
+vi.mock('firebase/firestore', () => ({
+    doc: vi.fn((_db, ...path: string[]) => path.join('/')),
+    getDoc: () =>
+        Promise.resolve({
+            exists: () => !!firestore.userInDb,
+            data: () => firestore.userInDb,
         }),
-    },
+    setDoc: vi.fn(),
+    updateDoc: firestore.update,
+    serverTimestamp: () => 'serverTimestamp',
 }))
 vi.mock('../../utils/analytics/track', () => ({
     trackLogin: vi.fn(),
@@ -82,6 +81,7 @@ describe('didSignIn emailVerified', () => {
         await signIn({ emailVerified: true })
 
         expect(firestore.update).toHaveBeenCalledOnce()
-        expect(firestore.update.mock.calls[0][0].emailVerified).toBe(true)
+        expect(firestore.update.mock.calls[0][0]).toBe('users/u1')
+        expect(firestore.update.mock.calls[0][1].emailVerified).toBe(true)
     })
 })

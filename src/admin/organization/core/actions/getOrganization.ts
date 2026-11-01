@@ -1,3 +1,4 @@
+import { doc, getDoc } from 'firebase/firestore'
 import type { Organization } from '../../../../core/models'
 import type { AppThunk } from '../../../../store'
 import { fireStoreMainInstance } from '../../../../firebase.ts'
@@ -10,12 +11,11 @@ import { addNotification } from '../../../notification/notifcationActions'
 export const getOrganization =
     (organizationId: string): AppThunk<Promise<Organization | undefined>> =>
     (dispatch) => {
-        return fireStoreMainInstance
-            .collection('organizations')
-            .doc(organizationId)
-            .get()
+        return getDoc(
+            doc(fireStoreMainInstance, 'organizations', organizationId)
+        )
             .then((docSnapshot) => {
-                if (docSnapshot.exists) {
+                if (docSnapshot.exists()) {
                     const data = {
                         id: organizationId,
                         ...docSnapshot.data(),
