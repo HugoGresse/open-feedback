@@ -1,3 +1,4 @@
+import { doc, getDoc } from 'firebase/firestore'
 import { fireStoreMainInstance } from '../../../firebase.ts'
 
 // A sessionVotes document maps each vote item id to either a counter
@@ -44,11 +45,14 @@ export const getTalkVoteCount = async (
     projectId: string,
     talkId: string
 ): Promise<number> => {
-    const snapshot = await fireStoreMainInstance
-        .collection('projects')
-        .doc(projectId)
-        .collection('sessionVotes')
-        .doc(talkId)
-        .get()
+    const snapshot = await getDoc(
+        doc(
+            fireStoreMainInstance,
+            'projects',
+            projectId,
+            'sessionVotes',
+            talkId
+        )
+    )
     return countTalkVotes(snapshot.data() as SessionVotes | undefined)
 }

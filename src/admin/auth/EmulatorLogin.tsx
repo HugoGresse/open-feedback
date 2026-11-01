@@ -1,6 +1,12 @@
-import type firebase from 'firebase/compat/app'
+import {
+    type AuthError,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    type UserCredential,
+} from 'firebase/auth'
 import { OFButton } from '../baseComponents/button/OFButton.tsx'
 import { authProvider } from '../../firebase.ts'
+import type { AuthUser } from '../../core/models.ts'
 import { didSignIn } from './authActions'
 import { useAppDispatch } from '../../store'
 
@@ -21,7 +27,7 @@ export const EmulatorLogin = () => {
             dispatch(
                 didSignIn(
                     user && {
-                        // A spread of the compat User drops its prototype
+                        // A spread of the User drops its prototype
                         // toJSON(), the only thing didSignIn reads.
                         toJSON: () => ({
                             ...user.toJSON(),
@@ -43,18 +49,20 @@ export const EmulatorLogin = () => {
 const login = async (
     email: string,
     password: string
-): Promise<firebase.auth.UserCredential | undefined> => {
+): Promise<UserCredential | undefined> => {
     try {
-        return await authProvider.createUserWithEmailAndPassword(
+        return await createUserWithEmailAndPassword(
+            authProvider,
             email,
             password
         )
     } catch (caughtError) {
-        // Firebase Auth rejects with a firebase.auth.Error
-        const error = caughtError as firebase.auth.Error
+        // Firebase Auth rejects with an AuthError
+        const error = caughtError as AuthError
         if (error.code === 'auth/email-already-in-use') {
             try {
-                return await authProvider.signInWithEmailAndPassword(
+                return await signInWithEmailAndPassword(
+                    authProvider,
                     email,
                     password
                 )
@@ -69,7 +77,7 @@ const login = async (
     }
 }
 
-const verifyEmail = async (user: firebase.User | null = null) => {
+const verifyEmail = async (user: AuthUser | null = null) => {
     if (!user || user.emailVerified) {
         return
     }

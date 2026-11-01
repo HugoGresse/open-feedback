@@ -4,7 +4,16 @@ import {
     HIDE_VOTE_SUCCESS,
     UNHIDE_VOTE_SUCCESS,
 } from './moderationActionTypes'
-import { fireStoreMainInstance, serverTimestamp } from '../../../firebase.ts'
+import { fireStoreMainInstance } from '../../../firebase.ts'
+import {
+    collection,
+    doc,
+    getDocs,
+    query,
+    serverTimestamp,
+    updateDoc,
+    where,
+} from 'firebase/firestore'
 import { getSelectedProjectIdSelector } from '../core/projectSelectors'
 import { VOTE_STATUS_ACTIVE, VOTE_STATUS_HIDDEN } from '../../../core/contants'
 import { addNotification } from '../../notification/notifcationActions'
@@ -34,11 +43,14 @@ export const getTextUserVotes =
             return
         }
 
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(projectId)
-            .collection('sessionVotes')
-            .get()
+        return getDocs(
+            collection(
+                fireStoreMainInstance,
+                'projects',
+                projectId,
+                'sessionVotes'
+            )
+        )
             .then((snapshot) => {
                 const talks: Record<string, TalkWithTextVotes> = {}
                 snapshot.forEach((doc) => {
@@ -93,13 +105,18 @@ export const getTextUserVotes =
                 return talksWithComments
             })
             .then((talksWithActiveComments) => {
-                return fireStoreMainInstance
-                    .collection('projects')
-                    .doc(projectId)
-                    .collection('userVotes')
-                    .where('status', '==', VOTE_STATUS_HIDDEN)
-                    .where('text', '>', '')
-                    .get()
+                return getDocs(
+                    query(
+                        collection(
+                            fireStoreMainInstance,
+                            'projects',
+                            projectId,
+                            'userVotes'
+                        ),
+                        where('status', '==', VOTE_STATUS_HIDDEN),
+                        where('text', '>', '')
+                    )
+                )
                     .then((snapshot) => {
                         let vote: Vote
                         snapshot.forEach((doc) => {
@@ -148,16 +165,20 @@ export const hideVote =
             return
         }
 
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(projectId)
-            .collection('userVotes')
-            .doc(vote.voteId)
-            .update({
+        return updateDoc(
+            doc(
+                fireStoreMainInstance,
+                'projects',
+                projectId,
+                'userVotes',
+                vote.voteId
+            ),
+            {
                 status: VOTE_STATUS_HIDDEN,
                 updatedAt: serverTimestamp(),
                 hiddenAt: serverTimestamp(),
-            })
+            }
+        )
             .then(() => {
                 dispatch({
                     type: HIDE_VOTE_SUCCESS,
@@ -184,16 +205,20 @@ export const unhideVote =
             return
         }
 
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(projectId)
-            .collection('userVotes')
-            .doc(vote.voteId)
-            .update({
+        return updateDoc(
+            doc(
+                fireStoreMainInstance,
+                'projects',
+                projectId,
+                'userVotes',
+                vote.voteId
+            ),
+            {
                 status: VOTE_STATUS_ACTIVE,
                 updatedAt: serverTimestamp(),
                 unhiddenAt: serverTimestamp(),
-            })
+            }
+        )
             .then(() => {
                 dispatch({
                     type: UNHIDE_VOTE_SUCCESS,

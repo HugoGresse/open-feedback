@@ -1,10 +1,25 @@
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/firestore'
-import 'firebase/compat/auth'
-import 'firebase/compat/performance'
-import 'firebase/compat/functions'
-import 'firebase/compat/analytics'
-import 'firebase/compat/storage'
+import { initializeApp } from 'firebase/app'
+import {
+    connectFirestoreEmulator,
+    initializeFirestore,
+} from 'firebase/firestore'
+import {
+    browserLocalPersistence,
+    browserPopupRedirectResolver,
+    browserSessionPersistence,
+    connectAuthEmulator,
+    debugErrorMap,
+    indexedDBLocalPersistence,
+    initializeAuth,
+    useDeviceLanguage,
+} from 'firebase/auth'
+import { getPerformance } from 'firebase/performance'
+import {
+    connectFunctionsEmulator,
+    getFunctions,
+    httpsCallable,
+} from 'firebase/functions'
+import { getAnalytics } from 'firebase/analytics'
 
 export const isUsingEmulators = import.meta.env.VITE_EMULATORS === 'true'
 
@@ -17,55 +32,44 @@ const config = {
     appId: import.meta.env.VITE_APPID,
     measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 }
-const firebaseMain = firebase.initializeApp(config)
+export const firebaseApp = initializeApp(config)
 
-export const auth = firebase.auth
-export const authProvider = firebaseMain.auth()
-export const fireStoreMainInstance = firebaseMain.firestore()
-export const analytics = config.measurementId ? firebaseMain.analytics() : null
-export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
-export const nowTimestamp = firebase.firestore.Timestamp.now
-export const deleteField = firebase.firestore.FieldValue.delete
-export const arrayRemoveField = firebase.firestore.FieldValue.arrayRemove
-export const arrayUnionField = firebase.firestore.FieldValue.arrayUnion
+// getAuth() setup, plus the full error messages the compat API installed
+export const authProvider = initializeAuth(firebaseApp, {
+    persistence: [
+        indexedDBLocalPersistence,
+        browserLocalPersistence,
+        browserSessionPersistence,
+    ],
+    popupRedirectResolver: browserPopupRedirectResolver,
+    errorMap: debugErrorMap,
+})
+export const fireStoreMainInstance = initializeFirestore(
+    firebaseApp,
+    // Fix issue with Cypress, see https://github.com/cypress-io/cypress/issues/6350#issuecomment-697122434
+    isUsingEmulators ? { experimentalForceLongPolling: true } : {}
+)
+export const analytics = config.measurementId ? getAnalytics(firebaseApp) : null
+const firebaseFunctions = getFunctions(firebaseApp)
 export const functions = {
-    alert: firebase.functions().httpsCallable('alert'),
-    deleteProject: firebase.functions().httpsCallable('deleteProject'),
-    deleteOrganization: firebase
-        .functions()
-        .httpsCallable('deleteOrganization'),
+    alert: httpsCallable(firebaseFunctions, 'alert'),
+    deleteProject: httpsCallable(firebaseFunctions, 'deleteProject'),
+    deleteOrganization: httpsCallable(firebaseFunctions, 'deleteOrganization'),
 }
 export const HttpsFunctionsUrl = {
     sendContactEmail: isUsingEmulators
         ? `http://127.0.0.1:5001/${config.projectId}/us-central1/sendContactEmail`
         : `https://us-central1-${config.projectId}.cloudfunctions.net/sendContactEmail`,
 }
-authProvider.useDeviceLanguage()
+useDeviceLanguage(authProvider)
 
 if (import.meta.env.PROD) {
-    firebase.performance()
+    getPerformance(firebaseApp)
 }
 if (isUsingEmulators) {
     // biome-ignore lint/suspicious/noConsole: intentional log
     console.log('ℹ️ App is using Firebase Emulators')
-    authProvider.useEmulator('http://127.0.0.1:9099')
-    firebase.storage().useEmulator('127.0.0.1', 9199)
-    firebase.functions().useEmulator('127.0.0.1', 5001)
-    // Fix issue with Cypress, see https://github.com/cypress-io/cypress/issues/6350#issuecomment-697122434
-    fireStoreMainInstance.settings({
-        experimentalForceLongPolling: true,
-        host: '127.0.0.1:8080',
-        ssl: false,
-    })
-}
-
-export const getStoragePublicPath = async (
-    snapshotRef: firebase.storage.Reference
-) => {
-    if (isUsingEmulators) {
-        return await snapshotRef.getDownloadURL()
-    }
-    const bucket = snapshotRef.bucket
-    const path = snapshotRef.fullPath
-    return `https://storage.googleapis.com/${bucket}/${path}`
+    connectAuthEmulator(authProvider, 'http://127.0.0.1:9099')
+    connectFunctionsEmulator(firebaseFunctions, '127.0.0.1', 5001)
+    connectFirestoreEmulator(fireStoreMainInstance, '127.0.0.1', 8080)
 }

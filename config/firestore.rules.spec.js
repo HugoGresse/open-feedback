@@ -1,4 +1,10 @@
-const firebase = require('@firebase/testing')
+const {
+    assertFails,
+    assertSucceeds,
+    initializeTestEnvironment,
+} = require('@firebase/rules-unit-testing')
+const firebase = require('firebase/compat/app')
+require('firebase/compat/firestore')
 const path = require('path')
 const fs = require('fs')
 
@@ -10,25 +16,23 @@ const UID_ADMIN = 'adminUserId'
 const UID_ANOTHER_ADMIN = 'anotherAdminUserId'
 const UID_OWNER = 'ownerUserId'
 
+let testEnv
+
 const emailOf = (uid) => `${uid.toLowerCase()}@example.com`
 
 function createApp(uid = UID_VIEWER, token = {}) {
-    const auth = {
-        uid,
-        email_verified: true,
-        email: emailOf(uid),
-        // Real ID tokens always carry the sign-in provider
-        firebase: { sign_in_provider: 'password' },
-        ...token,
-    }
-    return firebase.initializeTestApp({ projectId, auth }).firestore()
+    return testEnv
+        .authenticatedContext(uid, {
+            email_verified: true,
+            email: emailOf(uid),
+            // Real ID tokens always carry the sign-in provider
+            firebase: { sign_in_provider: 'password' },
+            ...token,
+        })
+        .firestore()
 }
 
-function createAdminApp() {
-    return firebase.initializeAdminApp({ projectId }).firestore()
-}
-
-// Seeded with the admin app: the create rule only lets the owner create an
+// Seeded with the rules disabled: the create rule only lets the owner create an
 // organization, and most tests need one owned by someone else.
 const createOrg = async (
     _app,
@@ -38,15 +42,17 @@ const createOrg = async (
     adminUserIds = [],
     ownerUserId = null
 ) => {
-    await createAdminApp().collection('organizations').doc(orgId).set(
-        {
-            organizationName: orgId,
-            viewerUserIds,
-            editorUserIds,
-            adminUserIds,
-            ownerUserId,
-        },
-        { merge: true }
+    await testEnv.withSecurityRulesDisabled((context) =>
+        context.firestore().collection('organizations').doc(orgId).set(
+            {
+                organizationName: orgId,
+                viewerUserIds,
+                editorUserIds,
+                adminUserIds,
+                ownerUserId,
+            },
+            { merge: true }
+        )
     )
 }
 
@@ -146,15 +152,18 @@ describe('Firestore rules', () => {
     beforeAll(async () => {
         const rulesPath = path.join(__dirname, 'firestore.rules')
         const rules = fs.readFileSync(rulesPath, 'utf8')
-        await firebase.loadFirestoreRules({ projectId, rules })
+        testEnv = await initializeTestEnvironment({
+            projectId,
+            firestore: { rules },
+        })
     })
 
     afterAll(async () => {
-        await Promise.all(firebase.apps().map((app) => app.delete()))
+        await testEnv.cleanup()
     })
 
     beforeEach(async () => {
-        await firebase.clearFirestoreData({ projectId })
+        await testEnv.clearFirestore()
     })
 
     describe('Organization/viewer', () => {
@@ -168,7 +177,7 @@ describe('Firestore rules', () => {
                 .collection('organizations')
                 .where('viewerUserIds', 'array-contains', UID_VIEWER)
                 .get()
-            const results = await firebase.assertSucceeds(listOrg)
+            const results = await assertSucceeds(listOrg)
             expect(results.docs.length).toEqual(1)
         })
 
@@ -177,7 +186,7 @@ describe('Firestore rules', () => {
             await createOrg(app, 'FirstOrg', [UID_VIEWER])
 
             const getOrg = app.collection('organizations').doc('FirstOrg').get()
-            await firebase.assertSucceeds(getOrg)
+            await assertSucceeds(getOrg)
         })
 
         it('cannot create a project for an organization with viewer only role', async () => {
@@ -190,7 +199,7 @@ describe('Firestore rules', () => {
                 UID_VIEWER,
                 'FirstOrg'
             )
-            await firebase.assertFails(project)
+            await assertFails(project)
         })
 
         it('cannot create a project for an organization without any role', async () => {
@@ -203,7 +212,7 @@ describe('Firestore rules', () => {
                 UID_VIEWER,
                 'FirstOrg'
             )
-            await firebase.assertFails(project)
+            await assertFails(project)
         })
 
         it('cannot edit a project for an organization without any role', async () => {
@@ -220,7 +229,7 @@ describe('Firestore rules', () => {
             const projectId = projectRef.id
 
             const project = updateProject(app, projectId)
-            await firebase.assertFails(project)
+            await assertFails(project)
         })
 
         it('cannot edit a project for an organization with viewer role', async () => {
@@ -237,7 +246,7 @@ describe('Firestore rules', () => {
             const projectId = projectRef.id
 
             const project = updateProject(app, projectId)
-            await firebase.assertFails(project)
+            await assertFails(project)
         })
 
         it("can list organization's projects with viewer role", async () => {
@@ -256,7 +265,7 @@ describe('Firestore rules', () => {
                 .collection('projects')
                 .where('organizationId', '==', 'FirstOrg')
                 .get()
-            await firebase.assertSucceeds(projects)
+            await assertSucceeds(projects)
         })
 
         it('can get a full project for an organization with viewer role', async () => {
@@ -274,12 +283,8 @@ describe('Firestore rules', () => {
             await addFullDataToProject(adminApp, projectId, UID_ADMIN)
 
             const project = getProject(app, projectId)
-            await firebase.assertSucceeds(project)
-            await assertProjectAllCollections(
-                app,
-                projectId,
-                firebase.assertSucceeds
-            )
+            await assertSucceeds(project)
+            await assertProjectAllCollections(app, projectId, assertSucceeds)
         })
 
         it('cannot delete a project for an organization with viewer role', async () => {
@@ -296,7 +301,7 @@ describe('Firestore rules', () => {
             const projectId = projectRef.id
 
             const project = app.collection('projects').doc(projectId).delete()
-            await firebase.assertFails(project)
+            await assertFails(project)
         })
 
         it('cannot edit the organization or org users with viewer role', async () => {
@@ -308,7 +313,7 @@ describe('Firestore rules', () => {
                 .collection('organizations')
                 .doc('FirstOrg')
                 .delete()
-            await firebase.assertFails(delOrg)
+            await assertFails(delOrg)
 
             const updateOrg = app
                 .collection('organizations')
@@ -316,7 +321,7 @@ describe('Firestore rules', () => {
                 .update({
                     name: 'toto',
                 })
-            await firebase.assertFails(updateOrg)
+            await assertFails(updateOrg)
         })
 
         it('cannot edit the project talks and speakers with viewer role', async () => {
@@ -340,7 +345,7 @@ describe('Firestore rules', () => {
                 .add({
                     name: 'Toto',
                 })
-            await firebase.assertFails(addTalk)
+            await assertFails(addTalk)
             const addSpeaker = app
                 .collection('projects')
                 .doc(projectId)
@@ -348,7 +353,7 @@ describe('Firestore rules', () => {
                 .add({
                     name: 'Toto',
                 })
-            await firebase.assertFails(addSpeaker)
+            await assertFails(addSpeaker)
         })
     })
 
@@ -363,7 +368,7 @@ describe('Firestore rules', () => {
                 UID_EDITOR,
                 'FirstOrg'
             )
-            await firebase.assertSucceeds(project)
+            await assertSucceeds(project)
         })
 
         it('can edit a project for an organization with editor role', async () => {
@@ -379,7 +384,7 @@ describe('Firestore rules', () => {
             const projectId = projectRef.id
 
             const project = updateProject(editorApp, projectId)
-            await firebase.assertSucceeds(project)
+            await assertSucceeds(project)
         })
 
         it('can delete a project he own for an organization with editor role', async () => {
@@ -398,7 +403,7 @@ describe('Firestore rules', () => {
                 .collection('projects')
                 .doc(projectId)
                 .delete()
-            await firebase.assertSucceeds(project)
+            await assertSucceeds(project)
         })
 
         it('cannot delete a project he does not own for an organization with editor role', async () => {
@@ -417,7 +422,7 @@ describe('Firestore rules', () => {
                 .collection('projects')
                 .doc(projectId)
                 .delete()
-            await firebase.assertFails(project)
+            await assertFails(project)
         })
 
         it('cannot create a project on another organization with editor role', async () => {
@@ -432,14 +437,14 @@ describe('Firestore rules', () => {
                 UID_EDITOR,
                 'FirstOrg'
             )
-            await firebase.assertFails(project)
+            await assertFails(project)
             const project2 = createProject(
                 adminApp,
                 'Third project',
                 UID_ADMIN,
                 'SecondOrg'
             )
-            await firebase.assertFails(project2)
+            await assertFails(project2)
         })
 
         it('cannot edit a project on another organization with editor role', async () => {
@@ -457,7 +462,7 @@ describe('Firestore rules', () => {
             const projectId = projectRef.id
 
             const project = updateProject(editorApp, projectId, 'SecondOrg')
-            await firebase.assertFails(project)
+            await assertFails(project)
         })
 
         it('cannot edit the organization or org users with editor role', async () => {
@@ -469,7 +474,7 @@ describe('Firestore rules', () => {
                 .collection('organizations')
                 .doc('FirstOrg')
                 .delete()
-            await firebase.assertFails(delOrg)
+            await assertFails(delOrg)
 
             const updateOrg = editorApp
                 .collection('organizations')
@@ -477,7 +482,7 @@ describe('Firestore rules', () => {
                 .update({
                     name: 'toto',
                 })
-            await firebase.assertFails(updateOrg)
+            await assertFails(updateOrg)
         })
 
         it('can edit the project talks and speakers with editor role', async () => {
@@ -506,7 +511,7 @@ describe('Firestore rules', () => {
                 .add({
                     name: 'Toto',
                 })
-            await firebase.assertSucceeds(addTalk)
+            await assertSucceeds(addTalk)
             const addSpeaker = app
                 .collection('projects')
                 .doc(projectId)
@@ -514,7 +519,7 @@ describe('Firestore rules', () => {
                 .add({
                     name: 'Toto',
                 })
-            await firebase.assertSucceeds(addSpeaker)
+            await assertSucceeds(addSpeaker)
         })
     })
 
@@ -540,7 +545,7 @@ describe('Firestore rules', () => {
                 .collection('projects')
                 .doc(project.id)
                 .delete()
-            await firebase.assertSucceeds(delProject)
+            await assertSucceeds(delProject)
         })
 
         it('cannot delete/edit a project from another organization with admin role', async () => {
@@ -565,7 +570,7 @@ describe('Firestore rules', () => {
                 .collection('projects')
                 .doc(project.id)
                 .delete()
-            await firebase.assertFails(delProject)
+            await assertFails(delProject)
 
             const editProject = adminApp
                 .collection('projects')
@@ -573,7 +578,7 @@ describe('Firestore rules', () => {
                 .update({
                     name: 'titi',
                 })
-            await firebase.assertFails(editProject)
+            await assertFails(editProject)
         })
 
         it('can add users to an organization with admin role', async () => {
@@ -587,7 +592,7 @@ describe('Firestore rules', () => {
                     viewerUserIds:
                         firebase.firestore.FieldValue.arrayUnion(UID_VIEWER),
                 })
-            await firebase.assertSucceeds(addUserToOrg)
+            await assertSucceeds(addUserToOrg)
 
             const updateOrg = adminApp
                 .collection('organizations')
@@ -595,7 +600,7 @@ describe('Firestore rules', () => {
                 .update({
                     name: 'NewOrgName',
                 })
-            await firebase.assertSucceeds(updateOrg)
+            await assertSucceeds(updateOrg)
         })
 
         it('cannot set the organization owner with admin role', async () => {
@@ -608,7 +613,7 @@ describe('Firestore rules', () => {
                 .update({
                     ownerUserId: UID_ADMIN,
                 })
-            await firebase.assertFails(setOrgOwner)
+            await assertFails(setOrgOwner)
         })
 
         it('cannot delete an organization with admin role', async () => {
@@ -619,7 +624,7 @@ describe('Firestore rules', () => {
                 .collection('organizations')
                 .doc('FirstOrg')
                 .delete()
-            await firebase.assertFails(deleteOrg)
+            await assertFails(deleteOrg)
         })
     })
 
@@ -634,7 +639,7 @@ describe('Firestore rules', () => {
                 .update({
                     ownerUserId: UID_ADMIN,
                 })
-            await firebase.assertSucceeds(setOrgOwner)
+            await assertSucceeds(setOrgOwner)
 
             const setBackOrgOwner = ownerUserId
                 .collection('organizations')
@@ -642,7 +647,7 @@ describe('Firestore rules', () => {
                 .update({
                     ownerUserId: UID_OWNER,
                 })
-            await firebase.assertFails(setBackOrgOwner)
+            await assertFails(setBackOrgOwner)
         })
 
         it('cannot delete an organization directly with owner role (done by the deleteOrganization function)', async () => {
@@ -653,7 +658,7 @@ describe('Firestore rules', () => {
                 .collection('organizations')
                 .doc('FirstOrg')
                 .delete()
-            await firebase.assertFails(deleteOrg)
+            await assertFails(deleteOrg)
         })
     })
 
@@ -671,7 +676,7 @@ describe('Firestore rules', () => {
                     editorUserIds: [UID_OWNER],
                     viewerUserIds: [UID_OWNER],
                 })
-            await firebase.assertSucceeds(createOrganization)
+            await assertSucceeds(createOrganization)
         })
 
         it('cannot create an organization owned by someone else', async () => {
@@ -681,7 +686,7 @@ describe('Firestore rules', () => {
                 .collection('organizations')
                 .doc('NewOrg')
                 .set({ name: 'NewOrg', ownerUserId: UID_OWNER })
-            await firebase.assertFails(createOrganization)
+            await assertFails(createOrganization)
         })
 
         it('cannot recreate a deleted organization with a stale merge write', async () => {
@@ -692,7 +697,7 @@ describe('Firestore rules', () => {
                 .collection('organizations')
                 .doc('DeletedOrg')
                 .set({ name: 'Renamed' }, { merge: true })
-            await firebase.assertFails(staleRename)
+            await assertFails(staleRename)
         })
     })
 
@@ -710,14 +715,14 @@ describe('Firestore rules', () => {
                 destinationUserInfo: emailOf(UID_ADMIN),
             })
 
-            const inviteSnapshot = await firebase.assertSucceeds(invite)
+            const inviteSnapshot = await assertSucceeds(invite)
 
             const deleteInvite = ownerUserId
                 .collection('invites')
                 .doc(inviteSnapshot.id)
                 .delete()
 
-            await firebase.assertSucceeds(deleteInvite)
+            await assertSucceeds(deleteInvite)
         })
 
         it('destination user can get an invite but not another person', async () => {
@@ -737,14 +742,14 @@ describe('Firestore rules', () => {
             const inviteId = invite.id
 
             const getInvite = adminApp.collection('invites').doc(inviteId).get()
-            await firebase.assertSucceeds(getInvite)
+            await assertSucceeds(getInvite)
 
             const getInviteStranger = strangerApp
                 .collection('invites')
                 .doc(inviteId)
                 .get()
 
-            await firebase.assertFails(getInviteStranger)
+            await assertFails(getInviteStranger)
         })
 
         it('a missing (cancelled) invite reads as not existing, not denied', async () => {
@@ -755,7 +760,7 @@ describe('Firestore rules', () => {
                 .doc('missing-invite')
                 .get()
 
-            const snapshot = await firebase.assertSucceeds(getMissing)
+            const snapshot = await assertSucceeds(getMissing)
             expect(snapshot.exists).toBe(false)
         })
 
@@ -781,7 +786,7 @@ describe('Firestore rules', () => {
                 .collection('invites')
                 .where('projectId', '==', project.id)
                 .get()
-            const invites = await firebase.assertSucceeds(listInvites)
+            const invites = await assertSucceeds(listInvites)
             expect(invites.docs.length).toEqual(2)
 
             const getInvitesStranger = strangerApp
@@ -789,7 +794,7 @@ describe('Firestore rules', () => {
                 .where('projectId', '==', project.id)
                 .get()
 
-            await firebase.assertFails(getInvitesStranger)
+            await assertFails(getInvitesStranger)
         })
 
         it('organization admin and owner can create & list & delete organization invites', async () => {
@@ -815,8 +820,8 @@ describe('Firestore rules', () => {
                 role: 'Admin',
             })
 
-            const invitation1 = await firebase.assertSucceeds(invite1)
-            const invitation2 = await firebase.assertSucceeds(invite2)
+            const invitation1 = await assertSucceeds(invite1)
+            const invitation2 = await assertSucceeds(invite2)
 
             const del1 = ownerApp
                 .collection('invites')
@@ -827,8 +832,8 @@ describe('Firestore rules', () => {
                 .doc(invitation2.id)
                 .delete()
 
-            await firebase.assertSucceeds(del1)
-            await firebase.assertSucceeds(del2)
+            await assertSucceeds(del1)
+            await assertSucceeds(del2)
         })
 
         it('organization admin and owner can list organization invites', async () => {
@@ -859,14 +864,14 @@ describe('Firestore rules', () => {
                 .where('organizationId', '==', 'FirstOrg')
                 .get()
 
-            const listAdminResult = await firebase.assertSucceeds(listAdmin)
+            const listAdminResult = await assertSucceeds(listAdmin)
             expect(listAdminResult.docs.length).toEqual(2)
 
             const listOwner = ownerApp
                 .collection('invites')
                 .where('organizationId', '==', 'FirstOrg')
                 .get()
-            const listOwnerResult = await firebase.assertSucceeds(listOwner)
+            const listOwnerResult = await assertSucceeds(listOwner)
             expect(listOwnerResult.docs.length).toEqual(2)
         })
 
@@ -894,10 +899,10 @@ describe('Firestore rules', () => {
                 role: 'Viewer',
             })
 
-            await firebase.assertFails(createInviteFromEditor)
+            await assertFails(createInviteFromEditor)
 
             const del2 = editorApp.collection('invites').doc(invite.id).delete()
-            await firebase.assertFails(del2)
+            await assertFails(del2)
         })
 
         it('organization viewers cannot create/delete organization invites', async () => {
@@ -923,10 +928,10 @@ describe('Firestore rules', () => {
                 destinationUserInfo: emailOf(UID_ADMIN),
                 role: 'Viewer',
             })
-            await firebase.assertFails(createInviteFromViewer)
+            await assertFails(createInviteFromViewer)
 
             const del1 = viewerApp.collection('invites').doc(invite.id).delete()
-            await firebase.assertFails(del1)
+            await assertFails(del1)
         })
 
         it('organization viewers & editors can list organization invites', async () => {
@@ -962,10 +967,8 @@ describe('Firestore rules', () => {
                 .where('organizationId', '==', 'FirstOrg')
                 .get()
 
-            const invitesListFromViewer =
-                await firebase.assertSucceeds(listFromViewer)
-            const invitesListFromEditor =
-                await firebase.assertSucceeds(listFromEditor)
+            const invitesListFromViewer = await assertSucceeds(listFromViewer)
+            const invitesListFromEditor = await assertSucceeds(listFromEditor)
             expect(invitesListFromViewer.docs.length).toEqual(2)
             expect(invitesListFromEditor.docs.length).toEqual(2)
         })
@@ -988,7 +991,7 @@ describe('Firestore rules', () => {
                 role: 'Viewer',
             })
 
-            await firebase.assertFails(newInvite)
+            await assertFails(newInvite)
         })
 
         it('an invite cannot target both a project and an organization', async () => {
@@ -1016,8 +1019,8 @@ describe('Firestore rules', () => {
                     ...fields,
                 })
 
-            await firebase.assertFails(invite({}))
-            await firebase.assertFails(invite({ role: 'Viewer' }))
+            await assertFails(invite({}))
+            await assertFails(invite({ role: 'Viewer' }))
         })
 
         it('an organization admin can only invite as Viewer, Editor or Admin', async () => {
@@ -1037,9 +1040,9 @@ describe('Firestore rules', () => {
                     role,
                 })
 
-            await firebase.assertSucceeds(invite('Editor'))
-            await firebase.assertFails(invite('Owner'))
-            await firebase.assertFails(invite(null))
+            await assertSucceeds(invite('Editor'))
+            await assertFails(invite('Owner'))
+            await assertFails(invite(null))
         })
 
         it('anonymous or unverified users cannot create invites', async () => {
@@ -1056,11 +1059,11 @@ describe('Firestore rules', () => {
                         destinationUserInfo: emailOf(UID_ADMIN),
                     })
 
-            await firebase.assertFails(invite({ email_verified: false }))
-            await firebase.assertFails(
+            await assertFails(invite({ email_verified: false }))
+            await assertFails(
                 invite({ firebase: { sign_in_provider: 'anonymous' } })
             )
-            await firebase.assertSucceeds(
+            await assertSucceeds(
                 invite({
                     email_verified: false,
                     email: null,
@@ -1083,8 +1086,8 @@ describe('Firestore rules', () => {
                     .doc(invite.id)
                     .get()
 
-            await firebase.assertSucceeds(read({}))
-            await firebase.assertFails(read({ email_verified: false }))
+            await assertSucceeds(read({}))
+            await assertFails(read({ email_verified: false }))
         })
 
         it('an invite must have one valid destination email and the creator as origin', async () => {
@@ -1106,10 +1109,8 @@ describe('Firestore rules', () => {
                     ...fields,
                 })
 
-            await firebase.assertSucceeds(invite({}))
-            await firebase.assertSucceeds(
-                invite({ projectName: 'x'.repeat(1000) })
-            )
+            await assertSucceeds(invite({}))
+            await assertSucceeds(invite({ projectName: 'x'.repeat(1000) }))
             for (const destinationUserInfo of [
                 'a@example.com,b@example.com',
                 'admin',
@@ -1118,17 +1119,15 @@ describe('Firestore rules', () => {
                 `a@example.com${String.fromCodePoint(0x2028)}`,
                 null,
             ]) {
-                await firebase.assertFails(invite({ destinationUserInfo }))
+                await assertFails(invite({ destinationUserInfo }))
             }
-            await firebase.assertFails(invite({ originUserId: UID_ADMIN }))
-            await firebase.assertFails(invite({ status: 'emailSent' }))
-            await firebase.assertFails(invite({ updatedAt: 'x' }))
-            await firebase.assertFails(invite({ role: 'Admin' }))
-            await firebase.assertFails(invite({ projectId: null }))
-            await firebase.assertFails(
-                invite({ projectName: 'x'.repeat(1001) })
-            )
-            await firebase.assertFails(invite({ unexpected: true }))
+            await assertFails(invite({ originUserId: UID_ADMIN }))
+            await assertFails(invite({ status: 'emailSent' }))
+            await assertFails(invite({ updatedAt: 'x' }))
+            await assertFails(invite({ role: 'Admin' }))
+            await assertFails(invite({ projectId: null }))
+            await assertFails(invite({ projectName: 'x'.repeat(1001) }))
+            await assertFails(invite({ unexpected: true }))
         })
     })
 
@@ -1137,7 +1136,7 @@ describe('Firestore rules', () => {
             const app = createApp()
 
             const project = createProject(app, 'First project', UID_VIEWER)
-            await firebase.assertSucceeds(project)
+            await assertSucceeds(project)
         })
 
         it('can delete existing votes if owner', async () => {
@@ -1156,7 +1155,7 @@ describe('Firestore rules', () => {
                 .doc(projectId)
                 .collection('userVotes')
                 .get()
-            const results = await firebase.assertSucceeds(userVotes)
+            const results = await assertSucceeds(userVotes)
             expect(results.docs.length).toEqual(1)
             for (const doc of results.docs) {
                 const deleteUserVote = app
@@ -1165,7 +1164,7 @@ describe('Firestore rules', () => {
                     .collection('userVotes')
                     .doc(doc.id)
                     .delete()
-                await firebase.assertSucceeds(deleteUserVote)
+                await assertSucceeds(deleteUserVote)
             }
 
             // Check sessionVotes
@@ -1174,7 +1173,7 @@ describe('Firestore rules', () => {
                 .doc(projectId)
                 .collection('sessionVotes')
                 .get()
-            const results2 = await firebase.assertSucceeds(sessionVotes)
+            const results2 = await assertSucceeds(sessionVotes)
             expect(results2.docs.length).toEqual(1)
             for (const doc of results2.docs) {
                 const deleteVote = app
@@ -1183,7 +1182,7 @@ describe('Firestore rules', () => {
                     .collection('sessionVotes')
                     .doc(doc.id)
                     .delete()
-                await firebase.assertSucceeds(deleteVote)
+                await assertSucceeds(deleteVote)
             }
         })
 
@@ -1205,7 +1204,7 @@ describe('Firestore rules', () => {
                 .update({
                     members: [UID_ADMIN, UID_VIEWER],
                 })
-            await firebase.assertSucceeds(addViewerAsMemberOnProject)
+            await assertSucceeds(addViewerAsMemberOnProject)
 
             // Check userVotes
             const userVotes = await viewerApp
@@ -1213,7 +1212,7 @@ describe('Firestore rules', () => {
                 .doc(projectId)
                 .collection('userVotes')
                 .get()
-            const results = await firebase.assertSucceeds(userVotes)
+            const results = await assertSucceeds(userVotes)
             expect(results.docs.length).toEqual(1)
             for (const doc of results.docs) {
                 const deleteUserVote = viewerApp
@@ -1222,14 +1221,14 @@ describe('Firestore rules', () => {
                     .collection('userVotes')
                     .doc(doc.id)
                     .delete()
-                await firebase.assertSucceeds(deleteUserVote)
+                await assertSucceeds(deleteUserVote)
                 const deleteUserVote2 = anotherApp
                     .collection('projects')
                     .doc(projectId)
                     .collection('userVotes')
                     .doc(doc.id)
                     .delete()
-                await firebase.assertFails(deleteUserVote2)
+                await assertFails(deleteUserVote2)
             }
 
             // Check sessionVotes
@@ -1238,7 +1237,7 @@ describe('Firestore rules', () => {
                 .doc(projectId)
                 .collection('sessionVotes')
                 .get()
-            const results2 = await firebase.assertSucceeds(sessionVotes)
+            const results2 = await assertSucceeds(sessionVotes)
             expect(results2.docs.length).toEqual(1)
             for (const doc of results2.docs) {
                 const deleteVote = viewerApp
@@ -1247,14 +1246,14 @@ describe('Firestore rules', () => {
                     .collection('sessionVotes')
                     .doc(doc.id)
                     .delete()
-                await firebase.assertSucceeds(deleteVote)
+                await assertSucceeds(deleteVote)
                 const deleteVote2 = anotherApp
                     .collection('projects')
                     .doc(projectId)
                     .collection('sessionVotes')
                     .doc(doc.id)
                     .delete()
-                await firebase.assertFails(deleteVote2)
+                await assertFails(deleteVote2)
             }
         })
     })
@@ -1268,7 +1267,7 @@ describe('Firestore rules', () => {
 
             const listOrg = app.collection('projects').get()
 
-            await firebase.assertFails(listOrg)
+            await assertFails(listOrg)
         })
         it('cannot get or create a super admin', async () => {
             const app = createApp(UID_ADMIN)
@@ -1277,14 +1276,14 @@ describe('Firestore rules', () => {
             createProject(app, 'Second project with another user', UID_EDITOR)
 
             const superAdminCreationRequest = createSuperAdmin(app, UID_ADMIN)
-            await firebase.assertFails(superAdminCreationRequest)
+            await assertFails(superAdminCreationRequest)
 
             const readSuperAdmin = app
                 .collection('admins/users/admins')
                 .doc(UID_ADMIN)
                 .get()
 
-            await firebase.assertFails(readSuperAdmin)
+            await assertFails(readSuperAdmin)
         })
 
         // Note: cannot do more test as I cannot add super user with the regular app :/

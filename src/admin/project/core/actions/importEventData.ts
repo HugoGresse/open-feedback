@@ -1,5 +1,11 @@
-import type firebase from 'firebase/compat/app'
-import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase'
+import {
+    type DocumentReference,
+    collection,
+    doc,
+    serverTimestamp,
+    writeBatch,
+} from 'firebase/firestore'
+import { fireStoreMainInstance } from '../../../../firebase'
 import type { AppThunk } from '../../../../store'
 import {
     type EventData,
@@ -16,7 +22,7 @@ export interface ImportSummary {
 }
 
 interface WriteOp {
-    ref: firebase.firestore.DocumentReference
+    ref: DocumentReference
     data: Record<string, unknown>
 }
 
@@ -39,7 +45,7 @@ const assertValidIds = (ids: string[], kind: string): void => {
 
 const commitInBatches = async (ops: WriteOp[]): Promise<void> => {
     for (let i = 0; i < ops.length; i += BATCH_LIMIT) {
-        const batch = fireStoreMainInstance.batch()
+        const batch = writeBatch(fireStoreMainInstance)
         ops.slice(i, i + BATCH_LIMIT).forEach(({ ref, data }) => {
             batch.set(ref, data, { merge: true })
         })
@@ -56,9 +62,7 @@ export const importEventData =
     async (dispatch) => {
         try {
             const data = normalizeEventData(rawData)
-            const projectRef = fireStoreMainInstance
-                .collection('projects')
-                .doc(projectId)
+            const projectRef = doc(fireStoreMainInstance, 'projects', projectId)
 
             const speakers = Object.values(data.speakers || {})
             const sessions = Object.values(data.sessions || {})
@@ -73,7 +77,7 @@ export const importEventData =
             )
 
             const speakerOps: WriteOp[] = speakers.map((speaker) => ({
-                ref: projectRef.collection('speakers').doc(speaker.id),
+                ref: doc(collection(projectRef, 'speakers'), speaker.id),
                 data: {
                     ...speaker,
                     createdAt: serverTimestamp(),
@@ -82,7 +86,7 @@ export const importEventData =
             }))
 
             const talkOps: WriteOp[] = sessions.map((session) => ({
-                ref: projectRef.collection('talks').doc(session.id),
+                ref: doc(collection(projectRef, 'talks'), session.id),
                 data: {
                     ...session,
                     createdAt: serverTimestamp(),

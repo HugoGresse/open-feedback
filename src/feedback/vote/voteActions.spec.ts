@@ -20,20 +20,17 @@ import type {
 import type { AppDispatch, RootState } from '../../store'
 
 const firestoreSet = vi.hoisted(() => vi.fn())
+const firestoreDoc = vi.hoisted(() =>
+    vi.fn((_db: unknown, ...segments: string[]) => segments.join('/'))
+)
 
-vi.mock('../../firebase.ts', () => ({
+vi.mock('firebase/firestore', () => ({
+    doc: firestoreDoc,
+    setDoc: firestoreSet,
     serverTimestamp: () => 'serverTimestamp',
-    nowTimestamp: () => 'now',
-    fireStoreMainInstance: {
-        collection: () => ({
-            doc: () => ({
-                collection: () => ({
-                    doc: () => ({ set: firestoreSet }),
-                }),
-            }),
-        }),
-    },
+    Timestamp: { now: () => 'now' },
 }))
+vi.mock('../../firebase.ts', () => ({ fireStoreMainInstance: {} }))
 vi.mock('./getVoteId', () => ({ getVoteId: vi.fn() }))
 vi.mock('./actions/isVoteAllowed', () => ({ isVoteAllowed: () => true }))
 vi.mock('./voteSelectors', () => ({
@@ -126,6 +123,7 @@ const settle = () => new Promise((resolve) => setTimeout(resolve))
 
 beforeEach(() => {
     firestoreSet.mockReset()
+    firestoreDoc.mockClear()
     firestoreSet.mockRejectedValue(new Error('offline'))
     vi.spyOn(console, 'error').mockImplementation(() => undefined)
 })
@@ -216,7 +214,8 @@ describe('voteFor on an existing comment', () => {
         )(store.dispatch, store.getState, undefined)
         await settle()
 
-        expect(firestoreSet.mock.calls[0][0].status).toBe(VOTE_STATUS_HIDDEN)
+        expect(firestoreSet.mock.calls[0][0]).toBe('projects/p1/userVotes/c1')
+        expect(firestoreSet.mock.calls[0][1].status).toBe(VOTE_STATUS_HIDDEN)
         expect(store.results()).toBe(resultsBefore)
     })
 })

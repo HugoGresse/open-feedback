@@ -1,3 +1,9 @@
+import {
+    addDoc,
+    collection,
+    serverTimestamp,
+    Timestamp,
+} from 'firebase/firestore'
 import type {
     Invite,
     InviteStatus,
@@ -9,11 +15,7 @@ import { getPendingInvitesSelector } from '../usersSelectors'
 import { addNotification } from '../../../notification/notifcationActions'
 import { getUserSelector } from '../../../auth/authSelectors'
 import { getSelectedProjectSelector } from '../../../project/core/projectSelectors'
-import {
-    fireStoreMainInstance,
-    nowTimestamp,
-    serverTimestamp,
-} from '../../../../firebase.ts'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
 import { getDataFromProviderDataOrUser } from '../../../auth/authActions'
 import { USER_INVITE_ADD, type UsersAction } from '../usersActionTypes'
 import { getSelectedOrganizationSelector } from '../../../organization/core/organizationSelectors'
@@ -78,9 +80,7 @@ export const inviteUser =
             ...getInviteTarget(inviteType, userType, project, organization),
         }
 
-        return fireStoreMainInstance
-            .collection('invites')
-            .add(invite)
+        return addDoc(collection(fireStoreMainInstance, 'invites'), invite)
             .then((docRef) => {
                 dispatch(
                     addNotification({
@@ -92,8 +92,8 @@ export const inviteUser =
                 const addedInvite: Invite = {
                     ...invite,
                     id: docRef.id,
-                    createdAt: nowTimestamp(),
-                    updatedAt: nowTimestamp(),
+                    createdAt: Timestamp.now(),
+                    updatedAt: Timestamp.now(),
                 }
                 const action: UsersAction = {
                     type: USER_INVITE_ADD,

@@ -1,5 +1,4 @@
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/firestore'
+import { FieldValue } from 'firebase/firestore'
 import type { Project } from '../../../../core/models'
 import type { ProjectEditData } from '../projectActionTypes'
 
@@ -13,6 +12,6 @@ export const projectEditToState = (
     Object.fromEntries(
         Object.entries(projectEdit).map(([key, value]) => [
             key,
-            value instanceof firebase.firestore.FieldValue ? null : value,
+            value instanceof FieldValue ? null : value,
         ])
     )

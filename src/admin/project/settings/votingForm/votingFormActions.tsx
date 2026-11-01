@@ -14,7 +14,8 @@ import {
 import type { TFunction } from 'i18next'
 import type { AppThunk } from '../../../../store'
 import type { VoteItem, VoteItemType } from '../../../../core/models'
-import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase.ts'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import {
     getSelectedProjectIdSelector,
     getSelectedProjectSelector,
@@ -192,16 +193,14 @@ export const saveVoteItems =
             type: SAVE_VOTEITEMS_ONGOING,
         })
 
-        return fireStoreMainInstance
-            .collection(collectionName)
-            .doc(required(documentId))
-            .set(
-                {
-                    voteItems: cleanedVoteItems,
-                    updatedAt: serverTimestamp(),
-                },
-                { merge: true }
-            )
+        return setDoc(
+            doc(fireStoreMainInstance, collectionName, required(documentId)),
+            {
+                voteItems: cleanedVoteItems,
+                updatedAt: serverTimestamp(),
+            },
+            { merge: true }
+        )
             .then(() => {
                 if (!hideNotification) {
                     dispatch(

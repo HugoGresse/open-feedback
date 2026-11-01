@@ -1,13 +1,13 @@
-import firebase from 'firebase/compat/app'
-import 'firebase/storage'
+import { deleteObject, ref } from 'firebase/storage'
+import { storage } from './firebaseStorage.ts'
 import type { AppThunk } from '../../../../store'
 
 export const deleteImageIfPossible = (storageFullPath: string) => {
-    const refBase = firebase.storage().ref()
+    const refBase = ref(storage)
     const fileToDelete = storageFullPath.split(refBase.bucket)[1]
-    const storageRef = firebase.storage().ref(fileToDelete)
+    const storageRef = ref(storage, fileToDelete)
 
-    storageRef.delete().catch((error: unknown) => {
+    deleteObject(storageRef).catch((error: unknown) => {
         // expected with emulators
         console.warn(error)
     })

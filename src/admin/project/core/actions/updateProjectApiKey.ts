@@ -1,6 +1,7 @@
 import type { AppThunk } from '../../../../store'
 import { getSelectedProjectIdOrThrowSelector } from '../projectSelectors'
-import { deleteField, fireStoreMainInstance } from '../../../../firebase.ts'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
+import { deleteField, doc, getDoc, setDoc } from 'firebase/firestore'
 import { addNotification } from '../../../notification/notifcationActions'
 import { generateProjectApiKey } from '../../../../utils/generateApiKey'
 
@@ -15,17 +16,19 @@ export interface ProjectIntegration {
 }
 
 const integrationDocRef = (projectId: string) =>
-    fireStoreMainInstance
-        .collection('projects')
-        .doc(projectId)
-        .collection(PROJECT_PRIVATE_COLLECTION)
-        .doc(PROJECT_INTEGRATION_DOC)
+    doc(
+        fireStoreMainInstance,
+        'projects',
+        projectId,
+        PROJECT_PRIVATE_COLLECTION,
+        PROJECT_INTEGRATION_DOC
+    )
 
 export const fetchProjectIntegration = async (
     projectId: string
 ): Promise<ProjectIntegration | null> => {
-    const doc = await integrationDocRef(projectId).get()
-    return doc.exists ? (doc.data() as ProjectIntegration) : null
+    const snapshot = await getDoc(integrationDocRef(projectId))
+    return snapshot.exists() ? (snapshot.data() as ProjectIntegration) : null
 }
 
 /**
@@ -38,8 +41,11 @@ export const updateProjectApiKey =
         const projectId = getSelectedProjectIdOrThrowSelector(getState())
         const apiKey = generateProjectApiKey()
 
-        return integrationDocRef(projectId)
-            .set({ apiKey, apiKeyLastUsedAt: deleteField() }, { merge: true })
+        return setDoc(
+            integrationDocRef(projectId),
+            { apiKey, apiKeyLastUsedAt: deleteField() },
+            { merge: true }
+        )
             .then(() => {
                 dispatch(
                     addNotification({

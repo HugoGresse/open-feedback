@@ -1,5 +1,6 @@
 import type { AppThunk } from '../../../../store'
 import { fireStoreMainInstance } from '../../../../firebase.ts'
+import { doc, getDoc } from 'firebase/firestore'
 import {
     getSelectedProjectIdOrThrowSelector,
     getSelectedProjectIdSelector,
@@ -22,19 +23,20 @@ export const getProject =
         initAPI?: boolean
     ): AppThunk<Promise<void>> =>
     (dispatch, getState) => {
-        return fireStoreMainInstance
-            .collection('projects')
-            .doc(
+        return getDoc(
+            doc(
+                fireStoreMainInstance,
+                'projects',
                 selectedProjectId ||
                     getSelectedProjectIdOrThrowSelector(getState())
             )
-            .get()
-            .then((doc) => {
-                if (doc.exists) {
+        )
+            .then((snapshot) => {
+                if (snapshot.exists()) {
                     // Firestore boundary
                     const project = {
-                        id: doc.id,
-                        ...doc.data(),
+                        id: snapshot.id,
+                        ...snapshot.data(),
                     } as AdminProject
                     if (
                         project.organizationId &&

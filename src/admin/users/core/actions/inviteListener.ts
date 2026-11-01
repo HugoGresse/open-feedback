@@ -1,3 +1,4 @@
+import { doc, onSnapshot } from 'firebase/firestore'
 import type { NavigateFunction } from 'react-router-dom'
 import type { AppThunk } from '../../../../store'
 import { fireStoreMainInstance } from '../../../../firebase.ts'
@@ -29,11 +30,10 @@ export const listenForInvite =
             })
         }
         try {
-            stopListenForInvite = fireStoreMainInstance
-                .collection('invites')
-                .doc(inviteId)
-                .onSnapshot((snapshot) => {
-                    if (snapshot.exists) {
+            stopListenForInvite = onSnapshot(
+                doc(fireStoreMainInstance, 'invites', inviteId),
+                (snapshot) => {
+                    if (snapshot.exists()) {
                         const data = snapshot.data() as InviteDocument
                         dispatch({
                             type: USER_INVITE_GET_SUCCESS,
@@ -51,7 +51,9 @@ export const listenForInvite =
                             payload: 'failed',
                         })
                     }
-                }, onError)
+                },
+                onError
+            )
         } catch (error) {
             // An id from a mangled link, e.g. with a "/", is not a valid doc
             onError(error)

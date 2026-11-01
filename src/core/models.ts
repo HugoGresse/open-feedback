@@ -3,7 +3,11 @@
 // invites) as written by the admin/feedback apps and the Cloud Functions
 // (functions/src/types, functions/src/triggers/models). Fields are optional
 // wherever older or imported documents may not have them.
-import type firebase from 'firebase/compat/app'
+import type { User as FirebaseUser } from 'firebase/auth'
+import type {
+    FieldValue as FirestoreFieldValue,
+    Timestamp as FirestoreTimestamp,
+} from 'firebase/firestore'
 import type {
     VOTE_STATUS_ACTIVE,
     VOTE_STATUS_DELETED,
@@ -19,8 +23,8 @@ import type {
 // Firestore primitives
 // ---------------------------------------------------------------------------
 
-export type Timestamp = firebase.firestore.Timestamp
-export type FieldValue = firebase.firestore.FieldValue
+export type Timestamp = FirestoreTimestamp
+export type FieldValue = FirestoreFieldValue
 /**
  * A date field as held client-side: a `Timestamp` once read back from
  * Firestore, or the `serverTimestamp()` sentinel on a freshly written object.
@@ -265,8 +269,8 @@ export interface OrganizationIntegration {
 // Users
 // ---------------------------------------------------------------------------
 
-/** The Firebase Auth user (compat API). */
-export type AuthUser = firebase.User
+/** The Firebase Auth user. */
+export type AuthUser = FirebaseUser
 
 /** The `users/{uid}` document, written on admin login. */
 export interface User {

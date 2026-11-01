@@ -1,4 +1,4 @@
-import type firebase from 'firebase/compat/app'
+import type { AuthError } from 'firebase/auth'
 import type { AuthUser } from '../../core/models'
 import {
     type AuthAction,
@@ -10,7 +10,7 @@ import {
 export interface AuthState {
     user: AuthUser | null
     isLogin: boolean
-    error: firebase.auth.Error | null
+    error: AuthError | null
 }
 
 const initState: AuthState = {

@@ -1,5 +1,6 @@
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import type { AppThunk } from '../../../../store'
-import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase.ts'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
 import { addNotification } from '../../../notification/notifcationActions'
 import { trackNewOrganization } from '../../../utils/track'
 import { getUserIdSelector } from '../../../auth/authSelectors'
@@ -27,9 +28,10 @@ export const newOrganization =
             updatedAt: serverTimestamp(),
         }
 
-        return fireStoreMainInstance
-            .collection('organizations')
-            .add(orgData)
+        return addDoc(
+            collection(fireStoreMainInstance, 'organizations'),
+            orgData
+        )
             .then(async (documentRef) => {
                 dispatch(
                     addNotification({

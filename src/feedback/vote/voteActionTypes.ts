@@ -1,4 +1,4 @@
-import type firebase from 'firebase/compat/app'
+import type { FirestoreError } from 'firebase/firestore'
 import type { Vote, VotesMap } from '../../core/models'
 
 export const ADD_VOTE_BEFORE_SUCCESS = 'vote/add/beforeSuccess'
@@ -36,7 +36,7 @@ export type VoteAction =
     | { type: typeof GET_USER_VOTES_SUCCESS; payload: VotesMap }
     | {
           type: typeof GET_USER_VOTES_ERROR
-          payload: firebase.firestore.FirestoreError
+          payload: FirestoreError
       }
     | { type: typeof DELETE_VOTE_POST_ERROR }
     | { type: typeof DELETE_VOTE_LOAD_ERROR }

@@ -88,7 +88,7 @@ export const UserInviteItem = ({
                             {t('users.invitation')} <b>{inviteStatus}</b>{' '}
                             {t('users.on')}{' '}
                             {DateTime.fromJSDate(
-                                // Read from Firestore or set with nowTimestamp()
+                                // Read from Firestore or set with Timestamp.now()
                                 (invite.updatedAt as Timestamp).toDate()
                             ).toLocaleString(dateFormat)}
                         </Typography>

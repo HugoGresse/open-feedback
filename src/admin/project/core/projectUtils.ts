@@ -1,7 +1,8 @@
 import { fireStoreMainInstance } from '../../../firebase.ts'
+import { collection, doc, getDoc } from 'firebase/firestore'
 
 export const getNewProjectId = () => {
-    return fireStoreMainInstance.collection('projects').doc().id
+    return doc(collection(fireStoreMainInstance, 'projects')).id
 }
 
 const reservedProjectIds = ['admin', 'l', 'contact', 'help', 'legal']
@@ -14,11 +15,8 @@ export const doesProjectIdExistOrIsAllowed = (
         return Promise.resolve(true)
     }
 
-    return fireStoreMainInstance
-        .collection('projects')
-        .doc(projectId)
-        .get()
-        .then((result) => result.exists)
+    return getDoc(doc(fireStoreMainInstance, 'projects', projectId))
+        .then((result) => result.exists())
         .catch((error) => {
             // biome-ignore lint/suspicious/noConsole: intentional log
             console.error(error)

@@ -1,6 +1,7 @@
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import type { FieldValue, Organization } from '../../../../core/models'
 import type { AppThunk } from '../../../../store'
-import { fireStoreMainInstance, serverTimestamp } from '../../../../firebase.ts'
+import { fireStoreMainInstance } from '../../../../firebase.ts'
 import { addNotification } from '../../../notification/notifcationActions'
 import { getSelectedOrganizationIdSelector } from '../organizationSelectors'
 import { getOrganization } from './getOrganization'
@@ -22,16 +23,14 @@ export const editOrganization =
             state
         ) as string
 
-        return fireStoreMainInstance
-            .collection('organizations')
-            .doc(organizationId)
-            .set(
-                {
-                    ...organizationData,
-                    updatedAt: serverTimestamp(),
-                },
-                { merge: true }
-            )
+        return setDoc(
+            doc(fireStoreMainInstance, 'organizations', organizationId),
+            {
+                ...organizationData,
+                updatedAt: serverTimestamp(),
+            },
+            { merge: true }
+        )
             .then(() => {
                 dispatch(
                     addNotification({

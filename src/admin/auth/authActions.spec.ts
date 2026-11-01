@@ -11,20 +11,19 @@ const firestore = vi.hoisted(() => ({
 
 vi.mock('../../firebase.ts', () => ({
     authProvider: {},
-    serverTimestamp: () => 'serverTimestamp',
-    fireStoreMainInstance: {
-        collection: () => ({
-            doc: () => ({
-                get: () =>
-                    Promise.resolve({
-                        exists: !!firestore.userInDb,
-                        data: () => firestore.userInDb,
-                    }),
-                set: firestore.set,
-                update: firestore.update,
-            }),
+    fireStoreMainInstance: {},
+}))
+vi.mock('firebase/auth', () => ({ signOut: vi.fn() }))
+vi.mock('firebase/firestore', () => ({
+    doc: vi.fn((_db, ...path: string[]) => path.join('/')),
+    getDoc: () =>
+        Promise.resolve({
+            exists: () => !!firestore.userInDb,
+            data: () => firestore.userInDb,
         }),
-    },
+    setDoc: firestore.set,
+    updateDoc: firestore.update,
+    serverTimestamp: () => 'serverTimestamp',
 }))
 vi.mock('../../utils/analytics/track', () => ({
     trackLogin: vi.fn(),
@@ -62,7 +61,8 @@ describe('didSignIn', () => {
         await signIn({ phoneNumber: '+33600000000' })
 
         expect(firestore.set).toHaveBeenCalledOnce()
-        const userField = firestore.set.mock.calls[0][0]
+        expect(firestore.set.mock.calls[0][0]).toBe('users/u1')
+        const userField = firestore.set.mock.calls[0][1]
         expect(userField.email).toBeNull()
         expect(userField.phoneNumber).toBe('+33600000000')
     })
@@ -73,6 +73,7 @@ describe('didSignIn', () => {
         await signIn({ email: 'new@example.com' })
 
         expect(firestore.update).toHaveBeenCalledOnce()
-        expect(firestore.update.mock.calls[0][0].email).toBe('new@example.com')
+        expect(firestore.update.mock.calls[0][0]).toBe('users/u1')
+        expect(firestore.update.mock.calls[0][1].email).toBe('new@example.com')
     })
 })
