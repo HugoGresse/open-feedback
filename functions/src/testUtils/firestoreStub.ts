@@ -118,3 +118,14 @@ export const replaceFirestoreByStub = (stub: unknown) => {
         configurable: true,
     })
 }
+
+// The admin.auth() calls the functions make
+export const getAuthMocksAndInit = () => {
+    const getUser = vi.fn()
+    const getUserByEmail = vi.fn()
+    Object.defineProperty(admin, 'auth', {
+        get: () => () => ({ getUser, getUserByEmail }),
+        configurable: true,
+    })
+    return { getUser, getUserByEmail }
+}

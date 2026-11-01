@@ -1,28 +1,37 @@
-import { isEmpty } from 'lodash'
 import type { MailgunEnv } from '../types/MailgunEnv'
+import { isValidEmailAddress } from './isValidEmailAddress'
 
 export interface EmailData {
-    to?: string[]
-    cc?: string[]
-    bcc?: string[]
+    to: string[]
     replyTo?: string
     subject: string
     html: string
 }
 
-const send = (config: MailgunEnv, data: EmailData): Promise<Response> => {
+const send = async (config: MailgunEnv, data: EmailData): Promise<Response> => {
     if (!config?.key || !config.api || !config.domain) {
-        return Promise.reject(
-            new Error(
-                'Mailgun configuration mailgun.key or mailgun.domain or mailgun.api not found.'
-            )
+        throw new Error(
+            'Mailgun configuration mailgun.key or mailgun.domain or mailgun.api not found.'
         )
     }
-    const { to, cc, bcc, replyTo, subject, html } = data
+    const { to, html } = data
 
-    if (isEmpty(to) && isEmpty(cc) && isEmpty(bcc)) {
-        return Promise.reject(new Error('No recipients given.'))
+    if (!Array.isArray(to) || to.length === 0) {
+        throw new Error('No recipients given.')
     }
+    // `for` rather than `find`: an undefined entry is invalid too
+    for (const address of to) {
+        if (!isValidEmailAddress(address)) {
+            throw new Error('Invalid recipient email address.')
+        }
+    }
+    // Reply-To is optional: a bad one is dropped, the email still goes out
+    const replyTo = isValidEmailAddress(data.replyTo) ? data.replyTo : null
+    if (data.replyTo && !replyTo) {
+        console.warn('Send email: invalid Reply-To dropped')
+    }
+    // Keep the subject header on one line
+    const subject = String(data.subject).replace(/[\p{Cc}\p{Zl}\p{Zp}]+/gu, ' ')
 
     const { key, api, domain } = config
 
@@ -32,22 +41,10 @@ const send = (config: MailgunEnv, data: EmailData): Promise<Response> => {
     form.append('from', from)
     form.append('subject', subject)
     form.append('html', html)
-    replyTo && form.append('h:Reply-To', replyTo)
-    to?.forEach((dest) => {
-        if (dest) form.append('to', dest)
-    })
-    bcc?.forEach((dest) => {
-        const bccEmail =
-            !isEmpty(dest) && /\S+@\S+\.\S+/.test(dest) ? dest : null
-        if (bccEmail) form.append('bcc', bccEmail)
-    })
-    cc?.forEach((dest) => {
-        const ccEmail =
-            !isEmpty(dest) && /\S+@\S+\.\S+/.test(dest) ? dest : null
-        if (ccEmail) form.append('cc', ccEmail)
-    })
+    if (replyTo) form.append('h:Reply-To', replyTo)
+    for (const address of to) form.append('to', address)
 
-    console.info(`Send email "${subject}" to`, { to, cc, bcc })
+    console.info('Send email', { subject, to })
 
     return fetch(`${api}`, {
         headers: { Authorization: `Basic ${token}` },

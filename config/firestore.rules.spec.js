@@ -18,9 +18,17 @@ const UID_OWNER = 'ownerUserId'
 
 let testEnv
 
-function createApp(uid = UID_VIEWER) {
+const emailOf = (uid) => `${uid.toLowerCase()}@example.com`
+
+function createApp(uid = UID_VIEWER, token = {}) {
     return testEnv
-        .authenticatedContext(uid, { email_verified: true, email: uid })
+        .authenticatedContext(uid, {
+            email_verified: true,
+            email: emailOf(uid),
+            // Real ID tokens always carry the sign-in provider
+            firebase: { sign_in_provider: 'password' },
+            ...token,
+        })
         .firestore()
 }
 
@@ -704,6 +712,7 @@ describe('Firestore rules', () => {
 
             const invite = ownerUserId.collection('invites').add({
                 projectId: project.id,
+                destinationUserInfo: emailOf(UID_ADMIN),
             })
 
             const inviteSnapshot = await assertSucceeds(invite)
@@ -728,7 +737,7 @@ describe('Firestore rules', () => {
 
             const invite = await ownerApp.collection('invites').add({
                 projectId: project.id,
-                destinationUserInfo: UID_ADMIN,
+                destinationUserInfo: emailOf(UID_ADMIN),
             })
             const inviteId = invite.id
 
@@ -766,11 +775,11 @@ describe('Firestore rules', () => {
 
             await ownerApp.collection('invites').add({
                 projectId: project.id,
-                destinationUserInfo: UID_ADMIN,
+                destinationUserInfo: emailOf(UID_ADMIN),
             })
             await ownerApp.collection('invites').add({
                 projectId: project.id,
-                destinationUserInfo: UID_ANOTHER_ADMIN,
+                destinationUserInfo: emailOf(UID_ANOTHER_ADMIN),
             })
 
             const listInvites = ownerApp
@@ -802,12 +811,12 @@ describe('Firestore rules', () => {
 
             const invite1 = ownerApp.collection('invites').add({
                 organizationId: 'FirstOrg',
-                destinationUserInfo: UID_VIEWER,
+                destinationUserInfo: emailOf(UID_VIEWER),
                 role: 'Viewer',
             })
             const invite2 = adminApp.collection('invites').add({
                 organizationId: 'FirstOrg',
-                destinationUserInfo: UID_ANOTHER_ADMIN,
+                destinationUserInfo: emailOf(UID_ANOTHER_ADMIN),
                 role: 'Admin',
             })
 
@@ -841,12 +850,12 @@ describe('Firestore rules', () => {
 
             await ownerApp.collection('invites').add({
                 organizationId: 'FirstOrg',
-                destinationUserInfo: UID_VIEWER,
+                destinationUserInfo: emailOf(UID_VIEWER),
                 role: 'Viewer',
             })
             await adminApp.collection('invites').add({
                 organizationId: 'FirstOrg',
-                destinationUserInfo: UID_ANOTHER_ADMIN,
+                destinationUserInfo: emailOf(UID_ANOTHER_ADMIN),
                 role: 'Admin',
             })
 
@@ -880,13 +889,13 @@ describe('Firestore rules', () => {
 
             const invite = await ownerApp.collection('invites').add({
                 organizationId: 'FirstOrg',
-                destinationUserInfo: UID_ADMIN,
+                destinationUserInfo: emailOf(UID_ADMIN),
                 role: 'Viewer',
             })
 
             const createInviteFromEditor = editorApp.collection('invites').add({
                 organizationId: 'FirstOrg',
-                destinationUserInfo: UID_ADMIN,
+                destinationUserInfo: emailOf(UID_ADMIN),
                 role: 'Viewer',
             })
 
@@ -910,13 +919,13 @@ describe('Firestore rules', () => {
 
             const invite = await ownerApp.collection('invites').add({
                 organizationId: 'FirstOrg',
-                destinationUserInfo: UID_ADMIN,
+                destinationUserInfo: emailOf(UID_ADMIN),
                 role: 'Viewer',
             })
 
             const createInviteFromViewer = viewerApp.collection('invites').add({
                 organizationId: 'FirstOrg',
-                destinationUserInfo: UID_ADMIN,
+                destinationUserInfo: emailOf(UID_ADMIN),
                 role: 'Viewer',
             })
             await assertFails(createInviteFromViewer)
@@ -940,12 +949,12 @@ describe('Firestore rules', () => {
 
             await ownerApp.collection('invites').add({
                 organizationId: 'FirstOrg',
-                destinationUserInfo: UID_ADMIN,
+                destinationUserInfo: emailOf(UID_ADMIN),
                 role: 'Viewer',
             })
             await ownerApp.collection('invites').add({
                 organizationId: 'FirstOrg',
-                destinationUserInfo: UID_OWNER,
+                destinationUserInfo: emailOf(UID_OWNER),
                 role: 'Viewer',
             })
 
@@ -978,11 +987,147 @@ describe('Firestore rules', () => {
 
             const newInvite = strangerApp.collection('invites').add({
                 organizationId: 'FirstOrg',
-                destinationUserInfo: UID_ADMIN,
+                destinationUserInfo: emailOf(UID_ADMIN),
                 role: 'Viewer',
             })
 
             await assertFails(newInvite)
+        })
+
+        it('an invite cannot target both a project and an organization', async () => {
+            // Owner of the project and admin of the organization: each
+            // target alone would be allowed
+            const ownerApp = createApp(UID_OWNER)
+            await createOrg(
+                ownerApp,
+                'FirstOrg',
+                [],
+                [],
+                [UID_OWNER],
+                UID_OWNER
+            )
+            const project = await createProject(
+                ownerApp,
+                'First project',
+                UID_OWNER
+            )
+            const invite = (fields) =>
+                ownerApp.collection('invites').add({
+                    projectId: project.id,
+                    organizationId: 'FirstOrg',
+                    destinationUserInfo: emailOf(UID_ADMIN),
+                    ...fields,
+                })
+
+            await assertFails(invite({}))
+            await assertFails(invite({ role: 'Viewer' }))
+        })
+
+        it('an organization admin can only invite as Viewer, Editor or Admin', async () => {
+            const adminApp = createApp(UID_ADMIN)
+            await createOrg(
+                adminApp,
+                'FirstOrg',
+                [],
+                [],
+                [UID_ADMIN],
+                UID_OWNER
+            )
+            const invite = (role) =>
+                adminApp.collection('invites').add({
+                    organizationId: 'FirstOrg',
+                    destinationUserInfo: emailOf(UID_VIEWER),
+                    role,
+                })
+
+            await assertSucceeds(invite('Editor'))
+            await assertFails(invite('Owner'))
+            await assertFails(invite(null))
+        })
+
+        it('anonymous or unverified users cannot create invites', async () => {
+            const project = await createProject(
+                createApp(UID_OWNER),
+                'Own',
+                UID_OWNER
+            )
+            const invite = (token) =>
+                createApp(UID_OWNER, token)
+                    .collection('invites')
+                    .add({
+                        projectId: project.id,
+                        destinationUserInfo: emailOf(UID_ADMIN),
+                    })
+
+            await assertFails(invite({ email_verified: false }))
+            await assertFails(
+                invite({ firebase: { sign_in_provider: 'anonymous' } })
+            )
+            await assertSucceeds(
+                invite({
+                    email_verified: false,
+                    email: null,
+                    phone_number: '+33600000000',
+                    firebase: { sign_in_provider: 'phone' },
+                })
+            )
+        })
+
+        it('only a verified invitee can read the invite', async () => {
+            const ownerApp = createApp(UID_OWNER)
+            const project = await createProject(ownerApp, 'Own', UID_OWNER)
+            const invite = await ownerApp.collection('invites').add({
+                projectId: project.id,
+                destinationUserInfo: emailOf(UID_ADMIN),
+            })
+            const read = (token) =>
+                createApp(UID_ADMIN, token)
+                    .collection('invites')
+                    .doc(invite.id)
+                    .get()
+
+            await assertSucceeds(read({}))
+            await assertFails(read({ email_verified: false }))
+        })
+
+        it('an invite must have one valid destination email and the creator as origin', async () => {
+            const ownerApp = createApp(UID_OWNER)
+            const project = await createProject(
+                ownerApp,
+                'First project',
+                UID_OWNER
+            )
+            const invite = (fields) =>
+                ownerApp.collection('invites').add({
+                    projectId: project.id,
+                    destinationUserInfo: emailOf(UID_ADMIN),
+                    originUserId: UID_OWNER,
+                    originUserName: null,
+                    status: 'new',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    ...fields,
+                })
+
+            await assertSucceeds(invite({}))
+            await assertSucceeds(invite({ projectName: 'x'.repeat(1000) }))
+            for (const destinationUserInfo of [
+                'a@example.com,b@example.com',
+                'admin',
+                'Admin@Example.com',
+                `a${String.fromCodePoint(0xa0)}b@example.com`,
+                `a@example.com${String.fromCodePoint(0x2028)}`,
+                null,
+            ]) {
+                await assertFails(invite({ destinationUserInfo }))
+            }
+            await assertFails(invite({ originUserId: UID_ADMIN }))
+            await assertFails(invite({ status: 'emailSent' }))
+            await assertFails(invite({ updatedAt: 'x' }))
+            await assertFails(invite({ role: 'Admin' }))
+            await assertFails(invite({ projectId: null }))
+            await assertFails(invite({ projectName: 'x'.repeat(1001) }))
+            await assertFails(invite({ unexpected: true }))
         })
     })
 

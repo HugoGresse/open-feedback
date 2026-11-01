@@ -5,12 +5,14 @@ import {
     userInviteCreated,
 } from './userInvite'
 import {
+    getAuthMocksAndInit,
     getFirestoreMocksAndInit,
     makeDocumentSnapshot,
     makeDocumentSnapshot2,
 } from '../../testUtils/firestoreStub'
 import type * as admin from 'firebase-admin'
 import { vi } from 'vitest'
+import { arrayUnion, serverTimestamp } from '../../helpers/firebaseInit'
 
 vi.mock('../../email/send')
 import send from '../../email/send'
@@ -92,37 +94,85 @@ describe('userInviteCreated', () => {
         expect(doc).toHaveBeenCalledWith(invite.id)
     })
 
-    it('should resolve when a user is invited to a project, thus an email is sent', async () => {
-        const { update, get, collection, doc, where } =
-            getFirestoreMocksAndInit()
-
-        update.mockImplementation(() => Promise.resolve('firestoreCompleted'))
-        get.mockImplementationOnce(() =>
-            Promise.resolve({
-                forEach: () => {
-                    // not implemented
-                },
-                empty: false,
-            })
-        )
+    it('should resolve when the invited email has no account yet', async () => {
+        const { update, collection } = getFirestoreMocksAndInit()
+        const { getUserByEmail } = getAuthMocksAndInit()
+        getUserByEmail.mockRejectedValue({ code: 'auth/user-not-found' })
         vi.mocked(send).mockResolvedValue(new Response())
 
-        const userInviteCreatedWrapped = test.wrap(userInviteCreated)
-
         const snapshot = makeDocumentSnapshot2(invite, `invites/${invite.id}`)
-        await expect(userInviteCreatedWrapped(snapshot)).resolves.toEqual(
-            'forEach not implemented or firebase issue'
+        await expect(test.wrap(userInviteCreated)(snapshot)).resolves.toEqual(
+            'no user matched'
         )
 
         expect(update).toBeCalledWith({ status: 'emailSent' })
-        expect(collection).toHaveBeenCalledWith('invites')
-        expect(doc).toHaveBeenCalledWith(invite.id)
+        expect(getUserByEmail).toHaveBeenCalledWith(invite.destinationUserInfo)
+        // Never the users collection: its email field is written by users
+        expect(collection).not.toHaveBeenCalledWith('users')
+    })
 
-        expect(collection).toHaveBeenCalledWith('users')
-        expect(where).toHaveBeenCalledWith(
-            'email',
-            '==',
-            invite.destinationUserInfo
+    it('should apply the invite to the verified Firebase Auth user of that email', async () => {
+        const { get, update } = getFirestoreMocksAndInit()
+        const { getUserByEmail } = getAuthMocksAndInit()
+        getUserByEmail.mockResolvedValue({
+            uid: 'authUid',
+            email: invite.destinationUserInfo,
+            emailVerified: true,
+        })
+        get.mockImplementation(() =>
+            Promise.resolve([
+                { id: invite.id, data: () => ({ projectId: 'projectId1' }) },
+            ])
+        )
+        vi.mocked(send).mockResolvedValue(new Response())
+
+        const snapshot = makeDocumentSnapshot2(invite, `invites/${invite.id}`)
+        await test.wrap(userInviteCreated)(snapshot)
+
+        expect(update).toHaveBeenCalledWith({
+            members: arrayUnion('authUid'),
+            updatedAt: serverTimestamp(),
+        })
+    })
+
+    it('should not apply the invite to an account whose email is not verified', async () => {
+        const { where, update } = getFirestoreMocksAndInit()
+        const { getUserByEmail } = getAuthMocksAndInit()
+        getUserByEmail.mockResolvedValue({
+            uid: 'squatterUid',
+            email: invite.destinationUserInfo,
+            emailVerified: false,
+        })
+        vi.mocked(send).mockResolvedValue(new Response())
+
+        const snapshot = makeDocumentSnapshot2(invite, `invites/${invite.id}`)
+        await expect(test.wrap(userInviteCreated)(snapshot)).resolves.toEqual(
+            'email not verified'
+        )
+
+        expect(where).not.toHaveBeenCalled()
+        expect(update).toHaveBeenCalledTimes(1)
+        expect(update).toHaveBeenCalledWith({ status: 'emailSent' })
+    })
+
+    it('should not send an invite that targets both a project and an organization', async () => {
+        const { update } = getFirestoreMocksAndInit()
+        const { getUserByEmail } = getAuthMocksAndInit()
+        vi.spyOn(console, 'error').mockImplementation(() => undefined)
+
+        const snapshot = makeDocumentSnapshot2(
+            { ...invite, organizationId: 'org1', role: 'Admin' },
+            `invites/${invite.id}`
+        )
+        await test.wrap(userInviteCreated)(snapshot)
+
+        expect(send).not.toHaveBeenCalled()
+        expect(getUserByEmail).not.toHaveBeenCalled()
+        expect(update).toHaveBeenCalledWith(
+            expect.objectContaining({
+                status: 'error',
+                error: 'Invalid invite target',
+            })
         )
     })
 })
@@ -155,6 +205,31 @@ describe('checkPendingInviteAndProcessThem', () => {
         )
         expect(where).toHaveBeenCalledWith('status', '==', 'emailSent')
         expect(get).toHaveBeenCalledTimes(1)
+    })
+
+    it('marks a pending invite with both targets as errored instead of applying it', async () => {
+        const { get, update, doc } = getFirestoreMocksAndInit()
+        get.mockImplementation(() =>
+            Promise.resolve([
+                {
+                    id: 'bad',
+                    data: () => ({
+                        projectId: '12',
+                        organizationId: 'victimOrg',
+                        role: 'Admin',
+                    }),
+                },
+            ])
+        )
+
+        await checkPendingInviteAndProcessThem(user)
+
+        expect(doc).not.toHaveBeenCalledWith('victimOrg')
+        expect(doc).toHaveBeenCalledWith('bad')
+        expect(update).toHaveBeenCalledTimes(1)
+        expect(update).toHaveBeenCalledWith(
+            expect.objectContaining({ status: 'error' })
+        )
     })
 
     it('check pending invites and assert process', async () => {
