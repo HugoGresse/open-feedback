@@ -7,19 +7,28 @@ import {
 } from '../../../../firebase.ts'
 import {
     GET_USER_DETAILS_SUCCESS,
+    USER_INVITE_HIDE,
     USER_INVITE_REMOVE_SUCCESS,
     USER_INVITES_GET_SUCCESS,
+    USER_INVITES_LISTEN,
     USERS_SET_FILTER,
     type UsersAction,
 } from '../usersActionTypes'
-import { getUsersSelector } from '../usersSelectors'
+import { getListedInvitesSelector, getUsersSelector } from '../usersSelectors'
+import { hasJustAccepted } from '../usersReducer'
+import { getProject } from '../../../project/core/actions/getProject'
+import { getOrganization } from '../../../organization/core/actions/getOrganization'
 import {
     getMemberIds,
     getSelectedProjectIdSelector,
+    getSelectedProjectSelector,
 } from '../../../project/core/projectSelectors'
 import { addNotification } from '../../../notification/notifcationActions'
 import { editProject } from '../../../project/core/actions/editProject'
-import { getSelectedOrganizationIdSelector } from '../../../organization/core/organizationSelectors'
+import {
+    getSelectedOrganizationIdSelector,
+    getSelectedOrganizationSelector,
+} from '../../../organization/core/organizationSelectors'
 import {
     editOrganization,
     type EditOrganizationData,
@@ -169,45 +178,91 @@ export const setUsersFilter = (filterValue: string): UsersAction => ({
     payload: filterValue.trim(),
 })
 
-export const getPendingInvites = (): AppThunk => (dispatch, getState) => {
-    const state = getState()
-    const projectId = getSelectedProjectIdSelector(state)
-    const organizationId = getSelectedOrganizationIdSelector(state)
+/**
+ * Listens to all the invites of the project, or else of the organization, not
+ * only the pending ones, to see when one is accepted. Returns the unsubscribe.
+ */
+export const listenForInvites =
+    (
+        projectId: string | null | undefined,
+        organizationId: string | null | undefined
+    ): AppThunk<(() => void) | undefined> =>
+    (dispatch, getState) => {
+        dispatch({ type: USER_INVITES_LISTEN })
+        const whereKey = projectId ? 'projectId' : 'organizationId'
+        const orgIdOrProjectId = projectId || organizationId
+        if (!orgIdOrProjectId) {
+            return
+        }
 
-    const whereKey = projectId ? 'projectId' : 'organizationId'
-    const orgIdOrProjectId = projectId || organizationId
-
-    fireStoreMainInstance
-        .collection('invites')
-        .where(whereKey, '==', orgIdOrProjectId)
-        .where('status', 'in', ['new', 'emailSent', 'error'])
-        .get()
-        .then((querySnapshot) => {
-            const pendingInvite: Invite[] = []
-            querySnapshot.forEach((snapshot) => {
-                pendingInvite.push({
-                    id: snapshot.id,
-                    ...snapshot.data(),
-                } as Invite)
-            })
-            return dispatch({
-                type: USER_INVITES_GET_SUCCESS,
-                payload: pendingInvite,
-            })
-        })
-        .catch((error: unknown) => {
-            // biome-ignore lint/suspicious/noConsole: intentional log
-            console.error(error)
-            dispatch(
-                addNotification({
-                    type: 'error',
-                    i18nkey: 'users.errorPendingInvitesFailed',
-                    message: `${JSON.stringify(error)}`,
-                })
+        return fireStoreMainInstance
+            .collection('invites')
+            .where(whereKey, '==', orgIdOrProjectId)
+            .onSnapshot(
+                (querySnapshot) => {
+                    const invites = querySnapshot.docs.map(
+                        (snapshot) =>
+                            ({
+                                id: snapshot.id,
+                                // A just created invite has its timestamps
+                                // pending, null otherwise
+                                ...snapshot.data({
+                                    serverTimestamps: 'estimate',
+                                }),
+                            }) as Invite
+                    )
+                    const listed = getListedInvitesSelector(getState())
+                    dispatch({
+                        type: USER_INVITES_GET_SUCCESS,
+                        payload: invites,
+                    })
+                    if (hasJustAccepted(listed, invites)) {
+                        dispatch(refreshMembers(projectId, organizationId))
+                    }
+                },
+                (error: unknown) => {
+                    // biome-ignore lint/suspicious/noConsole: intentional log
+                    console.error(error)
+                    dispatch(
+                        addNotification({
+                            type: 'error',
+                            i18nkey: 'users.errorPendingInvitesFailed',
+                            message: `${JSON.stringify(error)}`,
+                        })
+                    )
+                }
             )
-            return false
-        })
-}
+    }
+
+/** The members are read once: shows the one who just accepted an invite. */
+const refreshMembers =
+    (
+        projectId: string | null | undefined,
+        organizationId: string | null | undefined
+    ): AppThunk =>
+    (dispatch, getState) => {
+        if (projectId) {
+            // getProject also reads the organization when it is not loaded,
+            // denied to event members who are not in it: do not repeat its
+            // error on each acceptance.
+            const state = getState()
+            if (
+                getSelectedProjectSelector(state)?.organizationId &&
+                !getSelectedOrganizationSelector(state)
+            ) {
+                return
+            }
+            dispatch(getProject(projectId))
+        } else if (organizationId) {
+            dispatch(getOrganization(organizationId))
+        }
+    }
+
+/** Removes an accepted invite from the list, once shown as accepted. */
+export const hideInvite = (inviteId: string): UsersAction => ({
+    type: USER_INVITE_HIDE,
+    payload: inviteId,
+})
 
 export const cancelInvite =
     (inviteId: string): AppThunk =>

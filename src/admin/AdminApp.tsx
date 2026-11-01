@@ -22,6 +22,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { DateTime } from 'luxon'
 import { EnforceTrailingSlash } from '../utils/EnforceTrailingSlash.tsx'
 import { ROUTE_EVENT_BASE, RoutingMap } from './RoutingMap'
+import { InviteDialogFromUrl } from './users/InviteDialog.tsx'
 
 // Custom palette keys of the admin theme.
 declare module '@mui/material/styles' {
@@ -133,6 +134,7 @@ export function AdminApp() {
                                     </Route>
                                 </Routes>
                                 <SlidingOrganizationApp />
+                                <InviteDialogFromUrl />
 
                                 <Notifications />
                             </LocalizationProvider>
