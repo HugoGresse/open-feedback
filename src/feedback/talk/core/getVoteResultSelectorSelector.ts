@@ -4,9 +4,9 @@ import {
     getProjectVoteStartEndTimeSelector,
     hideVotesUntilUserVoteSelector,
 } from '../../project/projectSelectors'
-import { getUserVotesByTalkAndVoteItemSelector } from '../../vote/voteSelectors'
 import { getSelectedTalkIdSelector } from './talkSelectors'
 import { isVoteWindowOpen } from '../../vote/checkDataBeforeVote'
+import { shouldShowVoteResults } from './voteResultsVisibility'
 import type { AggregatedTextVote } from '../../../core/models'
 
 /** A text vote of the results, its Firestore timestamps turned into dates. */
@@ -31,35 +31,33 @@ export const getVoteResultSelectorSelector = createAppSelector(
     getSelectedTalkIdSelector,
     getProjectVoteResultsSelector,
     hideVotesUntilUserVoteSelector,
-    getUserVotesByTalkAndVoteItemSelector,
     getProjectVoteStartEndTimeSelector,
     (_: RootState, displayVotes: string | null) => displayVotes,
+    (_: RootState, _displayVotes: string | null, votedOnTalkAtLoad: boolean) =>
+        votedOnTalkAtLoad,
     (
         selectedTalkId,
         voteResults,
         hideVotesUntilUserVote,
-        currentUserVotes,
         projectVotesWindow,
-        displayVotes
+        displayVotes,
+        votedOnTalkAtLoad
     ): VoteResults => {
+        const [voteStartTime, voteEndTime] = projectVotesWindow
+        // Without both dates, the vote window is always open
+        const voteWindowOpen =
+            !voteStartTime ||
+            !voteEndTime ||
+            isVoteWindowOpen(voteStartTime, voteEndTime)[0]
         if (
-            hideVotesUntilUserVote &&
-            !displayVotes &&
-            (!currentUserVotes || Object.keys(currentUserVotes).length === 0)
+            !shouldShowVoteResults({
+                hideVotesUntilUserVote,
+                displayVotes,
+                votedOnTalkAtLoad,
+                voteWindowOpen,
+            })
         ) {
-            // Is vote window open?
-            if (projectVotesWindow[0] && projectVotesWindow[1]) {
-                const [voteWindowOpen] = isVoteWindowOpen(
-                    projectVotesWindow[0],
-                    projectVotesWindow[1]
-                )
-                if (voteWindowOpen) {
-                    return {}
-                }
-            } else {
-                // Hide other users votes until the user vote
-                return {}
-            }
+            return {}
         }
         if (
             !voteResults ||

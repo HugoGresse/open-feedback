@@ -11,6 +11,9 @@ const getVotes = (state: RootState) => state.votes
 export const getCurrentUserVotesSelector = (state: RootState) =>
     getVotes(state).currentUserVotes
 
+export const getUserVotesLoadedSelector = (state: RootState) =>
+    getVotes(state).userVotesLoaded
+
 export const getErrorVotePostSelector = (state: RootState) =>
     getVotes(state).errorVotePost
 

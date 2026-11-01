@@ -20,6 +20,7 @@ const vote: Vote = {
 
 const initialState: VoteState = {
     currentUserVotes: { [vote.id]: vote },
+    userVotesLoaded: true,
     errorVotePost: null,
     errorVotesLoad: null,
 }

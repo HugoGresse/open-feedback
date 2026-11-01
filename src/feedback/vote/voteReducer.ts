@@ -18,12 +18,15 @@ import type { VotesMap } from '../../core/models'
 export interface VoteState {
     /** The current user votes of the project, keyed by vote id. */
     currentUserVotes: VotesMap
+    /** Whether the current user votes have been loaded from the database. */
+    userVotesLoaded: boolean
     errorVotePost: string | null
     errorVotesLoad: string | null
 }
 
 const initState: VoteState = {
     currentUserVotes: {},
+    userVotesLoaded: false,
     errorVotePost: null,
     errorVotesLoad: null,
 }
@@ -37,6 +40,7 @@ export const voteReducer = (
             return {
                 ...state,
                 currentUserVotes: action.payload,
+                userVotesLoaded: true,
             }
         case ADD_VOTE_BEFORE_SUCCESS:
             return {

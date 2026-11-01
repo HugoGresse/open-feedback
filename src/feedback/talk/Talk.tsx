@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../store'
 import {
     getSelectedTalkSelector,
@@ -25,6 +25,7 @@ import {
     getActiveUserVotesByTalkAndVoteItemSelector,
     getErrorVotePostSelector,
     getErrorVotesLoadSelector,
+    getUserVotesLoadedSelector,
 } from '../vote/voteSelectors'
 
 import Grid from '@mui/material/Grid'
@@ -37,6 +38,10 @@ import { VOTE_TYPE_BOOLEAN, VOTE_TYPE_TEXT } from '../../core/contants'
 import { useTranslation } from 'react-i18next'
 import { TalkHeader } from './TalkHeader.tsx'
 import { getVoteResultSelectorSelector } from './core/getVoteResultSelectorSelector'
+import {
+    snapshotVotedOnTalkAtLoad,
+    type VotedOnTalkAtLoad,
+} from './core/voteResultsVisibility'
 import { useQuery } from '../../utils/useQuery'
 import { useParams } from 'react-router-dom'
 
@@ -55,8 +60,29 @@ export const Talk = () => {
     const userVotes = useAppSelector((state) =>
         getActiveUserVotesByTalkAndVoteItemSelector(state, talkId)
     )
+    const userVotesLoaded = useAppSelector(getUserVotesLoadedSelector)
+
+    // Whether the user had voted on the talk when it loaded: the votes cast
+    // during this visit don't reveal the results hidden until the user votes
+    const [votedAtLoad, setVotedAtLoad] = useState<VotedOnTalkAtLoad | null>(
+        null
+    )
+    const nextVotedAtLoad = snapshotVotedOnTalkAtLoad(
+        votedAtLoad,
+        id,
+        userVotesLoaded,
+        userVotes
+    )
+    if (nextVotedAtLoad !== votedAtLoad) {
+        setVotedAtLoad(nextVotedAtLoad)
+    }
+
     const voteResults = useAppSelector((state) =>
-        getVoteResultSelectorSelector(state, displayVotes)
+        getVoteResultSelectorSelector(
+            state,
+            displayVotes,
+            nextVotedAtLoad?.voted ?? false
+        )
     )
     const errorTalkLoad = useAppSelector(getTalkLoadErrorSelector)
     const errorVotePost = useAppSelector(getErrorVotePostSelector)
