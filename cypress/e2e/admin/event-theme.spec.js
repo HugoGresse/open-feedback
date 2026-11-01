@@ -48,8 +48,8 @@ describe('Event and theme options', function () {
         app.eventTheme.assertVoteRangeRestricted(true)
 
         // Restrict the vote range to last day only
-        const dateStartAt = DateTime.local().minus({ days: 2 }).day
-        const dateEndAt = DateTime.local().minus({ days: 1 }).day
+        const dateStartAt = DateTime.local().minus({ days: 2 })
+        const dateEndAt = DateTime.local().minus({ days: 1 })
 
         app.eventTheme.editVoteRangeOpenTime(dateStartAt, 13, 35)
         app.eventTheme.editVoteRangeEndTime(dateEndAt, 13, 35)
@@ -85,7 +85,7 @@ describe('Event and theme options', function () {
 
         app.eventTheme.assertVoteRangeRestricted(false)
         app.eventTheme.setVoteRangeRestricted(true)
-        app.eventTheme.editVoteRangeOpenTime(15, 13, 35)
+        app.eventTheme.editVoteRangeOpenTime(dateTime, 13, 35)
 
         app.eventTheme.save(true)
         cy.reload()
