@@ -76,12 +76,16 @@ export const getFirestoreMocksAndInit = () => {
 
     const firestoreStub = vi.fn(() => ({
         collection,
-        // Called by the test SDK to turn event data into a snapshot.
-        snapshot_: (proto: {
-            fields: Record<string, { stringValue?: string }>
-        }) => {
+        // Called by the test SDK to turn event data into a snapshot. Empty
+        // data comes as the document name alone: a missing document.
+        snapshot_: (
+            proto: string | { fields: Record<string, { stringValue?: string }> }
+        ) => {
             return {
                 data: () => {
+                    if (typeof proto === 'string') {
+                        return undefined
+                    }
                     const newObj: Record<string, string | undefined> = {}
                     Object.keys(proto.fields).forEach((key: string) => {
                         const field = proto.fields[key]

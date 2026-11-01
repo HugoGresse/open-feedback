@@ -57,10 +57,15 @@ jobs:
             - name: functions npm install (ci)
               working-directory: ./functions
               run: npm ci
-            # Fails on any warning, not only on errors.
+            # Fails on warnings too, not only on errors (info-level
+            # suggestions do not fail).
             - name: lint functions/
               working-directory: ./functions
               run: npm run lint
+            # The build excludes the specs and test utilities.
+            - name: typecheck functions/ specs
+              working-directory: ./functions
+              run: npm run typecheck
             - name: npm test (Firestore rules and functions/)
               run: |
                   npm run test

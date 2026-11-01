@@ -81,7 +81,7 @@ export class Vote {
         if (this.isTextPlusVote()) {
             if (
                 !this.voteData.voteId ||
-                this.isTextVoteDeleted(aggregatedVote)
+                this.isTextVoteDeleted(this.voteData.voteId, aggregatedVote)
             ) {
                 return {}
             }
@@ -131,15 +131,15 @@ export class Vote {
         }
     }
 
-    private isTextVoteDeleted(aggregatedVote?: AggregatedVote): boolean {
+    private isTextVoteDeleted(
+        voteId: string,
+        aggregatedVote?: AggregatedVote
+    ): boolean {
         // When deleting a text vote, the vote will be an empty object {}, and if the user did not have the latest version, he will upvote a textVote which does not exist, just an empty object.
-        const voteId = this.voteData?.voteId
-        const textVote = voteId
-            ? getAggregatedTextVotes(
-                  aggregatedVote,
-                  this.voteData.voteItemId
-              )?.[voteId]
-            : undefined
+        const textVote = getAggregatedTextVotes(
+            aggregatedVote,
+            this.voteData.voteItemId
+        )?.[voteId]
         return !textVote || Object.keys(textVote).length === 0
     }
 }

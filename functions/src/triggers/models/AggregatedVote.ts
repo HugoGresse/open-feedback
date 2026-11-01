@@ -21,5 +21,5 @@ export const getAggregatedTextVotes = (
     voteItemId: string
 ) => {
     const voteItem = aggregatedVote?.[voteItemId]
-    return typeof voteItem === 'object' ? voteItem : undefined
+    return voteItem && typeof voteItem === 'object' ? voteItem : undefined
 }

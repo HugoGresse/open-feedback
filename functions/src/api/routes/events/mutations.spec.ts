@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+    afterEach,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    type Mock,
+    vi,
+} from 'vitest'
 import type { FastifyInstance } from 'fastify'
 import { FakeFirestore } from 'firestore-vitest'
 import { mockFirebaseAdminApp } from '../../../testUtils/firestoreMock'
@@ -41,7 +49,7 @@ describe('event mutations', () => {
     let db: FakeFirestore
     let create: ReturnType<typeof vi.fn>
     let commit: ReturnType<typeof vi.fn>
-    let deleteFile: ReturnType<typeof vi.fn>
+    let deleteFile: Mock<(path: string, options: unknown) => Promise<unknown>>
     const orgHeaders = { 'x-api-key': 'oforg_valid' }
     const eventHeaders = { 'x-api-key': 'ofproj_valid' }
 
@@ -49,6 +57,7 @@ describe('event mutations', () => {
         mockFirebaseAdminApp({}, { firestore: false })
         db = new FakeFirestore(
             { projects: [structuredClone(project)] },
+            // @ts-expect-error: the typings omit the supported mutable option.
             { mutable: true }
         )
         vi.doMock('firebase-admin/firestore', () => ({

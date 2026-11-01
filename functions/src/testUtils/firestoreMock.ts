@@ -1,24 +1,11 @@
 import { vi } from 'vitest'
 import { FakeFirestore } from 'firestore-vitest'
+import type { FakeFirestoreDatabase } from 'firestore-vitest/mocks/firestore'
 
-export type FirestoreDatabase = NonNullable<
-    ConstructorParameters<typeof FakeFirestore>[0]
->
-
-// The Admin SDK Firestore members the fake does not implement.
-type StubbedFirestore = FakeFirestore & {
-    databaseId: string
-    recursiveDelete: () => void
-    terminate: () => void
-    listCollections: () => void
-    bulkWriter: () => void
-    bundle: () => void
-}
-
-const firestoreStub = (database: FirestoreDatabase) => {
+const firestoreStub = (database: FakeFirestoreDatabase) => {
     // Prepare namespaced classes
-    function firestoreConstructor(): StubbedFirestore {
-        return new FakeFirestore(database) as StubbedFirestore
+    function firestoreConstructor() {
+        return new FakeFirestore(database)
     }
     firestoreConstructor.Query = FakeFirestore.Query
     firestoreConstructor.CollectionReference = FakeFirestore.CollectionReference
@@ -32,7 +19,7 @@ const firestoreStub = (database: FirestoreDatabase) => {
 }
 
 export const mockFirebaseAdminApp = (
-    database: FirestoreDatabase,
+    database: FakeFirestoreDatabase,
     // Pass false when the spec registers its own firebase-admin/firestore
     // mock: vitest resolves queued doMocks in parallel, so two mocks of the
     // same module race and the stub could win.

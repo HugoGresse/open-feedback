@@ -56,7 +56,7 @@ export const userInviteCreated = onDocumentCreated(
             generateInviteEmail(invite, data.lang || 'en', appEnv, inviteId)
         )
 
-        if (sendResult instanceof Response && sendResult.ok) {
+        if (sendResult.ok) {
             return admin
                 .firestore()
                 .collection('invites')
@@ -75,10 +75,11 @@ export const userInviteCreated = onDocumentCreated(
                             if (querySnapshot.empty) {
                                 return Promise.resolve('no user matched')
                             }
-                            let promise: Promise<string | unknown[]> =
-                                Promise.resolve(
-                                    'forEach not implemented or firebase issue'
-                                )
+                            let promise: Promise<
+                                string | FirebaseFirestore.WriteResult[]
+                            > = Promise.resolve(
+                                'forEach not implemented or firebase issue'
+                            )
                             querySnapshot.forEach((userSnapshot) => {
                                 promise = checkPendingInviteAndProcessThem(
                                     userSnapshot.data() as admin.auth.UserRecord
@@ -110,7 +111,7 @@ export const checkPendingInviteAndProcessThem = (
         .where('status', '==', 'emailSent')
         .get()
         .then((querySnapshot) => {
-            const promises: Promise<unknown>[] = []
+            const promises: Promise<FirebaseFirestore.WriteResult>[] = []
             querySnapshot.forEach((snapshot) => {
                 const data = snapshot.data()
                 const organizationIdOrProjectId =
@@ -120,17 +121,13 @@ export const checkPendingInviteAndProcessThem = (
                     : InvitationType.ProjectInvitationType
 
                 promises.push(
-                    new Promise((resolve, reject) => {
-                        applyInvites(
-                            snapshot.id,
-                            invitationType,
-                            userId,
-                            organizationIdOrProjectId,
-                            data.role
-                        )
-                            .then((result) => resolve(result))
-                            .catch((error) => reject(error))
-                    })
+                    applyInvites(
+                        snapshot.id,
+                        invitationType,
+                        userId,
+                        organizationIdOrProjectId,
+                        data.role
+                    )
                 )
             })
             return Promise.all(promises)

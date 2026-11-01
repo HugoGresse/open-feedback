@@ -1,11 +1,11 @@
 import type { FastifyInstance } from 'fastify'
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import {
-    type FirestoreDatabase,
-    mockFirebaseAdminApp,
-} from '../../../testUtils/firestoreMock'
+import { mockFirebaseAdminApp } from '../../../testUtils/firestoreMock'
 import type { OrganizationDBEntity } from '../../../types/Organization'
-import { mockWhere } from 'firestore-vitest/mocks/firestore'
+import {
+    type FakeFirestoreDatabase,
+    mockWhere,
+} from 'firestore-vitest/mocks/firestore'
 
 const baseOrganization = {
     id: 'org_123',
@@ -35,7 +35,7 @@ const baseUser = {
 
 const mockOrganization = (
     organization?: Partial<OrganizationDBEntity>,
-    users?: FirestoreDatabase[string]
+    users?: FakeFirestoreDatabase[string]
 ) => {
     const org = {
         ...baseOrganization,

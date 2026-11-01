@@ -61,6 +61,7 @@ describe.each(['talks', 'speakers'] as const)('%s API', (kind) => {
         vi.resetAllMocks()
         db = new FakeFirestore(
             { projects: [structuredClone(project)] },
+            // @ts-expect-error: the typings omit the supported mutable option.
             { mutable: true }
         )
         const { OrganizationDao } = await import('../../dao/OrganizationDao')
@@ -555,7 +556,13 @@ describe.each(['talks', 'speakers'] as const)('%s API', (kind) => {
         // SDK page snapshots and verify the query arguments separately.
         const first = { id: 'record_a', data: () => ({ [field]: 'First' }) }
         const second = { id: 'record_b', data: () => ({ [field]: 'Second' }) }
-        vi.spyOn(FakeFirestore.CollectionReference.prototype, '_get')
+        // _get is internal to the fake, so it is not in its typings.
+        vi.spyOn(
+            FakeFirestore.CollectionReference.prototype as unknown as {
+                _get: () => unknown
+            },
+            '_get'
+        )
             .mockReturnValueOnce({ docs: [first, second], size: 2 } as never)
             .mockReturnValueOnce({ docs: [second], size: 1 } as never)
         const after = vi.spyOn(FakeFirestore.Query.prototype, 'startAfter')

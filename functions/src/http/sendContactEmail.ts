@@ -30,7 +30,7 @@ export const sendContactEmail = functions.https.onRequest(async (req, res) => {
         replyTo: body.email,
         html: `<html><body><p>${body.message}</p><br/>From: ${body.email}</body></html>`,
     })
-    if (sendResult instanceof Response && sendResult.ok) {
+    if (sendResult.ok) {
         res.set('Access-Control-Allow-Origin', '*')
         res.status(200).send(
             JSON.stringify({

@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { FieldValue } from 'firebase-admin/firestore'
 import { type AggregatedVote, getAggregatedTextVotes } from './AggregatedVote'
-import {
-    VOTE_STATUS_ACTIVE,
-    VOTE_TYPE_TEXT_PLUS,
-    Vote,
-    type VoteData,
-} from './vote'
+import { VOTE_STATUS_ACTIVE, VOTE_TYPE_TEXT_PLUS, Vote } from './vote'
 
 const textVote = {
     text: 'nice talk',
@@ -30,6 +25,12 @@ describe('getAggregatedTextVotes', () => {
     it('returns undefined without an aggregate or vote item', () => {
         expect(getAggregatedTextVotes(undefined, 'vi1')).toBeUndefined()
         expect(getAggregatedTextVotes({}, 'vi1')).toBeUndefined()
+        expect(
+            getAggregatedTextVotes(
+                { vi1: null } as unknown as AggregatedVote,
+                'vi1'
+            )
+        ).toBeUndefined()
     })
 })
 
@@ -44,7 +45,7 @@ describe('Vote.getVoteItemIncrementAggregation for an up-vote on a text', () => 
         status: VOTE_STATUS_ACTIVE,
         createdAt: {},
         updatedAt: {},
-    } satisfies VoteData)
+    })
 
     it('increments the plus of an existing text vote', () => {
         expect(
@@ -74,7 +75,7 @@ describe('Vote.getVoteItemIncrementAggregation for a text vote', () => {
         status: VOTE_STATUS_ACTIVE,
         createdAt: {},
         updatedAt: {},
-    } satisfies VoteData)
+    })
     const written = {
         text: 'edited',
         createdAt: {},
