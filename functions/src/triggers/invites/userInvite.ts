@@ -5,7 +5,7 @@ import { getAppEnv, getMailgunEnv } from '../../helpers/env'
 import { generateInviteEmail } from './generateInviteEmail'
 import { applyInvites } from './applyInvites'
 import { InvitationType } from '../../types/InvitationType'
-import { EmailInvite } from '../../types/EmailInvite'
+import type { EmailInvite } from '../../types/EmailInvite'
 import { onDocumentCreated } from 'firebase-functions/v2/firestore'
 
 // userInviteCreated is called when an user as been invited to a project or an organization.
@@ -75,7 +75,7 @@ export const userInviteCreated = onDocumentCreated(
                             if (querySnapshot.empty) {
                                 return Promise.resolve('no user matched')
                             }
-                            let promise: Promise<string | any[]> =
+                            let promise: Promise<string | unknown[]> =
                                 Promise.resolve(
                                     'forEach not implemented or firebase issue'
                                 )
@@ -89,7 +89,6 @@ export const userInviteCreated = onDocumentCreated(
                 })
         }
 
-        // eslint-disable-next-line prefer-promise-reject-errors
         return Promise.reject(
             'Function failed due to not successful email send'
         )
@@ -111,7 +110,7 @@ export const checkPendingInviteAndProcessThem = (
         .where('status', '==', 'emailSent')
         .get()
         .then((querySnapshot) => {
-            const promises: Promise<any>[] = []
+            const promises: Promise<unknown>[] = []
             querySnapshot.forEach((snapshot) => {
                 const data = snapshot.data()
                 const organizationIdOrProjectId =

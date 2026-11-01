@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 import { FakeFirestore } from 'firestore-vitest'
 import { mockFirebaseAdminApp } from '../../../testUtils/firestoreMock'
 
@@ -612,8 +612,9 @@ describe('event mutations', () => {
         })
 
         it('fills the default voting form when the organization has none', async () => {
-            const { OrganizationDao } =
-                await import('../../dao/OrganizationDao')
+            const { OrganizationDao } = await import(
+                '../../dao/OrganizationDao'
+            )
             vi.mocked(
                 OrganizationDao.getOrganizationFromApiKey
             ).mockResolvedValueOnce({ ...organization, voteItems: [] })

@@ -1,10 +1,10 @@
-import { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsync } from 'fastify'
 import { Type } from '@sinclair/typebox'
 import {
     ErrorSchema,
     EventIdSchema,
     NextCursorSchema,
-    ResourceListQuery,
+    type ResourceListQuery,
     ResourceListQuerySchema,
     SpeakerSchema,
     RESOURCE_ACCESS_NOTE,

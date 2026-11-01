@@ -1,10 +1,13 @@
-import { App as FirebaseApp } from 'firebase-admin/app'
+import type { App as FirebaseApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
-import { Organization, HydratedOrganization } from '../../types/Organization'
+import type {
+    Organization,
+    HydratedOrganization,
+} from '../../types/Organization'
 import { NotFoundError } from '../others/Errors'
-import { APIKey } from '../plugins/APIKey'
+import type { APIKey } from '../plugins/APIKey'
 import { UserDao } from './UserDao'
-import { User } from '../../types/User'
+import type { User } from '../../types/User'
 
 // Firestore stores createdAt/updatedAt as Timestamp objects, but the API
 // schema declares them as date-time strings. Normalize so the response
@@ -49,8 +52,8 @@ const ORGANIZATION_COLLECTION = 'organizations'
 const ORGANIZATION_PRIVATE_COLLECTION = 'private'
 const ORGANIZATION_INTEGRATION_DOC = 'integration'
 
-export class OrganizationDao {
-    public static async getOrganizationFromId(
+export const OrganizationDao = {
+    async getOrganizationFromId(
         firebaseApp: FirebaseApp,
         organizationId: string
     ): Promise<Organization> {
@@ -65,9 +68,9 @@ export class OrganizationDao {
         }
 
         return mapOrganizationDoc(organizationDoc.id, organizationDoc.data())
-    }
+    },
 
-    public static async getOrganizationFromApiKey(
+    async getOrganizationFromApiKey(
         firebaseApp: FirebaseApp,
         apiKey: APIKey
     ): Promise<Organization | null> {
@@ -117,9 +120,9 @@ export class OrganizationDao {
         }
 
         return mapOrganizationDoc(organizationDoc.id, organizationDoc.data())
-    }
+    },
 
-    public static async hydrateOrganization(
+    async hydrateOrganization(
         firebaseApp: FirebaseApp,
         organization: Organization
     ): Promise<HydratedOrganization> {
@@ -160,5 +163,5 @@ export class OrganizationDao {
             editorUsers: (editorUserIds || []).map(getUser),
             viewerUsers: (viewerUserIds || []).map(getUser),
         }
-    }
+    },
 }

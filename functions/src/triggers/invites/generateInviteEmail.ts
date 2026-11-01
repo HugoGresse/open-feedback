@@ -1,9 +1,9 @@
 import translation from '../../i18n/langs.json'
-import { EmailData } from '../../email/send'
+import type { EmailData } from '../../email/send'
 import userInvited from '../../email/templates/userInvited'
-import { AppEnv } from '../../types/AppEnv'
+import type { AppEnv } from '../../types/AppEnv'
 import { InvitationType } from '../../types/InvitationType'
-import { EmailInvite } from '../../types/EmailInvite'
+import type { EmailInvite } from '../../types/EmailInvite'
 
 const AVAILABLE_LANG = ['en', 'fr']
 type Lang = 'en' | 'fr'

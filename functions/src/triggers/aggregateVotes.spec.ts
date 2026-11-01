@@ -9,10 +9,10 @@ import {
     VOTE_STATUS_DELETED,
     VOTE_STATUS_ACTIVE,
     VOTE_TYPE_TEXT_PLUS,
-    VoteData,
+    type VoteData,
 } from './models/vote'
 import * as admin from 'firebase-admin'
-export const FieldValue = admin.firestore.FieldValue
+const FieldValue = admin.firestore.FieldValue
 import { vi } from 'vitest'
 
 const getMockedFirestore = (docData: Record<string, unknown>) =>
@@ -26,10 +26,7 @@ const getMockedFirestore = (docData: Record<string, unknown>) =>
                                 data: () => docData,
                                 exists: true,
                             }),
-                        set: (
-                            data: Record<string, unknown>,
-                            options: Record<string, unknown>
-                        ) => {
+                        set: (data: Record<string, unknown>) => {
                             return Promise.resolve(data)
                         },
                     })),

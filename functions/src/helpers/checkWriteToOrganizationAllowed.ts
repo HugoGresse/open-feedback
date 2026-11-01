@@ -1,4 +1,4 @@
-import { HttpsError, CallableRequest } from 'firebase-functions/v2/https'
+import { HttpsError, type CallableRequest } from 'firebase-functions/v2/https'
 import { assertUserAuthenticated } from './assertUserAuthenticated'
 import { getOrganization } from './getOrganization'
 import { isOrganizationWriteAllowed } from './isOrganizationWriteAllowed'

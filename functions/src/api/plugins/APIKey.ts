@@ -1,4 +1,4 @@
-import crypto from 'crypto'
+import crypto from 'node:crypto'
 import { BadRequestError } from '../others/Errors'
 
 export class APIKey {
@@ -34,11 +34,11 @@ export class APIKey {
     }
 
     public static generateOrganizationApiKey(length = 48): string {
-        return 'oforg_' + APIKey.generateRandomString(length)
+        return `oforg_${APIKey.generateRandomString(length)}`
     }
 
     public static generateProjectApiKey(length = 48): string {
-        return 'ofproj_' + APIKey.generateRandomString(length)
+        return `ofproj_${APIKey.generateRandomString(length)}`
     }
 
     private static generateRandomString(length: number): string {

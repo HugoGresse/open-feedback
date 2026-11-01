@@ -1,10 +1,10 @@
-import { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsync } from 'fastify'
 import { Type } from '@sinclair/typebox'
 import {
     ErrorSchema,
     EventIdSchema,
     EventSchema,
-    UpdateEvent,
+    type UpdateEvent,
     UpdateEventSchema,
 } from '../../schemas'
 import { authenticateRequest } from '../../plugins/apiKeyPlugin'

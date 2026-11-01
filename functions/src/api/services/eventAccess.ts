@@ -1,4 +1,4 @@
-import { FastifyRequest } from 'fastify'
+import type { FastifyRequest } from 'fastify'
 import { NotFoundError } from '../others/Errors'
 
 export type EventAccess = { projectId: string } | { organizationId: string }

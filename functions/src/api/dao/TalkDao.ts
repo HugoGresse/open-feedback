@@ -1,11 +1,11 @@
-import { App as FirebaseApp } from 'firebase-admin/app'
-import { DocumentReference, Transaction } from 'firebase-admin/firestore'
+import type { App as FirebaseApp } from 'firebase-admin/app'
+import type { DocumentReference, Transaction } from 'firebase-admin/firestore'
 import { BadRequestError, HttpError } from '../others/Errors'
-import { EventAccess } from '../services/eventAccess'
-import { CreateTalk, Talk, UpdateTalk } from '../schemas'
+import type { EventAccess } from '../services/eventAccess'
+import type { CreateTalk, Talk, UpdateTalk } from '../schemas'
 import {
     createResource,
-    EventResource,
+    type EventResource,
     getResource,
     listResources,
     textOrUndefined,
@@ -24,8 +24,8 @@ const talks: EventResource<Omit<Talk, 'id' | 'revision'>> = {
     defaults: () => ({ trackTitle: '', tags: [] }),
 }
 
-export class TalkDao {
-    public static list(
+export const TalkDao = {
+    list(
         firebaseApp: FirebaseApp,
         projectId: string,
         access: EventAccess,
@@ -36,18 +36,18 @@ export class TalkDao {
             limit,
             after,
         })
-    }
+    },
 
-    public static get(
+    get(
         firebaseApp: FirebaseApp,
         projectId: string,
         access: EventAccess,
         talkId: string
     ) {
         return getResource(firebaseApp, projectId, access, talks, talkId)
-    }
+    },
 
-    public static create(
+    create(
         firebaseApp: FirebaseApp,
         projectId: string,
         access: EventAccess,
@@ -64,9 +64,9 @@ export class TalkDao {
                 await assertSpeakersExist(transaction, event, fields.speakers)
             },
         })
-    }
+    },
 
-    public static update(
+    update(
         firebaseApp: FirebaseApp,
         projectId: string,
         access: EventAccess,
@@ -88,7 +88,7 @@ export class TalkDao {
                     )
             },
         })
-    }
+    },
 }
 
 // Deleting a talk in the admin UI leaves its votes behind; reusing its ID

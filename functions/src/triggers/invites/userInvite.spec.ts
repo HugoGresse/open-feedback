@@ -9,7 +9,7 @@ import {
     makeDocumentSnapshot,
     makeDocumentSnapshot2,
 } from '../../testUtils/firestoreStub'
-import * as admin from 'firebase-admin'
+import type * as admin from 'firebase-admin'
 import { vi } from 'vitest'
 
 vi.mock('../../email/send')
@@ -61,10 +61,9 @@ describe('userInviteCreated', () => {
     it('should reject when a user is invited to a project, email sent but db update failed', async () => {
         const { update, collection, doc } = getFirestoreMocksAndInit()
         update.mockImplementation(() =>
-            // eslint-disable-next-line prefer-promise-reject-errors
             Promise.reject('firestore update failed')
         )
-        ;(send as any).mockImplementation(() => new Response())
+        vi.mocked(send).mockResolvedValue(new Response())
 
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
@@ -73,16 +72,18 @@ describe('userInviteCreated', () => {
             'firestore update failed'
         )
 
-        expect((send as any).mock.calls[0][0]).toEqual({
+        expect(vi.mocked(send).mock.calls[0][0]).toEqual({
             api: 'MAILGUN_API',
             domain: 'MAILGUN_DOMAIN',
             key: 'MAILGUN_KEY',
         })
-        expect((send as any).mock.calls[0][1].subject).toEqual(
+        expect(vi.mocked(send).mock.calls[0][1].subject).toEqual(
             '[OpenFeedback] Hugo G invited you to become member of the event Project Name'
         )
-        expect((send as any).mock.calls[0][1].to).toEqual(['email@example.com'])
-        expect((send as any).mock.calls[0][1].html).toContain(
+        expect(vi.mocked(send).mock.calls[0][1].to).toEqual([
+            'email@example.com',
+        ])
+        expect(vi.mocked(send).mock.calls[0][1].html).toContain(
             '<!DOCTYPE html>\n<html'
         )
 
@@ -104,7 +105,7 @@ describe('userInviteCreated', () => {
                 empty: false,
             })
         )
-        ;(send as any).mockImplementation(() => new Response())
+        vi.mocked(send).mockResolvedValue(new Response())
 
         const userInviteCreatedWrapped = test.wrap(userInviteCreated)
 
@@ -131,7 +132,7 @@ describe('checkPendingInviteAndProcessThem', () => {
         uid: '00001',
         emailVerified: true,
         disabled: false,
-        metadata: {} as any,
+        metadata: {} as admin.auth.UserMetadata,
         providerData: [],
         email: 'toto@example.com',
         toJSON: () => ({}),

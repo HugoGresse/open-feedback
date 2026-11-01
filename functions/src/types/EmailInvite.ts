@@ -1,4 +1,4 @@
-import { InvitationType } from './InvitationType'
+import type { InvitationType } from './InvitationType'
 
 interface BaseEmailInvite {
     type: InvitationType

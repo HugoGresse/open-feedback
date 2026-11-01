@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import Fastify, { FastifyInstance } from 'fastify'
-import { IncomingMessage } from 'node:http'
+import Fastify, { type FastifyInstance } from 'fastify'
+import type { IncomingMessage } from 'node:http'
 import { addContentTypeParserForServerless } from './addContentTypeParserForServerless'
 
 describe('JSON bodies', () => {

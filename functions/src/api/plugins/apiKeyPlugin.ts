@@ -1,6 +1,6 @@
 import fastifyPlugin from 'fastify-plugin'
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
-import { Static, Type } from '@sinclair/typebox'
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
+import { type Static, Type } from '@sinclair/typebox'
 import {
     BadRequestError,
     NotFoundError,
@@ -66,7 +66,7 @@ export type Error400_401_VerifyRequestType = Static<
 >
 
 export const apiKeyPlugin = fastifyPlugin(
-    (fastify: FastifyInstance, options: unknown, next: () => void) => {
+    (fastify: FastifyInstance, _options: unknown, next: () => void) => {
         // Decorate request with organization and project properties
         fastify.decorateRequest('organization', null)
         fastify.decorateRequest('project', null)

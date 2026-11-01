@@ -2,7 +2,7 @@ import { assertUserAuthenticated } from './assertUserAuthenticated'
 import { getProject } from './getProject'
 import { getOrganization } from './getOrganization'
 import { isOrganizationWriteAllowed } from './isOrganizationWriteAllowed'
-import { CallableRequest, HttpsError } from 'firebase-functions/v2/https'
+import { type CallableRequest, HttpsError } from 'firebase-functions/v2/https'
 
 export const checkWriteToProjectAllowed = async (
     request: CallableRequest,

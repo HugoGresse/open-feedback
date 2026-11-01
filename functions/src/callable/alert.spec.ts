@@ -1,3 +1,4 @@
+import type { CallableRequest } from 'firebase-functions/v2/https'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import firebaseFunctionsTest from 'firebase-functions-test'
 import { alert } from './alert'
@@ -6,7 +7,8 @@ const test = firebaseFunctionsTest()
 const alertWrapped = test.wrap(alert)
 
 // Handlers may throw synchronously; normalise to a promise.
-const callAlert = async (data: unknown) => alertWrapped({ data } as any)
+const callAlert = async (data: unknown) =>
+    alertWrapped({ data } as CallableRequest)
 
 describe('alert', () => {
     const fetchMock = vi.fn()

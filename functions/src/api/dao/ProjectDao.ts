@@ -1,10 +1,10 @@
-import { App as FirebaseApp } from 'firebase-admin/app'
+import type { App as FirebaseApp } from 'firebase-admin/app'
 import { FieldValue, getFirestore } from 'firebase-admin/firestore'
-import { Project } from '../../types/Project'
-import { Organization } from '../../types/Organization'
+import type { Project } from '../../types/Project'
+import type { Organization } from '../../types/Organization'
 import { HttpError, NotFoundError } from '../others/Errors'
 import { APIKey } from '../plugins/APIKey'
-import { CreateEvent, UpdateEvent } from '../schemas'
+import type { CreateEvent, UpdateEvent } from '../schemas'
 import {
     assertEventIdAllowed,
     defaultVoteItems,
@@ -15,7 +15,7 @@ import { deleteReplacedEventImages } from '../services/eventImages'
 import {
     assertEventAccess,
     assertKeyScope,
-    EventAccess,
+    type EventAccess,
 } from '../services/eventAccess'
 
 export const PROJECT_COLLECTION = 'projects'
@@ -54,8 +54,8 @@ const mapProjectDoc = (
     return project as unknown as Project
 }
 
-export class ProjectDao {
-    public static async createProject(
+export const ProjectDao = {
+    async createProject(
         firebaseApp: FirebaseApp,
         organization: Organization,
         input: CreateEvent
@@ -115,9 +115,9 @@ export class ProjectDao {
             throw error
         }
         return { ...project, id: ref.id }
-    }
+    },
 
-    public static async updateProject(
+    async updateProject(
         firebaseApp: FirebaseApp,
         projectId: string,
         access: EventAccess,
@@ -163,9 +163,9 @@ export class ProjectDao {
             project as unknown as Record<string, unknown>
         )
         return project
-    }
+    },
 
-    public static async getProjectFromId(
+    async getProjectFromId(
         firebaseApp: FirebaseApp,
         projectId: string
     ): Promise<Project> {
@@ -177,9 +177,9 @@ export class ProjectDao {
         }
 
         return mapProjectDoc(doc.id, doc.data())
-    }
+    },
 
-    public static async getProjectFromApiKey(
+    async getProjectFromApiKey(
         firebaseApp: FirebaseApp,
         apiKey: APIKey
     ): Promise<Project | null> {
@@ -230,5 +230,5 @@ export class ProjectDao {
         }
 
         return mapProjectDoc(projectDoc.id, projectDoc.data())
-    }
+    },
 }

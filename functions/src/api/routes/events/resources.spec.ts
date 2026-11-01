@@ -7,7 +7,7 @@ import {
     it,
     vi,
 } from 'vitest'
-import { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 import { FakeFirestore } from 'firestore-vitest'
 import { mockFirebaseAdminApp } from '../../../testUtils/firestoreMock'
 

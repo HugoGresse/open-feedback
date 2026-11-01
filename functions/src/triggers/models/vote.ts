@@ -1,6 +1,6 @@
 import { firestoreIncrement } from '../../helpers/firebaseInit'
-import { AggregatedVote } from './AggregatedVote'
-import { VoteItemAggregationChange } from './VoteItemAggregationChange'
+import { type AggregatedVote, getAggregatedTextVotes } from './AggregatedVote'
+import type { VoteItemAggregationChange } from './VoteItemAggregationChange'
 
 export const VOTE_STATUS_ACTIVE = 'active'
 export const VOTE_STATUS_DELETED = 'deleted'
@@ -111,9 +111,11 @@ export class Vote {
         }
         // An edit keeps the current up-votes, a new (or re-written after its
         // deletion) text vote starts with its author's vote
-        const hasPlus =
-            aggregatedVote?.[this.voteData.voteItemId]?.[this.id]?.plus !==
-            undefined
+        const textVotes = getAggregatedTextVotes(
+            aggregatedVote,
+            this.voteData.voteItemId
+        )
+        const hasPlus = textVotes?.[this.id]?.plus !== undefined
         return {
             [this.voteData.voteItemId]: {
                 [this.id]: hasPlus ? voteText : { ...voteText, plus: 1 },
@@ -131,16 +133,14 @@ export class Vote {
 
     private isTextVoteDeleted(aggregatedVote?: AggregatedVote): boolean {
         // When deleting a text vote, the vote will be an empty object {}, and if the user did not have the latest version, he will upvote a textVote which does not exist, just an empty object.
-        return (
-            !this.voteData ||
-            !aggregatedVote ||
-            !aggregatedVote[this.voteData.voteItemId] ||
-            !this.voteData.voteId ||
-            !aggregatedVote[this.voteData.voteItemId][this.voteData.voteId] ||
-            Object.keys(
-                aggregatedVote[this.voteData.voteItemId][this.voteData.voteId]
-            ).length === 0
-        )
+        const voteId = this.voteData?.voteId
+        const textVote = voteId
+            ? getAggregatedTextVotes(
+                  aggregatedVote,
+                  this.voteData.voteItemId
+              )?.[voteId]
+            : undefined
+        return !textVote || Object.keys(textVote).length === 0
     }
 }
 

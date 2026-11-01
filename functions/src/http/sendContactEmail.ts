@@ -42,8 +42,7 @@ export const sendContactEmail = functions.https.onRequest(async (req, res) => {
         res.status(500).send(
             JSON.stringify({
                 success: true,
-                error:
-                    'Failed to send email: ' + (sendResult as any).statusText,
+                error: `Failed to send email: ${sendResult.statusText}`,
             })
         )
     }

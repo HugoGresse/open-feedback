@@ -1,4 +1,4 @@
-import { App as FirebaseApp } from 'firebase-admin/app'
+import type { App as FirebaseApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 import { BadRequestError } from '../others/Errors'
 
@@ -109,12 +109,12 @@ export const buildEventVotesExport = async (
                 .filter((name): name is string => !!name)
                 .join(', ')
 
-            const voteColumns = Object.keys(sessionVotes || {}).reduce<
+            const voteColumns = Object.entries(sessionVotes || {}).reduce<
                 Record<string, string | number>
-            >((acc, key) => {
+            >((acc, [key, value]) => {
                 const voteItem = voteItemsById.get(key)
                 if (voteItem?.name) {
-                    acc[voteItem.name] = voteValueToColumn(sessionVotes![key])
+                    acc[voteItem.name] = voteValueToColumn(value)
                 }
                 return acc
             }, {})

@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
-import { Project } from '../types/Project'
+import type { Project } from '../types/Project'
 
 export const getProject = async (
     projectId: string | null

@@ -20,7 +20,10 @@ const fake = vi.hoisted(() => ({
 vi.mock('../helpers/getOrganization', () => ({
     getOrganization: async (id: string) => {
         if (!fake.organization) {
-            throw new HttpsError('not-found', 'Organization has not been found.')
+            throw new HttpsError(
+                'not-found',
+                'Organization has not been found.'
+            )
         }
         return { ...fake.organization, id }
     },
@@ -47,10 +50,11 @@ vi.mock('firebase-admin', () => {
             },
             get: async () => ({
                 empty: ids().length === 0,
-                forEach: (callback: (doc: { ref: string }) => void) =>
-                    ids().forEach((id) =>
+                forEach: (callback: (doc: { ref: string }) => void) => {
+                    for (const id of ids()) {
                         callback({ ref: `${collection}/${id}` })
-                    ),
+                    }
+                },
             }),
         }
         return q
@@ -97,11 +101,11 @@ beforeEach(() => {
     fake.transactionDeletes = []
     fake.recursiveDeletes = []
     fake.writerDeletes = []
-    fake.deleteFiles.mockReset().mockImplementation(
-        async ({ prefix }: { prefix: string }) => {
+    fake.deleteFiles
+        .mockReset()
+        .mockImplementation(async ({ prefix }: { prefix: string }) => {
             fake.storagePrefixes.push(prefix)
-        }
-    )
+        })
     fake.storagePrefixes = []
     vi.spyOn(console, 'log').mockImplementation(() => undefined)
     vi.spyOn(console, 'error').mockImplementation(() => undefined)

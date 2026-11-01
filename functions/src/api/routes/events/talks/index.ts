@@ -1,4 +1,4 @@
-import { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsync } from 'fastify'
 import { listTalksRoute } from './list'
 import { getTalkRoute } from './get'
 import { createTalkRoute } from './create'

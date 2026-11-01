@@ -1,3 +1,4 @@
+import type { FastifyInstance } from 'fastify'
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mockFirebaseAdminApp } from '../../../testUtils/firestoreMock'
 import { mockWhere } from 'firestore-vitest/mocks/firestore'
@@ -44,7 +45,7 @@ const mockProjectKeyResolves = (
 }
 
 describe('/events/me', () => {
-    let fastify: any
+    let fastify: FastifyInstance
 
     beforeEach(async () => {
         mockFirebaseAdminApp({ projects: [], organizations: [], users: [] })

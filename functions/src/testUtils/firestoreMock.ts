@@ -1,17 +1,24 @@
 import { vi } from 'vitest'
 import { FakeFirestore } from 'firestore-vitest'
 
-const firestoreStub = (database: { [key: string]: any }) => {
+export type FirestoreDatabase = NonNullable<
+    ConstructorParameters<typeof FakeFirestore>[0]
+>
+
+// The Admin SDK Firestore members the fake does not implement.
+type StubbedFirestore = FakeFirestore & {
+    databaseId: string
+    recursiveDelete: () => void
+    terminate: () => void
+    listCollections: () => void
+    bulkWriter: () => void
+    bundle: () => void
+}
+
+const firestoreStub = (database: FirestoreDatabase) => {
     // Prepare namespaced classes
-    function firestoreConstructor(): FakeFirestore & {
-        databaseId: string
-        recursiveDelete: () => void
-        terminate: () => void
-        listCollections: () => void
-        bulkWriter: () => void
-        bundle: () => void
-    } {
-        return new FakeFirestore(database) as any
+    function firestoreConstructor(): StubbedFirestore {
+        return new FakeFirestore(database) as StubbedFirestore
     }
     firestoreConstructor.Query = FakeFirestore.Query
     firestoreConstructor.CollectionReference = FakeFirestore.CollectionReference
@@ -25,7 +32,7 @@ const firestoreStub = (database: { [key: string]: any }) => {
 }
 
 export const mockFirebaseAdminApp = (
-    database: { [key: string]: any },
+    database: FirestoreDatabase,
     // Pass false when the spec registers its own firebase-admin/firestore
     // mock: vitest resolves queued doMocks in parallel, so two mocks of the
     // same module race and the stub could win.
@@ -60,30 +67,30 @@ export const mockFirebaseAdminApp = (
         return {
             getFirestore: firestoreStub(database),
             initializeFirestore: vi.fn(),
-            AggregateField: vi.fn() as unknown as any,
-            AggregateQuery: vi.fn() as unknown as any,
-            AggregateQuerySnapshot: vi.fn() as unknown as any,
-            AggregateSpec: vi.fn() as unknown as any,
+            AggregateField: vi.fn(),
+            AggregateQuery: vi.fn(),
+            AggregateQuerySnapshot: vi.fn(),
+            AggregateSpec: vi.fn(),
             AggregateSpecData: vi.fn(),
-            AggregateType: vi.fn() as unknown as any,
-            BulkWriter: vi.fn() as unknown as any,
-            BulkWriterOptions: vi.fn() as unknown as any,
-            BundleBuilder: vi.fn() as unknown as any,
+            AggregateType: vi.fn(),
+            BulkWriter: vi.fn(),
+            BulkWriterOptions: vi.fn(),
+            BundleBuilder: vi.fn(),
             ChildUpdateFields: vi.fn(),
-            CollectionGroup: vi.fn() as unknown as any,
+            CollectionGroup: vi.fn(),
             CollectionReference: vi.fn(),
             DocumentChange: vi.fn(),
             DocumentChangeType: vi.fn(),
             DocumentData: vi.fn(),
             DocumentReference: vi.fn(),
             DocumentSnapshot: vi.fn(),
-            FieldPath: vi.fn() as unknown as any,
-            FieldValue: vi.fn() as unknown as any,
-            Filter: vi.fn() as unknown as any,
+            FieldPath: vi.fn(),
+            FieldValue: vi.fn(),
+            Filter: vi.fn(),
             Firestore: vi.fn(),
             FirestoreDataConverter: vi.fn(),
             GeoPoint: vi.fn(),
-            GrpcStatus: vi.fn() as unknown as any,
+            GrpcStatus: vi.fn(),
             NestedUpdateFields: vi.fn(),
             OrderByDirection: vi.fn(),
             PartialWithFieldValue: vi.fn(),
@@ -98,7 +105,7 @@ export const mockFirebaseAdminApp = (
             ReadWriteTransactionOptions: vi.fn(),
             Settings: vi.fn(),
             SetOptions: vi.fn(),
-            Timestamp: vi.fn() as unknown as any,
+            Timestamp: vi.fn(),
             Transaction: vi.fn(),
             UpdateData: vi.fn(),
             UnionToIntersection: vi.fn(),
@@ -106,7 +113,7 @@ export const mockFirebaseAdminApp = (
             WithFieldValue: vi.fn(),
             WriteBatch: vi.fn(),
             WriteResult: vi.fn(),
-            v1: vi.fn() as unknown as any,
+            v1: vi.fn(),
             setLogFunction: vi.fn(),
         }
     })
