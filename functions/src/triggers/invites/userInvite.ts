@@ -3,7 +3,8 @@ import send from '../../email/send'
 import { isEmpty } from 'lodash'
 import { getAppEnv, getMailgunEnv } from '../../helpers/env'
 import { generateInviteEmail } from './generateInviteEmail'
-import { applyInvites } from './applyInvites'
+import { applyInvites, markInviteAsErrored } from './applyInvites'
+import { getInviteTarget } from './getInviteTarget'
 import { InvitationType } from '../../types/InvitationType'
 import type { EmailInvite } from '../../types/EmailInvite'
 import { onDocumentCreated } from 'firebase-functions/v2/firestore'
@@ -33,103 +34,102 @@ export const userInviteCreated = onDocumentCreated(
             return Promise.reject(new Error('Empty data'))
         }
 
+        const target = getInviteTarget(data)
+        if (!target) {
+            console.error('> userInviteCreated invalid invite', inviteId)
+            return markInviteAsErrored(inviteId, INVALID_TARGET_ERROR)
+        }
+
         const baseInvite = {
             destinationUserInfo: data.destinationUserInfo,
             originUserName: data.originUserName,
         }
-        const invite: EmailInvite = data.organizationId
-            ? {
-                  ...baseInvite,
-                  type: InvitationType.OrganizationInvitationType,
-                  organizationId: data.organizationId,
-                  organizationName: data.organizationName,
-              }
-            : {
-                  ...baseInvite,
-                  type: InvitationType.ProjectInvitationType,
-                  projectId: data.projectId,
-                  projectName: data.projectName,
-              }
+        const invite: EmailInvite =
+            target.type === InvitationType.OrganizationInvitationType
+                ? {
+                      ...baseInvite,
+                      type: InvitationType.OrganizationInvitationType,
+                      organizationId: target.id,
+                      organizationName: data.organizationName,
+                  }
+                : {
+                      ...baseInvite,
+                      type: InvitationType.ProjectInvitationType,
+                      projectId: target.id,
+                      projectName: data.projectName,
+                  }
 
         const sendResult = await send(
             mailgunEnv,
             generateInviteEmail(invite, data.lang || 'en', appEnv, inviteId)
         )
 
-        if (sendResult.ok) {
-            return admin
-                .firestore()
-                .collection('invites')
-                .doc(inviteId)
-                .update({
-                    status: 'emailSent',
-                })
-                .then(() => {
-                    return admin
-                        .firestore()
-                        .collection('users')
-                        .where('email', '==', data.destinationUserInfo)
-                        .limit(1)
-                        .get()
-                        .then((querySnapshot) => {
-                            if (querySnapshot.empty) {
-                                return Promise.resolve('no user matched')
-                            }
-                            let promise: Promise<
-                                string | FirebaseFirestore.WriteResult[]
-                            > = Promise.resolve(
-                                'forEach not implemented or firebase issue'
-                            )
-                            querySnapshot.forEach((userSnapshot) => {
-                                promise = checkPendingInviteAndProcessThem(
-                                    userSnapshot.data() as admin.auth.UserRecord
-                                )
-                            })
-                            return promise
-                        })
-                })
+        if (!sendResult.ok) {
+            return Promise.reject(
+                'Function failed due to not successful email send'
+            )
         }
 
-        return Promise.reject(
-            'Function failed due to not successful email send'
-        )
+        await admin.firestore().collection('invites').doc(inviteId).update({
+            status: 'emailSent',
+        })
+
+        // Look the invitee up in Firebase Auth: the users collection is
+        // written by its owners, so its email field can claim any address.
+        const user = await getAuthUserByEmail(data.destinationUserInfo)
+        if (!user) {
+            return 'no user matched'
+        }
+        return checkPendingInviteAndProcessThem(user)
     }
 )
 
-// From a given user, it check if the user has pending invite for him, if so process it, add it to the linked project or
-// organization and complete the invite after
-export const checkPendingInviteAndProcessThem = (
+const INVALID_TARGET_ERROR = 'Invalid invite target'
+
+const getAuthUserByEmail = async (
+    email: string
+): Promise<admin.auth.UserRecord | null> => {
+    try {
+        return await admin.auth().getUserByEmail(email)
+    } catch (error) {
+        if ((error as { code?: string })?.code === 'auth/user-not-found') {
+            return null
+        }
+        throw error
+    }
+}
+
+// From a given user, check if they have pending invites, if so add them to the
+// linked project or organization and complete each invite.
+export const checkPendingInviteAndProcessThem = async (
     user: admin.auth.UserRecord
 ) => {
-    const userId = user.uid
-    const userInfo = user.email || user.phoneNumber
-
-    return admin
+    // Anyone can create an email/password account for an address they do not
+    // own: invites wait for the email to be verified (see userEmailVerified).
+    if (user.email && !user.emailVerified) {
+        return 'email not verified'
+    }
+    const querySnapshot = await admin
         .firestore()
         .collection('invites')
-        .where('destinationUserInfo', '==', userInfo)
+        .where('destinationUserInfo', '==', user.email || user.phoneNumber)
         .where('status', '==', 'emailSent')
         .get()
-        .then((querySnapshot) => {
-            const promises: Promise<FirebaseFirestore.WriteResult>[] = []
-            querySnapshot.forEach((snapshot) => {
-                const data = snapshot.data()
-                const organizationIdOrProjectId =
-                    data.organizationId || data.projectId
-                const invitationType: InvitationType = data.organizationId
-                    ? InvitationType.OrganizationInvitationType
-                    : InvitationType.ProjectInvitationType
 
-                promises.push(
-                    applyInvites(
-                        snapshot.id,
-                        invitationType,
-                        userId,
-                        organizationIdOrProjectId,
-                        data.role
-                    )
-                )
-            })
-            return Promise.all(promises)
-        })
+    const promises: Promise<FirebaseFirestore.WriteResult>[] = []
+    querySnapshot.forEach((snapshot) => {
+        const target = getInviteTarget(snapshot.data())
+        promises.push(
+            target
+                ? applyInvites(
+                      snapshot.id,
+                      target.type,
+                      user.uid,
+                      target.id,
+                      target.role
+                  )
+                : markInviteAsErrored(snapshot.id, INVALID_TARGET_ERROR)
+        )
+    })
+    return Promise.all(promises)
 }

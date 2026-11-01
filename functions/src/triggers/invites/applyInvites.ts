@@ -28,17 +28,16 @@ export const applyInvites = async (
         })
         .catch((error) => {
             console.log(error)
-            return admin
-                .firestore()
-                .collection('invites')
-                .doc(invitationId)
-                .update({
-                    updatedAt: serverTimestamp(),
-                    status: 'error',
-                    error: JSON.stringify(error),
-                })
+            return markInviteAsErrored(invitationId, JSON.stringify(error))
         })
 }
+
+export const markInviteAsErrored = (invitationId: string, error: string) =>
+    admin.firestore().collection('invites').doc(invitationId).update({
+        updatedAt: serverTimestamp(),
+        status: 'error',
+        error,
+    })
 
 const formatUpdate = (
     invitationType: InvitationType,
@@ -83,14 +82,7 @@ const formatOrganizationUpdate = (
                 adminUserIds: arrayUnion(invitedUserId),
                 updatedAt: serverTimestamp(),
             }
-        case OrganizationRole.Owner:
-            return {
-                viewerUserIds: arrayUnion(invitedUserId),
-                editorUserIds: arrayUnion(invitedUserId),
-                adminUserIds: arrayUnion(invitedUserId),
-                ownerUserId: invitedUserId,
-                updatedAt: serverTimestamp(),
-            }
+        // No Owner: an invite must never transfer ownership
         default:
             throw new Error('Unknown role to process organization invite')
     }

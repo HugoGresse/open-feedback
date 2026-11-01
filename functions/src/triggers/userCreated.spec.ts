@@ -21,14 +21,19 @@ describe('userCreated', () => {
         expect(where, 'firestore request not made').toHaveBeenCalledTimes(0)
     })
 
-    it('when a user signs up with an email, look up their pending invites', async () => {
+    it('when a user signs up with a verified email, look up their pending invites', async () => {
         const { get, where } = getFirestoreMocksAndInit()
         get.mockImplementation(() => Promise.resolve([]))
 
         const userCreatedWrapped = test.wrap(userCreated)
 
         await userCreatedWrapped({
-            data: { uid: '123', email: 'jane@example.com', providerData: [] },
+            data: {
+                uid: '123',
+                email: 'jane@example.com',
+                emailVerified: true,
+                providerData: [],
+            },
         })
 
         expect(where).toHaveBeenCalledWith(
@@ -37,5 +42,22 @@ describe('userCreated', () => {
             'jane@example.com'
         )
         expect(where).toHaveBeenCalledWith('status', '==', 'emailSent')
+    })
+
+    it('when a user signs up with an unverified email, wait for the verification', async () => {
+        const { where } = getFirestoreMocksAndInit()
+
+        await expect(
+            test.wrap(userCreated)({
+                data: {
+                    uid: '123',
+                    email: 'jane@example.com',
+                    emailVerified: false,
+                    providerData: [],
+                },
+            })
+        ).resolves.toEqual('email not verified')
+
+        expect(where).not.toHaveBeenCalled()
     })
 })
