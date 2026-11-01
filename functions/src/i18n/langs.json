@@ -14,7 +14,8 @@
                     "body": "Hey {destinationUserInfo},<br/><br/> You have been invited to be a member of the organization <b>{organizationName}</b> on OpenFeedback. Click on the button below to view the organization.",
                     "buttonText": "View the organization"
                 }
-            }
+            },
+            "unknownInviter": "Someone"
         }
     },
     "fr": {
@@ -32,7 +33,8 @@
                     "body": "Coucou {destinationUserInfo},<br/><br/> Vous avez été invité à devenir membre de l'organisation <b>{organizationName}</b> sur OpenFeedback. Cliquez sur le bouton suivant pour voir l'organisation.",
                     "buttonText": "Voir l'organisation"
                 }
-            }
+            },
+            "unknownInviter": "Quelqu'un"
         }
     }
 }
