@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import ScheduleIcon from '@mui/icons-material/Schedule'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import RemoveButton from '@mui/icons-material/RemoveCircle'
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
@@ -29,23 +31,40 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
-const dateFormat = Object.assign(DateTime.DATE_SHORT, {
+const dateFormat = Object.assign({}, DateTime.DATE_SHORT, {
     weekday: 'long',
     hour: 'numeric',
     minute: '2-digit',
 })
 
+/** How long an accepted invite stays listed, shown as accepted. */
+const ACCEPTED_INVITE_DISPLAY_MS = 4000
+
 export interface UserInviteItemProps {
     invite: Invite
     cancelInvite: (inviteId: string) => void
+    onAcceptedShown: (inviteId: string) => void
 }
 
 export const UserInviteItem = ({
     invite,
     cancelInvite,
+    onAcceptedShown,
 }: UserInviteItemProps) => {
     const classes = useStyles()
     const { t } = useTranslation()
+    const isAccepted = invite.status === 'completed'
+
+    useEffect(() => {
+        if (!isAccepted) {
+            return
+        }
+        const timeout = setTimeout(
+            () => onAcceptedShown(invite.id),
+            ACCEPTED_INVITE_DISPLAY_MS
+        )
+        return () => clearTimeout(timeout)
+    }, [isAccepted, invite.id, onAcceptedShown])
 
     const inviteStatus = invite.status
         ? t(`users.invite.${invite.status}`)
@@ -55,7 +74,14 @@ export const UserInviteItem = ({
         <OFListItem>
             <Grid item xs={12} sm={7} className={classes.cell}>
                 <Box display="flex">
-                    <ScheduleIcon className={classes.icon} />
+                    {isAccepted ? (
+                        <CheckCircleIcon
+                            className={classes.icon}
+                            color="success"
+                        />
+                    ) : (
+                        <ScheduleIcon className={classes.icon} />
+                    )}
                     <Box>
                         <Typography>{invite.destinationUserInfo}</Typography>
                         <Typography style={{ color: '#999' }}>
@@ -77,13 +103,15 @@ export const UserInviteItem = ({
                 )}
             </Grid>
             <Grid item xs={12} sm={2} className={classes.buttonCell}>
-                <IconButton
-                    aria-label="Cancel the invitation"
-                    onClick={() => cancelInvite(invite.id)}
-                    size="large"
-                >
-                    <RemoveButton />
-                </IconButton>
+                {!isAccepted && (
+                    <IconButton
+                        aria-label="Cancel the invitation"
+                        onClick={() => cancelInvite(invite.id)}
+                        size="large"
+                    >
+                        <RemoveButton />
+                    </IconButton>
+                )}
             </Grid>
         </OFListItem>
     )

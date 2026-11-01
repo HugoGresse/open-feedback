@@ -3,6 +3,7 @@ import type { RootState } from '../../../store'
 import { createAppSelector } from '../../../store'
 import { getAdminStateSelector } from '../../adminSelector'
 import { getUserIdSelector } from '../../auth/authSelectors'
+import { isPendingInvite } from './usersReducer'
 
 const getUsersState = (state: RootState) =>
     getAdminStateSelector(state).adminUsers
@@ -51,5 +52,11 @@ export const getFilteredUsersWithoutCurrentOneSelector = createAppSelector(
 export const getInviteSelector = (state: RootState) =>
     getUsersState(state).invite
 
-export const getPendingInvitesSelector = (state: RootState) =>
-    getUsersState(state).pendingInvites
+/** The invites to list, including the just accepted ones. */
+export const getListedInvitesSelector = (state: RootState) =>
+    getUsersState(state).invites
+
+export const getPendingInvitesSelector = createAppSelector(
+    [getListedInvitesSelector],
+    (invites) => invites.filter(isPendingInvite)
+)

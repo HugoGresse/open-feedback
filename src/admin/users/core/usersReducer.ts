@@ -1,4 +1,4 @@
-import type { Invite, User } from '../../../core/models'
+import type { Invite, InviteStatus, User } from '../../../core/models'
 import {
     GET_USER_DETAILS_SUCCESS,
     type InviteDocument,
@@ -6,9 +6,11 @@ import {
     USER_INVITE_ADD,
     USER_INVITE_GET_ERROR,
     USER_INVITE_GET_SUCCESS,
+    USER_INVITE_HIDE,
     USER_INVITE_LISTEN,
     USER_INVITE_REMOVE_SUCCESS,
     USER_INVITES_GET_SUCCESS,
+    USER_INVITES_LISTEN,
     type UsersAction,
     USERS_SET_FILTER,
 } from './usersActionTypes'
@@ -27,14 +29,18 @@ export interface UsersState {
     usersData: Record<string, User>
     /** The listened invite: `{}` while loading, the error when unreadable. */
     invite: Partial<InviteDocument> | InviteReadError
-    pendingInvites: Invite[]
+    /**
+     * The pending invites of the selected project or organization, plus the
+     * ones accepted while listed, kept until hidden to show they completed.
+     */
+    invites: Invite[]
     filter: string
 }
 
 const initState: UsersState = {
     usersData: {},
     invite: {},
-    pendingInvites: [],
+    invites: [],
     filter: '',
 }
 
@@ -71,21 +77,31 @@ export const usersReducer = (
                 ...state,
                 invite: action.payload,
             }
+        case USER_INVITES_LISTEN:
+            return {
+                ...state,
+                invites: [],
+            }
         case USER_INVITES_GET_SUCCESS:
             return {
                 ...state,
-                pendingInvites: action.payload,
+                invites: mergeListedInvites(state.invites, action.payload),
             }
         case USER_INVITE_ADD:
+            // The invites listener may have delivered it already
+            if (state.invites.some(({ id }) => id === action.payload.id)) {
+                return state
+            }
             return {
                 ...state,
-                pendingInvites: [...state.pendingInvites, action.payload],
+                invites: [...state.invites, action.payload],
             }
-        case USER_INVITE_REMOVE_SUCCESS: {
+        case USER_INVITE_REMOVE_SUCCESS:
+        case USER_INVITE_HIDE: {
             const inviteId = action.payload
             return {
                 ...state,
-                pendingInvites: state.pendingInvites.filter(
+                invites: state.invites.filter(
                     (invite) => invite.id !== inviteId
                 ),
             }
@@ -95,6 +111,9 @@ export const usersReducer = (
             return {
                 ...initState,
                 usersData: state.usersData,
+                // The invite dialog stays open over the joined event or
+                // organization, which is then selected
+                invite: state.invite,
             }
         case LOGOUT:
             return {
@@ -104,3 +123,35 @@ export const usersReducer = (
             return state
     }
 }
+
+const PENDING_INVITE_STATUSES: InviteStatus[] = ['new', 'emailSent', 'error']
+
+/** Not accepted yet: created, its email sent, or in error. */
+export const isPendingInvite = (invite: Invite) =>
+    PENDING_INVITE_STATUSES.includes(invite.status)
+
+/**
+ * The invites to list from all the invites of the project or organization: an
+ * accepted one is only kept when it was already listed, i.e. accepted since
+ * the listen started, not the ones accepted long ago.
+ */
+export const mergeListedInvites = (
+    listed: Invite[],
+    invites: Invite[]
+): Invite[] =>
+    invites.filter(
+        (invite) =>
+            isPendingInvite(invite) || listed.some(({ id }) => id === invite.id)
+    )
+
+/** Whether an invite listed as pending is now accepted. */
+export const hasJustAccepted = (listed: Invite[], invites: Invite[]) =>
+    invites.some(
+        (invite) =>
+            invite.status === 'completed' &&
+            listed.some(
+                (listedInvite) =>
+                    listedInvite.id === invite.id &&
+                    isPendingInvite(listedInvite)
+            )
+    )

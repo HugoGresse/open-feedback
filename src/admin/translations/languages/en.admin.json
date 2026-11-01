@@ -300,7 +300,8 @@
             "default": "has disappeared",
             "emailSent": "sent",
             "error": "errored",
-            "new": "created"
+            "new": "created",
+            "completed": "accepted"
         },
         "invites": "PENDING INVITES",
         "Member": "Member",
@@ -322,7 +323,11 @@
         "invitationGetFail": "Unable to get your invitation, ask for another one please.",
         "errorPendingInvitesFailed": "Failed to load pending invites, ",
         "cancelInviteFail": "Failed to cancel invite, ",
-        "inviteCompleted": "Invite completed, you'll be redirected to the event or organization soon",
+        "inviteProcessing": "Joining the event or organization, you'll be redirected to it soon…",
+        "inviteAccepted": "Invitation accepted",
+        "inviteJoinedEvent": "You joined the event {{name}}.",
+        "inviteJoinedOrganization": "You joined the organization {{name}}.",
+        "inviteOpenOrganization": "Open the organization",
         "inviteFailed": "This invitation failed. Ask the organizer to invite you again.",
         "inviteWrongAccount": "This invitation can't be opened with the account you are signed in with ({{account}}): it was sent to another email address. Log out and sign in with the email address the invitation was sent to.",
         "inviteLogout": "Log out"
