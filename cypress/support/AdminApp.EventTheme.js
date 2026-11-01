@@ -1,3 +1,5 @@
+import { APP_LANG } from '../testedProjectContent.js'
+
 export class EventTheme {
     open() {
         cy.contains('Event & Theme').click()
@@ -55,25 +57,44 @@ export class EventTheme {
         }
     }
 
-    // Select a day in the precedent month. Minutes should be % 5
-    editVoteRangeOpenTime(
-        dayToSelect,
-        hour,
-        minute,
-        selector = 'voteStartTime'
-    ) {
+    // Step the open calendar back until it shows the month of `date` (a luxon
+    // DateTime in the past or the current month). The calendar opens on the
+    // field's month, so a date two days ago is in the previous month on the
+    // 1st and 2nd. Waiting for a single label and month lets the transition
+    // finish before reading or clicking.
+    goToCalendarMonth(date, stepsLeft = 12) {
+        const label = date.setLocale(APP_LANG).toFormat('LLLL yyyy')
+        cy.get('.MuiDayCalendar-monthContainer').should('have.length', 1)
+        cy.get('.MuiPickersCalendarHeader-label')
+            .should('have.length', 1)
+            .invoke('text')
+            .then((text) => {
+                if (text.trim() === label) {
+                    return
+                }
+                if (stepsLeft === 0) {
+                    throw new Error(`Calendar never showed ${label}`)
+                }
+                cy.get('button[aria-label="Previous month"]').click()
+                this.goToCalendarMonth(date, stepsLeft - 1)
+            })
+    }
+
+    // `date` is a luxon DateTime. Minutes should be % 5
+    editVoteRangeOpenTime(date, hour, minute, selector = 'voteStartTime') {
         cy.get(`input[name="${selector}"`).click()
+
+        this.goToCalendarMonth(date)
 
         // Match the day cell by exact text rather than tabindex: MUI gives
         // today's cell tabindex=0 and the rest tabindex=-1, so a tabindex=-1
-        // selector fails whenever dayToSelect happens to be today.
+        // selector fails whenever the day happens to be today.
         cy.get('div[role=dialog]')
             .parent()
             .find('button')
             .filter(
                 (_, el) =>
-                    !el.disabled &&
-                    el.textContent.trim() === String(dayToSelect)
+                    !el.disabled && el.textContent.trim() === String(date.day)
             )
             .first()
             .click()
@@ -83,8 +104,8 @@ export class EventTheme {
         cy.get(`li[aria-label="${minute} minutes"]`).click({ force: true })
     }
 
-    editVoteRangeEndTime(dayToSelect, hour, minute) {
-        this.editVoteRangeOpenTime(dayToSelect, hour, minute, 'voteEndTime')
+    editVoteRangeEndTime(date, hour, minute) {
+        this.editVoteRangeOpenTime(date, hour, minute, 'voteEndTime')
     }
 
     assertVoteRangeStartTime(expectedString) {
